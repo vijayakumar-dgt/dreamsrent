@@ -17,6 +17,7 @@ class NewsletterController extends Controller
     {
         $this->NewsLetterRepository = $NewsLetterRepository;
     }
+
     public function index(Request $request): View
     {
         return view('admin.newsletters');

@@ -45,8 +45,8 @@ class HomeRepository implements HomeRepositoryInterface
         $vehicleTypes = $cartypes->map(function (Cartype $vehicleType) {
             $vehicleCount = VehicleInfo::where('type_id', $vehicleType->id)->count();
             return [
-                'id' => $vehicleType->id,
-                'name' => $vehicleType->name,
+                'id'            => $vehicleType->id,
+                'name'          => $vehicleType->name,
                 'vehicle_count' => $vehicleCount
             ];
         });
@@ -87,22 +87,22 @@ class HomeRepository implements HomeRepositoryInterface
         }
         $_pickuplocation = Location::select('id', 'name')->where('status', 1)->where('language_id', $languageId)->where('name', 'like', '%' . $pickuplocation . '%')->first();
         $data = [
-            'brands' => $brands,
-            'vehicleTypes' => $vehicleTypes,
-            'years' => $years,
-            'fuelTypes' => $fuelTypes,
-            'transmissions' => $transmissions,
-            'colors' => $colors,
-            'features' => $features,
-            'allowBooking' => $allowBooking,
-            'allowEnquiries' => $allowEnquiries,
-            'pickuplocation' => $pickuplocation,
-            'pickupdate' => $pickupdate,
-            'pickuptime' => $pickuptime,
-            'returndate' => $returndate,
-            'returntime' => $returntime,
-            'theme' => $theme,
-            'seo_title' => __('web.common.vehicles'),
+            'brands'                => $brands,
+            'vehicleTypes'          => $vehicleTypes,
+            'years'                 => $years,
+            'fuelTypes'             => $fuelTypes,
+            'transmissions'         => $transmissions,
+            'colors'                => $colors,
+            'features'              => $features,
+            'allowBooking'          => $allowBooking,
+            'allowEnquiries'        => $allowEnquiries,
+            'pickuplocation'        => $pickuplocation,
+            'pickupdate'            => $pickupdate,
+            'pickuptime'            => $pickuptime,
+            'returndate'            => $returndate,
+            'returntime'            => $returntime,
+            'theme'                 => $theme,
+            'seo_title'             => __('web.common.vehicles'),
             'initialPickupLocation' => $pickuplocation ? $_pickuplocation : null
         ];
 
@@ -199,24 +199,24 @@ class HomeRepository implements HomeRepositoryInterface
         $author_name = getCurrentUserFullname($appAdmin->id);
         $response = [
             'author_location' => $author_location,
-            'author_profile' => $author_profile,
-            'author_email' => $author_email,
-            'author_phone' => $author_phone,
-            'author_name' => $author_name,
-            'vehicle' => $vehicle,
-            'mainLocation' => $mainLocation,
-            'allLocation' => $allLocation,
-            'bookingCount' => $bookingCount,
-            'vehicleCount' => $vehicleCount,
-            'lastUpdate' => $lastUpdateFormatted,
-            'allowBooking' => $allowBooking,
-            'allowEnquiries' => $allowEnquiries,
-            'vehicleDetail' => $vehicleDetail,
-            'seo_title' => $seo_title,
+            'author_profile'  => $author_profile,
+            'author_email'    => $author_email,
+            'author_phone'    => $author_phone,
+            'author_name'     => $author_name,
+            'vehicle'         => $vehicle,
+            'mainLocation'    => $mainLocation,
+            'allLocation'     => $allLocation,
+            'bookingCount'    => $bookingCount,
+            'vehicleCount'    => $vehicleCount,
+            'lastUpdate'      => $lastUpdateFormatted,
+            'allowBooking'    => $allowBooking,
+            'allowEnquiries'  => $allowEnquiries,
+            'vehicleDetail'   => $vehicleDetail,
+            'seo_title'       => $seo_title,
             'seo_description' => $seo_description,
-            'meta_keywords' => $meta_keywords,
-            'og_image' => $og_image,
-            'slug' => $slug
+            'meta_keywords'   => $meta_keywords,
+            'og_image'        => $og_image,
+            'slug'            => $slug
         ];
 
         return $response;

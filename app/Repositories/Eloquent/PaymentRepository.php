@@ -2,11 +2,10 @@
 
 namespace App\Repositories\Eloquent;
 
-use Modules\Booking\Models\Booking;
-use Modules\Booking\Models\BookingUserInfo;
 use App\Repositories\Contracts\PaymentInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Modules\Booking\Models\Booking;
 
 class PaymentRepository implements PaymentInterface
 {
@@ -57,8 +56,8 @@ class PaymentRepository implements PaymentInterface
         $bookings = $query->skip($start)->take($length)->get();
 
         return [
-            'data' => $this->formatPaymentData($bookings),
-            'total' => $totalData,
+            'data'     => $this->formatPaymentData($bookings),
+            'total'    => $totalData,
             'filtered' => $totalData,
         ];
     }
@@ -71,12 +70,12 @@ class PaymentRepository implements PaymentInterface
             $paymentType = $this->formatPaymentType($booking->payment_type);
 
             return [
-                'id' => $booking->reservation_id,
-                'name' => $userInfo ? ucfirst($userInfo->first_name) . " " . ucfirst($userInfo->last_name) : "-",
-                'profile_image' => $booking->customerDetail->profile_image ? uploadedAsset($booking->customerDetail->profile_image) : uploadedAsset('', 'profile'),
-                'amount' => $booking->final_price,
-                'payment_type' => $paymentType,
-                'created_at' => formatDateTime($createdAt, false),
+                'id'             => $booking->reservation_id,
+                'name'           => $userInfo ? ucfirst($userInfo->first_name) . " " . ucfirst($userInfo->last_name) : "-",
+                'profile_image'  => $booking->customerDetail->profile_image ? uploadedAsset($booking->customerDetail->profile_image) : uploadedAsset('', 'profile'),
+                'amount'         => $booking->final_price,
+                'payment_type'   => $paymentType,
+                'created_at'     => formatDateTime($createdAt, false),
                 'payment_status' => $booking->payment_status,
             ];
         })->toArray();

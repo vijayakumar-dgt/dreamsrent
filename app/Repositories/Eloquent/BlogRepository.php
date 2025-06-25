@@ -2,21 +2,21 @@
 
 namespace App\Repositories\Eloquent;
 
-use Illuminate\Support\Facades\DB;
 use App\Repositories\Contracts\BlogRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Modules\GeneralSetting\Models\BlogCategory;
+use Modules\GeneralSetting\Models\BlogPost;
+use Modules\GeneralSetting\Models\BlogReviews;
 use Modules\GeneralSetting\Models\BlogTag;
 use Modules\GeneralSetting\Models\Language;
-use Modules\GeneralSetting\Models\BlogPost;
-use Illuminate\Support\Facades\App;
-use Illuminate\Http\JsonResponse;
 use Modules\GeneralSetting\Models\TranslationLanguage;
-use Modules\GeneralSetting\Models\BlogReviews;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class BlogRepository implements BlogRepositoryInterface
 {
@@ -145,11 +145,11 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $authUser = Auth::guard('web')->user();
         BlogReviews::create([
-            'blog_id' => $request->blog_id,
-            'user_id' => Auth::id(),
-            'name' => getCurrentUserFullname($authUser->id),
-            'email' => $authUser->email,
-            'comments' => $request->comment,
+            'blog_id'    => $request->blog_id,
+            'user_id'    => Auth::id(),
+            'name'       => getCurrentUserFullname($authUser->id),
+            'email'      => $authUser->email,
+            'comments'   => $request->comment,
             'created_at' => Carbon::now(),
         ]);
 

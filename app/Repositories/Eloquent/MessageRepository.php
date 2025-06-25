@@ -26,10 +26,10 @@ class MessageRepository implements MessageRepositoryInterface
         }
         $seo_title = __('web.user.messages');
         return [
-            'sender' => $sender,
-            'receiver' => $receiver,
+            'sender'      => $sender,
+            'receiver'    => $receiver,
             'lastMessage' => $lastMessage,
-            'seo_title' => $seo_title
+            'seo_title'   => $seo_title
         ];
     }
 
@@ -37,10 +37,10 @@ class MessageRepository implements MessageRepositoryInterface
     {
         if ($request->messageType == 'file' && $request->hasFile('file')) {
             $foldername = 'chat';
-            $file       = $request->file('file');
-            $filename   = $file ? $file->getClientOriginalName() : null;
-            $mime_type  = $file ? $file->getClientMimeType() : null;
-            $size       = $file ? $file->getSize() : null;
+            $file = $request->file('file');
+            $filename = $file ? $file->getClientOriginalName() : null;
+            $mime_type = $file ? $file->getClientMimeType() : null;
+            $size = $file ? $file->getSize() : null;
             $path = $file ? uploadFile($file, $foldername, $filename) : null;
             $_message = new Message();
             $_message->sender_id = $request->sender_id;
@@ -61,10 +61,10 @@ class MessageRepository implements MessageRepositoryInterface
         }
         $publishMessage = ($request->messageType == 'file' && isset($path)) ? $path : $request->message;
         $payload = [
-            'sender_id' => $request->sender_id,
+            'sender_id'   => $request->sender_id,
             'receiver_id' => $request->receiver_id,
-            'message' => $publishMessage,
-            'type' => $request->messageType,
+            'message'     => $publishMessage,
+            'type'        => $request->messageType,
         ];
         $payload = json_encode($payload);
         if ($payload === false) {
@@ -139,17 +139,17 @@ class MessageRepository implements MessageRepositoryInterface
             $messageText = strlen($lastMessage->message) > 20 ?
                 substr($lastMessage->message, 0, 20) . '...' : $lastMessage->message;
             $lastMessageResp = [
-                'id' => $lastMessage->id,
-                'message' => $lastMessage->type == 'text' ? $messageText : '<i class="fa fa-link"></i> ' . $messageText,
+                'id'         => $lastMessage->id,
+                'message'    => $lastMessage->type == 'text' ? $messageText : '<i class="fa fa-link"></i> ' . $messageText,
                 'created_at' => $lastMessage->created_at ? $lastMessage->created_at->diffForHumans() : null,
             ];
         }
         return [
-            'status' => true,
-            'code' => 200,
-            'messages' => MessageResource::collection($messages),
-            'next_offset' => $nextOffset,
-            'last_offset' => $offset,
+            'status'       => true,
+            'code'         => 200,
+            'messages'     => MessageResource::collection($messages),
+            'next_offset'  => $nextOffset,
+            'last_offset'  => $offset,
             'last_message' => $lastMessageResp
         ];
     }

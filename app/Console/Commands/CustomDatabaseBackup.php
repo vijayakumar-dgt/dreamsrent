@@ -3,9 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
-use Spatie\DbDumper\Databases\MySql;
 use Modules\GeneralSetting\Models\Dbbackup;
+use Spatie\DbDumper\Databases\MySql;
 
 class CustomDatabaseBackup extends Command
 {
@@ -44,7 +43,7 @@ class CustomDatabaseBackup extends Command
 
             // Store backup record in the database
             Dbbackup::create([
-                'name' => $fileName,
+                'name'       => $fileName,
                 'created_at' => now(),
             ]);
 

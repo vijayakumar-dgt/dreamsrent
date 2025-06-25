@@ -2,37 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Review;
 use App\Models\User;
-use App\Models\UserDetail;
 use App\Models\Wishlist;
-use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\View\View;
-use Modules\Page\Http\Requests\PageRequest;
-use Modules\Page\Models\Page;
-use Modules\Page\Repositories\Contracts\PageInterface;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Modules\CarInfo\Models\Brand;
+use Modules\CarInfo\Models\CarModel;
 use Modules\CarInfo\Models\Cartype;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\VehicleMeta;
-use Modules\CarInfo\Models\CarModel;
 use Modules\GeneralSetting\Models\BlogCategory;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 use Modules\MenuManagement\Models\Menu;
+use Modules\Page\Models\Page;
 
 class ThemeController extends Controller
 {
@@ -95,7 +86,7 @@ class ThemeController extends Controller
 
         $pageContentSections = json_decode($page->page_content ?? '[]', true) ?? [];
 
-        if (empty($pageContentSections) || !collect((array)$pageContentSections)->contains(fn($section) => $section['status'] == 1)) {
+        if (empty($pageContentSections) || !collect((array)$pageContentSections)->contains(fn ($section) => $section['status'] == 1)) {
             $pageContentSections = [];
         } else {
             foreach ($pageContentSections as &$section) {
@@ -364,22 +355,22 @@ class ThemeController extends Controller
                             }
 
                             $best_vehicle->label_1 = $decodedData['label_1'] ?? null;
-                            $best_vehicle->dis_1   = $decodedData['dis_1'] ?? null;
+                            $best_vehicle->dis_1 = $decodedData['dis_1'] ?? null;
 
                             $best_vehicle->label_2 = $decodedData['label_2'] ?? null;
-                            $best_vehicle->dis_2   = $decodedData['dis_2'] ?? null;
+                            $best_vehicle->dis_2 = $decodedData['dis_2'] ?? null;
 
                             $best_vehicle->label_3 = $decodedData['label_3'] ?? null;
-                            $best_vehicle->dis_3   = $decodedData['dis_3'] ?? null;
+                            $best_vehicle->dis_3 = $decodedData['dis_3'] ?? null;
 
                             $best_vehicle->label_4 = $decodedData['label_4'] ?? null;
-                            $best_vehicle->dis_4   = $decodedData['dis_4'] ?? null;
+                            $best_vehicle->dis_4 = $decodedData['dis_4'] ?? null;
 
                             $best_vehicle->label_5 = $decodedData['label_5'] ?? null;
-                            $best_vehicle->dis_5   = $decodedData['dis_5'] ?? null;
+                            $best_vehicle->dis_5 = $decodedData['dis_5'] ?? null;
 
                             $best_vehicle->label_6 = $decodedData['label_6'] ?? null;
-                            $best_vehicle->dis_6   = $decodedData['dis_6'] ?? null;
+                            $best_vehicle->dis_6 = $decodedData['dis_6'] ?? null;
 
                             unset($best_vehicle->content);
                         }
@@ -847,40 +838,40 @@ class ThemeController extends Controller
                                 }
                             }
                             return [
-                                'id' => $vehicle->id,
-                                'name' => $vehicle->name,
-                                'slug' => $vehicle->slug,
-                                'vehicle_image' => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
+                                'id'                      => $vehicle->id,
+                                'name'                    => $vehicle->name,
+                                'slug'                    => $vehicle->slug,
+                                'vehicle_image'           => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
                                 'multiple_vehicle_images' => $multipleImages,
-                                'has_multiple_image' => count($multipleImages) > 1,
-                                'avatar_image' => $avatarImage,
-                                'brand_id' => $vehicle->brand_id ?? null,
-                                'brand' => $vehicle->brand->brand_name ?? null,
-                                'car_type' => $vehicle->carType->name ?? null,
-                                'category' => $vehicle->category->name ?? null,
-                                'location' => $vehicle->mainLocation->name ?? null,
-                                'color' => $vehicle->color->name ?? null,
-                                'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
-                                'transmission' => $vehicle->transmission->name ?? null,
-                                'year' => $vehicle->year,
-                                'mileage' => $vehicle->mileage,
-                                'odometer' => $vehicle->odometer,
-                                'rating' => $rating,
-                                'currency' => $currencySymbol,
-                                'wishlist' => $wishlistExists,
-                                'passenger_capacity' => $vehicle->passenger_capacity,
-                                'num_seats' => $vehicle->num_seats,
-                                'num_doors' => $vehicle->num_doors,
-                                'num_airbags' => $vehicle->num_airbags,
-                                'vehicle_video' => $vehicle->vehicle_video,
-                                'features' => $vehicle->features,
-                                'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                                'is_featured' => $vehicle->popular,
-                                'is_top_rated' => $vehicle->recommended,
-                                'seo_title' => $vehicle->vehicle_metatitle,
-                                'seo_key' => $vehicle->vehicle_metakeywords,
-                                'seo_description' => $vehicle->vehicle_metadesc,
-                                'created_at' => $vehicle->created_at,
+                                'has_multiple_image'      => count($multipleImages) > 1,
+                                'avatar_image'            => $avatarImage,
+                                'brand_id'                => $vehicle->brand_id ?? null,
+                                'brand'                   => $vehicle->brand->brand_name ?? null,
+                                'car_type'                => $vehicle->carType->name ?? null,
+                                'category'                => $vehicle->category->name ?? null,
+                                'location'                => $vehicle->mainLocation->name ?? null,
+                                'color'                   => $vehicle->color->name ?? null,
+                                'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
+                                'transmission'            => $vehicle->transmission->name ?? null,
+                                'year'                    => $vehicle->year,
+                                'mileage'                 => $vehicle->mileage,
+                                'odometer'                => $vehicle->odometer,
+                                'rating'                  => $rating,
+                                'currency'                => $currencySymbol,
+                                'wishlist'                => $wishlistExists,
+                                'passenger_capacity'      => $vehicle->passenger_capacity,
+                                'num_seats'               => $vehicle->num_seats,
+                                'num_doors'               => $vehicle->num_doors,
+                                'num_airbags'             => $vehicle->num_airbags,
+                                'vehicle_video'           => $vehicle->vehicle_video,
+                                'features'                => $vehicle->features,
+                                'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
+                                'is_featured'             => $vehicle->popular,
+                                'is_top_rated'            => $vehicle->recommended,
+                                'seo_title'               => $vehicle->vehicle_metatitle,
+                                'seo_key'                 => $vehicle->vehicle_metakeywords,
+                                'seo_description'         => $vehicle->vehicle_metadesc,
+                                'created_at'              => $vehicle->created_at,
                             ];
                         });
 
@@ -997,43 +988,43 @@ class ThemeController extends Controller
                                 }
                             }
                             return [
-                                'id' => $vehicle->id,
-                                'name' => $vehicle->name,
-                                'slug' => $vehicle->slug,
-                                'vehicle_image' => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
+                                'id'                      => $vehicle->id,
+                                'name'                    => $vehicle->name,
+                                'slug'                    => $vehicle->slug,
+                                'vehicle_image'           => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
                                 'multiple_vehicle_images' => $multipleImages,
-                                'has_multiple_image' => count($multipleImages) > 1,
-                                'avatar_image' => $avatarImage,
-                                'brand_id' => $vehicle->brand_id ?? null,
-                                'brand' => $vehicle->brand->brand_name ?? null,
-                                'car_type' => $vehicle->carType->name ?? null,
-                                'category' => $vehicle->category->name ?? null,
-                                'tube_type' => Arr::random(['Tube', 'Tubeless']),
-                                'break_type' => Arr::random(['Drum', 'Disc']),
-                                'location' => $vehicle->mainLocation->name ?? null,
-                                'color' => $vehicle->color->name ?? null,
-                                'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
-                                'transmission' => $vehicle->transmission->name ?? null,
-                                'year' => $vehicle->year,
-                                'mileage' => $vehicle->mileage,
-                                'odometer' => $vehicle->odometer,
-                                'rating' => $rating,
-                                'total_review' => Review::where("vehicle_id", $vehicle->id)->count(),
-                                'currency' => $currencySymbol,
-                                'wishlist' => $wishlistExists,
-                                'passenger_capacity' => $vehicle->passenger_capacity,
-                                'num_seats' => $vehicle->num_seats,
-                                'num_doors' => $vehicle->num_doors,
-                                'num_airbags' => $vehicle->num_airbags,
-                                'vehicle_video' => $vehicle->vehicle_video,
-                                'features' => $vehicle->features,
-                                'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                                'is_featured' => $vehicle->popular,
-                                'is_top_rated' => $vehicle->recommended,
-                                'seo_title' => $vehicle->vehicle_metatitle,
-                                'seo_key' => $vehicle->vehicle_metakeywords,
-                                'seo_description' => $vehicle->vehicle_metadesc,
-                                'created_at' => $vehicle->created_at,
+                                'has_multiple_image'      => count($multipleImages) > 1,
+                                'avatar_image'            => $avatarImage,
+                                'brand_id'                => $vehicle->brand_id ?? null,
+                                'brand'                   => $vehicle->brand->brand_name ?? null,
+                                'car_type'                => $vehicle->carType->name ?? null,
+                                'category'                => $vehicle->category->name ?? null,
+                                'tube_type'               => Arr::random(['Tube', 'Tubeless']),
+                                'break_type'              => Arr::random(['Drum', 'Disc']),
+                                'location'                => $vehicle->mainLocation->name ?? null,
+                                'color'                   => $vehicle->color->name ?? null,
+                                'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
+                                'transmission'            => $vehicle->transmission->name ?? null,
+                                'year'                    => $vehicle->year,
+                                'mileage'                 => $vehicle->mileage,
+                                'odometer'                => $vehicle->odometer,
+                                'rating'                  => $rating,
+                                'total_review'            => Review::where("vehicle_id", $vehicle->id)->count(),
+                                'currency'                => $currencySymbol,
+                                'wishlist'                => $wishlistExists,
+                                'passenger_capacity'      => $vehicle->passenger_capacity,
+                                'num_seats'               => $vehicle->num_seats,
+                                'num_doors'               => $vehicle->num_doors,
+                                'num_airbags'             => $vehicle->num_airbags,
+                                'vehicle_video'           => $vehicle->vehicle_video,
+                                'features'                => $vehicle->features,
+                                'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
+                                'is_featured'             => $vehicle->popular,
+                                'is_top_rated'            => $vehicle->recommended,
+                                'seo_title'               => $vehicle->vehicle_metatitle,
+                                'seo_key'                 => $vehicle->vehicle_metakeywords,
+                                'seo_description'         => $vehicle->vehicle_metadesc,
+                                'created_at'              => $vehicle->created_at,
                             ];
                         });
 
@@ -1162,48 +1153,48 @@ class ThemeController extends Controller
                                 }
                             }
                             return [
-                                'id' => $vehicle->id,
-                                'name' => $vehicle->name,
-                                'slug' => $vehicle->slug,
-                                'vehicle_image' => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
+                                'id'                      => $vehicle->id,
+                                'name'                    => $vehicle->name,
+                                'slug'                    => $vehicle->slug,
+                                'vehicle_image'           => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
                                 'multiple_vehicle_images' => $multipleImages,
-                                'has_multiple_image' => count($multipleImages) > 1,
-                                'avatar_image' => $avatarImage,
-                                'brand_id' => $vehicle->brand_id ?? null,
-                                'brand' => $vehicle->brand->brand_name ?? null,
-                                'car_type' => $vehicle->carType->name ?? null,
-                                'category' => $vehicle->category->name ?? null,
-                                'tube_type' => Arr::random(['Tube', 'Tubeless']),
-                                'break_type' => Arr::random(['Drum', 'Disc']),
-                                'location' => $vehicle->mainLocation->name ?? null,
-                                'color' => $vehicle->color->name ?? null,
-                                'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
-                                'transmission' => $vehicle->transmission->name ?? null,
-                                'year' => $vehicle->year,
-                                'mileage' => $vehicle->mileage,
-                                'odometer' => $vehicle->odometer,
-                                'rating' => $rating,
-                                'total_review' => Review::where("vehicle_id", $vehicle->id)->count(),
-                                'currency' => $currencySymbol,
-                                'wishlist' => $wishlistExists,
-                                'passenger_capacity' => $vehicle->passenger_capacity,
-                                'num_seats' => $vehicle->num_seats,
-                                'num_doors' => $vehicle->num_doors,
-                                'num_airbags' => $vehicle->num_airbags,
-                                'vehicle_video' => $vehicle->vehicle_video,
-                                'features' => $vehicle->features,
-                                'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                                'is_featured' => $vehicle->popular,
-                                'is_top_rated' => $vehicle->recommended,
-                                'seo_title' => $vehicle->vehicle_metatitle,
-                                'seo_key' => $vehicle->vehicle_metakeywords,
-                                'seo_description' => $vehicle->vehicle_metadesc,
-                                'created_at' => $vehicle->created_at,
+                                'has_multiple_image'      => count($multipleImages) > 1,
+                                'avatar_image'            => $avatarImage,
+                                'brand_id'                => $vehicle->brand_id ?? null,
+                                'brand'                   => $vehicle->brand->brand_name ?? null,
+                                'car_type'                => $vehicle->carType->name ?? null,
+                                'category'                => $vehicle->category->name ?? null,
+                                'tube_type'               => Arr::random(['Tube', 'Tubeless']),
+                                'break_type'              => Arr::random(['Drum', 'Disc']),
+                                'location'                => $vehicle->mainLocation->name ?? null,
+                                'color'                   => $vehicle->color->name ?? null,
+                                'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
+                                'transmission'            => $vehicle->transmission->name ?? null,
+                                'year'                    => $vehicle->year,
+                                'mileage'                 => $vehicle->mileage,
+                                'odometer'                => $vehicle->odometer,
+                                'rating'                  => $rating,
+                                'total_review'            => Review::where("vehicle_id", $vehicle->id)->count(),
+                                'currency'                => $currencySymbol,
+                                'wishlist'                => $wishlistExists,
+                                'passenger_capacity'      => $vehicle->passenger_capacity,
+                                'num_seats'               => $vehicle->num_seats,
+                                'num_doors'               => $vehicle->num_doors,
+                                'num_airbags'             => $vehicle->num_airbags,
+                                'vehicle_video'           => $vehicle->vehicle_video,
+                                'features'                => $vehicle->features,
+                                'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
+                                'is_featured'             => $vehicle->popular,
+                                'is_top_rated'            => $vehicle->recommended,
+                                'seo_title'               => $vehicle->vehicle_metatitle,
+                                'seo_key'                 => $vehicle->vehicle_metakeywords,
+                                'seo_description'         => $vehicle->vehicle_metadesc,
+                                'created_at'              => $vehicle->created_at,
                             ];
                         });
 
                         $section['section_content'] = [
-                            'brands' => $brands,
+                            'brands'   => $brands,
                             'vehicles' => $data,
                         ];
                     }
@@ -1460,7 +1451,7 @@ class ThemeController extends Controller
                             $section['design'] = 'exclusive_bike';
                             $section['section_content'] = [
                                 "bike_icon" => $previewImage,
-                                "items" => $items,
+                                "items"     => $items,
                             ];
                         }
                     }
@@ -1708,7 +1699,7 @@ class ThemeController extends Controller
                                     }
 
                                     $items[] = [
-                                        'id' => $experience->id,
+                                        'id'   => $experience->id,
                                         'data' => $data,
                                     ];
                                 }
@@ -1734,7 +1725,7 @@ class ThemeController extends Controller
 
                         $blogss = DB::table('blog_posts')
                             ->select('id', 'title', 'image', 'slug', 'category', 'description', 'updated_at')
-                            ->when($type === 'all', fn($query) => $query)
+                            ->when($type === 'all', fn ($query) => $query)
                             ->limit((int) $limit)
                             ->where('language_id', $lang_id)
                             ->where('status', 1)
@@ -1747,15 +1738,15 @@ class ThemeController extends Controller
                         foreach ($blogss as $blog) {
                             $category = BlogCategory::find($blog->category);
                             $blogs[] = [
-                                'id' => $blog->id,
-                                'title' => $blog->title,
-                                'slug' => $blog->slug ?? Str::slug($blog->title),
-                                'image' => uploadedAsset($blog->image),
-                                'category' => $category?->name ?? '',
+                                'id'          => $blog->id,
+                                'title'       => $blog->title,
+                                'slug'        => $blog->slug ?? Str::slug($blog->title),
+                                'image'       => uploadedAsset($blog->image),
+                                'category'    => $category?->name ?? '',
                                 'description' => $blog->description,
-                                'updated_at' => formatDateTime($blog->updated_at),
-                                'author' => [
-                                    'name' => getCurrentUserFullName($appAdmin->id),
+                                'updated_at'  => formatDateTime($blog->updated_at),
+                                'author'      => [
+                                    'name'   => getCurrentUserFullName($appAdmin->id),
                                     'avatar' => uploadedAsset($appAdmin->userDetails->profile_image, 'profile'),
                                 ],
                             ];
@@ -1782,7 +1773,7 @@ class ThemeController extends Controller
                         $section['type'] = 'search_section';
                         $section['design'] = 'search_one';
                         $section['section_content'] = [
-                            "title" => "Search Section",
+                            "title"       => "Search Section",
                             "description" => "Find the best vehicles and services easily."
                         ];
                     }
@@ -1922,7 +1913,7 @@ class ThemeController extends Controller
 
                                 if (!empty($vehiclePrices)) {
                                     foreach ($vehiclePrices as $price) {
-                                        $filteredPrice = array_filter($price, fn($value) => $value > 0);
+                                        $filteredPrice = array_filter($price, fn ($value) => $value > 0);
                                         if (!empty($filteredPrice)) {
                                             $filteredPrices[] = $filteredPrice;
                                         }
@@ -1968,43 +1959,43 @@ class ThemeController extends Controller
                                 }
 
                                 return [
-                                    'id' => $vehicle->id,
-                                    'name' => $vehicle->name,
-                                    'slug' => $vehicle->slug,
-                                    'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
+                                    'id'                      => $vehicle->id,
+                                    'name'                    => $vehicle->name,
+                                    'slug'                    => $vehicle->slug,
+                                    'vehicle_image'           => url('/storage/' . $vehicle->vehicle_image),
                                     'multiple_vehicle_images' => $multipleImages,
-                                    'has_multiple_image' => count($multipleImages) > 1,
-                                    'avatar_image' => $avatarImage,
-                                    'brand_id' => $vehicle->brand_id ?? null,
-                                    'brand' => $vehicle->brand->brand_name ?? null,
-                                    'car_type' => $vehicle->carType->name ?? null,
-                                    'category' => $vehicle->category->name ?? null,
-                                    'tube_type' => Arr::random(['Tube', 'Tubeless']),
-                                    'break_type' => Arr::random(['Drum', 'Disc']),
-                                    'location' => $vehicle->mainLocation->name ?? null,
-                                    'color' => $vehicle->color->name ?? null,
-                                    'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
-                                    'transmission' => $vehicle->transmission->name ?? null,
-                                    'year' => $vehicle->year,
-                                    'mileage' => $vehicle->mileage,
-                                    'odometer' => $vehicle->odometer,
-                                    'rating' => $rating,
-                                    'total_review' => Review::where("vehicle_id", $vehicle->id)->count(),
-                                    'currency' => $currencySymbol,
-                                    'wishlist' => $wishlistExists,
-                                    'passenger_capacity' => $vehicle->passenger_capacity,
-                                    'num_seats' => $vehicle->num_seats,
-                                    'num_doors' => $vehicle->num_doors,
-                                    'num_airbags' => $vehicle->num_airbags,
-                                    'vehicle_video' => $vehicle->vehicle_video,
-                                    'features' => $vehicle->features,
-                                    'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                                    'is_featured' => $vehicle->popular,
-                                    'is_top_rated' => $vehicle->recommended,
-                                    'seo_title' => $vehicle->vehicle_metatitle,
-                                    'seo_key' => $vehicle->vehicle_metakeywords,
-                                    'seo_description' => $vehicle->vehicle_metadesc,
-                                    'created_at' => $vehicle->created_at,
+                                    'has_multiple_image'      => count($multipleImages) > 1,
+                                    'avatar_image'            => $avatarImage,
+                                    'brand_id'                => $vehicle->brand_id ?? null,
+                                    'brand'                   => $vehicle->brand->brand_name ?? null,
+                                    'car_type'                => $vehicle->carType->name ?? null,
+                                    'category'                => $vehicle->category->name ?? null,
+                                    'tube_type'               => Arr::random(['Tube', 'Tubeless']),
+                                    'break_type'              => Arr::random(['Drum', 'Disc']),
+                                    'location'                => $vehicle->mainLocation->name ?? null,
+                                    'color'                   => $vehicle->color->name ?? null,
+                                    'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
+                                    'transmission'            => $vehicle->transmission->name ?? null,
+                                    'year'                    => $vehicle->year,
+                                    'mileage'                 => $vehicle->mileage,
+                                    'odometer'                => $vehicle->odometer,
+                                    'rating'                  => $rating,
+                                    'total_review'            => Review::where("vehicle_id", $vehicle->id)->count(),
+                                    'currency'                => $currencySymbol,
+                                    'wishlist'                => $wishlistExists,
+                                    'passenger_capacity'      => $vehicle->passenger_capacity,
+                                    'num_seats'               => $vehicle->num_seats,
+                                    'num_doors'               => $vehicle->num_doors,
+                                    'num_airbags'             => $vehicle->num_airbags,
+                                    'vehicle_video'           => $vehicle->vehicle_video,
+                                    'features'                => $vehicle->features,
+                                    'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
+                                    'is_featured'             => $vehicle->popular,
+                                    'is_top_rated'            => $vehicle->recommended,
+                                    'seo_title'               => $vehicle->vehicle_metatitle,
+                                    'seo_key'                 => $vehicle->vehicle_metakeywords,
+                                    'seo_description'         => $vehicle->vehicle_metadesc,
+                                    'created_at'              => $vehicle->created_at,
                                 ];
                             });
 
@@ -2028,7 +2019,7 @@ class ThemeController extends Controller
                                     }
 
                                     $items[] = [
-                                        'data' => $experienceData,
+                                        'data'     => $experienceData,
                                         'vehicles' => $data->toArray(),
                                     ];
                                 }
@@ -2062,7 +2053,7 @@ class ThemeController extends Controller
                         ->where('language_id', $lang_id)
                         ->whereNull('deleted_at')
                         ->get()
-                        ->map(fn($cartype) => ['id' => $cartype->id, 'name' => $cartype->name]);
+                        ->map(fn ($cartype) => ['id' => $cartype->id, 'name' => $cartype->name]);
 
                     $section['section_type'] = 'all_category';
                     $section['design'] = 'category_two';
@@ -2106,14 +2097,14 @@ class ThemeController extends Controller
             }
         }
         $languageCode = app()->getLocale();
-        $language_id  = getLanguageId($languageCode);
+        $language_id = getLanguageId($languageCode);
         $cookieSettings = GeneralSetting::where('group_id', 7)->where('language_id', $language_id)->pluck('value', 'key');
         $cookieResponse = [
-            'content'          => $cookieSettings['cookiesContentText_' . $language_id] ?? '',
-            'position'         => $cookieSettings['cookiesPosition_' . $language_id] ?? '',
-            'agree_btn_text'   => $cookieSettings['agreeButtonText_' . $language_id] ?? '',
-            'decline_btn_text' => $cookieSettings['declineButtonText_' . $language_id] ?? '',
-            'show_decline_btn' => $cookieSettings['showDeclineButton_' . $language_id] ?? '',
+            'content'           => $cookieSettings['cookiesContentText_' . $language_id] ?? '',
+            'position'          => $cookieSettings['cookiesPosition_' . $language_id] ?? '',
+            'agree_btn_text'    => $cookieSettings['agreeButtonText_' . $language_id] ?? '',
+            'decline_btn_text'  => $cookieSettings['declineButtonText_' . $language_id] ?? '',
+            'show_decline_btn'  => $cookieSettings['showDeclineButton_' . $language_id] ?? '',
             'cookies_page_link' => $cookieSettings['cookiesPageLink_' . $language_id] ?? '',
         ];
         $categoryId = getCustomThemeCategoryId($themeId);
@@ -2157,7 +2148,7 @@ class ThemeController extends Controller
                 }
             }
             $filteredMenus = collect($menus)
-                ->filter(fn($menu) => isset($menu['status']) && $menu['status'] === true)
+                ->filter(fn ($menu) => isset($menu['status']) && $menu['status'] === true)
                 ->values()
                 ->all();
 
@@ -2189,18 +2180,18 @@ class ThemeController extends Controller
         });
 
         $data = [
-            'headers' => $headers,
-            'footers' => $footers,
-            'theme' => $theme,
-            'layout' => "frontend.theme_{$theme}.app",
-            'companyPhoneNumber' => $companyPhoneNumber,
-            'companyEmail' => $companyEmail,
-            'companyName' => $companyName,
+            'headers'              => $headers,
+            'footers'              => $footers,
+            'theme'                => $theme,
+            'layout'               => "frontend.theme_{$theme}.app",
+            'companyPhoneNumber'   => $companyPhoneNumber,
+            'companyEmail'         => $companyEmail,
+            'companyName'          => $companyName,
             'company_address_line' => $company_address_line,
-            'logo' => $logo,
-            'favicon' => $favicon,
-            'smallLogo' => $smallLogo,
-            'language_switcher' => $language_switcher
+            'logo'                 => $logo,
+            'favicon'              => $favicon,
+            'smallLogo'            => $smallLogo,
+            'language_switcher'    => $language_switcher
         ];
         $page = Page::where('slug', $slug)->where('theme_id', $themeId)->where('language_id', $lang_id)->first();
         if (!$page) {
@@ -2212,26 +2203,26 @@ class ThemeController extends Controller
         }
         if ($page) {
             $data = [
-                'page_title' => $page->page_title,
-                'slug' => $page->slug,
-                'currency' => getDefaultCurrencySymbol(),
-                'language_id' => $page->language_id,
+                'page_title'       => $page->page_title,
+                'slug'             => $page->slug,
+                'currency'         => getDefaultCurrencySymbol(),
+                'language_id'      => $page->language_id,
                 'content_sections' => $pageContentSections,
-                'seo_tag' => $page->seo_tag,
-                'seo_title' => $page->seo_title,
-                'seo_description' => $page->seo_description,
-                'status' => $page->status,
-                'cookie_settings' => $cookieResponse,
-                'vehicle_types' => $vehicleTypes,
-                'vehicle_models' => $vehicleModels,
-                'locations' => $locations,
-                'total_reviews' => $totalReviews
+                'seo_tag'          => $page->seo_tag,
+                'seo_title'        => $page->seo_title,
+                'seo_description'  => $page->seo_description,
+                'status'           => $page->status,
+                'cookie_settings'  => $cookieResponse,
+                'vehicle_types'    => $vehicleTypes,
+                'vehicle_models'   => $vehicleModels,
+                'locations'        => $locations,
+                'total_reviews'    => $totalReviews
             ];
             $seo_title = $page->seo_title;
             $seo_description = $page->seo_description;
             $og_title = $page->og_title;
             $og_description = $page->og_description;
-            $meta_keywords  = $page->keywords;
+            $meta_keywords = $page->keywords;
 
             $vehicleBrand = Brand::select("id", "brand_name", "brand_image", "brand_icon")
                 ->where("language_id", $language_id)

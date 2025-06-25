@@ -2,28 +2,27 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\CarInfo\Http\Controllers\BrandController;
-use Modules\CarInfo\Http\Controllers\CarInfoController;
-use Modules\CarInfo\Http\Controllers\CarTypeController;
-use Modules\CarInfo\Http\Controllers\DamageTypeController;
-use Modules\CarInfo\Http\Controllers\DoorTypeController;
-use Modules\CarInfo\Http\Controllers\LocationController;
 use Modules\CarInfo\Http\Controllers\CarColorController;
-use Modules\CarInfo\Http\Controllers\CarModelController;
-use Modules\CarInfo\Http\Controllers\CylinderController;
-use Modules\CarInfo\Http\Controllers\ExtraServiceController;
-use Modules\CarInfo\Http\Controllers\SafetyFeatureController;
-use Modules\CarInfo\Http\Controllers\TagController;
 use Modules\CarInfo\Http\Controllers\CarFuelController;
+use Modules\CarInfo\Http\Controllers\CarInfoController;
+use Modules\CarInfo\Http\Controllers\CarModelController;
 use Modules\CarInfo\Http\Controllers\CarSeatController;
 use Modules\CarInfo\Http\Controllers\CarSteeringController;
 use Modules\CarInfo\Http\Controllers\CarTransmissionContollerController;
-use Modules\CarInfo\Models\CarSteering;
-use Modules\CarInfo\Http\Controllers\SeasonController;
+use Modules\CarInfo\Http\Controllers\CarTypeController;
 use Modules\CarInfo\Http\Controllers\CategoryController;
-use Modules\CarInfo\Http\Controllers\InspectionController;
+use Modules\CarInfo\Http\Controllers\CylinderController;
+use Modules\CarInfo\Http\Controllers\DamageTypeController;
+use Modules\CarInfo\Http\Controllers\DoorTypeController;
 use Modules\CarInfo\Http\Controllers\DriverController;
-use Modules\CarInfo\Http\Controllers\MaintenanceController;
 use Modules\CarInfo\Http\Controllers\EnquireController;
+use Modules\CarInfo\Http\Controllers\ExtraServiceController;
+use Modules\CarInfo\Http\Controllers\InspectionController;
+use Modules\CarInfo\Http\Controllers\LocationController;
+use Modules\CarInfo\Http\Controllers\MaintenanceController;
+use Modules\CarInfo\Http\Controllers\SafetyFeatureController;
+use Modules\CarInfo\Http\Controllers\SeasonController;
+use Modules\CarInfo\Http\Controllers\TagController;
 
 Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHeader']], function () {
 

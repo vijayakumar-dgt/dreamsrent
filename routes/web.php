@@ -1,23 +1,21 @@
 <?php
 
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\TranslationController;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Route;
-use Modules\Page\Http\Controllers\PageController;
 use App\Http\Controllers\user\auth\UserLoginRegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 use Modules\Booking\Http\Controllers\UserBookingController;
-use Illuminate\Support\Facades\Session;
 use Modules\CarInfo\Http\Controllers\CarInfoController;
-use Modules\CarInfo\Http\Controllers\MaintenanceController;
 use Modules\GeneralSetting\Http\Controllers\Admin\LanguageController;
+use Modules\Page\Http\Controllers\PageController;
 
 Route::get('/documentation', function () {
     return response()->file(public_path('documentation/index.html'));

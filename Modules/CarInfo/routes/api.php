@@ -1,12 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\CarInfo\Http\Controllers\BrandController;
-use Modules\CarInfo\Http\Controllers\CarColorController;
 use Modules\CarInfo\Http\Controllers\CarInfoController;
-use Modules\CarInfo\Http\Controllers\CarModelController;
-use Modules\CarInfo\Http\Controllers\CarTypeController;
-use Modules\CarInfo\Http\Controllers\DriverController;
 use Modules\CarInfo\Http\Controllers\LocationController;
 
 /*

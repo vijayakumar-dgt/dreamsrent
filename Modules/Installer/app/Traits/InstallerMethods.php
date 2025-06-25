@@ -124,7 +124,6 @@ trait InstallerMethods
         return $success[1];
     }
 
-
     /**
      * Attempt to create a database connection with given credentials.
      *
@@ -209,7 +208,6 @@ trait InstallerMethods
             return 'Database connection failed! It looks like you have entered wrong database credentials (host, port, database, user, or password).';
         }
     }
-
 
     /**
      * Imports the database from a given SQL file.

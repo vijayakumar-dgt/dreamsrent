@@ -20,5 +20,5 @@ class Currency extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = ['currency_name', 'code', 'symbol', 'exchange_rate', 'status'];
-    protected $table    = 'currencies';
+    protected $table = 'currencies';
 }

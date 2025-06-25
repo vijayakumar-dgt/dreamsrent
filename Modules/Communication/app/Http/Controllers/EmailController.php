@@ -3,8 +3,8 @@
 namespace Modules\Communication\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Modules\Communication\Emails\Samplemail;
 use Modules\Communication\Helpers\MailConfigurator;
@@ -21,14 +21,14 @@ class EmailController extends Controller
         $attachment = $request->input('attachment'); // Attachment path
 
         $data = [
-            'message' => $content,
-            'subject' => $subject,
+            'message'    => $content,
+            'subject'    => $subject,
             'attachment' => $attachment,
         ];
 
         if (empty($tomail)) {
             return response()->json([
-                'code' => 400,
+                'code'    => 400,
                 'message' => 'Recipient email is required.',
             ], 400);
         }

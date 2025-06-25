@@ -21,23 +21,22 @@ class AddCityRequest extends FormRequest
                 'required',
                 'max:255',
                 Rule::unique('cities')
-                    ->where(fn($query) => $query->where('state_id', $this->state_id))
+                    ->where(fn ($query) => $query->where('state_id', $this->state_id))
                     ->ignore($cityId),
             ],
             'state_id' => 'required|exists:states,id',
-            'status' => 'nullable|boolean',
+            'status'   => 'nullable|boolean',
         ];
     }
-
 
     public function messages(): array
     {
         return [
-            'name.required' => __('admin.cms.city_required'),
-            'name.unique' => __('admin.cms.city_exists'),
-            'name.max' => __('admin.cms.city_max_length'),
+            'name.required'     => __('admin.cms.city_required'),
+            'name.unique'       => __('admin.cms.city_exists'),
+            'name.max'          => __('admin.cms.city_max_length'),
             'state_id.required' => __('admin.cms.state_required'),
-            'state_id.exists' => __('admin.cms.state_exists'),
+            'state_id.exists'   => __('admin.cms.state_exists'),
         ];
     }
 }

@@ -12,7 +12,7 @@ class MailConfigurator
      */
     public static function configureMail(): void
     {
-          /** @var CommunicationSetting|null $settings */
+        /** @var CommunicationSetting|null $settings */
         $settings = CommunicationSetting::where('settings_type', 1)
             ->whereIn('key', ['phpmail_status', 'smtp_status', 'sendgrid_status'])
             ->where('value', 1)
@@ -82,12 +82,12 @@ class MailConfigurator
         Config::set('mail.from.name', $getusername ?? "No-Reply");
         Config::set('mail.default', 'smtp');
         Config::set('mail.mailers.smtp', [
-            'transport' => 'smtp',
-            'host' => $gethost,
-            'port' => 587,
+            'transport'  => 'smtp',
+            'host'       => $gethost,
+            'port'       => 587,
             'encryption' => 'tls',
-            'username' => $getmail,
-            'password' => $getpassword,
+            'username'   => $getmail,
+            'password'   => $getpassword,
         ]);
     }
 
@@ -111,12 +111,12 @@ class MailConfigurator
         Config::set('mail.from.name', 'Truelysell');
         Config::set('mail.default', 'smtp');
         Config::set('mail.mailers.smtp', [
-            'transport' => 'smtp',
-            'host' => 'smtp.sendgrid.net',
-            'port' => 587,
+            'transport'  => 'smtp',
+            'host'       => 'smtp.sendgrid.net',
+            'port'       => 587,
             'encryption' => 'tls',
-            'username' => 'apikey',
-            'password' => $getkey,
+            'username'   => 'apikey',
+            'password'   => $getkey,
         ]);
     }
 }

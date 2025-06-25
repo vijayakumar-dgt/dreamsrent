@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\WalletHistory;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Stripe\Checkout\Session;
@@ -42,7 +42,7 @@ class WalletController extends Controller
     {
         $request->validate([
             'wallet_amount' => 'required|numeric|min:1',
-            'payment_type' => 'required|in:paypal,stripe,wallet_one',
+            'payment_type'  => 'required|in:paypal,stripe,wallet_one',
         ]);
 
         $user = Auth::guard('web')->user();
@@ -51,7 +51,7 @@ class WalletController extends Controller
 
         if (!$user) {
             return response()->json([
-                'code' => 401,
+                'code'    => 401,
                 'message' => 'Unauthorized access.',
             ], 401);
         }
@@ -67,12 +67,12 @@ class WalletController extends Controller
                 $this->provider->getAccessToken();
 
                 $order = [
-                    'intent' => 'CAPTURE',
+                    'intent'         => 'CAPTURE',
                     'purchase_units' => [
                         [
                             'amount' => [
                                 'currency_code' => "USD",
-                                'value' => $amount,
+                                'value'         => $amount,
                             ],
                         ],
                     ],
@@ -92,34 +92,34 @@ class WalletController extends Controller
 
                 if (!$response || !isset($response['id'])) {
                     return response()->json([
-                        'code' => 500,
+                        'code'    => 500,
                         'message' => 'Failed to create PayPal order.',
                     ]);
                 }
 
                 WalletHistory::create([
-                    'user_id' => $user->id,
-                    'amount' => $amount,
-                    'payment_type' => $paymentType,
-                    'status' => 'Pending',
-                    'transaction_id' => $response['id'],
+                    'user_id'          => $user->id,
+                    'amount'           => $amount,
+                    'payment_type'     => $paymentType,
+                    'status'           => 'Pending',
+                    'transaction_id'   => $response['id'],
                     'transaction_date' => now(),
                 ]);
 
                 if (!isset($response['links'][1]['href'])) {
                     return response()->json([
-                        'code' => 500,
+                        'code'    => 500,
                         'message' => 'Failed to generate PayPal payment link.',
                     ]);
                 }
                 return response()->json([
-                    'code' => 200,
-                    'message' => 'PayPal payment initiated. Redirecting...',
+                    'code'       => 200,
+                    'message'    => 'PayPal payment initiated. Redirecting...',
                     'paypal_url' => $response['links'][1]['href'],
                 ]);
             } catch (\Exception $e) {
                 return response()->json([
-                    'code' => 500,
+                    'code'    => 500,
                     'message' => 'PayPal authentication failed: ' . $e->getMessage(),
                 ]);
             }
@@ -133,38 +133,38 @@ class WalletController extends Controller
                 'line_items' => [
                     [
                         'price_data' => [
-                            'currency' => $currency_details,
+                            'currency'     => $currency_details,
                             'product_data' => ['name' => "Wallet Top-up"],
-                            'unit_amount' => intval($amount * 100),
+                            'unit_amount'  => intval($amount * 100),
                         ],
                         'quantity' => 1,
                     ]
                 ],
-                'mode' => 'payment',
+                'mode'        => 'payment',
                 'success_url' => route('user.stripe.payment.success.wallet') . "?session_id={CHECKOUT_SESSION_ID}",
-                'cancel_url' => route('payment-failed'),
+                'cancel_url'  => route('payment-failed'),
             ]);
 
             WalletHistory::create([
-                'user_id' => $user->id,
-                'amount' => $amount,
-                'payment_type' => $paymentType,
-                'status' => 'Pending',
-                'transaction_id' => $session->id,
+                'user_id'          => $user->id,
+                'amount'           => $amount,
+                'payment_type'     => $paymentType,
+                'status'           => 'Pending',
+                'transaction_id'   => $session->id,
                 'transaction_date' => now(),
             ]);
             return response()->json([
-                'code' => 200,
-                'message' => 'Stripe payment initiated. Redirecting...',
+                'code'       => 200,
+                'message'    => 'Stripe payment initiated. Redirecting...',
                 'stripe_url' => $session->url,
             ]);
         }
 
         WalletHistory::create([
-            'user_id' => $user->id,
-            'amount' => $amount,
-            'payment_type' => $paymentType,
-            'status' => 'Pending',
+            'user_id'          => $user->id,
+            'amount'           => $amount,
+            'payment_type'     => $paymentType,
+            'status'           => 'Pending',
             'transaction_date' => now(),
         ]);
 
@@ -180,7 +180,7 @@ class WalletController extends Controller
             $accessToken = $this->provider->getAccessToken();
             if (!$accessToken) {
                 return response()->json([
-                    'code' => 401,
+                    'code'    => 401,
                     'message' => 'PayPal authentication failed.',
                 ], 401);
             }
@@ -199,13 +199,13 @@ class WalletController extends Controller
                 return redirect()->route('user.wallet', ['transaction_id' => $response['id']]);
             } else {
                 return response()->json([
-                    'code' => 400,
+                    'code'    => 400,
                     'message' => 'Wallet payment capture failed.',
                 ], 400);
             }
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => 'An error occurred: ' . $e->getMessage(),
             ], 500);
         }
@@ -222,7 +222,7 @@ class WalletController extends Controller
             return redirect()->route('user.wallet', ['transaction_id' => $sessionId]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => 'An error occurred: ' . $e->getMessage(),
             ], 500);
         }
@@ -240,7 +240,7 @@ class WalletController extends Controller
 
             if (!$user) {
                 return response()->json([
-                    'code' => 401,
+                    'code'    => 401,
                     'message' => 'Unauthorized access.',
                 ], 401);
             }
@@ -267,21 +267,21 @@ class WalletController extends Controller
             $totalBalance = $totalCredit - $totalDebit;
             $currencySymbol = getDefaultCurrencySymbol();
             return response()->json([
-                'code' => 200,
-                'success' => true,
-                'message' => 'Wallet transaction history retrieved successfully.',
-                'data' => $walletHistory,
-                'total_credit' => $totalCredit,
-                'total_debit' => $totalDebit,
-                'total_balance' => $totalBalance,
+                'code'            => 200,
+                'success'         => true,
+                'message'         => 'Wallet transaction history retrieved successfully.',
+                'data'            => $walletHistory,
+                'total_credit'    => $totalCredit,
+                'total_debit'     => $totalDebit,
+                'total_balance'   => $totalBalance,
                 'currency_symbol' => $currencySymbol,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => 'An error occurred while retrieving wallet history.',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

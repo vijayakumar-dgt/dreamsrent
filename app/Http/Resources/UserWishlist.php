@@ -22,28 +22,28 @@ class UserWishlist extends JsonResource
         $vehicle = $this->resource->vehicle;
 
         return [
-            'id' => $this->resource->id,
-            'vehicle_id' => $this->resource->getAttribute('vehicle_id'),
-            'name' => $vehicle->name ?? '',
-            'slug' => $vehicle->slug ?? '',
-            'vehicle_image' => uploadedAsset($vehicle->vehicle_image ?? ''),
-            'brand' => $vehicle->brand->brand_name ?? null,
-            'car_type' => $vehicle->carType->name ?? null,
-            'category' => $vehicle->category->name ?? null,
-            'location' => $vehicle->mainLocation->name ?? null,
-            'color' => $vehicle->color->name ?? null,
-            'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
-            'transmission' => $vehicle->transmission->name ?? null,
-            'year' => $vehicle->year ?? null,
-            'mileage' => $vehicle->mileage ?? null,
+            'id'                 => $this->resource->id,
+            'vehicle_id'         => $this->resource->getAttribute('vehicle_id'),
+            'name'               => $vehicle->name ?? '',
+            'slug'               => $vehicle->slug ?? '',
+            'vehicle_image'      => uploadedAsset($vehicle->vehicle_image ?? ''),
+            'brand'              => $vehicle->brand->brand_name ?? null,
+            'car_type'           => $vehicle->carType->name ?? null,
+            'category'           => $vehicle->category->name ?? null,
+            'location'           => $vehicle->mainLocation->name ?? null,
+            'color'              => $vehicle->color->name ?? null,
+            'fuel_type'          => $vehicle->fuel_type->fuel_type ?? null,
+            'transmission'       => $vehicle->transmission->name ?? null,
+            'year'               => $vehicle->year ?? null,
+            'mileage'            => $vehicle->mileage ?? null,
             'passenger_capacity' => $vehicle->passenger_capacity ?? null,
-            'num_seats' => $vehicle->num_seats ?? null,
-            'num_doors' => $vehicle->num_doors ?? null,
-            'num_airbags' => $vehicle->num_airbags ?? null,
-            'vehicle_video' => $vehicle->vehicle_video ?? null,
-            'features' => $vehicle->features ?? [],
-            'currency' => getDefaultCurrencySymbol(),
-            'price' => ($vehicle instanceof \Modules\CarInfo\Models\VehicleInfo)
+            'num_seats'          => $vehicle->num_seats ?? null,
+            'num_doors'          => $vehicle->num_doors ?? null,
+            'num_airbags'        => $vehicle->num_airbags ?? null,
+            'vehicle_video'      => $vehicle->vehicle_video ?? null,
+            'features'           => $vehicle->features ?? [],
+            'currency'           => getDefaultCurrencySymbol(),
+            'price'              => ($vehicle instanceof \Modules\CarInfo\Models\VehicleInfo)
                 ? $this->getPrice($vehicle)
                 : 0,
             'filtered_price' => ($vehicle instanceof \Modules\CarInfo\Models\VehicleInfo)
@@ -80,7 +80,7 @@ class UserWishlist extends JsonResource
             // Get the first key-value pair correctly
             $firstKey = array_key_first($filteredPrices);
             return [
-                'type' => $firstKey,
+                'type'  => $firstKey,
                 'value' => $filteredPrices[$firstKey]
             ];
         }

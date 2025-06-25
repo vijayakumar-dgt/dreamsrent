@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class EditCountryRequest extends FormRequest
 {
@@ -17,13 +16,13 @@ class EditCountryRequest extends FormRequest
         $id = $this->route('id') ?? $this->input('id');
 
         return [
-            'id' => 'required|exists:countries,id',
+            'id'   => 'required|exists:countries,id',
             'name' => [
                 'required',
                 'max:255',
 
             ],
-            'code' => 'nullable|max:50',
+            'code'   => 'nullable|max:50',
             'status' => 'nullable|boolean',
         ];
     }
@@ -31,11 +30,11 @@ class EditCountryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id.required' => __('admin.common.id_required'),
-            'id.exists' => __('admin.common.id_not_exists'),
+            'id.required'   => __('admin.common.id_required'),
+            'id.exists'     => __('admin.common.id_not_exists'),
             'name.required' => __('admin.cms.country_required'),
-            'name.unique' => __('admin.cms.country_exists'),
-            'name.max' => __('admin.cms.country_max_length'),
+            'name.unique'   => __('admin.cms.country_exists'),
+            'name.max'      => __('admin.cms.country_max_length'),
         ];
     }
 }

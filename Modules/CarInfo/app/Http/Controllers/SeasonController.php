@@ -3,12 +3,9 @@
 namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Modules\CarInfo\Models\Season;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Modules\CarInfo\Http\Requests\SeasonRequest;
 use Modules\CarInfo\Repositories\Contracts\SeasonRepositoryInterface;
 

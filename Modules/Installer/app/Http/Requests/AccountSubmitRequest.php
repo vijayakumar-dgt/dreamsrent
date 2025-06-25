@@ -14,9 +14,9 @@ class AccountSubmitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'password' => 'required|string|same:confirm_password|min:8',
+            'name'             => 'required|string',
+            'email'            => 'required|email',
+            'password'         => 'required|string|same:confirm_password|min:8',
             'confirm_password' => 'required|string|min:8',
         ];
     }

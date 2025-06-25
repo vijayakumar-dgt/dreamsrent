@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
 
 class UserLoginRequest extends CustomFailedValidation
 {
@@ -23,7 +22,7 @@ class UserLoginRequest extends CustomFailedValidation
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users,email',
+            'email'    => 'required|email|exists:users,email',
             'password' => 'required|min:6',
         ];
     }
@@ -31,11 +30,11 @@ class UserLoginRequest extends CustomFailedValidation
     public function messages(): array
     {
         return [
-            'email.required' => __('web.auth.email_required'),
-            'email.email' => __('web.auth.valid_email'),
-            'email.exists' => __('web.auth.no_account_found'),
+            'email.required'    => __('web.auth.email_required'),
+            'email.email'       => __('web.auth.valid_email'),
+            'email.exists'      => __('web.auth.no_account_found'),
             'password.required' => __('web.auth.password_required'),
-            'password.min' => __('web.auth.password_minlength'),
+            'password.min'      => __('web.auth.password_minlength'),
         ];
     }
 }

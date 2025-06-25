@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\User;
 
 /**
  * @property string|null $document
@@ -23,12 +22,12 @@ class UserDocument extends Model
         'document'
     ];
 
-     /**
-     * @return BelongsTo<User, UserDocument>
-     */
+    /**
+    * @return BelongsTo<User, UserDocument>
+    */
     public function user(): BelongsTo
     {
-         /** @var belongsTo<User, UserDocument> */
+        /** @var belongsTo<User, UserDocument> */
         return $this->belongsTo(User::class, 'id');
     }
 }

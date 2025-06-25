@@ -15,6 +15,7 @@ class PurchaseVerificationRequest extends FormRequest
             'purchase_code' => 'required|string',
         ];
     }
+
     /**
      * Determine if the user is authorized to make this request.
      */

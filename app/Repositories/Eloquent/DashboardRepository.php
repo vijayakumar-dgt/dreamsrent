@@ -2,15 +2,15 @@
 
 namespace App\Repositories\Eloquent;
 
-use Illuminate\Support\Facades\DB;
-use App\Repositories\Contracts\DashboardRepositoryInterface;
-use Modules\CarInfo\Models\VehicleInfo;
-use Modules\Booking\Models\Booking;
-use Carbon\Carbon;
 use App\Models\Invoice;
-use Modules\GeneralSetting\Models\GeneralSetting;
-use Modules\GeneralSetting\Models\Currency;
+use App\Repositories\Contracts\DashboardRepositoryInterface;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Modules\Booking\Models\Booking;
 use Modules\CarInfo\Models\Maintenance;
+use Modules\CarInfo\Models\VehicleInfo;
+use Modules\GeneralSetting\Models\Currency;
+use Modules\GeneralSetting\Models\GeneralSetting;
 
 class DashboardRepository implements DashboardRepositoryInterface
 {
@@ -175,7 +175,7 @@ class DashboardRepository implements DashboardRepositoryInterface
                 $firstBooking = $dayBookings->first();
 
                 return [
-                    'date' => $firstBooking?->booking_date,
+                    'date'   => $firstBooking?->booking_date,
                     'income' => $dayBookings->sum(function ($booking) {
                         return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ?
                             $booking->final_price : 0;

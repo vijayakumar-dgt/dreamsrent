@@ -17,7 +17,7 @@ class EditCityRequest extends FormRequest
         $id = $this->route('id') ?? $this->input('id');
 
         return [
-            'id' => 'required|exists:cities,id',
+            'id'   => 'required|exists:cities,id',
             'name' => [
                 'required',
                 'max:255',
@@ -26,20 +26,20 @@ class EditCityRequest extends FormRequest
                 })->ignore($id)
             ],
             'state_id' => 'required|exists:states,id',
-            'status' => 'nullable|boolean',
+            'status'   => 'nullable|boolean',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'id.required' => __('admin.common.id_required'),
-            'id.exists' => __('admin.common.id_not_exists'),
-            'name.required' => __('admin.cms.city_required'),
-            'name.unique' => __('admin.cms.city_exists'),
-            'name.max' => __('admin.cms.city_max_length'),
+            'id.required'       => __('admin.common.id_required'),
+            'id.exists'         => __('admin.common.id_not_exists'),
+            'name.required'     => __('admin.cms.city_required'),
+            'name.unique'       => __('admin.cms.city_exists'),
+            'name.max'          => __('admin.cms.city_max_length'),
             'state_id.required' => __('admin.cms.state_required'),
-            'state_id.exists' => __('admin.cms.state_exists'),
+            'state_id.exists'   => __('admin.cms.state_exists'),
         ];
     }
 }

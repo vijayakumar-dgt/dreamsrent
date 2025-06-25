@@ -14,9 +14,9 @@ class TestimonialAddRequest extends CustomFailedValidation
     public function rules(): array
     {
         return [
-            'customer_name' => 'required|string|max:255',
-            'customer_rating' => 'required|integer|min:1|max:5',
-            'customer_review' => 'required|string',
+            'customer_name'     => 'required|string|max:255',
+            'customer_rating'   => 'required|integer|min:1|max:5',
+            'customer_review'   => 'required|string',
             'testimonial_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }

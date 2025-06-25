@@ -3,7 +3,6 @@
 namespace Modules\CarInfo\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class VehicleColorRequest extends CustomFailedValidation
@@ -40,11 +39,11 @@ class VehicleColorRequest extends CustomFailedValidation
     public function messages(): array
     {
         return [
-            'name.required' => __('admin.rentals.color_name_required'),
+            'name.required'  => __('admin.rentals.color_name_required'),
             'value.required' => __('admin.rentals.color_code_required'),
             'name.not_regex' => __('admin.common.script_tag_not_allowed'),
-            'value.unique' => __('admin.rentals.color_code_unique'),
-            'name.unique' => __('admin.rentals.color_name_unique'),
+            'value.unique'   => __('admin.rentals.color_code_unique'),
+            'name.unique'    => __('admin.rentals.color_name_unique'),
         ];
     }
 }

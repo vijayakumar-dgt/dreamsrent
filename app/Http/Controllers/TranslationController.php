@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
 
 class TranslationController extends Controller
 {

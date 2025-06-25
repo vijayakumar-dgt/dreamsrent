@@ -3,26 +3,24 @@
 namespace Modules\Booking\Repositories\Eloquent;
 
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingDetail;
 use Modules\Booking\Models\BookingHistory;
+use Modules\Booking\Repositories\Contracts\BookingRepositoryInterface;
 use Modules\CarInfo\Models\Driver;
 use Modules\CarInfo\Models\ExtraService;
-use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\PricingType;
+use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\VehicleSeason;
 use Modules\CarInfo\Models\VehicleTarrif;
 use Modules\GeneralSetting\Models\GeneralSetting;
-use Modules\GeneralSetting\Models\InsuranceBenefit;
-use Modules\Booking\Repositories\Contracts\BookingRepositoryInterface;
 use Modules\GeneralSetting\Models\Insurance;
+use Modules\GeneralSetting\Models\InsuranceBenefit;
 
 class BookingRepository implements BookingRepositoryInterface
 {
@@ -72,17 +70,17 @@ class BookingRepository implements BookingRepositoryInterface
             }
 
             $response = [
-                'code'   => 200,
+                'code'    => 200,
                 'message' => 'Customer retrieved successfully.',
-                'data' => $customer,
+                'data'    => $customer,
             ];
 
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'code'   => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
             return $response;
         }
@@ -179,10 +177,10 @@ class BookingRepository implements BookingRepositoryInterface
                     });
                 })
 
-                ->when(!empty($brandIds), fn($query) => $query->whereIn('vehicle_info.brand_id', $brandIds))
-                ->when(!empty($typeIds), fn($query) => $query->whereIn('vehicle_info.type_id', $typeIds))
-                ->when(!empty($modelIds), fn($query) => $query->whereIn('vehicle_info.model_id', $modelIds))
-                ->when(!empty($colorIds), fn($query) => $query->whereIn('vehicle_info.color_id', $colorIds))
+                ->when(!empty($brandIds), fn ($query) => $query->whereIn('vehicle_info.brand_id', $brandIds))
+                ->when(!empty($typeIds), fn ($query) => $query->whereIn('vehicle_info.type_id', $typeIds))
+                ->when(!empty($modelIds), fn ($query) => $query->whereIn('vehicle_info.model_id', $modelIds))
+                ->when(!empty($colorIds), fn ($query) => $query->whereIn('vehicle_info.color_id', $colorIds))
 
                 ->when(!empty($pickupLocation), function ($query) use ($pickupLocation) {
                     return $query->where(function ($q) use ($pickupLocation) {
@@ -201,7 +199,7 @@ class BookingRepository implements BookingRepositoryInterface
 
                     $search = (string) $search;
                     $tariff = (string) $tariff;
-                    $path   = '$[0].' . $tariff;
+                    $path = '$[0].' . $tariff;
 
                     $query->where(function ($q) use ($search) {
                         $q->where('vehicle_info.year', 'LIKE', "%{$search}%")
@@ -349,21 +347,22 @@ class BookingRepository implements BookingRepositoryInterface
             });
 
             $response = [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('Vehicles retrieved successfully.'),
-                'data' => $vehicles,
+                'data'    => $vehicles,
             ];
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
 
             return $response;
         }
     }
+
     public function store(Request $request): array
     {
         $bookingId = $request->booking_id ?? null;
@@ -375,11 +374,11 @@ class BookingRepository implements BookingRepositoryInterface
 
             $startDate = is_string($request->start_date) ? $request->start_date : '';
             $startTime = is_string($request->start_time) ? $request->start_time : '';
-            $endDate   = is_string($request->end_date)   ? $request->end_date   : '';
-            $endTime   = is_string($request->end_time)   ? $request->end_time   : '';
+            $endDate = is_string($request->end_date) ? $request->end_date : '';
+            $endTime = is_string($request->end_time) ? $request->end_time : '';
 
             $startDateTime = $startDate . ' ' . $startTime;
-            $endDateTime   = $endDate   . ' ' . $endTime;
+            $endDateTime = $endDate   . ' ' . $endTime;
             $startDateTimeCarbon = Carbon::createFromFormat('d-m-Y H:i', $startDateTime);
             $endDateTimeCarbon = Carbon::createFromFormat('d-m-Y H:i', $endDateTime);
 
@@ -388,36 +387,36 @@ class BookingRepository implements BookingRepositoryInterface
             $bookingId = $request->booking_id ?? null;
 
             $data = [
-                'vehicle_id' => $request->vehicle_id,
-                'customer_id' => $request->customer_id,
-                "booking_by" => "admin",
-                'driver_id' => $request->driver_id ?? null,
-                'driver_price' => $request->driver_price ?? 0,
-                'vehicle_price' => $request->vehicle_price,
-                'total_insurance_price' => $request->total_insurance_price ?? 0,
+                'vehicle_id'                => $request->vehicle_id,
+                'customer_id'               => $request->customer_id,
+                "booking_by"                => "admin",
+                'driver_id'                 => $request->driver_id ?? null,
+                'driver_price'              => $request->driver_price ?? 0,
+                'vehicle_price'             => $request->vehicle_price,
+                'total_insurance_price'     => $request->total_insurance_price ?? 0,
                 'total_extra_service_price' => $request->total_extra_service_price ?? 0,
-                'final_price' => $request->final_price ?? 0,
-                'extra_service' => $request->extra_service ?? null,
-                'insurance' => $request->insurance ?? null,
-                'security_deposit' => $request->security_deposit ?? null,
-                'start_datetime' => $startDateTime,
-                'end_datetime' => $endDateTime,
-                'pickup_location' => $request->pickup_location,
-                'return_location' => $request->return_location,
-                'booking_status' => Booking::$booked,
-                'booking_tariff' => $request->tariff ?? null,
-                'driving_type' => $request->driving_type ?? null,
-                'rental_type' => $request->vehicle_price_type ?? null,
-                'no_of_passengers' => $request->no_of_passengers ?? null,
-                'no_of_days' => $request->no_of_days ?? null,
-                'vehicle_total_price' => $request->vehicle_total_price ?? null,
-                'booking_date' => now(),
-                'payment_type' => 'cod'
+                'final_price'               => $request->final_price ?? 0,
+                'extra_service'             => $request->extra_service ?? null,
+                'insurance'                 => $request->insurance ?? null,
+                'security_deposit'          => $request->security_deposit ?? null,
+                'start_datetime'            => $startDateTime,
+                'end_datetime'              => $endDateTime,
+                'pickup_location'           => $request->pickup_location,
+                'return_location'           => $request->return_location,
+                'booking_status'            => Booking::$booked,
+                'booking_tariff'            => $request->tariff ?? null,
+                'driving_type'              => $request->driving_type ?? null,
+                'rental_type'               => $request->vehicle_price_type ?? null,
+                'no_of_passengers'          => $request->no_of_passengers ?? null,
+                'no_of_days'                => $request->no_of_days ?? null,
+                'vehicle_total_price'       => $request->vehicle_total_price ?? null,
+                'booking_date'              => now(),
+                'payment_type'              => 'cod'
             ];
             $details = [
                 'vehicle_price_type' => $request->vehicle_price_type,
-                'vehicle_season_id' => $request->vehicle_season_id ?? null,
-                'vehicle_tariff_id' => $request->vehicle_tariff_id ?? null,
+                'vehicle_season_id'  => $request->vehicle_season_id ?? null,
+                'vehicle_tariff_id'  => $request->vehicle_tariff_id ?? null,
             ];
             $vehicleTariff = '';
             $vehicleSeason = '';
@@ -473,18 +472,18 @@ class BookingRepository implements BookingRepositoryInterface
 
                 $customer = User::where('id', $booking->customer_id)->first();
                 $vehicle = VehicleInfo::where('id', $booking->vehicle_id)->first();
-                $driver  = Driver::find($booking->driver_id);
+                $driver = Driver::find($booking->driver_id);
                 $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
                 $notifyData = [
-                    'user_name' => $customer->name ?? '',
-                    'company_name' => $companyName,
-                    'email'     => $customer->email ?? '',
-                    'phonenumber' => $customer->phone_number ?? '',
-                    'vehicle_name' => $vehicle->name ?? "",
-                    'driver_name'  => $driver ? $driver->driver_name : "",
-                    'reservation_id' => $booking->reservation_id ?? "",
-                    'start_date'     => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
-                    'end_date'       => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
+                    'user_name'       => $customer->name ?? '',
+                    'company_name'    => $companyName,
+                    'email'           => $customer->email ?? '',
+                    'phonenumber'     => $customer->phone_number ?? '',
+                    'vehicle_name'    => $vehicle->name ?? "",
+                    'driver_name'     => $driver ? $driver->driver_name : "",
+                    'reservation_id'  => $booking->reservation_id ?? "",
+                    'start_date'      => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
+                    'end_date'        => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
                     'pickup_location' => $booking->pickupLocation ? $booking->pickupLocation->name : "",
                     'delivery_type'   => $booking->delivery_type ?? "",
                     'rental_type'     => $booking->rental_type ?? "",
@@ -501,7 +500,7 @@ class BookingRepository implements BookingRepositoryInterface
                         }
                     }
                     if (userNotificationsEnabled() && $customer && $customer->email) {
-                            sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
+                        sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
                     }
                 } catch (\Exception $e) {
                 }
@@ -531,8 +530,8 @@ class BookingRepository implements BookingRepositoryInterface
             $encryptedId = (is_int($bookingId) || is_string($bookingId)) ? customEncrypt($bookingId, Booking::$reservationSecretKey) : null;
 
             $response = [
-                'code' => 200,
-                'message' => $successMsg,
+                'code'             => 200,
+                'message'          => $successMsg,
                 'view_details_url' => route('reservation.details', ['id' => $encryptedId]),
             ];
 
@@ -541,9 +540,9 @@ class BookingRepository implements BookingRepositoryInterface
             DB::rollBack();
 
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => $errorMsg,
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
 
             return $response;
@@ -581,15 +580,15 @@ class BookingRepository implements BookingRepositoryInterface
             BookingDetail::where('booking_id', $id)->delete();
 
             $response = [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.bookings.reservation_delete_success')
             ];
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
             return $response;
@@ -603,15 +602,15 @@ class BookingRepository implements BookingRepositoryInterface
             Booking::where('id', $id)->update(['booking_status' => 5]);
 
             $response = [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.bookings.reservation_complete_success')
             ];
             return $response;
         } catch (\Exception $e) {
             $$response = [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
             return $response;
@@ -742,17 +741,17 @@ class BookingRepository implements BookingRepositoryInterface
             });
 
             $response = [
-                "draw" => intval($request->draw),
-                "recordsTotal" => $totalRecords,
+                "draw"            => intval($request->draw),
+                "recordsTotal"    => $totalRecords,
                 "recordsFiltered" => $filteredRecords,
-                "data" => $bookings
+                "data"            => $bookings
             ];
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
             return $response;
         }
@@ -764,12 +763,12 @@ class BookingRepository implements BookingRepositoryInterface
             $id = $request->booking_id ?? '';
 
             if (empty($id)) {
-                 $response = [
-                    'status' => 'error',
-                    'code'   => 400,
-                    'message' => 'Booking id is required.'
-                 ];
-                 return $response;
+                $response = [
+                   'status'  => 'error',
+                   'code'    => 400,
+                   'message' => 'Booking id is required.'
+                ];
+                return $response;
             }
 
             $booking = Booking::select(
@@ -812,16 +811,16 @@ class BookingRepository implements BookingRepositoryInterface
             }
 
             $response = [
-                'code' => 200,
+                'code'    => 200,
                 'message' => 'Success',
-                'data' => $booking,
+                'data'    => $booking,
             ];
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
             return $response;
         }
@@ -1052,33 +1051,33 @@ class BookingRepository implements BookingRepositoryInterface
             );
 
             $response = [
-                'no_of_days' => $noOfDays,
-                'vehicle_price_rate' => $vehiclePriceRate,
-                'vehicle_price_type' => $vehiclePriceType,
-                'driver_price' => $driverPriceVal,
-                'security_deposit' => $securityDeposit,
+                'no_of_days'                => $noOfDays,
+                'vehicle_price_rate'        => $vehiclePriceRate,
+                'vehicle_price_type'        => $vehiclePriceType,
+                'driver_price'              => $driverPriceVal,
+                'security_deposit'          => $securityDeposit,
                 'total_extra_service_price' => $totalExtraServicePrice,
-                'total_extra_service' => count($extraServiceName),
-                'total_price_val' => $totalPriceVal,
-                'total_price' => $totalPriceVal2,
-                'total_insurance_price' => $totalInsurancePrice,
-                'total_insurance' => count($insuranceName),
-                'insurance_name' => implode(', ', $insuranceName),
-                'extra_service_name' => implode(', ', $extraServiceName),
+                'total_extra_service'       => count($extraServiceName),
+                'total_price_val'           => $totalPriceVal,
+                'total_price'               => $totalPriceVal2,
+                'total_insurance_price'     => $totalInsurancePrice,
+                'total_insurance'           => count($insuranceName),
+                'insurance_name'            => implode(', ', $insuranceName),
+                'extra_service_name'        => implode(', ', $extraServiceName),
             ];
 
             $response = [
-                'code' => 200,
+                'code'    => 200,
                 'message' => 'Success',
-                'data' => $response,
+                'data'    => $response,
             ];
 
             return $response;
         } catch (\Throwable $e) {
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => 'An error occurred while calculating the total price.',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
 
             return $response;
@@ -1093,7 +1092,7 @@ class BookingRepository implements BookingRepositoryInterface
 
             if (!$booking) {
                 $response = [
-                    'code' => 404,
+                    'code'    => 404,
                     'message' => __('admin.bookings.not_found'),
                 ];
                 return $response;
@@ -1101,9 +1100,9 @@ class BookingRepository implements BookingRepositoryInterface
 
             if ($booking instanceof Booking) {
                 $booking->update([
-                    'cancel_reason' => $request->cancel_reason,
-                    'cancel_by' => Auth::guard('admin')->id() ?? $request->user_id,
-                    'cancel_date' => now(),
+                    'cancel_reason'  => $request->cancel_reason,
+                    'cancel_by'      => Auth::guard('admin')->id() ?? $request->user_id,
+                    'cancel_date'    => now(),
                     'booking_status' => 6,
                 ]);
             }
@@ -1126,18 +1125,18 @@ class BookingRepository implements BookingRepositoryInterface
                     $customer = User::find($singleBooking->customer_id);
                     $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
                     $vehicle = VehicleInfo::where('id', $singleBooking->vehicle_id)->first();
-                    $driver  = Driver::find($singleBooking->driver_id);
+                    $driver = Driver::find($singleBooking->driver_id);
 
                     $notifyData = [
-                        'user_name' => $customer->name ?? '',
-                        'company_name' => $companyName,
-                        'email'     => $customer->email ?? '',
-                        'phonenumber' => $customer->phone_number ?? '',
-                        'vehicle_name' => $vehicle->name ?? "",
-                        'driver_name'  => $driver ? $driver->driver_name : "",
-                        'reservation_id' => $singleBooking->reservation_id ?? "",
-                        'start_date'     => $singleBooking->start_datetime ? formatDateTime($singleBooking->start_datetime) : "",
-                        'end_date'       => $singleBooking->end_datetime ? formatDateTime($singleBooking->end_datetime) : "",
+                        'user_name'       => $customer->name ?? '',
+                        'company_name'    => $companyName,
+                        'email'           => $customer->email ?? '',
+                        'phonenumber'     => $customer->phone_number ?? '',
+                        'vehicle_name'    => $vehicle->name ?? "",
+                        'driver_name'     => $driver ? $driver->driver_name : "",
+                        'reservation_id'  => $singleBooking->reservation_id ?? "",
+                        'start_date'      => $singleBooking->start_datetime ? formatDateTime($singleBooking->start_datetime) : "",
+                        'end_date'        => $singleBooking->end_datetime ? formatDateTime($singleBooking->end_datetime) : "",
                         'pickup_location' => $singleBooking->pickupLocation ? $singleBooking->pickupLocation->name : "",
                         'delivery_type'   => $singleBooking->delivery_type ?? "",
                         'rental_type'     => $singleBooking->rental_type ?? "",
@@ -1157,18 +1156,18 @@ class BookingRepository implements BookingRepositoryInterface
                 $customer = User::find($booking->customer_id);
                 $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
                 $vehicle = VehicleInfo::where('id', $booking->vehicle_id)->first();
-                $driver  = Driver::find($booking->driver_id);
+                $driver = Driver::find($booking->driver_id);
 
                 $notifyData = [
-                    'user_name' => $customer->name ?? '',
-                    'company_name' => $companyName,
-                    'email'     => $customer->email ?? '',
-                    'phonenumber' => $customer->phone_number ?? '',
-                    'vehicle_name' => $vehicle->name ?? "",
-                    'driver_name'  => $driver ? $driver->driver_name : "",
-                    'reservation_id' => $booking->reservation_id ?? "",
-                    'start_date'     => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
-                    'end_date'       => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
+                    'user_name'       => $customer->name ?? '',
+                    'company_name'    => $companyName,
+                    'email'           => $customer->email ?? '',
+                    'phonenumber'     => $customer->phone_number ?? '',
+                    'vehicle_name'    => $vehicle->name ?? "",
+                    'driver_name'     => $driver ? $driver->driver_name : "",
+                    'reservation_id'  => $booking->reservation_id ?? "",
+                    'start_date'      => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
+                    'end_date'        => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
                     'pickup_location' => $booking->pickupLocation ? $booking->pickupLocation->name : "",
                     'delivery_type'   => $booking->delivery_type ?? "",
                     'rental_type'     => $booking->rental_type ?? "",
@@ -1194,17 +1193,17 @@ class BookingRepository implements BookingRepositoryInterface
             }
 
             $response = [
-                'code' => 200,
-                'message' => __('admin.bookings.reservation_cancel_success'),
+                'code'         => 200,
+                'message'      => __('admin.bookings.reservation_cancel_success'),
                 'redirect_url' => route('reservation.index'),
             ];
 
             return $response;
         } catch (\Throwable $e) {
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.bookings.reservation_cancel_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
             return $response;
         }

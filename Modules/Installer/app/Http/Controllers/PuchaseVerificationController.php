@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Log;
 use Modules\Installer\Http\Requests\PurchaseVerificationRequest;
 use Modules\Installer\Models\Configuration;
 use Modules\Installer\Repositories\Contracts\PurchaseVerificationInterface;
-use RuntimeException;
 
 class PuchaseVerificationController extends Controller
 {

@@ -3,19 +3,16 @@
 namespace Modules\GeneralSetting\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Modules\GeneralSetting\Http\Requests\CopyrightListRequest;
 use Modules\GeneralSetting\Http\Requests\CopyrightUpdateRequest;
 use Modules\GeneralSetting\Http\Requests\FaqStoreRequest;
 use Modules\GeneralSetting\Http\Requests\FaqUpdateRequest;
 use Modules\GeneralSetting\Http\Requests\HowItWorksListRequest;
 use Modules\GeneralSetting\Http\Requests\HowItWorksStoreRequest;
-use Modules\GeneralSetting\Models\Faq;
-use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
-use Illuminate\View\View;
 use Modules\GeneralSetting\Repositories\Contracts\FaqInterface;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 
@@ -41,16 +38,16 @@ class FaqController extends Controller
             $repository->storeHowItWorks($request->validated());
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.cms.how_it_works_update_success'),
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_update_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -61,22 +58,20 @@ class FaqController extends Controller
             $data = $repository->getHowItWorks($request->validated());
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
-
-
 
     public function copyright(Request $request): View
     {
@@ -91,16 +86,16 @@ class FaqController extends Controller
             $repository->updateCopyright($request->validated());
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.cms.copyright_update_success'),
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_update_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -111,35 +106,36 @@ class FaqController extends Controller
             $data = $repository->getCopyright($request->validated());
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data
+                'data'    => $data
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
+
     public function faqStore(FaqStoreRequest $request, FaqInterface $repository): JsonResponse
     {
         try {
             $faq = $repository->store($request->validated());
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.cms.faq_create_success'),
-                'data' => $faq
+                'data'    => $faq
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_create_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -150,15 +146,15 @@ class FaqController extends Controller
             $faqs = $repository->list(request()->all());
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.cms.faq_list_success'),
-                'data' => $faqs
+                'data'    => $faqs
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -169,15 +165,15 @@ class FaqController extends Controller
             $faq = $repository->update($request->id, $request->validated());
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.cms.faq_update_success'),
-                'data' => $faq
+                'data'    => $faq
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -194,14 +190,14 @@ class FaqController extends Controller
             $repository->delete($id);
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.cms.faq_delete_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

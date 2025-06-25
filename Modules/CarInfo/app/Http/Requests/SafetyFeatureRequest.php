@@ -28,10 +28,10 @@ class SafetyFeatureRequest extends CustomFailedValidation
     public function messages(): array
     {
         return [
-            'feature.required' => __('admin.rentals.feature_required'),
-            'feature.max' => __('admin.rentals.feature_maxlength'),
-            'feature.min' => __('admin.rentals.feature_minlength'),
-            'feature.unique' => __('admin.rentals.feature_unique'),
+            'feature.required'  => __('admin.rentals.feature_required'),
+            'feature.max'       => __('admin.rentals.feature_maxlength'),
+            'feature.min'       => __('admin.rentals.feature_minlength'),
+            'feature.unique'    => __('admin.rentals.feature_unique'),
             'feature.not_regex' => __('admin.common.script_tag_not_allowed'),
         ];
     }

@@ -24,9 +24,9 @@ class StoreTaxRateRequest extends CustomFailedValidation
     {
         return [
             'tax_name.required' => __('admin.general_settings.tax_name_required'),
-            'tax_name.min' => __('admin.general_settings.tax_name_minlength'),
-            'tax_name.max' => __('admin.general_settings.tax_name_maxlength'),
-            'tax_name.unique' => __('admin.general_settings.tax_name_unique'),
+            'tax_name.min'      => __('admin.general_settings.tax_name_minlength'),
+            'tax_name.max'      => __('admin.general_settings.tax_name_maxlength'),
+            'tax_name.unique'   => __('admin.general_settings.tax_name_unique'),
             'tax_rate.required' => __('admin.general_settings.tax_rate_required'),
         ];
     }

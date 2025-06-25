@@ -29,16 +29,16 @@ class NewsLetterRepository implements NewsLetterRepositoryInterface
             }
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.newsletter_subscriber_create_success')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.common.default_create_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
@@ -100,19 +100,19 @@ class NewsLetterRepository implements NewsLetterRepositoryInterface
             });
 
             return [
-                'status' => 'success',
-                'code' => 200,
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
+                'status'          => 'success',
+                'code'            => 200,
+                'draw'            => intval($request->draw),
+                'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $filteredRecords,
-                'data' => $subscribers,
+                'data'            => $subscribers,
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.common.default_retrieve_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
@@ -126,27 +126,26 @@ class NewsLetterRepository implements NewsLetterRepositoryInterface
 
             if ($deleted) {
                 return [
-                    'status' => 'success',
-                    'code' => 200,
+                    'status'  => 'success',
+                    'code'    => 200,
                     'message' => __('admin.others.newsletter_delete_success')
                 ];
             }
 
             return [
-                'status' => 'error',
-                'code' => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.not_found')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
-
 
     public function sendNewsletter(Request $request): array
     {
@@ -168,16 +167,16 @@ class NewsLetterRepository implements NewsLetterRepositoryInterface
             sendNewsletterEmail($email, 'newsletter', $notifyData);
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.others.newsletter_send_success')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.others.newsletter_send_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }

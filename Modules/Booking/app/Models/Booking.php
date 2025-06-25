@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\VehicleInfo;
-use Modules\Booking\Models\BookingDetail;
-use Modules\Booking\Models\BookingUserInfo;
 
 /**
  * @property string|null $booking_date
@@ -147,7 +145,7 @@ class Booking extends Model
             self::$inprogress => __('admin.common.in_progress'),
             self::$confirmed  => __('admin.common.confirmed'),
             self::$rejected   => __('admin.common.rejected'),
-            self::$booked   => __('admin.common.booked'),
+            self::$booked     => __('admin.common.booked'),
             self::$completed  => __('admin.common.completed'),
             self::$cancelled  => __('admin.common.cancelled'),
         ];

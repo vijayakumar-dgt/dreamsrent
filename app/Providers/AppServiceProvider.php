@@ -3,22 +3,17 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
-use Modules\GeneralSetting\Models\TranslationLanguage;
 use Modules\MenuManagement\Models\Menu;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Route;
-use Artesaos\SEOTools\Facades\SEOMeta;
-use Artesaos\SEOTools\Facades\OpenGraph;
-use Illuminate\Support\Facades\Cache;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -100,9 +95,9 @@ class AppServiceProvider extends ServiceProvider
             }
             $view->with([
                 'allLanguages' => $allLanguages,
-                'userDetails' => $userDetails,
-                'permissions' => $permissions,
-                'copyright' => $copyright
+                'userDetails'  => $userDetails,
+                'permissions'  => $permissions,
+                'copyright'    => $copyright
             ]);
         });
     }
@@ -127,16 +122,16 @@ class AppServiceProvider extends ServiceProvider
             $favicon = uploadedAsset(($logoSetting['favicon_image'] ?? null), 'default_favicon');
             $smallLogo = uploadedAsset(($logoSetting['small_image'] ?? null), 'default_small_logo');
             $view->with([
-                'theme' => $theme,
-                'layout' => "frontend.theme_{$theme}.app",
-                'companyPhoneNumber' => $companyPhoneNumber,
-                'companyEmail' => $companyEmail,
-                'companyName' => $companyName,
+                'theme'                => $theme,
+                'layout'               => "frontend.theme_{$theme}.app",
+                'companyPhoneNumber'   => $companyPhoneNumber,
+                'companyEmail'         => $companyEmail,
+                'companyName'          => $companyName,
                 'company_address_line' => $company_address_line,
-                'logo' => $logo,
-                'favicon' => $favicon,
-                'smallLogo' => $smallLogo,
-                'language_switcher' => $language_switcher
+                'logo'                 => $logo,
+                'favicon'              => $favicon,
+                'smallLogo'            => $smallLogo,
+                'language_switcher'    => $language_switcher
             ]);
         });
     }
@@ -187,7 +182,7 @@ class AppServiceProvider extends ServiceProvider
                     }
                 }
                 $filteredMenus = collect($menus)
-                    ->filter(fn($menu) => isset($menu['status']) && $menu['status'] === true)
+                    ->filter(fn ($menu) => isset($menu['status']) && $menu['status'] === true)
                     ->values()
                     ->all();
 

@@ -1,14 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\CalanderController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\InvoiceController;
 use App\Http\Controllers\admin\LoginController;
 use App\Http\Controllers\admin\PaymentController;
-use App\Http\Controllers\admin\InvoiceController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\auth\ForgotpasswordController;
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CustomerController;
@@ -18,6 +16,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\TranslationController;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Modules\GeneralSetting\Http\Controllers\Admin\LanguageController;
 

@@ -14,7 +14,7 @@ class SitemapSettingRequest extends CustomFailedValidation
     public function rules()
     {
         return [
-            'id' => ['nullable', 'exists:sitemap_urls,id'],
+            'id'  => ['nullable', 'exists:sitemap_urls,id'],
             'url' => [
                 'required',
                 'string',

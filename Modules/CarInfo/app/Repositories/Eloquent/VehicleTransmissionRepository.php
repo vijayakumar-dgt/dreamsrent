@@ -20,22 +20,22 @@ class VehicleTransmissionRepository implements VehicleTransmissionRepositoryInte
 
         try {
             $data = [
-                'name' => $request->name,
-                'status' => $request->status ?? 1,
+                'name'        => $request->name,
+                'status'      => $request->status ?? 1,
                 'language_id' => $languageId
             ];
 
             Transmission::updateOrCreate(['id' => $id], $data);
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMsg
             ];
         } catch (\Exception $th) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMsg
             ];
         }
@@ -64,15 +64,15 @@ class VehicleTransmissionRepository implements VehicleTransmissionRepositoryInte
             $data = $query->get();
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -83,8 +83,8 @@ class VehicleTransmissionRepository implements VehicleTransmissionRepositoryInte
 
         if (!$data) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -92,7 +92,7 @@ class VehicleTransmissionRepository implements VehicleTransmissionRepositoryInte
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -104,20 +104,20 @@ class VehicleTransmissionRepository implements VehicleTransmissionRepositoryInte
             $transmission->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.vehicle_transmission_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }

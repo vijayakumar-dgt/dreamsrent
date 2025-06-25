@@ -5,11 +5,8 @@ namespace Modules\CarInfo\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Modules\CarInfo\Http\Requests\SafetyFeatureRequest;
-use Modules\CarInfo\Models\SafetyFeature;
 use Modules\CarInfo\Repositories\Contracts\SafetyFeatureRepositoryInterface;
 
 class SafetyFeatureController extends Controller
@@ -31,7 +28,6 @@ class SafetyFeatureController extends Controller
         $response = $this->SafetyFeatureRepository->store($request);
         return response()->json($response, $response['code']);
     }
-
 
     public function list(Request $request): JsonResponse
     {

@@ -15,8 +15,8 @@ class UpdateTicketRequest extends FormRequest
     {
         return [
             'ticketid' => 'required|exists:tickets,id',
-            'status' => 'required|in:1,2,3,4',
-            'reply' => [
+            'status'   => 'required|in:1,2,3,4',
+            'reply'    => [
                 'required',
                 'string',
                 function ($attribute, $value, $fail) {

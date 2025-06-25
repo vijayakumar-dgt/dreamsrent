@@ -53,12 +53,12 @@ class UserRepository implements UserRepositoryInterface
         $currency = getDefaultCurrencySymbol();
         $seo_title = __('web.user.dashboard');
         $data = [
-            'totalBookingCount' => $totalBookingCount,
+            'totalBookingCount'  => $totalBookingCount,
             'totalWishlistCount' => $totalWishlistCount,
-            'totalBalance' => $totalBalance,
-            'totalTransaction' => $totalTransaction,
-            'currency' => $currency,
-            'seo_title' => $seo_title
+            'totalBalance'       => $totalBalance,
+            'totalTransaction'   => $totalTransaction,
+            'currency'           => $currency,
+            'seo_title'          => $seo_title
         ];
 
         return $data;
@@ -75,7 +75,7 @@ class UserRepository implements UserRepositoryInterface
         $seo_title = __('web.user.my_bookings');
         $data = [
             'totalBookingCount' => $totalBookingCount,
-            'seo_title' => $seo_title
+            'seo_title'         => $seo_title
         ];
         return $data;
     }
@@ -133,7 +133,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function getAjaxBookings(Request $request): Collection
     {
-         $user = Auth::guard('web')->user();
+        $user = Auth::guard('web')->user();
 
         if (!$user) {
             abort(403, 'Unauthorized access');
@@ -200,38 +200,38 @@ class UserRepository implements UserRepositoryInterface
             $booking = Booking::find($request->id);
             if (!$booking) {
                 $response = [
-                    'status' => 'error',
-                    'code' => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('web.user.booking_not_found')
                 ];
             }
 
             if (!$booking instanceof \Modules\Booking\Models\Booking) {
                 $response = [
-                    'status' => 'error',
-                    'code' => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('web.user.booking_not_found')
                 ];
             }
 
             $bookingDetail = BookingDetail::where('booking_id', $booking->id)->first();
             $historyData = [
-                'booking' => $booking->toArray(),
+                'booking'        => $booking->toArray(),
                 'booking_detail' => $bookingDetail?->toArray() ?? []
             ];
 
             BookingHistory::create([
                 'booking_id' => $booking->id,
-                'action' => 'cancel',
-                'data' => json_encode($historyData),
-                'message' => 'Reservation Cancelled'
+                'action'     => 'cancel',
+                'data'       => json_encode($historyData),
+                'message'    => 'Reservation Cancelled'
             ]);
 
             $booking->update([
                 'booking_status' => 6,
-                'cancel_date' => now(),
-                'cancel_by' => Auth::id(),
-                'cancel_reason' => $request->reason
+                'cancel_date'    => now(),
+                'cancel_by'      => Auth::id(),
+                'cancel_reason'  => $request->reason
             ]);
 
             DB::commit();
@@ -245,21 +245,21 @@ class UserRepository implements UserRepositoryInterface
                     $appAdmin = User::where('user_type', 1)->first();
 
                     $notifyData = [
-                        'user_name' => $authUser->name ?? '',
-                        'company_name' => $companyName,
-                        'email' => $authUser->email ?? '',
-                        'phonenumber' => $authUser->phone_number ?? '',
-                        'vehicle_name' => $vehicle->name ?? "",
-                        'driver_name' => $driver->driver_name ?? "",
-                        'reservation_id' => $booking->reservation_id ?? "",
-                        'start_date' => formatDateTime($booking->start_datetime),
-                        'end_date' => formatDateTime($booking->end_datetime),
+                        'user_name'       => $authUser->name ?? '',
+                        'company_name'    => $companyName,
+                        'email'           => $authUser->email ?? '',
+                        'phonenumber'     => $authUser->phone_number ?? '',
+                        'vehicle_name'    => $vehicle->name ?? "",
+                        'driver_name'     => $driver->driver_name ?? "",
+                        'reservation_id'  => $booking->reservation_id ?? "",
+                        'start_date'      => formatDateTime($booking->start_datetime),
+                        'end_date'        => formatDateTime($booking->end_datetime),
                         'pickup_location' => $booking->pickupLocation->name ?? "",
-                        'delivery_type' => $booking->delivery_type ?? "",
-                        'rental_type' => $booking->rental_type ?? "",
-                        'payment_type' => $booking->payment_type ?? "",
-                        'payment_status' => $booking->payment_status ?? "",
-                        'tototal_amount' => $booking->final_price ?? ""
+                        'delivery_type'   => $booking->delivery_type ?? "",
+                        'rental_type'     => $booking->rental_type ?? "",
+                        'payment_type'    => $booking->payment_type ?? "",
+                        'payment_status'  => $booking->payment_status ?? "",
+                        'tototal_amount'  => $booking->final_price ?? ""
                     ];
 
 
@@ -274,8 +274,8 @@ class UserRepository implements UserRepositoryInterface
                 }
             }
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.reservation_cancelled')
             ];
 
@@ -283,44 +283,45 @@ class UserRepository implements UserRepositoryInterface
         } catch (\Throwable $th) {
             DB::rollBack();
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
             return $response;
         }
     }
+
     public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
     {
         switch ($duration) {
             case 'this_week':
                 $duration = [
                     'from' => date('Y-m-d 00:00:00', strtotime('monday this week')),
-                    'to' => date('Y-m-d 23:59:59', strtotime('sunday this week'))
+                    'to'   => date('Y-m-d 23:59:59', strtotime('sunday this week'))
                 ];
                 break;
             case 'this_month':
                 $duration = [
                     'from' => date('Y-m-01 00:00:00'),
-                    'to' => date('Y-m-t 23:59:59')
+                    'to'   => date('Y-m-t 23:59:59')
                 ];
                 break;
             case 'last30':
                 $duration = [
                     'from' => date('Y-m-d 00:00:00', strtotime('-30 days')),
-                    'to' => date('Y-m-d 23:59:59')
+                    'to'   => date('Y-m-d 23:59:59')
                 ];
                 break;
             case 'last60':
                 $duration = [
                     'from' => date('Y-m-d 00:00:00', strtotime('-60 days')),
-                    'to' => date('Y-m-d 23:59:59')
+                    'to'   => date('Y-m-d 23:59:59')
                 ];
                 break;
             case 'last7':
                 $duration = [
                     'from' => date('Y-m-d 00:00:00', strtotime('-7 days')),
-                    'to' => date('Y-m-d 23:59:59')
+                    'to'   => date('Y-m-d 23:59:59')
                 ];
                 break;
             case 'custom':
@@ -342,7 +343,7 @@ class UserRepository implements UserRepositoryInterface
 
                     $duration = [
                         'from' => date('Y-m-d', $fromTimestamp) . ' 00:00:00',
-                        'to' => date('Y-m-d', $toTimestamp) . ' 23:59:59'
+                        'to'   => date('Y-m-d', $toTimestamp) . ' 23:59:59'
                     ];
                 } else {
                     return ['from' => '', 'to' => '', 'error' => 'Custom dates are required'];
@@ -363,15 +364,15 @@ class UserRepository implements UserRepositoryInterface
             $booking = Booking::find($request->id);
             $bookingDetail = BookingDetail::where('booking_id', $request->id)->first();
             $historyData = [
-                'booking' => $booking ? $booking->toArray() : '',
+                'booking'        => $booking ? $booking->toArray() : '',
                 'booking_detail' => $bookingDetail ? $bookingDetail->toArray() : []
             ];
 
             BookingHistory::create([
                 'booking_id' => $booking->id ?? '',
-                'action' => 'completed',
-                'data' => json_encode($historyData),
-                'message' => __('web.user.ride_completed')
+                'action'     => 'completed',
+                'data'       => json_encode($historyData),
+                'message'    => __('web.user.ride_completed')
             ]);
 
             if ($booking) {
@@ -380,8 +381,8 @@ class UserRepository implements UserRepositoryInterface
                 ]);
             }
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.ride_completed')
             ];
             DB::commit();
@@ -389,8 +390,8 @@ class UserRepository implements UserRepositoryInterface
         } catch (\Throwable $th) {
             DB::rollBack();
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
             return $response;
@@ -405,15 +406,15 @@ class UserRepository implements UserRepositoryInterface
             $booking = Booking::find($request->id);
             $bookingDetail = BookingDetail::where('booking_id', $request->id)->first();
             $historyData = [
-                'booking' => $booking ? $booking->toArray() : '',
+                'booking'        => $booking ? $booking->toArray() : '',
                 'booking_detail' => $bookingDetail ? $bookingDetail->toArray() : []
             ];
 
             BookingHistory::create([
                 'booking_id' => $booking->id ?? '',
-                'action' => 'started',
-                'data' => json_encode($historyData),
-                'message' => __('web.user.ride_started')
+                'action'     => 'started',
+                'data'       => json_encode($historyData),
+                'message'    => __('web.user.ride_started')
             ]);
 
             if ($booking) {
@@ -422,8 +423,8 @@ class UserRepository implements UserRepositoryInterface
                 ]);
             }
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.ride_started')
             ];
             DB::commit();
@@ -431,8 +432,8 @@ class UserRepository implements UserRepositoryInterface
         } catch (\Throwable $th) {
             DB::rollBack();
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
             return $response;
@@ -449,8 +450,8 @@ class UserRepository implements UserRepositoryInterface
                 $booking->delete();
             }
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.booking_deleted')
             ];
 
@@ -458,8 +459,8 @@ class UserRepository implements UserRepositoryInterface
             return $response;
         } catch (\Throwable $th) {
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
             DB::rollBack();
@@ -485,18 +486,18 @@ class UserRepository implements UserRepositoryInterface
             if ($wishlist) {
                 $wishlist->delete();
                 $response = [
-                    'status' => 'success',
-                    'code' => 200,
+                    'status'  => 'success',
+                    'code'    => 200,
                     'message' => __('web.user.removed_from_wishlist')
                 ];
             } else {
                 Wishlist::create([
-                    'user_id' => $authUserId,
+                    'user_id'    => $authUserId,
                     'vehicle_id' => $vehicle->id ?? ''
                 ]);
                 $response = [
-                    'status' => 'success',
-                    'code' => 200,
+                    'status'  => 'success',
+                    'code'    => 200,
                     'message' => __('web.user.added_to_wishlist')
                 ];
             }
@@ -504,8 +505,8 @@ class UserRepository implements UserRepositoryInterface
             return $response;
         } catch (\Throwable $th) {
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
             return $response;
@@ -525,7 +526,7 @@ class UserRepository implements UserRepositoryInterface
         $countries = Country::where('status', 1)->get();
         $seo_title = __('web.user.profile');
         $data = [
-            'user' => $user,
+            'user'      => $user,
             'countries' => $countries,
             'seo_title' => $seo_title
         ];
@@ -538,7 +539,7 @@ class UserRepository implements UserRepositoryInterface
             $user = Auth::guard('web')->user();
             if ($user instanceof User) {
                 $user->update([
-                    'email' => $request->email,
+                    'email'        => $request->email,
                     'phone_number' => $request->user_phone,
                 ]);
             }
@@ -551,34 +552,34 @@ class UserRepository implements UserRepositoryInterface
             UserDetail::updateOrCreate(
                 ['user_id' => $user?->id],
                 [
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
+                    'first_name'    => $request->first_name,
+                    'last_name'     => $request->last_name,
                     'mobile_number' => $request->user_phone,
-                    'address' => $request->address_line,
-                    'country_id' => $request->country,
-                    'state_id' => $request->state,
-                    'city_id' => $request->city,
-                    'postal_code' => $request->postal_code,
+                    'address'       => $request->address_line,
+                    'country_id'    => $request->country,
+                    'state_id'      => $request->state,
+                    'city_id'       => $request->city,
+                    'postal_code'   => $request->postal_code,
                     'profile_image' => $profilePhoto ?? $user->userDetail->profile_image ?? null,
                 ]
             );
             $profileImage = UserDetail::where('user_id', $user?->id)->value('profile_image');
 
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.profile_updated_successfully'),
-                'data' => [
+                'data'    => [
                     'profile_image' => uploadedAsset($profileImage, 'profile')
                 ],
             ];
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.error_occured'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
             return $response;
         }
@@ -599,10 +600,10 @@ class UserRepository implements UserRepositoryInterface
         $countries = Country::select('id', 'name')->where('status', 1)->get();
         $seo_title = __('web.user.preferences');
         $data = [
-            'languages' => $languages,
+            'languages'  => $languages,
             'preference' => $preference,
-            'countries' => $countries,
-            'seo_title' => $seo_title
+            'countries'  => $countries,
+            'seo_title'  => $seo_title
         ];
         return $data;
     }
@@ -612,7 +613,7 @@ class UserRepository implements UserRepositoryInterface
         $seo_title = __('web.user.notifications');
         $user = Auth::guard('web')->user();
         $data = [
-            'user' => $user,
+            'user'      => $user,
             'seo_title' => $seo_title
         ];
         return $data;
@@ -629,17 +630,17 @@ class UserRepository implements UserRepositoryInterface
                 $user->save();
             }
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.common.default_update_success'),
             ];
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.common.default_update_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
             return $response;
         }
@@ -651,15 +652,15 @@ class UserRepository implements UserRepositoryInterface
         $user = Auth::guard('web')->user();
         if ($user && $user->password && Hash::check($password, $user->password)) {
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.current_password_correct')
             ];
             return $response;
         } else {
             $response = [
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('web.user.current_password_incorrect')
             ];
             return $response;
@@ -671,8 +672,8 @@ class UserRepository implements UserRepositoryInterface
         $user = Auth::guard('web')->user();
         if (!$user || !$user->password || !Hash::check($request->current_password, $user->password)) {
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.current_password_incorrect')
             ];
             return $response;
@@ -686,8 +687,8 @@ class UserRepository implements UserRepositoryInterface
         }
 
         $response = [
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('web.user.password_updated_successfully')
         ];
 
@@ -700,18 +701,18 @@ class UserRepository implements UserRepositoryInterface
         $userDevices = UserDevice::where('user_id', $authUserId)->orderBy('created_at', 'desc')
             ->take(5)->get()->map(function ($device) {
                 return [
-                    'id' => $device->id,
+                    'id'          => $device->id,
                     'device_type' => $device->device_type,
-                    'browser' => $device->browser,
-                    'os' => $device->os,
-                    'ip_address' => $device->ip_address,
-                    'location' => $device->location,
-                    'date' => formatDateTime($device->created_at),
+                    'browser'     => $device->browser,
+                    'os'          => $device->os,
+                    'ip_address'  => $device->ip_address,
+                    'location'    => $device->location,
+                    'date'        => formatDateTime($device->created_at),
                 ];
             });
         $user = Auth::guard('web')->user();
         $response = [
-            'user' => Auth::guard('web')->user(),
+            'user'                     => Auth::guard('web')->user(),
             'last_password_changed_at' => Auth::guard('web')->check() && $user && $user->last_password_changed_at
                 ? formatDateTime($user->last_password_changed_at)
                 : "",
@@ -726,8 +727,8 @@ class UserRepository implements UserRepositoryInterface
         if ($request->isAll === "true") {
             UserDevice::where('user_id', $authUserId)->delete();
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.all_devices_removed')
             ];
         } else {
@@ -737,15 +738,15 @@ class UserRepository implements UserRepositoryInterface
                     $device->delete();
                 }
                 $response = [
-                    'status' => 'success',
-                    'code' => 200,
+                    'status'  => 'success',
+                    'code'    => 200,
                     'message' => __('web.user.device_removed_successfully')
                 ];
             }
         }
         $response = [
-            'status' => 'error',
-            'code' => 404,
+            'status'  => 'error',
+            'code'    => 404,
             'message' => __('web.user.device_not_found')
         ];
 
@@ -769,15 +770,15 @@ class UserRepository implements UserRepositoryInterface
             $language = TranslationLanguage::select('code')->where('id', $request->language_id)->first();
             session(['app_locale_user' => $language->code ?? 'en']);
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.preference_update_success')
             ];
             return $response;
         } catch (\Throwable $e) {
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.common.default_update_error')
             ];
             return $response;
@@ -790,16 +791,16 @@ class UserRepository implements UserRepositoryInterface
             $id = Auth::guard('web')->user()->id ?? $request->user_id;
             $data = User::select('language_id', 'region_id')->where('id', $id)->first();
             $response = [
-                'status' => 'success',
-                'code' => 200,
-                'data' => $data,
+                'status'  => 'success',
+                'code'    => 200,
+                'data'    => $data,
                 'message' => __('web.common.default_retrieve_success'),
             ];
             return $response;
         } catch (\Throwable $e) {
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.common.default_retrieve_error')
             ];
             return $response;
@@ -810,23 +811,23 @@ class UserRepository implements UserRepositoryInterface
     {
         try {
             Enquiry::create([
-                'car_id' => $request->vehicle_id,
-                'customer_name' => $request->enquiry_name,
-                'email' => $request->enquiry_email,
-                'phone' => $request->international_phone_number,
-                'enquiry_date' => date('Y-m-d'),
+                'car_id'          => $request->vehicle_id,
+                'customer_name'   => $request->enquiry_name,
+                'email'           => $request->enquiry_email,
+                'phone'           => $request->international_phone_number,
+                'enquiry_date'    => date('Y-m-d'),
                 'enquiry_details' => $request->enquiry_message
             ]);
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.enquiry_submitted_successfully')
             ];
             return $response;
         } catch (\Throwable $th) {
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
             return $response;
@@ -846,9 +847,9 @@ class UserRepository implements UserRepositoryInterface
         $html = view('frontend.user.notifications-popup', compact('notifications'))->render();
         $response = [
             'status' => 'success',
-            'code' => 200,
-            'html' => $html,
-            'count' => $notificationCount
+            'code'   => 200,
+            'html'   => $html,
+            'count'  => $notificationCount
         ];
 
         return $response;
@@ -863,15 +864,15 @@ class UserRepository implements UserRepositoryInterface
         ) {
             Notification::where('user_id', $authUserId)->update(['readed' => 1]);
             $response = [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ];
             return $response;
         } else {
             $response = [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ];
             return $response;
@@ -943,8 +944,8 @@ class UserRepository implements UserRepositoryInterface
     {
         Notification::where('id', $id)->update(['readed' => 1]);
         $response = [
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('web.user.notification_marked_as_read')
         ];
 
@@ -955,8 +956,8 @@ class UserRepository implements UserRepositoryInterface
     {
         Notification::where('id', $id)->delete();
         $response = [
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('web.user.notification_deleted')
         ];
 
@@ -968,8 +969,8 @@ class UserRepository implements UserRepositoryInterface
         $authUserId = Auth::guard('web')->user()->id ?? 0;
         Notification::where('user_id', $authUserId)->delete();
         $response = [
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('web.user.all_notofocations_deleted')
         ];
 

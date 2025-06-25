@@ -12,7 +12,6 @@ class BlogTag extends Model
 
     protected $fillable = ['name', 'slug', 'status', 'created_at', 'updated_at', 'language_id', 'parent_id'];
 
-
     /**
      * @return HasMany<BlogPost, BlogTag>
      */

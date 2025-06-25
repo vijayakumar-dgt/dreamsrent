@@ -14,7 +14,7 @@ class CookiesSettingsRequest extends CustomFailedValidation
     public function rules()
     {
         return [
-            'group_id' => 'required|integer',
+            'group_id'    => 'required|integer',
             'language_id' => 'nullable|integer',
         ];
     }
@@ -22,8 +22,8 @@ class CookiesSettingsRequest extends CustomFailedValidation
     public function messages()
     {
         return [
-            'group_id.required' => __('The group ID is required.'),
-            'group_id.integer' => __('The group ID must be an integer.'),
+            'group_id.required'   => __('The group ID is required.'),
+            'group_id.integer'    => __('The group ID must be an integer.'),
             'language_id.integer' => __('The language ID must be an integer.'),
         ];
     }

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\InvoiceRequest;
+use App\Repositories\Contracts\InvoiceRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use App\Repositories\Contracts\InvoiceRepositoryInterface;
-use App\Http\Requests\InvoiceRequest;
 
 class InvoiceController extends Controller
 {
@@ -18,6 +17,7 @@ class InvoiceController extends Controller
     {
         $this->invoiceRepository = $invoiceRepository;
     }
+
     public function index(): View
     {
         $data = $this->invoiceRepository->index();

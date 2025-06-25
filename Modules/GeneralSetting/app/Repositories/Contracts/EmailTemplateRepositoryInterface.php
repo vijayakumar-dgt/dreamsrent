@@ -1,6 +1,6 @@
 <?php
 
-namespace  Modules\GeneralSetting\Repositories\Contracts;
+namespace Modules\GeneralSetting\Repositories\Contracts;
 
 use Illuminate\Database\Eloquent\Collection;
 use Modules\GeneralSetting\Models\EmailTemplate;

@@ -28,7 +28,7 @@ class VehicleModelRequest extends CustomFailedValidation
                     ->whereNull('deleted_at')
                     ->where('language_id', $languageId),
             ],
-            'brand_id' => 'required',
+            'brand_id'   => 'required',
             'total_cars' => [
                 'nullable',
                 'max:255',
@@ -39,13 +39,13 @@ class VehicleModelRequest extends CustomFailedValidation
     public function messages(): array
     {
         return [
-            'model_name.required' => __('admin.rentals.model_name_required'),
-            'model_name.max' => __('admin.rentals.model_name_maxlength'),
-            'model_name.min' => __('admin.rentals.model_name_minlength'),
-            'model_name.unique' => __('admin.rentals.model_name_unique'),
+            'model_name.required'  => __('admin.rentals.model_name_required'),
+            'model_name.max'       => __('admin.rentals.model_name_maxlength'),
+            'model_name.min'       => __('admin.rentals.model_name_minlength'),
+            'model_name.unique'    => __('admin.rentals.model_name_unique'),
             'model_name.not_regex' => __('admin.common.script_tag_not_allowed'),
-            'brand_id.required' => __('admin.rentals.brand_required'),
-            'total_cars.required' => __('admin.rentals.total_vehicles_required'),
+            'brand_id.required'    => __('admin.rentals.brand_required'),
+            'total_cars.required'  => __('admin.rentals.total_vehicles_required'),
         ];
     }
 }

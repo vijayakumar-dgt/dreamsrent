@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Log;
 enum InstallerInfo: string
 {
     // Constants for database paths
-    const DUMMY_DATABASE_PATH = 'database/backup/rental-system.sql';
-    const FRESH_DATABASE_PATH = 'database/backup/rental-system.sql';
+    public const DUMMY_DATABASE_PATH = 'database/backup/rental-system.sql';
+    public const FRESH_DATABASE_PATH = 'database/backup/rental-system.sql';
 
     // Enum cases
     case LICENSE_FILE_PATH = 'app/license.json';
@@ -34,6 +34,7 @@ enum InstallerInfo: string
     {
         return storage_path(self::LICENSE_FILE_PATH->value);
     }
+
     /**
      * @return string[]
      */
@@ -169,7 +170,6 @@ enum InstallerInfo: string
         }
     }
 
-
     public static function writeAssetUrl(): bool
     {
         try {
@@ -215,7 +215,6 @@ enum InstallerInfo: string
 
         return false;
     }
-
 
     /**
      * Validates the provided purchase code against the local license file.

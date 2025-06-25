@@ -8,12 +8,12 @@ use App\Models\UserDocument;
 use App\Repositories\Contracts\CustomerRepositoryInterface;
 use App\Services\ImageResizer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Modules\Booking\Models\Booking;
+use Modules\GeneralSetting\Models\Language;
 
 class CustomerRepository implements CustomerRepositoryInterface
 {
@@ -51,20 +51,20 @@ class CustomerRepository implements CustomerRepositoryInterface
             DB::beginTransaction();
 
             $userData = [
-                'email' => $request->email,
+                'email'        => $request->email,
                 'phone_number' => $request->phone_number,
-                'user_type' => 3,
-                'language_id' => $request->language,
+                'user_type'    => 3,
+                'language_id'  => $request->language,
             ];
             $userDetailsData = [
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'gender' => $request->gender,
-                'dob' => Carbon::createFromFormat('d-m-Y', $request->dob),
-                'address' => $request->address,
-                'card_number' => $request->card_number,
+                'first_name'    => $request->first_name,
+                'last_name'     => $request->last_name,
+                'gender'        => $request->gender,
+                'dob'           => Carbon::createFromFormat('d-m-Y', $request->dob),
+                'address'       => $request->address,
+                'card_number'   => $request->card_number,
                 'date_of_issue' => Carbon::createFromFormat('d-m-Y', $request->date_of_issue),
-                'valid_date' => Carbon::createFromFormat('d-m-Y', $request->valid_date),
+                'valid_date'    => Carbon::createFromFormat('d-m-Y', $request->valid_date),
             ];
 
             if (empty($id)) {
@@ -85,7 +85,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                     foreach ($files as $file) {
                         $document = uploadFile($file, 'documents');
                         UserDocument::create([
-                            'user_id' => $user->id,
+                            'user_id'  => $user->id,
                             'document' => $document,
                         ]);
                     }
@@ -110,7 +110,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                     foreach ($files as $file) {
                         $document = uploadFile($file, 'documents');
                         UserDocument::create([
-                            'user_id' => $id,
+                            'user_id'  => $id,
                             'document' => $document,
                         ]);
                     }
@@ -137,15 +137,15 @@ class CustomerRepository implements CustomerRepositoryInterface
             DB::commit();
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMsg
             ];
         } catch (\Throwable $e) {
             DB::rollBack();
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMsg,
             ];
         }
@@ -273,15 +273,15 @@ class CustomerRepository implements CustomerRepositoryInterface
             });
 
             return [
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
+                'draw'            => intval($request->draw),
+                'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $filteredRecords,
-                'data' => $users,
-                'code' => 200,
+                'data'            => $users,
+                'code'            => 200,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
         }
@@ -330,8 +330,8 @@ class CustomerRepository implements CustomerRepositoryInterface
 
         return [
             'status' => 'success',
-            'code' => 200,
-            'data' => $data
+            'code'   => 200,
+            'data'   => $data
         ];
     }
 
@@ -412,10 +412,10 @@ class CustomerRepository implements CustomerRepositoryInterface
         }
 
         $data = [
-            'customer' => $customer,
-            'bookings' => $bookings,
+            'customer'         => $customer,
+            'bookings'         => $bookings,
             'bookingHistories' => $bookingHistories,
-            'defaultCurrency' => $defaultCurrency,
+            'defaultCurrency'  => $defaultCurrency,
         ];
 
         return $data;
@@ -436,14 +436,14 @@ class CustomerRepository implements CustomerRepositoryInterface
             }
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.user_management.user_delete_success')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error')
             ];
         }

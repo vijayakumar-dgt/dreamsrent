@@ -30,26 +30,26 @@ class MaintenanceRepository implements MaintenanceRepositoryInterface
         try {
             $data = [
                 'vehicle_id' => $request->vehicle_id,
-                'odometer' => $request->odometer,
-                'details' => $request->details,
-                'status' => $request->status,
+                'odometer'   => $request->odometer,
+                'details'    => $request->details,
+                'status'     => $request->status,
                 'start_date' => $request->start_date,
-                'end_date' => $request->end_date
+                'end_date'   => $request->end_date
             ];
 
             Maintenance::updateOrCreate(['id' => $id], $data);
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMsg
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMsg,
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
@@ -155,9 +155,9 @@ class MaintenanceRepository implements MaintenanceRepositoryInterface
                 $maintenance->odometer = number_format((float)$maintenance->odometer, 0, ',');
 
                 $statusMap = [
-                    Maintenance::$planned => __('admin.common.planned'),
+                    Maintenance::$planned    => __('admin.common.planned'),
                     Maintenance::$inprogress => __('admin.common.in_progress'),
-                    Maintenance::$completed => __('admin.common.completed'),
+                    Maintenance::$completed  => __('admin.common.completed'),
                 ];
                 $maintenance->status_text = $statusMap[$maintenance->status] ?? 'Unknown';
 
@@ -165,15 +165,15 @@ class MaintenanceRepository implements MaintenanceRepositoryInterface
             });
 
             return [
-                "draw" => intval($request->draw),
-                "recordsTotal" => $totalRecords,
+                "draw"            => intval($request->draw),
+                "recordsTotal"    => $totalRecords,
                 "recordsFiltered" => $filteredRecords,
-                "data" => $data,
-                'code' => 200
+                "data"            => $data,
+                'code'            => 200
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
         }
@@ -185,8 +185,8 @@ class MaintenanceRepository implements MaintenanceRepositoryInterface
 
         if (!$data) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -199,7 +199,7 @@ class MaintenanceRepository implements MaintenanceRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -211,20 +211,20 @@ class MaintenanceRepository implements MaintenanceRepositoryInterface
             $maintenance->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.maintenance_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }

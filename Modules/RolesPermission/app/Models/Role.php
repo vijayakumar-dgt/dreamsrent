@@ -23,8 +23,8 @@ class Role extends Model
         'created_by',
         'status',
     ];
-     /**
-     * @var string
-     */
+    /**
+    * @var string
+    */
     public static $roleSecretKey = 'RoleId';
 }

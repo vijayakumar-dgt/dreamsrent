@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\Contracts\HomeRepositoryInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
-use App\Repositories\Contracts\HomeRepositoryInterface;
 
 class HomeController extends Controller
 {
@@ -15,6 +15,7 @@ class HomeController extends Controller
     {
         $this->homeRepository = $homeRepository;
     }
+
     public function index(): View
     {
         $viewPath = $this->homeRepository->getHomeData();

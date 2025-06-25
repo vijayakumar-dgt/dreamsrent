@@ -10,7 +10,7 @@ class StorageStatusUpdateRequest extends CustomFailedValidation
     {
         return [
             'storage_type' => 'required|in:local_storage,aws_storage',
-            'status' => 'required|boolean',
+            'status'       => 'required|boolean',
         ];
     }
 

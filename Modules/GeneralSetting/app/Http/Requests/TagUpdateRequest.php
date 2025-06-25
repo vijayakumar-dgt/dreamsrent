@@ -14,7 +14,7 @@ class TagUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:blog_tags,name,' . $this->id,
+            'name'   => 'required|string|max:255|unique:blog_tags,name,' . $this->id,
             'status' => 'boolean',
         ];
     }
@@ -23,9 +23,9 @@ class TagUpdateRequest extends FormRequest
     {
         return [
             'name.required' => __('admin.manage.name_required'),
-            'name.max' => __('admin.manage.name_maxlength'),
-            'name.min' => __('admin.manage.name_minlength'),
-            'name.unique' => __('admin.manage.name_unique'),
+            'name.max'      => __('admin.manage.name_maxlength'),
+            'name.min'      => __('admin.manage.name_minlength'),
+            'name.unique'   => __('admin.manage.name_unique'),
         ];
     }
 }

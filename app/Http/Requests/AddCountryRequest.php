@@ -22,7 +22,7 @@ class AddCountryRequest extends FormRequest
                 'max:255',
                 Rule::unique('countries')->ignore($countryId),
             ],
-            'code' => 'nullable|max:50',
+            'code'   => 'nullable|max:50',
             'status' => 'nullable|boolean',
         ];
     }
@@ -31,8 +31,8 @@ class AddCountryRequest extends FormRequest
     {
         return [
             'name.required' => __('admin.cms.country_required'),
-            'name.unique' => __('admin.cms.country_exists'),
-            'name.max' => __('admin.cms.country_max_length'),
+            'name.unique'   => __('admin.cms.country_exists'),
+            'name.max'      => __('admin.cms.country_max_length'),
         ];
     }
 }

@@ -35,9 +35,9 @@ class RoleRequest extends CustomFailedValidation
     {
         return [
             'role.required' => __('admin.user_management.role_required'),
-            'role.max' => __('admin.user_management.role_maxlength'),
-            'role.min' => __('admin.user_management.role_minlength'),
-            'role.unique' => __('admin.user_management.role_unique'),
+            'role.max'      => __('admin.user_management.role_maxlength'),
+            'role.min'      => __('admin.user_management.role_minlength'),
+            'role.unique'   => __('admin.user_management.role_unique'),
         ];
     }
 }

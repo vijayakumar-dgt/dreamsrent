@@ -14,11 +14,11 @@ class AddTicketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category' => 'required',
-            'priority' => 'required|string|in:Low,Medium,High',
+            'category'    => 'required',
+            'priority'    => 'required|string|in:Low,Medium,High',
             'description' => 'required|string|max:1000',
-            'document' => 'array|max:10',
-            'document.*' => 'nullable|file|mimes:pdf,txt,doc,docx|max:10240',
+            'document'    => 'array|max:10',
+            'document.*'  => 'nullable|file|mimes:pdf,txt,doc,docx|max:10240',
         ];
     }
 }

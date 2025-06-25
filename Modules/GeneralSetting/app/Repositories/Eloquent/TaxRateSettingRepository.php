@@ -40,7 +40,7 @@ class TaxRateSettingRepository implements TaxRateSettingInterface
             foreach ($data['sub_tax'] as $taxRateId) {
                 SubTax::updateOrCreate([
                     'tax_group_id' => $group->id,
-                    'tax_rate_id' => $taxRateId
+                    'tax_rate_id'  => $taxRateId
                 ]);
             }
             return true;
@@ -48,13 +48,13 @@ class TaxRateSettingRepository implements TaxRateSettingInterface
 
         TaxGroup::where('id', $data['id'])->update([
             'tax_name' => $data['tax_group_name'],
-            'status' => $data['status'] ?? 1,
+            'status'   => $data['status'] ?? 1,
         ]);
         SubTax::where('tax_group_id', $data['id'])->whereNotIn('tax_rate_id', $data['sub_tax'])->delete();
         foreach ($data['sub_tax'] as $taxRateId) {
             SubTax::updateOrCreate([
                 'tax_group_id' => $data['id'],
-                'tax_rate_id' => $taxRateId
+                'tax_rate_id'  => $taxRateId
             ]);
         }
         return true;

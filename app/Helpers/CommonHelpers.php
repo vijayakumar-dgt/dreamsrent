@@ -3,13 +3,17 @@
 use App\Models\Notification;
 use App\Models\User;
 use App\Models\UserDetail;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Modules\CarInfo\Models\Category;
 use Modules\Communication\Http\Controllers\EmailController;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\DateFormat;
@@ -19,12 +23,7 @@ use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\NotificationType;
 use Modules\GeneralSetting\Models\TimeFormat;
 use Modules\GeneralSetting\Models\TranslationLanguage;
-use Modules\RolesPermission\Models\Module as ModuleModel;
 use Modules\RolesPermission\Models\Permission;
-use Illuminate\Support\Collection;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Cache;
-use Modules\CarInfo\Models\Category;
 
 if (!function_exists('clearCache')) {
     function clearCache(): bool
@@ -114,12 +113,12 @@ if (!function_exists('uploadedAsset')) {
 
         // Default response structure
         $defaultImages = [
-            'profile' => $baseUrl . '/backend/assets/img/default-profile.png',
-            'default2' => $baseUrl . '/backend/assets/img/default-placeholder-image.png',
-            'default' => $baseUrl . '/backend/assets/img/default-image-02.jpg',
-            'default_logo' => $baseUrl . '/backend/assets/img/logo.svg',
+            'profile'            => $baseUrl . '/backend/assets/img/default-profile.png',
+            'default2'           => $baseUrl . '/backend/assets/img/default-placeholder-image.png',
+            'default'            => $baseUrl . '/backend/assets/img/default-image-02.jpg',
+            'default_logo'       => $baseUrl . '/backend/assets/img/logo.svg',
             'default_small_logo' => $baseUrl . '/frontend/assets/img/logo-small.png',
-            'default_favicon' => $baseUrl . '/backend/assets/img/favicon.png',
+            'default_favicon'    => $baseUrl . '/backend/assets/img/favicon.png',
         ];
 
         // If file does not exist, return default image
@@ -155,12 +154,12 @@ if (!function_exists('uploadedAssetDetails')) {
 
         // Default response structure
         $defaultImages = [
-            'profile' => $baseUrl . '/backend/assets/img/default-profile.png',
-            'default2' => $baseUrl . '/backend/assets/img/default-placeholder-image.png',
-            'default' => $baseUrl . '/backend/assets/img/default-image-02.jpg',
-            'default_logo' => $baseUrl . '/backend/assets/img/logo.svg',
+            'profile'            => $baseUrl . '/backend/assets/img/default-profile.png',
+            'default2'           => $baseUrl . '/backend/assets/img/default-placeholder-image.png',
+            'default'            => $baseUrl . '/backend/assets/img/default-image-02.jpg',
+            'default_logo'       => $baseUrl . '/backend/assets/img/logo.svg',
             'default_small_logo' => $baseUrl . '/frontend/assets/img/logo-small.png',
-            'default_favicon' => $baseUrl . '/backend/assets/img/favicon.png',
+            'default_favicon'    => $baseUrl . '/backend/assets/img/favicon.png',
         ];
 
         // If file does not exist, return default image
@@ -428,7 +427,7 @@ function sendNotification(string $email, string $slug, array $notifyData = []): 
         'content'  => $parsedTemplate['content'],
     ];
 
-    $emailPayload    = new Request($payload);
+    $emailPayload = new Request($payload);
     $emailController = new EmailController();
     $emailController->sendEmail($emailPayload);
 
@@ -573,16 +572,16 @@ function sendNewsletterEmail(string|array $email, string $slug, array $notifyDat
 
     $parsedTemplate = [
         'subject'     => $replaced($subject),
-        'content' => $replaced($content),
+        'content'     => $replaced($content),
     ];
 
     $payload = [
         'to_email' => $email,
-        'subject' => $parsedTemplate['subject'],
-        'content' => $parsedTemplate['content'],
+        'subject'  => $parsedTemplate['subject'],
+        'content'  => $parsedTemplate['content'],
     ];
 
-    $emailPayload   = new Request($payload);
+    $emailPayload = new Request($payload);
     $emailController = new EmailController();
     $emailController->sendEmail($emailPayload);
 }
@@ -625,7 +624,7 @@ function getCategoryId()
        4 => 'boat',
     ];
     $languageId = getLanguageId(app()->getLocale());
-    $category   = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
+    $category = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
     return $category->id ?? 1;
 }
 
@@ -638,6 +637,6 @@ function getCustomThemeCategoryId($theme_id)
         4 => 'boat',
     ];
     $languageId = getLanguageId(app()->getLocale());
-    $category   = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
+    $category = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
     return $category->id ?? 1;
 }

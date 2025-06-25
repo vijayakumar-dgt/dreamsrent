@@ -17,7 +17,7 @@ class EditStateRequest extends FormRequest
         $id = $this->route('id') ?? $this->input('id');
 
         return [
-            'id' => 'required|exists:states,id',
+            'id'   => 'required|exists:states,id',
             'name' => [
                 'required',
                 'max:255',
@@ -26,20 +26,20 @@ class EditStateRequest extends FormRequest
                 })->ignore($id)
             ],
             'country_id' => 'required|exists:countries,id',
-            'status' => 'nullable|boolean',
+            'status'     => 'nullable|boolean',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'id.required' => __('admin.common.id_required'),
-            'id.exists' => __('admin.common.id_not_exists'),
-            'name.required' => __('admin.cms.state_required'),
-            'name.unique' => __('admin.cms.state_exists'),
-            'name.max' => __('admin.cms.state_max_length'),
+            'id.required'         => __('admin.common.id_required'),
+            'id.exists'           => __('admin.common.id_not_exists'),
+            'name.required'       => __('admin.cms.state_required'),
+            'name.unique'         => __('admin.cms.state_exists'),
+            'name.max'            => __('admin.cms.state_max_length'),
             'country_id.required' => __('admin.cms.country_required'),
-            'country_id.exists' => __('admin.cms.country_exists'),
+            'country_id.exists'   => __('admin.cms.country_exists'),
         ];
     }
 }

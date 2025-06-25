@@ -2,32 +2,10 @@
 
 namespace Modules\Page\Repositories\Eloquent;
 
-use Modules\Page\Models\Page;
-use Illuminate\Support\Str;
-use Modules\Page\Repositories\Contracts\PageInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\Models\Review;
-use App\Models\User;
-use App\Models\UserDetail;
-use App\Models\Wishlist;
-use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
-use Modules\CarInfo\Models\Brand;
-use Modules\CarInfo\Models\Cartype;
-use Modules\CarInfo\Models\Location;
-use Modules\CarInfo\Models\VehicleInfo;
-use Modules\CarInfo\Models\VehicleMeta;
-use Modules\GeneralSetting\Models\BlogCategory;
-use Modules\GeneralSetting\Models\Currency;
-use Modules\GeneralSetting\Models\GeneralSetting;
-use Modules\GeneralSetting\Models\Language;
-use Modules\GeneralSetting\Models\TranslationLanguage;
-use Illuminate\View\View;
-use Illuminate\Support\Arr;
+use Modules\Page\Models\Page;
+use Modules\Page\Repositories\Contracts\PageInterface;
 
 class PageRepository implements PageInterface
 {

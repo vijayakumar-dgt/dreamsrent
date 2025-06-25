@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Repositories\Contracts\BlogRepositoryInterface;
-use Illuminate\View\View;
 use App\Http\Requests\BlogRequest;
+use App\Repositories\Contracts\BlogRepositoryInterface;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class BlogController extends Controller
 {
@@ -16,12 +16,12 @@ class BlogController extends Controller
     {
         $this->blogRepository = $blogRepository;
     }
+
     public function BlogList(Request $request): View|JsonResponse
     {
         $data = $this->blogRepository->BlogList($request);
         return $data;
     }
-
 
     public function BlogDetail(int|string $id): View
     {

@@ -26,16 +26,16 @@ class EnquiryRequest extends CustomFailedValidation
     public function messages(): array
     {
         return [
-            'assigned_cars.required' => 'Please select at least one car.',
-            'assigned_cars.*.exists' => 'One or more selected cars are invalid.',
-            'customer_name.required' => 'Customer name is required.',
-            'customer_name.regex'    => 'Customer name can only contain letters and spaces.',
-            'email.required'         => 'Email is required.',
-            'email.email'            => 'Email format is invalid.',
-            'phone_number.required'  => 'Phone number is required.',
+            'assigned_cars.required'      => 'Please select at least one car.',
+            'assigned_cars.*.exists'      => 'One or more selected cars are invalid.',
+            'customer_name.required'      => 'Customer name is required.',
+            'customer_name.regex'         => 'Customer name can only contain letters and spaces.',
+            'email.required'              => 'Email is required.',
+            'email.email'                 => 'Email format is invalid.',
+            'phone_number.required'       => 'Phone number is required.',
             'phone_number.digits_between' => 'Phone number must be between 10 and 15 digits.',
-            'enquiry_details.required' => 'Enquiry details are required.',
-            'enquiry_details.max'    => 'Enquiry details may not be greater than 500 characters.',
+            'enquiry_details.required'    => 'Enquiry details are required.',
+            'enquiry_details.max'         => 'Enquiry details may not be greater than 500 characters.',
         ];
     }
 }

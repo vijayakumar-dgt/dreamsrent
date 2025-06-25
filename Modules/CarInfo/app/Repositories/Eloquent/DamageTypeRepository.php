@@ -16,8 +16,8 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
 
         if (!$authUser) {
             return [
-                'status' => 'error',
-                'code'   => 401,
+                'status'  => 'error',
+                'code'    => 401,
                 'message' => __('auth.unauthorized'),
             ];
         }
@@ -61,7 +61,7 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
             $authUser = current_user();
             $language_id = $authUser->language_id;
             $damageTypes = DamageType::when($request->has('keyword') && $request->keyword != "", function ($query) use ($request) {
-                    $query->where('damage_type', 'like', '%' . $request->keyword . '%');
+                $query->where('damage_type', 'like', '%' . $request->keyword . '%');
             })
                 ->when($request->has('status') && $request->status != "", function ($query) use ($request) {
                     $query->where('status', $request->status);
@@ -72,13 +72,13 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
             return [
                 'status' => 'success',
                 'code'   => 200,
-                'data' => $damageTypes
+                'data'   => $damageTypes
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -89,8 +89,8 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
 
         if (!$data) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.rentals.damage_type_not_found')
             ];
         }
@@ -98,7 +98,7 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -110,20 +110,20 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
             $damageType->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.damage_type_deleted')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.rentals.damage_type_not_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }

@@ -6,9 +6,11 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\User;
+use App\Models\WalletHistory;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingHistory;
@@ -22,17 +24,16 @@ use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\VehicleInsurance;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
+use Modules\GeneralSetting\Models\InsuranceBenefit;
 use Modules\GeneralSetting\Models\TaxGroup;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
-use Stripe\Stripe;
 use Stripe\Checkout\Session;
-use App\Models\WalletHistory;
-use Illuminate\Support\Collection;
-use Modules\GeneralSetting\Models\InsuranceBenefit;
+use Stripe\Stripe;
 
 class UserBookingRepository implements UserBookingRepositoryInterface
 {
     private $provider;
+
     public function __construct()
     {
         if (empty(env('PAYPAL_SANDBOX_CLIENT_ID')) || empty(env('PAYPAL_SANDBOX_CLIENT_SECRET'))) {
@@ -42,6 +43,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $this->provider->getAccessToken();
         }
     }
+
     public function getVehicleInfo(Request $request, string $slug): array|RedirectResponse
     {
         if (!Auth::guard('web')->check()) {
@@ -195,10 +197,10 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 $groupTaxAmount += $taxAmount;
 
                 $calculatedTaxes[] = [
-                    'group_name' => $group->tax_name,
-                    'rate_name' => $rate->tax_name,
+                    'group_name'   => $group->tax_name,
+                    'rate_name'    => $rate->tax_name,
                     'rate_percent' => $rate->tax_rate,
-                    'amount' => $taxAmount,
+                    'amount'       => $taxAmount,
                 ];
             }
         }
@@ -219,14 +221,14 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         $walletSetting = GeneralSetting::where("key", "wallet_status")->first();
         $walletStatus = ($walletSetting && $walletSetting->value == 1) ? 1 : 0;
         $data = [
-            'slug' => $slug,
-            'user' => $user,
-            'vehicleId' => $vehicleId,
-            'vehicle'   => $vehicle,
-            'vehicleImageUrl' => $vehicleImageUrl,
-            'mainLocation'    => $mainLocation,
-            'filteredPrices'  => $filteredPrices,
-            'extraServices'   => $extraServices,
+            'slug'              => $slug,
+            'user'              => $user,
+            'vehicleId'         => $vehicleId,
+            'vehicle'           => $vehicle,
+            'vehicleImageUrl'   => $vehicleImageUrl,
+            'mainLocation'      => $mainLocation,
+            'filteredPrices'    => $filteredPrices,
+            'extraServices'     => $extraServices,
             'extraServiceCount' => $extraServiceCount,
             'vehicleInsurance'  => $vehicleInsurance,
             'countries'         => $countries,
@@ -274,8 +276,8 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
         if (empty($pickupDatetime) || empty($returnDatetime) || empty($vehicleId)) {
             $response = [
-                'status' => 'error',
-                'code'   => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('web.home.booking_required_fields')
             ];
 
@@ -291,14 +293,14 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
         if ($isUnavailable) {
             $response = [
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => __('web.home.vehicle_already_booked_for_selected_time'),
                 'code'    => 200
             ];
             return $response;
         }
         $response = [
-            'status' => 'success',
+            'status'  => 'success',
             'message' => __('web.home.vehicle_available'),
             'code'    => 200
         ];
@@ -407,31 +409,31 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
             if ($bookingUserInfo) {
                 $driverInfo = (object)[
-                    'id' => null,
-                    'driver_name' => trim($bookingUserInfo->driver_first_name . ' ' . $bookingUserInfo->driver_last_name),
+                    'id'           => null,
+                    'driver_name'  => trim($bookingUserInfo->driver_first_name . ' ' . $bookingUserInfo->driver_last_name),
                     'phone_number' => $bookingUserInfo->driver_mobile_number,
                 ];
             }
         }
 
         $data = [
-            'transaction_id' => $transaction_id,
-            'booking' => $booking,
-            'vehicleId' => $vehicleId,
-            'vehicle' => $vehicle,
-            'vehicleImageUrl' => $vehicleImageUrl,
-            'dLocation' => $dLocation,
-            'rLocation' => $rLocation,
-            'mainLocation' => $mainLocation,
+            'transaction_id'                => $transaction_id,
+            'booking'                       => $booking,
+            'vehicleId'                     => $vehicleId,
+            'vehicle'                       => $vehicle,
+            'vehicleImageUrl'               => $vehicleImageUrl,
+            'dLocation'                     => $dLocation,
+            'rLocation'                     => $rLocation,
+            'mainLocation'                  => $mainLocation,
             'vehicleExtraServicesWithPrice' => $vehicleExtraServicesWithPrice,
-            'vehicleInsurance' => $vehicleInsurance,
-            'driverInfo' => $driverInfo,
-            'driverInfo_ride' => $driverInfo_ride,
-            'driverInfo_price' => $driverInfo_price,
-            'bookingInfo' => $bookingInfo,
-            'currencySymbol' => $currencySymbol,
-            'startDateTime' => $startDateTime,
-            'endDateTime' => $endDateTime
+            'vehicleInsurance'              => $vehicleInsurance,
+            'driverInfo'                    => $driverInfo,
+            'driverInfo_ride'               => $driverInfo_ride,
+            'driverInfo_price'              => $driverInfo_price,
+            'bookingInfo'                   => $bookingInfo,
+            'currencySymbol'                => $currencySymbol,
+            'startDateTime'                 => $startDateTime,
+            'endDateTime'                   => $endDateTime
         ];
 
         return $data;
@@ -449,7 +451,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         $authUser = current_user();
         if (!$authUser) {
             $response = [
-                'code' => 401,
+                'code'    => 401,
                 'message' => 'Unauthorized',
             ];
             return $response;
@@ -490,56 +492,56 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $generateID = 'COD' . str_pad((string) mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
             $data = [
-                "vehicle_id" => $request->input('vehicle_id'),
-                "booking_status" => 4,
-                "booking_by" => "user",
-                "booking_date" => $formattedBookingDate,
-                "start_datetime" => $startDatetime,
-                "end_datetime" => $endDatetime,
-                "pickup_location" => $pickup_location_id,
-                "return_location" => $return_location_id,
-                "delivery_location" => $pickup_location ?? null,
-                "delivery_return_location" => $return_location ?? null,
-                "delivery_type" => $request->rent_type,
-                "rental_type" => $request->price_type_value,
-                "security_deposit" => $request->input('security_deposit') ?? null,
-                "booking_tariff" => $request->input('booking_tariff')  ?? null,
-                "driving_type" => $request->input('driving_type') ?? null,
-                "no_of_passengers" => $request->input('no_person') ?? null,
-                "no_of_days" => $noOfDays,
-                "customer_id" => $authUser->id ?? 0,
-                "driver_id" => $request->input('driver_id') ?? 0,
-                "driver_price" => $request->input('driver_price_total'),
-                "extra_service" => $request->input('extra_services'),
-                "insurance" => $request->input('insurance'),
-                "total_insurance_price" => $request->input('insurance_price_total'),
+                "vehicle_id"                => $request->input('vehicle_id'),
+                "booking_status"            => 4,
+                "booking_by"                => "user",
+                "booking_date"              => $formattedBookingDate,
+                "start_datetime"            => $startDatetime,
+                "end_datetime"              => $endDatetime,
+                "pickup_location"           => $pickup_location_id,
+                "return_location"           => $return_location_id,
+                "delivery_location"         => $pickup_location ?? null,
+                "delivery_return_location"  => $return_location ?? null,
+                "delivery_type"             => $request->rent_type,
+                "rental_type"               => $request->price_type_value,
+                "security_deposit"          => $request->input('security_deposit') ?? null,
+                "booking_tariff"            => $request->input('booking_tariff') ?? null,
+                "driving_type"              => $request->input('driving_type') ?? null,
+                "no_of_passengers"          => $request->input('no_person') ?? null,
+                "no_of_days"                => $noOfDays,
+                "customer_id"               => $authUser->id ?? 0,
+                "driver_id"                 => $request->input('driver_id') ?? 0,
+                "driver_price"              => $request->input('driver_price_total'),
+                "extra_service"             => $request->input('extra_services'),
+                "insurance"                 => $request->input('insurance'),
+                "total_insurance_price"     => $request->input('insurance_price_total'),
                 "total_extra_service_price" => $request->input('extra_price_total'),
-                "vehicle_price" => $request->input('vehicle_price'),
-                "vehicle_total_price" => $request->input('vehicle_price_total'),
-                "final_price" => $request->input('total_price'),
-                "cancel_date" => $request->input('cancel_date') ?? null,
-                "cancel_by" => $request->input('cancel_by') ?? null,
-                "cancel_reason" => $request->input('cancel_reason') ?? null,
-                "created_by" => $request->input('created_by') ?? null,
-                "updated_by" => $request->input('updated_by') ?? null,
-                "transaction_id" => $generateID,
-                "payment_status" =>  1,
-                "payment_type" =>  "cod",
-                "tax_val" =>  $request->tax_val ?? null,
+                "vehicle_price"             => $request->input('vehicle_price'),
+                "vehicle_total_price"       => $request->input('vehicle_price_total'),
+                "final_price"               => $request->input('total_price'),
+                "cancel_date"               => $request->input('cancel_date') ?? null,
+                "cancel_by"                 => $request->input('cancel_by') ?? null,
+                "cancel_reason"             => $request->input('cancel_reason') ?? null,
+                "created_by"                => $request->input('created_by') ?? null,
+                "updated_by"                => $request->input('updated_by') ?? null,
+                "transaction_id"            => $generateID,
+                "payment_status"            => 1,
+                "payment_type"              => "cod",
+                "tax_val"                   => $request->tax_val ?? null,
             ];
 
             $booking = Booking::create($data);
 
             $dataForHistory = [
-                'bookings' => $booking->toArray(),
+                'bookings'        => $booking->toArray(),
                 'booking_details' => [] // keep empty for now
             ];
 
             BookingHistory::create([
                 'booking_id' => $booking->id,
-                'data' => json_encode($dataForHistory),
-                'action' => 'create',
-                'message' => __('web.home.booking_created'),
+                'data'       => json_encode($dataForHistory),
+                'action'     => 'create',
+                'message'    => __('web.home.booking_created'),
             ]);
 
             $reservationId = 'RES-' . str_pad((string) $booking->id, 4, '0', STR_PAD_LEFT);
@@ -547,26 +549,26 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $booking->update(['reservation_id' => $reservationId]);
 
             $addData = [
-                'booking_id' => $booking->id,
-                'driver_first_name' => $request->driver_first_name,
-                'driver_last_name' => $request->driver_last_name,
-                'driver_age' => $request->driver_age,
+                'booking_id'           => $booking->id,
+                'driver_first_name'    => $request->driver_first_name,
+                'driver_last_name'     => $request->driver_last_name,
+                'driver_age'           => $request->driver_age,
                 'driver_mobile_number' => $request->driver_mobile_number,
-                'driver_licence' => $request->driver_licence,
-                'driver_check' => $request->has('driver_check') ? 1 : 0,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'no_person' => $request->no_person ?? 0,
-                'company' => $request->company,
-                'address' => $request->address,
-                'country_id' => $request->country_id,
-                'state_id' => $request->state_id,
-                'city_id' => $request->city_id,
-                'pincode' => $request->pincode,
-                'email' => $request->email,
-                'phone_number' => $request->phone_number,
-                'add_info' => $request->add_info,
-                'terms' => $request->has('terms') ? 1 : 0,
+                'driver_licence'       => $request->driver_licence,
+                'driver_check'         => $request->has('driver_check') ? 1 : 0,
+                'first_name'           => $request->first_name,
+                'last_name'            => $request->last_name,
+                'no_person'            => $request->no_person ?? 0,
+                'company'              => $request->company,
+                'address'              => $request->address,
+                'country_id'           => $request->country_id,
+                'state_id'             => $request->state_id,
+                'city_id'              => $request->city_id,
+                'pincode'              => $request->pincode,
+                'email'                => $request->email,
+                'phone_number'         => $request->phone_number,
+                'add_info'             => $request->add_info,
+                'terms'                => $request->has('terms') ? 1 : 0,
             ];
 
             $bookingInfo = BookingUserInfo::create($addData);
@@ -574,18 +576,18 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             //send notification to admin
             $authUser = Auth::guard('web')->user();
             $vehicle = VehicleInfo::where('id', $request->vehicle_id)->first();
-            $driver  = Driver::find($booking->driver_id);
+            $driver = Driver::find($booking->driver_id);
             $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
             $notifyData = [
-                'user_name' => $authUser->name ?? '',
-                'company_name' => $companyName,
-                'email'     => $authUser->email ?? '',
-                'phonenumber' => $authUser->phone_number ?? '',
-                'vehicle_name' => $vehicle->name ?? "",
-                'driver_name'  => $driver ? $driver->driver_name : "",
-                'reservation_id' => $booking->reservation_id ?? "",
-                'start_date'     => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
-                'end_date'       => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
+                'user_name'       => $authUser->name ?? '',
+                'company_name'    => $companyName,
+                'email'           => $authUser->email ?? '',
+                'phonenumber'     => $authUser->phone_number ?? '',
+                'vehicle_name'    => $vehicle->name ?? "",
+                'driver_name'     => $driver ? $driver->driver_name : "",
+                'reservation_id'  => $booking->reservation_id ?? "",
+                'start_date'      => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
+                'end_date'        => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
                 'pickup_location' => $booking->pickupLocation->name ?? '',
                 'delivery_type'   => $booking->delivery_type ?? "",
                 'rental_type'     => $booking->rental_type ?? "",
@@ -607,10 +609,10 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             } catch (\Exception $e) {
             }
             $response = [
-                'code' => 200,
-                'message' => __('web.home.booking_successfully_created'),
-                'email' => $request->email,
-                'cod' => $booking->transaction_id,
+                'code'         => 200,
+                'message'      => __('web.home.booking_successfully_created'),
+                'email'        => $request->email,
+                'cod'          => $booking->transaction_id,
                 'redirect_url' => route('payment.success.page', ['transaction_id' => $booking->transaction_id])
             ];
             return $response;
@@ -620,7 +622,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             if (!$this->provider) {
                 $response = [
                     'success' => false,
-                    'code' => 503,
+                    'code'    => 503,
                     'message' => 'PayPal is currently unavailable. Please choose another payment method.',
                 ];
                 return $response;
@@ -643,7 +645,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $currency = strtolower(trim($currency_details));
             if (!in_array($currency, $allowedCurrencies)) {
                 return [
-                    'code' => 422,
+                    'code'    => 422,
                     'success' => false,
                     'message' => 'Invalid currency selected. Please use a supported currency like USD, INR, EUR, etc.',
                 ];
@@ -654,21 +656,21 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $unit = [
                 'items' => [
                     [
-                        'name' => 'Rental System',
-                        'quantity' => 1,
+                        'name'        => 'Rental System',
+                        'quantity'    => 1,
                         'unit_amount' => [
                             'currency_code' => $currency_details,
-                            'value' => $request->total_price,
+                            'value'         => $request->total_price,
                         ]
                     ],
                 ],
                 'amount' => [
                     'currency_code' => $currency_details,
-                    'value' => $request->total_price,
-                    'breakdown' => [
+                    'value'         => $request->total_price,
+                    'breakdown'     => [
                         'item_total' => [
                             'currency_code' => $currency_details,
-                            'value' => $request->total_price,
+                            'value'         => $request->total_price,
                         ],
                     ]
                 ]
@@ -688,49 +690,49 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             if (!is_array($response) || !array_key_exists('id', $response)) {
                 $response = [
                     'success' => false,
-                    'code' => 503,
+                    'code'    => 503,
                     'message' => 'PayPal is currently unavailable. Please choose another payment method.',
                 ];
                 return $response;
             }
 
             $data = [
-                "vehicle_id" => $request->input('vehicle_id'),
-                "booking_status" => 1,
-                "booking_by" => "user",
-                "booking_date" => $formattedBookingDate,
-                "start_datetime" => $startDatetime,
-                "end_datetime" => $endDatetime,
-                "pickup_location" => $pickup_location_id ?? null,
-                "return_location" => $return_location_id ?? null,
-                "delivery_location" => $pickup_location ?? null,
-                "delivery_return_location" => $return_location ?? null,
-                "delivery_type" => $request->rent_type,
-                "rental_type" => $request->price_type_value,
-                "security_deposit" => $request->input('security_deposit') ?? null,
-                "booking_tariff" => $request->input('booking_tariff') ?? null,
-                "driving_type" => $request->input('driving_type') ?? null,
-                "no_of_passengers" => $request->input('no_person') ?? null,
-                "no_of_days" => $noOfDays,
-                "customer_id" => $authUser->id ?? 0,
-                "driver_id" => $request->input('driver_id') ?? 0,
-                "driver_price" => $request->input('driver_price_total'),
-                "extra_service" => $request->input('extra_services'),
-                "insurance" => $request->input('insurance'),
-                "total_insurance_price" => $request->input('insurance_price_total'),
+                "vehicle_id"                => $request->input('vehicle_id'),
+                "booking_status"            => 1,
+                "booking_by"                => "user",
+                "booking_date"              => $formattedBookingDate,
+                "start_datetime"            => $startDatetime,
+                "end_datetime"              => $endDatetime,
+                "pickup_location"           => $pickup_location_id ?? null,
+                "return_location"           => $return_location_id ?? null,
+                "delivery_location"         => $pickup_location ?? null,
+                "delivery_return_location"  => $return_location ?? null,
+                "delivery_type"             => $request->rent_type,
+                "rental_type"               => $request->price_type_value,
+                "security_deposit"          => $request->input('security_deposit') ?? null,
+                "booking_tariff"            => $request->input('booking_tariff') ?? null,
+                "driving_type"              => $request->input('driving_type') ?? null,
+                "no_of_passengers"          => $request->input('no_person') ?? null,
+                "no_of_days"                => $noOfDays,
+                "customer_id"               => $authUser->id ?? 0,
+                "driver_id"                 => $request->input('driver_id') ?? 0,
+                "driver_price"              => $request->input('driver_price_total'),
+                "extra_service"             => $request->input('extra_services'),
+                "insurance"                 => $request->input('insurance'),
+                "total_insurance_price"     => $request->input('insurance_price_total'),
                 "total_extra_service_price" => $request->input('extra_price_total'),
-                "vehicle_price" => $request->input('vehicle_price'),
-                "vehicle_total_price" => $request->input('vehicle_price_total'),
-                "final_price" => $request->input('total_price'),
-                "cancel_date" => $request->input('cancel_date') ?? null,
-                "cancel_by" => $request->input('cancel_by') ?? null,
-                "cancel_reason" => $request->input('cancel_reason') ?? null,
-                "created_by" => $request->input('created_by') ?? null,
-                "updated_by" => $request->input('updated_by') ?? null,
-                "transaction_id" =>  $response['id'],
-                "payment_status" =>  1,
-                "payment_type" =>  "paypal",
-                "tax_val" =>  $request->tax_val ?? null,
+                "vehicle_price"             => $request->input('vehicle_price'),
+                "vehicle_total_price"       => $request->input('vehicle_price_total'),
+                "final_price"               => $request->input('total_price'),
+                "cancel_date"               => $request->input('cancel_date') ?? null,
+                "cancel_by"                 => $request->input('cancel_by') ?? null,
+                "cancel_reason"             => $request->input('cancel_reason') ?? null,
+                "created_by"                => $request->input('created_by') ?? null,
+                "updated_by"                => $request->input('updated_by') ?? null,
+                "transaction_id"            => $response['id'],
+                "payment_status"            => 1,
+                "payment_type"              => "paypal",
+                "tax_val"                   => $request->tax_val ?? null,
             ];
 
             $booking = Booking::create($data);
@@ -739,47 +741,47 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $booking->update(['reservation_id' => $reservationId]);
 
             $addData = [
-                'booking_id' => $booking->id,
-                'driver_first_name' => $request->driver_first_name,
-                'driver_last_name' => $request->driver_last_name,
-                'driver_age' => $request->driver_age,
+                'booking_id'           => $booking->id,
+                'driver_first_name'    => $request->driver_first_name,
+                'driver_last_name'     => $request->driver_last_name,
+                'driver_age'           => $request->driver_age,
                 'driver_mobile_number' => $request->driver_mobile_number,
-                'driver_licence' => $request->driver_licence,
-                'driver_check' => $request->has('driver_check') ? 1 : 0,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'no_person' => $request->no_person ?? 0,
-                'company' => $request->company,
-                'address' => $request->address,
-                'country_id' => $request->country_id,
-                'state_id' => $request->state_id,
-                'city_id' => $request->city_id,
-                'pincode' => $request->pincode,
-                'email' => $request->email,
-                'phone_number' => $request->phone_number,
-                'add_info' => $request->add_info,
-                'terms' => $request->has('terms') ? 1 : 0,
+                'driver_licence'       => $request->driver_licence,
+                'driver_check'         => $request->has('driver_check') ? 1 : 0,
+                'first_name'           => $request->first_name,
+                'last_name'            => $request->last_name,
+                'no_person'            => $request->no_person ?? 0,
+                'company'              => $request->company,
+                'address'              => $request->address,
+                'country_id'           => $request->country_id,
+                'state_id'             => $request->state_id,
+                'city_id'              => $request->city_id,
+                'pincode'              => $request->pincode,
+                'email'                => $request->email,
+                'phone_number'         => $request->phone_number,
+                'add_info'             => $request->add_info,
+                'terms'                => $request->has('terms') ? 1 : 0,
             ];
 
             $bookingInfo = BookingUserInfo::create($addData);
 
             $dataForHistory = [
-                'bookings' => $booking->toArray(),
+                'bookings'        => $booking->toArray(),
                 'booking_details' => [] // keep empty for now
             ];
 
             BookingHistory::create([
                 'booking_id' => $booking->id,
-                'data' => json_encode($dataForHistory),
-                'action' => 'create',
-                'message' => __('web.home.booking_created'),
+                'data'       => json_encode($dataForHistory),
+                'action'     => 'create',
+                'message'    => __('web.home.booking_created'),
             ]);
 
             $approve_paypal_url = $response['links'][1]['href'];
 
             $response = [
-                'code' => 200,
-                'message' => __('web.home.order_created_successfully'),
+                'code'       => 200,
+                'message'    => __('web.home.order_created_successfully'),
                 'paypal_url' => $approve_paypal_url
             ];
 
@@ -790,7 +792,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $stripeSecret = config('services.stripe.secret') ?? '';
             if (empty($stripeSecret)) {
                 $response = [
-                    'code' => 503,
+                    'code'    => 503,
                     'success' => false,
                     'message' => 'Stripe is currently unavailable. Please choose another payment method.'
                 ];
@@ -814,7 +816,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $currency = strtolower(trim($currency_details));
             if (!in_array($currency, $allowedCurrencies)) {
                 return [
-                    'code' => 422,
+                    'code'    => 422,
                     'success' => false,
                     'message' => 'Invalid currency selected. Please use a supported currency like USD, INR, EUR, etc.',
                 ];
@@ -823,53 +825,53 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $session = Session::create([
                 'line_items' => [[
                     'price_data' => [
-                        'currency' => $currency_details,
+                        'currency'     => $currency_details,
                         'product_data' => ['name' => "Rental Services"],
-                        'unit_amount' => intval((float) (is_numeric($request->input('total_price')) ? $request->input('total_price') : 0) * 100),
+                        'unit_amount'  => intval((float) (is_numeric($request->input('total_price')) ? $request->input('total_price') : 0) * 100),
                     ],
                     'quantity' => 1,
                 ]],
-                'mode' => 'payment',
+                'mode'        => 'payment',
                 'success_url' => route('strip.payment.success') . "?session_id={CHECKOUT_SESSION_ID}",
             ]);
 
             $data = [
-                "vehicle_id" => $request->input('vehicle_id'),
-                "booking_status" => 1,
-                "booking_by" => "user",
-                "booking_date" => $formattedBookingDate,
-                "start_datetime" => $startDatetime,
-                "end_datetime" => $endDatetime,
-                "pickup_location" => $pickup_location_id ?? null,
-                "return_location" => $return_location_id ?? null,
-                "delivery_location" => $pickup_location ?? null,
-                "delivery_return_location" => $return_location ?? null,
-                "delivery_type" => $request->rent_type,
-                "rental_type" => $request->price_type_value,
-                "security_deposit" => $request->input('security_deposit') ?? null,
-                "booking_tariff" => $request->input('booking_tariff') ?? null,
-                "driving_type" => $request->input('driving_type') ?? null,
-                "no_of_passengers" => $request->input('no_person') ?? null,
-                "no_of_days" => $noOfDays,
-                "customer_id" => $authUser->id ?? 0,
-                "driver_id" => $request->input('driver_id') ?? 0,
-                "driver_price" => $request->input('driver_price_total'),
-                "extra_service" => $request->input('extra_services'),
-                "insurance" => $request->input('insurance'),
-                "total_insurance_price" => $request->input('insurance_price_total'),
+                "vehicle_id"                => $request->input('vehicle_id'),
+                "booking_status"            => 1,
+                "booking_by"                => "user",
+                "booking_date"              => $formattedBookingDate,
+                "start_datetime"            => $startDatetime,
+                "end_datetime"              => $endDatetime,
+                "pickup_location"           => $pickup_location_id ?? null,
+                "return_location"           => $return_location_id ?? null,
+                "delivery_location"         => $pickup_location ?? null,
+                "delivery_return_location"  => $return_location ?? null,
+                "delivery_type"             => $request->rent_type,
+                "rental_type"               => $request->price_type_value,
+                "security_deposit"          => $request->input('security_deposit') ?? null,
+                "booking_tariff"            => $request->input('booking_tariff') ?? null,
+                "driving_type"              => $request->input('driving_type') ?? null,
+                "no_of_passengers"          => $request->input('no_person') ?? null,
+                "no_of_days"                => $noOfDays,
+                "customer_id"               => $authUser->id ?? 0,
+                "driver_id"                 => $request->input('driver_id') ?? 0,
+                "driver_price"              => $request->input('driver_price_total'),
+                "extra_service"             => $request->input('extra_services'),
+                "insurance"                 => $request->input('insurance'),
+                "total_insurance_price"     => $request->input('insurance_price_total'),
                 "total_extra_service_price" => $request->input('extra_price_total'),
-                "vehicle_price" => $request->input('vehicle_price'),
-                "vehicle_total_price" => $request->input('vehicle_price_total'),
-                "final_price" => $request->input('total_price'),
-                "cancel_date" => $request->input('cancel_date') ?? null,
-                "cancel_by" => $request->input('cancel_by') ?? null,
-                "cancel_reason" => $request->input('cancel_reason') ?? null,
-                "created_by" => $request->input('created_by') ?? null,
-                "updated_by" => $request->input('updated_by') ?? null,
-                "transaction_id" =>  $session->id,
-                "payment_status" =>  1,
-                "payment_type" =>  "stripe",
-                "tax_val" =>  $request->tax_val ?? null,
+                "vehicle_price"             => $request->input('vehicle_price'),
+                "vehicle_total_price"       => $request->input('vehicle_price_total'),
+                "final_price"               => $request->input('total_price'),
+                "cancel_date"               => $request->input('cancel_date') ?? null,
+                "cancel_by"                 => $request->input('cancel_by') ?? null,
+                "cancel_reason"             => $request->input('cancel_reason') ?? null,
+                "created_by"                => $request->input('created_by') ?? null,
+                "updated_by"                => $request->input('updated_by') ?? null,
+                "transaction_id"            => $session->id,
+                "payment_status"            => 1,
+                "payment_type"              => "stripe",
+                "tax_val"                   => $request->tax_val ?? null,
             ];
 
             $booking = Booking::create($data);
@@ -878,45 +880,45 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $booking->update(['reservation_id' => $reservationId]);
 
             $addData = [
-                'booking_id' => $booking->id,
-                'driver_first_name' => $request->driver_first_name,
-                'driver_last_name' => $request->driver_last_name,
-                'driver_age' => $request->driver_age,
+                'booking_id'           => $booking->id,
+                'driver_first_name'    => $request->driver_first_name,
+                'driver_last_name'     => $request->driver_last_name,
+                'driver_age'           => $request->driver_age,
                 'driver_mobile_number' => $request->driver_mobile_number,
-                'driver_licence' => $request->driver_licence,
-                'driver_check' => $request->has('driver_check') ? 1 : 0,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'no_person' => $request->no_person ?? 0,
-                'company' => $request->company,
-                'address' => $request->address,
-                'country_id' => $request->country_id,
-                'state_id' => $request->state_id,
-                'city_id' => $request->city_id,
-                'pincode' => $request->pincode,
-                'email' => $request->email,
-                'phone_number' => $request->phone_number,
-                'add_info' => $request->add_info,
-                'terms' => $request->has('terms') ? 1 : 0,
+                'driver_licence'       => $request->driver_licence,
+                'driver_check'         => $request->has('driver_check') ? 1 : 0,
+                'first_name'           => $request->first_name,
+                'last_name'            => $request->last_name,
+                'no_person'            => $request->no_person ?? 0,
+                'company'              => $request->company,
+                'address'              => $request->address,
+                'country_id'           => $request->country_id,
+                'state_id'             => $request->state_id,
+                'city_id'              => $request->city_id,
+                'pincode'              => $request->pincode,
+                'email'                => $request->email,
+                'phone_number'         => $request->phone_number,
+                'add_info'             => $request->add_info,
+                'terms'                => $request->has('terms') ? 1 : 0,
             ];
 
             $bookingInfo = BookingUserInfo::create($addData);
 
             $dataForHistory = [
-                'bookings' => $booking->toArray(),
+                'bookings'        => $booking->toArray(),
                 'booking_details' => []
             ];
 
             BookingHistory::create([
                 'booking_id' => $booking->id,
-                'data' => json_encode($dataForHistory),
-                'action' => 'create',
-                'message' => __('web.home.booking_created'),
+                'data'       => json_encode($dataForHistory),
+                'action'     => 'create',
+                'message'    => __('web.home.booking_created'),
             ]);
 
             $stripURL = $session->url;
             $response = [
-                'message' => __('web.home.order_created_successfully'),
+                'message'  => __('web.home.order_created_successfully'),
                 'stripurl' => $stripURL
             ];
 
@@ -938,9 +940,9 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
             if ($walletTotalAmount < $request->input('total_price')) {
                 $response = [
-                    'code' => 422,
+                    'code'    => 422,
                     'message' => __('web.home.insufficient_balance_in_wallet'),
-                    'data' => []
+                    'data'    => []
                 ];
                 return $response;
             }
@@ -948,56 +950,56 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $generateID = 'wallet' . str_pad((string) mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
             $data = [
-                "vehicle_id" => $request->input('vehicle_id'),
-                "booking_status" => 4,
-                "booking_by" => "user",
-                "booking_date" => $formattedBookingDate,
-                "start_datetime" => $startDatetime,
-                "end_datetime" => $endDatetime,
-                "pickup_location" => $pickup_location_id ?? null,
-                "return_location" => $return_location_id ?? null,
-                "delivery_location" => $pickup_location ?? null,
-                "delivery_return_location" => $return_location ?? null,
-                "delivery_type" => $request->rent_type,
-                "rental_type" => $request->price_type_value,
-                "security_deposit" => $request->input('security_deposit') ?? null,
-                "booking_tariff" => $request->input('booking_tariff')  ?? null,
-                "driving_type" => $request->input('driving_type') ?? null,
-                "no_of_passengers" => $request->input('no_person') ?? null,
-                "no_of_days" => $noOfDays,
-                "customer_id" => $authUser->id ?? 0,
-                "driver_id" => $request->input('driver_id') ?? 0,
-                "driver_price" => $request->input('driver_price_total'),
-                "extra_service" => $request->input('extra_services'),
-                "insurance" => $request->input('insurance'),
-                "total_insurance_price" => $request->input('insurance_price_total'),
+                "vehicle_id"                => $request->input('vehicle_id'),
+                "booking_status"            => 4,
+                "booking_by"                => "user",
+                "booking_date"              => $formattedBookingDate,
+                "start_datetime"            => $startDatetime,
+                "end_datetime"              => $endDatetime,
+                "pickup_location"           => $pickup_location_id ?? null,
+                "return_location"           => $return_location_id ?? null,
+                "delivery_location"         => $pickup_location ?? null,
+                "delivery_return_location"  => $return_location ?? null,
+                "delivery_type"             => $request->rent_type,
+                "rental_type"               => $request->price_type_value,
+                "security_deposit"          => $request->input('security_deposit') ?? null,
+                "booking_tariff"            => $request->input('booking_tariff') ?? null,
+                "driving_type"              => $request->input('driving_type') ?? null,
+                "no_of_passengers"          => $request->input('no_person') ?? null,
+                "no_of_days"                => $noOfDays,
+                "customer_id"               => $authUser->id ?? 0,
+                "driver_id"                 => $request->input('driver_id') ?? 0,
+                "driver_price"              => $request->input('driver_price_total'),
+                "extra_service"             => $request->input('extra_services'),
+                "insurance"                 => $request->input('insurance'),
+                "total_insurance_price"     => $request->input('insurance_price_total'),
                 "total_extra_service_price" => $request->input('extra_price_total'),
-                "vehicle_price" => $request->input('vehicle_price'),
-                "vehicle_total_price" => $request->input('vehicle_price_total'),
-                "final_price" => $request->input('total_price'),
-                "cancel_date" => $request->input('cancel_date') ?? null,
-                "cancel_by" => $request->input('cancel_by') ?? null,
-                "cancel_reason" => $request->input('cancel_reason') ?? null,
-                "created_by" => $request->input('created_by') ?? null,
-                "updated_by" => $request->input('updated_by') ?? null,
-                "transaction_id" => $generateID,
-                "payment_status" =>  1,
-                "payment_type" =>  "wallet",
-                "tax_val" =>  $request->tax_val ?? null,
+                "vehicle_price"             => $request->input('vehicle_price'),
+                "vehicle_total_price"       => $request->input('vehicle_price_total'),
+                "final_price"               => $request->input('total_price'),
+                "cancel_date"               => $request->input('cancel_date') ?? null,
+                "cancel_by"                 => $request->input('cancel_by') ?? null,
+                "cancel_reason"             => $request->input('cancel_reason') ?? null,
+                "created_by"                => $request->input('created_by') ?? null,
+                "updated_by"                => $request->input('updated_by') ?? null,
+                "transaction_id"            => $generateID,
+                "payment_status"            => 1,
+                "payment_type"              => "wallet",
+                "tax_val"                   => $request->tax_val ?? null,
             ];
 
             $booking = Booking::create($data);
 
             $dataForHistory = [
-                'bookings' => $booking->toArray(),
+                'bookings'        => $booking->toArray(),
                 'booking_details' => [] // keep empty for now
             ];
 
             BookingHistory::create([
                 'booking_id' => $booking->id,
-                'data' => json_encode($dataForHistory),
-                'action' => 'create',
-                'message' => __('web.home.booking_created'),
+                'data'       => json_encode($dataForHistory),
+                'action'     => 'create',
+                'message'    => __('web.home.booking_created'),
             ]);
 
             $reservationId = 'RES-' . str_pad((string) $booking->id, 4, '0', STR_PAD_LEFT);
@@ -1005,39 +1007,39 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $booking->update(['reservation_id' => $reservationId]);
 
             $addData = [
-                'booking_id' => $booking->id,
-                'driver_first_name' => $request->driver_first_name,
-                'driver_last_name' => $request->driver_last_name,
-                'driver_age' => $request->driver_age,
+                'booking_id'           => $booking->id,
+                'driver_first_name'    => $request->driver_first_name,
+                'driver_last_name'     => $request->driver_last_name,
+                'driver_age'           => $request->driver_age,
                 'driver_mobile_number' => $request->driver_mobile_number,
-                'driver_licence' => $request->driver_licence,
-                'driver_check' => $request->has('driver_check') ? 1 : 0,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'no_person' => $request->no_person ?? 0,
-                'company' => $request->company,
-                'address' => $request->address,
-                'country_id' => $request->country_id,
-                'state_id' => $request->state_id,
-                'city_id' => $request->city_id,
-                'pincode' => $request->pincode,
-                'email' => $request->email,
-                'phone_number' => $request->phone_number,
-                'add_info' => $request->add_info,
-                'terms' => $request->has('terms') ? 1 : 0,
+                'driver_licence'       => $request->driver_licence,
+                'driver_check'         => $request->has('driver_check') ? 1 : 0,
+                'first_name'           => $request->first_name,
+                'last_name'            => $request->last_name,
+                'no_person'            => $request->no_person ?? 0,
+                'company'              => $request->company,
+                'address'              => $request->address,
+                'country_id'           => $request->country_id,
+                'state_id'             => $request->state_id,
+                'city_id'              => $request->city_id,
+                'pincode'              => $request->pincode,
+                'email'                => $request->email,
+                'phone_number'         => $request->phone_number,
+                'add_info'             => $request->add_info,
+                'terms'                => $request->has('terms') ? 1 : 0,
             ];
 
             $bookingInfo = BookingUserInfo::create($addData);
 
             $walletData = [
-                "user_id" => $authUser->id,
-                "amount" => $request->input('total_price'),
-                "payment_type" => "others",
-                "status" => "Completed",
-                "reference_id" => $booking->id,
-                "transaction_id" => $booking->transaction_id,
+                "user_id"          => $authUser->id,
+                "amount"           => $request->input('total_price'),
+                "payment_type"     => "others",
+                "status"           => "Completed",
+                "reference_id"     => $booking->id,
+                "transaction_id"   => $booking->transaction_id,
                 "transaction_date" => now(),
-                "type" => 2,
+                "type"             => 2,
             ];
 
             $wallet = WalletHistory::create($walletData);
@@ -1045,18 +1047,18 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             //send notification to admin
             $authUser = Auth::guard('web')->user();
             $vehicle = VehicleInfo::where('id', $request->vehicle_id)->first();
-            $driver  = Driver::find($booking->driver_id);
+            $driver = Driver::find($booking->driver_id);
             $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
             $notifyData = [
-                'user_name' => $authUser->name ?? '',
-                'company_name' => $companyName,
-                'email'     => $authUser->email ?? '',
-                'phonenumber' => $authUser->phone_number ?? '',
-                'vehicle_name' => $vehicle->name ?? "",
-                'driver_name'  => $driver ? $driver->driver_name : "",
-                'reservation_id' => $booking->reservation_id ?? "",
-                'start_date'     => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
-                'end_date'       => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
+                'user_name'       => $authUser->name ?? '',
+                'company_name'    => $companyName,
+                'email'           => $authUser->email ?? '',
+                'phonenumber'     => $authUser->phone_number ?? '',
+                'vehicle_name'    => $vehicle->name ?? "",
+                'driver_name'     => $driver ? $driver->driver_name : "",
+                'reservation_id'  => $booking->reservation_id ?? "",
+                'start_date'      => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
+                'end_date'        => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
                 'pickup_location' => $booking->pickupLocation ? $booking->pickupLocation->name : "",
                 'delivery_type'   => $booking->delivery_type ?? "",
                 'rental_type'     => $booking->rental_type ?? "",
@@ -1078,10 +1080,10 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             } catch (\Exception $e) {
             }
             $response = [
-                'code' => 200,
-                'message' => __('web.home.booking_successfully_created'),
-                'email' => $request->email,
-                'cod' => $booking->transaction_id,
+                'code'         => 200,
+                'message'      => __('web.home.booking_successfully_created'),
+                'email'        => $request->email,
+                'cod'          => $booking->transaction_id,
                 'redirect_url' => route('payment.success.page', ['transaction_id' => $booking->transaction_id])
             ];
 
@@ -1108,15 +1110,15 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                     $driver = $booking ? Driver::find($booking->driver_id) : null;
                     $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
                     $notifyData = [
-                        'user_name' => $authUser->name ?? '',
-                        'company_name' => $companyName,
-                        'email'     => $authUser->email ?? '',
-                        'phonenumber' => $authUser->phone_number ?? '',
-                        'vehicle_name' => $vehicle->name ?? "",
-                        'driver_name'  => $driver ? $driver->driver_name : "",
-                        'reservation_id' => $booking->reservation_id ?? "",
-                        'start_date' => ($booking && $booking->start_datetime) ? formatDateTime($booking->start_datetime) : '',
-                        'end_date' => ($booking && $booking->end_datetime) ? formatDateTime($booking->end_datetime) : '',
+                        'user_name'       => $authUser->name ?? '',
+                        'company_name'    => $companyName,
+                        'email'           => $authUser->email ?? '',
+                        'phonenumber'     => $authUser->phone_number ?? '',
+                        'vehicle_name'    => $vehicle->name ?? "",
+                        'driver_name'     => $driver ? $driver->driver_name : "",
+                        'reservation_id'  => $booking->reservation_id ?? "",
+                        'start_date'      => ($booking && $booking->start_datetime) ? formatDateTime($booking->start_datetime) : '',
+                        'end_date'        => ($booking && $booking->end_datetime) ? formatDateTime($booking->end_datetime) : '',
                         'pickup_location' => ($booking && $booking->pickupLocation) ? $booking->pickupLocation->name : '',
                         'delivery_type'   => $booking->delivery_type ?? "",
                         'rental_type'     => $booking->rental_type ?? "",
@@ -1140,26 +1142,26 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                     $response = [
                         'redirect_url' => route('payment.success.page', ['transaction_id' => $response['id']])
                     ];
-                    
+
                     return $response;
                 }
                 $response = [
-                    'code' => 400,
+                    'code'    => 400,
                     'message' => __('web.home.payment_id_missing'),
                 ];
                 return $response;
             } else {
                 $response = [
-                    'code' => 400,
+                    'code'    => 400,
                     'message' => __('web.home.payment_capture_failed'),
                 ];
                 return $response;
             }
         } catch (\Exception $e) {
             $response = [
-                'code' => 400,
+                'code'    => 400,
                 'message' => 'An error occurred: ' . $e->getMessage(),
-                'error' => $e
+                'error'   => $e
             ];
             return $response;
         }
@@ -1190,7 +1192,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 ]);
 
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => 'An error occurred: ' . $e->getMessage(),
             ];
             return $response;
@@ -1214,21 +1216,21 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $driver = $booking ? Driver::find($booking->driver_id) : null;
             $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
             $notifyData = [
-                'user_name' => $authUser->name ?? '',
-                'company_name' => $companyName,
-                'email' => $authUser->email ?? '',
-                'phonenumber' => $authUser->phone_number ?? '',
-                'vehicle_name' => $vehicle->name ?? '',
-                'driver_name' => $driver ? $driver->driver_name : '',
-                'reservation_id' => $booking->reservation_id ?? '',
-                'start_date' => ($booking && $booking->start_datetime) ? formatDateTime($booking->start_datetime) : '',
-                'end_date' => ($booking && $booking->end_datetime) ? formatDateTime($booking->end_datetime) : '',
+                'user_name'       => $authUser->name ?? '',
+                'company_name'    => $companyName,
+                'email'           => $authUser->email ?? '',
+                'phonenumber'     => $authUser->phone_number ?? '',
+                'vehicle_name'    => $vehicle->name ?? '',
+                'driver_name'     => $driver ? $driver->driver_name : '',
+                'reservation_id'  => $booking->reservation_id ?? '',
+                'start_date'      => ($booking && $booking->start_datetime) ? formatDateTime($booking->start_datetime) : '',
+                'end_date'        => ($booking && $booking->end_datetime) ? formatDateTime($booking->end_datetime) : '',
                 'pickup_location' => $booking->pickupLocation->name ?? '',
-                'delivery_type' => $booking->delivery_type ?? '',
-                'rental_type' => $booking->rental_type ?? '',
-                'payment_type' => $booking->payment_type ?? '',
-                'payment_status' => $booking->payment_status ?? '',
-                'tototal_amount' => $booking->final_price ?? ''
+                'delivery_type'   => $booking->delivery_type ?? '',
+                'rental_type'     => $booking->rental_type ?? '',
+                'payment_type'    => $booking->payment_type ?? '',
+                'payment_status'  => $booking->payment_status ?? '',
+                'tototal_amount'  => $booking->final_price ?? ''
             ];
             try {
                 if (rentalNotificationEnabled()) {
@@ -1250,7 +1252,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => 'An error occurred: ' . $e->getMessage(),
             ];
 
@@ -1315,14 +1317,14 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 'id'             => $transaction->id,
                 'vehicle_name'   => $transaction->vehicle->name ?? 'N/A',
                 'vehicle_image'  => $transaction->vehicle ? uploadedAsset($transaction->vehicle->vehicle_image) : uploadedAsset('default.png'),
-                'rent_type' => ucfirst((string) ($transaction->rental_type ?? '')),
+                'rent_type'      => ucfirst((string) ($transaction->rental_type ?? '')),
                 'status'         => $transaction->payment_status,
                 'updated_at'     => $transaction->updated_at->format('d M Y, h:i A'),
             ];
         });
         $response = [
-            'code' => 200,
-            'data' => $data,
+            'code'   => 200,
+            'data'   => $data,
             'status' => 'success'
         ];
 

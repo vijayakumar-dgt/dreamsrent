@@ -26,7 +26,7 @@ class Permission extends Model
      */
     public function module(): BelongsTo
     {
-         /** @var belongsTo<Module, Permission> */
+        /** @var belongsTo<Module, Permission> */
         return $this->belongsTo(Module::class, 'module_id');
     }
 
@@ -36,7 +36,7 @@ class Permission extends Model
      */
     public function role(): BelongsTo
     {
-         /** @var belongsTo<Module, Permission> */
+        /** @var belongsTo<Module, Permission> */
         return $this->belongsTo(Role::class);
     }
 }

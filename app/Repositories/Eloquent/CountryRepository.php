@@ -48,7 +48,7 @@ class CountryRepository implements CountryInterface
     public function search($search, $status = null, $orderBy = 'desc'): Collection
     {
         return $this->model->when($search, function ($query) use ($search) {
-                $query->where('name', 'LIKE', "%{$search}%");
+            $query->where('name', 'LIKE', "%{$search}%");
         })
             ->when(!is_null($status), function ($query) use ($status) {
                 $query->where('status', $status);

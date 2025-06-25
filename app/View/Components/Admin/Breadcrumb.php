@@ -8,7 +8,14 @@ use Illuminate\View\Component;
 
 class Breadcrumb extends Component
 {
-    public $title, $breadcrumbs, $buttonText, $buttonId, $modalId, $permissionKey, $permissionModule;
+    public $title;
+    public $breadcrumbs;
+    public $buttonText;
+    public $buttonId;
+    public $modalId;
+    public $permissionKey;
+    public $permissionModule;
+
     /**
      * Create a new component instance.
      */

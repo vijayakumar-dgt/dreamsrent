@@ -9,8 +9,8 @@ use Illuminate\View\View;
 use Modules\GeneralSetting\Http\Requests\UpdateLocalizationRequest;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\DateFormat;
-use Modules\GeneralSetting\Models\TimeFormat;
 use Modules\GeneralSetting\Models\Language;
+use Modules\GeneralSetting\Models\TimeFormat;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Modules\GeneralSetting\Repositories\Contracts\LocalizationInterface;
 
@@ -33,13 +33,13 @@ class LocalizationController extends Controller
         $languages = TranslationLanguage::whereIn('id', $availableLanguages)->where('status', 1)->get();
 
         return view('generalsetting::website_settings.localization', [
-            'page_title' => 'Localization',
-            'timezones' => $this->repository->getTimezones(),
+            'page_title'  => 'Localization',
+            'timezones'   => $this->repository->getTimezones(),
             'timeformats' => $timeformats,
             'dateformats' => $dateformats,
-            'weekdays' => $weekdays,
-            'currencies' => $currencies,
-            'languages' => $languages
+            'weekdays'    => $weekdays,
+            'currencies'  => $currencies,
+            'languages'   => $languages
         ]);
     }
 
@@ -48,9 +48,9 @@ class LocalizationController extends Controller
         $timezones = $this->repository->searchTimezones($request->search);
 
         return response()->json([
-            'status' => 'success',
-            'code' => 200,
-            'data' => $timezones,
+            'status'  => 'success',
+            'code'    => 200,
+            'data'    => $timezones,
             'message' => __('admin.general_settings.timezone_success'),
         ]);
     }
@@ -59,18 +59,18 @@ class LocalizationController extends Controller
     {
         try {
             $localizationArray = [
-                'timezone' => $request->timezone,
-                'week_start_day' => $request->week_start_day,
-                'date_format' => $request->date_format,
-                'time_format' => $request->time_format,
-                'default_language' => $request->default_language ?? null,
-                'currency' => $request->currency,
-                'currency_symbol' => $request->currency_symbol,
-                'currency_position' => $request->currency_position,
-                'decimal_seperator' => $request->decimal_seperator,
+                'timezone'           => $request->timezone,
+                'week_start_day'     => $request->week_start_day,
+                'date_format'        => $request->date_format,
+                'time_format'        => $request->time_format,
+                'default_language'   => $request->default_language ?? null,
+                'currency'           => $request->currency,
+                'currency_symbol'    => $request->currency_symbol,
+                'currency_position'  => $request->currency_position,
+                'decimal_seperator'  => $request->decimal_seperator,
                 'thousand_seperator' => $request->thousand_seperator,
-                'currency_switcher' => $request->has('currency_switcher') ? 1 : 0,
-                'language_switcher' => $request->has('language_switcher') ? 1 : 0
+                'currency_switcher'  => $request->has('currency_switcher') ? 1 : 0,
+                'language_switcher'  => $request->has('language_switcher') ? 1 : 0
             ];
 
             $this->repository->updateLocalization($localizationArray);
@@ -80,14 +80,14 @@ class LocalizationController extends Controller
             config(['app.timezone' => $timezoneName]);
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.localization_update_success')
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $th->getMessage()
             ]);
         }
@@ -100,16 +100,16 @@ class LocalizationController extends Controller
         if ($settingTimezone) {
             $timezones = $this->repository->getTimezoneById($settingTimezone->value);
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'data' => $timezones,
+                'status'  => 'success',
+                'code'    => 200,
+                'data'    => $timezones,
                 'message' => __('admin.general_settings.timezone_success'),
             ]);
         }
 
         return response()->json([
-            'status' => 'error',
-            'code' => 500,
+            'status'  => 'error',
+            'code'    => 500,
             'message' => __('admin.general_settings.timezone_not_found'),
         ]);
     }

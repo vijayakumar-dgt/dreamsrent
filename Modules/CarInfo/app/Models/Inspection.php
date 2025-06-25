@@ -37,6 +37,7 @@ class Inspection extends Model
         /** @var BelongsTo<VehicleInfo,Inspection>  */
         return $this->belongsTo(VehicleInfo::class, 'vehicle_info_id', 'id')->withTrashed();
     }
+
     /**
      * @return BelongsTo<User,Inspection>
      */

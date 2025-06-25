@@ -2,11 +2,11 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Timezone;
 use Modules\GeneralSetting\Repositories\Contracts\LocalizationInterface;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Collection as SupportCollection;
 
 class LocalizationRepository implements LocalizationInterface
 {
@@ -24,7 +24,7 @@ class LocalizationRepository implements LocalizationInterface
             ->get()
             ->map(function ($timezone) {
                 return [
-                    'id' => $timezone->id,
+                    'id'   => $timezone->id,
                     'text' => $timezone->name
                 ];
             });

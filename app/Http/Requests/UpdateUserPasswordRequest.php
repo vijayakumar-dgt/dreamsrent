@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserPasswordRequest extends CustomFailedValidation
 {
@@ -24,7 +23,7 @@ class UpdateUserPasswordRequest extends CustomFailedValidation
     {
         return [
             'current_password' => 'required',
-            'new_password' => 'required|min:6',
+            'new_password'     => 'required|min:6',
             'confirm_password' => 'required|same:new_password',
         ];
     }

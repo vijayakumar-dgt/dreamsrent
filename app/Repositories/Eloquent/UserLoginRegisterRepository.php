@@ -10,10 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Modules\GeneralSetting\Models\EmailTemplate;
-use Modules\GeneralSetting\Models\GeneralSetting;
-use Jenssegers\Agent\Agent;
 use Illuminate\Support\Facades\Http;
+use Jenssegers\Agent\Agent;
+use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\UserDevice;
 
 class UserLoginRegisterRepository implements UserLoginRegisterInterface
@@ -23,7 +22,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         $user = User::where('email', $request->email)->first();
         if (!$user) {
             $response = [
-                'code' => 404,
+                'code'    => 404,
                 'message' => 'User not found.'
             ];
             return $response;
@@ -31,7 +30,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         $user->password = Hash::make($request->current_password);
         $user->save();
         $response = [
-            'code' => 200,
+            'code'    => 200,
             'message' => 'Password updated successfully.'
         ];
         return $response;
@@ -42,7 +41,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         $email = $request->input('email');
         if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return [
-                'code' => 400,
+                'code'  => 400,
                 'error' => __('web.auth.invalid_email')
             ];
         }
@@ -51,7 +50,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
 
         if (!$user || ($type === 'forgot' && in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com']))) {
             return [
-                'code' => 400,
+                'code'  => 400,
                 'error' => __('web.auth.email_not_registered')
             ];
         }
@@ -59,7 +58,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             ->pluck('value', 'key');
         if (!in_array($settings['otp_type'], ['email', 'sms'])) {
             return [
-                'code' => 400,
+                'code'  => 400,
                 'error' => __('web.auth.unsupported_otp_type')
             ];
         }
@@ -80,10 +79,10 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         );
 
         $notifyData = [
-            'otp' => $otp,
-            'expires_at' => $expiresAt,
+            'otp'             => $otp,
+            'expires_at'      => $expiresAt,
             'otp_digit_limit' => $settings['otp_digit_limit'],
-            'user_name' => $user->name
+            'user_name'       => $user->name
         ];
 
         $notificationslug = $type === 'forgot' ? 'forgot-otp' : 'login-otp';
@@ -93,20 +92,21 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         } catch (\Throwable $e) {
             \Log::error("Failed to send OTP notification: " . $e->getMessage());
             return [
-                'code' => 500,
+                'code'  => 500,
                 'error' => __('web.auth.failed_to_send_otp')
             ];
         }
 
         return [
-            'code' => 200,
-            'name' => $user->name,
+            'code'            => 200,
+            'name'            => $user->name,
             'otp_digit_limit' => $settings['otp_digit_limit'],
             'otp_expire_time' => $settings['otp_expire_time'],
-            'otp_type' => $settings['otp_type'],
-            'expires_at' => $expiresAt,
+            'otp_type'        => $settings['otp_type'],
+            'expires_at'      => $expiresAt,
         ];
     }
+
     public function generateOtp(int $digitLimit): string
     {
         return str_pad((string) random_int(0, pow(10, $digitLimit) - 1), $digitLimit, '0', STR_PAD_LEFT);
@@ -125,7 +125,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                     $currentDateTime = now()->setTimezone('Asia/Kolkata'); // Adjust timezone if needed
                     if ($currentDateTime->greaterThanOrEqualTo($expire)) {
                         return [
-                            'code' => 400,
+                            'code'  => 400,
                             'error' => __('web.auth.otp_is_expired')
                         ];
                     }
@@ -134,24 +134,24 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 if ($otp != '') {
                     if ($otp !== $request->otp) {
                         return [
-                            'code' => 400,
+                            'code'  => 400,
                             'error' => __('web.auth.invalid_otp')
                         ];
                     }
                 }
             }
             $data = [
-                'name' => $request->name,
-                'email' => $request->email,
+                'name'         => $request->name,
+                'email'        => $request->email,
                 'phone_number' => $request->phone_number,
-                'password' => Hash::make($request->password),
-                'user_type' => 3,
+                'password'     => Hash::make($request->password),
+                'user_type'    => 3,
             ];
             $save = User::create($data);
             $company_details = [
-                'user_id' => $save->id,
+                'user_id'    => $save->id,
                 'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
+                'last_name'  => $request->last_name,
             ];
             $company = UserDetail::create($company_details);
             Auth::login($save);
@@ -160,18 +160,18 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             Cache::forever('user_auth_id', $save->id);
             DB::table('otp_settings')->where('email', $request->email)->delete();
             return [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('web.auth.otp_verified_successfully')
             ];
         } elseif ($request->login_type == "forgot_email") {
             $request->validate([
                 'forgot_email' => 'required|email',
-                'otp' => 'required',
+                'otp'          => 'required',
             ]);
             $user = User::where('email', $request->forgot_email)->first();
             if (!$user) {
                 return [
-                    'code' => 404,
+                    'code'  => 404,
                     'error' => __('web.auth.user_not_found')
                 ];
             }
@@ -182,7 +182,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                     $currentDateTime = now()->setTimezone('Asia/Kolkata');
                     if ($currentDateTime->greaterThanOrEqualTo($expire)) {
                         return [
-                            'code' => 400,
+                            'code'  => 400,
                             'error' => __('web.auth.otp_is_expired')
                         ];
                     }
@@ -191,7 +191,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 if ($otp != '') {
                     if ($otp !== $request->otp) {
                         return [
-                            'code' => 400,
+                            'code'  => 400,
                             'error' => __('web.auth.invalid_otp')
                         ];
                     }
@@ -200,20 +200,20 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             DB::table('otp_settings')->where('email', $request->forgot_email)->delete();
             $data = "done";
             return [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('web.auth.otp_verified_successfully'),
-                'email' => $request->forgot_email,
-                'data' => $data
+                'email'   => $request->forgot_email,
+                'data'    => $data
             ];
         } else {
             $request->validate([
                 'email' => 'required|email',
-                'otp' => 'required',
+                'otp'   => 'required',
             ]);
             $user = User::where('email', $request->email)->first();
             if (!$user) {
                 return [
-                    'code' => 404,
+                    'code'  => 404,
                     'error' => __('web.auth.user_not_found')
                 ];
             }
@@ -224,7 +224,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                     $currentDateTime = now()->setTimezone('Asia/Kolkata'); // Adjust timezone if needed
                     if ($currentDateTime->greaterThanOrEqualTo($expire)) {
                         return [
-                            'code' => 400,
+                            'code'  => 400,
                             'error' => __('web.auth.otp_is_expired')
                         ];
                     }
@@ -233,7 +233,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 if ($otp != '') {
                     if ($otp !== $request->otp) {
                         return [
-                            'code' => 400,
+                            'code'  => 400,
                             'error' => __('web.auth.invalid_otp')
                         ];
                     }
@@ -250,7 +250,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             }
             DB::table('otp_settings')->where('email', $request->email)->delete();
             return [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('web.auth.otp_verified_successfully')
             ];
         }
@@ -260,7 +260,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
     {
         $exists = User::where('email', $email)->exists();
         return [
-            'code' => 200,
+            'code'   => 200,
             'exists' => $exists
         ];
     }
@@ -270,15 +270,15 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         $regStatus = DB::table('general_settings')->where('key', 'register')->value('value');
         if ($regStatus === "0") {
             $user = User::create([
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'email'     => $request->email,
+                'password'  => Hash::make($request->password),
                 'user_type' => 3,
             ]);
 
             UserDetail::create([
-                'user_id' => $user->id,
+                'user_id'    => $user->id,
                 'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
+                'last_name'  => $request->last_name,
             ]);
 
             Auth::login($user);
@@ -286,7 +286,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
 
             $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
             $notifyData = [
-                'user_name' => $request->first_name,
+                'user_name'    => $request->first_name,
                 'company_name' => $companyName,
             ];
 
@@ -303,20 +303,20 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 $redirectTo = '/redirect-to-booking';
             }
             return [
-                'status' => true,
-                'code' => 200,
+                'status'          => true,
+                'code'            => 200,
                 'register_status' => $regStatus,
-                'name' => $request->username,
-                'redirect_url' => $redirectTo,
-                'email' => $request->email,
-                'message' => __('web.auth.registration_success'),
+                'name'            => $request->username,
+                'redirect_url'    => $redirectTo,
+                'email'           => $request->email,
+                'message'         => __('web.auth.registration_success'),
             ];
         }
         $email = $request->email;
         if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return [
-                'status' => false,
-                'code' => 400,
+                'status'  => false,
+                'code'    => 400,
                 'message' => __('web.auth.valid_email')
             ];
         }
@@ -324,8 +324,8 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             ->pluck('value', 'key');
         if (!in_array($settings['otp_type'], ['email', 'sms'])) {
             return [
-                'status' => false,
-                'code' => 400,
+                'status'  => false,
+                'code'    => 400,
                 'message' => __('web.auth.unsupported_otp_type')
             ];
         }
@@ -346,18 +346,18 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             $content
         );
         return [
-            'status' => true,
-            'code' => 200,
+            'status'          => true,
+            'code'            => 200,
             'register_status' => $regStatus,
-            'message' => __('web.auth.otp_sent_success'),
-            'otp_type' => $settings['otp_type'],
-            'otp' => $otp,
-            'expires_at' => $expiresAt,
-            'email_subject' => $subject,
-            'email_content' => $content,
-            'name' => $request->username,
-            'phone_number' => $request->phone_number,
-            'email' => $request->email,
+            'message'         => __('web.auth.otp_sent_success'),
+            'otp_type'        => $settings['otp_type'],
+            'otp'             => $otp,
+            'expires_at'      => $expiresAt,
+            'email_subject'   => $subject,
+            'email_content'   => $content,
+            'name'            => $request->username,
+            'phone_number'    => $request->phone_number,
+            'email'           => $request->email,
         ];
     }
 
@@ -366,8 +366,8 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         $user = User::where('email', $request->email)->first();
         if ($user && ($user->user_type == 1 || $user->user_type == 2)) {
             return [
-                'status' => false,
-                'code'   => 422,
+                'status'  => false,
+                'code'    => 422,
                 'message' => __('web.auth.admin_access_not_allowed'),
             ];
         }
@@ -383,7 +383,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 ? $locationData['country'] . ' / ' . $locationData['city']
                 : 'India / Coimbatore';
 
-                $user = Auth::guard('web')->user();
+            $user = Auth::guard('web')->user();
 
             if ($user) {
                 $user_device = new UserDevice();
@@ -401,16 +401,16 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 $redirectTo = '/redirect-to-booking';
             }
             return  [
-                'status' => true,
-                'code'   => 200,
+                'status'       => true,
+                'code'         => 200,
                 'redirect_url' => $redirectTo,
-                'message' => __('web.auth.login_success'),
+                'message'      => __('web.auth.login_success'),
             ];
         }
 
         return [
-            'status' => false,
-            'code'   => 401,
+            'status'  => false,
+            'code'    => 401,
             'message' => __('web.auth.invalid_credentials'),
         ];
     }

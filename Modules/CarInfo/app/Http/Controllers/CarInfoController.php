@@ -3,9 +3,9 @@
 namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 use Modules\CarInfo\Repositories\Contracts\VehicleInfoRepositoryInterface;
 
 class CarInfoController extends Controller
@@ -29,6 +29,7 @@ class CarInfoController extends Controller
         $data = $this->vehicleInfoRepository->createVehicle();
         return view('carinfo::vehicle.add', $data);
     }
+
     public function vehicleedit(string $slug, Request $request): View
     {
         $data = $this->vehicleInfoRepository->editVehicle($slug, $request);

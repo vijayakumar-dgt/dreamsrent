@@ -41,6 +41,7 @@ class Maintenance extends Model
     public static int $planned = 1;
     public static int $inprogress = 2;
     public static int $completed = 3;
+
     /**
      *  @return HasOne<VehicleInfo, Maintenance>
      */
@@ -49,6 +50,7 @@ class Maintenance extends Model
         /** @var HasOne<VehicleInfo,Maintenance> */
         return $this->hasOne(VehicleInfo::class, 'id');
     }
+
     /**
      *  @return BelongsTo<VehicleInfo, Maintenance>
      */

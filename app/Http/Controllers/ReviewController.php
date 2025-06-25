@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Repositories\Contracts\ReviewRepositoryInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\View;
 
 class ReviewController extends Controller
 {
     protected ?Authenticatable $authUser;
     protected ReviewRepositoryInterface $reviewRepository;
+
     public function __construct(ReviewRepositoryInterface $reviewRepository)
     {
         $this->authUser = current_user();
@@ -44,7 +45,7 @@ class ReviewController extends Controller
      * @param int|null $reviewId
      * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReviewMessages>
      */
-    function fetchReviewReplies(?int $reviewId): Collection
+    public function fetchReviewReplies(?int $reviewId): Collection
     {
         $replies = $this->reviewRepository->fetchReviewReplies($reviewId);
         return $replies;

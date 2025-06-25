@@ -2,13 +2,13 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
-use Modules\GeneralSetting\Repositories\Contracts\LanguageSettingInterface;
-use Modules\GeneralSetting\Models\Language;
-use Modules\GeneralSetting\Models\TranslationLanguage;
-use RecursiveArrayIterator;
-use RecursiveIteratorIterator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Modules\GeneralSetting\Models\Language;
+use Modules\GeneralSetting\Models\TranslationLanguage;
+use Modules\GeneralSetting\Repositories\Contracts\LanguageSettingInterface;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 
 class LanguageSettingRepository implements LanguageSettingInterface
 {
@@ -25,16 +25,16 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
         if (!$languageTranslation) {
             return [
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('admin.general_settings.language_not_found')
             ];
         }
 
         if (Language::where('language_id', $languageTranslation->id)->exists()) {
             return [
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('admin.general_settings.language_already_exist')
             ];
         }
@@ -50,16 +50,16 @@ class LanguageSettingRepository implements LanguageSettingInterface
             $this->initializeLanguageFiles($languageTranslation->code);
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.language_added_successfully')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
@@ -91,24 +91,24 @@ class LanguageSettingRepository implements LanguageSettingInterface
             $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
 
             $responseArray[$language->transLang->code] = [
-                'id' => $language->id,
-                'language_name' => $language->transLang->name,
-                'lang_img' => url('backend/assets/img/flags/' . $language->transLang->code . '.svg'),
-                'lang_code' => $language->transLang->code,
-                'lang_rtl' => $language->rtl,
-                'default' => $language->default,
-                'status' => $language->status,
-                'total_keys' => $totalKeys,
+                'id'              => $language->id,
+                'language_name'   => $language->transLang->name,
+                'lang_img'        => url('backend/assets/img/flags/' . $language->transLang->code . '.svg'),
+                'lang_code'       => $language->transLang->code,
+                'lang_rtl'        => $language->rtl,
+                'default'         => $language->default,
+                'status'          => $language->status,
+                'total_keys'      => $totalKeys,
                 'translated_keys' => $translatedCount,
-                'progress' => $progress
+                'progress'        => $progress
             ];
         }
 
         return [
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('admin.general_settings.language_fetched_successfully'),
-            'data' => $responseArray
+            'data'    => $responseArray
         ];
     }
 
@@ -132,16 +132,16 @@ class LanguageSettingRepository implements LanguageSettingInterface
             $language->update([$field => $data['value']]);
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.language_updated_successfully')
             ];
         } catch (\Throwable $th) {
             return [
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error' => $th->getMessage()
+                'error'   => $th->getMessage()
             ];
         }
     }
@@ -152,7 +152,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
         if (!$language) {
             return [
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => __('admin.general_settings.language_not_found')
             ];
         }
@@ -164,7 +164,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
         app()->setLocale($languageCode);
 
         return [
-            'status' => 'success',
+            'status'  => 'success',
             'message' => __('admin.general_settings.language_changed_successfully')
         ];
     }
@@ -175,7 +175,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
         if (!$language) {
             return [
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => __('admin.general_settings.language_not_found')
             ];
         }
@@ -186,7 +186,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
         }
 
         return [
-            'status' => 'success',
+            'status'  => 'success',
             'message' => __('admin.general_settings.language_changed_successfully')
         ];
     }
@@ -199,7 +199,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
         }
 
         $language = Language::with('transLang')
-            ->whereHas('transLang', fn($query) => $query->where('code', $code))
+            ->whereHas('transLang', fn ($query) => $query->where('code', $code))
             ->firstOrFail();
 
         $langCode = $language->transLang->code ?? null;
@@ -207,8 +207,8 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
         return [
             'language' => $language,
-            'flag' => $flag,
-            'tab' => $type
+            'flag'     => $flag,
+            'tab'      => $type
         ];
     }
 
@@ -217,19 +217,19 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $validTabs = ['admin', 'web'];
         if (!in_array($tab, $validTabs)) {
             return [
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => 'Invalid tab provided'
             ];
         }
 
-        $language = Language::whereHas('transLang', fn($query) => $query->where('code', $code))
+        $language = Language::whereHas('transLang', fn ($query) => $query->where('code', $code))
             ->with('transLang')->first();
 
         if (!$language) {
             return [
-                'status' => 'error',
-                'code' => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.general_settings.language_not_found')
             ];
         }
@@ -256,19 +256,19 @@ class LanguageSettingRepository implements LanguageSettingInterface
             $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
 
             $responseArray[] = [
-                'module_name' => ucfirst(str_replace('_', ' ', $module)),
-                'module_key' => $module,
-                'total_keys' => $totalKeys,
+                'module_name'     => ucfirst(str_replace('_', ' ', $module)),
+                'module_key'      => $module,
+                'total_keys'      => $totalKeys,
                 'translated_keys' => $translatedCount,
-                'progress' => $progress,
+                'progress'        => $progress,
             ];
         }
 
         return [
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('admin.general_settings.module_fetched_success'),
-            'data' => $responseArray
+            'data'    => $responseArray
         ];
     }
 
@@ -276,19 +276,19 @@ class LanguageSettingRepository implements LanguageSettingInterface
     {
         if (!in_array($tab, ['admin', 'web'])) {
             return [
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('admin.general_settings.invalid_tab')
             ];
         }
 
-        $language = Language::whereHas('transLang', fn($query) => $query->where('code', $code))
+        $language = Language::whereHas('transLang', fn ($query) => $query->where('code', $code))
             ->with('transLang')->first();
 
         if (!$language) {
             return [
-                'status' => 'error',
-                'code' => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.general_settings.language_not_found')
             ];
         }
@@ -320,8 +320,8 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
             $responseArray[] = [
                 'default' => $value,
-                'key' => $key,
-                'value' => $translatedValue,
+                'key'     => $key,
+                'value'   => $translatedValue,
             ];
         }
 
@@ -329,27 +329,27 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $color = $this->getProgressColor($progress);
 
         return [
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'Module keys fetched successfully',
-            'data' => $responseArray,
-            'language' => $language,
-            'icon' => url('backend/assets/img/flags/' . $langCode . '.svg'),
-            'progress' => $progress,
-            'color' => $color,
+            'status'        => 'success',
+            'code'          => 200,
+            'message'       => 'Module keys fetched successfully',
+            'data'          => $responseArray,
+            'language'      => $language,
+            'icon'          => url('backend/assets/img/flags/' . $langCode . '.svg'),
+            'progress'      => $progress,
+            'color'         => $color,
             'uppercaseName' => strtoupper($language->transLang->name ?? '')
         ];
     }
 
     public function updateModuleLanguage(string $code, string $tab, string $module, string $key, string $value): array
     {
-        $language = Language::whereHas('transLang', fn($query) => $query->where('code', $code))
+        $language = Language::whereHas('transLang', fn ($query) => $query->where('code', $code))
             ->with('transLang')->first();
 
         if (!$language) {
             return [
-                'status' => 'error',
-                'code' => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.general_settings.language_changed_successfully')
             ];
         }
@@ -369,14 +369,14 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $color = $this->getProgressColor($progress);
 
         return [
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'Module key updated successfully',
-            'language' => $language,
-            'icon' => url('backend/assets/img/flags/' . $langCode . '.svg'),
+            'status'        => 'success',
+            'code'          => 200,
+            'message'       => 'Module key updated successfully',
+            'language'      => $language,
+            'icon'          => url('backend/assets/img/flags/' . $langCode . '.svg'),
             'uppercaseName' => strtoupper($language->transLang->name ?? ''),
-            'progress' => $progress,
-            'color' => $color
+            'progress'      => $progress,
+            'color'         => $color
         ];
     }
 
@@ -388,16 +388,16 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
         if ($langCode == $systemLanguage) {
             return [
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('admin.general_settings.cannot_delete_default_language')
             ];
         }
 
         if ($language->default == 1) {
             return [
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('admin.general_settings.cannot_delete_default_language')
             ];
         }
@@ -412,8 +412,8 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $language->delete();
 
         return [
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('admin.general_settings.language_deleted')
         ];
     }

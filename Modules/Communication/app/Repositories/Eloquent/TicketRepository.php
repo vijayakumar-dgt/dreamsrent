@@ -2,10 +2,10 @@
 
 namespace Modules\Communication\Repositories\Eloquent;
 
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Communication\Models\Ticket;
 use Modules\Communication\Models\TicketHistory;
 use Modules\Communication\Repositories\Contracts\TicketInterface;
-use Illuminate\Database\Eloquent\Collection;
 
 class TicketRepository implements TicketInterface
 {
@@ -118,7 +118,6 @@ class TicketRepository implements TicketInterface
         return $query->get();
     }
 
-
     public function assignTicket(int $ticketId, int $assigneeId, ?string $reply = null): object
     {
         $ticket = Ticket::findOrFail($ticketId);
@@ -161,11 +160,11 @@ class TicketRepository implements TicketInterface
         }
 
         TicketHistory::create([
-            'ticket_id' => $ticket->id,
-            'user_id' => $user->id,
+            'ticket_id'   => $ticket->id,
+            'user_id'     => $user->id,
             'description' => strip_tags($reply),
-            'created_by' => $user->id,
-            'updated_by' => $user->id,
+            'created_by'  => $user->id,
+            'updated_by'  => $user->id,
         ]);
 
         return $ticket;
@@ -174,11 +173,11 @@ class TicketRepository implements TicketInterface
     public function addHistory(int $ticketId, int $userId, string $description): object
     {
         return TicketHistory::create([
-            'ticket_id' => $ticketId,
-            'user_id' => $userId,
+            'ticket_id'   => $ticketId,
+            'user_id'     => $userId,
             'description' => strip_tags($description),
-            'created_by' => $userId,
-            'updated_by' => $userId,
+            'created_by'  => $userId,
+            'updated_by'  => $userId,
         ]);
     }
 }

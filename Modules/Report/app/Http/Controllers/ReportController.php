@@ -3,13 +3,8 @@
 namespace Modules\Report\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Modules\Booking\Models\Booking;
-use Modules\CarInfo\Models\VehicleInfo;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use Modules\Report\Repositories\Contracts\ReportRepositoryInterface;
 
 class ReportController extends Controller
@@ -20,6 +15,7 @@ class ReportController extends Controller
     {
         $this->reportRepository = $reportRepository;
     }
+
     /**
      * Display a listing of the resource.
      */

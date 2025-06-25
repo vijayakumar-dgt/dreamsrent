@@ -2,8 +2,8 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
-use Modules\GeneralSetting\Repositories\Contracts\SitemapSettingInterface;
 use Modules\GeneralSetting\Models\SitemapUrl;
+use Modules\GeneralSetting\Repositories\Contracts\SitemapSettingInterface;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
@@ -106,17 +106,17 @@ class SitemapSettingRepository implements SitemapSettingInterface
                         file_exists(public_path($sitemapUrl->sitemap_path))
                         ? asset($sitemapUrl->sitemap_path)
                         : '',
-                    'url' => $sitemapUrl->url,
+                    'url'          => $sitemapUrl->url,
                     'sitemap_path' => $sitemapUrl->sitemap_path,
-                    'id' => $sitemapUrl->id,
+                    'id'           => $sitemapUrl->id,
                 ];
             });
 
         return [
-            'draw' => $filters['draw'] ?? 0,
-            'recordsTotal' => $totalRecords,
+            'draw'            => $filters['draw'] ?? 0,
+            'recordsTotal'    => $totalRecords,
             'recordsFiltered' => $filteredRecords,
-            'data' => $sitemapUrls,
+            'data'            => $sitemapUrls,
         ];
     }
 

@@ -96,7 +96,6 @@ class PageServiceProvider extends ServiceProvider
         }
     }
 
-
     /**
      * Register views.
      */
@@ -112,6 +111,7 @@ class PageServiceProvider extends ServiceProvider
         $componentNamespace = $this->module_namespace($this->name, $this->app_path(config('modules.paths.generator.component-class.path')));
         Blade::componentNamespace($componentNamespace, $this->nameLower);
     }
+
     /**
      * @return string[]  // Specifies the return type as an array of strings (service names).
      */
@@ -119,6 +119,7 @@ class PageServiceProvider extends ServiceProvider
     {
         return [];
     }
+
     /**
      * @return string[]  // Specifies the return type as an array of strings (service names).
      */

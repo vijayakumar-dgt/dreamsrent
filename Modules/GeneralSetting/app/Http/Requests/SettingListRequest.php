@@ -17,6 +17,7 @@ class SettingListRequest extends CustomFailedValidation
             'group_id' => 'required|integer'
         ];
     }
+
     public function messages(): array
     {
         return [

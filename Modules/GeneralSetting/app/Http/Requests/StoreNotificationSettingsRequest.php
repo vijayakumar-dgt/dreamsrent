@@ -14,15 +14,15 @@ class StoreNotificationSettingsRequest extends CustomFailedValidation
     public function rules(): array
     {
         return [
-            'group_id' => 'required|integer',
-            'notificationPreference' => 'required',
-            'desktopNotifications' => 'required|boolean',
-            'bookingUpdates' => 'required|boolean',
-            'paymentNotifications' => 'required|boolean',
-            'vehicleManagement' => 'required|boolean',
-            'unreadBadge' => 'required|boolean',
+            'group_id'                => 'required|integer',
+            'notificationPreference'  => 'required',
+            'desktopNotifications'    => 'required|boolean',
+            'bookingUpdates'          => 'required|boolean',
+            'paymentNotifications'    => 'required|boolean',
+            'vehicleManagement'       => 'required|boolean',
+            'unreadBadge'             => 'required|boolean',
             'userTenantNotifications' => 'required|boolean',
-            'discountOffers' => 'required|boolean',
+            'discountOffers'          => 'required|boolean',
         ];
     }
 

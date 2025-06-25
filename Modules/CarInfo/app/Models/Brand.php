@@ -46,7 +46,7 @@ class Brand extends Model
      */
     public function carModels(): HasMany
     {
-         /** @var HasMany<CarModel, Brand>*/
+        /** @var HasMany<CarModel, Brand>*/
         return $this->hasMany(CarModel::class, 'brand_id');
     }
 }

@@ -4,11 +4,11 @@ namespace Modules\Report\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Report\Repositories\Contracts\ReportRepositoryInterface;
+use Modules\Report\Repositories\Eloquent\ReportRepository;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Modules\Report\Repositories\Contracts\ReportRepositoryInterface;
-use Modules\Report\Repositories\Eloquent\ReportRepository;
 
 class ReportServiceProvider extends ServiceProvider
 {
@@ -131,24 +131,21 @@ class ReportServiceProvider extends ServiceProvider
         Blade::componentNamespace($componentNamespace, $nameLower);
     }
 
-
-
-
-
-/**
- * Get the publishable view paths.
- *
- * @return string[]  Array of view paths.
- */
+    /**
+     * Get the publishable view paths.
+     *
+     * @return string[]  Array of view paths.
+     */
     public function provides(): array
     {
         return [];
     }
-/**
- * Get the publishable view paths.
- *
- * @return string[]  Array of view paths.
- */
+
+    /**
+     * Get the publishable view paths.
+     *
+     * @return string[]  Array of view paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];

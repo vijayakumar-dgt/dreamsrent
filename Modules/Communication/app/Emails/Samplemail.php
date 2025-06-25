@@ -5,7 +5,6 @@ namespace Modules\Communication\Emails;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class Samplemail extends Mailable
 {
@@ -22,7 +21,7 @@ class Samplemail extends Mailable
      */
     public ?string $attachment;
 
-  /**
+    /**
  * @param array{subject: string, message: string, attachment?: string|null} $messageBody
  */
     public function __construct(array $messageBody)
@@ -45,7 +44,7 @@ class Samplemail extends Mailable
         // Check if attachment exists and attach it to the email
         if ($this->attachment && file_exists($this->attachment)) {
             $email->attach($this->attachment, [
-                'as' => basename($this->attachment), // Set the attachment name
+                'as'   => basename($this->attachment), // Set the attachment name
                 'mime' => mime_content_type($this->attachment), // Automatically detects mime type
             ]);
         }

@@ -2,10 +2,10 @@
 
 namespace Modules\Page\Repositories\Eloquent;
 
-use Modules\Page\Repositories\Contracts\SectionInterface;
-use Modules\Page\Models\Section;
-use Modules\Page\Models\Page;
 use Illuminate\Support\Facades\DB;
+use Modules\Page\Models\Page;
+use Modules\Page\Models\Section;
+use Modules\Page\Repositories\Contracts\SectionInterface;
 
 class SectionRepository implements SectionInterface
 {
@@ -42,9 +42,9 @@ class SectionRepository implements SectionInterface
 
         if ($updated === 0) {
             DB::table('section_datas')->insert([
-                'section_id' => $sectionId,
+                'section_id'  => $sectionId,
                 'language_id' => $languageId,
-                'datas' => json_encode($data),
+                'datas'       => json_encode($data),
             ]);
         }
 

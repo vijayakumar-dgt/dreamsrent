@@ -3,11 +3,9 @@
 namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Modules\CarInfo\Models\Cylinder;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Modules\CarInfo\Http\Requests\CylinderRequest;
 use Modules\CarInfo\Repositories\Contracts\CylinderRepositoryInterface;
 
@@ -37,13 +35,11 @@ class CylinderController extends Controller
         return response()->json($response, $response['code']);
     }
 
-
     public function getCylinder($id): JsonResponse
     {
         $response = $this->CylinderRepository->getCylinder($id);
         return response()->json($response, $response['code']);
     }
-
 
     public function deleteCylinder(Request $request): JsonResponse
     {

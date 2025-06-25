@@ -6,7 +6,6 @@ use App\Models\City;
 use App\Models\State;
 use App\Repositories\Contracts\CityInterface;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 
 class CityRepository implements CityInterface
 {
@@ -89,8 +88,8 @@ class CityRepository implements CityInterface
             ->get();
 
         return [
-            'data' => $cities,
-            'total' => $total,
+            'data'     => $cities,
+            'total'    => $total,
             'filtered' => $total,
         ];
     }

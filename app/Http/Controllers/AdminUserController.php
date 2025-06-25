@@ -67,12 +67,12 @@ class AdminUserController extends Controller
         if ($request->ajax()) {
             $view = view('admin.partials.notification-items', compact('notifications'))->render();
             return response()->json([
-                'html' => $view,
-                'current_page' => $notifications->currentPage(),
-                'last_page' => $notifications->lastPage(),
+                'html'          => $view,
+                'current_page'  => $notifications->currentPage(),
+                'last_page'     => $notifications->lastPage(),
                 'prev_page_url' => $notifications->previousPageUrl(),
                 'next_page_url' => $notifications->nextPageUrl(),
-                'count' => $notifications->total()
+                'count'         => $notifications->total()
             ]);
         }
         return view('admin.partials.notifications', compact('notifications'));

@@ -5,7 +5,6 @@ namespace Modules\CarInfo\Repositories\Eloquent;
 use App\Services\ImageResizer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Modules\CarInfo\Models\Brand;
 use Modules\CarInfo\Models\Category;
 use Modules\CarInfo\Repositories\Contracts\BrandRepositoryInterface;
@@ -33,8 +32,8 @@ class BrandRepository implements BrandRepositoryInterface
 
             if ($id && !$brand) {
                 return [
-                    'status' => 'error',
-                    'code' => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('admin.common.not_found')
                 ];
             }
@@ -42,11 +41,11 @@ class BrandRepository implements BrandRepositoryInterface
             $category = Category::find($request->vehicle_category_id);
 
             $data = [
-                'brand_name'   => $request->brand_name,
+                'brand_name'    => $request->brand_name,
                 'category_id'   => $request->vehicle_category_id,
-                "type" => $category?->slug ?? null,
-                'language_id'  => $request->language_id ?? ($brand->language_id ?? $language_id),
-                'status'       => $request->status ?? ($brand->status ?? 1),
+                "type"          => $category?->slug ?? null,
+                'language_id'   => $request->language_id ?? ($brand->language_id ?? $language_id),
+                'status'        => $request->status ?? ($brand->status ?? 1),
             ];
 
             // Handle image uploads
@@ -62,16 +61,16 @@ class BrandRepository implements BrandRepositoryInterface
             Brand::updateOrCreate(['id' => $id], $data);
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => empty($id)
                     ? __('admin.rentals.brand_create_success')
                     : __('admin.rentals.brand_update_success')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => empty($id)
                     ? __('admin.common.default_create_error')
                     : __('admin.common.default_update_error'),
@@ -87,8 +86,8 @@ class BrandRepository implements BrandRepositoryInterface
             $authUser = current_user();
             if (!$authUser) {
                 return [
-                    'status' => 'error',
-                    'code'   => 401,
+                    'status'  => 'error',
+                    'code'    => 401,
                     'message' => 'Unauthorized: User not authenticated.'
                 ];
             }
@@ -136,17 +135,17 @@ class BrandRepository implements BrandRepositoryInterface
 
             // Return Response
             return [
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
+                'draw'            => intval($request->draw),
+                'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $filterTotalRecords,
-                'data' => $data,
-                'code' => 200,
+                'data'            => $data,
+                'code'            => 200,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -157,8 +156,8 @@ class BrandRepository implements BrandRepositoryInterface
 
         if (!$data) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -169,7 +168,7 @@ class BrandRepository implements BrandRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -181,20 +180,20 @@ class BrandRepository implements BrandRepositoryInterface
             $brand->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.brand_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }
@@ -214,15 +213,15 @@ class BrandRepository implements BrandRepositoryInterface
                 ->get(['id', 'brand_name']);
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }

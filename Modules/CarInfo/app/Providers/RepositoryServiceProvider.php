@@ -3,11 +3,9 @@
 namespace Modules\CarInfo\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\CarInfo\Repositories\Contracts\BrandRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\CategoryRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\CylinderRepositoryInterface;
-use Modules\CarInfo\Repositories\Contracts\SafetyFeatureRepositoryInterface;
-use Modules\CarInfo\Repositories\Contracts\SeasonRepositoryInterface;
-use Modules\CarInfo\Repositories\Contracts\BrandRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\DamageTypeRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\DoorTypeRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\DriverRepositoryInterface;
@@ -16,6 +14,8 @@ use Modules\CarInfo\Repositories\Contracts\ExtraServiceRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\InspectionRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\LocationRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\MaintenanceRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\SafetyFeatureRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\SeasonRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\TagRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleColorRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleFuelRepositoryInterface;
@@ -26,27 +26,27 @@ use Modules\CarInfo\Repositories\Contracts\VehicleSteeringRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleTransmissionRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleTypeRepositoryInterface;
 use Modules\CarInfo\Repositories\Eloquent\BrandRepository;
+use Modules\CarInfo\Repositories\Eloquent\CategoryRepository;
+use Modules\CarInfo\Repositories\Eloquent\CylinderRepository;
 use Modules\CarInfo\Repositories\Eloquent\DamageTypeRepository;
 use Modules\CarInfo\Repositories\Eloquent\DoorTypeRepository;
+use Modules\CarInfo\Repositories\Eloquent\DriverRepository;
+use Modules\CarInfo\Repositories\Eloquent\EnquiryRepository;
 use Modules\CarInfo\Repositories\Eloquent\ExtraServiceRepository;
+use Modules\CarInfo\Repositories\Eloquent\InspectionRepository;
+use Modules\CarInfo\Repositories\Eloquent\LocationRepository;
 use Modules\CarInfo\Repositories\Eloquent\MaintenanceRepository;
+use Modules\CarInfo\Repositories\Eloquent\SafetyFeatureRepository;
+use Modules\CarInfo\Repositories\Eloquent\SeasonRepository;
 use Modules\CarInfo\Repositories\Eloquent\TagRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleColorRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleFuelRepository;
+use Modules\CarInfo\Repositories\Eloquent\VehicleInfoRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleModelRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleSeatRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleSteeringRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleTransmissionRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleTypeRepository;
-use Modules\CarInfo\Repositories\Eloquent\CategoryRepository;
-use Modules\CarInfo\Repositories\Eloquent\CylinderRepository;
-use Modules\CarInfo\Repositories\Eloquent\DriverRepository;
-use Modules\CarInfo\Repositories\Eloquent\EnquiryRepository;
-use Modules\CarInfo\Repositories\Eloquent\InspectionRepository;
-use Modules\CarInfo\Repositories\Eloquent\LocationRepository;
-use Modules\CarInfo\Repositories\Eloquent\SafetyFeatureRepository;
-use Modules\CarInfo\Repositories\Eloquent\SeasonRepository;
-use Modules\CarInfo\Repositories\Eloquent\VehicleInfoRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {

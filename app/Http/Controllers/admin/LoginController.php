@@ -4,14 +4,14 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 use Jenssegers\Agent\Agent;
 use Modules\GeneralSetting\Models\UserDevice;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 
 class LoginController extends Controller
 {
@@ -28,22 +28,22 @@ class LoginController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'email' => 'required|email|exists:users',
+                'email'    => 'required|email|exists:users',
                 'password' => 'required|min:6',
             ],
             [
-                'email.required' => 'Email is required',
-                'email.email' => 'Email is invalid',
-                'email.exists' => 'Email does not exist',
+                'email.required'    => 'Email is required',
+                'email.email'       => 'Email is invalid',
+                'email.exists'      => 'Email does not exist',
                 'password.required' => 'Password is required',
-                'password.min' => 'Password must be at least 6 characters',
+                'password.min'      => 'Password must be at least 6 characters',
             ]
         );
         if ($validator->fails()) {
             return response()->json([
-                'status' => false,
-                'code' => 422,
-                'errors' => $validator->errors()->toArray(),
+                'status'  => false,
+                'code'    => 422,
+                'errors'  => $validator->errors()->toArray(),
                 'message' => $validator->errors()->first()
             ], 200);
         }
@@ -55,8 +55,8 @@ class LoginController extends Controller
             if ($user && ($user->status == 1 || $user->user_type == 1 || $user->user_type == 2)) {
                 if ($user->status == 0 && $user->user_type == 2) {
                     return response()->json([
-                        'status' => false,
-                        'code' => 401,
+                        'status'  => false,
+                        'code'    => 401,
                         'message' => 'Currently you are blocked! Please contact to admin.',
                     ], 200);
                 }
@@ -84,17 +84,17 @@ class LoginController extends Controller
                 $user_device->location = $localtion;
                 $user_device->save();
                 return response()->json([
-                    'status' => true,
-                    'code' => 200,
+                    'status'       => true,
+                    'code'         => 200,
                     'redirect_url' => route('dashboard'),
-                    'message' => 'Login successfully',
+                    'message'      => 'Login successfully',
                 ]);
             }
         }
 
         return response()->json([
-            'status' => false,
-            'code' => 401,
+            'status'  => false,
+            'code'    => 401,
             'message' => 'Invalid admin credentials',
         ], 200);
     }

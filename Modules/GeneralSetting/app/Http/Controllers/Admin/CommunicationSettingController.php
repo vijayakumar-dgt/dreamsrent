@@ -3,11 +3,11 @@
 namespace Modules\GeneralSetting\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\GeneralSetting\Http\Requests\CommunicationSettingRequest;
 use Modules\GeneralSetting\Repositories\Contracts\CommunicationSettingInterface;
-use Exception;
 
 class CommunicationSettingController extends Controller
 {
@@ -33,15 +33,15 @@ class CommunicationSettingController extends Controller
         try {
             $result = $this->communicationSetting->statusUpdate($request->validated());
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => $result['message'],
-                'data' => $result['data']
+                'data'    => $result['data']
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => 'Something went wrong',
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -51,15 +51,15 @@ class CommunicationSettingController extends Controller
         try {
             $result = $this->communicationSetting->smsList($request->all());
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => $result['message'],
-                'data' => $result['data']
+                'data'    => $result['data']
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.general_settings.data_failed_to_retrive'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -69,15 +69,15 @@ class CommunicationSettingController extends Controller
         try {
             $result = $this->communicationSetting->storeCommunicationSetting($request->validated());
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => $result['message'],
-                'data' => $result['data']
+                'data'    => $result['data']
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -87,14 +87,14 @@ class CommunicationSettingController extends Controller
         try {
             $result = $this->communicationSetting->sendTestMail($request);
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => $result['message'],
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
-                'code' => 400,
+                'code'    => 400,
                 'message' => __('admin.general_settings.test_mail_sent_fail'),
-                'error' => $th->getMessage()
+                'error'   => $th->getMessage()
             ], 400);
         }
     }

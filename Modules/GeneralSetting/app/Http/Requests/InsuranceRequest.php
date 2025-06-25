@@ -4,7 +4,6 @@ namespace Modules\GeneralSetting\Http\Requests;
 
 use App\Library\CustomFailedValidation;
 use Illuminate\Validation\Rule;
-use Modules\GeneralSetting\Models\Insurance;
 
 class InsuranceRequest extends CustomFailedValidation
 {
@@ -34,10 +33,10 @@ class InsuranceRequest extends CustomFailedValidation
                 Rule::unique('insurances')->ignore($id)->whereNull('deleted_at'),
             ],
             'price_type_id' => 'required|exists:pricing_types,id',
-            'price' => 'required|numeric|min:0',
-            'benefit.*' => 'required|string|max:255',
-            'status' => 'sometimes',
-            'language_id' => 'sometimes'
+            'price'         => 'required|numeric|min:0',
+            'benefit.*'     => 'required|string|max:255',
+            'status'        => 'sometimes',
+            'language_id'   => 'sometimes'
         ];
     }
 
@@ -50,14 +49,14 @@ class InsuranceRequest extends CustomFailedValidation
     {
         return [
             'insurance_name.required' => __('admin.general_settings.insurance_name_required'),
-            'insurance_name.unique' => __('admin.general_settings.insurance_name_exist'),
-            'price_type_id.required' => __('admin.general_settings.price_type_required'),
-            'price_type_id.exists' => __('admin.general_settings.price_type_invalid'),
-            'price.required' => __('admin.general_settings.price_required'),
-            'price.numeric' => __('admin.general_settings.price_numeric'),
-            'price.min' => __('admin.general_settings.price_min'),
-            'benefit.*.required' => __('admin.general_settings.benefit_required'),
-            'benefit.*.max' => __('admin.general_settings.benefit_max'),
+            'insurance_name.unique'   => __('admin.general_settings.insurance_name_exist'),
+            'price_type_id.required'  => __('admin.general_settings.price_type_required'),
+            'price_type_id.exists'    => __('admin.general_settings.price_type_invalid'),
+            'price.required'          => __('admin.general_settings.price_required'),
+            'price.numeric'           => __('admin.general_settings.price_numeric'),
+            'price.min'               => __('admin.general_settings.price_min'),
+            'benefit.*.required'      => __('admin.general_settings.benefit_required'),
+            'benefit.*.max'           => __('admin.general_settings.benefit_max'),
         ];
     }
 }

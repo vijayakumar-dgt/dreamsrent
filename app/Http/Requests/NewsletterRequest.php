@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class NewsletterRequest extends CustomFailedValidation
 {
@@ -27,7 +26,7 @@ class NewsletterRequest extends CustomFailedValidation
     {
         return [
             'subscriber_email.required' => __('web.user.subscriber_email_required'),
-            'subscriber_email.unique' => __('web.user.subscriber_email_unique'),
+            'subscriber_email.unique'   => __('web.user.subscriber_email_unique'),
         ];
     }
 }

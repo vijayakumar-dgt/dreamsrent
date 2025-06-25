@@ -30,18 +30,18 @@ class DriverRepository implements DriverRepositoryInterface
     {
         $id = $request->id ?? '';
         $data = [
-            'driver_name' => $request->driver_name,
-            'gender' => $request->gender,
-            'phone_number' => $request->phone_number,
-            'address' => $request->address,
-            'card_number' => $request->card_number,
+            'driver_name'   => $request->driver_name,
+            'gender'        => $request->gender,
+            'phone_number'  => $request->phone_number,
+            'address'       => $request->address,
+            'card_number'   => $request->card_number,
             'date_of_issue' => $request->date_of_issue,
-            'valid_date' => $request->valid_date,
-            'email' => $request->email,
+            'valid_date'    => $request->valid_date,
+            'email'         => $request->email,
         ];
 
         $successMsg = empty($id) ? __('admin.manage.driver_create_success') : __('admin.manage.driver_update_success');
-        $errorMsg = empty($id) ?  __('admin.common.default_create_error') : __('admin.common.default_update_error');
+        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
             if (empty($id)) {
@@ -49,8 +49,8 @@ class DriverRepository implements DriverRepositoryInterface
                     $file = $request->file('image');
                     if (!$file || !$file->isValid()) {
                         return [
-                            'status' => 'error',
-                            'code'   => 422,
+                            'status'  => 'error',
+                            'code'    => 422,
                             'message' => __('admin.common.file_upload_error')
                         ];
                     }
@@ -72,7 +72,7 @@ class DriverRepository implements DriverRepositoryInterface
                     $document = uploadFile($file, 'documents');
                     DriverDocument::create([
                         'driver_id' => $driver->id,
-                        'document' => $document,
+                        'document'  => $document,
                     ]);
                 }
             } else {
@@ -101,7 +101,7 @@ class DriverRepository implements DriverRepositoryInterface
                     $document = uploadFile($file, 'documents');
                     DriverDocument::create([
                         'driver_id' => $driver->id,
-                        'document' => $document,
+                        'document'  => $document,
                     ]);
                 }
 
@@ -126,14 +126,14 @@ class DriverRepository implements DriverRepositoryInterface
             }
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMsg
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMsg,
             ];
         }
@@ -228,7 +228,7 @@ class DriverRepository implements DriverRepositoryInterface
 
                     if ($vehicle) {
                         $driver->vehicle = [
-                            'vehicle_id' => $vehicle->id,
+                            'vehicle_id'   => $vehicle->id,
                             'vehicle_name' => $vehicle->vehicle_name,
                             'cartype_name' => $vehicle->cartype_name,
                         ];
@@ -245,15 +245,15 @@ class DriverRepository implements DriverRepositoryInterface
 
             // Prepare DataTable response
             return [
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
+                'draw'            => intval($request->draw),
+                'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $filteredRecords,
-                'data' => $drivers,
-                'code' => 200
+                'data'            => $drivers,
+                'code'            => 200
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
         }
@@ -272,7 +272,7 @@ class DriverRepository implements DriverRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -291,14 +291,14 @@ class DriverRepository implements DriverRepositoryInterface
             }
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.manage.driver_delete_success')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error')
             ];
         }
@@ -318,14 +318,14 @@ class DriverRepository implements DriverRepositoryInterface
             }
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.manage.driver_status_success')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_status_error')
             ];
         }
@@ -346,15 +346,15 @@ class DriverRepository implements DriverRepositoryInterface
                 ->get();
 
             return [
-                'code'   => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $drivers,
+                'data'    => $drivers,
             ];
         } catch (\Exception $e) {
             return [
-                'code'   => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -378,13 +378,13 @@ class DriverRepository implements DriverRepositoryInterface
             }
 
             return [
-                'code'   => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $driver,
+                'data'    => $driver,
             ];
         } catch (\Exception $e) {
             return [
-                'code'   => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
         }

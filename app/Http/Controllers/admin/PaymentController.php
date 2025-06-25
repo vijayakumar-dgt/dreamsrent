@@ -27,30 +27,30 @@ class PaymentController extends Controller
     {
         try {
             $params = [
-                'start' => $request->input('start', 0),
-                'length' => $request->input('length', 10),
-                'search' => $request->input('search.value'),
-                'sort_column' => $request->input("columns.{$request->input('order.0.column')}.data") ?? 'id',
+                'start'          => $request->input('start', 0),
+                'length'         => $request->input('length', 10),
+                'search'         => $request->input('search.value'),
+                'sort_column'    => $request->input("columns.{$request->input('order.0.column')}.data") ?? 'id',
                 'sort_direction' => $request->input('order.0.dir', 'desc'),
                 'payment_status' => $request->payment_status ?? [],
-                'payment_type' => $request->payment_type ?? [],
-                'sortby' => $request->sortby,
+                'payment_type'   => $request->payment_type ?? [],
+                'sortby'         => $request->sortby,
             ];
 
             $result = $this->paymentRepository->getPaymentList($params);
 
             return response()->json([
-                'draw' => intval($request->input('draw')),
-                'recordsTotal' => $result['total'],
+                'draw'            => intval($request->input('draw')),
+                'recordsTotal'    => $result['total'],
                 'recordsFiltered' => $result['filtered'],
-                'data' => $result['data'],
+                'data'            => $result['data'],
                 'currency_symbol' => getDefaultCurrencySymbol(),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

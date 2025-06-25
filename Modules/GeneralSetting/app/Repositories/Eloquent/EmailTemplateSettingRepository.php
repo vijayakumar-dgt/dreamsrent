@@ -2,10 +2,10 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
+use Illuminate\Database\Eloquent\Collection;
 use Modules\GeneralSetting\Models\EmailTemplate;
 use Modules\GeneralSetting\Models\NotificationTag;
 use Modules\GeneralSetting\Models\NotificationType;
-use Illuminate\Database\Eloquent\Collection;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 
 class EmailTemplateSettingRepository implements EmailTemplateRepositoryInterface
@@ -36,21 +36,21 @@ class EmailTemplateSettingRepository implements EmailTemplateRepositoryInterface
             ->get()
             ->map(function ($emailTemplate) {
                 return [
-                    'id' => $emailTemplate->id,
-                    'title' => $emailTemplate->title,
-                    'notification_type' => $emailTemplate->notification_type,
-                    'subject' => $emailTemplate->subject,
-                    'sms_content' => $emailTemplate->sms_content,
+                    'id'                   => $emailTemplate->id,
+                    'title'                => $emailTemplate->title,
+                    'notification_type'    => $emailTemplate->notification_type,
+                    'subject'              => $emailTemplate->subject,
+                    'sms_content'          => $emailTemplate->sms_content,
                     'notification_content' => $emailTemplate->notification_content,
-                    'description' => $emailTemplate->description,
-                    'status' => $emailTemplate->status,
-                    'formated_date' => formatDateTime($emailTemplate->created_at)
+                    'description'          => $emailTemplate->description,
+                    'status'               => $emailTemplate->status,
+                    'formated_date'        => formatDateTime($emailTemplate->created_at)
                 ];
             });
 
         return [
-            'data' => $emailTemplates,
-            'totalRecords' => $totalRecords,
+            'data'            => $emailTemplates,
+            'totalRecords'    => $totalRecords,
             'filteredRecords' => $filteredRecords
         ];
     }
@@ -93,7 +93,7 @@ class EmailTemplateSettingRepository implements EmailTemplateRepositoryInterface
 
         return [
             'notification_type' => $notificationType,
-            'tags' => $notificationType && $notificationType->tags
+            'tags'              => $notificationType && $notificationType->tags
                 ? json_decode($notificationType->tags)
                 : $defaultTags
         ];

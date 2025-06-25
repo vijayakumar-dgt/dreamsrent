@@ -3,12 +3,9 @@
 namespace Modules\Communication\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Modules\Communication\Models\Contact;
-use Illuminate\Support\Facades\Log;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Modules\Communication\Http\Requests\ContactMessagesRequest;
 use Modules\Communication\Repositories\Contracts\ContactMessagesRepositoryInterface;
 
@@ -20,6 +17,7 @@ class ContactController extends Controller
     {
         $this->contactMessagesRepository = $contactMessagesRepository;
     }
+
     public function index(): View
     {
         return view('communication::contact-message.index');

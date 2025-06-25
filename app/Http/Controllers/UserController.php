@@ -7,10 +7,10 @@ use App\Http\Requests\UserProfileRequest;
 use App\Http\Resources\UserBookings;
 use App\Http\Resources\UserWishlist;
 use App\Repositories\Contracts\UserRepositoryInterface;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -32,6 +32,7 @@ class UserController extends Controller
         $data = $this->userRepository->getUserBookings();
         return view('frontend.user.bookings', $data);
     }
+
     public function ajaxLastBookings(Request $request): AnonymousResourceCollection
     {
         $bookings = $this->userRepository->getAjaxLastBookings($request);
@@ -39,6 +40,7 @@ class UserController extends Controller
             'status' => 'success',
         ]);
     }
+
     public function ajaxBookings(Request $request): AnonymousResourceCollection
     {
         $bookings = $this->userRepository->getAjaxBookings($request);
@@ -52,7 +54,7 @@ class UserController extends Controller
         $booking = $this->userRepository->getBookingDetails($id);
         return response()->json([
             'status' => 'success',
-            'data' => new UserBookings($booking)
+            'data'   => new UserBookings($booking)
         ]);
     }
 
@@ -97,8 +99,8 @@ class UserController extends Controller
         $wishlists = $this->userRepository->getWishlistDataAjax();
         return response()->json([
             'status' => 'success',
-            'code' => 200,
-            'data' => UserWishlist::collection($wishlists)
+            'code'   => 200,
+            'data'   => UserWishlist::collection($wishlists)
         ]);
     }
 
@@ -149,13 +151,14 @@ class UserController extends Controller
         $response = $this->userRepository->updatePassword($request);
         return response()->json($response, $response['code'] ?? 200);
     }
+
     public function getSecuritySettings(): JsonResponse
     {
         $response = $this->userRepository->getSecuritySettings();
         return response()->json([
             'status' => 'success',
-            'code' => 200,
-            'data' => $response
+            'code'   => 200,
+            'data'   => $response
         ]);
     }
 
@@ -223,12 +226,12 @@ class UserController extends Controller
             $view = view('frontend.user.partials.notification-items', compact('notifications'))->render();
 
             return response()->json([
-                'html' => $view,
-                'current_page' => $notifications->currentPage(),
-                'last_page' => $notifications->lastPage(),
+                'html'          => $view,
+                'current_page'  => $notifications->currentPage(),
+                'last_page'     => $notifications->lastPage(),
                 'prev_page_url' => $notifications->previousPageUrl(),
                 'next_page_url' => $notifications->nextPageUrl(),
-                'count' => $notifications->total()
+                'count'         => $notifications->total()
             ]);
         }
 

@@ -3,19 +3,16 @@
 namespace Modules\Communication\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Communication\Http\Requests\AddTicketRequest;
-use Modules\Communication\Http\Requests\UpdateTicketRequest;
-use Modules\Communication\Http\Requests\AssignTicketRequest;
-use Modules\Communication\Models\TicketCategory;
 use App\Models\User;
-use Modules\Communication\Models\Ticket;
-use Modules\Communication\Models\TicketHistory;
-use Modules\Communication\Repositories\Contracts\TicketInterface;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Modules\Communication\Http\Requests\AddTicketRequest;
+use Modules\Communication\Http\Requests\AssignTicketRequest;
+use Modules\Communication\Http\Requests\UpdateTicketRequest;
+use Modules\Communication\Models\Ticket;
+use Modules\Communication\Repositories\Contracts\TicketInterface;
 
 class TicketController extends Controller
 {
@@ -64,7 +61,7 @@ class TicketController extends Controller
 
             if (!$user) {
                 return response()->json([
-                    'code' => 401,
+                    'code'    => 401,
                     'message' => 'Unauthenticated'
                 ], 401);
             }
@@ -87,27 +84,27 @@ class TicketController extends Controller
 
             // Create ticket
             $ticket = $this->repository->create([
-                'ticket_id' => $ticketId,
-                'priority' => $request->priority,
-                'user_id' => $user->id,
+                'ticket_id'   => $ticketId,
+                'priority'    => $request->priority,
+                'user_id'     => $user->id,
                 'description' => $request->description,
-                'status' => 1,
-                'subject' => $request->category,
-                'user_type' => $user->user_type ?? 3,
-                'attachment' => count($filePaths) > 0 ? json_encode($filePaths) : null,
-                'created_by' => $user->id,
+                'status'      => 1,
+                'subject'     => $request->category,
+                'user_type'   => $user->user_type ?? 3,
+                'attachment'  => count($filePaths) > 0 ? json_encode($filePaths) : null,
+                'created_by'  => $user->id,
             ]);
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => 'Ticket created successfully',
-                'data' => $ticket
+                'data'    => $ticket
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => 'An error occurred while creating the ticket',
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -119,7 +116,7 @@ class TicketController extends Controller
 
             if (!$user instanceof \App\Models\User) {
                 return response()->json([
-                    'code' => 401,
+                    'code'    => 401,
                     'message' => 'Unauthenticated'
                 ], 401);
             }
@@ -127,9 +124,9 @@ class TicketController extends Controller
             $filters = [
                 'ticketId' => $request->input('ticketId'),
                 'priority' => $request->input('priority', []),
-                'status' => $request->input('status', []),
-                'sort_by' => $request->input('sort_by', 'latest'),
-                'search' => $request->input('search', ''),
+                'status'   => $request->input('status', []),
+                'sort_by'  => $request->input('sort_by', 'latest'),
+                'search'   => $request->input('search', ''),
             ];
 
             $tickets = $this->repository->getTicketsForUser($user->id, $user->user_type, $filters);
@@ -141,15 +138,15 @@ class TicketController extends Controller
             });
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $tickets
+                'data'    => $tickets
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -161,7 +158,7 @@ class TicketController extends Controller
 
             if (!$user) {
                 return response()->json([
-                    'code' => 401,
+                    'code'    => 401,
                     'message' => 'Unauthenticated'
                 ], 401);
             }
@@ -173,15 +170,15 @@ class TicketController extends Controller
             );
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.support.ticket_update_success'),
-                'ticket' => $ticket
+                'ticket'  => $ticket
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -193,7 +190,7 @@ class TicketController extends Controller
 
             if (!$user) {
                 return response()->json([
-                    'code' => 401,
+                    'code'    => 401,
                     'message' => 'Unauthenticated'
                 ], 401);
             }
@@ -205,13 +202,13 @@ class TicketController extends Controller
             );
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.support.ticket_update_success'),
-                'ticket' => $ticket
+                'ticket'  => $ticket
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
-              'code' => $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500,
+              'code'    => $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500,
               'message' => $e->getMessage(),
             ], $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500);
         }
@@ -223,7 +220,7 @@ class TicketController extends Controller
             $id = $request->input('id');
             if (!is_numeric($id)) {
                 return response()->json([
-                    'code' => 400,
+                    'code'    => 400,
                     'success' => false,
                     'message' => 'Invalid ticket ID format'
                 ], 400);

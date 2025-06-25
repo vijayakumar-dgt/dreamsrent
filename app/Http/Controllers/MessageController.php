@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\MessageResource;
-use App\Models\Message;
 use App\Models\User;
 use App\Repositories\Contracts\MessageRepositoryInterface;
-use App\Services\MqttService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class MessageController extends Controller
@@ -21,6 +16,7 @@ class MessageController extends Controller
     {
         $this->messageRepository = $messageRepository;
     }
+
     public function index(): View
     {
         $data = $this->messageRepository->getUserData();

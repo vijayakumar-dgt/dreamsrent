@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\View\View;
 use App\Repositories\Contracts\DashboardRepositoryInterface;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
@@ -14,6 +14,7 @@ class DashboardController extends Controller
     {
         $this->dashboardRepository = $dashboardRepository;
     }
+
     public function index(): View
     {
         $data = $this->dashboardRepository->index();

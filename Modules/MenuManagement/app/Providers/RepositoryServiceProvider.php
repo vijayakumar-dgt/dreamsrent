@@ -16,8 +16,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->registerBindings();
     }
 
-
-
     protected function registerBindings(): void
     {
         $this->app->bind(MenuManagementInterface::class, MenuManagementRepository::class);
