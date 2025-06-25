@@ -42,13 +42,11 @@ class ReviewController extends Controller
     /**
      * Fetch review replies.
      *
-     * @param int|null $reviewId
      * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReviewMessages>
      */
     public function fetchReviewReplies(?int $reviewId): Collection
     {
-        $replies = $this->reviewRepository->fetchReviewReplies($reviewId);
-        return $replies;
+        return $this->reviewRepository->fetchReviewReplies($reviewId);
     }
 
     public function userReviewsList(Request $request): JsonResponse

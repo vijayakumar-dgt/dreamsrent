@@ -102,7 +102,6 @@ if (!function_exists('uploadedAsset')) {
     /**
      * @param string $filePath
      * @param string $default
-     * @return string
      */
     function uploadedAsset(?string $filePath, ?string $default = ''): string
     {
@@ -325,8 +324,6 @@ if (!function_exists('getUserPermissions')) {
 /**
  * @param Collection<int, \Modules\RolesPermission\Models\Permission> $permissions
  * @param string|string[] $moduleSlug
- * @param string $action
- * @return bool
  */
 function hasPermission(Collection $permissions, string|array $moduleSlug, string $action): bool
 {
@@ -370,18 +367,12 @@ function rentalNotificationEnabled(): int
 function userNotificationsEnabled(): bool
 {
     $user = Auth::guard('web')->user();
-    if ($user && $user->booking_confirmation == 1 && $user->email_notifications == 1) {
-        return true;
-    }
-    return false;
+    return $user && $user->booking_confirmation == 1 && $user->email_notifications == 1;
 }
 /**
  * Send a notification to the given email based on the provided slug and data.
  *
- * @param string $email
- * @param string $slug
  * @param array<string, mixed> $notifyData
- * @return void
  */
 function sendNotification(string $email, string $slug, array $notifyData = []): void
 {
@@ -411,7 +402,7 @@ function sendNotification(string $email, string $slug, array $notifyData = []): 
         return $text;
     };
 
-    if (!$email) {
+    if ($email === '' || $email === '0') {
         return;
     }
     $parsedTemplate = [
@@ -458,8 +449,6 @@ function getLanguageName(?string $langCode = 'en'): string
 
 /**
  * Get the profile image URL of the current user.
- *
- * @return string|null
  */
 function getProfileImage(): ?string
 {
@@ -467,14 +456,10 @@ function getProfileImage(): ?string
     $user = current_user();
 
     if ($user && $user->userDetail) {
-        $asset = uploadedAsset($user->userDetail->profile_image ?? '', 'profile');
-        return $asset;
+        return uploadedAsset($user->userDetail->profile_image ?? '', 'profile');
     } else {
-        $defaultImage = uploadedAsset('', 'profile');
-        return $defaultImage;
+        return uploadedAsset('', 'profile');
     }
-
-    return null;
 }
 
 function isAccessMenu(?string $menu): int
@@ -523,9 +508,6 @@ function getCurrentUserFullname($userId = null)
 
 /**
  * Send a notification to the given email based on the provided slug and data.
- * @param string $slug
- * @param string|array $email
- * @return void
  */
 function sendNewsletterEmail(string|array $email, string $slug, array $notifyData): void
 {
@@ -561,7 +543,7 @@ function sendNewsletterEmail(string|array $email, string $slug, array $notifyDat
     $subject = $template->subject ?? 'Reg - Newsletter';
     $content = $template->description ?? 'You have successfully subscribed to our newsletter.';
 
-    if ($slug == 'test_mail') {
+    if ($slug === 'test_mail') {
         $subject = $template->subject ?? 'Reg - Admin Test Mail';
         $content = $template->description ?? "Hello $notifyData[user_name],<br><br>
         This is a test email to confirm that the email configuration for admin notifications is working correctly.<br><br>

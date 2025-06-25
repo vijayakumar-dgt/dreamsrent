@@ -52,7 +52,8 @@ class UserRepository implements UserRepositoryInterface
             ->where('deleted_at', null)->where('payment_status', 2)->sum('final_price');
         $currency = getDefaultCurrencySymbol();
         $seo_title = __('web.user.dashboard');
-        $data = [
+
+        return [
             'totalBookingCount'  => $totalBookingCount,
             'totalWishlistCount' => $totalWishlistCount,
             'totalBalance'       => $totalBalance,
@@ -60,8 +61,6 @@ class UserRepository implements UserRepositoryInterface
             'currency'           => $currency,
             'seo_title'          => $seo_title
         ];
-
-        return $data;
     }
 
     public function getUserBookings(): array
@@ -73,11 +72,10 @@ class UserRepository implements UserRepositoryInterface
         $totalBookingCount = Booking::where('customer_id', $user->id)
             ->where('deleted_at', null)->count();
         $seo_title = __('web.user.my_bookings');
-        $data = [
+        return [
             'totalBookingCount' => $totalBookingCount,
             'seo_title'         => $seo_title
         ];
-        return $data;
     }
 
     public function getAjaxLastBookings(Request $request): Collection
@@ -126,9 +124,7 @@ class UserRepository implements UserRepositoryInterface
                     break;
             }
         }
-
-        $bookings = $bookings->orderBy('id', 'desc')->take(5)->get();
-        return $bookings;
+        return $bookings->orderBy('id', 'desc')->take(5)->get();
     }
 
     public function getAjaxBookings(Request $request): Collection
@@ -182,15 +178,12 @@ class UserRepository implements UserRepositoryInterface
                     break;
             }
         }
-
-        $bookings = $bookings->get();
-        return $bookings;
+        return $bookings->get();
     }
 
     public function getBookingDetails(int $id): object
     {
-        $booking = Booking::where('id', $id)->first();
-        return $booking;
+        return Booking::where('id', $id)->first();
     }
 
     public function cancelBooking(Request $request): array
@@ -236,7 +229,7 @@ class UserRepository implements UserRepositoryInterface
 
             DB::commit();
 
-            if (rentalNotificationEnabled()) {
+            if (rentalNotificationEnabled() !== 0) {
                 try {
                     $authUser = Auth::user();
                     $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
@@ -273,21 +266,19 @@ class UserRepository implements UserRepositoryInterface
                 } catch (\Throwable $ex) {
                 }
             }
-            $response = [
+
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.user.reservation_cancelled')
             ];
-
-            return $response;
         } catch (\Throwable $th) {
             DB::rollBack();
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
-            return $response;
         }
     }
 
@@ -325,7 +316,7 @@ class UserRepository implements UserRepositoryInterface
                 ];
                 break;
             case 'custom':
-                if (!empty($customFromDate) && !empty($customToDate)) {
+                if ($customFromDate !== null && $customFromDate !== '' && $customFromDate !== '0' && ($customToDate !== null && $customToDate !== '' && $customToDate !== '0')) {
                     if (strtotime($customFromDate) > strtotime($customToDate)) {
                         return ['error' => 'Custom from date cannot be greater than to date'];
                     }
@@ -389,12 +380,11 @@ class UserRepository implements UserRepositoryInterface
             return $response;
         } catch (\Throwable $th) {
             DB::rollBack();
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
-            return $response;
         }
     }
 
@@ -431,12 +421,11 @@ class UserRepository implements UserRepositoryInterface
             return $response;
         } catch (\Throwable $th) {
             DB::rollBack();
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
-            return $response;
         }
     }
 
@@ -470,8 +459,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function getWishlistData(): string
     {
-        $seo_title = __('web.user.wishlist');
-        return $seo_title;
+        return __('web.user.wishlist');
     }
 
     public function addToWishlist(int $id)
@@ -504,20 +492,18 @@ class UserRepository implements UserRepositoryInterface
 
             return $response;
         } catch (\Throwable $th) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
-            return $response;
         }
     }
 
     public function getWishlistDataAjax(): Collection
     {
         $authUserId = Auth::guard('web')->user()->id ?? 0;
-        $wishlists = Wishlist::where('user_id', $authUserId)->get();
-        return $wishlists;
+        return Wishlist::where('user_id', $authUserId)->get();
     }
 
     public function getProfileSettings()
@@ -525,12 +511,11 @@ class UserRepository implements UserRepositoryInterface
         $user = Auth::guard('web')->user();
         $countries = Country::where('status', 1)->get();
         $seo_title = __('web.user.profile');
-        $data = [
+        return [
             'user'      => $user,
             'countries' => $countries,
             'seo_title' => $seo_title
         ];
-        return $data;
     }
 
     public function updateProfile(Request $request): array
@@ -564,8 +549,7 @@ class UserRepository implements UserRepositoryInterface
                 ]
             );
             $profileImage = UserDetail::where('user_id', $user?->id)->value('profile_image');
-
-            $response = [
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.user.profile_updated_successfully'),
@@ -573,15 +557,13 @@ class UserRepository implements UserRepositoryInterface
                     'profile_image' => uploadedAsset($profileImage, 'profile')
                 ],
             ];
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.user.error_occured'),
                 'error'   => $e->getMessage()
             ];
-            return $response;
         }
     }
 
@@ -599,24 +581,22 @@ class UserRepository implements UserRepositoryInterface
         $preference = User::select('language_id', 'region_id')->where('id', $id)->first();
         $countries = Country::select('id', 'name')->where('status', 1)->get();
         $seo_title = __('web.user.preferences');
-        $data = [
+        return [
             'languages'  => $languages,
             'preference' => $preference,
             'countries'  => $countries,
             'seo_title'  => $seo_title
         ];
-        return $data;
     }
 
     public function getUserNotifications(): array
     {
         $seo_title = __('web.user.notifications');
         $user = Auth::guard('web')->user();
-        $data = [
+        return [
             'user'      => $user,
             'seo_title' => $seo_title
         ];
-        return $data;
     }
 
     public function updateNotificationSettings(Request $request): array
@@ -629,20 +609,18 @@ class UserRepository implements UserRepositoryInterface
                 $user->email_notifications = $request->email_notifications == "1" ? 1 : 0;
                 $user->save();
             }
-            $response = [
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.common.default_update_success'),
             ];
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.common.default_update_error'),
                 'error'   => $e->getMessage()
             ];
-            return $response;
         }
     }
 
@@ -651,19 +629,17 @@ class UserRepository implements UserRepositoryInterface
         $password = $request->password;
         $user = Auth::guard('web')->user();
         if ($user && $user->password && Hash::check($password, $user->password)) {
-            $response = [
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.user.current_password_correct')
             ];
-            return $response;
         } else {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 422,
                 'message' => __('web.user.current_password_incorrect')
             ];
-            return $response;
         }
     }
 
@@ -671,12 +647,11 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = Auth::guard('web')->user();
         if (!$user || !$user->password || !Hash::check($request->current_password, $user->password)) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.user.current_password_incorrect')
             ];
-            return $response;
         }
 
         $user = Auth::guard('web')->user();
@@ -686,13 +661,11 @@ class UserRepository implements UserRepositoryInterface
             $user->save();
         }
 
-        $response = [
+        return [
             'status'  => 'success',
             'code'    => 200,
             'message' => __('web.user.password_updated_successfully')
         ];
-
-        return $response;
     }
 
     public function getSecuritySettings(): array
@@ -711,14 +684,13 @@ class UserRepository implements UserRepositoryInterface
                 ];
             });
         $user = Auth::guard('web')->user();
-        $response = [
+        return [
             'user'                     => Auth::guard('web')->user(),
             'last_password_changed_at' => Auth::guard('web')->check() && $user && $user->last_password_changed_at
                 ? formatDateTime($user->last_password_changed_at)
                 : "",
             'devices' => $userDevices
         ];
-        return $response;
     }
 
     public function logoutDevice(Request $request): array
@@ -744,13 +716,12 @@ class UserRepository implements UserRepositoryInterface
                 ];
             }
         }
-        $response = [
+
+        return [
             'status'  => 'error',
             'code'    => 404,
             'message' => __('web.user.device_not_found')
         ];
-
-        return $response;
     }
 
     public function updatePreference(Request $request): array
@@ -769,19 +740,17 @@ class UserRepository implements UserRepositoryInterface
 
             $language = TranslationLanguage::select('code')->where('id', $request->language_id)->first();
             session(['app_locale_user' => $language->code ?? 'en']);
-            $response = [
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.user.preference_update_success')
             ];
-            return $response;
         } catch (\Throwable $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.common.default_update_error')
             ];
-            return $response;
         }
     }
 
@@ -790,20 +759,18 @@ class UserRepository implements UserRepositoryInterface
         try {
             $id = Auth::guard('web')->user()->id ?? $request->user_id;
             $data = User::select('language_id', 'region_id')->where('id', $id)->first();
-            $response = [
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'data'    => $data,
                 'message' => __('web.common.default_retrieve_success'),
             ];
-            return $response;
         } catch (\Throwable $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.common.default_retrieve_error')
             ];
-            return $response;
         }
     }
 
@@ -818,19 +785,17 @@ class UserRepository implements UserRepositoryInterface
                 'enquiry_date'    => date('Y-m-d'),
                 'enquiry_details' => $request->enquiry_message
             ]);
-            $response = [
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.user.enquiry_submitted_successfully')
             ];
-            return $response;
         } catch (\Throwable $th) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.user.error_occured')
             ];
-            return $response;
         }
     }
 
@@ -844,15 +809,14 @@ class UserRepository implements UserRepositoryInterface
                 ->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
             $notificationCount = Notification::where('user_id', $authUserId)->where('readed', 0)->count();
         }
-        $html = view('frontend.user.notifications-popup', compact('notifications'))->render();
-        $response = [
+        $html = view('frontend.user.notifications-popup', ['notifications' => $notifications])->render();
+
+        return [
             'status' => 'success',
             'code'   => 200,
             'html'   => $html,
             'count'  => $notificationCount
         ];
-
-        return $response;
     }
 
     public function markAllAsRead(): array
@@ -863,19 +827,17 @@ class UserRepository implements UserRepositoryInterface
                 ->where('readed', 0)->count() > 0
         ) {
             Notification::where('user_id', $authUserId)->update(['readed' => 1]);
-            $response = [
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ];
-            return $response;
         } else {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ];
-            return $response;
         }
     }
 
@@ -927,54 +889,48 @@ class UserRepository implements UserRepositoryInterface
             }
         }
 
-        $bookings = $bookings->get();
-
-        return $bookings;
+        return $bookings->get();
     }
 
     public function notifications()
     {
         $authUserId = Auth::guard('web')->user()->id ?? 0;
-        $notifications = Notification::where('user_id', $authUserId)
+        return Notification::where('user_id', $authUserId)
             ->orderBy('created_at', 'desc')->paginate(10);
-        return $notifications;
     }
 
     public function markNotificationAsRead(int $id): array
     {
         Notification::where('id', $id)->update(['readed' => 1]);
-        $response = [
+
+        return [
             'status'  => 'success',
             'code'    => 200,
             'message' => __('web.user.notification_marked_as_read')
         ];
-
-        return $response;
     }
 
     public function deleteNotification(int $id): array
     {
         Notification::where('id', $id)->delete();
-        $response = [
+
+        return [
             'status'  => 'success',
             'code'    => 200,
             'message' => __('web.user.notification_deleted')
         ];
-
-        return $response;
     }
 
     public function deleteAllNotification(): array
     {
         $authUserId = Auth::guard('web')->user()->id ?? 0;
         Notification::where('user_id', $authUserId)->delete();
-        $response = [
+
+        return [
             'status'  => 'success',
             'code'    => 200,
             'message' => __('web.user.all_notofocations_deleted')
         ];
-
-        return $response;
     }
 
     public function deleteAccount(): array
@@ -982,19 +938,16 @@ class UserRepository implements UserRepositoryInterface
         /** @var \App\Models\User|null $user */
         $user = Auth::guard('web')->user();
         if (!$user) {
-            $response = [
+            return [
                 'success' => false,
                 'message' => __('admin.general_settings.user_not_found')
             ];
-
-            return $response;
         }
         $user->delete();
-        $response = [
+
+        return [
             'success' => true,
             'message' => __('web.user.account_deleted_successfully')
         ];
-
-        return $response;
     }
 }

@@ -19,8 +19,7 @@ class BlogController extends Controller
 
     public function BlogList(Request $request): View|JsonResponse
     {
-        $data = $this->blogRepository->BlogList($request);
-        return $data;
+        return $this->blogRepository->BlogList($request);
     }
 
     public function BlogDetail(int|string $id): View
@@ -31,7 +30,6 @@ class BlogController extends Controller
 
     public function storeReview(BlogRequest $request)
     {
-        $data = $this->blogRepository->storeReview($request);
-        return $data;
+        return $this->blogRepository->storeReview($request);
     }
 }

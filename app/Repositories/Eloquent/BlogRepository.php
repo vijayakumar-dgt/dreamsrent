@@ -81,13 +81,13 @@ class BlogRepository implements BlogRepositoryInterface
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('frontend.blogs.partials.blogs-list', compact('blogPosts'))->render()
+                'html' => view('frontend.blogs.partials.blogs-list', ['blogPosts' => $blogPosts])->render()
             ]);
         }
 
         return view(
             'frontend.blogs.blog-list',
-            compact('blogPosts', 'languages', 'categories', 'tags', 'latestblogs', 'seo_title')
+            ['blogPosts' => $blogPosts, 'languages' => $languages, 'categories' => $categories, 'tags' => $tags, 'latestblogs' => $latestblogs, 'seo_title' => $seo_title]
         );
     }
 
@@ -136,9 +136,7 @@ class BlogRepository implements BlogRepositoryInterface
             ->get();
         $seo_title = $blogPosts->title ?? '';
 
-        $data = ['blogPosts' => $blogPosts, 'languages' => $languages, 'blogReviews' => $blogReviews, 'countReview' => $countReview, 'otherBlogs' => $otherBlogs, 'seo_title' => $seo_title];
-
-        return $data;
+        return ['blogPosts' => $blogPosts, 'languages' => $languages, 'blogReviews' => $blogReviews, 'countReview' => $countReview, 'otherBlogs' => $otherBlogs, 'seo_title' => $seo_title];
     }
 
     public function storeReview(Request $request): RedirectResponse

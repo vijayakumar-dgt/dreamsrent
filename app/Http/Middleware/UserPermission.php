@@ -133,7 +133,7 @@ class UserPermission
             $moduleDetails = $routeModules[$routeName] ?? null;
 
             if ($routeName == 'reservation.index' || $routeName == 'reservation.create' || $routeName == 'reservation.edit' || $routeName == 'reservation.details') {
-                if (isAccessMenu('reservation')) {
+                if (isAccessMenu('reservation') !== 0) {
                     if ($moduleDetails && hasPermission($permissions, $moduleDetails['module'], $moduleDetails['action'])) {
                         return $next($request);
                     }
@@ -151,10 +151,8 @@ class UserPermission
                 return redirect()->route($redirectRoute)->with('permission-error', __('admin.common.permission_access_denied'));
             }
         } elseif ($userType == 1) {
-            if ($routeName == 'reservation.index' || $routeName == 'reservation.create' || $routeName == 'reservation.edit' || $routeName == 'reservation.details') {
-                if (!isAccessMenu('reservation')) {
-                    return redirect()->route('dashboard')->with('permission-error', 'Currently this menu is disabled!');
-                }
+            if (($routeName == 'reservation.index' || $routeName == 'reservation.create' || $routeName == 'reservation.edit' || $routeName == 'reservation.details') && !isAccessMenu('reservation')) {
+                return redirect()->route('dashboard')->with('permission-error', 'Currently this menu is disabled!');
             }
         }
 

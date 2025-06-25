@@ -35,9 +35,7 @@ class CustomerRepository implements CustomerRepositoryInterface
             ->where('languages.status', 1)
             ->get();
 
-        $data = ['languages' => $languages];
-
-        return $data;
+        return ['languages' => $languages];
     }
 
     public function store(Request $request): array
@@ -116,16 +114,14 @@ class CustomerRepository implements CustomerRepositoryInterface
                     }
                 }
                 $removedDocuments = array_filter(explode(',', $request->removed_documents));
-                if (!empty($removedDocuments)) {
-                    foreach ($removedDocuments as $docId) {
-                        $removedDocument = UserDocument::find($docId);
-                        if ($removedDocument) {
-                            $doc = $removedDocument->document;
-                            if (!empty($doc) && Storage::disk('public')->exists($doc)) {
-                                Storage::disk('public')->delete($doc);
-                            }
-                            $removedDocument->delete();
+                foreach ($removedDocuments as $docId) {
+                    $removedDocument = UserDocument::find($docId);
+                    if ($removedDocument) {
+                        $doc = $removedDocument->document;
+                        if (!empty($doc) && Storage::disk('public')->exists($doc)) {
+                            Storage::disk('public')->delete($doc);
                         }
+                        $removedDocument->delete();
                     }
                 }
                 User::where('id', $id)->update($userData);
@@ -263,11 +259,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                     return $document;
                 });
 
-                if ($user->customer_full_name == ' ') {
-                    $user->customer_full_name = '';
-                } else {
-                    $user->customer_full_name = ucwords($user->customer_full_name);
-                }
+                $user->customer_full_name = $user->customer_full_name == ' ' ? '' : ucwords($user->customer_full_name);
 
                 return $user;
             });
@@ -411,14 +403,12 @@ class CustomerRepository implements CustomerRepositoryInterface
             });
         }
 
-        $data = [
+        return [
             'customer'         => $customer,
             'bookings'         => $bookings,
             'bookingHistories' => $bookingHistories,
             'defaultCurrency'  => $defaultCurrency,
         ];
-
-        return $data;
     }
 
     public function delete(Request $request): array

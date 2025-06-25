@@ -20,7 +20,7 @@ class PaymentController extends Controller
     public function index(): View
     {
         $GetPayments = $this->paymentRepository->getDistinctPaymentTypes();
-        return view("admin.payment.index", compact('GetPayments'));
+        return view("admin.payment.index", ['GetPayments' => $GetPayments]);
     }
 
     public function paymentList(Request $request): JsonResponse

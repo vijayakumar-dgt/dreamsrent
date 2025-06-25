@@ -25,8 +25,6 @@ class DatabaseSeeder extends Seeder
 
     /**
      * Generate the checklist entries.
-     *
-     * @return void
      */
     public function generateChecklist(): void
     {

@@ -74,7 +74,7 @@ class LoginController extends Controller
                 }
                 $user = Auth::guard('admin')->user();
                 $user_device = new UserDevice();
-                if ($user && isset($user->id)) {
+                if ($user && (property_exists($user, 'id') && $user->id !== null)) {
                     $user_device->user_id = $user->id;
                 }
                 $user_device->device_type = is_string($device_type) ? $device_type : null;

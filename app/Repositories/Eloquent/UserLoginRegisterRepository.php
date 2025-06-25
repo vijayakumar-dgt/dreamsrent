@@ -21,19 +21,17 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
     {
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            $response = [
+            return [
                 'code'    => 404,
                 'message' => 'User not found.'
             ];
-            return $response;
         }
         $user->password = Hash::make($request->current_password);
         $user->save();
-        $response = [
+        return [
             'code'    => 200,
             'message' => 'Password updated successfully.'
         ];
-        return $response;
     }
 
     public function getOtpSettings(Request $request): array
@@ -131,13 +129,11 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                     }
                 }
                 $otp = $otpSetting->otp ?? "";
-                if ($otp != '') {
-                    if ($otp !== $request->otp) {
-                        return [
-                            'code'  => 400,
-                            'error' => __('web.auth.invalid_otp')
-                        ];
-                    }
+                if ($otp != '' && $otp !== $request->otp) {
+                    return [
+                        'code'  => 400,
+                        'error' => __('web.auth.invalid_otp')
+                    ];
                 }
             }
             $data = [
@@ -188,13 +184,11 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                     }
                 }
                 $otp = $otpSetting->otp ?? "";
-                if ($otp != '') {
-                    if ($otp !== $request->otp) {
-                        return [
-                            'code'  => 400,
-                            'error' => __('web.auth.invalid_otp')
-                        ];
-                    }
+                if ($otp != '' && $otp !== $request->otp) {
+                    return [
+                        'code'  => 400,
+                        'error' => __('web.auth.invalid_otp')
+                    ];
                 }
             }
             DB::table('otp_settings')->where('email', $request->forgot_email)->delete();
@@ -230,13 +224,11 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                     }
                 }
                 $otp = $otpSetting->otp ?? "";
-                if ($otp != '') {
-                    if ($otp !== $request->otp) {
-                        return [
-                            'code'  => 400,
-                            'error' => __('web.auth.invalid_otp')
-                        ];
-                    }
+                if ($otp != '' && $otp !== $request->otp) {
+                    return [
+                        'code'  => 400,
+                        'error' => __('web.auth.invalid_otp')
+                    ];
                 }
             }
             Auth::guard('web')->login($user);

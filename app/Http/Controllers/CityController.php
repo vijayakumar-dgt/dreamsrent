@@ -20,7 +20,7 @@ class CityController extends Controller
     public function index(): View
     {
         $state_ids = $this->cityRepository->getStates();
-        return view('admin.city.index', compact("state_ids"));
+        return view('admin.city.index', ['state_ids' => $state_ids]);
     }
 
     public function store(AddCityRequest $request): JsonResponse

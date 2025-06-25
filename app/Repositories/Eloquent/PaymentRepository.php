@@ -112,7 +112,7 @@ class PaymentRepository implements PaymentInterface
 
     protected function formatPaymentType(string $paymentType): string
     {
-        return $paymentType == 'cod'
+        return $paymentType === 'cod'
             ? strtoupper(str_replace('_', ' ', $paymentType))
             : ucfirst(str_replace('_', ' ', $paymentType));
     }

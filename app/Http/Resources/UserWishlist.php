@@ -56,9 +56,6 @@ class UserWishlist extends JsonResource
     /**
      * Get the vehicle price(s) either as full list or just the first one.
      *
-     * @param VehicleInfo $vehicle
-     * @param bool $firstPrice
-     * @param bool $type
      * @return array<string, mixed>
      */
     public function getPrice(VehicleInfo $vehicle, bool $firstPrice = false, bool $type = false): array

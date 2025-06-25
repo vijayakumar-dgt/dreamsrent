@@ -13,7 +13,7 @@ class EditCountryRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('id') ?? $this->input('id');
+        $this->route('id') ?? $this->input('id');
 
         return [
             'id'   => 'required|exists:countries,id',

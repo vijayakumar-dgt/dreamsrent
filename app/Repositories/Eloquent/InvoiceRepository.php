@@ -33,9 +33,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
                $invoice->full_name = $invoice->first_name ? ($invoice->first_name . ' ' . $invoice->last_name) : '';
                return $invoice;
            });
-
-        $data = ['invoices' => $invoices,];
-        return $data;
+        return ['invoices' => $invoices,];
     }
 
     public function addInvoice(): array
@@ -81,9 +79,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
 
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
-        $data = ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'bookings' => $bookings, 'languages' => $languages];
-
-        return $data;
+        return ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'bookings' => $bookings, 'languages' => $languages];
     }
 
     public function store(Request $request)
@@ -181,9 +177,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
 
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
-        $data = ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'invoice' => $invoice, 'bookings' => $bookings, 'languages' => $languages];
-
-        return $data;
+        return ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'invoice' => $invoice, 'bookings' => $bookings, 'languages' => $languages];
     }
 
     public function delete(int $id)

@@ -45,8 +45,7 @@ class CalendarRepository implements CalendarRepositoryInterface
         }
 
         $currencySymbol = $currency->symbol ?? "$";
-
-        $data = [
+        return [
             'cartypes'       => $cartypes,
             'customerss'     => $customerss,
             'Vehicles'       => $Vehicles,
@@ -57,7 +56,6 @@ class CalendarRepository implements CalendarRepositoryInterface
             'customers'      => $customers,
             'currencySymbol' => $currencySymbol,
         ];
-        return $data;
     }
 
     public function getCalenderBooking(Request $request): array

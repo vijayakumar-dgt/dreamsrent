@@ -16,7 +16,7 @@ class MessageRepository implements MessageRepositoryInterface
         $sender = current_user();
         $receiver = User::where('user_type', 1)->first();
         $lastMessage = null;
-        if ($sender) {
+        if ($sender instanceof \Illuminate\Contracts\Auth\Authenticatable) {
             $lastMessage = Message::where(function ($query) use ($sender) {
                 $query->where(function ($query) use ($sender) {
                     $query->where('sender_id', $sender->getAuthIdentifier())
@@ -119,11 +119,7 @@ class MessageRepository implements MessageRepositoryInterface
             ->limit($perPage)
             ->get();
 
-        if ($offset === 0) {
-            $nextOffset = null;
-        } else {
-            $nextOffset = max(0, $offset - $perPage);
-        }
+        $nextOffset = $offset === 0 ? null : max(0, $offset - $perPage);
         $lastMessage = Message::where(function ($query) use ($authUserId, $messagePartnerId) {
             $query->where('sender_id', $authUserId)
                 ->where('receiver_id', $messagePartnerId);

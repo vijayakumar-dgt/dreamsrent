@@ -30,13 +30,11 @@ class ReviewRepository implements ReviewRepositoryInterface
             ->first();
 
         if (!$booking) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 403,
                 'message' => __('web.home.review_not_allowed')
             ];
-
-            return $response;
         }
 
         try {
@@ -60,22 +58,19 @@ class ReviewRepository implements ReviewRepositoryInterface
                 'user_id'   => $this->authUser->id ?? $request->user_id,
                 'comments'  => $request->comments,
             ]);
-            $response = [
+
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.home.review_create_success'),
             ];
-
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.common.default_create_error'),
                 'error'   => $e->getMessage()
             ];
-
-            return $response;
         }
     }
 
@@ -90,13 +85,11 @@ class ReviewRepository implements ReviewRepositoryInterface
             ->first();
 
         if (!$booking) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 403,
                 'message' => __('web.home.reply_not_allowed')
             ];
-
-            return $response;
         }
 
         try {
@@ -106,22 +99,18 @@ class ReviewRepository implements ReviewRepositoryInterface
                 'comments'  => $request->reply_comments,
             ]);
 
-            $response = [
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.home.reply_create_success'),
             ];
-
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.home.reply_create_error'),
                 'error'   => $e->getMessage()
             ];
-
-            return $response;
         }
     }
 
@@ -194,26 +183,24 @@ class ReviewRepository implements ReviewRepositoryInterface
                 ],
                 'reviews' => $reviewsData
             ];
-            $response = [
+            return [
                 'status' => 'success',
                 'code'   => 200,
                 'data'   => $finalData
             ];
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error'   => $e->getMessage()
             ];
-            return $response;
         }
     }
 
     public function fetchReviewReplies(int $reviewId): Collection
     {
-        $replies = ReviewMessages::select(
+        return ReviewMessages::select(
             'review_messages.comments',
             'review_messages.likes',
             'review_messages.dislikes',
@@ -235,8 +222,6 @@ class ReviewRepository implements ReviewRepositoryInterface
                 unset($reply->created_at);
                 return $reply;
             });
-
-        return $replies;
     }
 
     public function getRatingDescription(mixed $rating): string
@@ -322,23 +307,19 @@ class ReviewRepository implements ReviewRepositoryInterface
                 return $item;
             });
 
-            $response = [
+            return [
                 "draw"            => intval($request->draw),
                 "recordsTotal"    => $totalRecords,
                 "recordsFiltered" => $filteredRecords,
                 "data"            => $reviews,
             ];
-
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error'   => $e->getMessage()
             ];
-
-            return $response;
         }
     }
 
@@ -379,7 +360,7 @@ class ReviewRepository implements ReviewRepositoryInterface
                 ];
                 break;
             case 'custom':
-                if (!empty($customFromDate) && !empty($customToDate)) {
+                if ($customFromDate !== null && $customFromDate !== '' && $customFromDate !== '0' && ($customToDate !== null && $customToDate !== '' && $customToDate !== '0')) {
                     if (strtotime($customFromDate) > strtotime($customToDate)) {
                         return ['error' => 'Custom from date cannot be greater than to date'];
                     }
@@ -414,19 +395,17 @@ class ReviewRepository implements ReviewRepositoryInterface
     {
         try {
             Review::where('id', $id)->delete();
-            $response = [
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.user.review_delete_success')
             ];
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.common.default_delete_error')
             ];
-            return $response;
         }
     }
 
@@ -537,22 +516,19 @@ class ReviewRepository implements ReviewRepositoryInterface
                 return $item;
             });
 
-            $response = [
+            return [
                 "draw"            => intval($request->draw),
                 "recordsTotal"    => $totalRecords,
                 "recordsFiltered" => $filteredRecords,
                 "data"            => $reviews,
             ];
-
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error'   => $e->getMessage()
             ];
-            return $response;
         }
     }
 }

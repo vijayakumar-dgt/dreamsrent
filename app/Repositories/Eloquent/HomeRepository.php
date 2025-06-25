@@ -69,7 +69,6 @@ class HomeRepository implements HomeRepositoryInterface
         $pickuptime = "";
         $returndate = "";
         $returntime = "";
-        $vehiclemodel = "";
         $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
         $theme = $defaultTheme->value ?? 1;
         if ($theme == 1 || $theme == 4) {
@@ -86,7 +85,8 @@ class HomeRepository implements HomeRepositoryInterface
             $returntime = $returndatetime ? date('H:i:s', strtotime($returndatetime)) : '';
         }
         $_pickuplocation = Location::select('id', 'name')->where('status', 1)->where('language_id', $languageId)->where('name', 'like', '%' . $pickuplocation . '%')->first();
-        $data = [
+
+        return [
             'brands'                => $brands,
             'vehicleTypes'          => $vehicleTypes,
             'years'                 => $years,
@@ -105,14 +105,10 @@ class HomeRepository implements HomeRepositoryInterface
             'seo_title'             => __('web.common.vehicles'),
             'initialPickupLocation' => $pickuplocation ? $_pickuplocation : null
         ];
-
-        return $data;
     }
 
     public function getVehicleDetails(string $slug): array
     {
-        $slug = $slug;
-
         $vehicle = VehicleInfo::select('id', 'main_location_id', "other_location_id", 'views', "category_id")
             ->where('slug', $slug)->first();
         if (!$vehicle) {
@@ -142,7 +138,7 @@ class HomeRepository implements HomeRepositoryInterface
                     return $id != $vehicle->main_location_id;
                 });
 
-                if (!empty($filteredOtherIds)) {
+                if ($filteredOtherIds !== []) {
                     $otherLocations = Location::select('id', 'name', 'address')
                         ->whereIn('id', $filteredOtherIds)
                         ->get();
@@ -197,7 +193,8 @@ class HomeRepository implements HomeRepositoryInterface
         $author_email = $appAdmin->email ?? "";
         $author_phone = $appAdminDetails->mobile_number ?? "";
         $author_name = getCurrentUserFullname($appAdmin->id);
-        $response = [
+
+        return [
             'author_location' => $author_location,
             'author_profile'  => $author_profile,
             'author_email'    => $author_email,
@@ -218,23 +215,20 @@ class HomeRepository implements HomeRepositoryInterface
             'og_image'        => $og_image,
             'slug'            => $slug
         ];
-
-        return $response;
     }
 
     public function searchLocations(string $keyword): array
     {
-        if (!empty($keyword)) {
+        if ($keyword !== '' && $keyword !== '0') {
             $locations = Location::where("name", "LIKE", "%{$keyword}%")->select('id', 'name')->get();
         } else {
             $locations = collect();
         }
-        $response = [
+
+        return [
             'status' => true,
             'data'   => $locations
         ];
-
-        return $response;
     }
 
     public function getMaintenanceData(): array

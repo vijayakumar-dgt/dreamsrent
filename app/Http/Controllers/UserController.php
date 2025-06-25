@@ -85,7 +85,7 @@ class UserController extends Controller
     public function wishlists(Request $request): View
     {
         $seo_title = $this->userRepository->getWishlistData();
-        return view('frontend.user.wishlists', compact('seo_title'));
+        return view('frontend.user.wishlists', ['seo_title' => $seo_title]);
     }
 
     public function addToWishlist(Request $request): JsonResponse
@@ -137,7 +137,7 @@ class UserController extends Controller
     public function usersecurity(): View
     {
         $seo_title = __('web.user.security');
-        return view('frontend.user.security', compact('seo_title'));
+        return view('frontend.user.security', ['seo_title' => $seo_title]);
     }
 
     public function checkCurrentPassword(Request $request): JsonResponse
@@ -183,7 +183,7 @@ class UserController extends Controller
     public function reviews(Request $request): View
     {
         $seo_title = __('web.common.reviews');
-        return view('frontend.user.reviews', compact('seo_title'));
+        return view('frontend.user.reviews', ['seo_title' => $seo_title]);
     }
 
     public function storeEnquiry(Request $request): JsonResponse
@@ -207,7 +207,7 @@ class UserController extends Controller
     public function payments(Request $request): View
     {
         $seo_title = __('web.user.payments');
-        return view('frontend.user.payments', compact('seo_title'));
+        return view('frontend.user.payments', ['seo_title' => $seo_title]);
     }
 
     public function ajaxTransactions(Request $request): AnonymousResourceCollection
@@ -223,7 +223,7 @@ class UserController extends Controller
         $notifications = $this->userRepository->notifications();
 
         if ($request->ajax()) {
-            $view = view('frontend.user.partials.notification-items', compact('notifications'))->render();
+            $view = view('frontend.user.partials.notification-items', ['notifications' => $notifications])->render();
 
             return response()->json([
                 'html'          => $view,
@@ -235,7 +235,7 @@ class UserController extends Controller
             ]);
         }
 
-        return view('frontend.user.notifications', compact('notifications'));
+        return view('frontend.user.notifications', ['notifications' => $notifications]);
     }
 
     public function markNotificationAsRead(Request $request): JsonResponse

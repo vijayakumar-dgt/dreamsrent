@@ -88,7 +88,7 @@ class AppServiceProvider extends ServiceProvider
             $appLanguage = App::getLocale();
             $languageId = getLanguageId($appLanguage);
             $copyright = null;
-            if ($languageId) {
+            if ($languageId !== 0) {
                 $key = 'copy_right_' . $languageId;
                 $copyright = GeneralSetting::where('key', $key)
                     ->where('language_id', $languageId)->value('value');

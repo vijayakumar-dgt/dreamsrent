@@ -159,9 +159,9 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->limit(5)
             ->get()
             ->map(function ($user) {
-                $user->name = !empty($user->first_name)
-                    ? ucwords($user->first_name . ' ' . $user->last_name)
-                    : ucwords($user->name);
+                $user->name = empty($user->first_name)
+                    ? ucwords($user->name)
+                    : ucwords($user->first_name . ' ' . $user->last_name);
                 return $user;
             });
 
@@ -257,12 +257,10 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')
             ->where('invoices.deleted_at', null)->where('invoices.language_id', $languageId)->limit(5)->get()->map(function ($invoice) {
-                $invoice->full_name = !empty($invoice->first_name) ? ucwords($invoice->first_name . ' ' . $invoice->last_name) : '';
+                $invoice->full_name = empty($invoice->first_name) ? '' : ucwords($invoice->first_name . ' ' . $invoice->last_name);
                 return $invoice;
             });
 
-        $data = ['current_user' => $current_user, 'carTypes' => $carTypes, 'bookingCount' => $bookingCount, 'upcomingCount' => $upcomingCount, 'symbol' => $symbol, 'amount' => $amount, 'booking' => $booking, 'percentageChange' => $percentageChange, 'sign' => $sign, 'amountPercentageChange' => $amountPercentageChange, 'amountSymbol' => $amountSymbol, 'carSymbol' => $carSymbol, 'carPercentageChange' => $carPercentageChange, 'reservations' => $reservations, 'users' => $users, 'chartbooking' => $chartbooking, 'maintenances' => $maintenances, 'drivers' => $drivers, 'dates' => $dates, 'times' => $times, 'series' => $series, 'formattedDates' => $formattedDates, 'invoices' => $invoices];
-
-        return $data;
+        return ['current_user' => $current_user, 'carTypes' => $carTypes, 'bookingCount' => $bookingCount, 'upcomingCount' => $upcomingCount, 'symbol' => $symbol, 'amount' => $amount, 'booking' => $booking, 'percentageChange' => $percentageChange, 'sign' => $sign, 'amountPercentageChange' => $amountPercentageChange, 'amountSymbol' => $amountSymbol, 'carSymbol' => $carSymbol, 'carPercentageChange' => $carPercentageChange, 'reservations' => $reservations, 'users' => $users, 'chartbooking' => $chartbooking, 'maintenances' => $maintenances, 'drivers' => $drivers, 'dates' => $dates, 'times' => $times, 'series' => $series, 'formattedDates' => $formattedDates, 'invoices' => $invoices];
     }
 }

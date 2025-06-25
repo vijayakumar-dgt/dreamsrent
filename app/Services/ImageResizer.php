@@ -12,11 +12,6 @@ class ImageResizer
     /**
      * Upload and resize image (original, large, medium, thumbnail).
      * SVG will be stored as-is (not resized).
-     *
-     * @param UploadedFile $file
-     * @param string $baseFolder
-     * @param string|null $oldFilePath
-     * @return string|null
      */
     public function uploadFile(UploadedFile $file, string $baseFolder, ?string $oldFilePath = null): ?string
     {
@@ -37,7 +32,7 @@ class ImageResizer
             'thumbnail'  => [300, 200],
         ];
 
-        foreach ($sizes as $folder => $_) {
+        foreach (array_keys($sizes) as $folder) {
             $path = $basePath . ($folder === 'original' ? '' : "$folder/");
             File::ensureDirectoryExists($path, 0755, true);
         }
@@ -48,7 +43,7 @@ class ImageResizer
 
             if ($oldFilePath) {
                 $oldFilename = basename($oldFilePath);
-                foreach ($sizes as $folder => $_) {
+                foreach (array_keys($sizes) as $folder) {
                     $oldPath = $basePath . ($folder === 'original' ? '' : "$folder/") . $oldFilename;
                     if (File::exists($oldPath)) {
                         File::delete($oldPath);
@@ -83,7 +78,7 @@ class ImageResizer
 
         if ($oldFilePath) {
             $oldFilename = basename($oldFilePath);
-            foreach ($sizes as $folder => $_) {
+            foreach (array_keys($sizes) as $folder) {
                 $oldPath = $basePath . ($folder === 'original' ? '' : "$folder/") . $oldFilename;
                 if (File::exists($oldPath)) {
                     File::delete($oldPath);

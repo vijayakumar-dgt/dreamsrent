@@ -37,6 +37,7 @@
         "nunomaduro/larastan": "^3.4",
         "nunomaduro/phpinsights": "^2.13",
         "phpunit/phpunit": "^11.0.1",
+        "rector/rector": "^2.1",
         "squizlabs/php_codesniffer": "^3.12"
     },
     "autoload": {

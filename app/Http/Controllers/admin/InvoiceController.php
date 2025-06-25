@@ -44,13 +44,11 @@ class InvoiceController extends Controller
 
     public function destroy(?int $id): JsonResponse
     {
-        $response = $this->invoiceRepository->delete($id);
-        return $response;
+        return $this->invoiceRepository->delete($id);
     }
 
     public function update(InvoiceRequest $request, ?int $id): RedirectResponse
     {
-        $response = $this->invoiceRepository->update($request, $id);
-        return $response;
+        return $this->invoiceRepository->update($request, $id);
     }
 }

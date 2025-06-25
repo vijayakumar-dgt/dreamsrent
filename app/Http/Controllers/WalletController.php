@@ -14,9 +14,6 @@ use Stripe\Stripe;
 
 class WalletController extends Controller
 {
-    /**
-     * @var PayPalClient|null
-     */
     protected ?PayPalClient $provider;
 
     public function __construct()
@@ -35,7 +32,7 @@ class WalletController extends Controller
     public function wallet(Request $request): View
     {
         $seo_title = __('web.user.my_wallet');
-        return view('frontend.user.wallet', compact('seo_title'));
+        return view('frontend.user.wallet', ['seo_title' => $seo_title]);
     }
 
     public function addWallet(Request $request): JsonResponse
@@ -58,7 +55,7 @@ class WalletController extends Controller
 
         if ($paymentType === "Paypal") {
             try {
-                if (!$this->provider) {
+                if (!$this->provider instanceof \Srmklive\PayPal\Services\PayPal) {
                     return response()->json([
                         'success' => false,
                         'message' => 'PayPal is currently unavailable. Please choose another payment method.',

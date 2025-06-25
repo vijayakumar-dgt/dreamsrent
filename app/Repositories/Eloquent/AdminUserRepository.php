@@ -31,9 +31,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             ->where('status', 1)
             ->where('created_by', $userId)
             ->get();
-
-        $data = ['roles' => $roles];
-        return $data;
+        return ['roles' => $roles];
     }
 
     public function store(Request $request): array
@@ -276,7 +274,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             $notifications = [];
             $notificationCount = 0;
         }
-        $html = view('admin.partials.notification-popup', compact('notifications'))->render();
+        $html = view('admin.partials.notification-popup', ['notifications' => $notifications])->render();
         return [
             'status' => 'success',
             'code'   => 200,
@@ -308,8 +306,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
     public function notifications(Request $request): LengthAwarePaginator
     {
         $authUser = Auth::guard('admin')->user();
-        $notifications = Notification::where('user_id', $authUser->id)->orderBy('created_at', 'desc')->paginate(10);
-        return $notifications;
+        return Notification::where('user_id', $authUser->id)->orderBy('created_at', 'desc')->paginate(10);
     }
 
     public function markNotificationAsRead(Request $request): array

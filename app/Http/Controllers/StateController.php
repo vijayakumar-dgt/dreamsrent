@@ -20,7 +20,7 @@ class StateController extends Controller
     public function index(): View
     {
         $country_ids = $this->stateRepository->getCountries();
-        return view('admin.state.index', compact("country_ids"));
+        return view('admin.state.index', ['country_ids' => $country_ids]);
     }
 
     public function store(AddStateRequest $request): JsonResponse

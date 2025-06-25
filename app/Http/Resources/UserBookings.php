@@ -96,9 +96,6 @@ class UserBookings extends JsonResource
     {
         $authUser = current_user();
         $review = Review::where('vehicle_id', $vehicle_id)->where('user_id', $authUser->id)->first();
-        if ($review) {
-            return true;
-        }
-        return false;
+        return (bool) $review;
     }
 }

@@ -16,7 +16,7 @@ class MessageResource extends JsonResource
     public function toArray(Request $request): array
     {
         $authUser = current_user();
-        $authUserId = $authUser ? $authUser->getAuthIdentifier() : 0;
+        $authUserId = $authUser instanceof \Illuminate\Contracts\Auth\Authenticatable ? $authUser->getAuthIdentifier() : 0;
         $resource = $this->resource;
 
         return [
@@ -52,8 +52,7 @@ class MessageResource extends JsonResource
     {
         $user = User::where('user_type', 1)->first();
         if ($user && $user->userDetail) {
-            $profileImage = uploadedAsset($user->userDetail->profile_image, 'profile');
-            return $profileImage;
+            return uploadedAsset($user->userDetail->profile_image, 'profile');
         }
         return uploadedAsset('default', 'profile');
     }

@@ -33,7 +33,7 @@ class MessageController extends Controller
     {
         $users = User::where('user_type', 3)->orderBy('id', 'desc')->get();
         $sender = current_user();
-        return view('admin.chat.messages', compact('users', 'sender'));
+        return view('admin.chat.messages', ['users' => $users, 'sender' => $sender]);
     }
 
     public function fetchMessages(Request $request): JsonResponse
