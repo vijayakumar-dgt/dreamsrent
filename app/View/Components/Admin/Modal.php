@@ -8,18 +8,18 @@ use Illuminate\View\Component;
 
 class Modal extends Component
 {
-    public string $id;
-    public bool $isHeader;
-    public string $title;
-    public string $modalTitleId;
-    public string $className;
-    public string $dialogClassName;
-    public string $dialogPosition;
-    public string $formId;
-    public string $method;
-    public string $action;
-    public string $enctype;
-    public string $modalBodyClass = '';
+    protected string $id;
+    protected bool $isHeader;
+    protected string $title;
+    protected string $modalTitleId;
+    protected string $className;
+    protected string $dialogClassName;
+    protected string $dialogPosition;
+    protected string $formId;
+    protected string $method;
+    protected string $action;
+    protected string $enctype;
+    protected string $modalBodyClass = '';
 
     /**
      * Create a new component instance.
@@ -57,6 +57,19 @@ class Modal extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.admin.modal');
+        return view('components.admin.modal', [
+            'id' => $this->id,
+            'isHeader' => $this->isHeader,
+            'title' => $this->title,
+            'modalTitleId' => $this->modalTitleId,
+            'className' => $this->className,
+            'dialogClassName' => $this->dialogClassName,
+            'dialogPosition' => $this->dialogPosition,
+            'formId' => $this->formId,
+            'method' => $this->method,
+            'action' => $this->action,
+            'enctype' => $this->enctype,
+            'modalBodyClass' => $this->modalBodyClass,
+        ]);
     }
 }
