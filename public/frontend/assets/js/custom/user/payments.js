@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+/* global loadTranslationFile,  document, showToast, setTimeout, _l,  jQuery*/
+
+>>>>>>> 251b9448d968d0b7f0bb155be3bb954ba12621c5
 (($) => {
     "use strict";
 
     const fetchUserTransactions = async () => {
-        const limit = 5;
         const status = $(".status_filter.active").data('status') || '';
 =======
 /* global loadTranslationFile, document, showToast, setTimeout, _l, jQuery */
@@ -83,9 +87,14 @@
             }
 
             $(".payment-header").trigger("click");
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         } catch (error) {
             console.error(error);
+=======
+        } catch {
+            showToast("error", "Something went wrong. Please try again.");
+>>>>>>> 251b9448d968d0b7f0bb155be3bb954ba12621c5
         } finally {
             $(".table-loader").hide();
 =======

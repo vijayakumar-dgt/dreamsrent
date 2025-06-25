@@ -4,7 +4,7 @@
     "use strict";
 
     (async () => {
-        await loadTranslationFile('web', 'home');
+        await loadTranslationFile("web", "home");
         initLocationSearch();
     })();
 
@@ -51,15 +51,15 @@
             $suggestions.empty();
 
             if (data.length > 0) {
-                 data.forEach(location => {
-                    const $li = $('<li></li>')
-                        .attr('data-id', location.id)
+                data.forEach(location => {
+                    const $li = $("<li></li>")
+                        .attr("data-id", location.id)
                         .text(location.name);
                     $suggestions.append($li);
                 });
                 $searchBtn.prop("disabled", false);
             } else {
-                $suggestions.append(`<li class="no-results">${_l('web.home.no_location_found')}</li>`);
+                $suggestions.append(`<li class="no-results">${_l("web.home.no_location_found")}</li>`);
                 $searchBtn.prop("disabled", true);
             }
 
@@ -89,16 +89,16 @@
             url: "/user/add-to-wishlist",
             data: {
                 id: id,
-                _token: $('meta[name="csrf-token"]').attr("content")
+                _token: $("meta[name=\"csrf-token\"]").attr("content")
             },
             dataType: "json",
             success: function (response) {
                 showToast(response.status, response.message);
             },
             error: function () {
-                showToast('error', 'Something went wrong. Please try again.');
+                showToast("error", "Something went wrong. Please try again.");
             }
         });
     });
-    
+
 })();

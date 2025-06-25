@@ -24,11 +24,11 @@
     }
 
     window._l = function(key, replacements = {}) {
-        const [file, ...keys] = key.split('.');
+        const [file, ...keys] = key.split(".");
         let translation = keys.reduce((obj, i) => obj?.[i] ?? key, window.translations[file] || {});
 
         Object.keys(replacements).forEach((placeholder) => {
-            const regex = new RegExp(`:${placeholder}`, 'g');
+            const regex = new RegExp(`:${placeholder}`, "g");
             translation = translation.replace(regex, replacements[placeholder]);
         });
 

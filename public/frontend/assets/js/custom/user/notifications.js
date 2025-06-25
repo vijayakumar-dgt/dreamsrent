@@ -1,141 +1,161 @@
-<<<<<<< Updated upstream
-(($) => {
-=======
-/* global loadTranslationFile, document, showToast, _l, jQuery */
+/* global loadTranslationFile,  document, showToast, setTimeout, _l,  jQuery*/
 
-(function ($) {
->>>>>>> Stashed changes
+(($) => {
     "use strict";
 
-    const loadNotifications = async (page = 1) => {
+    const fetchUserTransactions = async () => {
+        const status = $(".status_filter.active").data("status") || "";
+        const customFromDate = $("#custom_from_date").val();
+        const customToDate = $("#custom_to_date").val();
+        const dateFilter = $(".datefilter.active").data("id");
+        const sortFilter = $(".sort-filter.active").data("id");
+
         try {
+            $(".table-loader").show();
+            $(".real-table").addClass("d-none");
+
+            const requestData = {
+                duration: dateFilter,
+                status: status,
+                custom_from_date: dateFilter === "custom" ? customFromDate : null,
+                custom_to_date: dateFilter === "custom" ? customToDate : null,
+                sortby: sortFilter,
+                _token: $("meta[name=\"csrf-token\"]").attr("content")
+            };
+
             const response = await $.ajax({
-                url: `/user/notifications?page=${page}`,
-                method: "GET",
+                url: "/user/ajax-transactions",
+                type: "POST",
+                data: requestData
             });
 
-            const $notificationList = $("#notification-list");
-            const $paginationContainer = $("#pagination-container");
-            const $notificationAction = $("#notification_action");
+            const table = $("#bookingTable").DataTable({
+                ordering: false,
+                searching: false,
+                pageLength: 10,
+                lengthChange: false,
+                language: {
+                    emptyTable: _l("web.common.empty_table"),
+                    info: `${_l("web.common.showing")} _START_ ${_l("web.common.to")} _END_ ${_l("web.common.of")} _TOTAL_ ${_l("web.common.entries")}`,
+                    infoEmpty: `${_l("web.common.showing")} 0 ${_l("web.common.to")} 0 ${_l("web.common.of")} 0 ${_l("web.common.entries")}`,
+                    infoFiltered: `(${_l("web.common.filtered_from")} _MAX_ ${_l("web.common.total_entries")})`,
+                    lengthMenu: `${_l("web.common.show")} _MENU_ ${_l("web.common.entries")}`,
+                    search: `${_l("web.common.search")}:`,
+                    zeroRecords: _l("web.common.no_matching_records"),
+                    paginate: {
+                        first: _l("web.common.first"),
+                        last: _l("web.common.last"),
+                        next: _l("web.common.next"),
+                        previous: _l("web.common.prev")
+                    }
+                },
+                destroy: true
+            });
 
-            if (response.count > 0) {
-                $notificationList.html(response.html);
-                $paginationContainer.html(renderPagination(response));
-                $notificationAction.removeClass("d-none");
+            table.clear();
+
+            if (response.status === "success" && response.data.length > 0) {
+                response.data.forEach(booking => {
+                    table.row.add($(createBookingCard(booking)));
+                });
+                setTimeout(() => {
+                    table.columns.adjust().draw();
+                });
             } else {
-                $notificationList.html(`<p class="text-center">${_l("web.user.no_notifications_found")}</p>`);
-                $paginationContainer.html("");
-                $notificationAction.addClass("d-none");
+                table.clear().draw();
+                $("#bookingTable tbody").html(`<tr><td colspan="5" class="text-center">${_l("we.common.no_bookings_found")}</td></tr>`);
             }
+
+            table.draw();
+            $(".payment-header").trigger("click");
         } catch (error) {
-            console.error('Error loading notifications:', error);
+            showToast("error", "Error fetching transactions:", $(error.message));
+        } finally {
+            $(".table-loader").hide();
+            $(".real-table").removeClass("d-none");
         }
     };
 
-    const renderPagination = (data) => {
-        const pageItems = Array.from({ length: data.last_page }, (_, i) => {
-            const pageNum = i + 1;
-            const activeClass = pageNum === data.current_page ? "active" : "";
-            return `
-                <li class="page-item ${activeClass}">
-                    <a class="page-link" href="#" data-page="${pageNum}">
-                        ${pageNum}
-                    </a>
-                </li>
-            `;
-        }).join("");
-
-        const prevDisabled = data.prev_page_url ? "" : "disabled";
-        const nextDisabled = data.next_page_url ? "" : "disabled";
+    const createBookingCard = (booking) => {
+        const statusLabel = formatStatusLabel(booking.payment_status);
+        const drivingType = (booking.driving_type || "").replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+        const paymentType = booking.payment_type ? booking.payment_type.charAt(0).toUpperCase() + booking.payment_type.slice(1) : "";
 
         return `
-            <nav class="custom-pagination">
-                <ul class="pagination justify-content-center align-items-center">
-                    <li class="page-item ${prevDisabled}">
-                        <a class="page-link" href="#" data-page="${data.current_page - 1}">
-                            <i class="fas fa-arrow-left me-1"></i> ${_l("web.user.prev")}
+            <tr>
+                <td><a href="javascript:void(${booking.id});" class="view_booking" data-id="${booking.id}">#${booking.reservation_id}</a></td>
+                <td>
+                    <div class="table-avatar">
+                        <a href="${booking.vehicle_page_url}" target="_blank" class="avatar flex-shrink-0">
+                            <img class="avatar-img" src="${booking.vehicle_image}" alt="${booking.vehicle_name || ""}">
                         </a>
-                    </li>
-                    ${pageItems}
-                    <li class="page-item ${nextDisabled}">
-                        <a class="page-link" href="#" data-page="${data.current_page + 1}">
-                            ${_l("web.user.next")} <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        `;
+                        <div class="table-head-name flex-grow-1">
+                            <a href="${booking.vehicle_page_url}" target="_blank">${booking.vehicle_name || ""}</a>
+                            <p>${drivingType}</p>
+                        </div>
+                    </div>
+                </td>
+                <td><p><span class="d-block">${booking.formated_booked_on || ""}</span></p></td>
+                <td><p class="text-darker">${booking.currency}${booking.total_amount}</p></td>
+                <td><span class="badge badge-light-secondary">${paymentType}</span></td>
+                <td>${statusLabel}</td>
+            </tr>`;
     };
 
-    const handleAjaxRequest = async (url, data, successCallback) => {
-        try {
-            const response = await $.ajax({
-                type: "POST",
-                url,
-                data: {
-                    ...data,
-                    _token: $("meta[name=\"csrf-token\"]").attr("content")
-                },
-                dataType: "json"
-            });
-
-            if (response.code === 200 || response.status === "success") {
-                showToast("success", response.message);
-                if (typeof successCallback === "function") {
-                    successCallback();
-                }
-            } else {
-                showToast("error", response.message);
-            }
-        } catch (err) {
-            showToast("error", err.message || "An error occurred");
-        }
+    const formatStatusLabel = (status) => {
+      const statusLabels = {
+        1: `<span class="badge badge-light-warning">${_l("web.common.pending")}</span>`,
+        2: `<span class="badge badge-light-success">${_l("web.common.completed")}</span>`,
+        3: `<span class="badge badge-light-danger">${_l("web.common.failed")}</span>`
+      };
+      return statusLabels[status] || "<span class='badge badge-light-danger'>" + "NA</span>";
     };
 
-    $(document).on("click", ".pagination .page-link", (e) => {
-        e.preventDefault();
-        const page = $(e.currentTarget).data("page");
-        if (page) {
-            loadNotifications(page);
+    $(document).on("click", "#apply-custom-filter", () => {
+        const customFromDate = $("#custom_from_date").val();
+        const customToDate = $("#custom_to_date").val();
+
+        if (!customFromDate || !customToDate) {
+            $("#custom_date_error").text(`${_l("web.common.enter_from_to_date")}`);
+            return;
+        }
+
+        const fromDate = new Date(customFromDate);
+        const toDate = new Date(customToDate);
+
+        if (toDate < fromDate) {
+            $("#custom_date_error").text(`${_l("web.common.to_date_must_greater")}`);
+            return;
+        }
+
+        $("#custom_date_error").text("");
+        $("#custom_date").modal("hide");
+        fetchUserTransactions();
+    });
+
+    $(document).on("click", ".datefilter", function () {
+        const selectedFilter = $(this).data("id");
+
+        $(".datefilter").removeClass("active");
+        $(this).addClass("active");
+        $(".datefilter_text").text($(this).text().trim());
+
+        if (selectedFilter !== "custom") {
+            $("#custom_from_date, #custom_to_date").val("");
+            fetchUserTransactions();
         }
     });
 
-    $(document).on("click", "#markAllAsRead", () => {
-        handleAjaxRequest("/user/mark-all-notifications-as-read", {}, loadNotifications);
-    });
-
-    $(document).on("click", ".notificationitem", (e) => {
-        const id = $(e.currentTarget).data("id");
-        if (id) {
-            handleAjaxRequest("/user/mark-notification-as-read", { id }, loadNotifications);
-        }
-    });
-
-    $(document).on("click", ".del_notification", (e) => {
-        const id = $(e.currentTarget).data("id");
-        $("#delete_notification .deletebtn").data("id", id);
-        $("#delete_notification").modal("show");
-    });
-
-    $(document).on("click", "#delete_notification .deletebtn", () => {
-        const id = $("#delete_notification .deletebtn").data("id");
-        if (id) {
-            handleAjaxRequest("/user/delete-notification", { id }, loadNotifications);
-            $("#delete_notification").modal("hide");
-        }
-    });
-
-    $(document).on("click", "#deleteAll", () => {
-        $("#deleteAllNotifications").modal("show");
-    });
-
-    $(document).on("click", ".deleteAllNotifications", () => {
-        handleAjaxRequest("/user/delete-all-notifications", {}, loadNotifications);
-        $("#deleteAllNotifications").modal("hide");
+    $(document).on("click", ".sort-filter", function () {
+        $(".sort-filter").removeClass("active");
+        $(this).addClass("active");
+        $(".sortfilter_text").text($(this).text().trim());
+        fetchUserTransactions();
     });
 
     (async () => {
         await loadTranslationFile("web", "user,common");
-        loadNotifications();
+        fetchUserTransactions();
     })();
+
 })(jQuery);

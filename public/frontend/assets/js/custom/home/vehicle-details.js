@@ -357,7 +357,7 @@
                 },
                 headers: {
                     Accept: "application/json",
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr(
                         "content"
                     ),
                 },
@@ -410,7 +410,7 @@
             },
             headers: {
                 Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr("content"),
             },
             success: function (response) {
                 if (response.code === 200) {
@@ -466,7 +466,7 @@
                 }
 
                 if (returnDate) {
-                    const returnOnly = returnDate.clone().startOf("day");
+                    returnDate.clone().startOf("day");
                 } else {
                     $(".bookingpickupdate")
                         .data("DateTimePicker")
@@ -621,7 +621,7 @@
             },
             headers: {
                 Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr("content"),
             },
             success: function (response) {
                 if (response.code === 200) {
@@ -706,15 +706,15 @@
                 let starsHtml = "";
                 for (let i = 1; i <= 5; i++) {
                     if (i <= Math.floor(review.average_ratings)) {
-                        starsHtml += '<i class="fas fa-star filled"></i>';
+                        starsHtml += "<i class=\"fas fa-star filled\"></i>";
                     } else if (
                         i === Math.ceil(review.average_ratings) &&
                         review.average_ratings % 1 !== 0
                     ) {
                         starsHtml +=
-                            '<i class="fas fa-star-half-alt filled"></i>';
+                            "<i class=\"fas fa-star-half-alt filled\"></i>";
                     } else {
-                        starsHtml += '<i class="far fa-star"></i>';
+                        starsHtml += "<i class=\"far fa-star\"></i>";
                     }
                 }
                 $("#review_list_container").append(`
@@ -912,7 +912,7 @@
                     contentType: false,
                     headers: {
                         Accept: "application/json",
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr(
                             "content"
                         ),
                     },
@@ -970,7 +970,7 @@
             url: "/vehicle-list-detail-api",
             data: {
                 vehicle_slug: slug,
-                _token: $('meta[name="csrf-token"]').attr("content"),
+                _token: $("meta[name=\"csrf-token\"]").attr("content"),
             },
             beforeSend: function () {
                 $(".skeleton-container").removeClass("d-none");
@@ -1032,15 +1032,15 @@
         let starsHtml = "";
 
         for (let i = 0; i < fullStars; i++) {
-            starsHtml += `<i class="fas fa-star filled"></i>`;
+            starsHtml += "<i class=\"fas fa-star filled\"></i>";
         }
 
         if (halfStar) {
-            starsHtml += `<i class="fas fa-star-half-alt filled"></i>`;
+            starsHtml += "<i class=\"fas fa-star-half-alt filled\"></i>";
         }
 
         for (let i = 0; i < emptyStars; i++) {
-            starsHtml += `<i class="fas fa-star"></i>`;
+            starsHtml += "<i class=\"fas fa-star\"></i>";
         }
 
         starsHtml += `<span class="d-inline-block average-list-rating">(${rating.toFixed(
@@ -1231,7 +1231,7 @@
                 )}</div>`;
             }
 
-            html += `</div>`;
+            html += "</div>";
             descriptionSection.html(html).show();
 
             // Click handler
@@ -1271,7 +1271,7 @@
             const featuresPerColumn = Math.ceil(
                 vehicle.features.length / columnCount
             );
-            let html = '<div class="row">';
+            let html = "<div class=\"row\">";
 
             for (let i = 0; i < columnCount; i++) {
                 const columnFeatures = vehicle.features.slice(
@@ -1280,7 +1280,7 @@
                 );
 
                 if (columnFeatures.length > 0) {
-                    html += '<div class="col-md-4"><ul>';
+                    html += "<div class=\"col-md-4\"><ul>";
                     columnFeatures.forEach((feature) => {
                         html += `<li><span><i class="bx bx-check-double"></i></span>${feature}</li>`;
                     });
@@ -1562,8 +1562,8 @@
             smartSpeed: 2000,
             autoplay: false,
             navText: [
-                '<i class="fa-solid fa-chevron-left"></i>',
-                '<i class="fa-solid fa-chevron-right"></i>',
+                "<i class=\"fa-solid fa-chevron-left\"></i>",
+                "<i class=\"fa-solid fa-chevron-right\"></i>",
             ],
             responsive: {
                 0: {
@@ -1590,7 +1590,7 @@
             url: "/user/add-to-wishlist",
             data: {
                 id: id,
-                _token: $('meta[name="csrf-token"]').attr("content"),
+                _token: $("meta[name=\"csrf-token\"]").attr("content"),
             },
             dataType: "json",
             success: function (response) {

@@ -1,22 +1,12 @@
-<<<<<<< Updated upstream
+/* global loadTranslationFile, document, showToast, setTimeout, FormData, _l, jQuery, mqtt*/
+
 (function ($) {
     "use strict";
 
     (async () => {
-        await loadTranslationFile('web', 'user,common');
-        const adminId = $("#messageinput").data('receiverid');
-        const customerId = $("#messageinput").data('senderid');
-=======
-/* global loadTranslationFile, document, showToast, setTimeout, FormData, _l, jQuery, mqtt */
-
-(function ($) {
-    "use strict";
-
-    (async function initChat() {
         await loadTranslationFile("web", "user,common");
 
         const customerId = $("#messageinput").data("senderid");
->>>>>>> Stashed changes
         listenMqttForNewMessages(customerId);
         fetchMessages();
     })();
@@ -28,12 +18,13 @@
 
     /**
      * Fetch messages from server.
-     * @param {boolean} initial
-     * @param {boolean} reset
+     * @param {boolean} initial - Whether this is the initial fetch.
+     * @param {boolean} reset - Whether to reset offsets.
      */
     async function fetchMessages(initial = true, reset = false) {
-        if (isLoading || offset === null) return;
-
+        if (isLoading || offset === null) {
+            return;
+        }
         isLoading = true;
 
         if (reset) {
@@ -44,7 +35,6 @@
         $.ajax({
             url: "/user/fetch-messages",
             type: "POST",
-            dataType: "json",
             data: {
                 user_id: userId,
                 offset: offset,
@@ -52,10 +42,12 @@
                 last_offset: lastOffset,
                 _token: $("meta[name='csrf-token']").attr("content")
             },
-            beforeSend: function () {
-                if (initial) $("#messagearea").html("");
+            beforeSend: () => {
+                if (initial) {
+                    $("#messagearea").html("");
+                }
             },
-            success: function (response) {
+            success: (response) => {
                 if (response.code === 200 && response.messages.length > 0) {
                     updateMessageView(response.messages, initial);
                     offset = response.next_offset;
@@ -70,32 +62,33 @@
                 if (offset === null) {
                     $("#messagebody").off("scroll");
                 }
+                isLoading = false;
             },
-            complete: function () {
+            error: () => {
                 isLoading = false;
             }
         });
     }
 
     function updateMessageView(messages, initial) {
-        const $container = $("#messagebody");
-        const $area = $("#messageArea");
-        const existing = new Set();
+        const messageContainer = $("#messagebody");
+        const messageArea = $("#messageArea");
+        const existingMessages = new Set();
 
         $(".message-card").each(function () {
-            existing.add($(this).data("message-id"));
+            existingMessages.add($(this).data("message-id"));
         });
 
-        const newMessages = messages.filter(msg => !existing.has(msg.id));
+        const newMessages = messages.filter((msg) => !existingMessages.has(msg.id));
         const html = newMessages.map(createMessageCard).join("");
 
         if (initial) {
-            $area.html(html);
-            scrollToBottom($container);
+            messageArea.html(html);
+            scrollToBottom(messageContainer);
         } else {
-            const oldHeight = $container[0].scrollHeight;
-            $area.prepend(html);
-            adjustScrollPosition($container, oldHeight);
+            const oldScrollHeight = messageContainer[0].scrollHeight;
+            messageArea.prepend(html);
+            adjustScrollPosition(messageContainer, oldScrollHeight);
         }
 
         setTimeout(() => {
@@ -103,16 +96,16 @@
         }, 10);
     }
 
-    function scrollToBottom($container) {
+    function scrollToBottom(container) {
         setTimeout(() => {
-            $container.scrollTop($container[0].scrollHeight);
+            container.scrollTop(container[0].scrollHeight);
         }, 10);
     }
 
-    function adjustScrollPosition($container, oldHeight) {
+    function adjustScrollPosition(container, oldScrollHeight) {
         setTimeout(() => {
-            const newHeight = $container[0].scrollHeight;
-            $container.scrollTop(newHeight - oldHeight);
+            const newScrollHeight = container[0].scrollHeight;
+            container.scrollTop(newScrollHeight - oldScrollHeight);
         }, 50);
     }
 
@@ -137,11 +130,11 @@
             connectTimeout: 5000
         });
 
-        client.on("connect", function () {
+        client.on("connect", () => {
             client.subscribe(topic, { qos: 1 });
         });
 
-        client.on("message", function () {
+        client.on("message", () => {
             offset = "";
             fetchMessages(true, true);
         });
@@ -154,10 +147,10 @@
     });
 
     $(document).on("click", "#sendmsg", function () {
-        const $input = $("#messageinput");
-        const message = $input.val().trim();
-        const senderId = $input.data("senderid");
-        const receiverId = $input.data("receiverid");
+        const $messageInput = $("#messageinput");
+        const message = $messageInput.val().trim();
+        const senderId = $messageInput.data("senderid");
+        const receiverId = $messageInput.data("receiverid");
         const topic = `dreamsrent/to_user/${receiverId}`;
         const file = $("#fileupload")[0].files[0];
 
@@ -183,23 +176,23 @@
             data: formData,
             processData: false,
             contentType: false,
-            beforeSend: function () {
-                $input.val("").prop("disabled", true);
+            beforeSend: () => {
+                $messageInput.val("").prop("disabled", true);
                 $("#sendmsg").prop("disabled", true);
             },
-            success: function () {
+            success: () => {
                 offset = "";
                 lastOffset = "";
                 fetchMessages(true, true);
             },
-            complete: function () {
-                $input.prop("disabled", false);
+            complete: () => {
+                $messageInput.prop("disabled", false);
                 $("#sendmsg").prop("disabled", false);
                 $("#fileupload").val("");
-                $input.val("");
+                $("#messageinput").val("");
                 $(".selected_file").text("").addClass("d-none");
             },
-            error: function () {
+            error: () => {
                 offset = "";
                 lastOffset = "";
                 fetchMessages(true, true);
@@ -208,22 +201,21 @@
     });
 
     function createMessageCard(message) {
-        const isRight = message.alignment === "right";
-        const msgContent =
-            message.message_type === "text"
-                ? message.message
-                : `<a href="${message.file_path}" target="_blank"><i class="fa fa-link"></i> ${message.message}</a>`;
+        const isRightAligned = message.alignment === "right";
+        const messageContent = message.message_type === "text"
+            ? message.message
+            : `<a href="${message.file_path}" target="_blank"><i class="fa fa-link"></i> ${message.message}</a>`;
 
         return `
-            <li class="notify-block ${isRight ? "sent" : "received"} d-flex message-card" data-message-id="${message.id}">
-                ${!isRight ? `
+            <li class="notify-block ${isRightAligned ? "sent" : "received"} d-flex">
+                ${!isRightAligned ? `
                     <div class="avatar flex-shrink-0">
                         <img src="${message.admin_avatar}" alt="User Image" class="avatar-img rounded-circle">
                     </div>` : ""}
                 <div class="media-body flex-grow-1">
                     <div class="msg-box">
                         <div>
-                            <p>${msgContent}</p>
+                            <p>${messageContent}</p>
                             <ul class="chat-msg-info">
                                 <li>
                                     <div class="chat-time">
@@ -239,17 +231,12 @@
 
     $(document).on("change", "#fileupload", function () {
         const fileName = this.files.length > 0 ? this.files[0].name : "";
-        const shortName = fileName.length > 20 ? `${fileName.slice(0, 20)}...` : fileName;
+        const displayName = fileName.length > 20 ? `${fileName.substring(0, 20)}...` : fileName;
 
         if (!fileName) {
             $(".selected_file").text("").addClass("d-none");
         } else {
-            $(".selected_file").removeClass("d-none").text(shortName);
+            $(".selected_file").removeClass("d-none").text(displayName);
         }
     });
-<<<<<<< Updated upstream
 })(jQuery);
-=======
-
-})(jQuery);
->>>>>>> Stashed changes

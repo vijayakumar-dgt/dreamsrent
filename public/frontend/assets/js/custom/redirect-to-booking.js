@@ -2,5 +2,5 @@
 
 (function () {
     "use strict";
-     document.getElementById('auto-booking-form').submit();
+     document.getElementById("auto-booking-form").submit();
 })();

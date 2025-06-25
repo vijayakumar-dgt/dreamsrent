@@ -1,3 +1,5 @@
+/* global loadTranslationFile,  document, showToast, setTimeout, moment, FormData, window, _l,  jQuery,  FullCalendar*/
+
 (($) => {
     "use strict";
 
@@ -21,70 +23,6 @@
                     minlength: _l("web.home.comments_minlength")
                 }
             },
-<<<<<<< Updated upstream
-        },
-        errorPlacement: function (error, element) {
-            if (element.hasClass("select2-hidden-accessible")) {
-                var errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            } else {
-                var errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            }
-        },
-        highlight: function (element) {
-            if ($(element).hasClass("select2-hidden-accessible")) {
-                $(element)
-                    .next(".select2-container")
-                    .addClass("is-invalid")
-                    .removeClass("is-valid");
-            }
-            $(element).addClass("is-invalid").removeClass("is-valid");
-        },
-        unhighlight: function (element) {
-            if ($(element).hasClass("select2-hidden-accessible")) {
-                $(element)
-                    .next(".select2-container")
-                    .removeClass("is-invalid")
-                    .addClass("is-valid");
-            }
-            $(element).removeClass("is-invalid").addClass("is-valid");
-            var errorId = element.id + "_error";
-            $("#" + errorId).text("");
-        },
-        onkeyup: function (element) {
-            $(element).valid();
-        },
-        onchange: function (element) {
-            $(element).valid();
-        },
-        submitHandler: function (form) {
-            let formData = new FormData();
-            formData.append("comments", $("#comments").val());
-            formData.append(
-                "service_ratings",
-                $('#service_ratings input[type="checkbox"]:checked').length
-            );
-            formData.append(
-                "location_ratings",
-                $('#location_ratings input[type="checkbox"]:checked').length
-            );
-            formData.append(
-                "facility_ratings",
-                $('#facility_ratings input[type="checkbox"]:checked').length
-            );
-            formData.append(
-                "value_for_money_ratings",
-                $('#value_for_money_ratings input[type="checkbox"]:checked')
-                    .length
-            );
-            formData.append(
-                "cleanliness_ratings",
-                $('#cleanliness_ratings input[type="checkbox"]:checked')
-                    .length
-            );
-            formData.append("vehicle_id", $("#reviewForm .vehicle_id").val());
-=======
             errorPlacement(error, element) {
                 const errorId = `${element.attr("id")}_error`;
                 $(`#${errorId}`).text(error.text());
@@ -120,7 +58,6 @@
                 formData.append("value_for_money_ratings", $("#value_for_money_ratings input[type=\"checkbox\"]:checked").length);
                 formData.append("cleanliness_ratings", $("#cleanliness_ratings input[type=\"checkbox\"]:checked").length);
                 formData.append("vehicle_id", $("#reviewForm .vehicle_id").val());
->>>>>>> Stashed changes
 
                 $.ajax({
                     type: "POST",
@@ -172,7 +109,6 @@
 })();
 
 const fetchUserBookings = (callback = null) => {
-    const limit = 3;
     const status = $(".status_filter.active").data("status") || "";
     const customFrom = $("#custom_from_date").val();
     const customTo = $("#custom_to_date").val();
@@ -250,11 +186,6 @@ const fetchUserBookings = (callback = null) => {
         complete: () => {
             toggleLoader(isCalendar, false);
         }
-<<<<<<< Updated upstream
-    },
-    error: console.log
-=======
->>>>>>> Stashed changes
     });
 };
 
@@ -774,43 +705,4 @@ $(document).ready(function () {
         $("#addReviewModal").modal("show");
     });
 });
-<<<<<<< Updated upstream
-$(".location_ratings").on("click", function () {
-    let selectedValue = $(this).val();
-    $(".location_ratings").each(function () {
-        $(this).prop("checked", $(this).val() >= selectedValue);
-    });
-});
-$(".facility_ratings").on("click", function () {
-    let selectedValue = $(this).val();
-    $(".facility_ratings").each(function () {
-        $(this).prop("checked", $(this).val() >= selectedValue);
-    });
-});
-$(".value_for_money_ratings").on("click", function () {
-    let selectedValue = $(this).val();
-    $(".value_for_money_ratings").each(function () {
-        $(this).prop("checked", $(this).val() >= selectedValue);
-    });
-});
-$(".cleanliness_ratings").on("click", function () {
-    let selectedValue = $(this).val();
-    $(".cleanliness_ratings").each(function () {
-        $(this).prop("checked", $(this).val() >= selectedValue);
-    });
-});
-
-$(document).on('click', '.add_review', e => {
-    let vehicle_id = $(e.currentTarget).data('vehicle_id');
-    console.log(vehicle_id);
-    
-    $("#reviewForm .vehicle_id").val(vehicle_id);
-    $("#addReviewModal").modal("show");
-});
-
 })(jQuery);
-
-
-=======
-})(jQuery);
->>>>>>> Stashed changes
