@@ -8,13 +8,13 @@ use Illuminate\View\Component;
 
 class Breadcrumb extends Component
 {
-    public $title;
-    public $breadcrumbs;
-    public $buttonText;
-    public $buttonId;
-    public $modalId;
-    public $permissionKey;
-    public $permissionModule;
+    protected $title;
+    protected $breadcrumbs;
+    protected $buttonText;
+    protected $buttonId;
+    protected $modalId;
+    protected $permissionKey;
+    protected $permissionModule;
 
     /**
      * Create a new component instance.
@@ -42,6 +42,14 @@ class Breadcrumb extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.admin.breadcrumb');
+        return view('components.admin.breadcrumb',[
+            'title' => $this->title,
+            'breadcrumbs' => $this->breadcrumbs,
+            'buttonText' => $this->buttonText,
+            'buttonId' => $this->buttonId,
+            'modalId' => $this->modalId,
+            'permissionKey' => $this->permissionKey,
+            'permissionModule' => $this->permissionModule
+        ]);
     }
 }
