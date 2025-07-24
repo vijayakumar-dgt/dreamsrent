@@ -1,0 +1,60 @@
+<?php
+
+namespace Modules\CarInfo\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Modules\CarInfo\Http\Requests\BrandRequest;
+use Modules\CarInfo\Models\Category;
+use Modules\CarInfo\Repositories\Contracts\BrandRepositoryInterface;
+
+class BrandController extends Controller
+{
+    protected BrandRepositoryInterface $brandRepository;
+
+    public function __construct(BrandRepositoryInterface $brandRepository)
+    {
+        $this->brandRepository = $brandRepository;
+    }
+
+    public function index(): View
+    {
+        $langID = current_user()->language_id ?? 1;
+        $category = Category::orderBy('id', 'desc')->where("language_id", $langID)->get();
+        return view('carinfo::brand.index', compact('category'));
+    }
+
+    public function store(BrandRequest $request)
+    {
+        $response = $this->brandRepository->store($request);
+        return response()->json($response, $response['code']);
+    }
+
+    public function list(Request $request): JsonResponse
+    {
+        $response = $this->brandRepository->list($request);
+        return response()->json($response, $response['code']);
+    }
+
+    public function edit(Request $request): JsonResponse
+    {
+        $id = $request->id;
+        $response = $this->brandRepository->edit($id);
+        return response()->json($response, $response['code']);
+    }
+
+    public function delete(Request $request): JsonResponse
+    {
+        $id = $request->id;
+        $response = $this->brandRepository->delete($id);
+        return response()->json($response, $response['code']);
+    }
+
+    public function getBrands(Request $request): JsonResponse
+    {
+        $response = $this->brandRepository->getBrands($request);
+        return response()->json($response, $response['code']);
+    }
+}

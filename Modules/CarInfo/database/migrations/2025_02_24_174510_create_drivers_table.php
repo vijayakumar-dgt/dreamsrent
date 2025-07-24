@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class () extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('drivers', function (Blueprint $table) {
+            $table->id();
+            $table->string('image')->nullable();
+            $table->string('driver_name')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('email')->nullable();
+            $table->string('address')->nullable();
+            $table->text('assigned_cars')->nullable();
+            $table->string('card_number')->nullable();
+            $table->string('date_of_issue')->nullable();
+            $table->string('valid_date')->nullable();
+            $table->boolean('status')->default(true);
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('drivers');
+    }
+};

@@ -1,0 +1,99 @@
+@extends('admin.admin')
+
+@section('meta_title', __('admin.support.contact_messages') . ' || ' . $companyName)
+
+@section('content')
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+        <div class="content me-4">
+            <x-admin.breadcrumb 
+                :title="__('admin.support.contact_messages')" 
+                :breadcrumbs="[
+                    __('admin.support.contact_messages') => ''
+                ]"
+            />
+            <!-- Table Header -->
+            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
+                <div class="d-flex align-items-center flex-wrap row-gap-3">
+                    <div class="dropdown sort-dropdown me-2">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center sort-dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="ti ti-filter me-1 sort"></i> {{ __('admin.common.sort_by_latest') }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end p-2">
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="latest">{{ __('admin.common.latest') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="ascending">{{ __('admin.common.ascending') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="descending">{{ __('admin.common.descending') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_month">{{ __('admin.common.last_month') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">{{ __('admin.common.last_7_days') }}</button></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+                    <div class="top-search">
+                        <div class="top-search-group">
+                            <span class="input-icon">
+                                <i class="ti ti-search"></i>
+                            </span>
+                            <input type="text" class="form-control search-input" placeholder="{{ __('admin.common.search') }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Table Header -->
+
+            <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+                @include('admin.content-loader')
+            </div>
+
+            <!-- Custom Data Table -->
+            <div class="custom-datatable-filter table-responsive d-none real-table">
+                <table id="contactTable" class="table datatable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>{{ strtoupper(__('admin.support.from')) }}</th>
+                            <th>{{ strtoupper(__('admin.common.phone')) }}</th>
+                            <th>{{ strtoupper(__('admin.common.email')) }}</th>
+                            <th>{{ strtoupper(__('admin.support.created_date')) }}</th>
+                            <th>{{ strtoupper(__('admin.support.message')) }}</th>
+                            @if (hasPermission($permissions, 'contact_messages', 'delete'))
+                            <th>{{ strtoupper(__('admin.common.action')) }}</th>
+                            @endif
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <!-- Custom Data Table -->
+            <div class="table-footer d-none"></div>
+        </div>
+        @include('admin.partials.footer')
+    </div>
+    <!-- /Page Wrapper -->
+
+    <!-- Delete -->
+    <div class="modal fade" id="delete_contact">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <form id="contactDeleteForm">
+                        <input type="hidden" name="delete_id" id="delete_id">
+                        <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
+                            <i class="ti ti-trash-x fs-26"></i>
+                        </span>
+                        <h4 class="mb-1">{{ __('admin.support.delete_message') }}</h4>
+                        <p class="mb-3">{{ __('admin.support.delete_message_description') }}</p>
+                        <div class="d-flex justify-content-center">
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+                            <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete -->
+
+@endsection
+@push('scripts')
+<script src="{{ asset('backend/assets/js/communication/contact.js') }}"></script>
+@endpush

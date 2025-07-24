@@ -1,0 +1,23 @@
+namespace Modules\GeneralSetting\Repositories;
+
+use Modules\GeneralSetting\Entities\GeneralSetting;
+
+class NotificationSettingsRepository
+{
+    public function saveSettings(array $data): void
+    {
+        foreach ($data as $key => $value) {
+            if ($key === 'group_id') {
+                continue;
+            }
+
+            GeneralSetting::updateOrCreate(
+                ['key' => $key],
+                [
+                    'value'    => $value,
+                    'group_id' => $data['group_id']
+                ]
+            );
+        }
+    }
+}

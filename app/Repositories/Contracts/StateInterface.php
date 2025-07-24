@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Repositories\Contracts;
+
+interface StateInterface
+{
+    public function all();
+
+    public function find($id);
+
+    public function create(array $data);
+
+    public function update($id, array $data);
+
+    public function delete($id);
+
+    public function bulkDelete(array $ids);
+
+    public function search($search, $status = null, $orderBy = 'desc');
+
+    public function getCountries();
+}

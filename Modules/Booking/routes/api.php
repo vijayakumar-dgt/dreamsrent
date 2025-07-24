@@ -1,0 +1,23 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Modules\Booking\Http\Controllers\BookingController;
+use Modules\Booking\Http\Controllers\UserBookingController;
+
+/*
+ *--------------------------------------------------------------------------
+ * API Routes
+ *--------------------------------------------------------------------------
+ *
+ * Here is where you can register API routes for your application. These
+ * routes are loaded by the RouteServiceProvider within a group which
+ * is assigned the "api" middleware group. Enjoy building your API!
+ *
+*/
+
+Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
+    Route::apiResource('booking', BookingController::class)->names('booking');
+});
+
+
+Route::post('check-booking', [UserBookingController::class,'checkBooking']);

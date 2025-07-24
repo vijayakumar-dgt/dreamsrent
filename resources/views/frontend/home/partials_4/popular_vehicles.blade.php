@@ -1,0 +1,136 @@
+@php
+    $yachts = $section['section_content']['vehicles'] ?? [];
+    $brands = $section['section_content']['brands'] ?? [];
+@endphp
+<!-- Top Feature Yacht -->
+<section class="top-features-yachts">
+    <div class="sec-bg">
+        <img src="{{ asset('frontend/assets/img/bg/yacht-cat-sec-bg-01.png') }}" class="anchor-img" alt="Img">
+        <img src="{{ asset('frontend/assets/img/bg/yacht-cat-sec-bg-03.png') }}" class="design-round" alt="Img">
+        <img src="{{ asset('frontend/assets/img/bg/ship-part-bg-01.png') }}" alt="Bg">
+    </div>
+    <div class="container">
+        <div class="sec-title">
+            <h4>{{ __('web.home.select_from_professionals') }}</h4>
+        </div>
+        @if(!empty($brands) && count($brands) > 0)
+        <div class="charter-company-slider owl-carousel">
+            @foreach ($brands as $brand)
+            <div class="charter-company-logo">
+                <span><img src="{{ $brand->brand_image }}" alt="Icon"></span>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="col-md-12 mb-3">
+            <p class="text-center">{{ __('web.common.empty_table') }}</p>
+        </div>
+        @endif
+        <div class="top-rated-yachts">
+            <div class="row align-items-center">
+                <div class="col-lg-4">
+                    <div class="section-header-two">
+                        <h2>{{ $section['section_title'] ?? "" }}</h2>
+                        <p>{{ $section['section_label'] ?? "" }}</p>
+                        <div class="owl-nav slide-nav-1 nav-control"></div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="top-rated-yachts-slider owl-carousel">
+                        @if(!empty($yachts) && count($yachts) > 0)
+                        @foreach ($yachts as $yacht)
+                        <div class="top-rated-card">
+                            <div class="rated-yacht-img slide-card-images">
+                                <div class="image-slider owl-carousel">
+                                    @if(!empty($yacht['multiple_vehicle_images']) && count($yacht['multiple_vehicle_images']) > 0)
+                                    @foreach ($yacht['multiple_vehicle_images'] as $image)
+                                    <div class="slide-images">
+                                        <a href="{{ route('vehicleDetails', $yacht['slug']) }}">
+                                            <img src="{{ $image }}" class="img-fluid" alt="img">
+                                        </a>
+                                    </div>
+                                    @endforeach
+                                    @endif
+                                </div>
+                                @if($yacht['is_featured'] == 1)
+                                <div class="img-top-ribbon">
+                                    <span class="ribbon-text bg-danger">{{ __('web.common.featured') }}</span>
+                                </div>
+                                @elseif($yacht['is_top_rated'] == 1)
+                                <div class="img-top-ribbon">
+                                    <span class="ribbon-text bg-warning">{{ __('web.common.top_rated') }}</span>
+                                </div>
+                                @endif
+                            </div>
+                            @php
+                                $filledStars = floor($yacht['rating']);
+                                $emptyStars = 5 - $filledStars;
+                            @endphp
+                            <div class="rated-yacht-content">
+                                <div class="yacht-content-head">
+                                    <div class="head-items-left">
+                                        <h4><a href="{{ route('vehicleDetails', $yacht['slug']) }}">{{ $yacht['name'] ?? "" }}</a></h4>
+                                        <span class="d-flex align-items-center"><i class="bx bx-map me-2"></i>{{ $yacht['location'] ?? "" }}</span>
+                                    </div>
+                                    <div class="head-items-right">
+                                        <div class="rated-star">
+                                            @for($i = 0; $i < $filledStars; $i++)
+                                            <i class="bx bxs-star filled"></i>
+                                            @endfor
+                                            @for($i = 0; $i < $emptyStars; $i++)
+                                            <i class="bx bxs-star"></i>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="yacht-content-body">
+                                    <ul class="yacht-features-info">
+                                        <li>
+                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-01.svg" alt="Img"></span>
+                                            <h6>{{ __('web.home.people') }} <span> : {{ $yacht['passenger_capacity'] ?? 0 }}</span></h6>
+                                        </li>
+                                        <li>
+                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/color.svg" alt="Img"></span>
+                                            <h6>{{ __('web.common.color') }} <span> : {{ $yacht['color'] ?? "" }}</span></h6>
+                                        </li>
+                                        <li>
+                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-03.svg" alt="Img"></span>
+                                            <h6>{{ __('web.home.fuel') }} <span> : {{ $yacht['fuel_type'] ?? "" }}</span></h6>
+                                        </li>
+                                        <li>
+                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-04.svg" alt="Img"></span>
+                                            <h6>{{ __('web.home.build') }} <span> : {{ $yacht['year'] ?? "" }}</span></h6>
+                                        </li>
+                                        <li>
+                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="Img"></span>
+                                            <h6>{{ __('web.common.seats') }} <span> : {{ $yacht['num_seats'] ?? "" }}</span></h6>
+                                        </li>
+                                        <li>
+                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="Img"></span>
+                                            <h6>{{ __('web.home.mileage') }} <span> : {{ round($yacht['mileage']) ?? "" }}</span></h6>
+                                        </li>
+                                    </ul>
+                                </div>
+                                @php    
+                                    $prices = array_slice($yacht['price'][0], 0, 1);
+                                @endphp
+                                <div class="yacht-content-footer">
+                                    @foreach($prices as $price_type => $price_val)
+                                    <p>{{ __('web.home.from') }} <span>{{ $data['currency'] }}{{ $price_val }} </span> /{{ ucfirst($price_type) }}</p>
+                                    @endforeach
+                                    <div class="yacht-book-btn">
+                                        <a href="javascript:void(0);" class="yacht-user-img"><img src="{{ $yacht['avatar_image'] }}" alt="Img"></a>
+                                        <a href="{{ route('vehicleDetails', $yacht['slug']) }}" class="btn btn-secondary">{{ __('web.home.book_now') }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /Top Feature Yacht -->
