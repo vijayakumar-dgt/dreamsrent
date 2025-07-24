@@ -124,7 +124,10 @@ class UserRepository implements UserRepositoryInterface
                     break;
             }
         }
-        return $bookings->orderBy('id', 'desc')->take(5)->get();
+        return $bookings->with(['vehicle:id,name', 'pickupLocation:id,name', 'returnLocation:id,name'])
+                        ->orderBy('id', 'desc')
+                        ->take(5)
+                        ->get();
     }
 
     public function getAjaxBookings(Request $request): Collection
@@ -178,7 +181,12 @@ class UserRepository implements UserRepositoryInterface
                     break;
             }
         }
-        return $bookings->get();
+        return $bookings->with([
+            'vehicle:id,name,type,year',
+            'pickupLocation:id,name',
+            'returnLocation:id,name',
+            'drivingType:id,name'
+        ])->get();
     }
 
     public function getBookingDetails(int $id): object

@@ -1,66 +1,241 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚗 DreamsRent - Vehicle Rental Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Laravel](https://img.shields.io/badge/Laravel-12.x-red.svg)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.4%2B-blue.svg)](https://php.net)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## About Laravel
+DreamsRent is a comprehensive, modern vehicle rental management system built with Laravel 12. It provides a complete solution for managing car rentals, bookings, payments, and customer relationships with a beautiful, responsive interface.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🌟 Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🚙 **Vehicle Management**
+- Complete vehicle inventory management
+- Multiple vehicle types (Cars, Bikes, Boats)
+- Vehicle specifications, images, and documentation
+- Seasonal pricing and tariff management
+- Maintenance tracking and damage reports
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 📅 **Booking System**
+- Real-time availability checking
+- Advanced booking calendar
+- Quotation generation
+- Multiple rental types (Daily, Weekly, Monthly, Yearly)
+- Driver assignment and management
 
-## Learning Laravel
+### 💳 **Payment Integration**
+- PayPal integration (Sandbox & Live)
+- Stripe payment gateway
+- Multiple currency support
+- Invoice generation and management
+- Payment history tracking
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 👥 **User Management**
+- Multi-role system (Admin, Customer, Driver)
+- Customer profiles and preferences
+- Document management
+- Wishlist functionality
+- Review and rating system
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 🎨 **Multiple Themes**
+- 4 beautiful responsive themes
+- Mobile-optimized designs
+- RTL language support
+- Customizable layouts
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🌍 **Multi-Language & Location**
+- Complete localization system
+- Multiple language support
+- Location-based services
+- Currency management
 
-## Laravel Sponsors
+### 📊 **Reports & Analytics**
+- Comprehensive dashboard
+- Booking reports
+- Revenue analytics
+- Customer insights
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 📱 **Additional Features**
+- SMS notifications
+- Email templates
+- SEO optimization
+- Blog management
+- FAQ system
+- Newsletter subscription
 
-### Premium Partners
+## 🛠️ Installation
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Requirements
 
-## Contributing
+- PHP 8.4 or higher
+- MySQL 8.0 or higher
+- Composer
+- Node.js & NPM
+- Apache/Nginx web server
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Quick Installation
 
-## Code of Conduct
+1. **Clone the repository**
+```bash
+git clone https://github.com/your-username/dreamsrent.git
+cd dreamsrent
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. **Install PHP dependencies**
+```bash
+composer install
+```
 
-## Security Vulnerabilities
+3. **Install Node.js dependencies**
+```bash
+npm install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. **Environment setup**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## License
+5. **Configure your database**
+Edit `.env` file with your database credentials:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=dreamsrent_db
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. **Run migrations and seeders**
+```bash
+php artisan migrate --seed
+```
+
+7. **Create storage link**
+```bash
+php artisan storage:link
+```
+
+8. **Build assets**
+```bash
+npm run build
+```
+
+9. **Start the development server**
+```bash
+php artisan serve
+```
+
+Visit `http://localhost:8000` to access the application.
+
+## 🔧 Configuration
+
+### Payment Gateways
+
+#### PayPal Configuration
+```env
+PAYPAL_MODE=sandbox
+PAYPAL_SANDBOX_CLIENT_ID=your_sandbox_client_id
+PAYPAL_SANDBOX_CLIENT_SECRET=your_sandbox_client_secret
+```
+
+#### Stripe Configuration
+```env
+STRIPE_KEY=your_stripe_publishable_key
+STRIPE_SECRET=your_stripe_secret_key
+```
+
+### Email Configuration
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=your_smtp_host
+MAIL_PORT=587
+MAIL_USERNAME=your_email
+MAIL_PASSWORD=your_password
+MAIL_ENCRYPTION=tls
+```
+
+## 🎯 Usage
+
+### Admin Panel
+Access the admin panel at `/admin` with default credentials:
+- **Email:** admin@dreamsrent.com
+- **Password:** password
+
+### Customer Registration
+Customers can register at `/register` and start booking vehicles immediately.
+
+### API Documentation
+API documentation is available at `/documentation`
+
+## 🏗️ Architecture
+
+DreamsRent follows a modular architecture with the following modules:
+
+- **Booking** - Handles all booking-related functionality
+- **CarInfo** - Vehicle management and information
+- **Communication** - Messaging and notifications
+- **GeneralSetting** - Application configuration
+- **MenuManagement** - Dynamic menu management
+- **Page** - CMS and page builder
+- **Report** - Analytics and reporting
+- **RolesPermission** - User roles and permissions
+
+## 🧪 Testing
+
+Run the test suite:
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test suite
+php artisan test --testsuite=Feature
+
+# Run with coverage
+php artisan test --coverage
+```
+
+## 🔒 Security
+
+DreamsRent implements several security measures:
+
+- CSRF protection on all forms
+- SQL injection prevention
+- XSS protection
+- Security headers middleware
+- Input validation and sanitization
+- Rate limiting on API endpoints
+
+## 🚀 Performance
+
+- Optimized database queries with eager loading
+- Redis caching support
+- Image optimization
+- Minified assets
+- Database indexing
+- Query optimization
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Support
+
+For support and questions:
+
+- 📧 Email: support@dreamsrent.com
+- 📖 Documentation: Available in `/public/documentation`
+- 🐛 Issues: Create an issue on GitHub
+
+## 🙏 Credits
+
+Built with ❤️ using:
+- [Laravel](https://laravel.com) - The PHP Framework
+- [Bootstrap](https://getbootstrap.com) - CSS Framework
+- [jQuery](https://jquery.com) - JavaScript Library
+- [Chart.js](https://www.chartjs.org) - Charts and Analytics
+
+---
+
+**DreamsRent** - Making vehicle rental management simple and efficient.

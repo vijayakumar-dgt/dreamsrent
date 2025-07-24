@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingDetail;
@@ -26,25 +27,42 @@ class BookingRepository implements BookingRepositoryInterface
 {
     public function create(): array
     {
-        $locations = Location::where('status', 1)->get();
-        $priceTypes = PricingType::where('type', 1)->get();
-        $drivingTypes = DB::table('driving_types')->get();
+        // Use eager loading and proper caching for better performance
+        $locations = Cache::remember('active_locations', 3600, function () {
+            return Location::where('status', 1)->select('id', 'name')->get();
+        });
+        
+        $priceTypes = Cache::remember('active_price_types', 3600, function () {
+            return PricingType::where('type', 1)->select('id', 'name')->get();
+        });
+        
+        $drivingTypes = Cache::remember('driving_types', 3600, function () {
+            return DB::table('driving_types')->select('id', 'name')->get();
+        });
+        
         /** @var \Illuminate\Support\Collection<int, \stdClass> $customers */
         $customers = User::select(
             'users.id',
             'users.name as username',
-            DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
+            DB::raw("CONCAT(COALESCE(user_details.first_name, ''), ' ', COALESCE(user_details.last_name, '')) as full_name"),
+            'users.email',
+            'users.phone_number'
         )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
+            ->orderBy('users.created_at', 'desc')
             ->get()->map(function ($customer) {
-                $customer->full_name = ucwords($customer->full_name) ?? $customer->username;
+                $customer->full_name = trim($customer->full_name) ?: $customer->username;
+                $customer->full_name = ucwords($customer->full_name);
                 return $customer;
             });
 
-        $data = ['locations' => $locations, 'priceTypes' => $priceTypes, 'drivingTypes' => $drivingTypes, 'customers' => $customers];
-
-        return $data;
+        return [
+            'locations' => $locations, 
+            'priceTypes' => $priceTypes, 
+            'drivingTypes' => $drivingTypes, 
+            'customers' => $customers
+        ];
     }
 
     public function getCustomerDetails(Request $request): array

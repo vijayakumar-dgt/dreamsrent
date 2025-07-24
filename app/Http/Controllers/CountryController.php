@@ -31,7 +31,7 @@ class CountryController extends Controller
                 'code'   => $request->code,
                 'status' => (int) ($request->status ?? 1),
             ];
-            // dd($data);
+    
             if ($request->filled('id')) {
                 $this->countryRepository->update($request->id, $data);
                 $message = __('admin.cms.country_update_success');

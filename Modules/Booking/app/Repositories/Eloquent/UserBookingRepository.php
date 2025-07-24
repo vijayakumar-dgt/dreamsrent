@@ -638,7 +638,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
             $currency_details = $currency->code ?? "usd";
 
-            // dd($currency_details);
+
 
             $allowedCurrencies = ['usd', 'inr', 'eur', 'aed'];
 

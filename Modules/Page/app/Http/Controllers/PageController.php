@@ -2425,7 +2425,7 @@ class PageController extends Controller
                 ->get();
 
             $content_sections = collect((array) $data['content_sections']);
-            // dd($content_sections);
+    
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
             } else {

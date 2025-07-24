@@ -22,17 +22,42 @@ class BookingRequest extends CustomFailedValidation
     public function rules(): array
     {
         return [
-            'start_date'      => 'required',
-            'start_time'      => 'required',
-            'end_date'        => 'required',
-            'end_time'        => 'required',
-            'pickup_location' => 'required',
-            'return_location' => 'required',
-            'vehicle_id'      => 'required',
-            'customer_id'     => 'required',
-            'vehicle_price'   => 'required',
-            'extra_service'   => 'required',
-            'insurance'       => 'required',
+            'start_date'      => 'required|date|after_or_equal:today',
+            'start_time'      => 'required|date_format:H:i',
+            'end_date'        => 'required|date|after:start_date',
+            'end_time'        => 'required|date_format:H:i',
+            'pickup_location' => 'required|integer|exists:locations,id',
+            'return_location' => 'required|integer|exists:locations,id',
+            'vehicle_id'      => 'required|integer|exists:vehicle_info,id',
+            'customer_id'     => 'required|integer|exists:users,id',
+            'vehicle_price'   => 'required|numeric|min:0',
+            'extra_service'   => 'required|array',
+            'extra_service.*' => 'integer|exists:extra_services,id',
+            'insurance'       => 'required|array',
+            'insurance.*'     => 'integer|exists:insurances,id',
+            'rental_type'     => 'sometimes|in:daily,weekly,monthly,yearly',
+            'delivery_type'   => 'sometimes|in:pickup,delivery',
+            'driving_type'    => 'sometimes|integer|exists:driving_types,id',
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'start_date.after_or_equal' => 'Start date must be today or a future date.',
+            'end_date.after' => 'End date must be after start date.',
+            'pickup_location.exists' => 'Selected pickup location is invalid.',
+            'return_location.exists' => 'Selected return location is invalid.',
+            'vehicle_id.exists' => 'Selected vehicle is not available.',
+            'customer_id.exists' => 'Selected customer does not exist.',
+            'vehicle_price.min' => 'Vehicle price must be greater than 0.',
+            'extra_service.*.exists' => 'One or more selected extra services are invalid.',
+            'insurance.*.exists' => 'One or more selected insurance options are invalid.',
         ];
     }
 }

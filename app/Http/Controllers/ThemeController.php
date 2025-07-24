@@ -2152,10 +2152,8 @@ class ThemeController extends Controller
             } else {
                 $viewPath = 'frontend.home.home_' . $themeId;
                 if (!view()->exists($viewPath)) {
-                    dd('view not found');
                     $viewPath = 'frontend.home.home_1';
                 }
-                // dd($viewPath);
                 return view($viewPath, ['data' => $data, 'content_sections' => $content_sections, 'vehicleBrand' => $vehicleBrand, 'seo_title' => $seo_title, 'seo_description' => $seo_description, 'og_title' => $og_title, 'og_description' => $og_description, 'meta_keywords' => $meta_keywords]);
             }
         } else {
