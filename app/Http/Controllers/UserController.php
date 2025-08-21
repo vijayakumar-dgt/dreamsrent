@@ -82,7 +82,7 @@ class UserController extends Controller
         return response()->json($response, $response['code'] ?? 200);
     }
 
-    public function wishlists(Request $request): View
+    public function wishlists(): View
     {
         $seo_title = $this->userRepository->getWishlistData();
         return view('frontend.user.wishlists', ['seo_title' => $seo_title]);
@@ -94,7 +94,7 @@ class UserController extends Controller
         return response()->json($response, $response['code'] ?? 200);
     }
 
-    public function ajaxWishlists(Request $request): JsonResponse
+    public function ajaxWishlists(): JsonResponse
     {
         $wishlists = $this->userRepository->getWishlistDataAjax();
         return response()->json([
@@ -180,7 +180,7 @@ class UserController extends Controller
         return response()->json($response, $response['code'] ?? 200);
     }
 
-    public function reviews(Request $request): View
+    public function reviews(): View
     {
         $seo_title = __('web.common.reviews');
         return view('frontend.user.reviews', ['seo_title' => $seo_title]);
@@ -204,7 +204,7 @@ class UserController extends Controller
         return response()->json($response, $response['code'] ?? 200);
     }
 
-    public function payments(Request $request): View
+    public function payments(): View
     {
         $seo_title = __('web.user.payments');
         return view('frontend.user.payments', ['seo_title' => $seo_title]);

@@ -20,7 +20,7 @@ use Modules\GeneralSetting\Models\TranslationLanguage;
 
 class BlogRepository implements BlogRepositoryInterface
 {
-    public function BlogList(Request $request): View| JsonResponse
+    public function blogList(Request $request): View| JsonResponse
     {
         $authUser = current_user();
 
@@ -91,7 +91,7 @@ class BlogRepository implements BlogRepositoryInterface
         );
     }
 
-    public function BlogDetail(int|string $id): array
+    public function blogDetail(int|string $id): array
     {
         $authUser = current_user();
 

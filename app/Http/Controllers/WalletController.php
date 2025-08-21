@@ -29,7 +29,7 @@ class WalletController extends Controller
         }
     }
 
-    public function wallet(Request $request): View
+    public function wallet(): View
     {
         $seo_title = __('web.user.my_wallet');
         return view('frontend.user.wallet', ['seo_title' => $seo_title]);
@@ -46,97 +46,100 @@ class WalletController extends Controller
         $amount = $request->wallet_amount;
         $paymentType = ucfirst($request->payment_type);
 
+        $response = [
+            'code'    => 500,
+            'message' => 'Something went wrong.',
+        ];
+        $statusCode = 500;
+
         if (!$user) {
-            return response()->json([
+            $response = [
                 'code'    => 401,
                 'message' => 'Unauthorized access.',
-            ], 401);
-        }
-
-        if ($paymentType === "Paypal") {
+            ];
+            $statusCode = 401;
+        } elseif ($paymentType === "Paypal") {
             try {
                 if (!$this->provider instanceof \Srmklive\PayPal\Services\PayPal) {
-                    return response()->json([
+                    $response = [
                         'success' => false,
                         'message' => 'PayPal is currently unavailable. Please choose another payment method.',
-                    ], 422);
-                }
-                $this->provider->getAccessToken();
+                    ];
+                    $statusCode = 422;
+                } else {
+                    $this->provider->getAccessToken();
 
-                $order = [
-                    'intent'         => 'CAPTURE',
-                    'purchase_units' => [
-                        [
+                    $order = [
+                        'intent'         => 'CAPTURE',
+                        'purchase_units' => [[
                             'amount' => [
                                 'currency_code' => "USD",
                                 'value'         => $amount,
                             ],
+                        ]],
+                        'application_context' => [
+                            'return_url' => url('user/paypal-payment-success-wallet'),
+                            'cancel_url' => url('payment-failed'),
                         ],
-                    ],
-                    'application_context' => [
-                        'return_url' => url('user/paypal-payment-success-wallet'),
-                        'cancel_url' => url('payment-failed'),
-                    ],
-                ];
+                    ];
 
-                $response = $this->provider->createOrder($order);
+                    $paypalResponse = $this->provider->createOrder($order);
 
-                if ($response instanceof \Psr\Http\Message\StreamInterface) {
-                    $response = json_decode($response->getContents(), true);
-                } elseif (is_string($response)) {
-                    $response = json_decode($response, true);
+                    if ($paypalResponse instanceof \Psr\Http\Message\StreamInterface) {
+                        $paypalResponse = json_decode($paypalResponse->getContents(), true);
+                    } elseif (is_string($paypalResponse)) {
+                        $paypalResponse = json_decode($paypalResponse, true);
+                    }
+
+                    if (!$paypalResponse || !isset($paypalResponse['id'])) {
+                        $response = [
+                            'code'    => 500,
+                            'message' => 'Failed to create PayPal order.',
+                        ];
+                    } else {
+                        WalletHistory::create([
+                            'user_id'          => $user->id,
+                            'amount'           => $amount,
+                            'payment_type'     => $paymentType,
+                            'status'           => 'Pending',
+                            'transaction_id'   => $paypalResponse['id'],
+                            'transaction_date' => now(),
+                        ]);
+
+                        if (!isset($paypalResponse['links'][1]['href'])) {
+                            $response = [
+                                'code'    => 500,
+                                'message' => 'Failed to generate PayPal payment link.',
+                            ];
+                        } else {
+                            $response = [
+                                'code'       => 200,
+                                'message'    => 'PayPal payment initiated. Redirecting...',
+                                'paypal_url' => $paypalResponse['links'][1]['href'],
+                            ];
+                            $statusCode = 200;
+                        }
+                    }
                 }
-
-                if (!$response || !isset($response['id'])) {
-                    return response()->json([
-                        'code'    => 500,
-                        'message' => 'Failed to create PayPal order.',
-                    ]);
-                }
-
-                WalletHistory::create([
-                    'user_id'          => $user->id,
-                    'amount'           => $amount,
-                    'payment_type'     => $paymentType,
-                    'status'           => 'Pending',
-                    'transaction_id'   => $response['id'],
-                    'transaction_date' => now(),
-                ]);
-
-                if (!isset($response['links'][1]['href'])) {
-                    return response()->json([
-                        'code'    => 500,
-                        'message' => 'Failed to generate PayPal payment link.',
-                    ]);
-                }
-                return response()->json([
-                    'code'       => 200,
-                    'message'    => 'PayPal payment initiated. Redirecting...',
-                    'paypal_url' => $response['links'][1]['href'],
-                ]);
             } catch (\Exception $e) {
-                return response()->json([
+                $response = [
                     'code'    => 500,
                     'message' => 'PayPal authentication failed: ' . $e->getMessage(),
-                ]);
+                ];
             }
-        }
-
-        if ($request->payment_type == "stripe") {
+        } elseif ($request->payment_type === "stripe") {
             Stripe::setApiKey(config('services.stripe.secret'));
             $currency_details = "USD";
 
             $session = Session::create([
-                'line_items' => [
-                    [
-                        'price_data' => [
-                            'currency'     => $currency_details,
-                            'product_data' => ['name' => "Wallet Top-up"],
-                            'unit_amount'  => intval($amount * 100),
-                        ],
-                        'quantity' => 1,
-                    ]
-                ],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency'     => $currency_details,
+                        'product_data' => ['name' => "Wallet Top-up"],
+                        'unit_amount'  => intval($amount * 100),
+                    ],
+                    'quantity' => 1,
+                ]],
                 'mode'        => 'payment',
                 'success_url' => route('user.stripe.payment.success.wallet') . "?session_id={CHECKOUT_SESSION_ID}",
                 'cancel_url'  => route('payment-failed'),
@@ -150,25 +153,30 @@ class WalletController extends Controller
                 'transaction_id'   => $session->id,
                 'transaction_date' => now(),
             ]);
-            return response()->json([
+
+            $response = [
                 'code'       => 200,
                 'message'    => 'Stripe payment initiated. Redirecting...',
                 'stripe_url' => $session->url,
+            ];
+            $statusCode = 200;
+        } else {
+            WalletHistory::create([
+                'user_id'          => $user->id,
+                'amount'           => $amount,
+                'payment_type'     => $paymentType,
+                'status'           => 'Pending',
+                'transaction_date' => now(),
             ]);
+
+            $response = [
+                'success' => true,
+                'message' => 'Payment added successfully!',
+            ];
+            $statusCode = 200;
         }
 
-        WalletHistory::create([
-            'user_id'          => $user->id,
-            'amount'           => $amount,
-            'payment_type'     => $paymentType,
-            'status'           => 'Pending',
-            'transaction_date' => now(),
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Payment added successfully!',
-        ]);
+        return response()->json($response, $statusCode);
     }
 
     public function paypalPaymentSuccessWallet(Request $request): JsonResponse|RedirectResponse
@@ -225,12 +233,12 @@ class WalletController extends Controller
         }
     }
 
-    public function paymentFailed(Request $request): View
+    public function paymentFailed(): View
     {
         return view("booking::user_booking.fail_page");
     }
 
-    public function walletHistoryList(Request $request): JsonResponse
+    public function walletHistoryList(): JsonResponse
     {
         try {
             $user = Auth::guard('web')->user();

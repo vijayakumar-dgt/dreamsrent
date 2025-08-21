@@ -61,7 +61,7 @@ class ReviewController extends Controller
         return response()->json($response, $response['code'] ?? 200);
     }
 
-    public function adminReviews(Request $request): View
+    public function adminReviews(): View
     {
         return view('admin.reviews');
     }

@@ -49,13 +49,13 @@ class AdminUserController extends Controller
         return response()->json($response, $response['code']);
     }
 
-    public function getNotifications(Request $request): JsonResponse
+    public function getNotifications(): JsonResponse
     {
         $response = $this->adminUserRepository->getNotifications();
         return response()->json($response, $response['code']);
     }
 
-    public function markAllAsRead(Request $request): JsonResponse
+    public function markAllAsRead(): JsonResponse
     {
         $response = $this->adminUserRepository->markAllAsRead();
         return response()->json($response, $response['code']);

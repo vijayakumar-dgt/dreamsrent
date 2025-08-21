@@ -47,7 +47,7 @@ class HomeController extends Controller
         return view('frontend.home.maintenance', $data);
     }
 
-    public function contactUs(Request $request): View
+    public function contactUs(): View
     {
         $data = $this->homeRepository->getContactData();
         return view('frontend.home.contact-us', $data);

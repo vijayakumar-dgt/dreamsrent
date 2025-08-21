@@ -43,7 +43,7 @@ class ForgotpasswordController extends Controller
         }
         try {
             $email = $request->email;
-            $otp = rand(1000, 9999);//4 digit OTP
+            $otp = random_int(1000, 9999);
             $token = Str::random(64);
             $user = User::where('email', $email)->first();
             Cache::put('forgotPasswordEmail_' . $token, $email, 600);
@@ -94,7 +94,7 @@ class ForgotpasswordController extends Controller
         $email = Cache::get('forgotPasswordEmail_' . $token);
 
         if ($email && User::where('email', $email)->exists()) {
-            $otp = rand(1000, 9999);
+            $otp = random_int(1000, 9999);
             $user = User::where('email', $email)->first();
             Cache::put('forgotPasswordEmail_' . $token, $email, 600);
             Cache::put('forgotPasswordOtp_' . $token, $otp, 600);
@@ -170,6 +170,14 @@ class ForgotpasswordController extends Controller
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
+
+        $response = [
+            'status'  => false,
+            'code'    => 422,
+            'message' => __('admin.auth.email_does_not_exist_or_token_is_invalid')
+        ];
+        $statusCode = 422;
+
         if ($token && $email) {
             $validator = Validator::make($request->all(), [
                 'password'              => 'required|min:6',
@@ -177,40 +185,40 @@ class ForgotpasswordController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
+                $response = [
                     'status'  => false,
                     'code'    => 422,
                     'error'   => $validator->errors()->first(),
                     'message' => $validator->errors()->first()
-                ], 422);
-            }
-
-            $user = User::where('email', $email)->first();
-            if ($user) {
-                $user->password = Hash::make($request->password);
-                $user->last_password_changed_at = now();
-                $user->save();
+                ];
             } else {
-                return response()->json([
-                    'status'  => false,
-                    'code'    => 422,
-                    'message' => __('admin.general_settings.user_not_found')
-                ], 422);
+                $user = User::where('email', $email)->first();
+
+                if ($user) {
+                    $user->password = Hash::make($request->password);
+                    $user->last_password_changed_at = now();
+                    $user->save();
+
+                    Cache::forget('forgotPasswordEmail_' . $token);
+                    Cache::forget('forgotPasswordOtp_' . $token);
+
+                    $response = [
+                        'status'       => true,
+                        'code'         => 200,
+                        'message'      => __('admin.general_settings.password_updated_successfully'),
+                        'redirect_url' => route('admin-login'),
+                    ];
+                    $statusCode = 200;
+                } else {
+                    $response = [
+                        'status'  => false,
+                        'code'    => 422,
+                        'message' => __('admin.general_settings.user_not_found')
+                    ];
+                }
             }
-            Cache::forget('forgotPasswordEmail_' . $token);
-            Cache::forget('forgotPasswordOtp_' . $token);
-            return response()->json([
-                'status'       => true,
-                'code'         => 200,
-                'message'      => __('admin.general_settings.password_updated_successfully'),
-                'redirect_url' => route('admin-login'),
-            ]);
-        } else {
-            return response()->json([
-                'status'  => false,
-                'code'    => 422,
-                'message' => __('admin.auth.email_does_not_exist_or_token_is_invalid')
-            ], 422);
         }
+
+        return response()->json($response, $statusCode);
     }
 }

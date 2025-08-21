@@ -11,39 +11,39 @@ use Illuminate\View\View;
 
 class NewsletterController extends Controller
 {
-    protected NewsLetterRepositoryInterface $NewsLetterRepository;
+    protected NewsLetterRepositoryInterface $newsLetterRepository;
 
-    public function __construct(NewsLetterRepositoryInterface $NewsLetterRepository)
+    public function __construct(NewsLetterRepositoryInterface $newsLetterRepository)
     {
-        $this->NewsLetterRepository = $NewsLetterRepository;
+        $this->newsLetterRepository = $newsLetterRepository;
     }
 
-    public function index(Request $request): View
+    public function index(): View
     {
         return view('admin.newsletters');
     }
 
     public function store(NewsletterRequest $request): JsonResponse
     {
-        $result = $this->NewsLetterRepository->save($request);
+        $result = $this->newsLetterRepository->save($request);
         return response()->json($result, $result['code']);
     }
 
     public function list(Request $request): JsonResponse
     {
-        $result = $this->NewsLetterRepository->list($request);
+        $result = $this->newsLetterRepository->list($request);
         return response()->json($result, $result['code']);
     }
 
     public function delete(Request $request): JsonResponse
     {
-        $result = $this->NewsLetterRepository->delete($request);
+        $result = $this->newsLetterRepository->delete($request);
         return response()->json($result, $result['code']);
     }
 
     public function sendNewsletter(SendNewsLetterRequest $request): JsonResponse
     {
-        $result = $this->NewsLetterRepository->sendNewsletter($request);
+        $result = $this->newsLetterRepository->sendNewsletter($request);
         return response()->json($result, $result['code']);
     }
 }

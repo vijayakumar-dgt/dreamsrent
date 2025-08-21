@@ -17,14 +17,14 @@ class BlogController extends Controller
         $this->blogRepository = $blogRepository;
     }
 
-    public function BlogList(Request $request): View|JsonResponse
+    public function blogList(Request $request): View|JsonResponse
     {
-        return $this->blogRepository->BlogList($request);
+        return $this->blogRepository->blogList($request);
     }
 
-    public function BlogDetail(int|string $id): View
+    public function blogDetail(int|string $id): View
     {
-        $data = $this->blogRepository->BlogDetail($id);
+        $data = $this->blogRepository->blogDetail($id);
         return view('frontend.blogs.blog-details', [...$data]);
     }
 
