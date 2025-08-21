@@ -7,7 +7,6 @@
     {!! SEOMeta::generate() !!}
     {!! OpenGraph::generate() !!}
 	<title>@yield('meta_title', $companyName)</title>
-
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/x-icon" href="{{ $favicon }}">
 
