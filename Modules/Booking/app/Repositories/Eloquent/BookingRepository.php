@@ -24,6 +24,9 @@ use Modules\GeneralSetting\Models\InsuranceBenefit;
 
 class BookingRepository implements BookingRepositoryInterface
 {
+    private const USERNAME_SELECT = 'users.name as username';
+    private const FULL_NAME_SELECT = "CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name";
+
     public function create(): array
     {
         $locations = Location::where('status', 1)->get();
@@ -32,7 +35,7 @@ class BookingRepository implements BookingRepositoryInterface
         /** @var \Illuminate\Support\Collection<int, \stdClass> $customers */
         $customers = User::select(
             'users.id',
-            'users.name as username',
+            self::USERNAME_SELECT,
             DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
         )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
@@ -53,7 +56,7 @@ class BookingRepository implements BookingRepositoryInterface
             $customerId = $request->customer_id ?? '';
             $customer = User::select(
                 'users.id',
-                'users.name as username',
+                self::USERNAME_SELECT,
                 DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
                 DB::raw("(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = users.id) as bookings_count"),
                 'users.email',
@@ -177,10 +180,10 @@ class BookingRepository implements BookingRepositoryInterface
                     });
                 })
 
-                ->when(!empty($brandIds), fn ($query) => $query->whereIn('vehicle_info.brand_id', $brandIds))
-                ->when(!empty($typeIds), fn ($query) => $query->whereIn('vehicle_info.type_id', $typeIds))
-                ->when(!empty($modelIds), fn ($query) => $query->whereIn('vehicle_info.model_id', $modelIds))
-                ->when(!empty($colorIds), fn ($query) => $query->whereIn('vehicle_info.color_id', $colorIds))
+                ->when(!empty($brandIds), fn($query) => $query->whereIn('vehicle_info.brand_id', $brandIds))
+                ->when(!empty($typeIds), fn($query) => $query->whereIn('vehicle_info.type_id', $typeIds))
+                ->when(!empty($modelIds), fn($query) => $query->whereIn('vehicle_info.model_id', $modelIds))
+                ->when(!empty($colorIds), fn($query) => $query->whereIn('vehicle_info.color_id', $colorIds))
 
                 ->when(!empty($pickupLocation), function ($query) use ($pickupLocation) {
                     return $query->where(function ($q) use ($pickupLocation) {
@@ -203,11 +206,11 @@ class BookingRepository implements BookingRepositoryInterface
 
                     $query->where(function ($q) use ($search) {
                         $q->where('vehicle_info.year', 'LIKE', "%{$search}%")
-                        ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
-                        ->orWhere('brands.brand_name', 'LIKE', "%{$search}%")
-                        ->orWhere('car_models.model_name', 'LIKE', "%{$search}%")
-                        ->orWhere('cartypes.name', 'LIKE', "%{$search}%")
-                        ->orWhere('car_colors.name', 'LIKE', "%{$search}%");
+                            ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
+                            ->orWhere('brands.brand_name', 'LIKE', "%{$search}%")
+                            ->orWhere('car_models.model_name', 'LIKE', "%{$search}%")
+                            ->orWhere('cartypes.name', 'LIKE', "%{$search}%")
+                            ->orWhere('car_colors.name', 'LIKE', "%{$search}%");
                     });
 
                     if (filled($tariff)) {
@@ -233,11 +236,11 @@ class BookingRepository implements BookingRepositoryInterface
                             ->whereRaw('CAST(vehicle_tarrifs.tariff_from_days AS UNSIGNED) <= ?', [$noOfDays])
                             ->whereRaw('CAST(vehicle_tarrifs.tariff_to_days AS UNSIGNED) >= ?', [$noOfDays]);
                     })
-                    ->where(function ($q) use ($tariff) {
-                        $q->whereNotNull("vehicle_tarrifs.tariff_daily_price")
-                        ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$tariff}')) IS NOT NULL");
-                    })
-                    ->selectRaw("
+                        ->where(function ($q) use ($tariff) {
+                            $q->whereNotNull("vehicle_tarrifs.tariff_daily_price")
+                                ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$tariff}')) IS NOT NULL");
+                        })
+                        ->selectRaw("
                         vehicle_tarrifs.id as vehicle_tariff_id,
                         COALESCE(
                             vehicle_tarrifs.tariff_daily_price,
@@ -282,11 +285,11 @@ class BookingRepository implements BookingRepositoryInterface
                                     ->whereDate('vehicle_seasons.seasonal_end_date', '>=', $end);
                             });
                     })
-                    ->where(function ($q) use ($seasonalRateColumn, $jsonPath) {
-                        $q->whereNotNull("vehicle_seasons.$seasonalRateColumn")
-                          ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, ?)) IS NOT NULL", [$jsonPath]);
-                    })
-                    ->selectRaw("
+                        ->where(function ($q) use ($seasonalRateColumn, $jsonPath) {
+                            $q->whereNotNull("vehicle_seasons.$seasonalRateColumn")
+                                ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, ?)) IS NOT NULL", [$jsonPath]);
+                        })
+                        ->selectRaw("
                         vehicle_seasons.id as vehicle_season_id,
                         COALESCE(
                             vehicle_seasons.$seasonalRateColumn,
@@ -556,7 +559,7 @@ class BookingRepository implements BookingRepositoryInterface
         $drivingTypes = DB::table('driving_types')->get();
         $customers = User::select(
             'users.id',
-            'users.name as username',
+            self::USERNAME_SELECT,
             DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
         )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
@@ -764,9 +767,9 @@ class BookingRepository implements BookingRepositoryInterface
 
             if (empty($id)) {
                 $response = [
-                   'status'  => 'error',
-                   'code'    => 400,
-                   'message' => 'Booking id is required.'
+                    'status'  => 'error',
+                    'code'    => 400,
+                    'message' => 'Booking id is required.'
                 ];
                 return $response;
             }
