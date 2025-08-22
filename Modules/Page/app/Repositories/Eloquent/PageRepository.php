@@ -79,7 +79,4 @@ class PageRepository implements PageInterface
             ->first();
     }
 
-    public function pageBuilderApi(array $request)
-    {
-    }
 }

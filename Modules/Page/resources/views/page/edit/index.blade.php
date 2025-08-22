@@ -104,7 +104,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label class="form-label" for="og_description">{{ __('admin.page.og_description') }}</label>
+                                        <label class="form-label" for="og_description">{{ __('admin.page.og_description') }}</label>
                                             <textarea rows="4" name="og_description" id="og_description" placeholder="{{ __('admin.page.og_description_placeholder') }}" class="form-control">{{ $query->og_description }}</textarea>
                                             <span class="invalid-feedback" id="og_description_error"></span>
                                         </div>
