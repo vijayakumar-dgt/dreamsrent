@@ -147,7 +147,7 @@
                             </div>
                             <!-- Document Upload -->
                             <div class="col-md-12">
-                                <label class="form-label">{{__('web.user.document')}}</label>
+                                <label for="document" class="form-label">{{__('web.user.document')}}</label>
                                 <div class="document-upload text-center br-3 mb-3">
                                     <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="img">
                                     <p class="mb-2">
@@ -180,13 +180,13 @@
                     </button>
                 </div>
                 <!-- Nav tabs -->
-                <ul class="nav nav-tabs m-2" id="ticketTab" role="tablist">
-                    <li class="nav-item" role="presentation">
+                <ul class="nav nav-tabs m-2" id="ticketTab">
+                    <li class="nav-item">
                         <button class="nav-link active" id="update-tab" data-bs-toggle="tab" data-bs-target="#updateTabPane" type="button" role="tab" aria-controls="updateTabPane" aria-selected="true">
                             {{ __('web.user.update_ticket') }}
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
                         <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#historyTabPane" type="button" role="tab" aria-controls="historyTabPane" aria-selected="false">
                             {{ __('web.user.ticket_history') }}
                         </button>
@@ -200,7 +200,7 @@
                             <div class="modal-body pb-1">
                                 <div class="row">
                                     <input type="hidden" name="ticketid" id="ticketid">
-                                    <label class="form-label">{{__('web.user.description')}}</label>
+                                    <label for="description" class="form-label">{{__('web.user.description')}}</label>
                                     <p class="description mb-3" id="description"></p>
                                     <!-- Hidden Status Field -->
                                     <div class="col-md-6 d-none">

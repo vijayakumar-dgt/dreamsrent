@@ -23,9 +23,9 @@
                     <!-- Top Info -->
                     <div class="border br-5 mb-3">
                         <div class="p-3 bg-light d-flex align-items-center justify-content-between flex-wrap gap-3">
-                            <h6 class="ticket_id">
+                            <div class="ticket_id">
                                 <span class="text-default category_name"></span>
-                            </h6>
+                            </div>
                             <div class="dropdown">
                                 <select class="select form-control status" id="status" name="status">
                                     <option value="">{{ __('admin.common.select') }}</option>

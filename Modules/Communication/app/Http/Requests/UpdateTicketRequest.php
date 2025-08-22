@@ -19,7 +19,7 @@ class UpdateTicketRequest extends FormRequest
             'reply'    => [
                 'required',
                 'string',
-                function ($attribute, $value, $fail) {
+                function ($value, $fail) {
                     if (str_word_count($value) > 60) {
                         $fail(__('admin.support.reply_maxwords'));
                     }

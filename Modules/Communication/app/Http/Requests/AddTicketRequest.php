@@ -18,7 +18,7 @@ class AddTicketRequest extends FormRequest
             'priority'    => 'required|string|in:Low,Medium,High',
             'description' => 'required|string|max:1000',
             'document'    => 'array|max:10',
-            'document.*'  => 'nullable|file|mimes:pdf,txt,doc,docx|max:10240',
+            'document.*'  => 'nullable|file|mimes:pdf,txt,doc,docx|max:5120',
         ];
     }
 }
