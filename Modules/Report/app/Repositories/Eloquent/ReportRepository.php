@@ -10,19 +10,41 @@ use Modules\Report\Repositories\Contracts\ReportRepositoryInterface;
 
 class ReportRepository implements ReportRepositoryInterface
 {
+    /**
+     * Filter bookings for paid status
+     */
+    private function filterPaidBookings($bookings)
+    {
+        return $bookings->filter(function ($booking) {
+            if ($booking->booking_by === 'admin') {
+                return is_null($booking->payment_status) || $booking->payment_status == 2;
+            }
+            return $booking->payment_status == 2;
+        });
+    }
+
+    /**
+     * Calculate weekly percentage change
+     */
+    private function calculateWeeklyChange(float $thisWeek, float $lastWeek): array
+    {
+        if ($lastWeek > 0) {
+            $percentageChange = (($thisWeek - $lastWeek) / $lastWeek) * 100;
+            $sign = $percentageChange >= 0 ? '+' : '-';
+        } else {
+            $percentageChange = $thisWeek > 0 ? 100 : 0;
+            $sign = $thisWeek > 0 ? '+' : '0';
+        }
+        
+        return ['percentageChange' => $percentageChange, 'sign' => $sign];
+    }
     public function incomeReport(): array
     {
         $bookings = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
         ->get();
         $bookingsCount = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
         ->orderby('bookings.id', 'desc')->paginate(10);
-        $totalIncome = $bookings->filter(function ($booking) {
-            if ($booking->booking_by === 'admin') {
-                return is_null($booking->payment_status) || $booking->payment_status == 2;
-            } else {
-                return $booking->payment_status == 2;
-            }
-        })->sum('final_price');
+        $totalIncome = $this->filterPaidBookings($bookings)->sum('final_price');
         $topEarningCar = $bookings
         ->groupBy('vehicle_id')
         ->map(fn ($group) => $group->sum('final_price'))
@@ -42,13 +64,7 @@ class ReportRepository implements ReportRepositoryInterface
         $thisWeekIncome = Booking::whereBetween('booking_date', [$startOfThisWeek, $endOfThisWeek])->sum('final_price');
         $lastWeekIncome = Booking::whereBetween('booking_date', [$startOfLastWeek, $endOfLastWeek])->sum('final_price');
 
-        if ($lastWeekIncome > 0) {
-            $percentageChange = (($thisWeekIncome - $lastWeekIncome) / $lastWeekIncome) * 100;
-            $sign = $percentageChange >= 0 ? '+' : '-';
-        } else {
-            $percentageChange = $thisWeekIncome > 0 ? 100 : 0;
-            $sign = $thisWeekIncome > 0 ? '+' : '0'; // If last week was 0, show +100% increase
-        }
+        $weeklyChange = $this->calculateWeeklyChange((float) $thisWeekIncome, (float) $lastWeekIncome);
         $symbol = getDefaultCurrencySymbol();
 
         $bookings->groupBy(function ($booking) {
@@ -66,7 +82,17 @@ class ReportRepository implements ReportRepositoryInterface
 
         ->values(); // Convert collection to array
 
-        $data = ['totalIncome' => $totalIncome, 'topEarningCar' => $topEarningCar, 'vehicle' => $vehicle, 'percentageChange' => $percentageChange, 'sign' => $sign, 'symbol' => $symbol, 'bookings' => $bookings, 'vehicleInfo' => $vehicleInfo, 'bookingsCount' => $bookingsCount];
+        $data = [
+            'totalIncome' => $totalIncome, 
+            'topEarningCar' => $topEarningCar, 
+            'vehicle' => $vehicle, 
+            'percentageChange' => $weeklyChange['percentageChange'], 
+            'sign' => $weeklyChange['sign'], 
+            'symbol' => $symbol, 
+            'bookings' => $bookings, 
+            'vehicleInfo' => $vehicleInfo, 
+            'bookingsCount' => $bookingsCount
+        ];
         return $data;
     }
 
