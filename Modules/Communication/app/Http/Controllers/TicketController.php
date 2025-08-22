@@ -91,7 +91,7 @@ class TicketController extends Controller
                 'status'      => 1,
                 'subject'     => $request->category,
                 'user_type'   => $user->user_type ?? 3,
-                'attachment'  => count($filePaths) > 0 ? json_encode($filePaths) : null,
+                'attachment' => !empty($filePaths) ? json_encode($filePaths) : null,
                 'created_by'  => $user->id,
             ]);
 
@@ -208,8 +208,8 @@ class TicketController extends Controller
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
-              'code'    => $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500,
-              'message' => $e->getMessage(),
+                'code'    => $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500,
+                'message' => $e->getMessage(),
             ], $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500);
         }
     }
@@ -218,36 +218,44 @@ class TicketController extends Controller
     {
         try {
             $id = $request->input('id');
+            $response = [];
+
             if (!is_numeric($id)) {
-                return response()->json([
+                $response = [
                     'code'    => 400,
                     'success' => false,
                     'message' => 'Invalid ticket ID format'
-                ], 400);
+                ];
+                $status = 400;
+            } else {
+                $result = $this->repository->delete((int) $id);
+
+                if (!$result) {
+                    $response = [
+                        'code'    => 404,
+                        'success' => false,
+                        'message' => 'Ticket not found.'
+                    ];
+                    $status = 404;
+                } else {
+                    $response = [
+                        'code'    => 200,
+                        'success' => true,
+                        'message' => __('admin.support.ticket_delete_success')
+                    ];
+                    $status = 200;
+                }
             }
-
-            $result = $this->repository->delete((int)$id);
-
-            if (!$result) {
-                return response()->json([
-                    'code'    => 404,
-                    'success' => false,
-                    'message' => 'Ticket not found.'
-                ], 404);
-            }
-
-            return response()->json([
-                'code'    => 200,
-                'success' => true,
-                'message' => __('admin.support.ticket_delete_success')
-            ], 200);
         } catch (\Exception $e) {
-            return response()->json([
+            $response = [
                 'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_delete_error'),
                 'error'   => $e->getMessage()
-            ], 500);
+            ];
+            $status = 500;
         }
+
+        return response()->json($response, $status);
     }
 }
