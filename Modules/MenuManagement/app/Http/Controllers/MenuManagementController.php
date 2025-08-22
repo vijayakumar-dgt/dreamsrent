@@ -112,43 +112,50 @@ class MenuManagementController extends Controller
             $langCode = app()->getLocale();
             $defaultLanguageId = $request->language_id ?? getLanguageId($langCode);
 
-            $filters = [
-                'language_id' => $defaultLanguageId,
-                'search'      => $request->search,
-                'sort'        => $request->sort
-            ];
+            // This variable will hold either the single menu object or the collection of menus.
+            $data = null;
 
-            // Single menu retrieval
+            // Single menu retrieval logic
             if ($request->has('id')) {
                 $menu = $this->menuRepository->find($request->id);
 
-                if ($menu->language_id != $defaultLanguageId) {
+                // Guard clause: Return early if menu not found or language mismatch
+                if (!$menu || $menu->language_id != $defaultLanguageId) {
+                    // Return 1: Not Found
                     return response()->json([
                         'code'    => 404,
-                        'message' => 'Menu not found for the default language',
+                        'message' => 'Menu not found for the specified language',
                     ], 404);
                 }
 
-                return response()->json([
-                    'code'    => 200,
-                    'message' => __('admin.common.default_retrieve_success'),
-                    'data'    => $menu,
-                ], 200);
+                // Assign the single menu to our data variable instead of returning
+                $data = $menu;
+            } else {
+                // Get all menus logic
+                $filters = [
+                    'language_id' => $defaultLanguageId,
+                    'search'      => $request->search,
+                    'sort'        => $request->sort
+                ];
+
+                $menus = $this->menuRepository->all($filters)->map(function ($menu) {
+                    $menu->created_date = formatDateTime($menu->created_at, false);
+                    unset($menu->created_at);
+                    return $menu;
+                });
+
+                // Assign the collection of menus to our data variable
+                $data = $menus;
             }
 
-            // Get all menus
-            $menus = $this->menuRepository->all($filters)->map(function ($menu) {
-                $menu->created_date = formatDateTime($menu->created_at, false);
-                unset($menu->created_at);
-                return $menu;
-            });
-
+            // Return 2: Consolidated Success Response
             return response()->json([
                 'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data'    => $menus,
+                'data'    => $data,
             ], 200);
         } catch (\Exception $e) {
+            // Return 3: Error Response
             return response()->json([
                 'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
@@ -202,24 +209,17 @@ class MenuManagementController extends Controller
 
     public function menuDelete(Request $request): JsonResponse
     {
-        $id = $request->id;
-
-        if (!$id) {
-            return response()->json(['code' => 400, 'message' => 'Menu ID is required.'], 400);
-        }
+        $data = $request->validate([
+            'id' => 'required|integer|exists:menus,id',
+        ]);
 
         try {
-            $this->menuRepository->delete($id);
+            $this->menuRepository->delete($data['id']);
 
             return response()->json([
                 'code'    => 200,
                 'message' => __('admin.cms.menu_delete_success'),
             ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'code'    => 404,
-                'message' => 'Menu not found.',
-            ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'code'    => 500,

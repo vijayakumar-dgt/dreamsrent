@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.support.contact_messages')" 
+            <x-admin.breadcrumb
+                :title="__('admin.support.contact_messages')"
                 :breadcrumbs="[
                     __('admin.support.contact_messages') => ''
                 ]"
