@@ -275,13 +275,14 @@
                                         <td>{{ formatDateTime($booking->booking_date, false) }}</td>
                                         <td>
                                             @php
-                                            $isPaid =
-                                            ($booking->booking_by === 'admin' && ($booking->payment_status === null || $booking->payment_status == 2)) ||
-                                            ($booking->booking_by !== 'admin' && $booking->payment_status == 2);
+                                                $isPaid = ($booking->booking_by === 'admin' && ($booking->payment_status === null || $booking->payment_status == 2)) ||
+                                                         ($booking->booking_by !== 'admin' && $booking->payment_status == 2);
+                                                $statusClass = $isPaid ? 'success' : 'danger';
+                                                $statusText = $isPaid ? __('admin.reports.paid') : __('admin.reports.pending');
                                             @endphp
-                                            <span class="badge badge-soft-{{ $isPaid ? 'success' : 'danger' }} d-inline-flex align-items-center badge-sm payment-status">
-                                                <i class="ti ti-point-filled me-1 text-{{ $isPaid ? 'success' : 'danger' }}"></i>
-                                                {{ $isPaid ? __('admin.reports.paid') : __('admin.reports.pending') }}
+                                            <span class="badge badge-soft-{{ $statusClass }} d-inline-flex align-items-center badge-sm payment-status">
+                                                <i class="ti ti-point-filled me-1 text-{{ $statusClass }}"></i>
+                                                {{ $statusText }}
                                             </span>
                                         </td>
                                     </tr>

@@ -111,8 +111,6 @@ class ReportRepository implements ReportRepositoryInterface
             : ($thisMonthGrandTotal > 0 ? 100 : 0);
 
         $signbreak = $percentageBreakChange >= 0 ? '+' : '-';
-        $class = $percentageBreakChange >= 0 ? 'text-success' : 'text-danger';
-        $icon = $percentageBreakChange >= 0 ? 'ti ti-arrow-wave-right-up' : 'ti ti-arrow-wave-right-down';
         $percentageBreakChangeFormatted = $signbreak . abs($percentageBreakChange) . '%';
         $percentageBreakChangeFormatted = number_format((float) $percentageBreakChangeFormatted, 2);
 
@@ -149,17 +147,15 @@ class ReportRepository implements ReportRepositoryInterface
             ->groupBy('vehicle_id')
             ->map(fn ($group) => $group->sum('final_price'));
 
-        $topEarningCar = $thisMonthEarnings->keys()->first();
+        $topEarningCarThisMonth = $thisMonthEarnings->keys()->first();
         $topEarningCarsTotal = $thisMonthEarnings->first();
-        $lastMonthEarningsForCar = (float) ($lastMonthEarnings[$topEarningCar] ?? 0);
+        $lastMonthEarningsForCar = (float) ($lastMonthEarnings[$topEarningCarThisMonth] ?? 0);
 
         $percentageCarChange = $lastMonthEarningsForCar > 0
             ? (($topEarningCarsTotal - $lastMonthEarningsForCar) / $lastMonthEarningsForCar) * 100
             : ($topEarningCarsTotal > 0 ? 100 : 0);
 
         $signCar = $percentageCarChange >= 0 ? '+' : '-';
-        $class = $percentageCarChange >= 0 ? 'text-success' : 'text-danger';
-        $icon = $percentageCarChange >= 0 ? 'ti ti-arrow-wave-right-up' : 'ti ti-arrow-wave-right-down';
         $percentageCarChangeFormatted = $signCar . abs($percentageCarChange) . '%';
         $percentageCarChangeFormatted = number_format((float) $percentageCarChangeFormatted, 2);
 
@@ -184,7 +180,6 @@ class ReportRepository implements ReportRepositoryInterface
 
     public function getEarningsBreakdown()
     {
-
         $breakdown = Booking::select(
             DB::raw('SUM(total_insurance_price) as total_insurance_price'),
             DB::raw('SUM(total_extra_service_price) as total_extra_service_price'),

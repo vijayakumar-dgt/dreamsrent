@@ -23,8 +23,6 @@ class ReportServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerCommands();
-        $this->registerCommandSchedules();
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
@@ -41,19 +39,6 @@ class ReportServiceProvider extends ServiceProvider
         $this->app->bind(ReportRepositoryInterface::class, ReportRepository::class);
     }
 
-    /**
-     * Register commands in the format of Command::class
-     */
-    protected function registerCommands(): void
-    {
-    }
-
-    /**
-     * Register command Schedules.
-     */
-    protected function registerCommandSchedules(): void
-    {
-    }
 
     /**
      * Register translations.
@@ -112,29 +97,24 @@ class ReportServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-
-        $nameLower = (string)$this->nameLower;
-        $viewPath = resource_path('views/modules/' . $nameLower);
+        $viewPath = resource_path('views/modules/' . $this->nameLower);
         $sourcePath = module_path($this->name, 'resources/views');
-        $this->publishes([$sourcePath => $viewPath], ['views', $nameLower . '-module-views']);
-        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $nameLower);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower . '-module-views']);
+        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
+        
         $componentPath = config('modules.paths.generator.component-class.path');
-
-
         if (is_array($componentPath)) {
             $componentPath = implode('', $componentPath);
         }
 
-        $componentPath = (string)$componentPath;
         $componentNamespace = $this->module_namespace($this->name, $componentPath);
-
-        Blade::componentNamespace($componentNamespace, $nameLower);
+        Blade::componentNamespace($componentNamespace, $this->nameLower);
     }
 
     /**
-     * Get the publishable view paths.
+     * Get the services provided by the provider.
      *
-     * @return string[]  Array of view paths.
+     * @return array<string>
      */
     public function provides(): array
     {
@@ -144,7 +124,7 @@ class ReportServiceProvider extends ServiceProvider
     /**
      * Get the publishable view paths.
      *
-     * @return string[]  Array of view paths.
+     * @return array<string>
      */
     private function getPublishableViewPaths(): array
     {
