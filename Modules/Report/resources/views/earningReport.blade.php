@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.reports.earning_report')" 
+            <x-admin.breadcrumb
+                :title="__('admin.reports.earning_report')"
                 :breadcrumbs="[
                     __('admin.reports.earning_report') => ''
                 ]">
@@ -201,9 +201,9 @@
                             </div>
                         </div>
                         <div class="dropdown">
-                            <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
+                            <button type="button" class="filtercollapse coloumn d-inline-flex align-items-center btn" data-bs-toggle="collapse" data-bs-target="#filtercollapse" aria-expanded="false" aria-controls="filtercollapse" onKeyDown="handleKeyDown(event)">
                                 <i class="ti ti-filter me-1"></i> {{__('admin.common.filter')}}
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -297,7 +297,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0">
-                                        <img src="{{ uploadedAsset($booking->profile_image, 'profile') }}" alt="Image Preview"></a>
+                                        <img src="{{ uploadedAsset($booking->profile_image, 'profile') }}" alt="Preview"></a>
                                     <div>
                                          <h6 class="fs-14 fw-semibold">{{$booking->full_name}}</h6>
                                     </div>
