@@ -6,6 +6,13 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PageRequest extends FormRequest
 {
+    /**
+     * Validation rule constants to avoid duplication
+     * sonarqube(php:S1192) - Define constants instead of duplicating literals
+     */
+    private const NULLABLE_ARRAY_MIN_1 = 'nullable|array|min:1';
+    private const NULLABLE_STRING = 'nullable|string';
+
     public function authorize()
     {
         return true;
@@ -15,19 +22,19 @@ class PageRequest extends FormRequest
     {
         $rules = [
             'title'            => 'required|max:100',
-            'section_title'    => 'nullable|array|min:1',
-            'section_title.*'  => 'nullable|string',
-            'section_label'    => 'nullable|array|min:1',
-            'section_label.*'  => 'nullable|string',
-            'page_content'     => 'nullable|array|min:1',
-            'page_content.*'   => 'nullable|string',
-            'meta_key'         => 'nullable|string',
-            'meta_title'       => 'nullable|string',
-            'meta_description' => 'nullable|string',
-            'keyword'          => 'nullable|string',
+            'section_title'    => self::NULLABLE_ARRAY_MIN_1,
+            'section_title.*'  => self::NULLABLE_STRING,
+            'section_label'    => self::NULLABLE_ARRAY_MIN_1,
+            'section_label.*'  => self::NULLABLE_STRING,
+            'page_content'     => self::NULLABLE_ARRAY_MIN_1,
+            'page_content.*'   => self::NULLABLE_STRING,
+            'meta_key'         => self::NULLABLE_STRING,
+            'meta_title'       => self::NULLABLE_STRING,
+            'meta_description' => self::NULLABLE_STRING,
+            'keyword'          => self::NULLABLE_STRING,
             'canonical_url'    => 'nullable|url',
-            'og_title'         => 'nullable|string',
-            'og_description'   => 'nullable|string',
+            'og_title'         => self::NULLABLE_STRING,
+            'og_description'   => self::NULLABLE_STRING,
             'language_id'      => 'nullable|integer|exists:translation_languages,id',
         ];
 

@@ -22,6 +22,4 @@ interface PageInterface
     public function getPagesWithFilters(array $filters): LengthAwarePaginator;
 
     public function getTranslatedPage(int $parentId, int $languageId);
-
-    public function pageBuilderApi(array $request);
 }
