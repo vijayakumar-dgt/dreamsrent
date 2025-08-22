@@ -5,8 +5,8 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content me-4 pb-0">
-            <x-admin.breadcrumb 
-                :title="__('admin.reports.income')" 
+            <x-admin.breadcrumb
+                :title="__('admin.reports.income')"
                 :breadcrumbs="[
                     __('admin.reports.income') => ''
                 ]">
@@ -144,8 +144,7 @@
             <div class="coupons-tabs">
                 <ul class="nav nav-pills mb-3" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" role="tab" aria-current="page"
-                            href="#income" aria-selected="true">{{__('admin.reports.income')}}</a>
+                        <button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#income" aria-current="page" aria-selected="true">{{__('admin.reports.income')}}</button>
                     </li>
                 </ul>
                 <div class="tab-content pb-3">
@@ -174,9 +173,9 @@
                                     </div>
                                 </div>
                                 <div class="dropdown">
-                                    <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
+                                    <button type="button" class="filtercollapse coloumn d-inline-flex align-items-center btn " data-bs-toggle="collapse" data-bs-target="#filtercollapse" aria-expanded="false" aria-controls="filtercollapse" onKeyDown="handleKeyDown(event)">
                                         <i class="ti ti-filter me-1"></i> {{__('admin.common.filter')}}
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
@@ -257,7 +256,7 @@
                                                         $imagePath = $newpath;
                                                     }
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" class="rounded-3" alt="Image Preview"></a>
+                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" class="rounded-3" alt="Preview"></a>
                                                 <div>
                                                     <h6><a href="javascript:void(0);" class="fw-semibold fs-14">{{$booking->name}}</a></h6>
                                                 </div>
