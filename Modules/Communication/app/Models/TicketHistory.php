@@ -22,32 +22,28 @@ class TicketHistory extends Model
     /** @return BelongsTo<Ticket, TicketHistory> */
     public function ticket(): BelongsTo
     {
-        /** @var BelongsTo<Ticket, TicketHistory> $relation */
-        $relation = $this->belongsTo(Ticket::class, 'ticket_id');
-        return $relation;
+        /** @var BelongsTo<Ticket, TicketHistory> */
+        return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 
     /** @return BelongsTo<User, TicketHistory> */
     public function user(): BelongsTo
     {
-        /** @var BelongsTo<User, TicketHistory> $relation */
-        $relation = $this->belongsTo(User::class, 'user_id');
-        return $relation;
+        /** @var BelongsTo<User, TicketHistory> */
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /** @return BelongsTo<User, TicketHistory> */
     public function creator(): BelongsTo
     {
-        /** @var BelongsTo<User, TicketHistory> $relation */
-        $relation = $this->belongsTo(User::class, 'created_by');
-        return $relation;
+        /** @var BelongsTo<User, TicketHistory> */
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /** @return BelongsTo<User, TicketHistory> */
     public function updater(): BelongsTo
     {
-        /** @var BelongsTo<User, TicketHistory> $relation */
-        $relation = $this->belongsTo(User::class, 'updated_by');
-        return $relation;
+        /** @var BelongsTo<User, TicketHistory> */
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

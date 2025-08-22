@@ -51,14 +51,14 @@ class ContactMessagesRepository implements ContactMessagesRepositoryInterface
             $contacts = Contact::query()
                 ->when($search, function ($query) use ($search) {
                     $query->where('name', 'LIKE', '%' . $search . '%')
-                          ->orWhere('phone_number', 'LIKE', '%' . $search . '%')
-                          ->orWhere('email', 'LIKE', '%' . $search . '%');
+                        ->orWhere('phone_number', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%');
                 })
-                ->when($sortBy === 'latest', fn ($query) => $query->orderBy('created_at', 'desc'))
-                ->when($sortBy === 'ascending', fn ($query) => $query->orderBy('name', 'asc'))
-                ->when($sortBy === 'descending', fn ($query) => $query->orderBy('name', 'desc'))
-                ->when($sortBy === 'last_month', fn ($query) => $query->whereBetween('created_at', [$startDate, $endDate]))
-                ->when($sortBy === 'last_7_days', fn ($query) => $query->whereBetween('created_at', [$sevenStartDate, $sevenEndDate]))
+                ->when($sortBy === 'latest', fn($query) => $query->orderBy('created_at', 'desc'))
+                ->when($sortBy === 'ascending', fn($query) => $query->orderBy('name', 'asc'))
+                ->when($sortBy === 'descending', fn($query) => $query->orderBy('name', 'desc'))
+                ->when($sortBy === 'last_month', fn($query) => $query->whereBetween('created_at', [$startDate, $endDate]))
+                ->when($sortBy === 'last_7_days', fn($query) => $query->whereBetween('created_at', [$sevenStartDate, $sevenEndDate]))
                 ->get()
                 ->map(function ($contact) {
                     $contact->name = ucwords($contact->name);
@@ -91,7 +91,9 @@ class ContactMessagesRepository implements ContactMessagesRepositoryInterface
         try {
             $idInput = $request->id;
 
+            // Still need to validate the input format
             if (!is_numeric($idInput)) {
+                // Return 1: Bad Request
                 return [
                     'code'    => 400,
                     'success' => false,
@@ -99,24 +101,26 @@ class ContactMessagesRepository implements ContactMessagesRepositoryInterface
                 ];
             }
 
-            $contact = Contact::find((int) $idInput);
-
-            if (!$contact) {
-                return [
-                    'code'    => 404,
-                    'success' => false,
-                    'message' => 'Contact not found.'
-                ];
-            }
+            // findOrFail throws an exception if not found, which is caught below
+            $contact = Contact::findOrFail((int) $idInput);
 
             $contact->delete();
 
+            // Return 2: Success
             return [
                 'code'    => 200,
                 'success' => true,
                 'message' => __('admin.support.contact_message_delete_success')
             ];
+        } catch ((\Exception $e) {
+            // Handle the specific case of the model not being found
+            return [
+                'code'    => 404,
+                'success' => false,
+                'message' => 'Contact not found.'
+            ];
         } catch (\Exception $e) {
+            // Return 3: General Error
             return [
                 'code'    => 500,
                 'success' => false,

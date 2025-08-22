@@ -3,12 +3,16 @@
 namespace Modules\Communication\Helpers;
 
 use Illuminate\Support\Facades\Config;
+use Modules\Communication\Exceptions\SendGridConfigurationException;
+use Modules\Communication\Exceptions\SmtpConfigurationException;
 use Modules\GeneralSetting\Models\CommunicationSetting;
 
 class MailConfigurator
 {
     /**
      * Configure mail settings based on communication settings.
+     * @throws SmtpConfigurationException
+     * @throws SendGridConfigurationException
      */
     public static function configureMail(): void
     {
@@ -74,8 +78,8 @@ class MailConfigurator
             ->value('value');
 
 
-        if (!$getmail || !$getpassword || !$gethost) {
-            throw new \Exception("SMTP settings are incomplete.");
+         if (!$getmail || !$getpassword || !$gethost) {
+            throw new SmtpConfigurationException("SMTP settings are incomplete.");
         }
 
         Config::set('mail.from.address', $getmail);
@@ -103,8 +107,8 @@ class MailConfigurator
             ->where('key', 'sendgrid_key')
             ->value('value');
 
-        if (!$getmail || !$getkey) {
-            throw new \Exception("SendGrid settings are incomplete.");
+          if (!$getmail || !$getkey) {
+            throw new SendGridConfigurationException("SendGrid settings are incomplete.");
         }
 
         Config::set('mail.from.address', $getmail);

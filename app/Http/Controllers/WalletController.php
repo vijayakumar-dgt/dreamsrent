@@ -42,12 +42,12 @@ class WalletController extends Controller
             'payment_type'  => 'required|in:paypal,stripe,wallet_one',
         ]);
 
-        $user = Auth::guard('web')->user();
-        $amount = $request->wallet_amount;
+        $user        = Auth::guard('web')->user();
+        $amount      = $request->wallet_amount;
         $paymentType = ucfirst($request->payment_type);
 
         $response = [];
-        $status   = 500;
+        $status   = null;
 
         if (!$user) {
             $response = [
@@ -77,8 +77,9 @@ class WalletController extends Controller
             }
         }
 
-        return response()->json($response, $status);
+        return response()->json($response, $status ?? 500);
     }
+
 
     private function normalizePaypalResponse($paypalResponse): ?array
     {

@@ -6,20 +6,34 @@ use Illuminate\Database\Eloquent\Collection;
 use Modules\Communication\Models\Ticket;
 use Modules\Communication\Models\TicketHistory;
 use Modules\Communication\Repositories\Contracts\TicketInterface;
+use Modules\Communication\Exceptions\InvalidStatusTransitionException;
+use Modules\Communication\Exceptions\ReplyNotAllowedException;
 
 class TicketRepository implements TicketInterface
 {
+    private const USER_RELATION = 'user:id,name,email';
+    private const USER_DETAIL_RELATION = 'user.userDetail:id,user_id,first_name,last_name,profile_image';
+
+    private const ASSIGNEE_RELATION = 'assignee:id,name,email';
+    private const ASSIGNEE_DETAIL_RELATION = 'assignee.userDetail:id,user_id,first_name,last_name,profile_image';
+
+    private const HISTORIES_RELATION = 'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at';
+    private const HISTORIES_USER_RELATION = 'ticketHistories.user:id,name,email';
+    private const HISTORIES_USER_DETAIL_RELATION = 'ticketHistories.user.userDetail:id,user_id,first_name,last_name,profile_image';
+
+    private const TICKET_RELATIONS = [
+        self::USER_RELATION,
+        self::USER_DETAIL_RELATION,
+        self::ASSIGNEE_RELATION,
+        self::ASSIGNEE_DETAIL_RELATION,
+        self::HISTORIES_RELATION,
+        self::HISTORIES_USER_RELATION,
+        self::HISTORIES_USER_DETAIL_RELATION,
+    ];
+    
     public function index(): Collection
     {
-        return Ticket::with([
-            'user:id,name,email',
-            'user.userDetail:id,user_id,first_name,last_name,profile_image',
-            'assignee:id,name,email',
-            'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
-            'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
-            'ticketHistories.user:id,name,email',
-            'ticketHistories.user.userDetail:id,user_id,first_name,last_name,profile_image',
-        ])->get();
+        return Ticket::with(self::TICKET_RELATIONS)->get();
     }
 
     public function create(array $data): mixed
@@ -40,28 +54,12 @@ class TicketRepository implements TicketInterface
 
     public function find(int $id): ?object
     {
-        return Ticket::with([
-            'user:id,name,email',
-            'user.userDetail:id,user_id,first_name,last_name,profile_image',
-            'assignee:id,name,email',
-            'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
-            'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
-            'ticketHistories.user:id,name,email',
-            'ticketHistories.user.userDetail:id,user_id,first_name,last_name,profile_image',
-        ])->find($id);
+        return Ticket::with(self::TICKET_RELATIONS)->find($id);
     }
 
     public function getTicketsForUser(int $userId, int $userType, array $filters = []): Collection
     {
-        $query = Ticket::with([
-            'user:id,name,email',
-            'user.userDetail:id,user_id,first_name,last_name,profile_image',
-            'assignee:id,name,email',
-            'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
-            'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
-            'ticketHistories.user:id,name,email',
-            'ticketHistories.user.userDetail:id,user_id,first_name,last_name,profile_image',
-        ]);
+        $query = Ticket::with(self::TICKET_RELATIONS);
 
         // Restrict by user type
         if ($userType === 1) {
@@ -145,9 +143,8 @@ class TicketRepository implements TicketInterface
 
         if ($currentStatus !== $status) {
             if (!isset($allowedTransitions[$currentStatus]) || !in_array($status, $allowedTransitions[$currentStatus])) {
-                throw new \Exception(__('admin.support.invalid_status_transition'), 403);
+                throw new InvalidStatusTransitionException(__('admin.support.invalid_status_transition'));
             }
-
             $ticket->status = $status;
         }
 
@@ -156,7 +153,7 @@ class TicketRepository implements TicketInterface
         $ticket->save();
 
         if ($currentStatus !== 3) {
-            throw new \Exception(__('admin.support.reply_allowed_only_in_status_3'), 403);
+            throw new ReplyNotAllowedException(__('admin.support.reply_allowed_only_in_status_3'));
         }
 
         TicketHistory::create([
