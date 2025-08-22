@@ -51,21 +51,6 @@ class ReportRepository implements ReportRepositoryInterface
         }
         $symbol = getDefaultCurrencySymbol();
 
-        $bookings->groupBy(function ($booking) {
-            return Carbon::parse($booking->booking_date)->format('Y-m-d'); // Group by date
-        })
-        ->map(function ($dayBookings) {
-            return [
-                'date' => $dayBookings->first()?->booking_date,
-                'income' => $dayBookings->sum(function ($booking) {
-                    return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ? $booking->final_price : 0;
-                }),
-                'expense' => 0 // Placeholder, modify if you have expenses
-            ];
-        })
-
-        ->values(); // Convert collection to array
-
         $data = ['totalIncome' => $totalIncome, 'topEarningCar' => $topEarningCar, 'vehicle' => $vehicle, 'percentageChange' => $percentageChange, 'sign' => $sign, 'symbol' => $symbol, 'bookings' => $bookings, 'vehicleInfo' => $vehicleInfo, 'bookingsCount' => $bookingsCount];
         return $data;
     }
@@ -111,8 +96,6 @@ class ReportRepository implements ReportRepositoryInterface
             : ($thisMonthGrandTotal > 0 ? 100 : 0);
 
         $signbreak = $percentageBreakChange >= 0 ? '+' : '-';
-        $class = $percentageBreakChange >= 0 ? 'text-success' : 'text-danger';
-        $icon = $percentageBreakChange >= 0 ? 'ti ti-arrow-wave-right-up' : 'ti ti-arrow-wave-right-down';
         $percentageBreakChangeFormatted = $signbreak . abs($percentageBreakChange) . '%';
         $percentageBreakChangeFormatted = number_format((float) $percentageBreakChangeFormatted, 2);
 
@@ -149,17 +132,15 @@ class ReportRepository implements ReportRepositoryInterface
             ->groupBy('vehicle_id')
             ->map(fn($group) => $group->sum('final_price'));
 
-        $topEarningCar = $thisMonthEarnings->keys()->first();
+        $topEarningCarThisMonth = $thisMonthEarnings->keys()->first();
         $topEarningCarsTotal = $thisMonthEarnings->first();
-        $lastMonthEarningsForCar = (float) ($lastMonthEarnings[$topEarningCar] ?? 0);
+        $lastMonthEarningsForCar = (float) ($lastMonthEarnings[$topEarningCarThisMonth] ?? 0);
 
         $percentageCarChange = $lastMonthEarningsForCar > 0
             ? (($topEarningCarsTotal - $lastMonthEarningsForCar) / $lastMonthEarningsForCar) * 100
             : ($topEarningCarsTotal > 0 ? 100 : 0);
 
         $signCar = $percentageCarChange >= 0 ? '+' : '-';
-        $class = $percentageCarChange >= 0 ? 'text-success' : 'text-danger';
-        $icon = $percentageCarChange >= 0 ? 'ti ti-arrow-wave-right-up' : 'ti ti-arrow-wave-right-down';
         $percentageCarChangeFormatted = $signCar . abs($percentageCarChange) . '%';
         $percentageCarChangeFormatted = number_format((float) $percentageCarChangeFormatted, 2);
 
@@ -184,7 +165,6 @@ class ReportRepository implements ReportRepositoryInterface
 
     public function getEarningsBreakdown()
     {
-
         $breakdown = Booking::select(
             DB::raw('SUM(total_insurance_price) as total_insurance_price'),
             DB::raw('SUM(total_extra_service_price) as total_extra_service_price'),

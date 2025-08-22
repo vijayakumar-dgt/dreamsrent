@@ -46,4 +46,11 @@ class ReportController extends Controller
         $breakdown = $this->reportRepository->getEarningsBreakdown();
         return response()->json($breakdown);
     }
+
+    public function fetchFilteredBookings(): JsonResponse
+    {
+        return response()->json([
+            'message' => 'Method implementation required'
+        ]);
+    }
 }

@@ -21,6 +21,10 @@ class ReportRequest extends CustomFailedValidation
      */
     public function rules(): array
     {
-        return [];
+        // Add validation rules as needed for report-specific requests
+        return [
+            // Example: 'date_range' => 'nullable|string',
+            // Example: 'vehicle_id' => 'nullable|integer|exists:vehicle_info,id',
+        ];
     }
 }

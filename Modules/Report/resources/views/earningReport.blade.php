@@ -44,16 +44,13 @@
                                         </div>
                                     </div>
                                     <p class="fs-12 fw-normal d-flex align-items-center justify-content-center text-truncate mt-2">
-                                        @if($sign == '+')
-                                        <span class="text-success fs-12 d-flex align-items-center me-1">
-                                            <i class="ti ti-arrow-wave-right-up me-1"></i>{{$percentageChangeFormatted}}
+                                        @php
+                                            $changeClass = $sign == '+' ? 'text-success' : 'text-danger';
+                                            $changeIcon = $sign == '+' ? 'ti-arrow-wave-right-up' : 'ti-arrow-wave-right-down';
+                                        @endphp
+                                        <span class="{{ $changeClass }} fs-12 d-flex align-items-center me-1">
+                                            <i class="ti {{ $changeIcon }} me-1"></i>{{ $percentageChangeFormatted }}
                                         </span> {{ __('admin.reports.from_last_month') }}
-                                        @endif
-                                        @if($sign == '-')
-                                        <span class="text-danger fs-12 d-flex align-items-center me-1">
-                                            <i class="ti ti-arrow-wave-right-up me-1"></i>{{$percentageChangeFormatted}}
-                                        </span> {{ __('admin.reports.from_last_month') }}
-                                        @endif
                                     </p>
                                 </div>
                             </div>
@@ -71,16 +68,13 @@
                                         </div>
                                     </div>
                                     <p class="fs-12 fw-normal d-flex align-items-center justify-content-center text-truncate mt-2">
-                                        @if($signbreak == '+')
-                                        <span class="text-success fs-12 d-flex align-items-center me-1">
-                                            <i class="ti ti-arrow-wave-right-up me-1"></i>{{$percentageBreakChangeFormatted}}
+                                        @php
+                                            $breakClass = $signbreak == '+' ? 'text-success' : 'text-danger';
+                                            $breakIcon = $signbreak == '+' ? 'ti-arrow-wave-right-up' : 'ti-arrow-wave-right-down';
+                                        @endphp
+                                        <span class="{{ $breakClass }} fs-12 d-flex align-items-center me-1">
+                                            <i class="ti {{ $breakIcon }} me-1"></i>{{ $percentageBreakChangeFormatted }}
                                         </span> {{ __('admin.reports.from_last_month') }}
-                                        @endif
-                                        @if($signbreak == '-')
-                                        <span class="text-danger fs-12 d-flex align-items-center me-1">
-                                            <i class="ti ti-arrow-wave-right-up me-1"></i>{{$percentageBreakChangeFormatted}}
-                                        </span> {{ __('admin.reports.from_last_month') }}
-                                        @endif
                                     </p>
                                 </div>
                             </div>
@@ -98,16 +92,13 @@
                                         </div>
                                     </div>
                                     <p class="fs-12 fw-normal d-flex align-items-center justify-content-center text-truncate mt-2">
-                                        @if($sign == '+')
-                                        <span class="text-success fs-12 d-flex align-items-center me-1">
-                                            <i class="ti ti-arrow-wave-right-up me-1"></i>{{$percentageChangeFormatted}}
+                                        @php
+                                            $changeClass = $sign == '+' ? 'text-success' : 'text-danger';
+                                            $changeIcon = $sign == '+' ? 'ti-arrow-wave-right-up' : 'ti-arrow-wave-right-down';
+                                        @endphp
+                                        <span class="{{ $changeClass }} fs-12 d-flex align-items-center me-1">
+                                            <i class="ti {{ $changeIcon }} me-1"></i>{{ $percentageChangeFormatted }}
                                         </span> {{ __('admin.reports.from_last_month') }}
-                                        @endif
-                                        @if($sign == '-')
-                                        <span class="text-danger fs-12 d-flex align-items-center me-1">
-                                            <i class="ti ti-arrow-wave-right-up me-1"></i>{{$percentageChangeFormatted}}
-                                        </span> {{ __('admin.reports.from_last_month') }}
-                                        @endif
                                     </p>
                                 </div>
                             </div>
@@ -125,16 +116,13 @@
                                         </div>
                                     </div>
                                     <p class="fs-12 fw-normal d-flex align-items-center justify-content-center text-truncate mt-2">
-                                        @if($signCar == '+')
-                                        <span class="text-success fs-12 d-flex align-items-center me-1">
-                                            <i class="ti ti-arrow-wave-right-up me-1"></i>{{$percentageCarChangeFormatted}}
+                                        @php
+                                            $carClass = $signCar == '+' ? 'text-success' : 'text-danger';
+                                            $carIcon = $signCar == '+' ? 'ti-arrow-wave-right-up' : 'ti-arrow-wave-right-down';
+                                        @endphp
+                                        <span class="{{ $carClass }} fs-12 d-flex align-items-center me-1">
+                                            <i class="ti {{ $carIcon }} me-1"></i>{{ $percentageCarChangeFormatted }}
                                         </span> {{ __('admin.reports.from_last_month') }}
-                                        @endif
-                                        @if($signCar == '-')
-                                        <span class="text-danger fs-12 d-flex align-items-center me-1">
-                                            <i class="ti ti-arrow-wave-right-up me-1"></i>{{$percentageCarChangeFormatted}}
-                                        </span> {{ __('admin.reports.from_last_month') }}
-                                        @endif
                                     </p>
                                 </div>
                             </div>
@@ -328,15 +316,15 @@
                             </td>
                             <td>
                                 @php
-                                $statusLabels = [
-                                1 => ['text' => 'In Progress', 'color' => 'success'],
-                                2 => ['text' => 'Confirmed', 'color' => 'success'],
-                                3 => ['text' => 'Rejected', 'color' => 'danger'],
-                                4 => ['text' => 'Booked', 'color' => 'success'],
-                                5 => ['text' => 'Completed', 'color' => 'success'],
-                                6 => ['text' => 'Cancelled', 'color' => 'danger']
-                                ];
-                                $status = $statusLabels[$booking->booking_status] ?? ['text' => 'Unknown', 'color' => 'secondary'];
+                                    $statusConfig = config('booking.status_labels', [
+                                        1 => ['text' => 'In Progress', 'color' => 'success'],
+                                        2 => ['text' => 'Confirmed', 'color' => 'success'],
+                                        3 => ['text' => 'Rejected', 'color' => 'danger'],
+                                        4 => ['text' => 'Booked', 'color' => 'success'],
+                                        5 => ['text' => 'Completed', 'color' => 'success'],
+                                        6 => ['text' => 'Cancelled', 'color' => 'danger']
+                                    ]);
+                                    $status = $statusConfig[$booking->booking_status] ?? ['text' => 'Unknown', 'color' => 'secondary'];
                                 @endphp
                                 <span class="badge badge-soft-{{ $status['color'] }} d-inline-flex align-items-center badge-sm">
                                     <i class="ti ti-point-filled me-1 text-{{ $status['color'] }}"></i> {{ $status['text'] }}
