@@ -38,6 +38,7 @@ class Location extends Model
             $location->workingDays()->delete();
         });
     }
+
     /**
      * @return HasMany<LocationWorkingDay,Location>
      */

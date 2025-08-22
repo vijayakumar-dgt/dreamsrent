@@ -14,10 +14,10 @@ class BlogPostRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'title' => 'required|string|max:255',
-            'language' => 'required|integer',
+            'title'       => 'required|string|max:255',
+            'language'    => 'required|integer',
             'category_id' => 'required|integer',
-            'tag_id' => 'required|array',
+            'tag_id'      => 'required|array',
             'description' => 'nullable|string',
         ];
 

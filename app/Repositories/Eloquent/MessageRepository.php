@@ -16,7 +16,7 @@ class MessageRepository implements MessageRepositoryInterface
         $sender = current_user();
         $receiver = User::where('user_type', 1)->first();
         $lastMessage = null;
-        if ($sender) {
+        if ($sender instanceof \Illuminate\Contracts\Auth\Authenticatable) {
             $lastMessage = Message::where(function ($query) use ($sender) {
                 $query->where(function ($query) use ($sender) {
                     $query->where('sender_id', $sender->getAuthIdentifier())
@@ -26,10 +26,10 @@ class MessageRepository implements MessageRepositoryInterface
         }
         $seo_title = __('web.user.messages');
         return [
-            'sender' => $sender,
-            'receiver' => $receiver,
+            'sender'      => $sender,
+            'receiver'    => $receiver,
             'lastMessage' => $lastMessage,
-            'seo_title' => $seo_title
+            'seo_title'   => $seo_title
         ];
     }
 
@@ -37,10 +37,10 @@ class MessageRepository implements MessageRepositoryInterface
     {
         if ($request->messageType == 'file' && $request->hasFile('file')) {
             $foldername = 'chat';
-            $file       = $request->file('file');
-            $filename   = $file ? $file->getClientOriginalName() : null;
-            $mime_type  = $file ? $file->getClientMimeType() : null;
-            $size       = $file ? $file->getSize() : null;
+            $file = $request->file('file');
+            $filename = $file ? $file->getClientOriginalName() : null;
+            $mime_type = $file ? $file->getClientMimeType() : null;
+            $size = $file ? $file->getSize() : null;
             $path = $file ? uploadFile($file, $foldername, $filename) : null;
             $_message = new Message();
             $_message->sender_id = $request->sender_id;
@@ -61,10 +61,10 @@ class MessageRepository implements MessageRepositoryInterface
         }
         $publishMessage = ($request->messageType == 'file' && isset($path)) ? $path : $request->message;
         $payload = [
-            'sender_id' => $request->sender_id,
+            'sender_id'   => $request->sender_id,
             'receiver_id' => $request->receiver_id,
-            'message' => $publishMessage,
-            'type' => $request->messageType,
+            'message'     => $publishMessage,
+            'type'        => $request->messageType,
         ];
         $payload = json_encode($payload);
         if ($payload === false) {
@@ -119,11 +119,7 @@ class MessageRepository implements MessageRepositoryInterface
             ->limit($perPage)
             ->get();
 
-        if ($offset === 0) {
-            $nextOffset = null;
-        } else {
-            $nextOffset = max(0, $offset - $perPage);
-        }
+        $nextOffset = $offset === 0 ? null : max(0, $offset - $perPage);
         $lastMessage = Message::where(function ($query) use ($authUserId, $messagePartnerId) {
             $query->where('sender_id', $authUserId)
                 ->where('receiver_id', $messagePartnerId);
@@ -139,17 +135,17 @@ class MessageRepository implements MessageRepositoryInterface
             $messageText = strlen($lastMessage->message) > 20 ?
                 substr($lastMessage->message, 0, 20) . '...' : $lastMessage->message;
             $lastMessageResp = [
-                'id' => $lastMessage->id,
-                'message' => $lastMessage->type == 'text' ? $messageText : '<i class="fa fa-link"></i> ' . $messageText,
+                'id'         => $lastMessage->id,
+                'message'    => $lastMessage->type == 'text' ? $messageText : '<i class="fa fa-link"></i> ' . $messageText,
                 'created_at' => $lastMessage->created_at ? $lastMessage->created_at->diffForHumans() : null,
             ];
         }
         return [
-            'status' => true,
-            'code' => 200,
-            'messages' => MessageResource::collection($messages),
-            'next_offset' => $nextOffset,
-            'last_offset' => $offset,
+            'status'       => true,
+            'code'         => 200,
+            'messages'     => MessageResource::collection($messages),
+            'next_offset'  => $nextOffset,
+            'last_offset'  => $offset,
             'last_message' => $lastMessageResp
         ];
     }

@@ -4,11 +4,11 @@ namespace Modules\GeneralSetting\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Modules\GeneralSetting\Repositories\Contracts\AdminProfileInterface;
+use Modules\GeneralSetting\Repositories\Contracts\BlogCategoryRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\CommunicationSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\CurrencySettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\DbbackupInterface;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
-use Modules\GeneralSetting\Repositories\Contracts\BlogCategoryRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\FaqInterface;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
@@ -19,6 +19,7 @@ use Modules\GeneralSetting\Repositories\Contracts\SitemapSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\TaxRateSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\TestimonialInterface;
 use Modules\GeneralSetting\Repositories\Eloquent\AdminProfileRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\BlogCategoryRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\CommunicationSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\CurrencySettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\DbbackupRepository;
@@ -26,13 +27,12 @@ use Modules\GeneralSetting\Repositories\Eloquent\EmailTemplateSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\FaqRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\GeneralSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\InsuranceSettingRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\LanguageSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\LocalizationRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\SignatureSettingRepository;
-use Modules\GeneralSetting\Repositories\Eloquent\LanguageSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\SitemapSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\TaxRateSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\TestimonialRepository;
-use Modules\GeneralSetting\Repositories\Eloquent\BlogCategoryRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {

@@ -9,39 +9,39 @@ use App\Models\Wishlist;
 use App\Services\ImageResizer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Modules\CarInfo\Models\Cartype;
-use Modules\CarInfo\Models\Location;
-use Modules\CarInfo\Models\VehicleDamage;
-use Modules\CarInfo\Models\VehicleInfo;
-use Modules\CarInfo\Repositories\Contracts\VehicleInfoRepositoryInterface;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Modules\Booking\Models\Booking;
+use Modules\CarInfo\Models\Brand;
+use Modules\CarInfo\Models\CarColor;
+use Modules\CarInfo\Models\CarFuel;
 use Modules\CarInfo\Models\CarModel;
+use Modules\CarInfo\Models\Cartype;
+use Modules\CarInfo\Models\Category;
+use Modules\CarInfo\Models\DamageType;
+use Modules\CarInfo\Models\ExtraService;
+use Modules\CarInfo\Models\Location;
+use Modules\CarInfo\Models\PricingType;
 use Modules\CarInfo\Models\SafetyFeature;
+use Modules\CarInfo\Models\Transmission;
+use Modules\CarInfo\Models\VehicleDamage;
 use Modules\CarInfo\Models\VehicleExtraService;
 use Modules\CarInfo\Models\VehicleFaq;
+use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\VehicleInsurance;
 use Modules\CarInfo\Models\VehicleMeta;
 use Modules\CarInfo\Models\VehicleSeason;
 use Modules\CarInfo\Models\VehicleTarrif;
+use Modules\CarInfo\Repositories\Contracts\VehicleInfoRepositoryInterface;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
+use Modules\GeneralSetting\Models\Insurance;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
-use Illuminate\Support\Str;
-use Illuminate\Http\UploadedFile;
-use Modules\CarInfo\Models\Brand;
-use Modules\CarInfo\Models\CarColor;
-use Modules\CarInfo\Models\CarFuel;
-use Modules\CarInfo\Models\Category;
-use Modules\CarInfo\Models\DamageType;
-use Modules\CarInfo\Models\ExtraService;
-use Modules\CarInfo\Models\PricingType;
-use Modules\CarInfo\Models\Transmission;
-use Modules\GeneralSetting\Models\Insurance;
 
 class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 {
@@ -61,8 +61,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         $vechileLocation = Location::orderBy('id', 'desc')->where("language_id", $langID)->get();
 
         $data = [
-            'vechileName' => $vechileName,
-            'vechileType' => $vechileType,
+            'vechileName'     => $vechileName,
+            'vechileType'     => $vechileType,
             'vechileLocation' => $vechileLocation,
         ];
 
@@ -111,22 +111,22 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         $currencySymbol = $currency->symbol ?? "$";
 
         $data = [
-            'carTypes' => $carTypes,
-            'Brands' => $Brands,
-            'CarModel' => $CarModel,
-            'Category' => $Category,
-            'Location' => $Location,
-            'CarColor' => $CarColor,
-            'CarFuel' => $CarFuel,
-            'Transmission' => $Transmission,
-            'SafetyFeature' => $SafetyFeature,
-            'DamageTypes' => $DamageTypes,
-            'ExtraServices' => $ExtraServices,
+            'carTypes'         => $carTypes,
+            'Brands'           => $Brands,
+            'CarModel'         => $CarModel,
+            'Category'         => $Category,
+            'Location'         => $Location,
+            'CarColor'         => $CarColor,
+            'CarFuel'          => $CarFuel,
+            'Transmission'     => $Transmission,
+            'SafetyFeature'    => $SafetyFeature,
+            'DamageTypes'      => $DamageTypes,
+            'ExtraServices'    => $ExtraServices,
             'ExtraServiceInfo' => $ExtraServiceInfo,
-            'insurances' => $insurances,
-            'priceType' => $priceType,
-            'authUser' => $authUser,
-            'currencySymbol' => $currencySymbol,
+            'insurances'       => $insurances,
+            'priceType'        => $priceType,
+            'authUser'         => $authUser,
+            'currencySymbol'   => $currencySymbol,
         ];
 
         return $data;
@@ -171,6 +171,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             "transmission_id",
             "mileage",
             "passenger_capacity",
+            "water_tight",
+            "sliding",
+            "hatch",
             "num_seats",
             "num_doors",
             "num_airbags",
@@ -197,7 +200,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 if (!$query) {
                     $query = new VehicleInfo([
                         'language_id' => $languageId,
-                        'parent_id' => $baseVehicle->id,
+                        'parent_id'   => $baseVehicle->id,
                     ]);
                 }
             }
@@ -214,7 +217,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 if ($query == null) {
                     $query = new VehicleInfo([
                         'language_id' => $languageId,
-                        'parent_id' => $baseVehicle->parent_id,
+                        'parent_id'   => $baseVehicle->parent_id,
                     ]);
                 }
             }
@@ -274,24 +277,24 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         $currencySymbol = $currency->symbol ?? "$";
 
         $data = [
-            'carTypes' => $carTypes,
-            'Brands' => $Brands,
-            'Models' => $Models,
-            'Category' => $Category,
-            'Location' => $Location,
-            'CarFuel' => $CarFuel,
-            'CarColor' => $CarColor,
-            'Transmission' => $Transmission,
-            'SafetyFeature' => $SafetyFeature,
+            'carTypes'         => $carTypes,
+            'Brands'           => $Brands,
+            'Models'           => $Models,
+            'Category'         => $Category,
+            'Location'         => $Location,
+            'CarFuel'          => $CarFuel,
+            'CarColor'         => $CarColor,
+            'Transmission'     => $Transmission,
+            'SafetyFeature'    => $SafetyFeature,
             'selectedFeatures' => $selectedFeatures,
-            'vehiclePrices' => $vehiclePrices,
-            'ExtraServices' => $ExtraServices,
+            'vehiclePrices'    => $vehiclePrices,
+            'ExtraServices'    => $ExtraServices,
             'ExtraServiceInfo' => $ExtraServiceInfo,
-            'insurances' => $insurances,
-            'priceType' => $priceType,
-            'DamageTypes' => $DamageTypes,
-            'query' => $query,
-            'currencySymbol' => $currencySymbol,
+            'insurances'       => $insurances,
+            'priceType'        => $priceType,
+            'DamageTypes'      => $DamageTypes,
+            'query'            => $query,
+            'currencySymbol'   => $currencySymbol,
         ];
 
         return $data;
@@ -337,41 +340,44 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $category = Category::find($request->vehicle_category_id);
 
             $data = [
-                "vehicle_image" => $vehicleImagePath,
-                "language_id" => $request->lang_id,
-                "name" => $request->title,
-                'slug' => $slug,
-                "perma_link" => $request->perma_link,
-                "type_id" => $request->vehicle_type_id,
-                "brand_id" => $request->vehicle_brand_id,
-                "model_id" => $request->vehicle_model_id,
-                "category_id" => $request->vehicle_category_id,
-                "type" => $category?->slug ?? null,
-                "plate_number" => $request->plate_number,
-                "vin" => $request->vin_number,
-                "main_location_id" => $request->main_location_id,
-                "other_location" => $request->other_location,
-                "other_location_id" => $request->other_location_id,
-                "fuel_type_id" => $request->vehicle_fuel_id,
-                "odometer" => $request->odometer,
-                "color_id" => $request->vehicle_color_id,
-                "year" => $request->vehicle_year,
-                "transmission_id" => $request->vehicle_transmission_id,
-                "mileage" => $request->vehicle_mileage,
-                "passenger_capacity" => $request->vehicle_passenger,
-                "vehicle_price" => $vehiclePriceJson,
-                "num_seats" => $request->num_seats,
-                "num_doors" => $request->num_doors,
-                "num_airbags" => $request->num_airbags,
-                "vehicle_basekm" => $BaseKilo,
+                "vehicle_image"        => $vehicleImagePath,
+                "language_id"          => $request->lang_id,
+                "name"                 => $request->title,
+                'slug'                 => $slug,
+                "perma_link"           => $request->perma_link,
+                "type_id"              => $request->vehicle_type_id,
+                "brand_id"             => $request->vehicle_brand_id,
+                "model_id"             => $request->vehicle_model_id,
+                "category_id"          => $request->vehicle_category_id,
+                "type"                 => $category?->slug ?? null,
+                "plate_number"         => $request->plate_number,
+                "vin"                  => $request->vin_number,
+                "main_location_id"     => $request->main_location_id,
+                "other_location"       => $request->other_location,
+                "other_location_id"    => $request->other_location_id,
+                "fuel_type_id"         => $request->vehicle_fuel_id,
+                "odometer"             => $request->odometer,
+                "color_id"             => $request->vehicle_color_id,
+                "year"                 => $request->vehicle_year,
+                "transmission_id"      => $request->vehicle_transmission_id,
+                "mileage"              => $request->vehicle_mileage,
+                "passenger_capacity"   => $request->vehicle_passenger,
+                "water_tight"          => $request->water_tight,
+                "sliding"              => $request->sliding,
+                "hatch"                => $request->hatch,
+                "vehicle_price"        => $vehiclePriceJson,
+                "num_seats"            => $request->num_seats,
+                "num_doors"            => $request->num_doors,
+                "num_airbags"          => $request->num_airbags,
+                "vehicle_basekm"       => $BaseKilo,
                 "vehicle_extrakmprice" => $ExtraKilo,
-                "vehicle_video" => $request->car_video,
-                "vehicle_metatitle" => $request->seo_title,
+                "vehicle_video"        => $request->car_video,
+                "vehicle_metatitle"    => $request->seo_title,
                 "vehicle_metakeywords" => $request->seo_key,
-                "vehicle_metadesc" => $request->seo_description,
-                "features" => $request->feature_id,
-                "description" => $request->description,
-                "created_by" => $authId,
+                "vehicle_metadesc"     => $request->seo_description,
+                "features"             => $request->feature_id,
+                "description"          => $request->description,
+                "created_by"           => $authId,
             ];
 
             $save = VehicleInfo::create($data);
@@ -489,7 +495,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                             VehicleTarrif::where('id', $tariff['id'])
                                 ->where('vehicle_id', $save->id)
                                 ->update([
-                                    'tariff_title' => $tariff['title'],
+                                    'tariff_title'       => $tariff['title'],
                                     'tariff_daily_price' => $tariff['daily_price'],
                                     'tariff_from_days'   => $tariff['from_days'],
                                     'tariff_to_days'     => $tariff['to_days'],
@@ -499,7 +505,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                         } else {
                             VehicleTarrif::create([
                                 'vehicle_id'         => $save->id,
-                                'tariff_title' => $tariff['title'],
+                                'tariff_title'       => $tariff['title'],
                                 'tariff_daily_price' => $tariff['daily_price'],
                                 'tariff_from_days'   => $tariff['from_days'],
                                 'tariff_to_days'     => $tariff['to_days'],
@@ -520,25 +526,25 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                             VehicleSeason::where('id', $season['id'])
                                 ->where('vehicle_id', $save->id)
                                 ->update([
-                                    'seasonal_title'       => $season['title'],
-                                    'seasonal_start_date'  => $season['start_date'],
-                                    'seasonal_end_date'    => $season['end_date'],
-                                    'seasonal_daily_rate'  => $season['daily_rate'],
-                                    'seasonal_weekly_rate' => $season['weekly_rate'],
+                                    'seasonal_title'        => $season['title'],
+                                    'seasonal_start_date'   => $season['start_date'],
+                                    'seasonal_end_date'     => $season['end_date'],
+                                    'seasonal_daily_rate'   => $season['daily_rate'],
+                                    'seasonal_weekly_rate'  => $season['weekly_rate'],
                                     'seasonal_monthly_rate' => $season['monthly_rate'],
-                                    'seasonal_late_fee'    => $season['late_fee'],
+                                    'seasonal_late_fee'     => $season['late_fee'],
                                 ]);
                         } else {
                             // Create new seasonal pricing if ID is null
                             VehicleSeason::create([
-                                'vehicle_id'           => $save->id,
-                                'seasonal_title'       => $season['title'],
-                                'seasonal_start_date'  => $season['start_date'],
-                                'seasonal_end_date'    => $season['end_date'],
-                                'seasonal_daily_rate'  => $season['daily_rate'],
-                                'seasonal_weekly_rate' => $season['weekly_rate'],
+                                'vehicle_id'            => $save->id,
+                                'seasonal_title'        => $season['title'],
+                                'seasonal_start_date'   => $season['start_date'],
+                                'seasonal_end_date'     => $season['end_date'],
+                                'seasonal_daily_rate'   => $season['daily_rate'],
+                                'seasonal_weekly_rate'  => $season['weekly_rate'],
                                 'seasonal_monthly_rate' => $season['monthly_rate'],
-                                'seasonal_late_fee'    => $season['late_fee'],
+                                'seasonal_late_fee'     => $season['late_fee'],
                             ]);
                         }
                     }
@@ -565,10 +571,10 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                             ]);
                         } else {
                             VehicleExtraService::create([
-                                'vehicle_id' => $save->id,
+                                'vehicle_id'       => $save->id,
                                 'extra_service_id' => $serviceId,
-                                'value' => $value,
-                                'price' => $price,
+                                'value'            => $value,
+                                'price'            => $price,
                             ]);
                         }
                     }
@@ -623,13 +629,13 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.rentals.vehicle_create_success'),
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_create_error'),
             ];
@@ -641,7 +647,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         try {
             $authId = Auth::guard('admin')->id();
 
-            $vehicleID  = $request->vehicle_id;
+            $vehicleID = $request->vehicle_id;
             /** @var \Modules\CarInfo\Models\VehicleInfo $vehicle */
             $vehicle = VehicleInfo::find($vehicleID);
 
@@ -683,40 +689,43 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $category = Category::find($request->vehicle_category_id);
 
             $data = [
-                "vehicle_image" => $vehicleImagePath,
-                "parent_id" => (int) $request->parent_id,
-                "name" => $request->title,
-                'slug' => $slug,
-                "perma_link" => $request->perma_link,
-                "type_id" => $request->vehicle_type_id,
-                "brand_id" => $request->vehicle_brand_id,
-                "model_id" => $request->vehicle_model_id,
-                "category_id" => $request->vehicle_category_id,
-                "type" => $category?->slug ?? null,
-                "plate_number" => $request->plate_number,
-                "vin" => $request->vin_number,
-                "main_location_id" => $request->main_location_id,
-                "other_location_id" => $request->other_location_id,
-                "fuel_type_id" => $request->vehicle_fuel_id,
-                "odometer" => $request->odometer,
-                "color_id" => $request->vehicle_color_id,
-                "year" => $request->vehicle_year,
-                "transmission_id" => $request->vehicle_transmission_id,
-                "mileage" => $request->vehicle_mileage,
-                "passenger_capacity" => $request->vehicle_passenger,
-                "vehicle_price" => $vehiclePriceJson,
-                "num_seats" => $request->num_seats,
-                "num_doors" => $request->num_doors,
-                "num_airbags" => $request->num_airbags,
-                "vehicle_basekm" => $BaseKilo,
+                "vehicle_image"        => $vehicleImagePath,
+                "parent_id"            => (int) $request->parent_id,
+                "name"                 => $request->title,
+                'slug'                 => $slug,
+                "perma_link"           => $request->perma_link,
+                "type_id"              => $request->vehicle_type_id,
+                "brand_id"             => $request->vehicle_brand_id,
+                "model_id"             => $request->vehicle_model_id,
+                "category_id"          => $request->vehicle_category_id,
+                "type"                 => $category?->slug ?? null,
+                "plate_number"         => $request->plate_number,
+                "vin"                  => $request->vin_number,
+                "main_location_id"     => $request->main_location_id,
+                "other_location_id"    => $request->other_location_id,
+                "fuel_type_id"         => $request->vehicle_fuel_id,
+                "odometer"             => $request->odometer,
+                "color_id"             => $request->vehicle_color_id,
+                "year"                 => $request->vehicle_year,
+                "transmission_id"      => $request->vehicle_transmission_id,
+                "mileage"              => $request->vehicle_mileage,
+                "passenger_capacity"   => $request->vehicle_passenger,
+                "water_tight"          => $request->water_tight,
+                "sliding"              => $request->sliding,
+                "hatch"                => $request->hatch,
+                "vehicle_price"        => $vehiclePriceJson,
+                "num_seats"            => $request->num_seats,
+                "num_doors"            => $request->num_doors,
+                "num_airbags"          => $request->num_airbags,
+                "vehicle_basekm"       => $BaseKilo,
                 "vehicle_extrakmprice" => $ExtraKilo,
-                "vehicle_video" => $request->car_video,
-                "vehicle_metatitle" => $request->seo_title,
+                "vehicle_video"        => $request->car_video,
+                "vehicle_metatitle"    => $request->seo_title,
                 "vehicle_metakeywords" => $request->seo_key,
-                "vehicle_metadesc" => $request->seo_description,
-                "features" => $request->feature_id,
-                "description" => $request->description,
-                "created_by" => $authId,
+                "vehicle_metadesc"     => $request->seo_description,
+                "features"             => $request->feature_id,
+                "description"          => $request->description,
+                "created_by"           => $authId,
             ];
 
             if ($request->filled('language_id')) {
@@ -738,7 +747,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $imagePaths = [];
                 if (is_array($images)) {
                     foreach ($images as $image) {
-                        $fileName =  $this->imageResizer->uploadFile($image, 'vehicles/images');
+                        $fileName = $this->imageResizer->uploadFile($image, 'vehicles/images');
                         $imagePaths[] = $fileName;
                     }
                 }
@@ -877,7 +886,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                             VehicleTarrif::where('id', $tariff['id'])
                                 ->where('vehicle_id', $update->id)
                                 ->update([
-                                    'tariff_title' => $tariff['title'],
+                                    'tariff_title'       => $tariff['title'],
                                     'tariff_daily_price' => $tariff['daily_price'],
                                     'tariff_from_days'   => $tariff['from_days'],
                                     'tariff_to_days'     => $tariff['to_days'],
@@ -887,7 +896,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                         } else {
                             VehicleTarrif::create([
                                 'vehicle_id'         => $update->id,
-                                'tariff_title' => $tariff['title'],
+                                'tariff_title'       => $tariff['title'],
                                 'tariff_daily_price' => $tariff['daily_price'],
                                 'tariff_from_days'   => $tariff['from_days'],
                                 'tariff_to_days'     => $tariff['to_days'],
@@ -909,25 +918,25 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                             VehicleSeason::where('id', $season['id'])
                                 ->where('vehicle_id', $update->id)
                                 ->update([
-                                    'seasonal_title'       => $season['title'],
-                                    'seasonal_start_date'  => $season['start_date'],
-                                    'seasonal_end_date'    => $season['end_date'],
-                                    'seasonal_daily_rate'  => $season['daily_rate'],
-                                    'seasonal_weekly_rate' => $season['weekly_rate'],
+                                    'seasonal_title'        => $season['title'],
+                                    'seasonal_start_date'   => $season['start_date'],
+                                    'seasonal_end_date'     => $season['end_date'],
+                                    'seasonal_daily_rate'   => $season['daily_rate'],
+                                    'seasonal_weekly_rate'  => $season['weekly_rate'],
                                     'seasonal_monthly_rate' => $season['monthly_rate'],
-                                    'seasonal_late_fee'    => $season['late_fee'],
+                                    'seasonal_late_fee'     => $season['late_fee'],
                                 ]);
                         } else {
                             // Create new seasonal pricing if ID is null
                             VehicleSeason::create([
-                                'vehicle_id'           => $update->id,
-                                'seasonal_title'       => $season['title'],
-                                'seasonal_start_date'  => $season['start_date'],
-                                'seasonal_end_date'    => $season['end_date'],
-                                'seasonal_daily_rate'  => $season['daily_rate'],
-                                'seasonal_weekly_rate' => $season['weekly_rate'],
+                                'vehicle_id'            => $update->id,
+                                'seasonal_title'        => $season['title'],
+                                'seasonal_start_date'   => $season['start_date'],
+                                'seasonal_end_date'     => $season['end_date'],
+                                'seasonal_daily_rate'   => $season['daily_rate'],
+                                'seasonal_weekly_rate'  => $season['weekly_rate'],
                                 'seasonal_monthly_rate' => $season['monthly_rate'],
-                                'seasonal_late_fee'    => $season['late_fee'],
+                                'seasonal_late_fee'     => $season['late_fee'],
                             ]);
                         }
                     }
@@ -944,10 +953,10 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                     // Insert new records
                     foreach ($extraServices as $service) {
                         VehicleExtraService::create([
-                            'vehicle_id' => $update->id,
+                            'vehicle_id'       => $update->id,
                             'extra_service_id' => $service['service_id'],
-                            'value' => $service['value'],
-                            'price' => $service['price'],
+                            'value'            => $service['value'],
+                            'price'            => $service['price'],
                         ]);
                     }
                 }
@@ -1001,13 +1010,13 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.rentals.vehicle_update_success')
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error'),
             ];
         }
@@ -1020,7 +1029,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $authId = current_user();
             if (!$authId) {
                 return [
-                    'code' => 401,
+                    'code'    => 401,
                     'message' => __('Unauthorized.'),
                 ];
             }
@@ -1135,7 +1144,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                         }
                     } catch (\Exception $e) {
                         return [
-                            'code' => 400,
+                            'code'    => 400,
                             'message' => __('Invalid date format.'),
                         ];
                     }
@@ -1143,7 +1152,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             $vehicles = $query->where("language_id", $languageId)->get()->map(function ($vehicle) {
-                $vehicle->vehicle_image = uploadedAsset($vehicle->vehicle_image);
+                $vehicleImagePath = $vehicle->vehicle_image ?? '';
+                $filename = basename($vehicleImagePath);
+                $newpath = 'vehicles/images/small/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $vehicleImagePath = $newpath;
+                }
+                $vehicle->vehicle_image = uploadedAsset($vehicleImagePath);
 
                 $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
                 $currency = null;
@@ -1160,7 +1176,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
                 if ($vehicleMetas) {
                     $images = $vehicleMetas->value ? json_decode($vehicleMetas->value) : [];
-                    $vehicle->multiple_vehicle_images = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $images);
+                    $vehicle->multiple_vehicle_images = array_map(fn ($img) => url('storage/vehicles/' . basename($img)), $images);
                 } else {
                     $vehicle->multiple_vehicle_images = [];
                 }
@@ -1176,15 +1192,15 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             });
 
             return [
-                'code' => 200,
-                'status' => 'success',
+                'code'    => 200,
+                'status'  => 'success',
                 'message' => __('Vehicles list retrieved successfully.'),
-                'data' => $vehicles,
+                'data'    => $vehicles,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
-                'status' => 'error',
+                'code'    => 500,
+                'status'  => 'error',
                 'message' => __('admin.common.default_retrieve_error')
             ];
         }
@@ -1228,9 +1244,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             if (!$location) {
                 return [
-                    'code' => 200,
+                    'code'    => 200,
                     'message' => __('Vehicles list retrieved successfully.'),
-                    'data' => []
+                    'data'    => []
                 ];
             }
 
@@ -1383,7 +1399,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             if (count($dates) === 2) {
                 try {
                     $stDate = $dates[0];
-                    $eDate  = $dates[1];
+                    $eDate = $dates[1];
                     if ($stDate && $eDate) {
                         $startDate = Carbon::createFromFormat('m/d/Y', trim($stDate));
                         $endDate = Carbon::createFromFormat('m/d/Y', trim($eDate));
@@ -1396,7 +1412,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                     }
                 } catch (\Exception $e) {
                     return [
-                        'code' => 400,
+                        'code'    => 400,
                         'message' => __('Invalid date format.'),
                     ];
                 }
@@ -1486,57 +1502,57 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 }
             }
             return [
-                'id' => $vehicle->id,
-                'name' => $vehicle->name,
-                'slug' => $vehicle->slug,
-                'vehicle_image' => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
+                'id'                      => $vehicle->id,
+                'name'                    => $vehicle->name,
+                'slug'                    => $vehicle->slug,
+                'vehicle_image'           => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
                 'multiple_vehicle_images' => $multipleImages,
-                'has_multiple_image' => count($multipleImages) > 1,
-                'avatar_image' => $avatarImage,
-                'brand' => $vehicle->brand->brand_name ?? null,
-                'car_type' => $vehicle->carType->name ?? null,
-                'category' => $vehicle->category->name ?? null,
-                'location' => $vehicle->mainLocation->name ?? null,
-                'color' => $vehicle->color->name ?? null,
-                'color_code' => $vehicle->color->value ?? null,
-                'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
-                'transmission' => $vehicle->transmission->name ?? null,
-                'year' => $vehicle->year,
-                'mileage' => $vehicle->mileage,
-                'passenger_capacity' => $vehicle->passenger_capacity,
-                'num_seats' => $vehicle->num_seats,
-                'num_doors' => $vehicle->num_doors,
-                'num_airbags' => $vehicle->num_airbags,
-                'vehicle_video' => $vehicle->vehicle_video,
-                'features' => $vehicle->features,
-                'currency' => $currencySymbol,
-                'rating' => $rating,
-                'wishlist' => $wishlistExists,
-                'review_count' => $review_count,
-                'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                'is_featured' => $vehicle->popular == 1 ? true : false,
-                'is_top_rated' => is_numeric($rating) && $rating >= 4,
-                'seo_title' => $vehicle->vehicle_metatitle,
-                'seo_key' => $vehicle->vehicle_metakeywords,
-                'seo_description' => $vehicle->vehicle_metadesc,
-                'authenticated' => Auth::guard('web')->check(),
-                'created_at' => $vehicle->created_at,
-                'status' => $vehicle->status,
+                'has_multiple_image'      => count($multipleImages) > 1,
+                'avatar_image'            => $avatarImage,
+                'brand'                   => $vehicle->brand->brand_name ?? null,
+                'car_type'                => $vehicle->carType->name ?? null,
+                'category'                => $vehicle->category->name ?? null,
+                'location'                => $vehicle->mainLocation->name ?? null,
+                'color'                   => $vehicle->color->name ?? null,
+                'color_code'              => $vehicle->color->value ?? null,
+                'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
+                'transmission'            => $vehicle->transmission->name ?? null,
+                'year'                    => $vehicle->year,
+                'mileage'                 => $vehicle->mileage,
+                'passenger_capacity'      => $vehicle->passenger_capacity,
+                'num_seats'               => $vehicle->num_seats,
+                'num_doors'               => $vehicle->num_doors,
+                'num_airbags'             => $vehicle->num_airbags,
+                'vehicle_video'           => $vehicle->vehicle_video,
+                'features'                => $vehicle->features,
+                'currency'                => $currencySymbol,
+                'rating'                  => $rating,
+                'wishlist'                => $wishlistExists,
+                'review_count'            => $review_count,
+                'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
+                'is_featured'             => $vehicle->popular == 1 ? true : false,
+                'is_top_rated'            => is_numeric($rating) && $rating >= 4,
+                'seo_title'               => $vehicle->vehicle_metatitle,
+                'seo_key'                 => $vehicle->vehicle_metakeywords,
+                'seo_description'         => $vehicle->vehicle_metadesc,
+                'authenticated'           => Auth::guard('web')->check(),
+                'created_at'              => $vehicle->created_at,
+                'status'                  => $vehicle->status,
             ];
         });
 
 
         return [
-            'code' => 200,
-            'message' => __('Vehicles list retrieved successfully.'),
-            'data' => $data,
+            'code'       => 200,
+            'message'    => __('Vehicles list retrieved successfully.'),
+            'data'       => $data,
             'pagination' => [
-                'total' => $vehicles->total(), // Total vehicles count
-                'per_page' => $vehicles->perPage(), // Vehicles per page
-                'current_page' => $vehicles->currentPage(), // Current page number
-                'last_page' => $vehicles->lastPage(), // Last page number
-                'from' => $vehicles->firstItem(), // First item number on the page
-                'to' => $vehicles->lastItem(), // Last item number on the page
+                'total'         => $vehicles->total(), // Total vehicles count
+                'per_page'      => $vehicles->perPage(), // Vehicles per page
+                'current_page'  => $vehicles->currentPage(), // Current page number
+                'last_page'     => $vehicles->lastPage(), // Last page number
+                'from'          => $vehicles->firstItem(), // First item number on the page
+                'to'            => $vehicles->lastItem(), // Last item number on the page
                 'next_page_url' => $vehicles->nextPageUrl(), // Next page URL
                 'prev_page_url' => $vehicles->previousPageUrl(), // Previous page URL
             ],
@@ -1553,18 +1569,18 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             if (!$vehicle) {
                 return [
-                    'code' => 404,
+                    'code'   => 404,
                     'exists' => 'no'
                 ];
             }
 
             return [
-                'code' => 200,
+                'code'   => 200,
                 'exists' => 'yes'
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'  => 500,
                 'error' => __('admin.common.default_retrieve_error')
             ];
         }
@@ -1576,14 +1592,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $vehicleSeasons = VehicleSeason::where("vehicle_id", $vehicleId)->get();
 
             return [
-                'code'  => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $vehicleSeasons
+                'data'    => $vehicleSeasons
             ];
         } catch (\Exception $e) {
             return [
-                'code'  => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
@@ -1596,14 +1612,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $vehicleTrraifs = VehicleTarrif::where("vehicle_id", $vehicleId)->get();
 
             return [
-                'code'  => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $vehicleTrraifs
+                'data'    => $vehicleTrraifs
             ];
         } catch (\Exception $e) {
             return [
-                'code'  => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
@@ -1617,8 +1633,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             // Initialize response structure
             $response = [
-                'vehicle_images' => [],
-                'vehicle_docs' => [],
+                'vehicle_images'   => [],
+                'vehicle_docs'     => [],
                 'vehicle_policies' => [],
             ];
 
@@ -1651,14 +1667,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             return [
-                'code'  => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $response
+                'data'    => $response
             ];
         } catch (\Exception $e) {
             return [
-                'code'  => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
@@ -1671,14 +1687,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $vehicleFaqs = VehicleFaq::where("vehicle_id", $vehicleId)->get();
 
             return [
-                'code'  => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $vehicleFaqs
+                'data'    => $vehicleFaqs
             ];
         } catch (\Exception $e) {
             return [
-                'code'  => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
@@ -1691,14 +1707,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $vehicleDamages = VehicleDamage::where("vehicle_id", $vehicleId)->get();
 
             return [
-                'code'  => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $vehicleDamages
+                'data'    => $vehicleDamages
             ];
         } catch (\Exception $e) {
             return [
-                'code'  => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
@@ -1718,27 +1734,27 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $formattedBenefits = str_pad((string)$benefitCount, 2, '0', STR_PAD_LEFT);
 
                 return [
-                    'id' => $insurance->id,
-                    'vehicle_id' => $insurance->vehicle_id,
-                    'insurances_id' => $insurance->insurances_id,
+                    'id'             => $insurance->id,
+                    'vehicle_id'     => $insurance->vehicle_id,
+                    'insurances_id'  => $insurance->insurances_id,
                     'insurance_name' => optional($insurance->insurance)->insurance_name, // Get insurance name
-                    'value' => $insurance->value,
-                    'price' => $insurance->price,
-                    'benefits' => $formattedBenefits, // Count formatted
-                    'created_at' => $insurance->created_at,
-                    'updated_at' => $insurance->updated_at,
-                    'deleted_at' => $insurance->deleted_at,
+                    'value'          => $insurance->value,
+                    'price'          => $insurance->price,
+                    'benefits'       => $formattedBenefits, // Count formatted
+                    'created_at'     => $insurance->created_at,
+                    'updated_at'     => $insurance->updated_at,
+                    'deleted_at'     => $insurance->deleted_at,
                 ];
             });
 
             return [
-                'code'  => 200,
+                'code'    => 200,
                 'success' => true,
-                'data' => $insuranceData
+                'data'    => $insuranceData
             ];
         } catch (\Exception $e) {
             return [
-                'code'  => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
@@ -1751,13 +1767,13 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $models = CarModel::where('brand_id', $brandId)->get(['id', 'model_name']);
 
             return [
-                'code'  => 200,
+                'code'    => 200,
                 'success' => true,
-                'data' => $models
+                'data'    => $models
             ];
         } catch (\Exception $e) {
             return [
-                'code'  => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
@@ -1793,7 +1809,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             if (!$vehicleSlug) {
                 return [
-                    'code'  => 400,
+                    'code'    => 400,
                     'success' => false,
                     'message' => 'Vehicle ID is required'
                 ];
@@ -1819,10 +1835,10 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             if ($vehicles->isEmpty()) {
                 return [
-                    'code'  => 404,
+                    'code'    => 404,
                     'success' => false,
                     'message' => 'No vehicle found with the provided slug.',
-                    'data' => [],
+                    'data'    => [],
                 ];
             }
 
@@ -1897,106 +1913,107 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $faqEnabled = GeneralSetting::where('group_id', 20)->where('key', 'faq')->first()->value;
                 $extraServiceEnabled = GeneralSetting::where('group_id', 20)->where('key', 'extraService')->first()->value;
                 $data = [
-                    'id' => $vehicle->id,
-                    'name' => $vehicle->name,
-                    'slug' => $vehicle->slug,
-                    'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
-                    'multiple_vehicle_doc' => array_map(fn($doc) => url('storage/' . ($doc)), $multipleDoc),
-                    'multiple_vehicle_policy' => array_map(fn($policy) => url('storage/' . ($policy)), $multiplePolicy),
+                    'id'                      => $vehicle->id,
+                    'name'                    => $vehicle->name,
+                    'slug'                    => $vehicle->slug,
+                    'vehicle_image'           => url('/storage/' . $vehicle->vehicle_image),
+                    'multiple_vehicle_doc'    => array_map(fn ($doc) => url('storage/' . ($doc)), $multipleDoc),
+                    'multiple_vehicle_policy' => array_map(fn ($policy) => url('storage/' . ($policy)), $multiplePolicy),
                     'multiple_vehicle_images' => $multipleImages,
-                    'has_multiple_image' => count($multipleImages) > 1,
-                    'brand' => $vehicle->brand->brand_name ?? null,
-                    'car_type' => $vehicle->carType->name ?? null,
-                    'category' => $vehicle->category->name ?? null,
-                    'location' => $vehicle->mainLocation->name ?? null,
-                    'color' => $vehicle->color->name ?? null,
-                    'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
-                    'transmission' => $vehicle->transmission->name ?? null,
-                    'wishlist' => $wishlistExists,
-                    'year' => $vehicle->year,
-                    'mileage' => $vehicle->mileage,
-                    'vin' => $vehicle->vin,
-                    'rating' => $rating,
-                    'passenger_capacity' => $vehicle->passenger_capacity,
-                    'num_seats' => $vehicle->num_seats,
-                    'num_doors' => $vehicle->num_doors,
-                    'num_airbags' => $vehicle->num_airbags,
-                    'vehicle_video' => $vehicle->vehicle_video,
-                    'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                    'created_at' => $vehicle->created_at,
-                    'features' => $featureNames,
-                    'currency' => getDefaultCurrencySymbol(),
-                    'seo_title' => $vehicle->vehicle_metatitle,
-                    'seo_key' => $vehicle->vehicle_metakeywords,
-                    'seo_description' => $vehicle->vehicle_metadesc,
-                    'is_featured' => (bool) rand(0, 1),
-                    'is_top_rated' => (bool) rand(0, 1),
-                    'authenticated' => Auth::guard('web')->check(),
-                    'description' => $vehicle->description,
-                    'extraservice' => $extraServiceEnabled ? $vehicle->extraservices->map(function (VehicleExtraService $extraservice) {
+                    'has_multiple_image'      => count($multipleImages) > 1,
+                    'brand'                   => $vehicle->brand->brand_name ?? null,
+                    'car_type'                => $vehicle->carType->name ?? null,
+                    'category'                => $vehicle->category->name ?? null,
+                    'location'                => $vehicle->mainLocation->name ?? null,
+                    'color'                   => $vehicle->color->name ?? null,
+                    'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
+                    'transmission'            => $vehicle->transmission->name ?? null,
+                    'wishlist'                => $wishlistExists,
+                    'year'                    => $vehicle->year,
+                    'mileage'                 => $vehicle->mileage,
+                    'vin'                     => $vehicle->vin,
+                    'rating'                  => $rating,
+                    'passenger_capacity'      => $vehicle->passenger_capacity,
+                    'hatch'                   => $vehicle->hatch,
+                    'num_seats'               => $vehicle->num_seats,
+                    'num_doors'               => $vehicle->num_doors,
+                    'num_airbags'             => $vehicle->num_airbags,
+                    'vehicle_video'           => $vehicle->vehicle_video,
+                    'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
+                    'created_at'              => $vehicle->created_at,
+                    'features'                => $featureNames,
+                    'currency'                => getDefaultCurrencySymbol(),
+                    'seo_title'               => $vehicle->vehicle_metatitle,
+                    'seo_key'                 => $vehicle->vehicle_metakeywords,
+                    'seo_description'         => $vehicle->vehicle_metadesc,
+                    'is_featured'             => (bool) rand(0, 1),
+                    'is_top_rated'            => (bool) rand(0, 1),
+                    'authenticated'           => Auth::guard('web')->check(),
+                    'description'             => $vehicle->description,
+                    'extraservice'            => $extraServiceEnabled ? $vehicle->extraservices->map(function (VehicleExtraService $extraservice) {
                         return [
                             'extra_service_id' => $extraservice->extra_service_id,
-                            'value' => $extraservice->value,
-                            'price' => $extraservice->price,
-                            'name' => optional($extraservice->extraService)->name,
-                            'icon' => uploadedAsset(optional($extraservice->extraService)->icon), // Convert icon to full URL
-                            'description' => optional($extraservice->extraService)->description,
-                            'image' => url('/storage/' . optional($extraservice->extraService)->image), // Convert image to full URL
+                            'value'            => $extraservice->value,
+                            'price'            => $extraservice->price,
+                            'name'             => optional($extraservice->extraService)->name,
+                            'icon'             => uploadedAsset(optional($extraservice->extraService)->icon), // Convert icon to full URL
+                            'description'      => optional($extraservice->extraService)->description,
+                            'image'            => url('/storage/' . optional($extraservice->extraService)->image), // Convert image to full URL
                         ];
                     }) : null,
                     'tariff' => $vehicle->tariffs->map(function (VehicleTarrif $tariff) {
                         return [
-                            'tariff_title' => $tariff->tariff_title,
+                            'tariff_title'       => $tariff->tariff_title,
                             'tariff_daily_price' => $tariff->tariff_daily_price,
-                            'tariff_from_days' => $tariff->tariff_from_days,
-                            'tariff_to_days' => $tariff->tariff_to_days,
-                            'tariff_base_km' => $tariff->tariff_base_km,
+                            'tariff_from_days'   => $tariff->tariff_from_days,
+                            'tariff_to_days'     => $tariff->tariff_to_days,
+                            'tariff_base_km'     => $tariff->tariff_base_km,
                             'tariff_extra_price' => $tariff->tariff_extra_price,
                         ];
                     }),
                     'seasonal' => $vehicle->seasonals->map(function (VehicleSeason $seasonal) {
                         return [
-                            'seasonal_title' => $seasonal->seasonal_title,
-                            'seasonal_start_date' => $seasonal->seasonal_start_date,
-                            'seasonal_end_date' => $seasonal->seasonal_end_date,
-                            'seasonal_daily_rate' => $seasonal->seasonal_daily_rate,
-                            'seasonal_weekly_rate' => $seasonal->seasonal_weekly_rate,
+                            'seasonal_title'        => $seasonal->seasonal_title,
+                            'seasonal_start_date'   => $seasonal->seasonal_start_date,
+                            'seasonal_end_date'     => $seasonal->seasonal_end_date,
+                            'seasonal_daily_rate'   => $seasonal->seasonal_daily_rate,
+                            'seasonal_weekly_rate'  => $seasonal->seasonal_weekly_rate,
                             'seasonal_monthly_rate' => $seasonal->seasonal_monthly_rate,
-                            'seasonal_late_fee' => $seasonal->seasonal_late_fee,
+                            'seasonal_late_fee'     => $seasonal->seasonal_late_fee,
                         ];
                     }),
                     'faqs' => $faqEnabled ? $vehicle->faqs->map(function (VehicleFaq $faq) {
                         return [
                             'question' => $faq->question,
-                            'answer' => $faq->answer,
+                            'answer'   => $faq->answer,
                         ];
                     }) : [],
                     'damages' => $vehicle->damages->map(function (VehicleDamage $damage) {
                         return [
-                            'damage_type' => $damage->damage_type,
+                            'damage_type'     => $damage->damage_type,
                             'damage_loaction' => $damage->damage_loaction,
-                            'image' => $damage->image,
-                            'description' => $damage->description,
+                            'image'           => $damage->image,
+                            'description'     => $damage->description,
                         ];
                     }),
                     'owner_details' => $vehicle->owner ? [
-                        'name' => $vehicle->owner->name,
+                        'name'         => $vehicle->owner->name,
                         'phone_number' => $vehicle->owner->mobile_number,
-                        'email' => $vehicle->owner->email,
-                        'image' => $vehicle->owner->userDetails ? url('/storage/' . $vehicle->owner->userDetails->profile_image) : null
+                        'email'        => $vehicle->owner->email,
+                        'image'        => $vehicle->owner->userDetails ? url('/storage/' . $vehicle->owner->userDetails->profile_image) : null
                     ] : null
                 ];
             }
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data
+                'data'    => $data
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_retrieve_error')
             ];
@@ -2009,7 +2026,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $vehicles
+            'data'   => $vehicles
         ];
     }
 
@@ -2027,7 +2044,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             if (!$vehicleMeta) {
                 return [
-                    'code' => 404,
+                    'code'    => 404,
                     'success' => false,
                     'message' => 'Vehicle images not found.'
                 ];
@@ -2052,20 +2069,20 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $vehicleMeta->save();
 
                 return [
-                    'code' => 200,
+                    'code'    => 200,
                     'success' => true,
                     'message' => 'Image deleted successfully.'
                 ];
             }
 
             return [
-                'code' => 404,
+                'code'    => 404,
                 'success' => false,
                 'message' => 'Image not found in database.'
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_delete_error')
             ];
@@ -2089,7 +2106,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             if (!$vehicleMeta) {
                 return [
-                    'code' => 404,
+                    'code'    => 404,
                     'success' => false,
                     'message' => 'Policy files not found.'
                 ];
@@ -2105,20 +2122,20 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $vehicleMeta->save();
 
                 return [
-                    'code' => 200,
+                    'code'    => 200,
                     'success' => true,
                     'message' => 'Policy file deleted successfully.'
                 ];
             }
 
             return [
-                'code' => 404,
+                'code'    => 404,
                 'success' => false,
                 'message' => 'Policy file not found.'
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_delete_error')
             ];
@@ -2218,47 +2235,47 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             return [
-                'id' => $vehicle->id,
-                'name' => $vehicle->name,
-                'slug' => $vehicle->slug,
-                'vehicle_image' => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
-                'avatar_image' => $avatarImage,
-                'brand' => $vehicle->brand->brand_name ?? null,
-                'car_type' => $vehicle->carType->name ?? null,
-                'category' => $vehicle->category->name ?? null,
-                'location' => $vehicle->mainLocation->name ?? null,
-                'color' => $vehicle->color->name ?? null,
-                'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
-                'transmission' => $vehicle->transmission->name ?? null,
-                'year' => $vehicle->year,
-                'mileage' => $vehicle->mileage,
+                'id'                 => $vehicle->id,
+                'name'               => $vehicle->name,
+                'slug'               => $vehicle->slug,
+                'vehicle_image'      => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
+                'avatar_image'       => $avatarImage,
+                'brand'              => $vehicle->brand->brand_name ?? null,
+                'car_type'           => $vehicle->carType->name ?? null,
+                'category'           => $vehicle->category->name ?? null,
+                'location'           => $vehicle->mainLocation->name ?? null,
+                'color'              => $vehicle->color->name ?? null,
+                'fuel_type'          => $vehicle->fuel_type->fuel_type ?? null,
+                'transmission'       => $vehicle->transmission->name ?? null,
+                'year'               => $vehicle->year,
+                'mileage'            => $vehicle->mileage,
                 'passenger_capacity' => $vehicle->passenger_capacity,
-                'num_seats' => $vehicle->num_seats,
-                'num_doors' => $vehicle->num_doors,
-                'num_airbags' => $vehicle->num_airbags,
-                'vehicle_video' => $vehicle->vehicle_video,
-                'features' => $vehicle->features,
-                'currency' => $currencySymbol,
-                'rating' => $rating,
-                'wishlist' => $wishlistExists,
-                'review_count' => $review_count,
-                'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                'is_featured' => (bool) rand(0, 1),
-                'is_top_rated' => (bool) rand(0, 1),
-                'seo_title' => $vehicle->vehicle_metatitle,
-                'seo_key' => $vehicle->vehicle_metakeywords,
-                'seo_description' => $vehicle->vehicle_metadesc,
-                'authenticated' => Auth::guard('web')->check(),
-                'created_at' => $vehicle->created_at,
-                'status' => $vehicle->status,
+                'num_seats'          => $vehicle->num_seats,
+                'num_doors'          => $vehicle->num_doors,
+                'num_airbags'        => $vehicle->num_airbags,
+                'vehicle_video'      => $vehicle->vehicle_video,
+                'features'           => $vehicle->features,
+                'currency'           => $currencySymbol,
+                'rating'             => $rating,
+                'wishlist'           => $wishlistExists,
+                'review_count'       => $review_count,
+                'price'              => !empty($filteredPrices) ? $filteredPrices : null,
+                'is_featured'        => (bool) rand(0, 1),
+                'is_top_rated'       => (bool) rand(0, 1),
+                'seo_title'          => $vehicle->vehicle_metatitle,
+                'seo_key'            => $vehicle->vehicle_metakeywords,
+                'seo_description'    => $vehicle->vehicle_metadesc,
+                'authenticated'      => Auth::guard('web')->check(),
+                'created_at'         => $vehicle->created_at,
+                'status'             => $vehicle->status,
             ];
         });
 
         $html = view('frontend.home.list.recommended-vehicles', compact('data'))->render();
         return [
-            'code' => 200,
+            'code'    => 200,
             'message' => __('Vehicles retrieved successfully.'),
-            'html' => $html
+            'html'    => $html
         ];
     }
 
@@ -2268,9 +2285,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         $damage = VehicleDamage::find($id);
 
         return [
-            'code' => 200,
+            'code'    => 200,
             'success' => true,
-            'data' => $damage
+            'data'    => $damage
         ];
     }
 
@@ -2286,20 +2303,20 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.vehicle_delete_success'),
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }
@@ -2313,8 +2330,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             if (!$vehicle) {
                 return [
-                    'status' => 'error',
-                    'code'   => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('admin.common.no_data_found'),
                 ];
             }
@@ -2323,14 +2340,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $vehicle->save();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.popular_status_update_success'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error'),
             ];
         }
@@ -2344,8 +2361,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             if (!$vehicle) {
                 return [
-                    'status' => 'error',
-                    'code'   => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('admin.common.no_data_found'),
                 ];
             }
@@ -2354,14 +2371,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $vehicle->save();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.recommended_status_update_success'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error'),
             ];
         }
@@ -2375,8 +2392,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             if (!$vehicle) {
                 return [
-                    'status' => 'error',
-                    'code'   => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('admin.common.no_data_found'),
                 ];
             }
@@ -2385,14 +2402,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $vehicle->save();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.common.default_status_success'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_status_error'),
             ];
         }

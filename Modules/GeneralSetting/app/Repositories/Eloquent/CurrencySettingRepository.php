@@ -11,8 +11,8 @@ class CurrencySettingRepository implements CurrencySettingInterface
     {
         $currencyData = [
             'currency_name' => $data['currency_name'],
-            'code' => $data['code'],
-            'symbol' => $data['symbol'],
+            'code'          => $data['code'],
+            'symbol'        => $data['symbol'],
             'exchange_rate' => $data['exchange_rate'] ?? 0,
         ];
 
@@ -26,7 +26,6 @@ class CurrencySettingRepository implements CurrencySettingInterface
         $currencyData['status'] = $data['status'] ?? 0;
         return Currency::where('id', $data['id'])->update($currencyData);
     }
-
 
     public function getCurrencyList(array $filters = [], int $perPage = 10): mixed
     {
@@ -49,7 +48,6 @@ class CurrencySettingRepository implements CurrencySettingInterface
 
         return $query->paginate($perPage);
     }
-
 
     public function findCurrency(int $id): mixed
     {

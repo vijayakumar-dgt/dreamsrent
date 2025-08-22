@@ -3,13 +3,9 @@
 namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Modules\CarInfo\Models\Cartype;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\Rule;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Modules\CarInfo\Http\Requests\VehicleTypeRequest;
 use Modules\CarInfo\Models\Category;
 use Modules\CarInfo\Repositories\Contracts\VehicleTypeRepositoryInterface;
@@ -39,7 +35,6 @@ class CarTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-
     public function storeType(VehicleTypeRequest $request): JsonResponse
     {
         $response = $this->vehicleTypeRepository->store($request);
@@ -64,7 +59,6 @@ class CarTypeController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-
     public function deleteType(Request $request): JsonResponse
     {
         $id = $request->delete_id;

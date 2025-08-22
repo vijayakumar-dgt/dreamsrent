@@ -32,18 +32,18 @@ class FaqRepository implements FaqInterface
         $defaultLanguage = Language::where('default', 1)->value('language_id');
 
         return Faq::when($filters['language_id'] ?? null, function ($query, $languageId) {
-                return $query->where('language_id', $languageId);
+            return $query->where('language_id', $languageId);
         }, function ($query) use ($defaultLanguage) {
             return $query->where('language_id', $defaultLanguage);
         })
-            ->when(isset($filters['status']), fn($query) => $query->where('status', $filters['status']))
+            ->when(isset($filters['status']), fn ($query) => $query->where('status', $filters['status']))
             ->when($filters['sort_by'] ?? null, function ($query, $sort) {
                 return match ($sort) {
-                    'asc' => $query->orderBy('order_by', 'asc'),
-                    'desc' => $query->orderBy('order_by', 'desc'),
+                    'asc'         => $query->orderBy('order_by', 'asc'),
+                    'desc'        => $query->orderBy('order_by', 'desc'),
                     'last_7_days' => $query->where('created_at', '>=', now()->subDays(7)),
-                    'last_month' => $query->where('created_at', '>=', now()->subMonth()),
-                    default => $query->orderBy('order_by', 'desc'),
+                    'last_month'  => $query->where('created_at', '>=', now()->subMonth()),
+                    default       => $query->orderBy('order_by', 'desc'),
                 };
             })
             ->when($filters['search'] ?? null, function ($query, $search) {

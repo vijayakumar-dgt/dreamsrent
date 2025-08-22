@@ -2,25 +2,25 @@
 
 namespace App\Repositories\Eloquent;
 
-use Illuminate\Support\Facades\DB;
 use App\Repositories\Contracts\BlogRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Modules\GeneralSetting\Models\BlogCategory;
+use Modules\GeneralSetting\Models\BlogPost;
+use Modules\GeneralSetting\Models\BlogReviews;
 use Modules\GeneralSetting\Models\BlogTag;
 use Modules\GeneralSetting\Models\Language;
-use Modules\GeneralSetting\Models\BlogPost;
-use Illuminate\Support\Facades\App;
-use Illuminate\Http\JsonResponse;
 use Modules\GeneralSetting\Models\TranslationLanguage;
-use Modules\GeneralSetting\Models\BlogReviews;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class BlogRepository implements BlogRepositoryInterface
 {
-    public function BlogList(Request $request): View| JsonResponse
+    public function blogList(Request $request): View| JsonResponse
     {
         $authUser = current_user();
 
@@ -81,17 +81,17 @@ class BlogRepository implements BlogRepositoryInterface
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('frontend.blogs.partials.blogs-list', compact('blogPosts'))->render()
+                'html' => view('frontend.blogs.partials.blogs-list', ['blogPosts' => $blogPosts])->render()
             ]);
         }
 
         return view(
             'frontend.blogs.blog-list',
-            compact('blogPosts', 'languages', 'categories', 'tags', 'latestblogs', 'seo_title')
+            ['blogPosts' => $blogPosts, 'languages' => $languages, 'categories' => $categories, 'tags' => $tags, 'latestblogs' => $latestblogs, 'seo_title' => $seo_title]
         );
     }
 
-    public function BlogDetail(int|string $id): array
+    public function blogDetail(int|string $id): array
     {
         $authUser = current_user();
 
@@ -136,20 +136,18 @@ class BlogRepository implements BlogRepositoryInterface
             ->get();
         $seo_title = $blogPosts->title ?? '';
 
-        $data = ['blogPosts' => $blogPosts, 'languages' => $languages, 'blogReviews' => $blogReviews, 'countReview' => $countReview, 'otherBlogs' => $otherBlogs, 'seo_title' => $seo_title];
-
-        return $data;
+        return ['blogPosts' => $blogPosts, 'languages' => $languages, 'blogReviews' => $blogReviews, 'countReview' => $countReview, 'otherBlogs' => $otherBlogs, 'seo_title' => $seo_title];
     }
 
     public function storeReview(Request $request): RedirectResponse
     {
         $authUser = Auth::guard('web')->user();
         BlogReviews::create([
-            'blog_id' => $request->blog_id,
-            'user_id' => Auth::id(),
-            'name' => getCurrentUserFullname($authUser->id),
-            'email' => $authUser->email,
-            'comments' => $request->comment,
+            'blog_id'    => $request->blog_id,
+            'user_id'    => Auth::id(),
+            'name'       => getCurrentUserFullname($authUser->id),
+            'email'      => $authUser->email,
+            'comments'   => $request->comment,
             'created_at' => Carbon::now(),
         ]);
 

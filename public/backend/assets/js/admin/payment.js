@@ -1,6 +1,7 @@
+/* global $, loadTranslationFile, document, showToast, _l */
 (async () => {
     "use strict";
-    await loadTranslationFile('admin', 'common, finance_accounts');
+    await loadTranslationFile("admin", "common, finance_accounts");
     let selectedStatuses = [];
     let selectedPaymentTypes = [];
     let currentSearch = "";
@@ -19,7 +20,7 @@
                 url: "/admin/payments-info",
                 type: "POST",
                 headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content"),
                 },
                 data: function (d) {
                     d.search = currentSearch;
@@ -29,9 +30,9 @@
                 },
                 error: function (error) {
                     if (error.responseJSON?.code === 500) {
-                        showToast('error', error.responseJSON.message);
+                        showToast("error", error.responseJSON.message);
                     } else {
-                        showToast('error', _l('admin.common.default_retrieve_error'));
+                        showToast("error", _l("admin.common.default_retrieve_error"));
                     }
                 },
                 beforeSend: function () {
@@ -68,7 +69,7 @@
                 { 
                     data: "final_price",
                     render: function (data, type, row) {
-                        return (row.currency_symbol ?? '$') + row.amount;
+                        return (row.currency_symbol ?? "$") + row.amount;
                     }
                 },
                 { data: "payment_type" },
@@ -133,9 +134,9 @@
                 $(".table-footer")
                     .empty()
                     .append(
-                        $('<div class="d-flex justify-content-between align-items-center w-100"></div>')
-                            .append($('<div class="datatable-info"></div>').append(info.clone(true)))
-                            .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                        $("<div class='d-flex justify-content-between align-items-center w-100'></div>")
+                            .append($("<div class='datatable-info'></div>").append(info.clone(true)))
+                            .append($("<div class='datatable-pagination'></div>").append(pagination.clone(true)))
                     );
                 $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
             },

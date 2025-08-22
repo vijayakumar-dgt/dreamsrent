@@ -2,9 +2,9 @@
 
 namespace Modules\Installer\Repositories\Eloquent;
 
-use Modules\Installer\Repositories\Contracts\PurchaseVerificationInterface;
 use Illuminate\Support\Facades\Http;
 use Modules\Installer\Enums\InstallerInfo;
+use Modules\Installer\Repositories\Contracts\PurchaseVerificationInterface;
 use RuntimeException;
 
 class PurchaseVerificationRepository implements PurchaseVerificationInterface

@@ -5531,10 +5531,10 @@ table .badge {
 }
 
 .listing-item .listing-content .listing-details-group ul li {
-	-ms-flex: 33.33%;
-	flex: 33.33%;
-	max-width: 33.33%;
-	padding-top: 2px;
+	-ms-flex: 19.33%;
+    flex: 19.33%;
+    max-width: 19.33%;
+    padding-top: 2px;
 }
 
 .listing-item .listing-content .listing-details-group ul li span img {
@@ -8209,12 +8209,7 @@ table .badge {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	position: absolute;
-	width: 100%;
 	margin-top: 30px;
-	opacity: 0;
-	bottom: -30px;
-	transition: 0.5s all;
 }
 
 .sec-bottom-info .bottom-ship-info-card .ship-pricing h5 {
@@ -8238,8 +8233,12 @@ table .badge {
 
 .hover-ship-info {
 	transition: 0.5s all;
+	transform: translateY(63px);
 }
-
+.hover-ship-info:hover {
+	transition: 0.5s all;
+	transform: translateY(0px);
+}
 .hover-ship-info:hover {
 	transition: 0.5s all;
 }
@@ -10321,7 +10320,7 @@ table .badge {
 .popular-section .bike-list .listing-content {
 	width: 50%;
 	margin: 0;
-	padding: 24px;
+	padding: 12px;
 }
 
 @media (max-width: 1199.96px) {

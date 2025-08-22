@@ -3,14 +3,9 @@
 namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Modules\CarInfo\Models\CarFuel;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Illuminate\Validation\Rule;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Modules\CarInfo\Http\Requests\VehicleFuelRequest;
 use Modules\CarInfo\Repositories\Contracts\VehicleFuelRepositoryInterface;
 

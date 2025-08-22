@@ -34,8 +34,8 @@ class VehicleFuelRequest extends CustomFailedValidation
     public function messages(): array
     {
         return [
-            'fuel_type.required' => __('admin.rentals.fuel_type_required'),
-            'fuel_type.unique'   => __('admin.rentals.fuel_type_unique'),
+            'fuel_type.required'  => __('admin.rentals.fuel_type_required'),
+            'fuel_type.unique'    => __('admin.rentals.fuel_type_unique'),
             'fuel_type.not_regex' => __('admin.common.script_tag_not_allowed'),
         ];
     }

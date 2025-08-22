@@ -3,17 +3,14 @@
 namespace Modules\MenuManagement\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
+use Modules\GeneralSetting\Models\Language;
 use Modules\MenuManagement\Http\Requests\MenuManagementUpdateRequest;
 use Modules\MenuManagement\Http\Requests\StoreMenuRequest;
-use Modules\MenuManagement\Models\Menu;
-use Modules\GeneralSetting\Models\Language;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use Modules\GeneralSetting\Models\TranslationLanguage;
-use Illuminate\View\View;
 use Modules\MenuManagement\Http\Requests\UpdateMenuRequest;
+use Modules\MenuManagement\Models\Menu;
 use Modules\MenuManagement\Repositories\Contracts\MenuManagementInterface;
 
 class MenuManagementController extends Controller
@@ -52,17 +49,17 @@ class MenuManagementController extends Controller
             );
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.cms.menu_update_success'),
-                'menu' => $menu
+                'menu'    => $menu
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_update_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -76,35 +73,35 @@ class MenuManagementController extends Controller
             if (
                 $data['menu_type'] === 'header' &&
                 $this->menuRepository->exists([
-                    'menu_type' => 'header',
+                    'menu_type'   => 'header',
                     'language_id' => $data['language']
                 ])
             ) {
                 return response()->json([
-                    'code' => 422,
+                    'code'    => 422,
                     'message' => __('admin.cms.header_menu_exists'),
-                    'errors' => ['menu_type' => [__('admin.cms.header_menu_exists')]],
+                    'errors'  => ['menu_type' => [__('admin.cms.header_menu_exists')]],
                 ], 422);
             }
 
             $menu = $this->menuRepository->create([
-                'name' => $data['menu_name'],
+                'name'          => $data['menu_name'],
                 'permenantlink' => $data['menu_permalink'],
-                'language_id' => $data['language'],
-                'menu_type' => $data['menu_type'],
-                'status' => 1
+                'language_id'   => $data['language'],
+                'menu_type'     => $data['menu_type'],
+                'status'        => 1
             ]);
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.cms.menu_create_success'),
-                'data' => $menu,
+                'data'    => $menu,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_create_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -117,8 +114,8 @@ class MenuManagementController extends Controller
 
             $filters = [
                 'language_id' => $defaultLanguageId,
-                'search' => $request->search,
-                'sort' => $request->sort
+                'search'      => $request->search,
+                'sort'        => $request->sort
             ];
 
             // Single menu retrieval
@@ -127,15 +124,15 @@ class MenuManagementController extends Controller
 
                 if ($menu->language_id != $defaultLanguageId) {
                     return response()->json([
-                        'code' => 404,
+                        'code'    => 404,
                         'message' => 'Menu not found for the default language',
                     ], 404);
                 }
 
                 return response()->json([
-                    'code' => 200,
+                    'code'    => 200,
                     'message' => __('admin.common.default_retrieve_success'),
-                    'data' => $menu,
+                    'data'    => $menu,
                 ], 200);
             }
 
@@ -147,15 +144,15 @@ class MenuManagementController extends Controller
             });
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $menus,
+                'data'    => $menus,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -169,36 +166,36 @@ class MenuManagementController extends Controller
             if (
                 $data['editMenuType'] == 'header' &&
                 $this->menuRepository->exists([
-                    'menu_type' => 'header',
+                    'menu_type'   => 'header',
                     'language_id' => $data['language'],
                     ['id', '!=', $data['menu_id']]
                 ])
             ) {
                 return response()->json([
-                    'code' => 422,
+                    'code'    => 422,
                     'message' => __('admin.cms.header_menu_exists'),
-                    'errors' => ['editMenuType' => [__('admin.cms.header_menu_exists')]],
+                    'errors'  => ['editMenuType' => [__('admin.cms.header_menu_exists')]],
                 ], 422);
             }
 
             $menu = $this->menuRepository->update($data['menu_id'], [
-                'name' => $data['editMenuName'],
+                'name'          => $data['editMenuName'],
                 'permenantlink' => $data['editMenuPermalink'],
-                'status' => $request->has('menu_status') ? 1 : 0,
-                'language_id' => $data['language'],
-                'menu_type' => $data['editMenuType'],
+                'status'        => $request->has('menu_status') ? 1 : 0,
+                'language_id'   => $data['language'],
+                'menu_type'     => $data['editMenuType'],
             ]);
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.cms.menu_update_success'),
-                'data' => $menu
+                'data'    => $menu
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -215,19 +212,19 @@ class MenuManagementController extends Controller
             $this->menuRepository->delete($id);
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.cms.menu_delete_success'),
             ], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
-                'code' => 404,
+                'code'    => 404,
                 'message' => 'Menu not found.',
             ], 404);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

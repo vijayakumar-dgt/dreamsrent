@@ -45,8 +45,8 @@ class HomeRepository implements HomeRepositoryInterface
         $vehicleTypes = $cartypes->map(function (Cartype $vehicleType) {
             $vehicleCount = VehicleInfo::where('type_id', $vehicleType->id)->count();
             return [
-                'id' => $vehicleType->id,
-                'name' => $vehicleType->name,
+                'id'            => $vehicleType->id,
+                'name'          => $vehicleType->name,
                 'vehicle_count' => $vehicleCount
             ];
         });
@@ -69,7 +69,6 @@ class HomeRepository implements HomeRepositoryInterface
         $pickuptime = "";
         $returndate = "";
         $returntime = "";
-        $vehiclemodel = "";
         $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
         $theme = $defaultTheme->value ?? 1;
         if ($theme == 1 || $theme == 4) {
@@ -86,33 +85,30 @@ class HomeRepository implements HomeRepositoryInterface
             $returntime = $returndatetime ? date('H:i:s', strtotime($returndatetime)) : '';
         }
         $_pickuplocation = Location::select('id', 'name')->where('status', 1)->where('language_id', $languageId)->where('name', 'like', '%' . $pickuplocation . '%')->first();
-        $data = [
-            'brands' => $brands,
-            'vehicleTypes' => $vehicleTypes,
-            'years' => $years,
-            'fuelTypes' => $fuelTypes,
-            'transmissions' => $transmissions,
-            'colors' => $colors,
-            'features' => $features,
-            'allowBooking' => $allowBooking,
-            'allowEnquiries' => $allowEnquiries,
-            'pickuplocation' => $pickuplocation,
-            'pickupdate' => $pickupdate,
-            'pickuptime' => $pickuptime,
-            'returndate' => $returndate,
-            'returntime' => $returntime,
-            'theme' => $theme,
-            'seo_title' => __('web.common.vehicles'),
+
+        return [
+            'brands'                => $brands,
+            'vehicleTypes'          => $vehicleTypes,
+            'years'                 => $years,
+            'fuelTypes'             => $fuelTypes,
+            'transmissions'         => $transmissions,
+            'colors'                => $colors,
+            'features'              => $features,
+            'allowBooking'          => $allowBooking,
+            'allowEnquiries'        => $allowEnquiries,
+            'pickuplocation'        => $pickuplocation,
+            'pickupdate'            => $pickupdate,
+            'pickuptime'            => $pickuptime,
+            'returndate'            => $returndate,
+            'returntime'            => $returntime,
+            'theme'                 => $theme,
+            'seo_title'             => __('web.common.vehicles'),
             'initialPickupLocation' => $pickuplocation ? $_pickuplocation : null
         ];
-
-        return $data;
     }
 
     public function getVehicleDetails(string $slug): array
     {
-        $slug = $slug;
-
         $vehicle = VehicleInfo::select('id', 'main_location_id', "other_location_id", 'views', "category_id")
             ->where('slug', $slug)->first();
         if (!$vehicle) {
@@ -142,7 +138,7 @@ class HomeRepository implements HomeRepositoryInterface
                     return $id != $vehicle->main_location_id;
                 });
 
-                if (!empty($filteredOtherIds)) {
+                if ($filteredOtherIds !== []) {
                     $otherLocations = Location::select('id', 'name', 'address')
                         ->whereIn('id', $filteredOtherIds)
                         ->get();
@@ -197,44 +193,42 @@ class HomeRepository implements HomeRepositoryInterface
         $author_email = $appAdmin->email ?? "";
         $author_phone = $appAdminDetails->mobile_number ?? "";
         $author_name = getCurrentUserFullname($appAdmin->id);
-        $response = [
-            'author_location' => $author_location,
-            'author_profile' => $author_profile,
-            'author_email' => $author_email,
-            'author_phone' => $author_phone,
-            'author_name' => $author_name,
-            'vehicle' => $vehicle,
-            'mainLocation' => $mainLocation,
-            'allLocation' => $allLocation,
-            'bookingCount' => $bookingCount,
-            'vehicleCount' => $vehicleCount,
-            'lastUpdate' => $lastUpdateFormatted,
-            'allowBooking' => $allowBooking,
-            'allowEnquiries' => $allowEnquiries,
-            'vehicleDetail' => $vehicleDetail,
-            'seo_title' => $seo_title,
-            'seo_description' => $seo_description,
-            'meta_keywords' => $meta_keywords,
-            'og_image' => $og_image,
-            'slug' => $slug
-        ];
 
-        return $response;
+        return [
+            'author_location' => $author_location,
+            'author_profile'  => $author_profile,
+            'author_email'    => $author_email,
+            'author_phone'    => $author_phone,
+            'author_name'     => $author_name,
+            'vehicle'         => $vehicle,
+            'mainLocation'    => $mainLocation,
+            'allLocation'     => $allLocation,
+            'bookingCount'    => $bookingCount,
+            'vehicleCount'    => $vehicleCount,
+            'lastUpdate'      => $lastUpdateFormatted,
+            'allowBooking'    => $allowBooking,
+            'allowEnquiries'  => $allowEnquiries,
+            'vehicleDetail'   => $vehicleDetail,
+            'seo_title'       => $seo_title,
+            'seo_description' => $seo_description,
+            'meta_keywords'   => $meta_keywords,
+            'og_image'        => $og_image,
+            'slug'            => $slug
+        ];
     }
 
     public function searchLocations(string $keyword): array
     {
-        if (!empty($keyword)) {
+        if ($keyword !== '' && $keyword !== '0') {
             $locations = Location::where("name", "LIKE", "%{$keyword}%")->select('id', 'name')->get();
         } else {
             $locations = collect();
         }
-        $response = [
+
+        return [
             'status' => true,
             'data'   => $locations
         ];
-
-        return $response;
     }
 
     public function getMaintenanceData(): array

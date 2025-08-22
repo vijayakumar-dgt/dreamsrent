@@ -22,17 +22,17 @@ class BookingRequest extends CustomFailedValidation
     public function rules(): array
     {
         return [
-            'start_date' => 'required',
-            'start_time' => 'required',
-            'end_date' => 'required',
-            'end_time' => 'required',
+            'start_date'      => 'required',
+            'start_time'      => 'required',
+            'end_date'        => 'required',
+            'end_time'        => 'required',
             'pickup_location' => 'required',
             'return_location' => 'required',
-            'vehicle_id' => 'required',
-            'customer_id' => 'required',
-            'vehicle_price' => 'required',
-            'extra_service' => 'required',
-            'insurance' => 'required',
+            'vehicle_id'      => 'required',
+            'customer_id'     => 'required',
+            'vehicle_price'   => 'required',
+            'extra_service'   => 'required',
+            'insurance'       => 'required',
         ];
     }
 }

@@ -46,12 +46,12 @@
                 brand_image: {
                     required: _l("admin.rentals.brand_image_required"),
                     extension: _l("admin.rentals.brand_image_format"),
-                    filesize: _l("admin.rentals.brand_image_size", { size: 2 }),
+                    filesize: _l("admin.rentals.brand_image_size"),
                 },
                 brand_icon: {
                     required: _l("admin.rentals.brand_icon_required"),
                     extension: _l("admin.rentals.brand_icon_format"),
-                    filesize: _l("admin.rentals.brand_icon_size", { size: 2 }),
+                    filesize: _l("admin.rentals.brand_icon_size"),
                 },
             },
             errorPlacement: function (error, element) {
@@ -109,10 +109,10 @@
 
                 img.onload = function () {
                     valid =
-                        img.width >= 10 &&
-                        img.width <= 25 &&
-                        img.height >= 10 &&
-                        img.height <= 25;
+                        img.width >= 100 &&
+                        img.width <= 100 &&
+                        img.height >= 100 &&
+                        img.height <= 100;
                     $(element).data("valid-dimension", valid);
                     $(element).valid();
                 };

@@ -1,23 +1,21 @@
 <?php
 
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\TranslationController;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Route;
-use Modules\Page\Http\Controllers\PageController;
 use App\Http\Controllers\user\auth\UserLoginRegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 use Modules\Booking\Http\Controllers\UserBookingController;
-use Illuminate\Support\Facades\Session;
 use Modules\CarInfo\Http\Controllers\CarInfoController;
-use Modules\CarInfo\Http\Controllers\MaintenanceController;
 use Modules\GeneralSetting\Http\Controllers\Admin\LanguageController;
+use Modules\Page\Http\Controllers\PageController;
 
 Route::get('/documentation', function () {
     return response()->file(public_path('documentation/index.html'));
@@ -139,8 +137,8 @@ Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securit
     Route::get('maintenance', [HomeController::class, 'maintenance'])->name('maintenance');
     Route::get('/pages/{slug}', [PageController::class, 'getPage'])->name('pages');
 
-    Route::get('blogs', [BlogController::class, 'BlogList'])->name('blogs.list');
-    Route::get('blog-details/{id}', [BlogController::class, 'BlogDetail'])->name('blogs.detail');
+    Route::get('blogs', [BlogController::class, 'blogList'])->name('blogs.list');
+    Route::get('blog-details/{id}', [BlogController::class, 'blogDetail'])->name('blogs.detail');
     Route::post('/blog-review', [BlogController::class, 'storeReview'])->name('blogs.review.store');
     Route::post('/userprofile', [UserController::class, 'userprofile'])->name('userprofile');
     Route::post('user/mark-all-notifications-as-read', [UserController::class, 'markAllAsRead']);

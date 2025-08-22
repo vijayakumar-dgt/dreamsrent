@@ -3,8 +3,6 @@
 namespace Modules\CarInfo\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class DamageTypeRequest extends CustomFailedValidation

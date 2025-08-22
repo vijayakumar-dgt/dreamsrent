@@ -9,8 +9,8 @@ class UpdateEmailRequest extends CustomFailedValidation
     public function rules(): array
     {
         return [
-            'new_email' => 'required|email|unique:users,email',
-            'current_email' => 'required|email',
+            'new_email'              => 'required|email|unique:users,email',
+            'current_email'          => 'required|email',
             'email_current_password' => 'required',
         ];
     }

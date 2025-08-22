@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\GeneralSetting\Models\Insurance;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
-use Illuminate\Support\Collection;
 
 /**
  * @property Insurance $insurance

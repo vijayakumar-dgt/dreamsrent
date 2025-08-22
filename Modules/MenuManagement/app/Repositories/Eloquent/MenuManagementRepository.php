@@ -2,10 +2,9 @@
 
 namespace Modules\MenuManagement\Repositories\Eloquent;
 
-use Modules\MenuManagement\Models\Menu;
 use Illuminate\Support\Facades\DB;
+use Modules\MenuManagement\Models\Menu;
 use Modules\MenuManagement\Repositories\Contracts\MenuManagementInterface;
-use Illuminate\Database\Eloquent\Collection;
 
 class MenuManagementRepository implements MenuManagementInterface
 {

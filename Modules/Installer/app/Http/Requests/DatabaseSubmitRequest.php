@@ -15,13 +15,13 @@ class DatabaseSubmitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'host' => 'required|ip',
-            'port' => 'required|numeric',
-            'database' => 'required|string',
-            'user' => 'required|string',
-            'db_pass' => InstallerInfo::isRemoteLocal() ? 'nullable' : 'required|string',
+            'host'           => 'required|ip',
+            'port'           => 'required|numeric',
+            'database'       => 'required|string',
+            'user'           => 'required|string',
+            'db_pass'        => InstallerInfo::isRemoteLocal() ? 'nullable' : 'required|string',
             'reset_database' => 'nullable|string',
-            'fresh_install' => 'nullable|boolean',
+            'fresh_install'  => 'nullable|boolean',
         ];
     }
 }

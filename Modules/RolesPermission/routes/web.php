@@ -1,6 +1,5 @@
 <?php
 
-use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Route;
 use Modules\RolesPermission\Http\Controllers\RolesPermissionController;
 

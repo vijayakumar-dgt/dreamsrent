@@ -31,10 +31,10 @@ class CurrencyController extends Controller
         try {
             $data = [
                 'currency_name' => $request->currency_name,
-                'code' => $request->code,
-                'symbol' => $request->symbol,
+                'code'          => $request->code,
+                'symbol'        => $request->symbol,
                 'exchange_rate' => $request->exchange_rate ?? 0,
-                'status' => $request->status === 'on' ? 1 : 0,
+                'status'        => $request->status === 'on' ? 1 : 0,
             ];
 
             if ($request->has('id')) {
@@ -49,8 +49,8 @@ class CurrencyController extends Controller
                     : __('admin.general_settings.currency_created_successfully');
 
                 return response()->json([
-                    'status' => 'success',
-                    'code' => 200,
+                    'status'  => 'success',
+                    'code'    => 200,
                     'message' => $message
                 ]);
             }
@@ -58,8 +58,8 @@ class CurrencyController extends Controller
             throw new \Exception('Failed to save currency');
         } catch (\Throwable $th) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $th->getMessage()
             ], 500);
         }
@@ -69,7 +69,7 @@ class CurrencyController extends Controller
     {
         try {
             $filters = [
-                'keyword' => $request->keyword ?? '',
+                'keyword'  => $request->keyword ?? '',
                 'order_by' => 'asc',
                 'paginate' => false
             ];
@@ -82,22 +82,22 @@ class CurrencyController extends Controller
                 $recordsTotal = Currency::count();
 
                 return response()->json([
-                    'draw' => intval($request->draw),
-                    'recordsTotal' => $recordsTotal,
+                    'draw'            => intval($request->draw),
+                    'recordsTotal'    => $recordsTotal,
                     'recordsFiltered' => $recordsFiltered,
-                    'data' => $currencies
+                    'data'            => $currencies
                 ]);
             }
 
             return response()->json([
                 'status' => 'success',
-                'code' => 200,
-                'data' => $currencies
+                'code'   => 200,
+                'data'   => $currencies
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $th->getMessage()
             ], 500);
         }
@@ -113,15 +113,15 @@ class CurrencyController extends Controller
             }
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'data' => $currency,
+                'status'  => 'success',
+                'code'    => 200,
+                'data'    => $currency,
                 'message' => __('admin.general_settings.currency_fetched_successfully')
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'status' => 'error',
-                'code' => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => $th->getMessage()
             ], 404);
         }
@@ -137,16 +137,16 @@ class CurrencyController extends Controller
             }
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.currency_deleted_successfully')
             ]);
         } catch (\Throwable $th) {
             $code = $th->getMessage() === __('admin.general_settings.currency_not_found') ? 404 : 500;
 
             return response()->json([
-                'status' => 'error',
-                'code' => $code,
+                'status'  => 'error',
+                'code'    => $code,
                 'message' => $th->getMessage()
             ], $code);
         }

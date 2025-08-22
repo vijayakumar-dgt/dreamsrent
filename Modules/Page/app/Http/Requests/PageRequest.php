@@ -14,21 +14,21 @@ class PageRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'title' => 'required|max:100',
-            'section_title' => 'nullable|array|min:1',
-            'section_title.*' => 'nullable|string',
-            'section_label' => 'nullable|array|min:1',
-            'section_label.*' => 'nullable|string',
-            'page_content' => 'nullable|array|min:1',
-            'page_content.*' => 'nullable|string',
-            'meta_key' => 'nullable|string',
-            'meta_title' => 'nullable|string',
+            'title'            => 'required|max:100',
+            'section_title'    => 'nullable|array|min:1',
+            'section_title.*'  => 'nullable|string',
+            'section_label'    => 'nullable|array|min:1',
+            'section_label.*'  => 'nullable|string',
+            'page_content'     => 'nullable|array|min:1',
+            'page_content.*'   => 'nullable|string',
+            'meta_key'         => 'nullable|string',
+            'meta_title'       => 'nullable|string',
             'meta_description' => 'nullable|string',
-            'keyword' => 'nullable|string',
-            'canonical_url' => 'nullable|url',
-            'og_title' => 'nullable|string',
-            'og_description' => 'nullable|string',
-            'language_id' => 'nullable|integer|exists:translation_languages,id',
+            'keyword'          => 'nullable|string',
+            'canonical_url'    => 'nullable|url',
+            'og_title'         => 'nullable|string',
+            'og_description'   => 'nullable|string',
+            'language_id'      => 'nullable|integer|exists:translation_languages,id',
         ];
 
         $pageId = $this->input('page_id');
@@ -49,19 +49,18 @@ class PageRequest extends FormRequest
         return $rules;
     }
 
-
     public function messages()
     {
         return [
-            'title.required' => __('The page title field is required.'),
-            'slug.required' => __('The slug field is required.'),
-            'slug.unique' => __('The slug has already been taken.'),
-            'section_title.required' => __('At least one section title is required.'),
-            'section_label.required' => __('At least one section label is required.'),
-            'page_content.required' => __('At least one page content section is required.'),
+            'title.required'           => __('The page title field is required.'),
+            'slug.required'            => __('The slug field is required.'),
+            'slug.unique'              => __('The slug has already been taken.'),
+            'section_title.required'   => __('At least one section title is required.'),
+            'section_label.required'   => __('At least one section label is required.'),
+            'page_content.required'    => __('At least one page content section is required.'),
             'section_title.*.required' => __('Each section title is required.'),
             'section_label.*.required' => __('Each section label is required.'),
-            'page_content.*.required' => __('Each page content section is required.'),
+            'page_content.*.required'  => __('Each page content section is required.'),
         ];
     }
 }

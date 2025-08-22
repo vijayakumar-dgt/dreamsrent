@@ -4,11 +4,11 @@ namespace Modules\Report\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Report\Repositories\Contracts\ReportRepositoryInterface;
+use Modules\Report\Repositories\Eloquent\ReportRepository;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Modules\Report\Repositories\Contracts\ReportRepositoryInterface;
-use Modules\Report\Repositories\Eloquent\ReportRepository;
 
 class ReportServiceProvider extends ServiceProvider
 {

@@ -2,11 +2,11 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
-use Modules\GeneralSetting\Repositories\Contracts\CommunicationSettingInterface;
-use Modules\GeneralSetting\Models\CommunicationSetting;
-use Illuminate\Support\Facades\Auth;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\GeneralSetting\Models\CommunicationSetting;
+use Modules\GeneralSetting\Repositories\Contracts\CommunicationSettingInterface;
 
 class CommunicationSettingRepository implements CommunicationSettingInterface
 {
@@ -60,7 +60,7 @@ class CommunicationSettingRepository implements CommunicationSettingInterface
 
         return [
             'message' => __('admin.general_settings.data_retrived_successfully'),
-            'data' => ['settings' => $settings]
+            'data'    => ['settings' => $settings]
         ];
     }
 
@@ -75,7 +75,7 @@ class CommunicationSettingRepository implements CommunicationSettingInterface
 
         return [
             'message' => __('admin.general_settings.settings_update_success'),
-            'data' => []
+            'data'    => []
         ];
     }
 
@@ -114,45 +114,45 @@ class CommunicationSettingRepository implements CommunicationSettingInterface
     {
         return match ($data['type']) {
             'nexmo' => [
-                'nexmo_api_key' => $data['nexmo_api_key'],
+                'nexmo_api_key'    => $data['nexmo_api_key'],
                 'nexmo_secret_key' => $data['nexmo_secret_key'],
-                'nexmo_sender_id' => $data['nexmo_sender_id'],
+                'nexmo_sender_id'  => $data['nexmo_sender_id'],
             ],
             'twofactor' => [
-                'twofactor_api_key' => $data['twofactor_api_key'],
+                'twofactor_api_key'    => $data['twofactor_api_key'],
                 'twofactor_secret_key' => $data['twofactor_secret_key'],
-                'twofactor_sender_id' => $data['twofactor_sender_id'],
+                'twofactor_sender_id'  => $data['twofactor_sender_id'],
             ],
             'twilio' => [
-                'twilio_api_key' => $data['twilio_api_key'],
+                'twilio_api_key'    => $data['twilio_api_key'],
                 'twilio_secret_key' => $data['twilio_secret_key'],
-                'twilio_sender_id' => $data['twilio_sender_id'],
+                'twilio_sender_id'  => $data['twilio_sender_id'],
             ],
             'smtp' => [
                 'smtp_from_email' => $data['smtp_from_email'],
-                'smtp_password' => $data['smtp_password'],
-                'smtp_from_name' => $data['smtp_from_name'],
-                'smtp_port' => $data['smtp_port'],
-                'smtp_host' => $data['smtp_host'],
+                'smtp_password'   => $data['smtp_password'],
+                'smtp_from_name'  => $data['smtp_from_name'],
+                'smtp_port'       => $data['smtp_port'],
+                'smtp_host'       => $data['smtp_host'],
             ],
             'phpmail' => [
                 'phpmail_from_email' => $data['phpmail_from_email'],
-                'phpmail_password' => $data['phpmail_password'],
-                'phpmail_from_name' => $data['phpmail_from_name'],
+                'phpmail_password'   => $data['phpmail_password'],
+                'phpmail_from_name'  => $data['phpmail_from_name'],
             ],
             'sendgrid' => [
                 'sendgrid_from_email' => $data['sendgrid_from_email'],
-                'sendgrid_key' => $data['sendgrid_key'],
+                'sendgrid_key'        => $data['sendgrid_key'],
             ],
             'fcm' => [
-                'project_id' => $data['project_id'],
+                'project_id'   => $data['project_id'],
                 'client_email' => $data['client_email'],
-                'private_key' => $data['private_key'],
+                'private_key'  => $data['private_key'],
             ],
             'notification_settings' => [
                 'emailNotifications' => isset($data['emailNotifications']) && $data['emailNotifications'] == 'on' ? 1 : 0,
-                'pushNotifications' => isset($data['pushNotifications']) && $data['pushNotifications'] == 'on' ? 1 : 0,
-                'smsNotifications' => isset($data['smsNotifications']) && $data['smsNotifications'] == 'on' ? 1 : 0,
+                'pushNotifications'  => isset($data['pushNotifications']) && $data['pushNotifications'] == 'on' ? 1 : 0,
+                'smsNotifications'   => isset($data['smsNotifications']) && $data['smsNotifications'] == 'on' ? 1 : 0,
             ],
             default => [],
         };

@@ -105,7 +105,6 @@ class RolesPermissionServiceProvider extends ServiceProvider
         }
     }
 
-
     /**
      * Register views.
      */

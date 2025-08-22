@@ -14,7 +14,7 @@ class HowItWorksListRequest extends CustomFailedValidation
     public function rules(): array
     {
         return [
-            'group_id' => 'required|integer',
+            'group_id'    => 'required|integer',
             'language_id' => 'nullable|integer',
         ];
     }

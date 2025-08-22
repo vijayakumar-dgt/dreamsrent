@@ -5,13 +5,13 @@ namespace Modules\Installer\Http\Middleware;
 use Carbon\Carbon;
 use Closure;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Modules\Installer\Enums\InstallerInfo;
 use Modules\Installer\Models\Configuration;
-use Illuminate\Http\RedirectResponse;
 
 class PurchaseVerifyMiddleware
 {

@@ -148,17 +148,20 @@
         </div>
     </div>
     <!-- /Sort By -->	
+    <div id="global-loader" class="d-none">
+        @include('frontend.content-loader')
+    </div>
     <!-- Car Grid View -->
     <section class="section car-listing pt-0">
         <div class="container">
             <div class="row">
                 @include('frontend.home.list.filter')
-                <div class="col-lg-9 grid_loader_div position-relative">
-                    @include('frontend.content-loader')
+                <div id="grid-loader-wrapper" class="col-lg-9 grid_loader_div position-relative">
                 </div>
-                <div class="col-lg-8 col-sm-12 col-12 d-none list_loader_div position-relative">
-                    @include('frontend.content-loader') 
+
+                <div id="list-loader-wrapper" class="col-lg-8 col-sm-12 col-12 d-none list_loader_div position-relative">
                 </div>
+
                 <div class="col-lg-9 listCardDiv position-relative d-none">
                     <div class="row">
                     </div>

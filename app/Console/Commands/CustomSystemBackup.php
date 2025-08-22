@@ -3,9 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
-use ZipArchive;
 use Modules\GeneralSetting\Models\Dbbackup;
+use ZipArchive;
 
 class CustomSystemBackup extends Command
 {
@@ -33,8 +32,8 @@ class CustomSystemBackup extends Command
 
                 // Store backup record in the database
                 Dbbackup::create([
-                    'name' => $fileName,
-                    'type' => '2',
+                    'name'       => $fileName,
+                    'type'       => '2',
                     'created_at' => now(),
                 ]);
 

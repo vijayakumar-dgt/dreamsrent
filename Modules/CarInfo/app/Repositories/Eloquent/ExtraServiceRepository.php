@@ -32,8 +32,8 @@ class ExtraServiceRepository implements ExtraServiceRepositoryInterface
                 $extraService = ExtraService::find($id);
                 if ($extraService == null) {
                     return [
-                        'status' => 'error',
-                        'code'   => 422,
+                        'status'  => 'error',
+                        'code'    => 422,
                         'message' => __('admin.common.default_update_error')
                     ];
                 }
@@ -64,14 +64,14 @@ class ExtraServiceRepository implements ExtraServiceRepositoryInterface
             $extraService->save();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMessage
             ];
         } catch (\Throwable $th) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMessage
             ];
         }
@@ -102,13 +102,13 @@ class ExtraServiceRepository implements ExtraServiceRepositoryInterface
             return [
                 'status' => 'success',
                 'code'   => 200,
-                'data' => $extraServices
+                'data'   => $extraServices
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -119,8 +119,8 @@ class ExtraServiceRepository implements ExtraServiceRepositoryInterface
 
         if (!$data) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -135,7 +135,7 @@ class ExtraServiceRepository implements ExtraServiceRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -147,20 +147,20 @@ class ExtraServiceRepository implements ExtraServiceRepositoryInterface
             $extraService->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.extra_service_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }
@@ -187,15 +187,15 @@ class ExtraServiceRepository implements ExtraServiceRepositoryInterface
                 });
 
             return [
-                'code'   => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $extraServices,
+                'data'    => $extraServices,
             ];
         } catch (\Exception $e) {
             return [
-                'code'   => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }

@@ -2,11 +2,8 @@
 
 namespace Modules\CarInfo\Repositories\Eloquent;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Modules\CarInfo\Http\Requests\SafetyFeatureRequest;
-use Modules\CarInfo\Models\CarFuel;
-use Modules\CarInfo\Models\Cylinder;
 use Modules\CarInfo\Models\SafetyFeature;
 use Modules\CarInfo\Repositories\Contracts\SafetyFeatureRepositoryInterface;
 
@@ -19,7 +16,7 @@ class SafetyFeatureRepository implements SafetyFeatureRepositoryInterface
         $languageId = $authUser->language_id ?? 1;
 
         $data = [
-            'feature' => $request->feature,
+            'feature'     => $request->feature,
             'language_id' => $languageId
         ];
 
@@ -40,20 +37,19 @@ class SafetyFeatureRepository implements SafetyFeatureRepositoryInterface
             }
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMsg
             ];
         } catch (\Exception $e) {
             return [
-              'status' => 'error',
-              'code' => 500,
+              'status'  => 'error',
+              'code'    => 500,
               'message' => $errorMsg,
-              'error' => $e->getMessage()
+              'error'   => $e->getMessage()
             ];
         }
     }
-
 
     public function list(Request $request): array
     {
@@ -90,17 +86,17 @@ class SafetyFeatureRepository implements SafetyFeatureRepositoryInterface
             $data = $query->skip($start)->take($length)->get();
 
             return [
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
+                'draw'            => intval($request->draw),
+                'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $filterTotalRecords,
-                'data' => $data,
-                'code' => 200,
+                'data'            => $data,
+                'code'            => 200,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
@@ -111,8 +107,8 @@ class SafetyFeatureRepository implements SafetyFeatureRepositoryInterface
 
         return [
             'status' => 'success',
-            'code' => 200,
-            'data' => $feature
+            'code'   => 200,
+            'data'   => $feature
         ];
     }
 
@@ -122,14 +118,14 @@ class SafetyFeatureRepository implements SafetyFeatureRepositoryInterface
             SafetyFeature::where('id', $id)->delete();
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.safety_feature_delete_success')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error')
             ];
         }

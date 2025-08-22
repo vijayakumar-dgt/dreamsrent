@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Addon extends Model
 {
-   /**
-    * The attributes that are mass assignable.
-    */
+    /**
+     * The attributes that are mass assignable.
+     */
     protected $table = 'addons';
 
     protected $fillable = [

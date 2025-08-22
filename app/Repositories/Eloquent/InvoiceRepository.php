@@ -2,27 +2,25 @@
 
 namespace App\Repositories\Eloquent;
 
-use Illuminate\Support\Facades\DB;
-use App\Repositories\Contracts\InvoiceRepositoryInterface;
 use App\Models\Invoice;
-use Modules\GeneralSetting\Models\GeneralSetting;
-use Modules\GeneralSetting\Models\Currency;
+use App\Models\User;
+use App\Repositories\Contracts\InvoiceRepositoryInterface;
+use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Modules\Booking\Models\Booking;
 use Modules\CarInfo\Models\VehicleInfo;
-use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
+use Modules\GeneralSetting\Models\Currency;
+use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 
 class InvoiceRepository implements InvoiceRepositoryInterface
 {
     public function index(): array
     {
-       /** @var \App\Models\User|null $authId */
+        /** @var \App\Models\User|null $authId */
         $authId = current_user();
         $languageId = $authId ? $authId->language_id : null;
         $invoices = Invoice::with('items')
@@ -35,9 +33,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
                $invoice->full_name = $invoice->first_name ? ($invoice->first_name . ' ' . $invoice->last_name) : '';
                return $invoice;
            });
-
-        $data = ['invoices' => $invoices,];
-        return $data;
+        return ['invoices' => $invoices,];
     }
 
     public function addInvoice(): array
@@ -83,9 +79,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
 
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
-        $data = ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'bookings' => $bookings, 'languages' => $languages];
-
-        return $data;
+        return ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'bookings' => $bookings, 'languages' => $languages];
     }
 
     public function store(Request $request)
@@ -95,31 +89,31 @@ class InvoiceRepository implements InvoiceRepositoryInterface
 
             $invoice = Invoice::create([
                 'invoice_number' => $request->invoice_number,
-                'car_id' => $request->car_id,
-                'currency_id' => $request->currency_id,
-                'status' => $request->status,
-                'biller' => $request->biller,
-                'customer_id' => $request->customer_id,
+                'car_id'         => $request->car_id,
+                'currency_id'    => $request->currency_id,
+                'status'         => $request->status,
+                'biller'         => $request->biller,
+                'customer_id'    => $request->customer_id,
                 'payment_method' => $request->payment_method,
-                'terms' => $request->terms,
-                'notes' => $request->notes,
-                'subtotal' => $request->subtotal,
-                'tax' => $request->tax ?? 0,
-                'grand_total' => $request->grand_total,
-                'from_date' => Carbon::parse($request->from_date),
-                'to_date' => Carbon::parse($request->to_date),
-                'created_at' => Carbon::now(),
-                'language_id' => $request->language_id,
+                'terms'          => $request->terms,
+                'notes'          => $request->notes,
+                'subtotal'       => $request->subtotal,
+                'tax'            => $request->tax ?? 0,
+                'grand_total'    => $request->grand_total,
+                'from_date'      => Carbon::parse($request->from_date),
+                'to_date'        => Carbon::parse($request->to_date),
+                'created_at'     => Carbon::now(),
+                'language_id'    => $request->language_id,
             ]);
 
             foreach ($request->items as $item) {
                 $invoice->items()->create([
                     'description' => $item['description'] ?? 0,
-                    'qty' => $item['qty'] ?? 0,
-                    'price' => $item['price'] ?? 0,
-                    'tax' => $item['tax'] ?? 0,
+                    'qty'         => $item['qty'] ?? 0,
+                    'price'       => $item['price'] ?? 0,
+                    'tax'         => $item['tax'] ?? 0,
                     'total_price' => $item['total_price'] ?? 0,
-                    'created_at' => Carbon::now(),
+                    'created_at'  => Carbon::now(),
 
                 ]);
             }
@@ -128,7 +122,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
 
             return response()->json([
                 'success' => true,
-                'code'   => 200,
+                'code'    => 200,
                 'message' => __('admin.finance_accounts.invoice_create_success')
             ]);
         } catch (\Exception $e) {
@@ -136,7 +130,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             return response()->json([
                 'success' => false,
                 'message' => __('admin.common.default_create_error.'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -183,9 +177,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
 
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
-        $data = ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'invoice' => $invoice, 'bookings' => $bookings, 'languages' => $languages];
-
-        return $data;
+        return ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'invoice' => $invoice, 'bookings' => $bookings, 'languages' => $languages];
     }
 
     public function delete(int $id)
@@ -203,7 +195,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             return response()->json([
                 'success' => false,
                 'message' => __('admin.common.default_delete_error.'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -214,19 +206,19 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             $invoice = Invoice::findOrFail($id);
             $invoice->update([
                 'invoice_number' => $request->invoice_number,
-                'car_id' => $request->car_id,
-                'from_date' => Carbon::parse($request->from_date),
-                'to_date' => Carbon::parse($request->to_date),
-                'currency_id' => $request->currency_id,
-                'status' => $request->status,
+                'car_id'         => $request->car_id,
+                'from_date'      => Carbon::parse($request->from_date),
+                'to_date'        => Carbon::parse($request->to_date),
+                'currency_id'    => $request->currency_id,
+                'status'         => $request->status,
                 'payment_method' => $request->payment_method,
-                'language_id' => $request->language_id,
-                'terms' => $request->terms,
-                'notes' => $request->notes,
-                'subtotal' => $request->subtotal,
-                'tax' => $request->tax ?? 0,
-                'grand_total' => $request->grand_total,
-                'updated_at' => Carbon::now(),
+                'language_id'    => $request->language_id,
+                'terms'          => $request->terms,
+                'notes'          => $request->notes,
+                'subtotal'       => $request->subtotal,
+                'tax'            => $request->tax ?? 0,
+                'grand_total'    => $request->grand_total,
+                'updated_at'     => Carbon::now(),
             ]);
 
             $invoice->items()->delete();
@@ -236,12 +228,12 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             foreach ($items as $item) {
                 $invoice->items()->create([
                     'description' => $item['description'] ?? 0,
-                    'qty' => $item['qty'] ?? 0,
-                    'price' => $item['price'] ?? 0,
-                    'tax' => 0,
+                    'qty'         => $item['qty'] ?? 0,
+                    'price'       => $item['price'] ?? 0,
+                    'tax'         => 0,
                     'total_price' => $item['total_price'] ?? 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
                 ]);
             }
 

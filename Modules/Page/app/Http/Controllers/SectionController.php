@@ -3,16 +3,14 @@
 namespace Modules\Page\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 use Modules\CarInfo\Models\VehicleInfo;
-use Modules\Page\Models\Section;
 use Modules\Page\Http\Requests\AddSectionRequest;
 use Modules\Page\Http\Requests\UpdateSectionRequest;
 use Modules\Page\Repositories\Contracts\SectionInterface;
-use Modules\Page\Models\Page;
 
 class SectionController extends Controller
 {
@@ -47,9 +45,9 @@ class SectionController extends Controller
             }
 
             $data[] = array_merge([
-                'id' => $section->id,
-                'name' => $section->title,
-                'icon' => $section->icon,
+                'id'     => $section->id,
+                'name'   => $section->title,
+                'icon'   => $section->icon,
                 'status' => $section->status,
             ], $decodedDatas);
 
@@ -59,10 +57,10 @@ class SectionController extends Controller
         }
 
         return response()->json([
-            'code' => 200,
+            'code'    => 200,
             'message' => __('Section details retrieved successfully.'),
-            'data' => $data,
-            'theme' => $theme
+            'data'    => $data,
+            'theme'   => $theme
         ], 200);
     }
 
@@ -75,7 +73,7 @@ class SectionController extends Controller
 
         if (!$authuser) {
             return response()->json([
-                'code' => 401,
+                'code'    => 401,
                 'message' => __('Unauthorized. User not found.'),
             ], 401);
         }
@@ -84,7 +82,7 @@ class SectionController extends Controller
 
         if (!$languageId) {
             return response()->json([
-                'code' => 400,
+                'code'    => 400,
                 'message' => __('Language ID not found for the user.'),
             ], 400);
         }
@@ -139,18 +137,18 @@ class SectionController extends Controller
             }
 
             $data[] = array_merge([
-                'id' => $section->id,
+                'id'       => $section->id,
                 'theme_id' => $section->theme_id,
-                'title' => $section->title,
-                'name' => $section->name,
-                'status' => $section->status,
+                'title'    => $section->title,
+                'name'     => $section->name,
+                'status'   => $section->status,
             ], $decodedDatas);
         }
 
         return response()->json([
-            'code' => 200,
+            'code'    => 200,
             'message' => __('Section details retrieved successfully.'),
-            'data' => $data
+            'data'    => $data
         ], 200);
     }
 
@@ -165,7 +163,7 @@ class SectionController extends Controller
         $authuser = Auth::user();
         if (!$authuser) {
             return response()->json([
-                'code' => 401,
+                'code'    => 401,
                 'message' => __('Unauthorized. User not found.'),
             ], 401);
         }
@@ -193,7 +191,7 @@ class SectionController extends Controller
         $authuser = Auth::user();
         if (!$authuser) {
             return response()->json([
-                'code' => 401,
+                'code'    => 401,
                 'message' => __('Unauthorized. User not found.'),
             ], 401);
         }
@@ -221,14 +219,14 @@ class SectionController extends Controller
         try {
             $this->sectionRepository->deletePage($request->id);
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => 'Page deleted successfully.'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => 'An error occurred while deleting page!'
             ], 500);
         }
@@ -246,10 +244,10 @@ class SectionController extends Controller
             }
 
             $data = [
-                'label_one' => $request->label_one,
-                'line_one' => $request->line_one,
-                'line_two' => $request->line_two,
-                'description_one' => $request->description_one,
+                'label_one'           => $request->label_one,
+                'line_one'            => $request->line_one,
+                'line_two'            => $request->line_two,
+                'description_one'     => $request->description_one,
                 'thumbnail_image_one' => $thumbnailPath,
             ];
         } elseif ($sectionId == 29) {
@@ -259,8 +257,8 @@ class SectionController extends Controller
             }
 
             $data = [
-                'label_two' => $request->label_two,
-                'description_two' => $request->description_two,
+                'label_two'           => $request->label_two,
+                'description_two'     => $request->description_two,
                 'thumbnail_image_two' => $thumbnailPath,
             ];
         } elseif ($sectionId == 43) {
@@ -270,10 +268,10 @@ class SectionController extends Controller
             }
 
             $data = [
-                'label_three_one' => $request->label_three_one,
-                'label_three_two' => $request->label_three_two,
-                'label_three_three' => $request->label_three_three,
-                'description_three' => $request->description_three,
+                'label_three_one'      => $request->label_three_one,
+                'label_three_two'      => $request->label_three_two,
+                'label_three_three'    => $request->label_three_three,
+                'description_three'    => $request->description_three,
                 'thumbnail_image_four' => $thumbnailPath,
             ];
         } elseif ($sectionId == 56) {
@@ -290,44 +288,44 @@ class SectionController extends Controller
             }
 
             $data = [
-                'label_boat_one' => $request->label_boat_one,
-                'label_boat_two' => $request->label_boat_two,
-                'label_boat_three' => $request->label_boat_three,
-                'description_boat' => $request->description_boat,
+                'label_boat_one'       => $request->label_boat_one,
+                'label_boat_two'       => $request->label_boat_two,
+                'label_boat_three'     => $request->label_boat_three,
+                'description_boat'     => $request->description_boat,
                 'thumbnail_image_boat' => $thumbnails, // Store as array
             ];
         } elseif ($sectionId == 42) {
             $data = [
                 'vehicle_id' => $request->vehicle_id,
-                'label_1' => $request->label_1,
-                'dis_1' => $request->dis_1,
-                'label_2' => $request->label_2,
-                'dis_2' => $request->dis_2,
-                'label_3' => $request->label_3,
-                'dis_3' => $request->dis_3,
-                'label_4' => $request->label_4,
-                'dis_4' => $request->dis_4,
-                'label_5' => $request->label_5,
-                'dis_5' => $request->dis_5,
-                'label_6' => $request->label_6,
-                'dis_6' => $request->dis_6,
+                'label_1'    => $request->label_1,
+                'dis_1'      => $request->dis_1,
+                'label_2'    => $request->label_2,
+                'dis_2'      => $request->dis_2,
+                'label_3'    => $request->label_3,
+                'dis_3'      => $request->dis_3,
+                'label_4'    => $request->label_4,
+                'dis_4'      => $request->dis_4,
+                'label_5'    => $request->label_5,
+                'dis_5'      => $request->dis_5,
+                'label_6'    => $request->label_6,
+                'dis_6'      => $request->dis_6,
             ];
         } elseif ($sectionId == 26) {
             $data = [
                 'why_label_1' => $request->why_label_1,
-                'why_dis_1' => $request->why_dis_1,
-                'why_icon_1' => $this->processIcon($request, 'why_icon_1', $existingData['why_icon_1'] ?? null),
+                'why_dis_1'   => $request->why_dis_1,
+                'why_icon_1'  => $this->processIcon($request, 'why_icon_1', $existingData['why_icon_1'] ?? null),
                 'why_label_2' => $request->why_label_2,
-                'why_dis_2' => $request->why_dis_2,
-                'why_icon_2' => $this->processIcon($request, 'why_icon_2', $existingData['why_icon_2'] ?? null),
+                'why_dis_2'   => $request->why_dis_2,
+                'why_icon_2'  => $this->processIcon($request, 'why_icon_2', $existingData['why_icon_2'] ?? null),
                 'why_label_3' => $request->why_label_3,
-                'why_dis_3' => $request->why_dis_3,
-                'why_icon_3' => $this->processIcon($request, 'why_icon_3', $existingData['why_icon_3'] ?? null),
+                'why_dis_3'   => $request->why_dis_3,
+                'why_icon_3'  => $this->processIcon($request, 'why_icon_3', $existingData['why_icon_3'] ?? null),
             ];
         } elseif ($sectionId == 68) {
             $data = [
-                'label_boat_experience_1' => $request->label_boat_experience_1,
-                'description_boat_experience_1' => $request->description_boat_experience_1,
+                'label_boat_experience_1'           => $request->label_boat_experience_1,
+                'description_boat_experience_1'     => $request->description_boat_experience_1,
                 'thumbnail_image_boat_experience_1' => $this->processIcon(
                     $request,
                     'thumbnail_image_boat_experience_1',
@@ -342,7 +340,7 @@ class SectionController extends Controller
             ];
         } elseif ($sectionId == 71) {
             $data = [
-                'label_bike_experience_1' => $request->label_bike_experience_1,
+                'label_bike_experience_1'           => $request->label_bike_experience_1,
                 'thumbnail_image_bike_experience_1' => $this->processIcon(
                     $request,
                     'thumbnail_image_bike_experience_1',
@@ -412,14 +410,14 @@ class SectionController extends Controller
 
             $data = [
                 'thumbnail_image_bike_exclusive' => $thumbnailPath,
-                'bike_label_1' => $request->bike_label_1,
-                'bike_dis_1' => $request->bike_dis_1,
-                'bike_label_2' => $request->bike_label_2,
-                'bike_dis_2' => $request->bike_dis_2,
-                'bike_label_3' => $request->bike_label_3,
-                'bike_dis_3' => $request->bike_dis_3,
-                'bike_label_4' => $request->bike_label_4,
-                'bike_dis_4' => $request->bike_dis_4,
+                'bike_label_1'                   => $request->bike_label_1,
+                'bike_dis_1'                     => $request->bike_dis_1,
+                'bike_label_2'                   => $request->bike_label_2,
+                'bike_dis_2'                     => $request->bike_dis_2,
+                'bike_label_3'                   => $request->bike_label_3,
+                'bike_dis_3'                     => $request->bike_dis_3,
+                'bike_label_4'                   => $request->bike_label_4,
+                'bike_dis_4'                     => $request->bike_dis_4,
             ];
         }
 
@@ -437,7 +435,7 @@ class SectionController extends Controller
     protected function updateSectionTitle($request, $sectionId)
     {
         $titleFieldMap = [
-            1 => 'section_title_one',
+            1  => 'section_title_one',
             29 => 'section_title_two',
             42 => 'section_title_three',
             56 => 'section_title_boat',

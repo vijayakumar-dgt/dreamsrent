@@ -14,9 +14,9 @@ class AssignTicketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ticketid' => 'required|exists:tickets,id',
+            'ticketid'     => 'required|exists:tickets,id',
             'assign_staff' => 'required|exists:users,id',
-            'reply' => 'nullable|string|max:3000'
+            'reply'        => 'nullable|string|max:3000'
         ];
     }
 }

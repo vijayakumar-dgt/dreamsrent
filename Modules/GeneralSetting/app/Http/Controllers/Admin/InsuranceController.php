@@ -49,8 +49,8 @@ class InsuranceController extends Controller
                 : __('admin.general_settings.insurance_update_success');
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMsg
             ]);
         } catch (\Exception $e) {
@@ -59,8 +59,8 @@ class InsuranceController extends Controller
                 : __('admin.common.default_update_error');
 
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMsg,
             ], 500);
         }
@@ -73,9 +73,9 @@ class InsuranceController extends Controller
             return response()->json($result, 200);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -86,13 +86,13 @@ class InsuranceController extends Controller
             $data = $this->repository->getInsuranceWithBenefits($request->id);
             return response()->json([
                 'status' => 'success',
-                'code' => 200,
-                'data' => $data
+                'code'   => 200,
+                'data'   => $data
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
             ], 500);
         }
@@ -103,14 +103,14 @@ class InsuranceController extends Controller
         try {
             $this->repository->deleteInsurance($request->id);
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.insurance_delete_success'),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ], 500);
         }
@@ -121,15 +121,15 @@ class InsuranceController extends Controller
         try {
             $data = $this->repository->getVehicleInsurances($request->vehicle_ids);
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data
+                'data'    => $data
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
             ], 500);
         }

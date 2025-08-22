@@ -2,10 +2,10 @@
 
 namespace Modules\Communication\Repositories\Eloquent;
 
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Communication\Models\Ticket;
 use Modules\Communication\Models\TicketHistory;
 use Modules\Communication\Repositories\Contracts\TicketInterface;
-use Illuminate\Database\Eloquent\Collection;
 
 class TicketRepository implements TicketInterface
 {
@@ -14,7 +14,6 @@ class TicketRepository implements TicketInterface
         return Ticket::with([
             'user:id,name,email',
             'user.userDetail:id,user_id,first_name,last_name,profile_image',
-            'category:id,name',
             'assignee:id,name,email',
             'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
             'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
@@ -44,7 +43,6 @@ class TicketRepository implements TicketInterface
         return Ticket::with([
             'user:id,name,email',
             'user.userDetail:id,user_id,first_name,last_name,profile_image',
-            'category:id,name',
             'assignee:id,name,email',
             'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
             'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
@@ -58,7 +56,6 @@ class TicketRepository implements TicketInterface
         $query = Ticket::with([
             'user:id,name,email',
             'user.userDetail:id,user_id,first_name,last_name,profile_image',
-            'category:id,name',
             'assignee:id,name,email',
             'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
             'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
@@ -95,9 +92,6 @@ class TicketRepository implements TicketInterface
                 $q->where('ticket_id', 'like', '%' . $filters['search'] . '%')
                     ->orWhereHas('user', function ($q2) use ($filters) {
                         $q2->where('name', 'like', '%' . $filters['search'] . '%');
-                    })
-                    ->orWhereHas('category', function ($q2) use ($filters) {
-                        $q2->where('name', 'like', '%' . $filters['search'] . '%');
                     });
             });
         }
@@ -123,7 +117,6 @@ class TicketRepository implements TicketInterface
 
         return $query->get();
     }
-
 
     public function assignTicket(int $ticketId, int $assigneeId, ?string $reply = null): object
     {
@@ -167,11 +160,11 @@ class TicketRepository implements TicketInterface
         }
 
         TicketHistory::create([
-            'ticket_id' => $ticket->id,
-            'user_id' => $user->id,
+            'ticket_id'   => $ticket->id,
+            'user_id'     => $user->id,
             'description' => strip_tags($reply),
-            'created_by' => $user->id,
-            'updated_by' => $user->id,
+            'created_by'  => $user->id,
+            'updated_by'  => $user->id,
         ]);
 
         return $ticket;
@@ -180,11 +173,11 @@ class TicketRepository implements TicketInterface
     public function addHistory(int $ticketId, int $userId, string $description): object
     {
         return TicketHistory::create([
-            'ticket_id' => $ticketId,
-            'user_id' => $userId,
+            'ticket_id'   => $ticketId,
+            'user_id'     => $userId,
             'description' => strip_tags($description),
-            'created_by' => $userId,
-            'updated_by' => $userId,
+            'created_by'  => $userId,
+            'updated_by'  => $userId,
         ]);
     }
 }

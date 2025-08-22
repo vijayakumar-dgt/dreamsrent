@@ -3,11 +3,8 @@
 namespace Modules\CarInfo\Repositories\Eloquent;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Modules\CarInfo\Models\Category;
 use Modules\CarInfo\Models\Season;
-use Modules\CarInfo\Repositories\Contracts\CategoryRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\SeasonRepositoryInterface;
 
 class SeasonRepository implements SeasonRepositoryInterface
@@ -19,8 +16,8 @@ class SeasonRepository implements SeasonRepositoryInterface
 
             if (!$season) {
                 return [
-                    'status' => 'error',
-                    'code' => 422,
+                    'status'  => 'error',
+                    'code'    => 422,
                     'message' => __('admin.rentals.season_not_found'),
                 ];
             }
@@ -30,16 +27,16 @@ class SeasonRepository implements SeasonRepositoryInterface
             $season->save();
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => empty($request->id)
                     ? __('admin.rentals.season_create_success')
                     : __('admin.rentals.season_update_success'),
             ];
         } catch (\Throwable $th) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => empty($request->id)
                     ? __('admin.common.default_create_error')
                     : __('admin.common.default_update_error'),
@@ -69,10 +66,10 @@ class SeasonRepository implements SeasonRepositoryInterface
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
@@ -89,16 +86,16 @@ class SeasonRepository implements SeasonRepositoryInterface
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => 'Season not found.'
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
@@ -110,20 +107,20 @@ class SeasonRepository implements SeasonRepositoryInterface
             $season->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.season_delete_success'),
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => 'Season not found',
             ];
         } catch (\Throwable $th) {
             return [
-                'status' => 'error',
-                'code'   => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => $th->getMessage(),
             ];
         }

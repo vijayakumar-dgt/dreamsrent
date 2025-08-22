@@ -6,8 +6,8 @@ return [
 
         'source' => [
             'files' => [
-                'include' => [],
-                'exclude' => [],
+                'include'       => [],
+                'exclude'       => [],
                 'relative_path' => base_path(),
             ],
             'databases' => ['mysql'],

@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Modules\Booking\Repositories\Contracts\BookingRepositoryInterface;
 use Modules\Booking\Http\Request\BookingRequest;
+use Modules\Booking\Repositories\Contracts\BookingRepositoryInterface;
 
 class BookingController extends Controller
 {
@@ -17,6 +17,7 @@ class BookingController extends Controller
     {
         $this->bookingRepository = $bookingRepository;
     }
+
     public function index(): View
     {
         return view('booking::reservation.index');
@@ -31,7 +32,7 @@ class BookingController extends Controller
     public function getCustomerDetails(Request $request): JsonResponse
     {
         $response = $this->bookingRepository->getCustomerDetails($request);
-        return response()->json($response, $response['code']  ?? 200);
+        return response()->json($response, $response['code'] ?? 200);
     }
 
     public function getFilterVehicles(Request $request): JsonResponse
@@ -51,6 +52,7 @@ class BookingController extends Controller
         $data = $this->bookingRepository->edit($request, $id);
         return view('booking::reservation.edit', [...$data]);
     }
+
     public function delete(Request $request): JsonResponse
     {
         $response = $this->bookingRepository->delete($request);

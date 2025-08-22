@@ -27,11 +27,11 @@ class CountryController extends Controller
     {
         try {
             $data = [
-                'name' => $request->name,
-                'code' => $request->code,
+                'name'   => $request->name,
+                'code'   => $request->code,
                 'status' => (int) ($request->status ?? 1),
             ];
-            // dd($data);
+            
             if ($request->filled('id')) {
                 $this->countryRepository->update($request->id, $data);
                 $message = __('admin.cms.country_update_success');
@@ -41,14 +41,14 @@ class CountryController extends Controller
             }
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $message,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $request->filled('id')
                     ? __('admin.common.default_update_error')
                     : __('admin.common.default_create_error'),
@@ -60,22 +60,22 @@ class CountryController extends Controller
     {
         try {
             $data = [
-                'name' => $request->name,
-                'code' => $request->code,
+                'name'   => $request->name,
+                'code'   => $request->code,
                 'status' => $request->status ?? 1
             ];
 
             $this->countryRepository->update($request->id, $data);
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.cms.country_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error')
             ], 500);
         }
@@ -91,15 +91,15 @@ class CountryController extends Controller
             );
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -110,8 +110,8 @@ class CountryController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'code' => 200,
-            'data' => $country
+            'code'   => 200,
+            'data'   => $country
         ]);
     }
 
@@ -121,14 +121,14 @@ class CountryController extends Controller
             $this->countryRepository->delete($request->id);
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.common.default_delete_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ], 500);
         }

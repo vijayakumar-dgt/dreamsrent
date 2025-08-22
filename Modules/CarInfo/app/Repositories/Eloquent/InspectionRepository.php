@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Modules\CarInfo\Models\Cartype;
 use Modules\CarInfo\Models\Checklist;
 use Modules\CarInfo\Models\Inspection;
 use Modules\CarInfo\Models\VehicleInfo;
@@ -26,7 +25,7 @@ class InspectionRepository implements InspectionRepositoryInterface
             });
         $checklists = Checklist::where('status', true)->orderBy('name', 'asc')->get();
         $data = [
-            'users' => $users,
+            'users'      => $users,
             'checklists' => $checklists
         ];
 
@@ -44,8 +43,8 @@ class InspectionRepository implements InspectionRepositoryInterface
                 $inspection = Inspection::find($request->id);
                 if ($inspection == null) {
                     return [
-                        'status' => 'error',
-                        'code' => 404,
+                        'status'  => 'error',
+                        'code'    => 404,
                         'message' => 'Inspection not found.',
                     ];
                 }
@@ -76,15 +75,15 @@ class InspectionRepository implements InspectionRepositoryInterface
 
             $inspection->save();
             return [
-                'status' => 'success',
-                'code'   => 200,
-                'data' => $inspection,
+                'status'  => 'success',
+                'code'    => 200,
+                'data'    => $inspection,
                 'message' => $successMessage
             ];
         } catch (\Throwable $th) {
             return [
-                'status' => 'error',
-                'code'   => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => $errorMessage
             ];
         }
@@ -143,14 +142,14 @@ class InspectionRepository implements InspectionRepositoryInterface
 
             return [
                 'status' => 'success',
-                'code' => 200,
-                'data' => $inspections
+                'code'   => 200,
+                'data'   => $inspections
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -161,8 +160,8 @@ class InspectionRepository implements InspectionRepositoryInterface
 
         if (!$inspection) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -170,7 +169,7 @@ class InspectionRepository implements InspectionRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $inspection
+            'data'   => $inspection
         ];
     }
 
@@ -182,20 +181,20 @@ class InspectionRepository implements InspectionRepositoryInterface
             $inspection->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.inspection_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
                 'error'   => $e->getMessage(),
             ];
@@ -211,15 +210,15 @@ class InspectionRepository implements InspectionRepositoryInterface
             ->get(['id', 'name'])
             ->map(function (VehicleInfo $vehicle) {
                 return [
-                    'id' => $vehicle->id,
+                    'id'   => $vehicle->id,
                     'text' => $vehicle->name
                 ];
             });
 
         return [
             'status' => 'success',
-            'code' => 200,
-            'data' => $vehicles
+            'code'   => 200,
+            'data'   => $vehicles
         ];
     }
 

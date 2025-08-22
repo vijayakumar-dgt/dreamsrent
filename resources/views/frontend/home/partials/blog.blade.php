@@ -16,7 +16,7 @@
             <div class="col-lg-4 col-md-6 d-lg-flex">
                 <div class="blog grid-blog">
                     <div class="blog-image">
-                        <a href="{{ route('blogs.detail', $blog['slug']) }}"><img class="img-fluid" src="{{ $blog['image'] }}" alt="Post Image"></a>
+                        <a href="{{ route('blogs.detail', $blog['slug']) }}"><img class="img-fluid" src="{{ $blog['image'] }}" alt="{{ $blog['title'] ?? "" }}"></a>
                     </div>
                     <div class="blog-content">
                          <p class="blog-category mb-2">

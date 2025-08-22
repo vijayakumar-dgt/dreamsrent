@@ -3,9 +3,9 @@
 namespace Modules\GeneralSetting\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 use Modules\GeneralSetting\Http\Requests\EmailTemplateRequest;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 
@@ -21,7 +21,7 @@ class EmailTemplateController extends Controller
     public function index(): View
     {
         return view('generalsetting::system_settings.email_template', [
-            'tags' => $this->repository->getAllNotificationTags(),
+            'tags'              => $this->repository->getAllNotificationTags(),
             'notificationTypes' => $this->repository->getAllNotificationTypes()
         ]);
     }
@@ -36,8 +36,8 @@ class EmailTemplateController extends Controller
                 : __('admin.general_settings.email_templated_success');
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $message
             ]);
         } catch (\Throwable $th) {
@@ -51,10 +51,10 @@ class EmailTemplateController extends Controller
             $result = $this->repository->getEmailTemplates($request->all());
 
             return response()->json([
-                'draw' => $request->draw,
-                'recordsTotal' => $result['totalRecords'],
+                'draw'            => $request->draw,
+                'recordsTotal'    => $result['totalRecords'],
                 'recordsFiltered' => $result['filteredRecords'],
-                'data' => $result['data']
+                'data'            => $result['data']
             ]);
         } catch (\Throwable $th) {
             return $this->jsonErrorResponse($th);
@@ -68,8 +68,8 @@ class EmailTemplateController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code' => 200,
-                'data' => $emailTemplate
+                'code'   => 200,
+                'data'   => $emailTemplate
             ]);
         } catch (\Throwable $th) {
             return $this->jsonErrorResponse($th);
@@ -82,8 +82,8 @@ class EmailTemplateController extends Controller
             $this->repository->deleteEmailTemplate($request->id);
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.email_template_deleted_success')
             ]);
         } catch (\Throwable $th) {
@@ -98,9 +98,9 @@ class EmailTemplateController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code' => 200,
-                'data' => $data['notification_type'],
-                'tags' => $data['tags']
+                'code'   => 200,
+                'data'   => $data['notification_type'],
+                'tags'   => $data['tags']
             ]);
         } catch (\Throwable $th) {
             return $this->jsonErrorResponse($th);
@@ -110,8 +110,8 @@ class EmailTemplateController extends Controller
     protected function jsonErrorResponse(\Throwable $exception, int $code = 422): JsonResponse
     {
         return response()->json([
-            'status' => 'error',
-            'code' => $code,
+            'status'  => 'error',
+            'code'    => $code,
             'message' => $exception->getMessage()
         ], $code);
     }

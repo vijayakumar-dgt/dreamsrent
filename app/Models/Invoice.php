@@ -3,10 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\InvoiceItem;
 
 /**
  * @property InvoiceItem $InvoiceItem
@@ -44,7 +43,7 @@ class Invoice extends Authenticatable
      */
     public function items(): HasMany
     {
-         /** @var hasMany<InvoiceItem, Invoice> */
+        /** @var hasMany<InvoiceItem, Invoice> */
         return $this->hasMany(InvoiceItem::class, 'invoice_id'); // explicitly tell Laravel the FK
     }
 }

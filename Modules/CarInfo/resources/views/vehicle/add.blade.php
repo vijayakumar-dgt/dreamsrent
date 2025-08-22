@@ -140,7 +140,9 @@
 													<select name="vehicle_category_id" class="form-control select" id="vehicle_category_id">
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($Category as $CategoryValues)
-														<option value="{{ $CategoryValues->id }}">{{ ucwords(strtolower($CategoryValues->name)) }}</option>
+														<option value="{{ $CategoryValues->id }}" data-slug="{{ $CategoryValues->slug }}">
+															{{ ucwords(strtolower($CategoryValues->name)) }}
+														</option>
 														@endforeach
 													</select>
 													<span class="invalid-feedback" id="vehicle_category_id_error"></span>
@@ -287,7 +289,7 @@
 													<input name="vehicle_passenger" id="vehicle_passenger" maxlength="2" placeholder="{{ __('admin.rentals.passengers_placeholder') }}" type="text" class="form-control priceLimit">
 												</div>
 											</div>
-											<div class="col-lg-4 col-md-6">
+											<div class="col-lg-4 col-md-6 CarContain">
 												<div class="mb-3">
 													<label class="form-label">{{ __('admin.rentals.no_of_seats') }}</label>
 													<select name="num_seats" class="form-control select" id="num_seats">
@@ -298,7 +300,7 @@
 													</select>
 												</div>
 											</div>
-											<div class="col-lg-4 col-md-6">
+											<div class="col-lg-4 col-md-6 CarContain car-doors-field">
 												<div class="mb-3">
 													<label class="form-label">{{ __('admin.rentals.no_of_doors') }}</label>
 													<select name="num_doors" class="form-control select" id="num_doors">
@@ -309,10 +311,43 @@
 													</select>
 												</div>
 											</div>
-											<div class="col-lg-4 col-md-6">
+											<div class="col-lg-4 col-md-6 CarContain">
 												<div class="mb-3">
 													<label class="form-label">{{ __('admin.rentals.no_of_airbags') }}</label>
 													<input type="text" class="form-control priceLimit" maxlength="1" placeholder="{{ __('admin.rentals.airbags_placeholder') }}" name="num_airbags" id="num_airbags">
+												</div>
+											</div>
+											<div class="col-lg-4 col-md-6 BoatContain">
+												<div class="mb-3">
+													<label class="form-label">{{ __('admin.rentals.water_tight') }}</label>
+													<select name="water_tight" class="form-control select" id="water_tight">
+														<option value="">{{ __('admin.rentals.select') }}</option>
+														@for ($i = 1; $i <= 20; $i++)
+															<option value="{{ $i }}">{{ $i }}</option>
+															@endfor
+													</select>
+												</div>
+											</div>
+											<div class="col-lg-4 col-md-6 BoatContain">
+												<div class="mb-3">
+													<label class="form-label">{{ __('admin.rentals.sliding') }}</label>
+													<select name="sliding" class="form-control select" id="sliding">
+														<option value="">{{ __('admin.rentals.select') }}</option>
+														@for ($i = 1; $i <= 20; $i++)
+															<option value="{{ $i }}">{{ $i }}</option>
+															@endfor
+													</select>
+												</div>
+											</div>
+											<div class="col-lg-4 col-md-6 BoatContain">
+												<div class="mb-3">
+													<label class="form-label">{{ __('admin.rentals.hatch') }}</label>
+													<select name="hatch" class="form-control select" id="hatch">
+														<option value="">{{ __('admin.rentals.select') }}</option>
+														@for ($i = 1; $i <= 20; $i++)
+															<option value="{{ $i }}">{{ $i }}</option>
+															@endfor
+													</select>
 												</div>
 											</div>
 											<div class="col-lg-12 col-md-6">

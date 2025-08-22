@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
 
 class ResetPasswordRequest extends CustomFailedValidation
 {
@@ -23,7 +22,7 @@ class ResetPasswordRequest extends CustomFailedValidation
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users,email',
+            'email'            => 'required|email|exists:users,email',
             'current_password' => 'required|string|min:6',
             'confirm_password' => 'required|same:current_password',
         ];
@@ -32,11 +31,11 @@ class ResetPasswordRequest extends CustomFailedValidation
     public function messages()
     {
         return [
-            'email.required' => __('web.home.email_required'),
-            'email.email' => __('web.home.valid_email'),
-            'email.exists' => __('web.auth.email_already_taken'),
+            'email.required'            => __('web.home.email_required'),
+            'email.email'               => __('web.home.valid_email'),
+            'email.exists'              => __('web.auth.email_already_taken'),
             'current_password.required' => __('web.user.current_password_required'),
-            'current_password.min' => __('web.user.password_length_must_6')
+            'current_password.min'      => __('web.user.password_length_must_6')
         ];
     }
 }

@@ -28,8 +28,8 @@ class LocationRepository implements LocationRepositoryInterface
         $authUser = current_user();
         if (!$authUser) {
             return [
-                'status' => 'error',
-                'code'   => 401,
+                'status'  => 'error',
+                'code'    => 401,
                 'message' => 'Unauthorized: User not authenticated.'
             ];
         }
@@ -48,8 +48,8 @@ class LocationRepository implements LocationRepositoryInterface
                 $oldImage = $location->image ?? '';
                 if (!$location) {
                     return [
-                        'status' => 'error',
-                        'code'   => 404,
+                        'status'  => 'error',
+                        'code'    => 404,
                         'message' => __('admin.common.default_update_error')
                     ];
                 }
@@ -99,14 +99,14 @@ class LocationRepository implements LocationRepositoryInterface
             }
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMessage
             ];
         } catch (\Throwable $th) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMessage,
             ];
         }
@@ -121,8 +121,8 @@ class LocationRepository implements LocationRepositoryInterface
             $authUser = current_user();
             if (!$authUser) {
                 return [
-                    'status' => 'error',
-                    'code'   => 401,
+                    'status'  => 'error',
+                    'code'    => 401,
                     'message' => 'Unauthorized: User not authenticated.'
                 ];
             }
@@ -156,9 +156,9 @@ class LocationRepository implements LocationRepositoryInterface
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -168,8 +168,8 @@ class LocationRepository implements LocationRepositoryInterface
         $location = Location::with('workingDays')->find($id);
         if (!$location) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -181,7 +181,7 @@ class LocationRepository implements LocationRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $location
+            'data'   => $location
         ];
     }
 
@@ -193,20 +193,20 @@ class LocationRepository implements LocationRepositoryInterface
             $location->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.manage.location_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }
@@ -218,13 +218,13 @@ class LocationRepository implements LocationRepositoryInterface
             $countries = Country::where('status', 1)->get(['id', 'name']);
 
             return [
-                'code' => 200,
-                'data' => $countries,
+                'code'    => 200,
+                'data'    => $countries,
                 'message' => __('Countries retrieved successfully.')
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => 'Error! while retrieving countries'
             ];
         }
@@ -236,13 +236,13 @@ class LocationRepository implements LocationRepositoryInterface
             $states = State::where('status', 1)->where('country_id', $countryId)->get(['id', 'country_id', 'name']);
 
             return [
-                'code' => 200,
-                'data' => $states,
+                'code'    => 200,
+                'data'    => $states,
                 'message' => __('States retrieved successfully.')
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => 'Error! while retrieving states'
             ];
         }
@@ -254,13 +254,13 @@ class LocationRepository implements LocationRepositoryInterface
             $cities = City::where('status', 1)->where('state_id', $stateId)->get(['id', 'state_id', 'name']);
 
             return [
-                'code' => 200,
-                'data' => $cities,
+                'code'    => 200,
+                'data'    => $cities,
                 'message' => __('Cities retrieved successfully.')
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => 'Error! while retrieving cities'
             ];
         }
@@ -281,7 +281,7 @@ class LocationRepository implements LocationRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $locations
+            'data'   => $locations
         ];
     }
 }

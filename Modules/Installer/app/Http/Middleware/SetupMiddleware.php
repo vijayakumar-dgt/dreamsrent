@@ -5,7 +5,6 @@ namespace Modules\Installer\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Http\Response;
 
 class SetupMiddleware
 {

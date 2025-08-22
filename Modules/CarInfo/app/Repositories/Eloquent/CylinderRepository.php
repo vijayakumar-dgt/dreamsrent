@@ -4,7 +4,6 @@ namespace Modules\CarInfo\Repositories\Eloquent;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Modules\CarInfo\Models\CarFuel;
 use Modules\CarInfo\Models\Cylinder;
 use Modules\CarInfo\Repositories\Contracts\CylinderRepositoryInterface;
 
@@ -22,8 +21,8 @@ class CylinderRepository implements CylinderRepositoryInterface
                 $cylinder = Cylinder::find($request->id);
                 if (!$cylinder) {
                     return [
-                        'status' => 'error',
-                        'code'   => 404,
+                        'status'  => 'error',
+                        'code'    => 404,
                         'message' => __('admin.rentals.cylinder_type_not_found')
                     ];
                 }
@@ -36,14 +35,14 @@ class CylinderRepository implements CylinderRepositoryInterface
             $cylinder->save();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMessage
             ];
         } catch (\Throwable $th) {
             return [
-              'status' => 'error',
-              'code'   => 422,
+              'status'  => 'error',
+              'code'    => 422,
               'message' => $th->getMessage()
             ];
         }
@@ -61,8 +60,8 @@ class CylinderRepository implements CylinderRepositoryInterface
             ];
         } catch (\Throwable $th) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $th->getMessage()
             ];
         }
@@ -80,14 +79,14 @@ class CylinderRepository implements CylinderRepositoryInterface
             ];
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.rentals.cylinder_type_not_found')
             ];
         } catch (\Throwable $th) {
             return [
-                'status' => 'error',
-                'code'   => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => $th->getMessage()
             ];
         }
@@ -100,20 +99,20 @@ class CylinderRepository implements CylinderRepositoryInterface
             $cylinder->delete();
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.cylinder_type_deleted')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-              'status' => 'error',
-              'code' => 422,
+              'status'  => 'error',
+              'code'    => 422,
               'message' => __('admin.rentals.cylinder_type_not_found')
             ];
         } catch (\Throwable $th) {
             return [
-             'status' => 'error',
-             'code' => 422,
+             'status'  => 'error',
+             'code'    => 422,
              'message' => $th->getMessage()
             ];
         }
@@ -122,7 +121,7 @@ class CylinderRepository implements CylinderRepositoryInterface
     public function getCylinderServerside(Request $request): array
     {
         $pageLength = $request->length;
-        $offset     = $request->start;
+        $offset = $request->start;
 
         $query = Cylinder::query();
 
@@ -146,10 +145,10 @@ class CylinderRepository implements CylinderRepositoryInterface
                            ->get();
 
         return [
-            'draw' => $request->draw,
-            'recordsTotal' => $totalRecords,
+            'draw'            => $request->draw,
+            'recordsTotal'    => $totalRecords,
             'recordsFiltered' => $filteredRecords,
-            'data' => $cylinders
+            'data'            => $cylinders
         ];
     }
 }

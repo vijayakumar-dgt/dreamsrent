@@ -2,11 +2,11 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
+use App\Services\ImageResizer;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Modules\GeneralSetting\Models\SignatureSetting;
 use Modules\GeneralSetting\Repositories\Contracts\SignatureSettingInterface;
-use App\Services\ImageResizer;
 
 class SignatureSettingRepository implements SignatureSettingInterface
 {
@@ -16,6 +16,7 @@ class SignatureSettingRepository implements SignatureSettingInterface
     {
         $this->imageResizer = $imageResizer;
     }
+
     public function getAllSignatures(string|null $search)
     {
         return SignatureSetting::when($search, function ($query) use ($search) {
@@ -33,15 +34,17 @@ class SignatureSettingRepository implements SignatureSettingInterface
     {
         $imagePath = $image ? $this->uploadSignatureImage($image) : null;
 
-        if (!empty($data['is_default'])) {
+        if (isset($data['is_default']) && $data['is_default'] == 1) {
             $this->resetDefaultSignature();
         }
 
+        $isDefault = (isset($data['is_default']) && $data['is_default'] == 1) ? 1 : 0;
+
         return SignatureSetting::create([
-            'signature_name' => $data['signature_name'],
+            'signature_name'  => $data['signature_name'],
             'signature_image' => $imagePath,
-            'status' => 1,
-            'is_default' => !empty($data['is_default']) ? 1 : 0,
+            'status'          => 1,
+            'is_default'      => $isDefault,
         ]);
     }
 
@@ -62,8 +65,8 @@ class SignatureSettingRepository implements SignatureSettingInterface
 
         $signature->update([
             'signature_name' => $data['signature_name'],
-            'is_default' => $isDefault,
-            'status' => !empty($data['status']) ? 1 : 0
+            'is_default'     => $isDefault,
+            'status'         => !empty($data['status']) ? 1 : 0
         ]);
 
         return $signature;
@@ -90,7 +93,7 @@ class SignatureSettingRepository implements SignatureSettingInterface
 
     protected function uploadSignatureImage(UploadedFile $file): string
     {
-        return $this->imageResizer->uploadFile($file, 'signatures', null);        
+        return $this->imageResizer->uploadFile($file, 'signatures', null);
     }
 
     protected function deleteSignatureImage(?string $imagePath)

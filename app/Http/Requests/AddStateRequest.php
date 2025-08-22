@@ -20,23 +20,22 @@ class AddStateRequest extends FormRequest
                 'required',
                 'max:255',
                 Rule::unique('states')
-                    ->where(fn($query) => $query->where('country_id', $this->country_id))
+                    ->where(fn ($query) => $query->where('country_id', $this->country_id))
                     ->ignore($stateId),
             ],
             'country_id' => 'required|exists:countries,id',
-            'status' => 'nullable|boolean',
+            'status'     => 'nullable|boolean',
         ];
     }
-
 
     public function messages(): array
     {
         return [
-            'name.required' => __('admin.cms.state_required'),
-            'name.unique' => __('admin.cms.state_exists'),
-            'name.max' => __('admin.cms.state_max_length'),
+            'name.required'       => __('admin.cms.state_required'),
+            'name.unique'         => __('admin.cms.state_exists'),
+            'name.max'            => __('admin.cms.state_max_length'),
             'country_id.required' => __('admin.cms.country_required'),
-            'country_id.exists' => __('admin.cms.country_exists'),
+            'country_id.exists'   => __('admin.cms.country_exists'),
         ];
     }
 }

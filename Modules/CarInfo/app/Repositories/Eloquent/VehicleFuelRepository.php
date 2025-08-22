@@ -17,24 +17,24 @@ class VehicleFuelRepository implements VehicleFuelRepositoryInterface
             $languageId = $authUser->language_id ?? 1;
 
             $data = [
-                'fuel_type' => $request->fuel_type,
-                'status' => $request->status ?? 1,
+                'fuel_type'   => $request->fuel_type,
+                'status'      => $request->status ?? 1,
                 'language_id' => $languageId
             ];
 
             CarFuel::updateOrCreate(['id' => $id], $data);
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => empty($id)
                     ? __('admin.rentals.fuel_type_create_success')
                     : __('admin.rentals.fuel_type_update_success'),
             ];
         } catch (\Exception $th) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => empty($id)
                     ? __('admin.common.default_create_error')
                     : __('admin.common.default_update_error'),
@@ -65,15 +65,15 @@ class VehicleFuelRepository implements VehicleFuelRepositoryInterface
             $data = $query->get();
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -84,8 +84,8 @@ class VehicleFuelRepository implements VehicleFuelRepositoryInterface
 
         if (!$data) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -93,7 +93,7 @@ class VehicleFuelRepository implements VehicleFuelRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -105,20 +105,20 @@ class VehicleFuelRepository implements VehicleFuelRepositoryInterface
             $carFuel->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.fuel_type_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }

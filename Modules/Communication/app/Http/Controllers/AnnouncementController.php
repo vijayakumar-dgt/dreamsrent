@@ -3,13 +3,9 @@
 namespace Modules\Communication\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Modules\Communication\Models\Announcement;
-use Modules\Communication\Models\Enquiry;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Modules\Communication\Http\Requests\AnnouncementRequest;
 use Modules\Communication\Repositories\Contracts\AnnouncementRepositoryInterface;
 
@@ -21,6 +17,7 @@ class AnnouncementController extends Controller
     {
         $this->announcementRepository = $announcementRepository;
     }
+
     public function index(): View
     {
         return view('communication::announcement.index');

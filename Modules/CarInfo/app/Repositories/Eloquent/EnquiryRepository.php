@@ -2,12 +2,9 @@
 
 namespace Modules\CarInfo\Repositories\Eloquent;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Modules\CarInfo\Models\Enquiry;
-use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Repositories\Contracts\EnquiryRepositoryInterface;
 
 class EnquiryRepository implements EnquiryRepositoryInterface
@@ -19,25 +16,25 @@ class EnquiryRepository implements EnquiryRepositoryInterface
 
             foreach ($request->assigned_cars as $carId) {
                 $enquiries[] = Enquiry::create([
-                    'car_id' => $carId,
-                    'customer_name' => $request->customer_name,
-                    'email' => $request->email,
-                    'phone' => $request->phone_number,
-                    'enquiry_date' => now(),
+                    'car_id'          => $carId,
+                    'customer_name'   => $request->customer_name,
+                    'email'           => $request->email,
+                    'phone'           => $request->phone_number,
+                    'enquiry_date'    => now(),
                     'enquiry_details' => $request->enquiry_details,
-                    'status' => '1'
+                    'status'          => '1'
                 ]);
             }
 
             return [
-                'code'   => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.bookings.enquiry_create_success'),
-                'data' => $enquiries
+                'data'    => $enquiries
             ];
         } catch (\Exception $e) {
             return [
-                'code'   => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_create_error'),
             ];
@@ -107,21 +104,28 @@ class EnquiryRepository implements EnquiryRepositoryInterface
                     }
                 })
                 ->get()->map(function ($enquiry) {
-                    $enquiry->vehicle_image = uploadedAsset($enquiry->vehicle_image ?? null, 'default');
+                    $vehicleImagePath = $enquiry->vehicle_image ?? '';
+                    $filename = basename($vehicleImagePath);
+                    $newpath = 'vehicles/images/small/' . $filename;
+                    $file = public_path('storage/' . $newpath);
+                    if (file_exists($file)) {
+                        $vehicleImagePath = $newpath;
+                    }
+                    $enquiry->vehicle_image = uploadedAsset($vehicleImagePath);
                     $enquiry->customer_name = ucwords($enquiry->customer_name);
                     $enquiry->formatted_created_at = formatDateTime($enquiry->created_at, false);
                     return $enquiry;
                 });
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $enquiries
+                'data'    => $enquiries
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
@@ -138,7 +142,7 @@ class EnquiryRepository implements EnquiryRepositoryInterface
             if ($enquiry->status == 3) {
                 return [
                     'success' => false,
-                    'code' => 400,
+                    'code'    => 400,
                     'message' => __('admin.bookings.enquiry_already_closed'),
                 ];
             }
@@ -146,7 +150,7 @@ class EnquiryRepository implements EnquiryRepositoryInterface
             if ($enquiry->status == 1 && $request->status == 3) {
                 return [
                     'success' => false,
-                    'code' => 400,
+                    'code'    => 400,
                     'message' => __('admin.bookings.enquiry_opened_before_cannot_be_closed'),
                 ];
             }
@@ -154,7 +158,7 @@ class EnquiryRepository implements EnquiryRepositoryInterface
             if ($enquiry->status == 2 && $request->status == 1) {
                 return [
                     'success' => false,
-                    'code' => 400,
+                    'code'    => 400,
                     'message' => __('admin.bookings.enquiry_closed_before_cannot_be_opened'),
                 ];
             }
@@ -164,17 +168,17 @@ class EnquiryRepository implements EnquiryRepositoryInterface
             $enquiry->save();
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'success' => true,
                 'message' => __('admin.bookings.enquiry_update_success'),
-                'data' => $enquiry
+                'data'    => $enquiry
             ];
         } catch (\Exception $e) {
             return [
-              'code' => 500,
+              'code'    => 500,
               'success' => false,
               'message' => __('admin.common.default_update_error'),
-              'error' => $e->getMessage()
+              'error'   => $e->getMessage()
             ];
         }
     }
@@ -200,14 +204,14 @@ class EnquiryRepository implements EnquiryRepositoryInterface
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
                 'error'   => $e->getMessage(),
             ];

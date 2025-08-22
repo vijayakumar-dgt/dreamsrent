@@ -315,7 +315,7 @@
                                                 "delete"
                                             )
                                                 ? `<li>
-                                            <button type="button" class="dropdown-item rounded-1 delete-category" data-id="${
+                                            <button type="button" class="dropdown-item rounded-1 delete-category d-none" data-id="${
                                                 value.id
                                             }" data-bs-toggle="modal" data-bs-target="#delete-modal">
                                             <i class="ti ti-trash me-1"></i>${_l(

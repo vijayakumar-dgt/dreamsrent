@@ -872,7 +872,8 @@
                         const avatarSpan = $('<span>').addClass('avatar flex-shrink-0 me-2');
                         $('<img>', {
                             src: item.image,
-                            alt: ''
+                            class: 'admin-vehicle-image',
+                            alt: 'vehicle image'
                         }).appendTo(avatarSpan);
 
                         const vehicleInfo = $('<div>');

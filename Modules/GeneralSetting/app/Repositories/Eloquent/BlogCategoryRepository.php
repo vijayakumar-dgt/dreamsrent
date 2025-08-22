@@ -2,23 +2,20 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
-use Modules\GeneralSetting\Models\BlogCategory;
-use Modules\GeneralSetting\Repositories\Contracts\BlogCategoryRepositoryInterface;
-use Illuminate\Support\Collection;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Modules\GeneralSetting\Models\BlogReviews;
-use Modules\GeneralSetting\Models\BlogTag;
-use Modules\GeneralSetting\Models\BlogPost;
+use App\Services\ImageResizer;
 use Carbon\Carbon;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Modules\GeneralSetting\Models\Language;
-use App\Services\ImageResizer;
 use Illuminate\Support\Str;
+use Modules\GeneralSetting\Models\BlogCategory;
+use Modules\GeneralSetting\Models\BlogPost;
+use Modules\GeneralSetting\Models\BlogReviews;
+use Modules\GeneralSetting\Models\BlogTag;
+use Modules\GeneralSetting\Models\Language;
+use Modules\GeneralSetting\Repositories\Contracts\BlogCategoryRepositoryInterface;
 
 class BlogCategoryRepository implements BlogCategoryRepositoryInterface
 {
@@ -28,6 +25,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     {
         $this->imageResizer = $imageResizer;
     }
+
     public function blogCategory(): array
     {
         /** @var \App\Models\User|null $authId */
@@ -44,13 +42,13 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     public function categoryStore(Request $request): JsonResponse
     {
         BlogCategory::create([
-            'name' => $request->name,
-            'status' => 1,
-            'created_at' =>  Carbon::now(),
+            'name'        => $request->name,
+            'status'      => 1,
+            'created_at'  => Carbon::now(),
             'language_id' => $request->language_id,
         ]);
         return response()->json([
-            'code' => 200,
+            'code'    => 200,
             'message' => 'Blog Category added successfully!'
         ], 200);
     }
@@ -59,7 +57,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     {
         $category = BlogCategory::where('id', $id)->firstOrFail();
         $category->update([
-            'name' => $request->name,
+            'name'   => $request->name,
             'status' => $request->status ?? 0,
         ]);
         return redirect()->back()->with('success', 'Blog Category updated successfully.');
@@ -88,13 +86,13 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     public function tagStore(Request $request): JsonResponse
     {
         BlogTag::create([
-            'name' => $request->name,
-            'status' => 1,
-            'created_at' =>  Carbon::now(),
+            'name'        => $request->name,
+            'status'      => 1,
+            'created_at'  => Carbon::now(),
             'language_id' => $request->language_id,
         ]);
         return response()->json([
-            'code' => 200,
+            'code'    => 200,
             'message' => 'Blog Tag added successfully!'
         ], 200);
     }
@@ -103,7 +101,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     {
         $tag = BlogTag::findOrFail($id);
         $tag->update([
-            'name' => $request->name,
+            'name'   => $request->name,
             'status' => $request->status ?? 0,
         ]);
         return redirect()->back()->with('success', 'Blog Tag updated successfully.');
@@ -180,17 +178,17 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
         assert($request->file('image') instanceof \Illuminate\Http\UploadedFile);
         $imagePath = $this->imageResizer->uploadFile($request->file('image'), 'blogs/images', null);
         BlogPost::create([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
+            'title'       => $request->title,
+            'slug'        => Str::slug($request->title),
             'language_id' => $request->language,
-            'category' => $request->category_id,
-            'tags' => json_encode($request->tag_id),
+            'category'    => $request->category_id,
+            'tags'        => json_encode($request->tag_id),
             'description' => $request->description,
-            'image' => $imagePath,
-            'status' => 1,
-            'created_by' => Auth::id(),
-            'updated_by' => Auth::id(),
-            'created_at' => Carbon::now(),
+            'image'       => $imagePath,
+            'status'      => 1,
+            'created_by'  => Auth::id(),
+            'updated_by'  => Auth::id(),
+            'created_at'  => Carbon::now(),
         ]);
         return response()->json(['message' => 'Blog added successfully!']);
     }
@@ -205,18 +203,18 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
 
     public function blogEdit(int $id): array
     {
-         /** @var \App\Models\User|null $authId */
-         $authId = current_user();
-         $languageId = $authId ? $authId->language_id : null;
-         $blog = BlogPost::findOrFail($id);
-         $languages = Language::with('transLang')->where('deleted_at', null)->get();
-         $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
-         $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
+        /** @var \App\Models\User|null $authId */
+        $authId = current_user();
+        $languageId = $authId ? $authId->language_id : null;
+        $blog = BlogPost::findOrFail($id);
+        $languages = Language::with('transLang')->where('deleted_at', null)->get();
+        $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
+        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
 
         $data = [
-            'blog' => $blog,
-            'tags' => $tags,
-            'languages' => $languages,
+            'blog'       => $blog,
+            'tags'       => $tags,
+            'languages'  => $languages,
             'categories' => $categories,
         ];
 

@@ -14,7 +14,7 @@ class BlogCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:blog_categories,name',
+            'name'        => 'required|string|max:255|unique:blog_categories,name',
             'language_id' => 'required',
         ];
     }
@@ -23,9 +23,9 @@ class BlogCategoryRequest extends FormRequest
     {
         return [
             'name.required' => __('admin.manage.name_required'),
-            'name.max' => __('admin.manage.name_maxlength'),
-            'name.min' => __('admin.manage.name_minlength'),
-            'name.unique' => __('admin.manage.name_unique'),
+            'name.max'      => __('admin.manage.name_maxlength'),
+            'name.min'      => __('admin.manage.name_minlength'),
+            'name.unique'   => __('admin.manage.name_unique'),
         ];
     }
 }

@@ -20,9 +20,9 @@ class VehicleColorRepository implements VehicleColorRepositoryInterface
 
         try {
             $data = [
-                'name' => $request->name,
-                'value' => $request->value,
-                'status' => $request->status ?? 1,
+                'name'        => $request->name,
+                'value'       => $request->value,
+                'status'      => $request->status ?? 1,
                 'language_id' => $languageId
             ];
 
@@ -33,14 +33,14 @@ class VehicleColorRepository implements VehicleColorRepositoryInterface
             }
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMsg
             ];
         } catch (\Exception $th) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMsg
             ];
         }
@@ -69,15 +69,15 @@ class VehicleColorRepository implements VehicleColorRepositoryInterface
             $data = $query->get();
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -88,8 +88,8 @@ class VehicleColorRepository implements VehicleColorRepositoryInterface
 
         if (!$data) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -97,7 +97,7 @@ class VehicleColorRepository implements VehicleColorRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -109,20 +109,20 @@ class VehicleColorRepository implements VehicleColorRepositoryInterface
             $carColor->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.vehicle_color_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }
@@ -145,15 +145,15 @@ class VehicleColorRepository implements VehicleColorRepositoryInterface
                 ]);
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }

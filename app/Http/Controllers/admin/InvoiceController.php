@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\InvoiceRequest;
+use App\Repositories\Contracts\InvoiceRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use App\Repositories\Contracts\InvoiceRepositoryInterface;
-use App\Http\Requests\InvoiceRequest;
 
 class InvoiceController extends Controller
 {
@@ -18,6 +17,7 @@ class InvoiceController extends Controller
     {
         $this->invoiceRepository = $invoiceRepository;
     }
+
     public function index(): View
     {
         $data = $this->invoiceRepository->index();
@@ -44,13 +44,11 @@ class InvoiceController extends Controller
 
     public function destroy(?int $id): JsonResponse
     {
-        $response = $this->invoiceRepository->delete($id);
-        return $response;
+        return $this->invoiceRepository->delete($id);
     }
 
     public function update(InvoiceRequest $request, ?int $id): RedirectResponse
     {
-        $response = $this->invoiceRepository->update($request, $id);
-        return $response;
+        return $this->invoiceRepository->update($request, $id);
     }
 }

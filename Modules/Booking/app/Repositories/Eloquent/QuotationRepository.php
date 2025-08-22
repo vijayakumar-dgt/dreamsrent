@@ -2,9 +2,7 @@
 
 namespace Modules\Booking\Repositories\Eloquent;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -12,15 +10,15 @@ use Illuminate\Support\Facades\DB;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingDetail;
 use Modules\Booking\Models\BookingHistory;
+use Modules\Booking\Repositories\Contracts\QuotationRepositoryInterface;
 use Modules\CarInfo\Models\Driver;
 use Modules\CarInfo\Models\ExtraService;
-use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\PricingType;
+use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\VehicleSeason;
 use Modules\CarInfo\Models\VehicleTarrif;
 use Modules\GeneralSetting\Models\GeneralSetting;
-use Modules\Booking\Repositories\Contracts\QuotationRepositoryInterface;
 use Modules\GeneralSetting\Models\Insurance;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
 
@@ -69,47 +67,47 @@ class QuotationRepository implements QuotationRepositoryInterface
             }
 
             $startDateTime = Carbon::parse($startDate . ' ' . $startTime)->format('Y-m-d H:i:s');
-            $endDateTime   = Carbon::parse($endDate . ' ' . $endTime)->format('Y-m-d H:i:s');
+            $endDateTime = Carbon::parse($endDate . ' ' . $endTime)->format('Y-m-d H:i:s');
 
 
             $bookingId = $request->booking_id ?? null;
 
             $data = [
-                'vehicle_id' => $request->vehicle_id,
-                'customer_id' => $request->customer_id,
-                "booking_by" => "quotation",
-                'driver_id' => $request->driver_id ?? null,
-                'driver_price' => $request->driver_price ?? 0,
-                'vehicle_price' => $request->vehicle_price,
-                'total_insurance_price' => $request->total_insurance_price ?? 0,
+                'vehicle_id'                => $request->vehicle_id,
+                'customer_id'               => $request->customer_id,
+                "booking_by"                => "quotation",
+                'driver_id'                 => $request->driver_id ?? null,
+                'driver_price'              => $request->driver_price ?? 0,
+                'vehicle_price'             => $request->vehicle_price,
+                'total_insurance_price'     => $request->total_insurance_price ?? 0,
                 'total_extra_service_price' => $request->total_extra_service_price ?? 0,
-                'final_price' => $request->final_price ?? 0,
-                'extra_service' => $request->extra_service ?? null,
-                'insurance' => $request->insurance ?? null,
-                'security_deposit' => $request->security_deposit ?? null,
-                'start_datetime' => $startDateTime,
-                'end_datetime' => $endDateTime,
-                'pickup_location' => $request->pickup_location,
-                'return_location' => $request->return_location,
-                'booking_status' => 1,
-                'booking_tariff' => $request->tariff ?? null,
-                'driving_type' => $request->driving_type ?? null,
-                'rental_type' => $request->vehicle_price_type ?? null,
-                'no_of_passengers' => $request->no_of_passengers ?? null,
-                'no_of_days' => $request->no_of_days ?? null,
-                'vehicle_total_price' => $request->vehicle_total_price ?? null,
-                'base_km' => $request->base_km ?? null,
-                'km_extra_price' => $request->km_extra_price ?? null,
-                'expenses' => $request->expenses ?? null,
-                'delivery_price' => $request->delivery_price ?? null,
-                'tax_val' => $request->tax_val ?? null,
-                'tax_type' => $request->tax_type ?? null,
-                'booking_date' => now(),
+                'final_price'               => $request->final_price ?? 0,
+                'extra_service'             => $request->extra_service ?? null,
+                'insurance'                 => $request->insurance ?? null,
+                'security_deposit'          => $request->security_deposit ?? null,
+                'start_datetime'            => $startDateTime,
+                'end_datetime'              => $endDateTime,
+                'pickup_location'           => $request->pickup_location,
+                'return_location'           => $request->return_location,
+                'booking_status'            => 1,
+                'booking_tariff'            => $request->tariff ?? null,
+                'driving_type'              => $request->driving_type ?? null,
+                'rental_type'               => $request->vehicle_price_type ?? null,
+                'no_of_passengers'          => $request->no_of_passengers ?? null,
+                'no_of_days'                => $request->no_of_days ?? null,
+                'vehicle_total_price'       => $request->vehicle_total_price ?? null,
+                'base_km'                   => $request->base_km ?? null,
+                'km_extra_price'            => $request->km_extra_price ?? null,
+                'expenses'                  => $request->expenses ?? null,
+                'delivery_price'            => $request->delivery_price ?? null,
+                'tax_val'                   => $request->tax_val ?? null,
+                'tax_type'                  => $request->tax_type ?? null,
+                'booking_date'              => now(),
             ];
             $details = [
                 'vehicle_price_type' => $request->vehicle_price_type,
-                'vehicle_season_id' => $request->vehicle_season_id ?? null,
-                'vehicle_tariff_id' => $request->vehicle_tariff_id ?? null,
+                'vehicle_season_id'  => $request->vehicle_season_id ?? null,
+                'vehicle_tariff_id'  => $request->vehicle_tariff_id ?? null,
             ];
             $vehicleTariff = '';
             $vehicleSeason = '';
@@ -118,25 +116,25 @@ class QuotationRepository implements QuotationRepositoryInterface
                 $vehicleTariff = VehicleTarrif::find($request->vehicle_tariff_id);
 
                 if ($vehicleTariff instanceof \Modules\CarInfo\Models\VehicleTarrif) {
-                    $details['tariff_title']        = $vehicleTariff->tariff_title;
-                    $details['tariff_price']        = $vehicleTariff->tariff_daily_price;
-                    $details['tariff_from_days']    = $vehicleTariff->tariff_from_days;
-                    $details['tariff_to_days']      = $vehicleTariff->tariff_to_days;
-                    $details['tariff_base_km']      = $vehicleTariff->tariff_base_km;
-                    $details['tariff_extra_price']  = $vehicleTariff->tariff_extra_price;
+                    $details['tariff_title'] = $vehicleTariff->tariff_title;
+                    $details['tariff_price'] = $vehicleTariff->tariff_daily_price;
+                    $details['tariff_from_days'] = $vehicleTariff->tariff_from_days;
+                    $details['tariff_to_days'] = $vehicleTariff->tariff_to_days;
+                    $details['tariff_base_km'] = $vehicleTariff->tariff_base_km;
+                    $details['tariff_extra_price'] = $vehicleTariff->tariff_extra_price;
                 }
             }
             if ($request->vehicle_season_id) {
                 $vehicleSeason = VehicleSeason::find($request->vehicle_season_id);
 
                 if ($vehicleSeason instanceof \Modules\CarInfo\Models\VehicleSeason) {
-                    $details['seasonal_title']         = $vehicleSeason->seasonal_title;
-                    $details['seasonal_start_date']    = $vehicleSeason->seasonal_start_date;
-                    $details['seasonal_end_date']      = $vehicleSeason->seasonal_end_date;
-                    $details['seasonal_daily_rate']    = $vehicleSeason->seasonal_daily_rate;
-                    $details['seasonal_weekly_rate']   = $vehicleSeason->seasonal_weekly_rate;
-                    $details['seasonal_monthly_rate']  = $vehicleSeason->seasonal_monthly_rate;
-                    $details['seasonal_late_fee']      = $vehicleSeason->seasonal_late_fee;
+                    $details['seasonal_title'] = $vehicleSeason->seasonal_title;
+                    $details['seasonal_start_date'] = $vehicleSeason->seasonal_start_date;
+                    $details['seasonal_end_date'] = $vehicleSeason->seasonal_end_date;
+                    $details['seasonal_daily_rate'] = $vehicleSeason->seasonal_daily_rate;
+                    $details['seasonal_weekly_rate'] = $vehicleSeason->seasonal_weekly_rate;
+                    $details['seasonal_monthly_rate'] = $vehicleSeason->seasonal_monthly_rate;
+                    $details['seasonal_late_fee'] = $vehicleSeason->seasonal_late_fee;
                 }
             }
 
@@ -165,18 +163,18 @@ class QuotationRepository implements QuotationRepositoryInterface
 
                 $customer = User::where('id', $booking->customer_id)->first();
                 $vehicle = VehicleInfo::where('id', $booking->vehicle_id)->first();
-                $driver  = Driver::find($booking->driver_id);
+                $driver = Driver::find($booking->driver_id);
                 $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
                 $notifyData = [
-                    'user_name' => $customer->name ?? '',
-                    'company_name' => $companyName,
-                    'email'     => $customer->email ?? '',
-                    'phonenumber' => $customer->phone_number ?? '',
-                    'vehicle_name' => $vehicle->name ?? "",
-                    'driver_name'  => $driver ? $driver->driver_name : "",
-                    'reservation_id' => $booking->reservation_id ?? "",
-                    'start_date'     => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
-                    'end_date'       => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
+                    'user_name'       => $customer->name ?? '',
+                    'company_name'    => $companyName,
+                    'email'           => $customer->email ?? '',
+                    'phonenumber'     => $customer->phone_number ?? '',
+                    'vehicle_name'    => $vehicle->name ?? "",
+                    'driver_name'     => $driver ? $driver->driver_name : "",
+                    'reservation_id'  => $booking->reservation_id ?? "",
+                    'start_date'      => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
+                    'end_date'        => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
                     'pickup_location' => $booking->pickupLocation ? $booking->pickupLocation->name : "",
                     'delivery_type'   => $booking->delivery_type ?? "",
                     'rental_type'     => $booking->rental_type ?? "",
@@ -208,7 +206,7 @@ class QuotationRepository implements QuotationRepositoryInterface
                 $bookingDetail = BookingDetail::where('booking_id', $bookingId)->first();
 
                 $historyData = [
-                    'bookings' => $booking instanceof \Modules\Booking\Models\Booking ? $booking->toArray() : [],
+                    'bookings'        => $booking instanceof \Modules\Booking\Models\Booking ? $booking->toArray() : [],
                     'booking_details' => $bookingDetail instanceof \Modules\Booking\Models\BookingDetail ? $bookingDetail->toArray() : [],
                 ];
                 if ($booking instanceof \Modules\Booking\Models\Booking) {
@@ -226,8 +224,8 @@ class QuotationRepository implements QuotationRepositoryInterface
             $encryptedId = (is_int($bookingId) || is_string($bookingId)) ? customEncrypt($bookingId, Booking::$reservationSecretKey) : null;
 
             $response = [
-                'code' => 200,
-                'message' => $successMsg,
+                'code'             => 200,
+                'message'          => $successMsg,
                 'view_details_url' => route('quotations.details', ['id' => $encryptedId]),
             ];
 
@@ -236,9 +234,9 @@ class QuotationRepository implements QuotationRepositoryInterface
             DB::rollBack();
 
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => $errorMsg,
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
             return $response;
         }
@@ -381,24 +379,31 @@ class QuotationRepository implements QuotationRepositoryInterface
             // Format Response Data
             $bookings->map(function ($booking) {
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-                $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
+                $vehicleImagePath = $booking->vehicle_image ?? '';
+                $filename = basename($vehicleImagePath);
+                $newpath = 'vehicles/images/small/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $vehicleImagePath = $newpath;
+                }
+                $booking->vehicle_image = uploadedAsset($vehicleImagePath);
                 $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
 
                 return $booking;
             });
 
             $response = [
-                "draw" => intval($request->input('draw', 0)),
-                "recordsTotal" => $totalRecords,
+                "draw"            => intval($request->input('draw', 0)),
+                "recordsTotal"    => $totalRecords,
                 "recordsFiltered" => $filteredRecords,
-                "data" => $bookings
+                "data"            => $bookings
             ];
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
             return $response;
         }
@@ -411,8 +416,8 @@ class QuotationRepository implements QuotationRepositoryInterface
 
             if (empty($id)) {
                 $response = [
-                    'status' => 'error',
-                    'code'   => 400,
+                    'status'  => 'error',
+                    'code'    => 400,
                     'message' => 'Booking id is required.'
                 ];
                 return $response;
@@ -457,16 +462,16 @@ class QuotationRepository implements QuotationRepositoryInterface
             }
 
             $response = [
-                'code' => 200,
+                'code'    => 200,
                 'message' => 'Success',
-                'data' => $booking,
+                'data'    => $booking,
             ];
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
             return $response;
         }
@@ -532,7 +537,14 @@ class QuotationRepository implements QuotationRepositoryInterface
         if ($booking) {
             $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
             $booking->driver_image = uploadedAsset($booking->driver_image, 'profile');
-            $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
+            $vehicleImagePath = $booking->vehicle_image ?? '';
+            $filename = basename($vehicleImagePath);
+            $newpath = 'vehicles/images/small/' . $filename;
+            $file = public_path('storage/' . $newpath);
+            if (file_exists($file)) {
+                $vehicleImagePath = $newpath;
+            }
+            $booking->vehicle_image = uploadedAsset($vehicleImagePath);
 
             $booking->extra_service_count = 0;
             $booking->extra_service_names = [];
@@ -598,15 +610,15 @@ class QuotationRepository implements QuotationRepositoryInterface
             BookingDetail::where('booking_id', $id)->delete();
 
             $response = [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.bookings.quotation_delete_success')
             ];
             return $response;
         } catch (\Exception $e) {
             $response = [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
             return $response;

@@ -2,9 +2,9 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
+use Illuminate\Support\Collection;
 use Modules\GeneralSetting\Models\Dbbackup;
 use Modules\GeneralSetting\Repositories\Contracts\DbbackupInterface;
-use Illuminate\Support\Collection;
 
 class DbbackupRepository implements DbbackupInterface
 {

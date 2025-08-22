@@ -2,7 +2,7 @@
 
 return [
     'inertia' => env('SEO_TOOLS_INERTIA', false),
-    'meta' => [
+    'meta'    => [
         /*
          * The default configurations to be used by the meta generator.
          */

@@ -3,6 +3,8 @@
     await loadTranslationFile("admin", "rentals, common");
 
     $(document).ready(function () {
+        $("#vehicle_category_id").trigger("change");
+
         if ($(".custom-select").length > 0) {
             $(".custom-select").select2({
                 minimumResultsForSearch: -1,
@@ -2240,7 +2242,9 @@
                     displayPrice = `${currency}${updatedPrice}`;
                 }
 
-                $(`.priceIn[data-id='ins_price_${uniqueId}']`).text(displayPrice);
+                $(`.priceIn[data-id='ins_price_${uniqueId}']`).text(
+                    displayPrice
+                );
                 $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
                 $(`.priceTypeIn[data-id='${uniqueId}']`).text(priceTypeLabel);
                 $(`#insurance_price_type_one_${uniqueId}`).val(
@@ -2277,6 +2281,23 @@
                 }
             );
         });
+    });
+
+    $(document).on("change", "#vehicle_category_id", function () {
+        const selectedOption = $(this).find("option:selected");
+        const slug = selectedOption.data("slug");
+
+        // Hide all conditional sections
+        $(".CarContain, .BoatContain").hide();
+
+        if (slug === "car") {
+            $(".CarContain").show();
+        } else if (slug === "bike") {
+            $(".CarContain").show();
+            $(".car-doors-field").hide();
+        } else if (slug === "boat") {
+            $(".BoatContain").show();
+        }
     });
 
     let editingDamageID = null;

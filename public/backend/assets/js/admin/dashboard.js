@@ -1,12 +1,13 @@
+/* global document, ApexCharts, showToast */
 (function () {
     "use strict";
 
     const chartDataElement = document.getElementById("chart-data");
 
     const times = JSON.parse(chartDataElement.dataset.times);
-    const bookingDate = JSON.parse(chartDataElement.dataset.bookingDate);
+    // Removed unused bookingDate variable
     const series = JSON.parse(chartDataElement.dataset.series);
-    const dates = JSON.parse(chartDataElement.dataset.dates);
+    // Removed unused dates variable
     const bookingData = JSON.parse(chartDataElement.dataset.bookings);
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -15,7 +16,7 @@
                 type: "heatmap",
                 height: 400,
                 events: {
-                    mounted: function (ctx, config) {
+                    mounted: function () {
                         const heatmapCells = document.querySelectorAll(
                             ".apexcharts-heatmap-rect"
                         );
@@ -64,6 +65,7 @@
     });
 
     if (typeof bookingData === "undefined" || !Array.isArray(bookingData)) {
+        showToast("error", "Booking data is not available or not an array");
     }
 
     var incomeData = [];
@@ -82,6 +84,7 @@
             }
         });
     } else {
+        showToast("error", "No booking data available for processing");
     }
 
     var optionsIncome = {
@@ -108,6 +111,7 @@
         );
         chart.render();
     } else {
+        showToast("error", "ApexCharts is not available");
     }
 
     document.querySelectorAll(".dropdown-item-chat").forEach((item) => {
@@ -149,11 +153,7 @@
         endOfLastWeek.setDate(startOfLastWeek.getDate() + 6);
 
         let thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        let previousMonth = new Date(
-            today.getFullYear(),
-            today.getMonth() - 1,
-            1
-        );
+        // Removed unused previousMonth variable
 
         const formatDate = (date) => {
             return `${date.getDate()} ${date.toLocaleString("default", {
@@ -218,6 +218,7 @@
                 xaxis: { categories: categories },
             });
         } else {
+            showToast("error", "Chart instance is not available for update");
         }
 
         const incomeText = document.querySelector(".income-summary p");

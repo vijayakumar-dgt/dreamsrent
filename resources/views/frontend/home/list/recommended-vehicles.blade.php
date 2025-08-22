@@ -29,7 +29,7 @@
                                                 <a href="javascript:void(0)" class="author-img">
                                                     <img src="{{ $vehicle['avatar_image'] }}" alt="author">
                                                 </a>
-                                                <h3 class="listing-title">
+                                                <h3 class="listing-title text-start">
                                                     <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] }}</a>
                                                 </h3>
                                                 @php 
@@ -38,7 +38,7 @@
                                                     $emptyStars = 5 - $rating;
                                                     $fullStars = $rating;
                                                 @endphp
-                                                <div class="list-rating">
+                                                <div class="list-rating text-start">
                                                     @for ($i = 0; $i < $fullStars; $i++)
                                                         <i class="fas fa-star filled"></i>
                                                     @endfor

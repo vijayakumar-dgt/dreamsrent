@@ -116,7 +116,7 @@
                                     @foreach($fuelTypes as $fuelType)
                                     <li>
                                         <div class="input-selection">
-                                            <input type="radio" name="color" id="{{ $fuelType->fuel_type ?? ""}}" class="fuel_types" value="{{ $fuelType->id ?? ""}}">
+                                            <input type="radio" name="fuel_type" id="{{ $fuelType->fuel_type ?? ""}}" class="fuel_types" value="{{ $fuelType->id ?? ""}}">
                                             <label for="{{ $fuelType->fuel_type ?? ""}}">{{ $fuelType->fuel_type ?? "" }}</label>
                                         </div>
                                     </li>
@@ -240,10 +240,13 @@
                                 <ul>
                                     @if(!empty($colors) && count($colors) > 0)
                                         @foreach($colors as $color)
+                                        @php
+                                            $colorName = strtolower(trim(preg_replace('/\s+/', '-', $color->name)));
+                                        @endphp
                                     <li>
                                         <div class="input-themeselects">
-                                            <input type="radio" name="color" class="colors" id="{{ $color->name ?? ""}}" value="{{ $color->id ?? ""}}">
-                                            <label for="{{ $color->name ?? ""}}" class="{{ $color->name ?? ""}}" style="background-color:{{ $color->value ?? ""}}"></label>
+                                            <input type="radio" name="color" class="colors" id="{{ $colorName ?? ""}}" value="{{ $color->id ?? ""}}">
+                                            <label for="{{ $colorName ?? ""}}" class="{{ $colorName ?? ""}}" style="background-color:{{ $color->value ?? ""}}"></label>
                                         </div>
                                     </li>
                                         @endforeach
@@ -319,10 +322,13 @@
                                 <ul>
                                     @if(!empty($transmissions) && count($transmissions) > 0)
                                         @foreach($transmissions as $k => $transmission)
+                                        @php
+                                            $transmissionName = strtolower(trim(preg_replace('/\s+/', '-', $transmission->name)));
+                                        @endphp
                                     <li>
                                         <div class="input-selection">
-                                            <input type="radio" name="transmission" id="{{ $transmission->name ?? ""}}" value="{{ $transmission->id ?? ""}}" class="transmissions">
-                                            <label for="{{ $transmission->name ?? ""}}">{{ $transmission->name ?? ""}}	</label>
+                                            <input type="radio" name="transmission" id="{{ $transmissionName ?? ""}}" value="{{ $transmission->id ?? ""}}" class="transmissions">
+                                            <label for="{{ $transmissionName ?? ""}}">{{ $transmission->name ?? ""}}	</label>
                                         </div>
                                     </li>
                                         @endforeach

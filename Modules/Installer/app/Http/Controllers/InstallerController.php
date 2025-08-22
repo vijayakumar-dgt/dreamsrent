@@ -2,31 +2,25 @@
 
 namespace Modules\Installer\Http\Controllers;
 
-use Closure;
-use Exception;
-use App\Models\Administrator;
-use App\Enums\UserStatus;
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Modules\GeneralSetting\Models\GeneralSetting;
-use Modules\Installer\Enums\InstallerInfo;
-use Modules\Installer\Models\Configuration;
-use Modules\Installer\Traits\InstallerMethods;
 use App\Models\User;
 use App\Models\UserDetail;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Http\RedirectResponse;
+use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use Modules\Installer\Http\Requests\DatabaseSubmitRequest;
+use Modules\GeneralSetting\Models\GeneralSetting;
+use Modules\Installer\Enums\InstallerInfo;
 use Modules\Installer\Http\Requests\AccountSubmitRequest;
 use Modules\Installer\Http\Requests\ConfigurationSubmitRequest;
+use Modules\Installer\Http\Requests\DatabaseSubmitRequest;
+use Modules\Installer\Models\Configuration;
+use Modules\Installer\Traits\InstallerMethods;
 
 class InstallerController extends Controller
 {
@@ -44,6 +38,7 @@ class InstallerController extends Controller
         $view = 'installer::requirements';
         return view($view, compact('checks', 'success', 'failedChecks'));
     }
+
     /**
      * @return View|RedirectResponse
      */
@@ -74,11 +69,11 @@ class InstallerController extends Controller
             $validated = $request->validated();
 
             $databaseDetails = [
-                'host' => $validated['host'],
-                'port' => is_numeric($validated['port']) ? (int)$validated['port'] : $validated['port'],
-                'database' => $validated['database'],
-                'user' => $validated['user'],
-                'password' => $validated['db_pass'] ?? '',
+                'host'           => $validated['host'],
+                'port'           => is_numeric($validated['port']) ? (int)$validated['port'] : $validated['port'],
+                'database'       => $validated['database'],
+                'user'           => $validated['user'],
+                'password'       => $validated['db_pass'] ?? '',
                 'reset_database' => $validated['reset_database'] ?? null,
             ];
 
@@ -88,12 +83,12 @@ class InstallerController extends Controller
                 if ($databaseCreate === 'not-found') {
                     return response()->json([
                         'create_database' => true,
-                        'message' => 'Database not found! Please create the database first.'
+                        'message'         => 'Database not found! Please create the database first.'
                     ], 200);
                 } elseif ($databaseCreate === 'table-exist') {
                     return response()->json([
                         'reset_database' => true,
-                        'message' => 'This database has tables already. Please create a new database or reset existing tables first to continue'
+                        'message'        => 'This database has tables already. Please create a new database or reset existing tables first to continue'
                     ], 200);
                 }
                 return response()->json([
@@ -119,10 +114,10 @@ class InstallerController extends Controller
             }
 
             $envConfig = [
-                'host' => $validated['host'],
-                'port' => $databaseDetails['port'],
+                'host'     => $validated['host'],
+                'port'     => $databaseDetails['port'],
                 'database' => $validated['database'],
-                'user' => $validated['user'],
+                'user'     => $validated['user'],
                 'password' => $validated['password'] ?? '',
             ];
             $this->changeEnvDatabaseConfig($envConfig);
@@ -173,8 +168,6 @@ class InstallerController extends Controller
         file_put_contents($envPath, $content);
     }
 
-
-
     public function account(): View|RedirectResponse
     {
         session()->put('step-1-complete', true);
@@ -210,10 +203,10 @@ class InstallerController extends Controller
             $admin = User::updateOrCreate(
                 ['email' => $validated['email']],
                 [
-                    'name' => $validated['name'],
-                    'password' => Hash::make($password),
+                    'name'      => $validated['name'],
+                    'password'  => Hash::make($password),
                     'user_type' => 1,
-                    'role_id' => 1,
+                    'role_id'   => 1,
                 ]
             );
 
@@ -232,7 +225,7 @@ class InstallerController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to Create Admin Account',
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -287,6 +280,7 @@ class InstallerController extends Controller
             return response()->json(['success' => false, 'message' => 'Configuration Failed'], 200);
         }
     }
+
     public function smtp(): RedirectResponse
     {
         $step = Configuration::stepExists();
@@ -296,6 +290,7 @@ class InstallerController extends Controller
         }
         return redirect()->route('setup.complete');
     }
+
     /**
      * Skip the SMTP setup and move to the next setup step.
      *
@@ -307,6 +302,7 @@ class InstallerController extends Controller
         session()->put('step-6-complete', true);
         return redirect()->route('setup.complete');
     }
+
     public function setupComplete(): Response|RedirectResponse
     {
         session()->put('step-7-complete', true);

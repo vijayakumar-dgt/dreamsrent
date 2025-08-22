@@ -3,10 +3,9 @@
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Modules\GeneralSetting\Models\EmailTemplate;
 use Modules\Installer\Enums\InstallerInfo;
 use Modules\Installer\Models\Configuration;
-use Modules\GeneralSetting\Models\GeneralSetting;
-use Modules\GeneralSetting\Models\EmailTemplate;
 use stdClass;
 
 if (!function_exists('setupStatus')) {
@@ -27,7 +26,7 @@ if (!function_exists('setupStatus')) {
                 });
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
-                Cache::rememberForever($cacheKey, fn(): bool => false);
+                Cache::rememberForever($cacheKey, fn (): bool => false);
             }
         }
 
@@ -149,7 +148,7 @@ if (! function_exists('updateChecking')) {
                     : '';
 
                 $response = Http::post(InstallerInfo::UPDATE_CHECK_URL->value, [
-                    'updated_at' => $last_update_date,
+                    'updated_at'          => $last_update_date,
                     'verification_hashed' => $verificationHashed,
                 ])->json();
 
@@ -188,18 +187,18 @@ if (! function_exists('showUpdateAvailablity')) {
 
                 if ($update_url) {
                     return (object) [
-                        'status' => true,
+                        'status'  => true,
                         'message' => __('Update is available'),
-                        'url' => $update_url,
+                        'url'     => $update_url,
                     ];
                 }
             }
         }
 
         return (object) [
-            'status' => false,
+            'status'  => false,
             'message' => __('You are using the latest version already.'),
-            'url' => null,
+            'url'     => null,
         ];
     }
 }

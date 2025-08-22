@@ -3,15 +3,14 @@
 namespace Modules\GeneralSetting\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Modules\GeneralSetting\Http\Requests\TestimonialAddRequest;
-use Modules\GeneralSetting\Http\Requests\TestimonialEditRequest;
-use Modules\GeneralSetting\Repositories\Contracts\TestimonialInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Storage;
-use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\UploadedFile;
+use Illuminate\View\View;
+use Modules\GeneralSetting\Http\Requests\TestimonialAddRequest;
+use Modules\GeneralSetting\Http\Requests\TestimonialEditRequest;
+use Modules\GeneralSetting\Models\Language;
+use Modules\GeneralSetting\Repositories\Contracts\TestimonialInterface;
 
 class TestimonialController extends Controller
 {
@@ -40,17 +39,17 @@ class TestimonialController extends Controller
 
         $testimonial = $this->testimonialRepository->create([
             'customer_name' => $request->customer_name,
-            'ratings' => $request->customer_rating,
-            'review' => $request->customer_review,
-            'image' => $imagePath,
-            'status' => true // default status
+            'ratings'       => $request->customer_rating,
+            'review'        => $request->customer_review,
+            'image'         => $imagePath,
+            'status'        => true // default status
         ]);
 
         return response()->json([
-            'code' => 200,
+            'code'    => 200,
             'success' => true,
             'message' => __('admin.cms.testimonial_create_success'),
-            'data' => $testimonial
+            'data'    => $testimonial
         ]);
     }
 
@@ -58,8 +57,8 @@ class TestimonialController extends Controller
     {
         try {
             $filters = [
-                'search' => $request->search,
-                'sort' => $request->sort,
+                'search'  => $request->search,
+                'sort'    => $request->sort,
                 'ratings' => $request->ratings
             ];
 
@@ -73,13 +72,13 @@ class TestimonialController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => __('admin.general_settings.testimonial_retrive_success'),
-                'data' => $testimonials
+                'data'    => $testimonials
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => __('admin.general_settings.fail_retrive_testimonial'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -90,16 +89,16 @@ class TestimonialController extends Controller
             $testimonial = $this->testimonialRepository->find($request->id);
             if (!$testimonial) {
                 return response()->json([
-                    'code' => 404,
+                    'code'    => 404,
                     'message' => __('admin.common.not_found')
                 ], 404);
             }
 
             $data = [
                 'customer_name' => $request->customer_name,
-                'ratings' => $request->customer_rating,
-                'review' => $request->customer_review,
-                'status' => $request->status
+                'ratings'       => $request->customer_rating,
+                'review'        => $request->customer_review,
+                'status'        => $request->status
             ];
 
             if ($request->hasFile('testimonial_image')) {
@@ -113,15 +112,15 @@ class TestimonialController extends Controller
             $this->testimonialRepository->update($request->id, $data);
 
             return response()->json([
-                'code' => 200,
-                'message' => __('admin.cms.testimonial_update_success'),
+                'code'        => 200,
+                'message'     => __('admin.cms.testimonial_update_success'),
                 'testimonial' => $this->testimonialRepository->find($request->id)
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -132,14 +131,14 @@ class TestimonialController extends Controller
             $this->testimonialRepository->delete($request->id);
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.cms.testimonial_delete_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

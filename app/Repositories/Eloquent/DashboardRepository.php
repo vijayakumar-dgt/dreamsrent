@@ -2,15 +2,15 @@
 
 namespace App\Repositories\Eloquent;
 
-use Illuminate\Support\Facades\DB;
-use App\Repositories\Contracts\DashboardRepositoryInterface;
-use Modules\CarInfo\Models\VehicleInfo;
-use Modules\Booking\Models\Booking;
-use Carbon\Carbon;
 use App\Models\Invoice;
-use Modules\GeneralSetting\Models\GeneralSetting;
-use Modules\GeneralSetting\Models\Currency;
+use App\Repositories\Contracts\DashboardRepositoryInterface;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Modules\Booking\Models\Booking;
 use Modules\CarInfo\Models\Maintenance;
+use Modules\CarInfo\Models\VehicleInfo;
+use Modules\GeneralSetting\Models\Currency;
+use Modules\GeneralSetting\Models\GeneralSetting;
 
 class DashboardRepository implements DashboardRepositoryInterface
 {
@@ -19,7 +19,7 @@ class DashboardRepository implements DashboardRepositoryInterface
         $current_user = current_user();
 
         $languageId = $current_user->language_id ?? 1;
-        $carTypes = VehicleInfo::Join('car_fuels', 'vehicle_info.fuel_type_id', '=', 'car_fuels.id')
+        $carTypes = VehicleInfo::LeftJoin('car_fuels', 'vehicle_info.fuel_type_id', '=', 'car_fuels.id')
             ->LeftJoin('driving_types', 'vehicle_info.type_id', '=', 'driving_types.id')
             ->select('vehicle_info.*', 'driving_types.name as driving_name', 'car_fuels.fuel_type')
             ->where('vehicle_info.language_id', $languageId)
@@ -159,9 +159,9 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->limit(5)
             ->get()
             ->map(function ($user) {
-                $user->name = !empty($user->first_name)
-                    ? ucwords($user->first_name . ' ' . $user->last_name)
-                    : ucwords($user->name);
+                $user->name = empty($user->first_name)
+                    ? ucwords($user->name)
+                    : ucwords($user->first_name . ' ' . $user->last_name);
                 return $user;
             });
 
@@ -175,7 +175,7 @@ class DashboardRepository implements DashboardRepositoryInterface
                 $firstBooking = $dayBookings->first();
 
                 return [
-                    'date' => $firstBooking?->booking_date,
+                    'date'   => $firstBooking?->booking_date,
                     'income' => $dayBookings->sum(function ($booking) {
                         return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ?
                             $booking->final_price : 0;
@@ -257,12 +257,10 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')
             ->where('invoices.deleted_at', null)->where('invoices.language_id', $languageId)->limit(5)->get()->map(function ($invoice) {
-                $invoice->full_name = !empty($invoice->first_name) ? ucwords($invoice->first_name . ' ' . $invoice->last_name) : '';
+                $invoice->full_name = empty($invoice->first_name) ? '' : ucwords($invoice->first_name . ' ' . $invoice->last_name);
                 return $invoice;
             });
 
-        $data = ['current_user' => $current_user, 'carTypes' => $carTypes, 'bookingCount' => $bookingCount, 'upcomingCount' => $upcomingCount, 'symbol' => $symbol, 'amount' => $amount, 'booking' => $booking, 'percentageChange' => $percentageChange, 'sign' => $sign, 'amountPercentageChange' => $amountPercentageChange, 'amountSymbol' => $amountSymbol, 'carSymbol' => $carSymbol, 'carPercentageChange' => $carPercentageChange, 'reservations' => $reservations, 'users' => $users, 'chartbooking' => $chartbooking, 'maintenances' => $maintenances, 'drivers' => $drivers, 'dates' => $dates, 'times' => $times, 'series' => $series, 'formattedDates' => $formattedDates, 'invoices' => $invoices];
-
-        return $data;
+        return ['current_user' => $current_user, 'carTypes' => $carTypes, 'bookingCount' => $bookingCount, 'upcomingCount' => $upcomingCount, 'symbol' => $symbol, 'amount' => $amount, 'booking' => $booking, 'percentageChange' => $percentageChange, 'sign' => $sign, 'amountPercentageChange' => $amountPercentageChange, 'amountSymbol' => $amountSymbol, 'carSymbol' => $carSymbol, 'carPercentageChange' => $carPercentageChange, 'reservations' => $reservations, 'users' => $users, 'chartbooking' => $chartbooking, 'maintenances' => $maintenances, 'drivers' => $drivers, 'dates' => $dates, 'times' => $times, 'series' => $series, 'formattedDates' => $formattedDates, 'invoices' => $invoices];
     }
 }

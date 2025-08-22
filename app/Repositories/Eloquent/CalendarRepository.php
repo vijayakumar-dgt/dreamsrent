@@ -2,12 +2,11 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\Contracts\CalendarRepositoryInterface;
 use App\Models\DrivingType;
 use App\Models\User;
+use App\Repositories\Contracts\CalendarRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\View\View;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingUserInfo;
 use Modules\CarInfo\Models\Cartype;
@@ -46,19 +45,17 @@ class CalendarRepository implements CalendarRepositoryInterface
         }
 
         $currencySymbol = $currency->symbol ?? "$";
-
-        $data = [
-            'cartypes' => $cartypes,
-            'customerss' => $customerss,
-            'Vehicles' => $Vehicles,
-            'drivers' => $drivers,
-            'locations' => $locations,
-            'priceTypes' => $priceTypes,
-            'drivingTypes' => $drivingTypes,
-            'customers' => $customers,
+        return [
+            'cartypes'       => $cartypes,
+            'customerss'     => $customerss,
+            'Vehicles'       => $Vehicles,
+            'drivers'        => $drivers,
+            'locations'      => $locations,
+            'priceTypes'     => $priceTypes,
+            'drivingTypes'   => $drivingTypes,
+            'customers'      => $customers,
             'currencySymbol' => $currencySymbol,
         ];
-        return $data;
     }
 
     public function getCalenderBooking(Request $request): array
@@ -102,20 +99,20 @@ class CalendarRepository implements CalendarRepositoryInterface
                 : $userName;
 
             return [
-                'id' => $booking->id,
-                'name' => $fullName,
+                'id'             => $booking->id,
+                'name'           => $fullName,
                 'booking_status' => $booking->booking_status,
-                'booking_date' => $booking->booking_date,
+                'booking_date'   => $booking->booking_date,
                 'start_datetime' => $booking->start_datetime,
-                'end_datetime' => $booking->end_datetime,
-                'created_at' => $booking->created_at,
+                'end_datetime'   => $booking->end_datetime,
+                'created_at'     => $booking->created_at,
             ];
         });
 
         return [
-            'code' => 200,
+            'code'    => 200,
             'message' => __('Booking List retrieved successfully.'),
-            'data' => $data,
+            'data'    => $data,
         ];
     }
 
@@ -126,7 +123,7 @@ class CalendarRepository implements CalendarRepositoryInterface
 
         if (!$booking) {
             return [
-                'code' => 404,
+                'code'    => 404,
                 'message' => 'Booking not found'
             ];
         }
@@ -135,9 +132,14 @@ class CalendarRepository implements CalendarRepositoryInterface
         $vehicle = $booking->vehicle;
         $vehicleType = null;
         if ($vehicle) {
-            $vehicle->vehicle_image = is_string($vehicle->vehicle_image)
-                ? uploadedAsset($vehicle->vehicle_image ?? '')
-                : uploadedAsset('', 'default');
+            $vehicleImagePath = $vehicle->vehicle_image ?? '';
+            $filename = basename($vehicleImagePath);
+            $newpath = 'vehicles/images/small/' . $filename;
+            $file = public_path('storage/' . $newpath);
+            if (file_exists($file)) {
+                $vehicleImagePath = $newpath;
+            }
+            $vehicle->vehicle_image = uploadedAsset($vehicleImagePath);
             $vehicleTypeId = $vehicle->type_id ?? null;
             $vehicleType = Cartype::select('name')->where("id", $vehicleTypeId)->first();
         }
@@ -160,9 +162,9 @@ class CalendarRepository implements CalendarRepositoryInterface
             $bookingUser = BookingUserInfo::where('booking_id', $booking->id)->first();
 
             $driverDetails = (object) [
-                'driver_name' => trim(($bookingUser->driver_first_name ?? '') . ' ' . ($bookingUser->driver_last_name ?? '')) ?: null,
+                'driver_name'  => trim(($bookingUser->driver_first_name ?? '') . ' ' . ($bookingUser->driver_last_name ?? '')) ?: null,
                 'phone_number' => $bookingUser->driver_mobile_number ?? null,
-                'image' => uploadedAsset('', 'profile'),
+                'image'        => uploadedAsset('', 'profile'),
             ];
         }
 
@@ -172,9 +174,9 @@ class CalendarRepository implements CalendarRepositoryInterface
             $userDetail = $userInfo->userDetail;
 
             $customerData = [
-                'first_name' => $userDetail->first_name ?? '',
-                'last_name' => $userDetail->last_name ?? '',
-                'phone_number' => $userInfo->phone_number ?? '',
+                'first_name'    => $userDetail->first_name ?? '',
+                'last_name'     => $userDetail->last_name ?? '',
+                'phone_number'  => $userInfo->phone_number ?? '',
                 'profile_image' => ($userDetail && $userDetail->profile_image)
                     ? uploadedAsset($userDetail->profile_image, 'profile')
                     : uploadedAsset('', 'profile'),
@@ -198,14 +200,14 @@ class CalendarRepository implements CalendarRepositoryInterface
 
         $currencySymbol = $currency->symbol ?? "$";
         return [
-            'code' => 200,
-            'booking' => $booking,
-            'vehicleType' => $vehicleType,
-            'pickupLocation' => $pickupLocation,
-            'returnLocation' => $returnLocation,
-            'driverDetails' => $driverDetails,
+            'code'            => 200,
+            'booking'         => $booking,
+            'vehicleType'     => $vehicleType,
+            'pickupLocation'  => $pickupLocation,
+            'returnLocation'  => $returnLocation,
+            'driverDetails'   => $driverDetails,
             'customerDetails' => $customerData,
-            'currency' => $currencySymbol,
+            'currency'        => $currencySymbol,
         ];
     }
 }

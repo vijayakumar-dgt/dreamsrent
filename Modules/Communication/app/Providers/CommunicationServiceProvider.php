@@ -73,7 +73,7 @@ class CommunicationServiceProvider extends ServiceProvider
     /**
      * Register config.
      */
-   /**
+    /**
  * Register config.
  */
     protected function registerConfig(): void

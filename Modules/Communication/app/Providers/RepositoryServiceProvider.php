@@ -3,10 +3,10 @@
 namespace Modules\Communication\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\Communication\Repositories\Contracts\TicketInterface;
-use Modules\Communication\Repositories\Eloquent\AnnouncementRepository;
 use Modules\Communication\Repositories\Contracts\AnnouncementRepositoryInterface;
 use Modules\Communication\Repositories\Contracts\ContactMessagesRepositoryInterface;
+use Modules\Communication\Repositories\Contracts\TicketInterface;
+use Modules\Communication\Repositories\Eloquent\AnnouncementRepository;
 use Modules\Communication\Repositories\Eloquent\ContactMessagesRepository;
 use Modules\Communication\Repositories\Eloquent\TicketRepository;
 

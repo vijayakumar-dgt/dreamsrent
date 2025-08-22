@@ -14,17 +14,17 @@ class UpdateAdminProfileRequest extends CustomFailedValidation
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:users,id',
+            'id'            => 'required|exists:users,id',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $this->id,
-            'phone' => 'required',
-            'address_line' => 'nullable|string|max:255',
-            'postal_code' => 'nullable|string|max:10',
-            'country' => 'nullable|numeric',
-            'state' => 'nullable|numeric',
-            'city' => 'nullable|numeric',
+            'first_name'    => 'required|string|max:255',
+            'last_name'     => 'required|string|max:255',
+            'email'         => 'required|email|unique:users,email,' . $this->id,
+            'phone'         => 'required',
+            'address_line'  => 'nullable|string|max:255',
+            'postal_code'   => 'nullable|string|max:10',
+            'country'       => 'nullable|numeric',
+            'state'         => 'nullable|numeric',
+            'city'          => 'nullable|numeric',
         ];
     }
 }

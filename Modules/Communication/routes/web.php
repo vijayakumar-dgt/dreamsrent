@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Communication\Http\Controllers\CommunicationController;
 use Modules\Communication\Http\Controllers\AnnouncementController;
 use Modules\Communication\Http\Controllers\ContactController;
 use Modules\Communication\Http\Controllers\TicketController;

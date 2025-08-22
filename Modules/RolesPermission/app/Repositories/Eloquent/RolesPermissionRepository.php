@@ -6,10 +6,10 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Modules\RolesPermission\Repositories\Contracts\RolesPermissionRepositoryInterface;
-use Modules\RolesPermission\Models\Role;
 use Modules\RolesPermission\Models\Module as ModuleModel;
 use Modules\RolesPermission\Models\Permission;
+use Modules\RolesPermission\Models\Role;
+use Modules\RolesPermission\Repositories\Contracts\RolesPermissionRepositoryInterface;
 
 class RolesPermissionRepository implements RolesPermissionRepositoryInterface
 {
@@ -23,7 +23,7 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
 
         try {
             $data = [
-                'role_name' => $request->role,
+                'role_name'  => $request->role,
                 'created_by' => $authId,
             ];
 
@@ -35,14 +35,14 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
             }
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMsg
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMsg,
             ];
         }
@@ -89,15 +89,15 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
             });
 
             return [
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
+                'draw'            => intval($request->draw),
+                'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $filterTotalRecords,
-                'data' => $data,
-                'code' => 200
+                'data'            => $data,
+                'code'            => 200
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
         }
@@ -110,8 +110,8 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
 
         if (!$data) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -119,7 +119,7 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -132,20 +132,20 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
             Cache::forget('permissions_' . $id);
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.user_management.role_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error')
             ];
         }
@@ -175,7 +175,7 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
             ->get();
 
         $data = [
-            'role' => $role,
+            'role'    => $role,
             'modules' => $modules,
         ];
         return $data;
@@ -192,10 +192,10 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
                     ['id' => $permission['id'], 'role_id' => $roleId],
                     [
                         'module_id' => $permission['module_id'],
-                        'create' => $permission['create'] ?? 0,
-                        'view' => $permission['view'] ?? 0,
-                        'edit' => $permission['edit'] ?? 0,
-                        'delete' => $permission['delete'] ?? 0,
+                        'create'    => $permission['create'] ?? 0,
+                        'view'      => $permission['view'] ?? 0,
+                        'edit'      => $permission['edit'] ?? 0,
+                        'delete'    => $permission['delete'] ?? 0,
                         'allow_all' => $permission['allow_all'] ?? 0
                     ]
                 );
@@ -203,12 +203,12 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
             Cache::forget('permissions_' . $roleId);
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.user_management.permission_update_success'),
             ];
         } catch (\Throwable $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error'),
             ];
         }
@@ -220,13 +220,13 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
             $permissions = getUserPermissions();
 
             return [
-                'code' => 200,
-                'data' => $permissions,
+                'code'    => 200,
+                'data'    => $permissions,
                 'message' => __('admin.common.default_retrieve_success'),
             ];
         } catch (\Throwable $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
         }

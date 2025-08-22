@@ -96,7 +96,6 @@ class MenuManagementServiceProvider extends ServiceProvider
         }
     }
 
-
     /**
      * Register views.
      */
@@ -125,12 +124,12 @@ class MenuManagementServiceProvider extends ServiceProvider
     {
         return [];
     }
+
     /**
  * Get the paths for publishable views.
  *
  * @return array<string>  // Indicates the array contains strings (paths)
  */
-
     private function getPublishableViewPaths(): array
     {
         $paths = [];

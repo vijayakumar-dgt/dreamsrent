@@ -3,17 +3,18 @@
 namespace Modules\Booking\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Srmklive\PayPal\Services\PayPal as PayPalClient;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Modules\Booking\Repositories\Contracts\UserBookingRepositoryInterface;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class UserBookingController extends Controller
 {
     private $provider;
     protected UserBookingRepositoryInterface $userBookingRepository;
+
     public function __construct(UserBookingRepositoryInterface $userBookingRepository)
     {
         if (empty(env('PAYPAL_SANDBOX_CLIENT_ID')) || empty(env('PAYPAL_SANDBOX_CLIENT_SECRET'))) {

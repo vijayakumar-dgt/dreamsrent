@@ -14,7 +14,7 @@ class DoorTypeRepository implements DoorTypeRepositoryInterface
         $id = $request->id ?? '';
 
         $successMsg = empty($id) ? __('admin.rentals.door_type_create_success') : __('admin.rentals.door_type_update_success');
-        $errorMsg = empty($id) ?  __('admin.common.default_create_error') : __('admin.common.default_update_error');
+        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
             $data = [
@@ -25,14 +25,14 @@ class DoorTypeRepository implements DoorTypeRepositoryInterface
             DoorType::updateOrCreate(['id' => $id], $data);
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMsg
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMsg,
             ];
         }
@@ -50,7 +50,7 @@ class DoorTypeRepository implements DoorTypeRepositoryInterface
                 });
             }
 
-             // Status Filter
+            // Status Filter
             if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
                 $status = $request->sort_by_status;
                 $query->where('door_types.status', $status);
@@ -71,17 +71,17 @@ class DoorTypeRepository implements DoorTypeRepositoryInterface
             $data = $query->skip($start)->take($length)->get();
 
             return [
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
+                'draw'            => intval($request->draw),
+                'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $filterTotalRecords,
-                'data' => $data,
-                'code' => 200
+                'data'            => $data,
+                'code'            => 200
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -92,8 +92,8 @@ class DoorTypeRepository implements DoorTypeRepositoryInterface
 
         if (!$data) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -101,7 +101,7 @@ class DoorTypeRepository implements DoorTypeRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -113,20 +113,20 @@ class DoorTypeRepository implements DoorTypeRepositoryInterface
             $doorType->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.door_type_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }

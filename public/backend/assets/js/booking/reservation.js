@@ -382,16 +382,6 @@
                 $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
             }
         });
-    }
-
-    const tableWrapper = '.table-responsive';
-
-    $(document).on('show.bs.dropdown', tableWrapper, function () {
-        $(this).css('overflow', 'hidden');
-    });
-
-    $(document).on('hide.bs.dropdown', tableWrapper, function () {
-        $(this).css('overflow', 'auto');
-    });
+    }   
 
 })();

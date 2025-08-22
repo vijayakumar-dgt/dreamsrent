@@ -3,7 +3,6 @@
 namespace Modules\CarInfo\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class BrandRequest extends CustomFailedValidation
@@ -30,20 +29,20 @@ class BrandRequest extends CustomFailedValidation
                 'not_regex:/<\/?script\b[^>]*>/i'
             ],
             'brand_image' => 'nullable|mimes:jpeg,jpg,png,svg|max:2048',
-            'brand_icon' => 'nullable|mimes:jpeg,jpg,png,svg|max:2048',
+            'brand_icon'  => 'nullable|mimes:jpeg,jpg,png,svg|max:2048',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'brand_name.required' => __('admin.rentals.brand_name_required'),
-            'brand_name.max' => __('admin.rentals.brand_name_maxlength'),
-            'brand_name.min' => __('admin.rentals.brand_name_minlength'),
-            'brand_name.unique' => __('admin.rentals.brand_name_unique'),
+            'brand_name.required'  => __('admin.rentals.brand_name_required'),
+            'brand_name.max'       => __('admin.rentals.brand_name_maxlength'),
+            'brand_name.min'       => __('admin.rentals.brand_name_minlength'),
+            'brand_name.unique'    => __('admin.rentals.brand_name_unique'),
             'brand_name.not_regex' => __('admin.common.script_tag_not_allowed'),
-            'brand_image.mimes' => __('admin.rentals.brand_image_format'),
-            'brand_image.max' => __('admin.rentals.brand_image_size'),
+            'brand_image.mimes'    => __('admin.rentals.brand_image_format'),
+            'brand_image.max'      => __('admin.rentals.brand_image_size'),
         ];
     }
 }

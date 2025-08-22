@@ -7,10 +7,10 @@ use App\Http\Requests\UserProfileRequest;
 use App\Http\Resources\UserBookings;
 use App\Http\Resources\UserWishlist;
 use App\Repositories\Contracts\UserRepositoryInterface;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -32,6 +32,7 @@ class UserController extends Controller
         $data = $this->userRepository->getUserBookings();
         return view('frontend.user.bookings', $data);
     }
+
     public function ajaxLastBookings(Request $request): AnonymousResourceCollection
     {
         $bookings = $this->userRepository->getAjaxLastBookings($request);
@@ -39,6 +40,7 @@ class UserController extends Controller
             'status' => 'success',
         ]);
     }
+
     public function ajaxBookings(Request $request): AnonymousResourceCollection
     {
         $bookings = $this->userRepository->getAjaxBookings($request);
@@ -52,7 +54,7 @@ class UserController extends Controller
         $booking = $this->userRepository->getBookingDetails($id);
         return response()->json([
             'status' => 'success',
-            'data' => new UserBookings($booking)
+            'data'   => new UserBookings($booking)
         ]);
     }
 
@@ -80,10 +82,10 @@ class UserController extends Controller
         return response()->json($response, $response['code'] ?? 200);
     }
 
-    public function wishlists(Request $request): View
+    public function wishlists(): View
     {
         $seo_title = $this->userRepository->getWishlistData();
-        return view('frontend.user.wishlists', compact('seo_title'));
+        return view('frontend.user.wishlists', ['seo_title' => $seo_title]);
     }
 
     public function addToWishlist(Request $request): JsonResponse
@@ -92,13 +94,13 @@ class UserController extends Controller
         return response()->json($response, $response['code'] ?? 200);
     }
 
-    public function ajaxWishlists(Request $request): JsonResponse
+    public function ajaxWishlists(): JsonResponse
     {
         $wishlists = $this->userRepository->getWishlistDataAjax();
         return response()->json([
             'status' => 'success',
-            'code' => 200,
-            'data' => UserWishlist::collection($wishlists)
+            'code'   => 200,
+            'data'   => UserWishlist::collection($wishlists)
         ]);
     }
 
@@ -135,7 +137,7 @@ class UserController extends Controller
     public function usersecurity(): View
     {
         $seo_title = __('web.user.security');
-        return view('frontend.user.security', compact('seo_title'));
+        return view('frontend.user.security', ['seo_title' => $seo_title]);
     }
 
     public function checkCurrentPassword(Request $request): JsonResponse
@@ -149,13 +151,14 @@ class UserController extends Controller
         $response = $this->userRepository->updatePassword($request);
         return response()->json($response, $response['code'] ?? 200);
     }
+
     public function getSecuritySettings(): JsonResponse
     {
         $response = $this->userRepository->getSecuritySettings();
         return response()->json([
             'status' => 'success',
-            'code' => 200,
-            'data' => $response
+            'code'   => 200,
+            'data'   => $response
         ]);
     }
 
@@ -177,10 +180,10 @@ class UserController extends Controller
         return response()->json($response, $response['code'] ?? 200);
     }
 
-    public function reviews(Request $request): View
+    public function reviews(): View
     {
         $seo_title = __('web.common.reviews');
-        return view('frontend.user.reviews', compact('seo_title'));
+        return view('frontend.user.reviews', ['seo_title' => $seo_title]);
     }
 
     public function storeEnquiry(Request $request): JsonResponse
@@ -201,10 +204,10 @@ class UserController extends Controller
         return response()->json($response, $response['code'] ?? 200);
     }
 
-    public function payments(Request $request): View
+    public function payments(): View
     {
         $seo_title = __('web.user.payments');
-        return view('frontend.user.payments', compact('seo_title'));
+        return view('frontend.user.payments', ['seo_title' => $seo_title]);
     }
 
     public function ajaxTransactions(Request $request): AnonymousResourceCollection
@@ -220,19 +223,19 @@ class UserController extends Controller
         $notifications = $this->userRepository->notifications();
 
         if ($request->ajax()) {
-            $view = view('frontend.user.partials.notification-items', compact('notifications'))->render();
+            $view = view('frontend.user.partials.notification-items', ['notifications' => $notifications])->render();
 
             return response()->json([
-                'html' => $view,
-                'current_page' => $notifications->currentPage(),
-                'last_page' => $notifications->lastPage(),
+                'html'          => $view,
+                'current_page'  => $notifications->currentPage(),
+                'last_page'     => $notifications->lastPage(),
                 'prev_page_url' => $notifications->previousPageUrl(),
                 'next_page_url' => $notifications->nextPageUrl(),
-                'count' => $notifications->total()
+                'count'         => $notifications->total()
             ]);
         }
 
-        return view('frontend.user.notifications', compact('notifications'));
+        return view('frontend.user.notifications', ['notifications' => $notifications]);
     }
 
     public function markNotificationAsRead(Request $request): JsonResponse

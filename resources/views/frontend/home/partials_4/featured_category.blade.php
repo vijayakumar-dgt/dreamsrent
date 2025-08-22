@@ -91,9 +91,18 @@
             <h2>{{ $section['section_title'] ?? "" }}</h2>
             <p>{{ $section['section_label'] ?? "" }}</p>
         </div>
+        @php
+            $yachtTypes = collect($section['section_content'] ?? []);
+                        
+            if ($yachtTypes->count() == 10) {
+                $yachtTypes = $yachtTypes->take(10);
+            } elseif ($yachtTypes->count() >= 5 && $yachtTypes->count() < 10) {
+                $yachtTypes = $yachtTypes->take(5);
+            }
+        @endphp
         <div class="row yacht-category-lists">
-            @if(!empty($section['section_content']) && count($section['section_content']) > 0)
-            @foreach ($section['section_content'] as $yacht)
+            @if(!empty($yachtTypes) && count($yachtTypes) > 0)
+            @foreach ($yachtTypes as $yacht)
             <div class="custom-col">
                 <div class="yacht-cat-grid">
                     <div class="yatch-card-img">

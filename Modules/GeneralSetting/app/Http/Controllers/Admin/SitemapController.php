@@ -28,16 +28,16 @@ class SitemapController extends Controller
             $this->sitemapSetting->store($request->validated());
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.sitemap_success'),
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('admin.general_settings.retrived_error'),
-                'error' => $th->getMessage()
+                'error'   => $th->getMessage()
             ], 422);
         }
     }
@@ -47,7 +47,7 @@ class SitemapController extends Controller
         $result = $this->sitemapSetting->generateSitemap();
 
         return response()->json([
-            'status' => !empty($result) ? 'success' : 'error',
+            'status'  => !empty($result) ? 'success' : 'error',
             'message' => !empty($result)
                 ? __('admin.general_settings.sitemap_generated')
                 : __('admin.general_settings.sitemap_generation_failed')
@@ -67,16 +67,16 @@ class SitemapController extends Controller
             $this->sitemapSetting->deleteSitemapUrl(request()->id);
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.sitemap_url_delete'),
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error' => $th->getMessage()
+                'error'   => $th->getMessage()
             ], 422);
         }
     }

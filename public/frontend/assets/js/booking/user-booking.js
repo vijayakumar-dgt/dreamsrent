@@ -1,3 +1,5 @@
+/* global $, loadTranslationFile,  document, showToast, FormData, window,  _l,  alert, FileReader*/
+
 (async () => {
     "use strict";
 
@@ -178,7 +180,6 @@
         let $totalPriceElement = $("#total_price"); // Hidden input for total price
         let $totalPriceExtra = $("#extra_price_total"); // Hidden input for total price
         let $totalPriceInsurance = $("#insurance_price_total"); // Hidden input for total price
-        let $totalPriceDriver = $("#driver_price_total"); // Hidden input for total price
         let $totalPriceSpan = $(".vehicle-total-price span"); // Display total price
         let $submitButton = $("#sumbit_btn"); // Display final price button
 
@@ -612,18 +613,17 @@
             },
             errorElement: "span",
             errorPlacement: function (error, element) {
-                error.addClass("text-danger"); // Ensure the error text is red
+                error.addClass("text-danger");
 
                 if (element.attr("type") === "checkbox") {
                     element.closest(".custom_check").append(error);
                 } else if (element.attr("type") === "file") {
                     $("#driver_file_error").html(error);
-                } else if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
+                } else if (element.hasClass("select2-hidden-accessible") || $("#" + element.attr("id") + "_error").length) {
+                    const errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 } else {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
+                    element.after(error);
                 }
             },
             highlight: function (element) {
@@ -704,7 +704,7 @@
 
                 finalFormData.append(
                     "_token",
-                    $('meta[name="csrf-token"]').attr("content")
+                    $("meta[name=\"csrf-token\"]").attr("content")
                 );
 
                 [
@@ -718,7 +718,7 @@
 
                 let selectedExtras = [];
 
-                $('input[name="add_extra"]:checked').each(function () {
+                $("input[name=\"add_extra\"]:checked").each(function () {
                     let parent = $(this).closest("li");
                     let extraId = parent.data("service-id");
                     let extraPrice = parseFloat(
@@ -742,16 +742,16 @@
 
                 let selectedInsurance = [];
 
-                $('input[name="add_insurance"]:checked').each(function () {
+                $("input[name=\"add_insurance\"]:checked").each(function () {
                     let parent = $(this).closest(".insurance-select");
                     let insuranceId = parent
-                        .find('input[name="insurance_id[]"]')
+                        .find("input[name=\"insurance_id[]\"]")
                         .val();
                     let insurancePrice = parseFloat(
                         parent.find("h6").text().replace("$", "")
                     );
                     let insuranceType = parent
-                        .find('input[name="insurance_type[]"]')
+                        .find("input[name=\"insurance_id[]\"]")
                         .val();
 
                     selectedInsurance.push({
@@ -794,7 +794,7 @@
                 let totalTax = parseFloat($("#tax_val").val()) || 0;
                 finalFormData.append("tax_val", totalTax);
 
-                let rentType = $('input[name="rent_type"]:checked').val();
+                let rentType = $("input[name=\"rent_type\"]:checked").val();
                 finalFormData.append("rent_type", rentType ?? "");
 
                 $("#sumbit_btn")
@@ -811,13 +811,13 @@
                     cache: false,
                     headers: {
                         Accept: "application/json",
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr(
                             "content"
                         ),
                     },
                 })
 
-                    .done((response, statusText, xhr) => {
+                    .done((response) => {
                         if (response.code === 200 && response.cod) {
                             showToast("success", response.message);
                             window.location.href = response.redirect_url; // Redirect to success page
@@ -890,7 +890,7 @@
                 success: function (response) {
                     $stateDropdown
                         .empty()
-                        .append('<option value="">Select State</option>');
+                        .append("<option value=\"\">Select State</option>");
 
                     if (response.length > 0) {
                         $.each(response, function (key, state) {
@@ -914,7 +914,7 @@
                 error: function () {
                     alert("Failed to fetch states. Please try again.");
                     $stateDropdown
-                        .html('<option value="">Select State</option>')
+                        .html("<option value=\"\">Select State</option>")
                         .prop("disabled", false);
                 },
             });
@@ -931,7 +931,7 @@
                 success: function (response) {
                     $cityDropdown
                         .empty()
-                        .append('<option value="">Select City</option>');
+                        .append("<option value=\"\">Select City</option>");
 
                     if (response.length > 0) {
                         $.each(response, function (key, city) {
@@ -948,7 +948,7 @@
                 error: function () {
                     alert("Failed to fetch cities. Please try again.");
                     $cityDropdown
-                        .html('<option value="">Select City</option>')
+                        .html("<option value=\"\">Select City</option>")
                         .prop("disabled", false);
                 },
             });
@@ -965,7 +965,7 @@
         // On country change
         $("#country_id").on("change", function () {
             let countryId = $(this).val();
-            $("#city_id").html('<option value="">Select City</option>'); // Reset city
+            $("#city_id").html("<option value=\"\">Select City</option>"); // Reset city
             if (countryId) {
                 $stateDropdown
                     .prop("disabled", true)
@@ -988,12 +988,8 @@
 
                         if (response.length > 0) {
                             $.each(response, function (key, state) {
-                                $stateDropdown.append(
-                                    '<option value="' +
-                                        state.id +
-                                        '">' +
-                                        state.name +
-                                        "</option>"
+                              $stateDropdown.append(
+                                    `<option value="${state.id}">${state.name}</option>`
                                 );
                             });
                         }
@@ -1042,13 +1038,9 @@
 
                         if (response.length > 0) {
                             $.each(response, function (key, city) {
-                                $cityDropdown.append(
-                                    '<option value="' +
-                                        city.id +
-                                        '">' +
-                                        city.name +
-                                        "</option>"
-                                );
+                          $cityDropdown.append(
+                                `<option value="${city.id}">${city.name}</option>`
+                            );
                             });
                         }
 
@@ -1177,7 +1169,6 @@
         $(".show-benefits-link").on("click", function (e) {
             e.preventDefault();
             const insuranceId = $(this).data("insurance-id");
-            const token = $('meta[name="csrf-token"]').attr("content");
 
             $("#benefit-list").html(`
     <div class="d-flex justify-content-center py-3">
@@ -1192,7 +1183,7 @@
                 url: "/get/benefits",
                 data: {
                     id: insuranceId,
-                    _token: $('meta[name="csrf-token"]').attr("content"),
+                    _token: $("meta[name=\"csrf-token\"]").attr("content"),
                 },
                 success: function (response) {
                     const $list = $("#benefit-list");
@@ -1201,12 +1192,12 @@
                     if (response.length > 0) {
                         response.forEach((item, index) => {
                             const number = index + 1;
-                            const $li = $('<li class="mb-2"></li>');
+                            const $li = $("<li class=\"mb-2\"></li>");
                             $li.text(`${number}. ${item.benefit}`);
                             $list.append($li);
                         });
                     } else {
-                        $list.append($('<li></li>').text("No benefits available."));
+                        $list.append($("<li></li>").text("No benefits available."));
                     }
 
                     $("#show_benifit").modal("show");

@@ -21,13 +21,12 @@ class SeasonRequest extends CustomFailedValidation
         ];
     }
 
-
     public function messages(): array
     {
         return [
-            'name.required' => __('admin.rentals.season_name_required'),
-            'name.unique' => __('admin.rentals.season_name_unique'),
-            'name.max' => __('admin.rentals.season_name_maxlength'),
+            'name.required'  => __('admin.rentals.season_name_required'),
+            'name.unique'    => __('admin.rentals.season_name_unique'),
+            'name.max'       => __('admin.rentals.season_name_maxlength'),
             'name.not_regex' => __('admin.common.script_tag_not_allowed'),
         ];
     }

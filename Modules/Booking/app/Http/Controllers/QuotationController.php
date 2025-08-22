@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Modules\Booking\Repositories\Contracts\QuotationRepositoryInterface;
 use Modules\Booking\Http\Request\QuotationRequest;
+use Modules\Booking\Repositories\Contracts\QuotationRepositoryInterface;
 
 class QuotationController extends Controller
 {
@@ -44,7 +44,7 @@ class QuotationController extends Controller
     public function bookingList(Request $request): JsonResponse
     {
         $response = $this->quotationRepository->bookingList($request);
-        return response()->json($response, $response['code']  ?? 200);
+        return response()->json($response, $response['code'] ?? 200);
     }
 
     public function getBookingDetails(Request $request): JsonResponse
@@ -62,6 +62,6 @@ class QuotationController extends Controller
     public function delete(Request $request): JsonResponse
     {
         $response = $this->quotationRepository->delete($request);
-        return response()->json($response, $response['code']  ?? 200);
+        return response()->json($response, $response['code'] ?? 200);
     }
 }

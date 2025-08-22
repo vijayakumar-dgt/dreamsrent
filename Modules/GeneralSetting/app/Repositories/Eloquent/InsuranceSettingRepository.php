@@ -2,12 +2,12 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Modules\CarInfo\Models\PricingType;
 use Modules\GeneralSetting\Models\Insurance;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
-use Modules\CarInfo\Models\PricingType;
 use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
-use Illuminate\Database\Eloquent\Collection;
 
 class InsuranceSettingRepository implements InsuranceSettingInterface
 {
@@ -67,10 +67,10 @@ class InsuranceSettingRepository implements InsuranceSettingInterface
         });
 
         return [
-            'draw' => intval($params['draw']),
-            'recordsTotal' => $totalRecords,
+            'draw'            => intval($params['draw']),
+            'recordsTotal'    => $totalRecords,
             'recordsFiltered' => $filterTotal,
-            'data' => $data,
+            'data'            => $data,
         ];
     }
 
@@ -112,7 +112,7 @@ class InsuranceSettingRepository implements InsuranceSettingInterface
             if (!empty($benefit)) {
                 InsuranceBenefit::create([
                     'insurance_id' => $insuranceId,
-                    'benefit' => $benefit
+                    'benefit'      => $benefit
                 ]);
             }
         }
@@ -130,7 +130,7 @@ class InsuranceSettingRepository implements InsuranceSettingInterface
                     if (!empty($newBenefit)) {
                         InsuranceBenefit::create([
                             'insurance_id' => $insuranceId,
-                            'benefit' => $newBenefit
+                            'benefit'      => $newBenefit
                         ]);
                     }
                 }

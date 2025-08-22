@@ -1,28 +1,32 @@
+/* global $, loadTranslationFile, window, document, showToast, _l, FormData */
 (function () {
     "use strict";
 
     (async () => {
-        
-        await loadTranslationFile('admin', 'common, finance_accounts');
+        "use strict";
 
-        $('#linkReservationTable').DataTable({
+        await loadTranslationFile("admin", "common, finance_accounts");
+
+        const table = $("#linkReservationTable").DataTable({
             ordering: false,
             searching: false,
             pageLength: 10,
             lengthChange: false,
-            "drawCallback": function () {
-                $(".dataTables_info").addClass('d-none');
-                $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
+            drawCallback: function () {
+                $(".dataTables_info").addClass("d-none");
+                $(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
 
-                var tableWrapper = $(this).closest('.dataTables_wrapper');
-                var info = tableWrapper.find('.dataTables_info');
-                var pagination = tableWrapper.find('.dataTables_paginate');
+                const tableWrapper = $(this).closest(".dataTables_wrapper");
+                const info = tableWrapper.find(".dataTables_info");
+                const pagination = tableWrapper.find(".dataTables_paginate");
 
-                $('.table-footer').empty()
-                    .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
-                        .append($('<div class="datatable-info"></div>').append(info.clone(true)))
-                        .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
-                    );
+                $(".table-footer").empty().append(
+                    $("<div>", { class: "d-flex justify-content-between align-items-center w-100" }).append(
+                        $("<div>", { class: "datatable-info" }).append(info.clone(true)),
+                        $("<div>", { class: "datatable-pagination" }).append(pagination.clone(true))
+                    )
+                );
+
                 $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
             },
             language: {
@@ -37,139 +41,139 @@
                     first: _l("admin.common.first"),
                     last: _l("admin.common.last"),
                     next: _l("admin.common.next"),
-                    previous: _l("admin.common.previous"),
-                },
+                    previous: _l("admin.common.previous")
+                }
             },
             initComplete: function () {
                 $(".table-loader, .input-loader, .label-loader").hide();
                 $(".real-table, .real-label, .real-input").removeClass("d-none");
-                if ($("#linkReservationTable").DataTable().rows().count() === 0) {
+                if (table.rows().count() === 0) {
                     $(".table-footer").addClass("d-none");
                 } else {
                     $(".table-footer").removeClass("d-none");
                 }
             }
         });
-        
     })();
 
     function calculateGrandTotal() {
         let grandTotal = 0;
-        document.querySelectorAll('.total').forEach(input => {
+        document.querySelectorAll(".total").forEach(function (input) {
             const value = parseFloat(input.value) || 0;
             grandTotal += value;
         });
-        document.getElementById('grand-total').innerText = `$${grandTotal.toFixed(2)}`;
-        document.getElementById('sub-total').innerText = `$${grandTotal.toFixed(2)}`;
 
-        document.getElementById('grand-total-value').value = `${grandTotal.toFixed(2)}`;
-        document.getElementById('subtotal-value').value = `${grandTotal.toFixed(2)}`;
+        const formattedTotal = `$${grandTotal.toFixed(2)}`;
+        document.getElementById("grand-total").innerText = formattedTotal;
+        document.getElementById("sub-total").innerText = formattedTotal;
+        document.getElementById("grand-total-value").value = grandTotal.toFixed(2);
+        document.getElementById("subtotal-value").value = grandTotal.toFixed(2);
     }
 
     function bindEvents(row) {
-        const qty = row.querySelector('.qty');
-        const price = row.querySelector('.price');
-        const total = row.querySelector('.total');
+        const qty = row.querySelector(".qty");
+        const price = row.querySelector(".price");
+        const total = row.querySelector(".total");
 
-        const calculate = () => {
+        function calculate() {
             const qtyVal = parseFloat(qty.value) || 0;
             const priceVal = parseFloat(price.value) || 0;
             total.value = (qtyVal * priceVal).toFixed(2);
             calculateGrandTotal();
-        };
-
-        if (qty && price && total) {
-            qty.addEventListener('input', calculate);
-            price.addEventListener('input', calculate);
         }
 
-        const deleteBtn = row.querySelector('.delete-row');
+        if (qty && price && total) {
+            qty.addEventListener("input", calculate);
+            price.addEventListener("input", calculate);
+        }
+
+        const deleteBtn = row.querySelector(".delete-row");
         if (deleteBtn) {
-            deleteBtn.addEventListener('click', () => {
+            deleteBtn.addEventListener("click", function () {
                 row.remove();
                 calculateGrandTotal();
             });
         }
     }
 
-    // On page load
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll('#rental-details-body tr').forEach(row => bindEvents(row));
+        document.querySelectorAll("#rental-details-body tr").forEach(function (row) {
+            bindEvents(row);
+        });
         calculateGrandTotal();
     });
 
-    let rowIndex = 1; // Start from 1 since there's already 1 row in HTML
+    let rowIndex = 1;
 
     function createRow(index) {
-        return `
-            <td class="pe-0"><div><input type="text" name="items[${index}][description]" class="form-control"></div></td>
-            <td class="pe-0"><div><input type="number" name="items[${index}][qty]" class="form-control qty"></div></td>
-            <td class="pe-0"><div><input type="number" name="items[${index}][price]" class="form-control price"></div></td>
-            <td class="pe-0"><div><input type="number" name="items[${index}][tax]" class="form-control"></div></td>
-            <td class="pe-0"><div><input type="number" name="items[${index}][total_price]" class="form-control total" readonly></div></td>
-            <td><div><a href="javascript:void(0);" class="btn btn-icon btn-sm text-danger delete-row"><i class="ti ti-trash"></i></a></div></td>
-        `;
+        return (
+            "<td class=\"pe-0\"><div><input type=\"text\" name=\"items[" + index + "][description]\" class=\"form-control\"></div></td>" +
+            "<td class=\"pe-0\"><div><input type=\"number\" name=\"items[" + index + "][qty]\" class=\"form-control qty\"></div></td>" +
+            "<td class=\"pe-0\"><div><input type=\"number\" name=\"items[" + index + "][price]\" class=\"form-control price\"></div></td>" +
+            "<td class=\"pe-0\"><div><input type=\"number\" name=\"items[" + index + "][tax]\" class=\"form-control\"></div></td>" +
+            "<td class=\"pe-0\"><div><input type=\"number\" name=\"items[" + index + "][total_price]\" class=\"form-control total\" readonly></div></td>" +
+            "<td><div><a href=\"javascript:void(0);\" class=\"btn btn-icon btn-sm text-danger delete-row\"><i class=\"ti ti-trash\"></i></a></div></td>"
+        );
     }
 
-    document.getElementById('addMoreRow').addEventListener('click', function () {
-        const tbody = document.getElementById('rental-details-body');
-        const newRow = document.createElement('tr');
+    document.getElementById("addMoreRow").addEventListener("click", function () {
+        const tbody = document.getElementById("rental-details-body");
+        const newRow = document.createElement("tr");
 
         newRow.innerHTML = createRow(rowIndex);
-        rowIndex++;
+        rowIndex += 1;
 
         tbody.appendChild(newRow);
         bindEvents(newRow);
     });
 
-
-    // Bind to existing row initially present in DOM
-    document.querySelectorAll('#rental-details-body tr').forEach(row => bindEvents(row));
+    // Bind events to existing rows initially present in DOM
+    document.querySelectorAll("#rental-details-body tr").forEach(function (row) {
+        bindEvents(row);
+    });
 
     // Delegate event to handle dynamically added rows
-    document.getElementById('rental-details-body').addEventListener('click', function (e) {
-        if (e.target.closest('.delete-row')) {
-            e.target.closest('tr').remove();
+    document.getElementById("rental-details-body").addEventListener("click", function (e) {
+        const deleteBtn = e.target.closest(".delete-row");
+        if (deleteBtn) {
+            deleteBtn.closest("tr").remove();
         }
     });
 
     $(document).ready(function () {
-
         // Set up CSRF token
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr("content")
             }
         });
 
         // Form submit via AJAX
-        $('#invoiceAdd').on('submit', function (e) {
+        $("#invoiceAdd").on("submit", function (e) {
             e.preventDefault();
 
-            let form = $(this)[0];
-            let formData = new FormData(form);
-            
+            const form = this;
+            const formData = new FormData(form);
+
             $.ajax({
-                url: $(this).attr('action'),
-                method: 'POST',
+                url: $(form).attr("action"),
+                method: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
                 beforeSend: function () {
-                    // You can show a loader here
+                    // Optional loader can be added here
                 },
-                success: function (response) {
-                    // Handle success (customize as needed)
+                success: function () {
                     showToast("success", "Invoice Created!");
                     window.location.href = "/admin/invoices";
                 },
                 error: function (xhr) {
-                    // Handle validation errors
                     if (xhr.status === 422) {
-                        let errors = xhr.responseJSON.errors;
-                        let message = '';
+                        const errors = xhr.responseJSON.errors;
+                        let message = "";
                         $.each(errors, function (key, value) {
-                            message += value + '\n';
+                            message += value + "\n";
                         });
                         showToast("warning", message);
                     } else {
@@ -179,30 +183,31 @@
             });
         });
 
-
-        $('#invoiceEdit').on('submit', function (e) {
+        $("#invoiceEdit").on("submit", function (e) {
             e.preventDefault();
-        
-            let form = $(this)[0];
-            let formData = new FormData(form);
-        
-            // Remove existing item-related keys (optional safety cleanup)
-            for (let key of formData.keys()) {
-                if (key.startsWith('items')) {
-                    formData.delete(key);
+
+            const form = this;
+            const formData = new FormData(form);
+            const keysToDelete = [];
+            for (const key of formData.keys()) {
+                if (key.startsWith("items")) {
+                    keysToDelete.push(key);
                 }
             }
-        
+            keysToDelete.forEach(function (key) {
+                formData.delete(key);
+            });
+
             // Build items array manually
-            let items = [];
-            $('#rental-details-body tr').each(function () {
-                let description = $(this).find('input[name*="[description]"]').val();
-                let qty = $(this).find('input[name*="[qty]"]').val();
-                let price = $(this).find('input[name*="[price]"]').val();
-                let tax = $(this).find('input[name*="[tax]"]').val();
-                let total_price = $(this).find('input[name*="[total_price]"]').val();
-        
-                // Avoid pushing empty rows (optional)
+            const items = [];
+            $("#rental-details-body tr").each(function () {
+                const description = $(this).find("input[name*=\"[description]\"]").val();
+                const qty = $(this).find("input[name*=\"[qty]\"]").val();
+                const price = $(this).find("input[name*=\"[price]\"]").val();
+                const tax = $(this).find("input[name*=\"[tax]\"]").val();
+                const total_price = $(this).find("input[name*=\"[total_price]\"]").val();
+
+                // Avoid pushing empty rows
                 if (description || qty || price || tax || total_price) {
                     items.push({
                         description: description,
@@ -213,28 +218,28 @@
                     });
                 }
             });
-        
+
             // Append items as JSON string
-            formData.append('items', JSON.stringify(items));
-        
-            let invoiceId = $('input[name="id"]').val();
-        
+            formData.append("items", JSON.stringify(items));
+
+            const invoiceId = $("input[name=\"id\"]").val();
+
             $.ajax({
-                url: `/../admin/update-invoice/${invoiceId}`,
-                method: 'POST',
+                url: "/../admin/update-invoice/" + invoiceId,
+                method: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function (response) {
+                success: function () {
                     showToast("success", "Invoice Updated!");
                     window.location.href = "/admin/invoices";
                 },
                 error: function (xhr) {
                     if (xhr.status === 422) {
-                        let errors = xhr.responseJSON.errors;
-                        let message = '';
+                        const errors = xhr.responseJSON.errors;
+                        let message = "";
                         $.each(errors, function (key, value) {
-                            message += value + '\n';
+                            message += value + "\n";
                         });
                         showToast("warning", message);
                     } else {
@@ -242,76 +247,73 @@
                     }
                 }
             });
-        });
-        
+        }); 
     });
 
     $(document).ready(function () {
-        let itemIndex = 1; // Start from 1 if the first row is 0
+        let itemIndex = 1;
 
-        $(document).on('click', '.booking-row', function () {
+        $(document).on("click", ".booking-row", function () {
             $("#link_reservation").modal("hide");
 
             // Remove any row that has all blank or zero values
-            $('#rental-details-body tr').each(function () {
-                const description = $(this).find('input[name*="[description]"]').val();
-                const price = parseFloat($(this).find('input[name*="[price]"]').val()) || 0;
-                const tax = parseFloat($(this).find('input[name*="[tax]"]').val()) || 0;
-                const total = parseFloat($(this).find('input[name*="[total_price]"]').val()) || 0;
+            $("#rental-details-body tr").each(function () {
+                const description = $(this).find("input[name*=\"[description]\"]").val();
+                const price = parseFloat($(this).find("input[name*=\"[price]\"]").val()) || 0;
+                const tax = parseFloat($(this).find("input[name*=\"[tax]\"]").val()) || 0;
+                const total = parseFloat($(this).find("input[name*=\"[total_price]\"]").val()) || 0;
 
-                if (!description && price == '' && tax == '' && total == '') {
+                if (!description && price === 0 && tax === 0 && total === 0) {
                     $(this).remove();
                 }
             });
 
-            const vehicle = $(this).data('vehicle');
-            const price = parseFloat($(this).data('price')) || 0;
-            const tax = parseFloat($(this).data('tax')) || 0;
-            const total = parseFloat($(this).data('final_price')) || 0;
+            const vehicle = $(this).data("vehicle");
+            const price = parseFloat($(this).data("price")) || 0;
+            const tax = parseFloat($(this).data("tax")) || 0;
+            const total = parseFloat($(this).data("final_price")) || 0;
 
-            let row = `
-                <tr>
-                    <td class="pe-0">
-                        <div><input type="text" name="items[${itemIndex}][description]" class="form-control" value="${vehicle}"></div>
-                    </td>
-                    <td class="pe-0">
-                        <div><input type="number" name="items[${itemIndex}][qty]" class="form-control qty" value="0" readonly></div>
-                    </td>
-                    <td class="pe-0">
-                        <div><input type="number" name="items[${itemIndex}][price]" class="form-control price" value="${price}" readonly></div>
-                    </td>
-                    <td class="pe-0">
-                        <div><input type="number" name="items[${itemIndex}][tax]" class="form-control" value="${tax}" readonly></div>
-                    </td>
-                    <td class="pe-0">
-                        <div><input type="number" name="items[${itemIndex}][total_price]" class="form-control total" value="${total}" readonly></div>
-                    </td>
-                    <td>
-                        <div><a href="javascript:void(0);" class="btn btn-icon btn-sm text-danger delete-row"><i class="ti ti-trash"></i></a></div>
-                    </td>
-                </tr>
-            `;
+            const row = "<tr>" +
+                "<td class=\"pe-0\">" +
+                "<div><input type=\"text\" name=\"items[" + itemIndex + "][description]\" class=\"form-control\" value=\"" + vehicle + "\"></div>" +
+                "</td>" +
+                "<td class=\"pe-0\">" +
+                "<div><input type=\"number\" name=\"items[" + itemIndex + "][qty]\" class=\"form-control qty\" value=\"0\" readonly></div>" +
+                "</td>" +
+                "<td class=\"pe-0\">" +
+                "<div><input type=\"number\" name=\"items[" + itemIndex + "][price]\" class=\"form-control price\" value=\"" + price + "\" readonly></div>" +
+                "</td>" +
+                "<td class=\"pe-0\">" +
+                "<div><input type=\"number\" name=\"items[" + itemIndex + "][tax]\" class=\"form-control\" value=\"" + tax + "\" readonly></div>" +
+                "</td>" +
+                "<td class=\"pe-0\">" +
+                "<div><input type=\"number\" name=\"items[" + itemIndex + "][total_price]\" class=\"form-control total\" value=\"" + total + "\" readonly></div>" +
+                "</td>" +
+                "<td>" +
+                "<div><a href=\"javascript:void(0);\" class=\"btn btn-icon btn-sm text-danger delete-row\"><i class=\"ti ti-trash\"></i></a></div>" +
+                "</td>" +
+                "</tr>";
 
-            $('#rental-details-body').append(row);
-            calculateGrandTotal(); // Assuming this exists
-            itemIndex++;
+            $("#rental-details-body").append(row);
+            if (typeof calculateGrandTotal === "function") {
+                calculateGrandTotal();
+            }
+            itemIndex += 1;
         });
 
-        // Delete row on trash icon click
-        $(document).on('click', '.delete-row', function () {
-            $(this).closest('tr').remove();
+        $(document).on("click", ".delete-row", function () {
+            $(this).closest("tr").remove();
         });
-    });
 
-    $(document).ready(function () {
-        $(function () {
-            $('.datetimepicker').datetimepicker({
-                format: 'DD/MM/YYYY',
-                minDate: new Date()
-            });
+        // Initialize datetimepicker
+        $(".datetimepicker").datetimepicker({
+            format: "DD/MM/YYYY",
+            minDate: new Date()
         });
-        const timestamp = Math.floor(Date.now() / 1000); // current UNIX timestamp
-        const invoiceNumber = 'INV-' + timestamp;
-        $('#invoice_number').val(invoiceNumber);
+
+        // Generate invoice number
+        const timestamp = Math.floor(Date.now() / 1000);
+        const invoiceNumber = "INV-" + timestamp;
+        $("#invoice_number").val(invoiceNumber);
     });
 })();

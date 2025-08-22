@@ -2,16 +2,16 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
-use Intervention\Image\Laravel\Facades\Image;
-use Modules\GeneralSetting\Models\GeneralSetting;
 use App\Services\ImageResizer;
 use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Laravel\Facades\Image;
+use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\UserDevice;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 
 class GeneralSettingRepository implements GeneralSettingInterface
@@ -41,6 +41,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
             return $setting;
         });
     }
+
     public function storeCompanySettings(array $data): void
     {
         $file = $data['company_profile_photo'] ?? null;
@@ -60,7 +61,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
             GeneralSetting::updateOrCreate(
                 ['key' => 'company_profile_photo'],
                 [
-                    'value' => $companyPhotoStoragePath,
+                    'value'    => $companyPhotoStoragePath,
                     'group_id' => $data['group_id'] ?? null
                 ]
             );
@@ -71,12 +72,13 @@ class GeneralSettingRepository implements GeneralSettingInterface
             GeneralSetting::updateOrCreate(
                 ['key' => $key],
                 [
-                    'value' => $value,
+                    'value'    => $value,
                     'group_id' => $data['group_id'] ?? null
                 ]
             );
         }
     }
+
     public function getCompanySettings(int $groupId): array|null
     {
         $settings = GeneralSetting::where('group_id', $groupId)->pluck('value', 'key');
@@ -86,20 +88,21 @@ class GeneralSettingRepository implements GeneralSettingInterface
         }
 
         return [
-            'organization_name' => $settings['organization_name'] ?? null,
-            'owner_name' => $settings['owner_name'] ?? null,
-            'company_email' => $settings['company_email'] ?? null,
-            'company_phone' => $settings['international_phone_number'] ?? null,
-            'industry' => $settings['industry'] ?? null,
-            'team_size' => $settings['team_size'] ?? null,
-            'company_address_line' => $settings['company_address_line'] ?? null,
-            'country' => $settings['country'] ?? null,
-            'state' => $settings['state'] ?? null,
-            'city' => $settings['city'] ?? null,
-            'company_postal_code' => $settings['company_postal_code'] ?? null,
+            'organization_name'     => $settings['organization_name'] ?? null,
+            'owner_name'            => $settings['owner_name'] ?? null,
+            'company_email'         => $settings['company_email'] ?? null,
+            'company_phone'         => $settings['international_phone_number'] ?? null,
+            'industry'              => $settings['industry'] ?? null,
+            'team_size'             => $settings['team_size'] ?? null,
+            'company_address_line'  => $settings['company_address_line'] ?? null,
+            'country'               => $settings['country'] ?? null,
+            'state'                 => $settings['state'] ?? null,
+            'city'                  => $settings['city'] ?? null,
+            'company_postal_code'   => $settings['company_postal_code'] ?? null,
             'company_profile_photo' => uploadedAsset($settings['company_profile_photo'] ?? null, 'default')
         ];
     }
+
     public function saveNotificationSettings(array $data): void
     {
         foreach ($data as $key => $value) {
@@ -110,7 +113,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
             GeneralSetting::updateOrCreate(
                 ['key' => $key],
                 [
-                    'value' => $value,
+                    'value'    => $value,
                     'group_id' => $data['group_id']
                 ]
             );
@@ -132,7 +135,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
                 GeneralSetting::updateOrCreate(
                     ['key' => $key],
                     [
-                        'value' => $value,
+                        'value'    => $value,
                         'group_id' => $groupId
                     ]
                 );
@@ -177,7 +180,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
             GeneralSetting::updateOrCreate(
                 ['key' => 'metaImage'],
                 [
-                    'value' => $seoPhotoStoragePath,
+                    'value'    => $seoPhotoStoragePath,
                     'group_id' => $groupId
                 ]
             );
@@ -187,7 +190,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
             GeneralSetting::updateOrCreate(
                 ['key' => $key],
                 [
-                    'value' => $value,
+                    'value'    => $value,
                     'group_id' => $groupId
                 ]
             );
@@ -200,10 +203,10 @@ class GeneralSettingRepository implements GeneralSettingInterface
     {
         $paths = [];
         $logoFields = [
-            'logo_image' => 'logo',
+            'logo_image'    => 'logo',
             'favicon_image' => 'favicon',
-            'small_image' => 'small',
-            'dark_logo' => 'dark',
+            'small_image'   => 'small',
+            'dark_logo'     => 'dark',
         ];
 
         foreach ($logoFields as $field => $folderName) {
@@ -282,7 +285,6 @@ class GeneralSettingRepository implements GeneralSettingInterface
         }
     }
 
-
     public function updateThemeSettings(array $data): void
     {
         try {
@@ -293,7 +295,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
                     GeneralSetting::updateOrCreate(
                         ['key' => $key],
                         [
-                            'value' => $value,
+                            'value'    => $value,
                             'group_id' => $groupId
                         ]
                     );
@@ -309,11 +311,11 @@ class GeneralSettingRepository implements GeneralSettingInterface
     {
         try {
             $settings = [
-                'otp_type' => $data['otp_type'],
+                'otp_type'        => $data['otp_type'],
                 'otp_digit_limit' => $data['otp_digit_limit'],
                 'otp_expire_time' => $data['otp_expire_time'],
-                'login' => $data['login'] ?? false,
-                'register' => $data['register'] ?? false,
+                'login'           => $data['login'] ?? false,
+                'register'        => $data['register'] ?? false,
             ];
 
             foreach ($settings as $key => $value) {
@@ -331,15 +333,16 @@ class GeneralSettingRepository implements GeneralSettingInterface
             throw $e;
         }
     }
+
     public function updateCopyright(array $data): void
     {
         GeneralSetting::updateOrCreate(
             [
-                'key' => 'copy_right_' . $data['language'],
+                'key'      => 'copy_right_' . $data['language'],
                 'group_id' => $data['group_id'],
             ],
             [
-                'value' => $data['copy_right_description'],
+                'value'       => $data['copy_right_description'],
                 'language_id' => $data['language']
             ]
         );
@@ -359,16 +362,16 @@ class GeneralSettingRepository implements GeneralSettingInterface
         $settings = [
             'minAdvanceReservation' => $data['minAdvanceReservation'] ?? null,
             'maxAdvanceReservation' => $data['maxAdvanceReservation'] ?? null,
-            'cancellationBuffer' => $data['cancellationBuffer'] ?? null,
-            'rescheduleBuffer' => $data['rescheduleBuffer'] ?? null,
-            'faq' => $data['faq'] ?? null,
-            'damages' => $data['damages'] ?? null,
-            'extraService' => $data['extraService'] ?? null,
-            'booking' => $data['booking'] ?? null,
-            'enquiries' => $data['enquiries'] ?? null,
-            'reservation' => $data['reservation'] ?? null,
-            'seasonalPricing' => $data['seasonalPricing'] ?? null,
-            'pricing' => $data['pricing'] ?? null,
+            'cancellationBuffer'    => $data['cancellationBuffer'] ?? null,
+            'rescheduleBuffer'      => $data['rescheduleBuffer'] ?? null,
+            'faq'                   => $data['faq'] ?? null,
+            'damages'               => $data['damages'] ?? null,
+            'extraService'          => $data['extraService'] ?? null,
+            'booking'               => $data['booking'] ?? null,
+            'enquiries'             => $data['enquiries'] ?? null,
+            'reservation'           => $data['reservation'] ?? null,
+            'seasonalPricing'       => $data['seasonalPricing'] ?? null,
+            'pricing'               => $data['pricing'] ?? null,
         ];
 
         foreach ($settings as $key => $value) {
@@ -399,8 +402,8 @@ class GeneralSettingRepository implements GeneralSettingInterface
                     'invoices',
                     $oldPath,
                     [
-                        'width' => 300,  // Set desired width
-                        'height' => 150,  // Set desired height
+                        'width'     => 300,  // Set desired width
+                        'height'    => 150,  // Set desired height
                         'thumbnail' => true  // Generate thumbnail
                     ]
                 );
@@ -428,12 +431,12 @@ class GeneralSettingRepository implements GeneralSettingInterface
             }
 
             $settings = [
-                'invoice_prefix' => $data['invoice_prefix'] ?? null,
-                'invoice_due' => $data['invoice_due'] ?? null,
-                'invoice_round_off' => $data['invoice_round_off'] ?? null,
-                'round_off_enabled' => ($data['round_off_enabled'] ?? 'off') === 'on' ? 1 : 0,
+                'invoice_prefix'       => $data['invoice_prefix'] ?? null,
+                'invoice_due'          => $data['invoice_due'] ?? null,
+                'invoice_round_off'    => $data['invoice_round_off'] ?? null,
+                'round_off_enabled'    => ($data['round_off_enabled'] ?? 'off') === 'on' ? 1 : 0,
                 'show_company_details' => ($data['show_company_details'] ?? 'off') === 'on' ? 1 : 0,
-                'invoice_terms' => $data['invoice_terms'] ?? null,
+                'invoice_terms'        => $data['invoice_terms'] ?? null,
             ];
 
             foreach ($settings as $key => $value) {
@@ -461,6 +464,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
 
         return (bool) GeneralSetting::updateOrCreate($attributes, $values);
     }
+
     public function getCookiesSettings(int $groupId, ?int $languageId = null): array
     {
         if (!$languageId) {
@@ -483,7 +487,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
         ];
 
         $settings = GeneralSetting::where('group_id', $groupId)
-            ->whereIn('key', array_map(fn($key) => $key . '_' . $languageId, $keys))
+            ->whereIn('key', array_map(fn ($key) => $key . '_' . $languageId, $keys))
             ->pluck('value', 'key');
 
         $formatted = [];
@@ -494,24 +498,25 @@ class GeneralSettingRepository implements GeneralSettingInterface
 
         return $formatted;
     }
+
     public function storeCookiesSettings(array $data): void
     {
         $fields = [
             'cookiesContentText' => $data['cookiesContentText'],
-            'cookiesPosition' => $data['cookiesPosition'],
-            'agreeButtonText' => $data['agreeButtonText'],
-            'declineButtonText' => $data['declineButtonText'],
-            'showDeclineButton' => isset($data['showDeclineButton']) ? 1 : 0,
-            'cookiesPageLink' => $data['cookiesPageLink'],
+            'cookiesPosition'    => $data['cookiesPosition'],
+            'agreeButtonText'    => $data['agreeButtonText'],
+            'declineButtonText'  => $data['declineButtonText'],
+            'showDeclineButton'  => isset($data['showDeclineButton']) ? 1 : 0,
+            'cookiesPageLink'    => $data['cookiesPageLink'],
         ];
         foreach ($fields as $key => $value) {
             GeneralSetting::updateOrCreate(
                 [
-                    'key' => $key . '_' . $data['language'],
+                    'key'      => $key . '_' . $data['language'],
                     'group_id' => $data['group_id'],
                 ],
                 [
-                    'value' => $value,
+                    'value'       => $value,
                     'language_id' => $data['language']
                 ]
             );
@@ -577,20 +582,20 @@ class GeneralSettingRepository implements GeneralSettingInterface
             ->orderByDesc('created_at')
             ->take(5)
             ->get()
-            ->map(fn($device) => [
-                'id' => $device->id,
+            ->map(fn ($device) => [
+                'id'          => $device->id,
                 'device_type' => $device->device_type,
-                'browser' => $device->browser,
-                'os' => $device->os,
-                'ip_address' => $device->ip_address,
-                'location' => $device->location,
-                'date' => formatDateTime($device->created_at)
+                'browser'     => $device->browser,
+                'os'          => $device->os,
+                'ip_address'  => $device->ip_address,
+                'location'    => $device->location,
+                'date'        => formatDateTime($device->created_at)
             ]);
 
         return [
-            'user' => $user,
+            'user'                     => $user,
             'last_password_changed_at' => $user->last_password_changed_at ? formatDateTime($user->last_password_changed_at) : 'null',
-            'devices' => $devices
+            'devices'                  => $devices
         ];
     }
 
@@ -612,6 +617,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
 
         return ['success' => true, 'message' => __('admin.general_settings.device_removed_successfully')];
     }
+
     public function updatePaymentSettings(array $data): bool
     {
         try {
@@ -746,11 +752,11 @@ class GeneralSettingRepository implements GeneralSettingInterface
     {
         GeneralSetting::updateOrCreate(
             [
-                'key' => 'how_it_works_' . $data['language'],
+                'key'      => 'how_it_works_' . $data['language'],
                 'group_id' => $data['group_id'],
             ],
             [
-                'value' => $data['howitwork_description'],
+                'value'       => $data['howitwork_description'],
                 'language_id' => $data['language'],
             ]
         );

@@ -260,7 +260,7 @@
 
         $(document).on("click", "#deleteLanguage", function () {
             let id = $(this).data("id");
-            $("#deleteForm #delete_id").val(id);
+            $("#deleteForm #id").val(id);
         });
 
         $("#deleteForm").on("submit", function (e) {

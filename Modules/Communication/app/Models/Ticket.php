@@ -2,13 +2,11 @@
 
 namespace Modules\Communication\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
-use Modules\Communication\Models\TicketCategory;
-use Modules\Communication\Models\TicketHistory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Modules\Communication\Models\Ticket

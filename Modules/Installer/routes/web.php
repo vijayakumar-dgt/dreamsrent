@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Installer\Http\Controllers\InstallerController;
+use Modules\Installer\Http\Controllers\PuchaseVerificationController;
 use Modules\Installer\Http\Middleware\PurchaseVerifyMiddleware;
 use Modules\Installer\Http\Middleware\SetupMiddleware;
-use Modules\Installer\Http\Controllers\PuchaseVerificationController;
 
 //all setup route
 Route::prefix('setup')->withoutMiddleware(PurchaseVerifyMiddleware::class)->group(function () {

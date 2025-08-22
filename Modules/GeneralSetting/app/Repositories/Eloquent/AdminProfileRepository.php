@@ -2,12 +2,12 @@
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
 
-use Modules\GeneralSetting\Repositories\Contracts\AdminProfileInterface;
 use App\Models\User;
 use App\Models\UserDetail;
+use App\Services\ImageResizer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Services\ImageResizer;
+use Modules\GeneralSetting\Repositories\Contracts\AdminProfileInterface;
 
 class AdminProfileRepository implements AdminProfileInterface
 {
@@ -17,14 +17,15 @@ class AdminProfileRepository implements AdminProfileInterface
     {
         $this->imageResizer = $imageResizer;
     }
+
     public function getProfile(): array
     {
         try {
             $user = Auth::guard('admin')->user();
             if (!$user) {
                 return [
-                    'status' => 'error',
-                    'code' => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => 'User not found',
                 ];
             }
@@ -44,17 +45,17 @@ class AdminProfileRepository implements AdminProfileInterface
             ];
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.profile_update_success'),
-                'data' => $profile
+                'data'    => $profile
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.profile_update_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
@@ -66,14 +67,14 @@ class AdminProfileRepository implements AdminProfileInterface
 
             if (!$user) {
                 return [
-                    'status' => 'error',
-                    'code' => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('admin.general_settings.user_not_found')
                 ];
             }
 
             $user->update([
-                'email' => $data['email'],
+                'email'        => $data['email'],
                 'phone_number' => $data['phone'],
             ]);
 
@@ -98,16 +99,16 @@ class AdminProfileRepository implements AdminProfileInterface
             );
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.profile_update_success')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.profile_update_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
@@ -121,15 +122,15 @@ class AdminProfileRepository implements AdminProfileInterface
 
             return [
                 'status' => 'success',
-                'code' => 200,
-                'valid' => $isValid
+                'code'   => 200,
+                'valid'  => $isValid
             ];
         } catch (\Exception $e) {
             return [
                 'status' => 'error',
-                'code' => 500,
-                'valid' => false,
-                'error' => $e->getMessage()
+                'code'   => 500,
+                'valid'  => false,
+                'error'  => $e->getMessage()
             ];
         }
     }
@@ -141,8 +142,8 @@ class AdminProfileRepository implements AdminProfileInterface
 
             if (!$user) {
                 return [
-                    'status' => 'error',
-                    'code' => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('admin.general_settings.user_not_found'),
                 ];
             }
@@ -152,16 +153,16 @@ class AdminProfileRepository implements AdminProfileInterface
             }
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.account_deleted_successfully'),
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.profile_update_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }

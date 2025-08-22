@@ -1,22 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\GeneralSetting\Http\Controllers\Admin\GeneralSettingController;
 use Modules\GeneralSetting\Http\Controllers\Admin\AdminProfileController;
-use Modules\GeneralSetting\Http\Controllers\Admin\CurrencyController;
-use Modules\GeneralSetting\Http\Controllers\Admin\BankController;
-use Modules\GeneralSetting\Http\Controllers\Admin\EmailTemplateController;
-use Modules\GeneralSetting\Http\Controllers\Admin\InsuranceController;
-use Modules\GeneralSetting\Http\Controllers\Admin\LocalizationController;
+use Modules\GeneralSetting\Http\Controllers\Admin\BlogsController;
 use Modules\GeneralSetting\Http\Controllers\Admin\CommunicationSettingController;
+use Modules\GeneralSetting\Http\Controllers\Admin\CurrencyController;
+use Modules\GeneralSetting\Http\Controllers\Admin\DbbackupController;
+use Modules\GeneralSetting\Http\Controllers\Admin\EmailTemplateController;
+use Modules\GeneralSetting\Http\Controllers\Admin\FaqController;
+use Modules\GeneralSetting\Http\Controllers\Admin\GeneralSettingController;
+use Modules\GeneralSetting\Http\Controllers\Admin\InsuranceController;
 use Modules\GeneralSetting\Http\Controllers\Admin\LanguageController;
+use Modules\GeneralSetting\Http\Controllers\Admin\LocalizationController;
+use Modules\GeneralSetting\Http\Controllers\Admin\SignatureSettingsController;
 use Modules\GeneralSetting\Http\Controllers\Admin\SitemapController;
 use Modules\GeneralSetting\Http\Controllers\Admin\TaxRateController;
-use Modules\GeneralSetting\Http\Controllers\Admin\SignatureSettingsController;
-use Modules\GeneralSetting\Http\Controllers\Admin\FaqController;
-use Modules\GeneralSetting\Http\Controllers\Admin\BlogsController;
 use Modules\GeneralSetting\Http\Controllers\Admin\TestimonialController;
-use Modules\GeneralSetting\Http\Controllers\Admin\DbbackupController;
 
 Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHeader']], function () {
 

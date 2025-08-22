@@ -4,9 +4,9 @@ namespace Modules\GeneralSetting\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\GeneralSetting\Http\Requests\UpdateAdminProfileRequest;
-use Illuminate\Http\Request;
 use Modules\GeneralSetting\Repositories\Contracts\AdminProfileInterface;
 
 class AdminProfileController extends Controller
@@ -17,6 +17,7 @@ class AdminProfileController extends Controller
     {
         $this->profileRepo = $profileRepo;
     }
+
     public function adminProfile(): View
     {
         return view('generalsetting::adminProfile.index');

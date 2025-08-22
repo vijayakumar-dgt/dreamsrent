@@ -33,6 +33,7 @@ class Driver extends Model
         'date_of_issue',
         'valid_date',
     ];
+
     /**
      * @return HasMany<DriverDocument, Driver>
      */

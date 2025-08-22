@@ -18,7 +18,7 @@ class CustomerController extends Controller
         $this->customerRepository = $customerRepository;
     }
 
-    public function index(Request $request): View
+    public function index(): View
     {
         $data = $this->customerRepository->index();
         return view('admin.customers', $data);

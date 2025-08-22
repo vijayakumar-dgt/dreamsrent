@@ -19,6 +19,7 @@ class DriverDocument extends Model
         'driver_id',
         'document'
     ];
+
     /**
      * @return BelongsTo<Driver, DriverDocument>
      */

@@ -49,13 +49,13 @@ class AdminUserController extends Controller
         return response()->json($response, $response['code']);
     }
 
-    public function getNotifications(Request $request): JsonResponse
+    public function getNotifications(): JsonResponse
     {
         $response = $this->adminUserRepository->getNotifications();
         return response()->json($response, $response['code']);
     }
 
-    public function markAllAsRead(Request $request): JsonResponse
+    public function markAllAsRead(): JsonResponse
     {
         $response = $this->adminUserRepository->markAllAsRead();
         return response()->json($response, $response['code']);
@@ -65,17 +65,17 @@ class AdminUserController extends Controller
     {
         $notifications = $this->adminUserRepository->notifications($request);
         if ($request->ajax()) {
-            $view = view('admin.partials.notification-items', compact('notifications'))->render();
+            $view = view('admin.partials.notification-items', ['notifications' => $notifications])->render();
             return response()->json([
-                'html' => $view,
-                'current_page' => $notifications->currentPage(),
-                'last_page' => $notifications->lastPage(),
+                'html'          => $view,
+                'current_page'  => $notifications->currentPage(),
+                'last_page'     => $notifications->lastPage(),
                 'prev_page_url' => $notifications->previousPageUrl(),
                 'next_page_url' => $notifications->nextPageUrl(),
-                'count' => $notifications->total()
+                'count'         => $notifications->total()
             ]);
         }
-        return view('admin.partials.notifications', compact('notifications'));
+        return view('admin.partials.notifications', ['notifications' => $notifications]);
     }
 
     public function markNotificationAsRead(Request $request): JsonResponse

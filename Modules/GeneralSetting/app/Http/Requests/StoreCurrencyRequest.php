@@ -16,7 +16,7 @@ class StoreCurrencyRequest extends CustomFailedValidation
                     ->ignore($this->id)
                     ->whereNull('deleted_at')
             ],
-            'code' => 'required',
+            'code'   => 'required',
             'symbol' => 'required'
         ];
     }
@@ -25,9 +25,9 @@ class StoreCurrencyRequest extends CustomFailedValidation
     {
         return [
             'currency_name.required' => __('admin.general_settings.enter_currency_name'),
-            'currency_name.unique' => __('admin.general_settings.currency_name_unique'),
-            'code.required' => __('admin.general_settings.enter_currency_code'),
-            'symbol.required' => __('admin.general_settings.enter_currency_symbol')
+            'currency_name.unique'   => __('admin.general_settings.currency_name_unique'),
+            'code.required'          => __('admin.general_settings.enter_currency_code'),
+            'symbol.required'        => __('admin.general_settings.enter_currency_symbol')
         ];
     }
 

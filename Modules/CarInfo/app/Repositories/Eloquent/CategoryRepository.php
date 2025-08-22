@@ -2,7 +2,6 @@
 
 namespace Modules\CarInfo\Repositories\Eloquent;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Modules\CarInfo\Models\Category;
@@ -18,36 +17,37 @@ class CategoryRepository implements CategoryRepositoryInterface
             $languageId = $authUser->language_id ?? 1;
 
             $data = [
-                'name' => $request->name,
-                'status' => $request->status ?? 1,
+                'name'        => $request->name,
+                'status'      => $request->status ?? 1,
                 'language_id' => $languageId,
             ];
 
             if (empty($id)) {
                 Category::create($data);
                 return [
-                    'status' => 'success',
-                    'code' => 200,
+                    'status'  => 'success',
+                    'code'    => 200,
                     'message' => __('admin.rentals.category_create_success'),
                 ];
             } else {
                 Category::where('id', $id)->update($data);
                 return [
-                    'status' => 'success',
-                    'code' => 200,
+                    'status'  => 'success',
+                    'code'    => 200,
                     'message' => __('admin.rentals.category_update_success'),
                 ];
             }
         } catch (\Exception $th) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => empty($id)
                     ? __('admin.common.default_create_error')
                     : __('admin.common.default_update_error'),
             ];
         }
     }
+
     public function list(Request $request): array
     {
         try {
@@ -72,20 +72,21 @@ class CategoryRepository implements CategoryRepositoryInterface
             $data = $query->get();
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ];
         } catch (\Exception $e) {
             return [
-              'status' => 'error',
-              'code' => 500,
+              'status'  => 'error',
+              'code'    => 500,
               'message' => __('admin.common.default_retrieve_error'),
-              'error' => $e->getMessage(),
+              'error'   => $e->getMessage(),
             ];
         }
     }
+
     public function edit(Request $request): array
     {
         try {
@@ -96,23 +97,23 @@ class CategoryRepository implements CategoryRepositoryInterface
 
             if (!$category) {
                 return [
-                    'status' => 'error',
-                    'code' => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('admin.common.category_not_found'),
                 ];
             }
 
             return [
                 'status' => 'success',
-                'code' => 200,
-                'data' => $category,
+                'code'   => 200,
+                'data'   => $category,
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -127,8 +128,8 @@ class CategoryRepository implements CategoryRepositoryInterface
 
             if (!$category) {
                 return [
-                    'status' => 'error',
-                    'code' => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('admin.common.category_not_found'),
                 ];
             }
@@ -137,16 +138,16 @@ class CategoryRepository implements CategoryRepositoryInterface
             $category->delete();
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.category_delete_success'),
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }
@@ -159,8 +160,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             // Check if IDs are provided
             if (!$ids || count($ids) == 0) {
                 return [
-                    'status' => 'error',
-                    'code' => 400,
+                    'status'  => 'error',
+                    'code'    => 400,
                     'message' => __('admin.common.no_items_selected'),
                 ];
             }
@@ -169,16 +170,16 @@ class CategoryRepository implements CategoryRepositoryInterface
             Category::whereIn('id', $ids)->delete();
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.selected_items_deleted_successfully'),
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }

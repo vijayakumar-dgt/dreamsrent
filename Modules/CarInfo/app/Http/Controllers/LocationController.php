@@ -3,18 +3,12 @@
 namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\City;
-use App\Models\Country;
-use App\Models\State;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Modules\CarInfo\Models\Location;
-use Modules\CarInfo\Models\LocationWorkingDay;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 use Modules\CarInfo\Http\Requests\LocationRequest;
+use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Repositories\Contracts\LocationRepositoryInterface;
 
 class LocationController extends Controller
@@ -100,7 +94,7 @@ class LocationController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'code' => 422,
+                'code'    => 422,
                 'message' => $validator->messages()->toArray()
             ], 422);
         }
@@ -124,7 +118,7 @@ class LocationController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'code' => 422,
+                'code'    => 422,
                 'message' => $validator->messages()->toArray()
             ], 422);
         }

@@ -1,3 +1,4 @@
+/* global $, loadTranslationFile, document, _l, showToast, FormData, window */
 (async () => {
     "use strict";
 
@@ -11,8 +12,8 @@
                 const email = $(this).data("email");
                 const password = $(this).data("password");
 
-                $('#loginForm input[name="email"]').val(email);
-                $('#loginForm input[name="password"]').val(password);
+                $("#loginForm input[name='email']").val(email);
+                $("#loginForm input[name='password']").val(password);
             });
         });
         $(".submitbtn").attr("disabled", false);
@@ -60,7 +61,7 @@
             submitHandler: function (form) {
                 let _formData = new FormData(form);
                 $("#loginForm .submitbtn").html(
-                    '<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>'
+                    "<span class='spinner-border spinner-border-sm align-middle' role='status' aria-hidden='true'></span>"
                 );
                 $("#loginForm .submitbtn").attr("disabled", true);
                 $("#error").text("");
@@ -72,7 +73,7 @@
                     contentType: false,
                     success: function (resp) {
                         if (resp.status) {
-                            window.location.href = '/admin';
+                            window.location.href = "/admin";
                         } else {
                             showToast("error", resp.message);
                             $("#loginForm .submitbtn").text(

@@ -8,19 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\CarInfo\Models\Brand;
-use Modules\CarInfo\Models\Cartype;
-use Modules\CarInfo\Models\Category;
-use Modules\CarInfo\Models\CarColor;
-use Modules\CarInfo\Models\CarFuel;
-use Modules\CarInfo\Models\Location;
-use Modules\CarInfo\Models\Maintenance;
-use Modules\CarInfo\Models\Transmission;
-use Modules\CarInfo\Models\VehicleDamage;
-use Modules\CarInfo\Models\VehicleExtraService;
-use Modules\CarInfo\Models\VehicleFaq;
-use Modules\CarInfo\Models\VehicleSeason;
-use Modules\CarInfo\Models\VehicleTarrif;
 
 /**
  * @property int $id
@@ -66,10 +53,9 @@ use Modules\CarInfo\Models\VehicleTarrif;
  */
 class VehicleInfo extends Model
 {
+    use SoftDeletes;
     public ?string $location_name = null;
     public ?string $image_url = null;
-
-    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -97,6 +83,9 @@ class VehicleInfo extends Model
         'transmission_id',
         'mileage',
         'passenger_capacity',
+        'water_tight',
+        'sliding',
+        'hatch',
         'num_seats',
         'num_doors',
         'num_airbags',
@@ -163,6 +152,7 @@ class VehicleInfo extends Model
         /** @var BelongsTo<Location,VehicleInfo> */
         return $this->belongsTo(Location::class, 'main_location_id');
     }
+
     /**
      * @return BelongsTo<CarColor, VehicleInfo>
      */
@@ -171,6 +161,7 @@ class VehicleInfo extends Model
         /** @var BelongsTo<CarColor,VehicleInfo> */
         return $this->belongsTo(CarColor::class, 'color_id');
     }
+
     /**
      * @return BelongsTo<CarFuel, VehicleInfo>
      */
@@ -179,6 +170,7 @@ class VehicleInfo extends Model
         /** @var BelongsTo<CarFuel,VehicleInfo> */
         return $this->belongsTo(CarFuel::class, 'fuel_type_id');
     }
+
     /**
      * @return BelongsTo<Transmission, VehicleInfo>
      */
@@ -192,6 +184,7 @@ class VehicleInfo extends Model
     {
         return $this->vehicle_image ? asset('storage/' . $this->vehicle_image) : null;
     }
+
     /**
      * @return HasMany<VehicleFaq, VehicleInfo>
      */
@@ -200,6 +193,7 @@ class VehicleInfo extends Model
         /** @var HasMany<VehicleFaq,VehicleInfo> */
         return $this->hasMany(VehicleFaq::class, 'vehicle_id', 'id');
     }
+
     /**
      * @return HasMany<VehicleDamage, VehicleInfo>
      */
@@ -208,6 +202,7 @@ class VehicleInfo extends Model
         /** @var HasMany<VehicleDamage,VehicleInfo> */
         return $this->hasMany(VehicleDamage::class, 'vehicle_id', 'id');
     }
+
     /**
      * @return HasMany<VehicleTarrif, VehicleInfo>
      */
@@ -216,6 +211,7 @@ class VehicleInfo extends Model
         /** @var HasMany<VehicleTarrif,VehicleInfo> */
         return $this->hasMany(VehicleTarrif::class, 'vehicle_id', 'id');
     }
+
     /**
      * @return HasMany<VehicleSeason, VehicleInfo>
      */
@@ -224,6 +220,7 @@ class VehicleInfo extends Model
         /** @var HasMany<VehicleSeason,VehicleInfo> */
         return $this->hasMany(VehicleSeason::class, 'vehicle_id', 'id');
     }
+
     /**
      * @return HasMany<VehicleExtraService, VehicleInfo>
      */
@@ -232,6 +229,7 @@ class VehicleInfo extends Model
         /** @var HasMany<VehicleExtraService,VehicleInfo> */
         return $this->hasMany(VehicleExtraService::class, 'vehicle_id', 'id');
     }
+
     /**
      * @return HasMany<Maintenance, VehicleInfo>
      */
@@ -240,6 +238,7 @@ class VehicleInfo extends Model
         /** @var HasMany<Maintenance,VehicleInfo> */
         return $this->hasMany(Maintenance::class, 'vehicle_id');
     }
+
     /**
      * @return BelongsTo<User, VehicleInfo>
      */

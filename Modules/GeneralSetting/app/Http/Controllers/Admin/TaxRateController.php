@@ -5,10 +5,10 @@ namespace Modules\GeneralSetting\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\GeneralSetting\Http\Requests\StoreTaxRateRequest;
-use Modules\GeneralSetting\Http\Requests\StoreTaxGroupRequest;
-use Modules\GeneralSetting\Repositories\Contracts\TaxRateSettingInterface;
 use Illuminate\View\View;
+use Modules\GeneralSetting\Http\Requests\StoreTaxGroupRequest;
+use Modules\GeneralSetting\Http\Requests\StoreTaxRateRequest;
+use Modules\GeneralSetting\Repositories\Contracts\TaxRateSettingInterface;
 
 class TaxRateController extends Controller
 {
@@ -30,7 +30,7 @@ class TaxRateController extends Controller
             $data = [
                 'tax_name' => $request->tax_name,
                 'tax_rate' => $request->tax_rate,
-                'status' => $request->status ?? 1,
+                'status'   => $request->status ?? 1,
             ];
 
             if (isset($request->id)) {
@@ -45,8 +45,8 @@ class TaxRateController extends Controller
                     : __('admin.general_settings.tax_rate_create_success');
 
                 return response()->json([
-                    'status' => 'success',
-                    'code'   => 200,
+                    'status'  => 'success',
+                    'code'    => 200,
                     'message' => $message
                 ]);
             }
@@ -58,10 +58,10 @@ class TaxRateController extends Controller
                 : __('admin.common.default_create_error');
 
             return response()->json([
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $message,
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -77,15 +77,15 @@ class TaxRateController extends Controller
                 });
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -98,7 +98,7 @@ class TaxRateController extends Controller
         return response()->json([
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ], 200);
     }
 
@@ -109,14 +109,14 @@ class TaxRateController extends Controller
             $this->taxRateSettingRepository->deleteTaxRate($id);
 
             return response()->json([
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.tax_rate_delete_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error')
             ], 500);
         }
@@ -127,8 +127,8 @@ class TaxRateController extends Controller
         try {
             $data = [
                 'tax_group_name' => $request->tax_group_name,
-                'sub_tax' => $request->sub_tax,
-                'status' => $request->status ?? 1,
+                'sub_tax'        => $request->sub_tax,
+                'status'         => $request->status ?? 1,
             ];
 
             if (isset($request->id)) {
@@ -143,8 +143,8 @@ class TaxRateController extends Controller
                     : __('admin.general_settings.tax_group_create_success');
 
                 return response()->json([
-                    'status' => 'success',
-                    'code'   => 200,
+                    'status'  => 'success',
+                    'code'    => 200,
                     'message' => $message
                 ]);
             }
@@ -156,10 +156,10 @@ class TaxRateController extends Controller
                 : __('admin.common.default_create_error');
 
             return response()->json([
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $message,
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -176,15 +176,15 @@ class TaxRateController extends Controller
                 });
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -208,7 +208,7 @@ class TaxRateController extends Controller
         return response()->json([
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ], 200);
     }
 
@@ -219,14 +219,14 @@ class TaxRateController extends Controller
             $this->taxRateSettingRepository->deleteTaxGroup($id);
 
             return response()->json([
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.tax_group_delete_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error')
             ], 500);
         }
@@ -238,15 +238,15 @@ class TaxRateController extends Controller
             $data = $this->taxRateSettingRepository->getActiveTaxRates();
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

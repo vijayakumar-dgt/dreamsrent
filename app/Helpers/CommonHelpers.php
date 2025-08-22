@@ -3,13 +3,17 @@
 use App\Models\Notification;
 use App\Models\User;
 use App\Models\UserDetail;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Modules\CarInfo\Models\Category;
 use Modules\Communication\Http\Controllers\EmailController;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\DateFormat;
@@ -19,12 +23,7 @@ use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\NotificationType;
 use Modules\GeneralSetting\Models\TimeFormat;
 use Modules\GeneralSetting\Models\TranslationLanguage;
-use Modules\RolesPermission\Models\Module as ModuleModel;
 use Modules\RolesPermission\Models\Permission;
-use Illuminate\Support\Collection;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Cache;
-use Modules\CarInfo\Models\Category;
 
 if (!function_exists('clearCache')) {
     function clearCache(): bool
@@ -103,7 +102,6 @@ if (!function_exists('uploadedAsset')) {
     /**
      * @param string $filePath
      * @param string $default
-     * @return string
      */
     function uploadedAsset(?string $filePath, ?string $default = ''): string
     {
@@ -114,12 +112,12 @@ if (!function_exists('uploadedAsset')) {
 
         // Default response structure
         $defaultImages = [
-            'profile' => $baseUrl . '/backend/assets/img/default-profile.png',
-            'default2' => $baseUrl . '/backend/assets/img/default-placeholder-image.png',
-            'default' => $baseUrl . '/backend/assets/img/default-image-02.jpg',
-            'default_logo' => $baseUrl . '/backend/assets/img/logo.svg',
+            'profile'            => $baseUrl . '/backend/assets/img/default-profile.png',
+            'default2'           => $baseUrl . '/backend/assets/img/default-placeholder-image.png',
+            'default'            => $baseUrl . '/backend/assets/img/default-image-02.jpg',
+            'default_logo'       => $baseUrl . '/backend/assets/img/logo.svg',
             'default_small_logo' => $baseUrl . '/frontend/assets/img/logo-small.png',
-            'default_favicon' => $baseUrl . '/backend/assets/img/favicon.png',
+            'default_favicon'    => $baseUrl . '/backend/assets/img/favicon.png',
         ];
 
         // If file does not exist, return default image
@@ -155,12 +153,12 @@ if (!function_exists('uploadedAssetDetails')) {
 
         // Default response structure
         $defaultImages = [
-            'profile' => $baseUrl . '/backend/assets/img/default-profile.png',
-            'default2' => $baseUrl . '/backend/assets/img/default-placeholder-image.png',
-            'default' => $baseUrl . '/backend/assets/img/default-image-02.jpg',
-            'default_logo' => $baseUrl . '/backend/assets/img/logo.svg',
+            'profile'            => $baseUrl . '/backend/assets/img/default-profile.png',
+            'default2'           => $baseUrl . '/backend/assets/img/default-placeholder-image.png',
+            'default'            => $baseUrl . '/backend/assets/img/default-image-02.jpg',
+            'default_logo'       => $baseUrl . '/backend/assets/img/logo.svg',
             'default_small_logo' => $baseUrl . '/frontend/assets/img/logo-small.png',
-            'default_favicon' => $baseUrl . '/backend/assets/img/favicon.png',
+            'default_favicon'    => $baseUrl . '/backend/assets/img/favicon.png',
         ];
 
         // If file does not exist, return default image
@@ -326,8 +324,6 @@ if (!function_exists('getUserPermissions')) {
 /**
  * @param Collection<int, \Modules\RolesPermission\Models\Permission> $permissions
  * @param string|string[] $moduleSlug
- * @param string $action
- * @return bool
  */
 function hasPermission(Collection $permissions, string|array $moduleSlug, string $action): bool
 {
@@ -371,18 +367,12 @@ function rentalNotificationEnabled(): int
 function userNotificationsEnabled(): bool
 {
     $user = Auth::guard('web')->user();
-    if ($user && $user->booking_confirmation == 1 && $user->email_notifications == 1) {
-        return true;
-    }
-    return false;
+    return $user && $user->booking_confirmation == 1 && $user->email_notifications == 1;
 }
 /**
  * Send a notification to the given email based on the provided slug and data.
  *
- * @param string $email
- * @param string $slug
  * @param array<string, mixed> $notifyData
- * @return void
  */
 function sendNotification(string $email, string $slug, array $notifyData = []): void
 {
@@ -412,7 +402,7 @@ function sendNotification(string $email, string $slug, array $notifyData = []): 
         return $text;
     };
 
-    if (!$email) {
+    if ($email === '' || $email === '0') {
         return;
     }
     $parsedTemplate = [
@@ -428,7 +418,7 @@ function sendNotification(string $email, string $slug, array $notifyData = []): 
         'content'  => $parsedTemplate['content'],
     ];
 
-    $emailPayload    = new Request($payload);
+    $emailPayload = new Request($payload);
     $emailController = new EmailController();
     $emailController->sendEmail($emailPayload);
 
@@ -459,8 +449,6 @@ function getLanguageName(?string $langCode = 'en'): string
 
 /**
  * Get the profile image URL of the current user.
- *
- * @return string|null
  */
 function getProfileImage(): ?string
 {
@@ -468,14 +456,10 @@ function getProfileImage(): ?string
     $user = current_user();
 
     if ($user && $user->userDetail) {
-        $asset = uploadedAsset($user->userDetail->profile_image ?? '', 'profile');
-        return $asset;
+        return uploadedAsset($user->userDetail->profile_image ?? '', 'profile');
     } else {
-        $defaultImage = uploadedAsset('', 'profile');
-        return $defaultImage;
+        return uploadedAsset('', 'profile');
     }
-
-    return null;
 }
 
 function isAccessMenu(?string $menu): int
@@ -524,9 +508,6 @@ function getCurrentUserFullname($userId = null)
 
 /**
  * Send a notification to the given email based on the provided slug and data.
- * @param string $slug
- * @param string|array $email
- * @return void
  */
 function sendNewsletterEmail(string|array $email, string $slug, array $notifyData): void
 {
@@ -562,7 +543,7 @@ function sendNewsletterEmail(string|array $email, string $slug, array $notifyDat
     $subject = $template->subject ?? 'Reg - Newsletter';
     $content = $template->description ?? 'You have successfully subscribed to our newsletter.';
 
-    if ($slug == 'test_mail') {
+    if ($slug === 'test_mail') {
         $subject = $template->subject ?? 'Reg - Admin Test Mail';
         $content = $template->description ?? "Hello $notifyData[user_name],<br><br>
         This is a test email to confirm that the email configuration for admin notifications is working correctly.<br><br>
@@ -573,16 +554,16 @@ function sendNewsletterEmail(string|array $email, string $slug, array $notifyDat
 
     $parsedTemplate = [
         'subject'     => $replaced($subject),
-        'content' => $replaced($content),
+        'content'     => $replaced($content),
     ];
 
     $payload = [
         'to_email' => $email,
-        'subject' => $parsedTemplate['subject'],
-        'content' => $parsedTemplate['content'],
+        'subject'  => $parsedTemplate['subject'],
+        'content'  => $parsedTemplate['content'],
     ];
 
-    $emailPayload   = new Request($payload);
+    $emailPayload = new Request($payload);
     $emailController = new EmailController();
     $emailController->sendEmail($emailPayload);
 }
@@ -625,7 +606,7 @@ function getCategoryId()
        4 => 'boat',
     ];
     $languageId = getLanguageId(app()->getLocale());
-    $category   = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
+    $category = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
     return $category->id ?? 1;
 }
 
@@ -638,6 +619,6 @@ function getCustomThemeCategoryId($theme_id)
         4 => 'boat',
     ];
     $languageId = getLanguageId(app()->getLocale());
-    $category   = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
+    $category = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
     return $category->id ?? 1;
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
 
 class ValidateEmailRequest extends CustomFailedValidation
 {
@@ -31,7 +30,7 @@ class ValidateEmailRequest extends CustomFailedValidation
     {
         return [
             'email.required' => __('web.auth.email_required'),
-            'email.email' => __('web.auth.valid_email'),
+            'email.email'    => __('web.auth.valid_email'),
         ];
     }
 }

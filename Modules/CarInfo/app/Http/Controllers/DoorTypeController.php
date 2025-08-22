@@ -5,11 +5,7 @@ namespace Modules\CarInfo\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Modules\CarInfo\Models\DoorType;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 use Modules\CarInfo\Http\Requests\DoorTypeRequest;
 use Modules\CarInfo\Repositories\Contracts\DoorTypeRepositoryInterface;
 

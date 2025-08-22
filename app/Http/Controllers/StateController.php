@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddStateRequest;
-use App\Http\Requests\EditStateRequest;
 use App\Repositories\Contracts\StateInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class StateController extends Controller
 {
@@ -21,15 +20,16 @@ class StateController extends Controller
     public function index(): View
     {
         $country_ids = $this->stateRepository->getCountries();
-        return view('admin.state.index', compact("country_ids"));
+        return view('admin.state.index', ['country_ids' => $country_ids]);
     }
+
     public function store(AddStateRequest $request): JsonResponse
     {
         try {
             $data = [
-                'name' => $request->name,
+                'name'       => $request->name,
                 'country_id' => $request->country_id,
-                'status' => (int) ($request->status ?? 1),
+                'status'     => (int) ($request->status ?? 1),
             ];
 
             if ($request->filled('id')) {
@@ -41,21 +41,20 @@ class StateController extends Controller
             }
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $message,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $request->filled('id')
                     ? __('admin.common.default_update_error')
                     : __('admin.common.default_create_error'),
             ], 500);
         }
     }
-
 
     public function list(Request $request): JsonResponse
     {
@@ -67,15 +66,15 @@ class StateController extends Controller
             );
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -86,8 +85,8 @@ class StateController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'code' => 200,
-            'data' => $state
+            'code'   => 200,
+            'data'   => $state
         ]);
     }
 
@@ -97,14 +96,14 @@ class StateController extends Controller
             $this->stateRepository->delete($request->id);
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.cms.state_delete_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ], 500);
         }

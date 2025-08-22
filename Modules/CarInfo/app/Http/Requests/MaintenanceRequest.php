@@ -3,8 +3,8 @@
 namespace Modules\CarInfo\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Validation\Validator;
 use Carbon\Carbon;
+use Illuminate\Validation\Validator;
 use Modules\CarInfo\Models\Maintenance;
 
 class MaintenanceRequest extends CustomFailedValidation
@@ -33,10 +33,10 @@ class MaintenanceRequest extends CustomFailedValidation
     {
         return [
             'vehicle_id' => ['required'],
-            'odometer' => ['required'],
+            'odometer'   => ['required'],
             'start_date' => ['required'],
-            'end_date' => ['required'],
-            'details' => [
+            'end_date'   => ['required'],
+            'details'    => [
                 'required',
                 'not_regex:/<\/?script\b[^>]*>/i'
             ],
@@ -48,12 +48,12 @@ class MaintenanceRequest extends CustomFailedValidation
     {
         return [
             'vehicle_id.required' => __('admin.rentals.vehicle_required'),
-            'odometer.required' => __('admin.rentals.odometer_required'),
+            'odometer.required'   => __('admin.rentals.odometer_required'),
             'start_date.required' => __('admin.rentals.start_date_required'),
-            'end_date.required' => __('admin.rentals.end_date_required'),
-            'details.required' => __('admin.rentals.details_required'),
-            'details.not_regex' => __('admin.common.script_tag_not_allowed'),
-            'status.required' => __('admin.rentals.status_required'),
+            'end_date.required'   => __('admin.rentals.end_date_required'),
+            'details.required'    => __('admin.rentals.details_required'),
+            'details.not_regex'   => __('admin.common.script_tag_not_allowed'),
+            'status.required'     => __('admin.rentals.status_required'),
         ];
     }
 

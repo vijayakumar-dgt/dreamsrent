@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Modules\RolesPermission\Repositories\Contracts\RolesPermissionRepositoryInterface;
 use Modules\RolesPermission\Http\Requests\RoleRequest;
 use Modules\RolesPermission\Models\Role;
+use Modules\RolesPermission\Repositories\Contracts\RolesPermissionRepositoryInterface;
 
 class RolesPermissionController extends Controller
 {

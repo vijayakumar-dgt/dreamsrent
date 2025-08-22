@@ -1,3 +1,5 @@
+/* global $, document, loadTranslationFile, showToast, _l, setTimeout, DOMPurify, moment, FormData, window, Fancybox*/
+
 (async () => {
     "use strict";
     await loadTranslationFile("web", "user,common,home");
@@ -9,138 +11,6 @@
         fetchVehicleDetails();
         fetchRecommendedVehicles();
         listReviews();
-
-        $("#reviewForm").validate({
-            rules: {
-                comments: {
-                    required: true,
-                    minlength: 3,
-                },
-            },
-            messages: {
-                comments: {
-                    required: _l("web.home.comments_required"),
-                    minlength: _l("web.home.comments_minlength"),
-                },
-            },
-            errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                } else {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
-            },
-            highlight: function (element) {
-                if ($(element).hasClass("select2-hidden-accessible")) {
-                    $(element)
-                        .next(".select2-container")
-                        .addClass("is-invalid")
-                        .removeClass("is-valid");
-                }
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight: function (element) {
-                if ($(element).hasClass("select2-hidden-accessible")) {
-                    $(element)
-                        .next(".select2-container")
-                        .removeClass("is-invalid")
-                        .addClass("is-valid");
-                }
-                $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
-                $("#" + errorId).text("");
-            },
-            onkeyup: function (element) {
-                $(element).valid();
-            },
-            onchange: function (element) {
-                $(element).valid();
-            },
-            submitHandler: function (form) {
-                let formData = new FormData();
-                formData.append("comments", $("#comments").val());
-                formData.append(
-                    "service_ratings",
-                    $('#service_ratings input[type="checkbox"]:checked').length
-                );
-                formData.append(
-                    "location_ratings",
-                    $('#location_ratings input[type="checkbox"]:checked').length
-                );
-                formData.append(
-                    "facility_ratings",
-                    $('#facility_ratings input[type="checkbox"]:checked').length
-                );
-                formData.append(
-                    "value_for_money_ratings",
-                    $('#value_for_money_ratings input[type="checkbox"]:checked')
-                        .length
-                );
-                formData.append(
-                    "cleanliness_ratings",
-                    $('#cleanliness_ratings input[type="checkbox"]:checked')
-                        .length
-                );
-                formData.append("vehicle_id", $("#vehicle_id").val());
-
-                $.ajax({
-                    type: "POST",
-                    url: "/user/add-review",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        Accept: "application/json",
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                            "content"
-                        ),
-                    },
-                    beforeSend: function () {
-                        $(".submit-review").attr("disabled", true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                                "web.home.submitting"
-                            )}..
-                        `);
-                    },
-                    success: function (resp) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        $(".submit-review")
-                            .removeAttr("disabled")
-                            .html(_l("web.home.submit_review"));
-                        $("#reviewForm")[0].reset();
-                        $(
-                            ".service_ratings, .location_ratings, .facility_ratings, .value_for_money_ratings, .cleanliness_ratings"
-                        ).prop("checked", false);
-
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            listReviews();
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        $(".submit-review")
-                            .removeAttr("disabled")
-                            .html(_l("web.home.submit_review"));
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
-                });
-            },
-        });
 
         $("#enquiryForm").validate({
             rules: {
@@ -487,7 +357,7 @@
                 },
                 headers: {
                     Accept: "application/json",
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr(
                         "content"
                     ),
                 },
@@ -531,37 +401,6 @@
         }
     });
 
-    $(".service_ratings").on("click", function () {
-        let selectedValue = $(this).val();
-        $(".service_ratings").each(function () {
-            $(this).prop("checked", $(this).val() >= selectedValue);
-        });
-    });
-    $(".location_ratings").on("click", function () {
-        let selectedValue = $(this).val();
-        $(".location_ratings").each(function () {
-            $(this).prop("checked", $(this).val() >= selectedValue);
-        });
-    });
-    $(".facility_ratings").on("click", function () {
-        let selectedValue = $(this).val();
-        $(".facility_ratings").each(function () {
-            $(this).prop("checked", $(this).val() >= selectedValue);
-        });
-    });
-    $(".value_for_money_ratings").on("click", function () {
-        let selectedValue = $(this).val();
-        $(".value_for_money_ratings").each(function () {
-            $(this).prop("checked", $(this).val() >= selectedValue);
-        });
-    });
-    $(".cleanliness_ratings").on("click", function () {
-        let selectedValue = $(this).val();
-        $(".cleanliness_ratings").each(function () {
-            $(this).prop("checked", $(this).val() >= selectedValue);
-        });
-    });
-
     function fetchRecommendedVehicles() {
         $.ajax({
             url: "/vehicle-intrset-list",
@@ -571,7 +410,7 @@
             },
             headers: {
                 Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr("content"),
             },
             success: function (response) {
                 if (response.code === 200) {
@@ -627,8 +466,7 @@
                 }
 
                 if (returnDate) {
-                    const returnOnly = returnDate.clone().startOf("day");
-                    // $(".bookingpickupdate").data("DateTimePicker").maxDate(returnOnly);
+                    returnDate.clone().startOf("day");
                 } else {
                     $(".bookingpickupdate")
                         .data("DateTimePicker")
@@ -768,9 +606,7 @@
                         )
                     ) {
                         $(this).data("DateTimePicker").date(null);
-                        alert(
-                            "Return time must be at least 1 hour after pickup time."
-                        );
+                        showToast("error", "Return time must be at least 1 hour after pickup time.");
                     }
                 }
             });
@@ -785,7 +621,7 @@
             },
             headers: {
                 Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr("content"),
             },
             success: function (response) {
                 if (response.code === 200) {
@@ -870,15 +706,15 @@
                 let starsHtml = "";
                 for (let i = 1; i <= 5; i++) {
                     if (i <= Math.floor(review.average_ratings)) {
-                        starsHtml += '<i class="fas fa-star filled"></i>';
+                        starsHtml += "<i class=\"fas fa-star filled\"></i>";
                     } else if (
                         i === Math.ceil(review.average_ratings) &&
                         review.average_ratings % 1 !== 0
                     ) {
                         starsHtml +=
-                            '<i class="fas fa-star-half-alt filled"></i>';
+                            "<i class=\"fas fa-star-half-alt filled\"></i>";
                     } else {
-                        starsHtml += '<i class="far fa-star"></i>';
+                        starsHtml += "<i class=\"far fa-star\"></i>";
                     }
                 }
                 $("#review_list_container").append(`
@@ -1028,12 +864,12 @@
                     minlength: _l("web.home.reply_comments_minlength"),
                 },
             },
-            errorPlacement: function (error, element) {
+          errorPlacement: function (error, element) {
+                const errorId = element.attr("id") + "_error";
+
                 if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 } else {
-                    var errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 }
             },
@@ -1076,7 +912,7 @@
                     contentType: false,
                     headers: {
                         Accept: "application/json",
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr(
                             "content"
                         ),
                     },
@@ -1134,7 +970,7 @@
             url: "/vehicle-list-detail-api",
             data: {
                 vehicle_slug: slug,
-                _token: $('meta[name="csrf-token"]').attr("content"),
+                _token: $("meta[name=\"csrf-token\"]").attr("content"),
             },
             beforeSend: function () {
                 $(".skeleton-container").removeClass("d-none");
@@ -1167,6 +1003,7 @@
             vehicle.mileage ? Math.ceil(vehicle.mileage) : ""
         );
         $(".vehicle_doors").text(vehicle.num_doors ?? "");
+        $(".vehicle_hatch").text(vehicle.hatch ?? "");
         let vehicleImages = createVehicleCard(vehicle);
         let cleanImage = DOMPurify.sanitize(vehicleImages);
         $(".detail-product").empty().append(cleanImage);
@@ -1195,15 +1032,15 @@
         let starsHtml = "";
 
         for (let i = 0; i < fullStars; i++) {
-            starsHtml += `<i class="fas fa-star filled"></i>`;
+            starsHtml += "<i class=\"fas fa-star filled\"></i>";
         }
 
         if (halfStar) {
-            starsHtml += `<i class="fas fa-star-half-alt filled"></i>`;
+            starsHtml += "<i class=\"fas fa-star-half-alt filled\"></i>";
         }
 
         for (let i = 0; i < emptyStars; i++) {
-            starsHtml += `<i class="fas fa-star"></i>`;
+            starsHtml += "<i class=\"fas fa-star\"></i>";
         }
 
         starsHtml += `<span class="d-inline-block average-list-rating">(${rating.toFixed(
@@ -1394,7 +1231,7 @@
                 )}</div>`;
             }
 
-            html += `</div>`;
+            html += "</div>";
             descriptionSection.html(html).show();
 
             // Click handler
@@ -1434,7 +1271,7 @@
             const featuresPerColumn = Math.ceil(
                 vehicle.features.length / columnCount
             );
-            let html = '<div class="row">';
+            let html = "<div class=\"row\">";
 
             for (let i = 0; i < columnCount; i++) {
                 const columnFeatures = vehicle.features.slice(
@@ -1443,7 +1280,7 @@
                 );
 
                 if (columnFeatures.length > 0) {
-                    html += '<div class="col-md-4"><ul>';
+                    html += "<div class=\"col-md-4\"><ul>";
                     columnFeatures.forEach((feature) => {
                         html += `<li><span><i class="bx bx-check-double"></i></span>${feature}</li>`;
                     });
@@ -1725,8 +1562,8 @@
             smartSpeed: 2000,
             autoplay: false,
             navText: [
-                '<i class="fa-solid fa-chevron-left"></i>',
-                '<i class="fa-solid fa-chevron-right"></i>',
+                "<i class=\"fa-solid fa-chevron-left\"></i>",
+                "<i class=\"fa-solid fa-chevron-right\"></i>",
             ],
             responsive: {
                 0: {
@@ -1753,7 +1590,7 @@
             url: "/user/add-to-wishlist",
             data: {
                 id: id,
-                _token: $('meta[name="csrf-token"]').attr("content"),
+                _token: $("meta[name=\"csrf-token\"]").attr("content"),
             },
             dataType: "json",
             success: function (response) {
@@ -1768,7 +1605,7 @@
                     showToast("error", response.message);
                 }
             },
-            error: function (error) {},
+            error: function () {},
         });
     });
 

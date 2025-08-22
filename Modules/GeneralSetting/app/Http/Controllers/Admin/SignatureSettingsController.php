@@ -3,12 +3,12 @@
 namespace Modules\GeneralSetting\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\View\View;
 use Modules\GeneralSetting\Http\Requests\SignatureSettingRequest;
 use Modules\GeneralSetting\Repositories\Contracts\SignatureSettingInterface;
-use Illuminate\Support\Facades\Artisan;
 
 class SignatureSettingsController extends Controller
 {
@@ -132,9 +132,9 @@ class SignatureSettingsController extends Controller
     protected function jsonResponse(int $code, string $message, $data = null, array $additional = [])
     {
         $response = [
-            'code' => $code,
+            'code'    => $code,
             'message' => $message,
-            'data' => $data
+            'data'    => $data
         ];
 
         return response()->json(array_merge($response, $additional), $code);

@@ -1139,16 +1139,16 @@ Version      : 1.0
 					items:1
 				},				
 				550:{
-					items:3
+					items:2
 				},
 				768:{
-					items:4
+					items:3
 				},
 				1000:{
-					items:5
+					items:4
 				},
 				1200:{
-					items:7
+					items:6
 				}
 			}
 		})
@@ -1579,4 +1579,11 @@ Version      : 1.0
 			});
 		});
 	}
+
+	(function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "rydu0zsjqr");
+	
 })(jQuery);

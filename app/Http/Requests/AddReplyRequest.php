@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
 
 class AddReplyRequest extends CustomFailedValidation
 {
@@ -31,7 +30,7 @@ class AddReplyRequest extends CustomFailedValidation
     {
         return [
             'reply_comments.required' => __('web.home.reply_comments_required'),
-            'reply_comments.min' => __('web.home.reply_comments_minlength'),
+            'reply_comments.min'      => __('web.home.reply_comments_minlength'),
         ];
     }
 }

@@ -1,3 +1,5 @@
+/* global $, document, showToast, setTimeout, moment, FormData, window, bootstrap, flatpickr, DOMParser, location*/
+
 (function () {
     "use strict";
     window.showToast = function(toastType, message) {
@@ -26,7 +28,7 @@
             });
             toast.show();
         }else{
-            console.log('toast not found');
+            showToast("error", "Something went wrong. Please try again.");
         }
     }
 
@@ -216,7 +218,7 @@
             ) {
                 if (!returnTime.isAfter(moment(pickupTime).add(59, "minutes"))) {
                     $(this).data("DateTimePicker").date(null);
-                    alert("Return time must be at least 1 hour after pickup time.");
+                    showToast("error", "Return time must be at least 1 hour after pickup time.");
                 }
             }
         });
@@ -355,7 +357,7 @@
             ) {
                 if (!returnTime.isAfter(moment(pickupTime).add(59, "minutes"))) {
                     $(this).data("DateTimePicker").date(null);
-                    alert("Return time must be at least 1 hour after pickup time.");
+                    showToast("error", "Return time must be at least 1 hour after pickup time.");
                 }
             }
         });
@@ -436,13 +438,8 @@
             }
         },
         errorPlacement: function (error, element) {
-            if (element.hasClass("select2-hidden-accessible")) {
-                var errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            } else {
-                var errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            }
+            const errorId = element.attr("id") + "_error";
+            $("#" + errorId).text(error.text());
         },
         highlight: function (element) {
             if ($(element).hasClass("select2-hidden-accessible")) {
@@ -517,7 +514,6 @@
     });
 
     $(document).on("click",".change-user-language", function () {
-        console.log($(this).data("language_code"));
         let languageCode = $(this).data("language_code");
         let language_id = $(this).data("id");
         $.ajax({
@@ -584,8 +580,8 @@
                 showToast(response.status, response.message);
                 }
             },
-            error: function (error) {
-                console.error(error);
+            error: function () {
+                showToast("error", "Something went wrong. Please try again.");
             }
         });
     });

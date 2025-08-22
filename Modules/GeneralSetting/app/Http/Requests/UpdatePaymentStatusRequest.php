@@ -9,8 +9,8 @@ class UpdatePaymentStatusRequest extends CustomFailedValidation
     public function rules(): array
     {
         return [
-            'key' => 'required|string',
-            'value' => 'required|in:0,1',
+            'key'      => 'required|string',
+            'value'    => 'required|in:0,1',
             'group_id' => 'required|integer',
         ];
     }

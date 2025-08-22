@@ -1,7 +1,7 @@
 <!-- Why Choose Us -->
     <section class="section why-choose popular-explore">
         <div class="choose-left">
-            <img src="{{ asset('frontend/assets/img/bg/choose-left.png') }}" class="img-fluid" alt="{{ __('web.home.why_choose_us') }}">
+            <img src="{{ asset('frontend/assets/img/bg/choose-left.png') }}" class="img-fluid" alt="" role="presentation">
         </div>
         <div class="container">
             <!-- Heading title-->
@@ -22,7 +22,7 @@
                         <div class="card flex-fill">
                             <div class="card-body">
                                 <div class="choose-img choose-black">
-                                    <img src="{{ $item['why_icon'] }}" alt="Icon">
+                                    <img src="{{ $item['why_icon'] }}" alt="" role="presentation">
                                 </div>
                                 <div class="choose-content">
                                     <h4>{{ $item['why_label'] }}</h4>

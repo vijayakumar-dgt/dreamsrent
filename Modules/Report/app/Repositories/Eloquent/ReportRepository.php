@@ -2,11 +2,11 @@
 
 namespace Modules\Report\Repositories\Eloquent;
 
-use Modules\Report\Repositories\Contracts\ReportRepositoryInterface;
-use Modules\Booking\Models\Booking;
-use Modules\CarInfo\Models\VehicleInfo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Modules\Booking\Models\Booking;
+use Modules\CarInfo\Models\VehicleInfo;
+use Modules\Report\Repositories\Contracts\ReportRepositoryInterface;
 
 class ReportRepository implements ReportRepositoryInterface
 {
@@ -25,7 +25,7 @@ class ReportRepository implements ReportRepositoryInterface
         })->sum('final_price');
         $topEarningCar = $bookings
         ->groupBy('vehicle_id')
-        ->map(fn($group) => $group->sum('final_price'))
+        ->map(fn ($group) => $group->sum('final_price'))
         ->sortDesc()
         ->keys()
         ->first();
@@ -50,6 +50,21 @@ class ReportRepository implements ReportRepositoryInterface
             $sign = $thisWeekIncome > 0 ? '+' : '0'; // If last week was 0, show +100% increase
         }
         $symbol = getDefaultCurrencySymbol();
+
+        $bookings->groupBy(function ($booking) {
+            return Carbon::parse($booking->booking_date)->format('Y-m-d'); // Group by date
+        })
+        ->map(function ($dayBookings) {
+            return [
+                'date'   => $dayBookings->first()?->booking_date,
+                'income' => $dayBookings->sum(function ($booking) {
+                    return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ? $booking->final_price : 0;
+                }),
+                'expense' => 0 // Placeholder, modify if you have expenses
+            ];
+        })
+
+        ->values(); // Convert collection to array
 
         $data = ['totalIncome' => $totalIncome, 'topEarningCar' => $topEarningCar, 'vehicle' => $vehicle, 'percentageChange' => $percentageChange, 'sign' => $sign, 'symbol' => $symbol, 'bookings' => $bookings, 'vehicleInfo' => $vehicleInfo, 'bookingsCount' => $bookingsCount];
         return $data;
@@ -103,7 +118,7 @@ class ReportRepository implements ReportRepositoryInterface
         // Earnings per vehicle
         $earningsByCar = $bookings
             ->groupBy('vehicle_id')
-            ->map(fn($group) => $group->sum('final_price'))
+            ->map(fn ($group) => $group->sum('final_price'))
             ->sortDesc();
 
         $topEarningCar = $earningsByCar->keys()->first();
@@ -126,11 +141,11 @@ class ReportRepository implements ReportRepositoryInterface
         // Per-vehicle earnings
         $thisMonthEarnings = $bookings->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('vehicle_id')
-            ->map(fn($group) => $group->sum('final_price'))
+            ->map(fn ($group) => $group->sum('final_price'))
             ->sortDesc();
         $lastMonthEarnings = $bookings->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])
             ->groupBy('vehicle_id')
-            ->map(fn($group) => $group->sum('final_price'));
+            ->map(fn ($group) => $group->sum('final_price'));
 
         $topEarningCarThisMonth = $thisMonthEarnings->keys()->first();
         $topEarningCarsTotal = $thisMonthEarnings->first();

@@ -3,11 +3,11 @@
 namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Modules\CarInfo\Models\Tag;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Modules\CarInfo\Http\Requests\TagRequest;
+use Modules\CarInfo\Models\Tag;
 use Modules\CarInfo\Repositories\Contracts\TagRepositoryInterface;
 
 class TagController extends Controller
@@ -28,7 +28,6 @@ class TagController extends Controller
     {
         return view('carinfo::tag.index');
     }
-
 
     /**
      * Save or update a tag in the database.

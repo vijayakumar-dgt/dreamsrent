@@ -28,8 +28,8 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
         $authUser = current_user();
         if (!$authUser) {
             return [
-                'status' => 'error',
-                'code'   => 401,
+                'status'  => 'error',
+                'code'    => 401,
                 'message' => 'Unauthorized: User not authenticated.'
             ];
         }
@@ -39,8 +39,8 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
             $languageId = $request->input('language_id') ?? $authUser->language_id;
 
             $data = [
-                'model_name' => $request->input('model_name'),
-                'brand_id'   => $request->input('brand_id'),
+                'model_name'  => $request->input('model_name'),
+                'brand_id'    => $request->input('brand_id'),
                 'language_id' => $languageId,
                 'status'      => $request->input('status', 1),
             ];
@@ -48,16 +48,16 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
             CarModel::updateOrCreate(['id' => $id], $data);
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => empty($id)
                     ? __('admin.rentals.vehicle_model_create_success')
                     : __('admin.rentals.vehicle_model_update_success'),
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => empty($id)
                     ? __('admin.common.default_create_error')
                     : __('admin.common.default_update_error'),
@@ -71,8 +71,8 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
         $authUser = current_user();
         if (!$authUser) {
             return [
-                'status' => 'error',
-                'code'   => 401,
+                'status'  => 'error',
+                'code'    => 401,
                 'message' => 'Unauthorized: User not authenticated.'
             ];
         }
@@ -131,15 +131,15 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
                 ]);
 
             return [
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
+                'draw'            => intval($request->draw),
+                'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $filterTotalRecords,
-                'data' => $data,
-                'code' => 200,
+                'data'            => $data,
+                'code'            => 200,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
         }
@@ -151,8 +151,8 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
 
         if (!$data) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found')
             ];
         }
@@ -160,7 +160,7 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
         return [
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data
         ];
     }
 
@@ -172,20 +172,20 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
             $carModel->delete();
 
             return [
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.rentals.vehicle_model_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code'   => 404,
+                'status'  => 'error',
+                'code'    => 404,
                 'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
         }
@@ -198,7 +198,7 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
             $search = $request->search ?? null;
 
             $data = CarModel::when(function ($query) use ($search) {
-                    return $query->where('model_name', 'LIKE', "%{$search}%");
+                return $query->where('model_name', 'LIKE', "%{$search}%");
             })
                 ->orderBy('id', $orderBy)
                 ->where('status', 1)
@@ -208,15 +208,15 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
                 ]);
 
             return [
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $data,
+                'data'    => $data,
             ];
         } catch (\Exception $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ];
         }
     }

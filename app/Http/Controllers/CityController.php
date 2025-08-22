@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddCityRequest;
-use App\Http\Requests\EditCityRequest;
 use App\Repositories\Contracts\CityInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CityController extends Controller
 {
@@ -21,16 +20,16 @@ class CityController extends Controller
     public function index(): View
     {
         $state_ids = $this->cityRepository->getStates();
-        return view('admin.city.index', compact("state_ids"));
+        return view('admin.city.index', ['state_ids' => $state_ids]);
     }
 
     public function store(AddCityRequest $request): JsonResponse
     {
         try {
             $data = [
-                'name' => $request->name,
+                'name'     => $request->name,
                 'state_id' => $request->state_id,
-                'status' => (int) ($request->status ?? 1),
+                'status'   => (int) ($request->status ?? 1),
             ];
 
             if ($request->filled('id')) {
@@ -42,14 +41,14 @@ class CityController extends Controller
             }
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $message,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $request->filled('id')
                     ? __('admin.common.default_update_error')
                     : __('admin.common.default_create_error'),
@@ -62,27 +61,27 @@ class CityController extends Controller
     {
         try {
             $params = [
-                'start' => $request->input('start'),
-                'length' => $request->input('length'),
-                'search' => $request->input('search.value'),
+                'start'        => $request->input('start'),
+                'length'       => $request->input('length'),
+                'search'       => $request->input('search.value'),
                 'order_column' => $request->input("columns.{$request->input('order.0.column')}.data") ?? 'name',
-                'order_dir' => $request->input('order.0.dir') ?? 'asc',
-                'status' => $request->input('status'),
+                'order_dir'    => $request->input('order.0.dir') ?? 'asc',
+                'status'       => $request->input('status'),
             ];
 
             $result = $this->cityRepository->datatable($params);
 
             return response()->json([
-                'draw' => intval($request->input('draw')),
-                'recordsTotal' => $result['total'],
+                'draw'            => intval($request->input('draw')),
+                'recordsTotal'    => $result['total'],
                 'recordsFiltered' => $result['filtered'],
-                'data' => $result['data'],
+                'data'            => $result['data'],
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -93,8 +92,8 @@ class CityController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'code' => 200,
-            'data' => $city
+            'code'   => 200,
+            'data'   => $city
         ]);
     }
 
@@ -104,14 +103,14 @@ class CityController extends Controller
             $this->cityRepository->delete($request->id);
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.cms.city_delete_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error')
             ], 500);
         }

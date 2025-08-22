@@ -4,7 +4,6 @@ namespace Modules\GeneralSetting\Http\Requests;
 
 use App\Library\CustomFailedValidation;
 use Illuminate\Validation\Rule;
-use Modules\GeneralSetting\Models\EmailTemplate;
 
 class EmailTemplateRequest extends CustomFailedValidation
 {
@@ -16,16 +15,16 @@ class EmailTemplateRequest extends CustomFailedValidation
     public function rules()
     {
         $rules = [
-            'title' => 'required|string|max:255',
+            'title'             => 'required|string|max:255',
             'notification_type' => [
                 'required',
                 $this->uniqueNotificationTypeRule()
             ],
-            'subject' => 'required|string|max:255',
-            'sms_content' => 'required|string|max:500',
+            'subject'              => 'required|string|max:255',
+            'sms_content'          => 'required|string|max:500',
             'notification_content' => 'nullable|string',
-            'description' => 'required|string',
-            'status' => 'sometimes'
+            'description'          => 'required|string',
+            'status'               => 'sometimes'
         ];
 
         return $rules;
@@ -41,13 +40,13 @@ class EmailTemplateRequest extends CustomFailedValidation
     public function messages()
     {
         return [
-            'title.required' => __('The title field is required.'),
+            'title.required'             => __('The title field is required.'),
             'notification_type.required' => __('The notification type is required.'),
-            'notification_type.unique' => __('An email template already exists for this notification type.'),
-            'subject.required' => __('The subject field is required.'),
-            'sms_content.required' => __('The SMS content is required.'),
-            'description.required' => __('The description cannot be empty.'),
-            '*.max' => __('The :attribute may not be greater than :max characters.'),
+            'notification_type.unique'   => __('An email template already exists for this notification type.'),
+            'subject.required'           => __('The subject field is required.'),
+            'sms_content.required'       => __('The SMS content is required.'),
+            'description.required'       => __('The description cannot be empty.'),
+            '*.max'                      => __('The :attribute may not be greater than :max characters.'),
         ];
     }
 

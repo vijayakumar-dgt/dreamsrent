@@ -3,11 +3,11 @@
 namespace Modules\GeneralSetting\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
+use Modules\GeneralSetting\Http\Requests\CompanySettingRequest;
 use Modules\GeneralSetting\Http\Requests\CookiesSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\ListCompanyRequest;
 use Modules\GeneralSetting\Http\Requests\SettingListRequest;
@@ -17,6 +17,7 @@ use Modules\GeneralSetting\Http\Requests\StoreCookiesSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreInvoiceSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreLogoSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreMaintenanceSettingsRequest;
+use Modules\GeneralSetting\Http\Requests\StoreNotificationSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreOtpSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreRentalSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreSeoSetupRequest;
@@ -27,24 +28,8 @@ use Modules\GeneralSetting\Http\Requests\UpdatePaymentStatusRequest;
 use Modules\GeneralSetting\Http\Requests\UpdatePhoneNumberRequest;
 use Modules\GeneralSetting\Http\Requests\UpdateThemeSettingsRequest;
 use Modules\GeneralSetting\Models\GeneralSetting;
-use Modules\GeneralSetting\Models\UserDevice;
-use Modules\GeneralSetting\Models\IndustryType;
-use Modules\GeneralSetting\Models\TeamSize;
-use App\Models\User;
-use App\Models\UserDetail;
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use Modules\GeneralSetting\Models\Language;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Intervention\Image\Laravel\Facades\Image;
-use Modules\GeneralSetting\Http\Requests\StoreNotificationSettingsRequest;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
-use Modules\GeneralSetting\Http\Requests\CompanySettingRequest;
 
 class GeneralSettingController extends Controller
 {
@@ -54,6 +39,7 @@ class GeneralSettingController extends Controller
     {
         $this->repository = $repository;
     }
+
     public function index(): View
     {
         /** @var view-string $view */
@@ -131,15 +117,15 @@ class GeneralSettingController extends Controller
             $repository->saveRentalSettings($request->validated());
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.general_settings.rental_saved_successfully'),
-                'data' => []
+                'data'    => []
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -159,15 +145,15 @@ class GeneralSettingController extends Controller
             $paths = $this->repository->storeLogoSettings($files);
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.general_settings.logo_update_success'),
-                'data' => $paths,
+                'data'    => $paths,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.general_settings.logo_setting_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -186,17 +172,18 @@ class GeneralSettingController extends Controller
             $repository->storeOtpSettings($request->validated());
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.general_settings.otp_success'),
-                'data' => []
+                'data'    => []
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.general_settings.retrive_error'),
             ], 500);
         }
     }
+
     public function storageStatusUpdate(StorageStatusUpdateRequest $request): JsonResponse
     {
         try {
@@ -229,27 +216,27 @@ class GeneralSettingController extends Controller
     {
         try {
             $settings = [
-                'aws_access_key' => $request->aws_access_key,
-                'aws_secret_key' => $request->aws_secret_key,
-                'aws_region' => $request->aws_region,
+                'aws_access_key'  => $request->aws_access_key,
+                'aws_secret_key'  => $request->aws_secret_key,
+                'aws_region'      => $request->aws_region,
                 'aws_bucket_name' => $request->aws_bucket_name,
-                'aws_base_url' => $request->aws_base_url
+                'aws_base_url'    => $request->aws_base_url
             ];
 
             $success = $this->repository->updateAwsSettings($settings);
 
             if ($success) {
                 return response()->json([
-                    'code' => 200,
+                    'code'    => 200,
                     'message' => __('admin.general_settings.aws_success'),
-                    'data' => []
+                    'data'    => []
                 ]);
             }
 
             throw new \Exception(__('admin.general_settings.update_failed'));
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.general_settings.retrive_error'),
             ], 500);
         }
@@ -269,15 +256,15 @@ class GeneralSettingController extends Controller
             $repository->saveInvoiceSettings($request->validated());
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.general_settings.invoice_setting_success'),
-                'data' => []
+                'data'    => []
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.general_settings.invoice_setting_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -288,16 +275,16 @@ class GeneralSettingController extends Controller
             $this->repository->storeCompanySettings($request->validated());
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.company_setting_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -308,16 +295,16 @@ class GeneralSettingController extends Controller
             $this->repository->saveNotificationSettings($request->validated());
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.notification_update_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.notification_error_update'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -330,16 +317,16 @@ class GeneralSettingController extends Controller
             $this->repository->storeSeoSettings($data, $groupId);
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.seo_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.seo_update_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -350,16 +337,16 @@ class GeneralSettingController extends Controller
             $repository->storeMaintenanceSettings($request->all());
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.maintanance_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.maintanance_update_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -370,16 +357,16 @@ class GeneralSettingController extends Controller
             $repository->storeCookiesSettings($request->validated());
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.cookies_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.sretrive_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -393,17 +380,17 @@ class GeneralSettingController extends Controller
             );
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.cookies_retrive_success'),
-                'data' => $settings
+                'data'    => $settings
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ]);
         }
     }
@@ -415,23 +402,23 @@ class GeneralSettingController extends Controller
 
             if (!$data) {
                 return response()->json([
-                    'status' => 'error',
-                    'code' => 404,
+                    'status'  => 'error',
+                    'code'    => 404,
                     'message' => __('admin.common.no_data_found'),
                 ], 404);
             }
 
             return response()->json([
                 'status' => 'success',
-                'code' => 200,
-                'data' => $data
+                'code'   => 200,
+                'data'   => $data
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -442,17 +429,17 @@ class GeneralSettingController extends Controller
             $settings = $this->repository->getSettingsByGroup($request->validated()['group_id']);
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.setting_retrive_success'),
-                'data' => $settings
+                'data'    => $settings
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -468,8 +455,8 @@ class GeneralSettingController extends Controller
         $result = \Hash::check($password, auth('admin')->user()->password);
 
         return response()->json([
-            'status' => $result ? 'success' : 'error',
-            'code' => $result ? 200 : 422,
+            'status'  => $result ? 'success' : 'error',
+            'code'    => $result ? 200 : 422,
             'message' => __(
                 $result ? 'admin.general_settings.current_password_correct' : 'admin.general_settings.current_password_incorrect'
             ),
@@ -483,25 +470,25 @@ class GeneralSettingController extends Controller
 
         if (!$user->phone_number) {
             return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'error' => "null",
+                'status'  => 'error',
+                'code'    => 422,
+                'error'   => "null",
                 'message' => __('admin.general_settings.phone_number_not_set'),
             ], 422);
         }
 
         if ($user->phone_number !== $currentPhone) {
             return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'error' => "incorrect",
+                'status'  => 'error',
+                'code'    => 422,
+                'error'   => "incorrect",
                 'message' => __('admin.general_settings.phone_number_incorrect'),
             ], 422);
         }
 
         return response()->json([
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('admin.general_settings.phone_number_correct'),
         ]);
     }
@@ -514,8 +501,8 @@ class GeneralSettingController extends Controller
         ]));
 
         return response()->json([
-            'status' => $result['success'] ? 'success' : 'error',
-            'code' => $result['success'] ? 200 : 422,
+            'status'  => $result['success'] ? 'success' : 'error',
+            'code'    => $result['success'] ? 200 : 422,
             'message' => $result['message']
         ], $result['success'] ? 200 : 422);
     }
@@ -529,8 +516,8 @@ class GeneralSettingController extends Controller
         ]));
 
         return response()->json([
-            'status' => $result['success'] ? 'success' : 'error',
-            'code' => $result['success'] ? 200 : 422,
+            'status'  => $result['success'] ? 'success' : 'error',
+            'code'    => $result['success'] ? 200 : 422,
             'message' => $result['message']
         ], $result['success'] ? 200 : 422);
     }
@@ -544,8 +531,8 @@ class GeneralSettingController extends Controller
         ]));
 
         return response()->json([
-            'status' => $result['success'] ? 'success' : 'error',
-            'code' => $result['success'] ? 200 : 422,
+            'status'  => $result['success'] ? 'success' : 'error',
+            'code'    => $result['success'] ? 200 : 422,
             'message' => $result['message']
         ], $result['success'] ? 200 : 422);
     }
@@ -556,8 +543,8 @@ class GeneralSettingController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'code' => 200,
-            'data' => $data
+            'code'   => 200,
+            'data'   => $data
         ]);
     }
 
@@ -566,8 +553,8 @@ class GeneralSettingController extends Controller
         $result = $this->repository->logoutDevice($request->only(['isAll', 'id']));
 
         return response()->json([
-            'status' => $result['success'] ? 'success' : 'error',
-            'code' => 200,
+            'status'  => $result['success'] ? 'success' : 'error',
+            'code'    => 200,
             'message' => $result['message']
         ]);
     }
@@ -581,16 +568,16 @@ class GeneralSettingController extends Controller
             $user->save();
             $message = $user->google_auth_enabled === 1 ? "Google Authentication Enabled Successfully" : "Google Authentication Disabled Successfully";
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $message
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'status' => 'error',
-                'code' => 422,
+                'status'  => 'error',
+                'code'    => 422,
                 'message' => 'Something went wrong',
-                'error' => $th->getMessage()
+                'error'   => $th->getMessage()
             ]);
         }
     }
@@ -601,16 +588,16 @@ class GeneralSettingController extends Controller
             $this->repository->updatePrefixes($request->all(), $request->group_id);
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.prefix_settings_update_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -627,7 +614,7 @@ class GeneralSettingController extends Controller
 
             if ($success) {
                 return response()->json([
-                    'code' => 200,
+                    'code'    => 200,
                     'message' => __('admin.general_settings.payment_updated_successfull'),
                 ]);
             }
@@ -635,7 +622,7 @@ class GeneralSettingController extends Controller
             throw new \Exception(__('admin.general_settings.update_failed'));
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.general_settings.global_settings_error') . $e->getMessage()
             ], 500);
         }
@@ -671,15 +658,15 @@ class GeneralSettingController extends Controller
             $data = $this->repository->getPaymentSettings($groupId, $orderBy);
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.general_settings.general_settings_success'),
-                'data' => $data,
+                'data'    => $data,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.general_settings.global_settings_error'),
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -695,14 +682,14 @@ class GeneralSettingController extends Controller
             $repository->updateThemeSettings($request->validated());
 
             return response()->json([
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.general_settings.theme_update_success')
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_update_error'),
             ], 500);
         }

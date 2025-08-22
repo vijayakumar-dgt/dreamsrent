@@ -8,11 +8,10 @@ use App\Models\UserDetail;
 use App\Repositories\Contracts\AdminUserRepositoryInterface;
 use App\Services\ImageResizer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Modules\RolesPermission\Models\Role;
 
@@ -32,9 +31,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             ->where('status', 1)
             ->where('created_by', $userId)
             ->get();
-
-        $data = ['roles' => $roles];
-        return $data;
+        return ['roles' => $roles];
     }
 
     public function store(Request $request): array
@@ -48,16 +45,16 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             DB::beginTransaction();
 
             $userData = [
-                'email' => $request->email,
+                'email'        => $request->email,
                 'phone_number' => $request->phone_number,
-                'role_id' => $request->role_id,
-                'user_type' => 2,
-                'status' => $request->status ?? 1,
+                'role_id'      => $request->role_id,
+                'user_type'    => 2,
+                'status'       => $request->status ?? 1,
             ];
             $userDetailsData = [
                 'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'parent_id' => current_user()->id ?? $request->user_id
+                'last_name'  => $request->last_name,
+                'parent_id'  => current_user()->id ?? $request->user_id
             ];
 
             if (empty($id)) {
@@ -95,17 +92,17 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             DB::commit();
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => $successMsg
             ];
         } catch (\Throwable $e) {
             DB::rollBack();
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => $errorMsg,
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ];
         }
     }
@@ -204,15 +201,15 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             });
 
             return [
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
+                'draw'            => intval($request->draw),
+                'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $filteredRecords,
-                'data' => $users,
-                'code' => 200
+                'data'            => $users,
+                'code'            => 200
             ];
         } catch (\Throwable $e) {
             return [
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
             ];
         }
@@ -241,8 +238,8 @@ class AdminUserRepository implements AdminUserRepositoryInterface
 
         return [
             'status' => 'success',
-            'code' => 200,
-            'data' => $data
+            'code'   => 200,
+            'data'   => $data
         ];
     }
 
@@ -253,14 +250,14 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             UserDetail::where('user_id', $id)->delete();
 
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('admin.user_management.user_delete_success')
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('admin.common.default_delete_error')
             ];
         }
@@ -277,13 +274,13 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             $notifications = [];
             $notificationCount = 0;
         }
-        $html = view('admin.partials.notification-popup', compact('notifications'))->render();
+        $html = view('admin.partials.notification-popup', ['notifications' => $notifications])->render();
         return [
             'status' => 'success',
-            'code' => 200,
-            'html' => $html,
-            'auth' => $authUser,
-            'count' => $notificationCount
+            'code'   => 200,
+            'html'   => $html,
+            'auth'   => $authUser,
+            'count'  => $notificationCount
         ];
     }
 
@@ -293,14 +290,14 @@ class AdminUserRepository implements AdminUserRepositoryInterface
         if ($authUser !== null && Notification::where('user_id', $authUser->id)->where('readed', 0)->count() > 0) {
             Notification::where('user_id', $authUser->id)->update(['readed' => 1]);
             return [
-                'status' => 'success',
-                'code' => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ];
         } else {
             return [
-                'status' => 'error',
-                'code' => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ];
         }
@@ -309,16 +306,15 @@ class AdminUserRepository implements AdminUserRepositoryInterface
     public function notifications(Request $request): LengthAwarePaginator
     {
         $authUser = Auth::guard('admin')->user();
-        $notifications = Notification::where('user_id', $authUser->id)->orderBy('created_at', 'desc')->paginate(10);
-        return $notifications;
+        return Notification::where('user_id', $authUser->id)->orderBy('created_at', 'desc')->paginate(10);
     }
 
     public function markNotificationAsRead(Request $request): array
     {
         Notification::where('id', $request->id)->update(['readed' => 1]);
         return [
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('web.user.notification_marked_as_read')
         ];
     }
@@ -327,8 +323,8 @@ class AdminUserRepository implements AdminUserRepositoryInterface
     {
         Notification::where('id', $id)->delete();
         return [
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('web.user.notification_deleted')
         ];
     }
@@ -340,8 +336,8 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             Notification::where('user_id', $authUser->id)->delete();
         }
         return [
-            'status' => 'success',
-            'code' => 200,
+            'status'  => 'success',
+            'code'    => 200,
             'message' => __('web.user.all_notofocations_deleted')
         ];
     }
