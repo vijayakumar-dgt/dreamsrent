@@ -174,11 +174,10 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
             ->where('user_type', $userType)
             ->get();
 
-        $data = [
+        return [
             'role'    => $role,
             'modules' => $modules,
         ];
-        return $data;
     }
 
     public function permissionUpdate(Request $request): array

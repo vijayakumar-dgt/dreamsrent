@@ -42,7 +42,7 @@ class ReportRepository implements ReportRepositoryInterface
     /**
      * Format percentage change with sign
      */
-    private function formatPercentageChange(float $percentage, string $sign): string
+    private function formatPercentageChange(float $percentage): string
     {
         return number_format(abs($percentage), 2) . '%';
     }
@@ -100,17 +100,7 @@ class ReportRepository implements ReportRepositoryInterface
         
         // Chart processing is handled in the frontend
         
-        return [
-            'totalIncome' => $totalIncome, 
-            'topEarningCar' => $topEarningCar, 
-            'vehicle' => $vehicle, 
-            'percentageChange' => $weeklyChange['percentageChange'], 
-            'sign' => $weeklyChange['sign'], 
-            'symbol' => $symbol, 
-            'bookings' => $bookings, 
-            'vehicleInfo' => $vehicleInfo, 
-            'bookingsCount' => $bookingsCount
-        ];
+        return ['totalIncome' => $totalIncome,'topEarningCar' => $topEarningCar,'vehicle' => $vehicle,'percentageChange' => $weeklyChange['percentageChange'],'sign' => $weeklyChange['sign'],'symbol' => $symbol,'bookings' => $bookings,'vehicleInfo' => $vehicleInfo,'bookingsCount' => $bookingsCount];
     }
     
     private function getBookingsWithVehicleInfo(): \Illuminate\Support\Collection
@@ -161,7 +151,7 @@ class ReportRepository implements ReportRepositoryInterface
         // Monthly breakdown data
         $breakdownData = $this->getMonthlyBreakdownData($bookings);
         $breakdownChange = $this->calculatePercentageChange($breakdownData['thisMonth'], $breakdownData['lastMonth']);
-        $percentageBreakChangeFormatted = $this->formatPercentageChange($breakdownChange['percentageChange'], $breakdownChange['sign']);
+        $percentageBreakChangeFormatted = $this->formatPercentageChange($breakdownChange['percentageChange']);
 
         // Vehicle earnings data
         $vehicleData = $this->getVehicleEarningsData($bookings);
@@ -169,7 +159,7 @@ class ReportRepository implements ReportRepositoryInterface
         // Monthly income data
         $incomeData = $this->getMonthlyIncomeData($bookings);
         $incomeChange = $this->calculatePercentageChange($incomeData['thisMonth'], $incomeData['lastMonth']);
-        $percentageChangeFormatted = $this->formatPercentageChange($incomeChange['percentageChange'], $incomeChange['sign']);
+        $percentageChangeFormatted = $this->formatPercentageChange($incomeChange['percentageChange']);
 
         $symbol = getDefaultCurrencySymbol();
 
@@ -244,7 +234,7 @@ class ReportRepository implements ReportRepositoryInterface
         $lastMonthEarningsForCar = (float) ($lastMonthEarnings[$topEarningCarThisMonth] ?? 0);
 
         $carChange = $this->calculatePercentageChange($topEarningCarsTotal, $lastMonthEarningsForCar);
-        $percentageCarChangeFormatted = $this->formatPercentageChange($carChange['percentageChange'], $carChange['sign']);
+        $percentageCarChangeFormatted = $this->formatPercentageChange($carChange['percentageChange']);
 
         return [
             'vehicle' => $vehicle,

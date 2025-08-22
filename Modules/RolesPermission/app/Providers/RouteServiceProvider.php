@@ -10,16 +10,6 @@ class RouteServiceProvider extends ServiceProvider
     protected string $name = 'RolesPermission';
 
     /**
-     * Called before routes are registered.
-     *
-     * Register any model bindings or pattern based filters.
-     */
-    public function boot(): void
-    {
-        parent::boot();
-    }
-
-    /**
      * Define the routes for the application.
      */
     public function map(): void

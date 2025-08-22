@@ -38,14 +38,14 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.page.title') }} <span class="text-danger">*</span></label>
+                                            <label class="form-label" for="title">{{ __('admin.page.title') }} <span class="text-danger">*</span></label>
                                             <input type="text" name="title" id="title" placeholder="{{ __('admin.page.title_placeholder') }}" value="{{ $query->page_title }}" class="form-control">
                                             <span class="invalid-feedback" id="title_error"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.page.slug') }} <span class="text-danger">*</span></label>
+                                            <label class="form-label" for="slug">{{ __('admin.page.slug') }} <span class="text-danger">*</span></label>
                                             <input type="text"
                                                 name="slug"
                                                 id="slug"
@@ -69,42 +69,42 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.page.meta_title') }}</label>
+                                            <label class="form-label" for="mete_title">{{ __('admin.page.meta_title') }}</label>
                                             <input type="text" name="mete_title" id="mete_title" placeholder="{{ __('admin.page.meta_title_placeholder') }}" value="{{ $query->seo_title }}" class="form-control">
                                             <span class="invalid-feedback" id="mete_title_error"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.page.meta_keywords') }}</label>
+                                            <label class="form-label" for="meta_key">{{ __('admin.page.meta_keywords') }}</label>
                                             <input type="text" name="meta_key" id="meta_key" placeholder="{{ __('admin.page.meta_keywords_placeholder') }}" value="{{ $query->seo_tag }}" class="form-control">
                                             <span class="invalid-feedback" id="meta_key_error"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.page.meta_description') }}</label>
+                                            <label class="form-label" for="meta_description">{{ __('admin.page.meta_description') }}</label>
                                             <textarea rows="4" name="meta_description" id="meta_description" placeholder="{{ __('admin.page.meta_description_placeholder') }}" class="form-control">{{ $query->seo_description }}</textarea>
                                             <span class="invalid-feedback" id="meta_description_error"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.page.canonical_url') }}</label>
+                                            <label class="form-label" for="canonical_url">{{ __('admin.page.canonical_url') }}</label>
                                             <input type="text" name="canonical_url" id="canonical_url" placeholder="{{ __('admin.page.canonical_url_placeholder') }}" value="{{ $query->canonical_url }}" class="form-control">
                                             <span class="invalid-feedback" id="canonical_url_error"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.page.og_title') }}</label>
+                                            <label class="form-label" for="og_title">{{ __('admin.page.og_title') }}</label>
                                             <input type="text" name="og_title" id="og_title" placeholder="{{ __('admin.page.og_title_placeholder') }}" value="{{ $query->og_title }}" class="form-control">
                                             <span class="invalid-feedback" id="og_title_error"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.page.og_description') }}</label>
+                                            <label class="form-label" for="og_description">{{ __('admin.page.og_description') }}</label>
                                             <textarea rows="4" name="og_description" id="og_description" placeholder="{{ __('admin.page.og_description_placeholder') }}" class="form-control">{{ $query->og_description }}</textarea>
                                             <span class="invalid-feedback" id="og_description_error"></span>
                                         </div>
