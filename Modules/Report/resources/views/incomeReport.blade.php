@@ -142,7 +142,7 @@
             </div>
             <!-- /Charts -->
             <div class="coupons-tabs">
-                <ul class="nav nav-pills mb-3" role="tablist">
+                <ul class="nav nav-pills mb-3">
                     <li class="nav-item">
                         <button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#income" aria-current="page">{{__('admin.reports.income')}}</button>
                     </li>
@@ -304,3 +304,4 @@
 @push('scripts')
 <script src="{{ asset('backend/assets/js/report/income.js') }}"></script>
 @endpush
+ 
