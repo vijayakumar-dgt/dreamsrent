@@ -40,49 +40,20 @@ class ReportRepository implements ReportRepositoryInterface
     }
     public function incomeReport(): array
     {
-        $bookings = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
-        ->get();
-        $bookingsCount = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
-        ->orderby('bookings.id', 'desc')->paginate(10);
+        $bookings = $this->getBookingsWithVehicleInfo();
+        $bookingsCount = $this->getPaginatedBookings();
         $totalIncome = $this->filterPaidBookings($bookings)->sum('final_price');
-        $topEarningCar = $bookings
-        ->groupBy('vehicle_id')
-        ->map(fn ($group) => $group->sum('final_price'))
-        ->sortDesc()
-        ->keys()
-        ->first();
-
+        $topEarningCar = $this->getTopEarningVehicle($bookings);
         $vehicle = VehicleInfo::find($topEarningCar);
         $vehicleInfo = VehicleInfo::where('status', 1)->where('deleted_at', null)->get();
-
-        $startOfThisWeek = now()->startOfWeek();
-        $endOfThisWeek = now()->endOfWeek();
-
-        $startOfLastWeek = now()->subWeek()->startOfWeek();
-        $endOfLastWeek = now()->subWeek()->endOfWeek();
-
-        $thisWeekIncome = Booking::whereBetween('booking_date', [$startOfThisWeek, $endOfThisWeek])->sum('final_price');
-        $lastWeekIncome = Booking::whereBetween('booking_date', [$startOfLastWeek, $endOfLastWeek])->sum('final_price');
-
-        $weeklyChange = $this->calculateWeeklyChange((float) $thisWeekIncome, (float) $lastWeekIncome);
+        
+        $weeklyIncomes = $this->getWeeklyIncomes();
+        $weeklyChange = $this->calculateWeeklyChange($weeklyIncomes['thisWeek'], $weeklyIncomes['lastWeek']);
         $symbol = getDefaultCurrencySymbol();
-
-        $bookings->groupBy(function ($booking) {
-            return Carbon::parse($booking->booking_date)->format('Y-m-d'); // Group by date
-        })
-        ->map(function ($dayBookings) {
-            return [
-                'date'   => $dayBookings->first()?->booking_date,
-                'income' => $dayBookings->sum(function ($booking) {
-                    return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ? $booking->final_price : 0;
-                }),
-                'expense' => 0 // Placeholder, modify if you have expenses
-            ];
-        })
-
-        ->values(); // Convert collection to array
-
-        $data = [
+        
+        $this->processBookingsForChart($bookings);
+        
+        return [
             'totalIncome' => $totalIncome, 
             'topEarningCar' => $topEarningCar, 
             'vehicle' => $vehicle, 
@@ -93,7 +64,62 @@ class ReportRepository implements ReportRepositoryInterface
             'vehicleInfo' => $vehicleInfo, 
             'bookingsCount' => $bookingsCount
         ];
-        return $data;
+    }
+    
+    private function getBookingsWithVehicleInfo()
+    {
+        return Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')->get();
+    }
+    
+    private function getPaginatedBookings()
+    {
+        return Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
+            ->orderby('bookings.id', 'desc')->paginate(10);
+    }
+    
+    private function getTopEarningVehicle($bookings)
+    {
+        return $bookings
+            ->groupBy('vehicle_id')
+            ->map(fn ($group) => $group->sum('final_price'))
+            ->sortDesc()
+            ->keys()
+            ->first();
+    }
+    
+    private function getWeeklyIncomes(): array
+    {
+        $startOfThisWeek = now()->startOfWeek();
+        $endOfThisWeek = now()->endOfWeek();
+        $startOfLastWeek = now()->subWeek()->startOfWeek();
+        $endOfLastWeek = now()->subWeek()->endOfWeek();
+        
+        return [
+            'thisWeek' => (float) Booking::whereBetween('booking_date', [$startOfThisWeek, $endOfThisWeek])->sum('final_price'),
+            'lastWeek' => (float) Booking::whereBetween('booking_date', [$startOfLastWeek, $endOfLastWeek])->sum('final_price')
+        ];
+    }
+    
+    private function processBookingsForChart($bookings)
+    {
+        return $bookings->groupBy(function ($booking) {
+            return Carbon::parse($booking->booking_date)->format('Y-m-d');
+        })
+        ->map(function ($dayBookings) {
+            return [
+                'date'   => $dayBookings->first()?->booking_date,
+                'income' => $this->calculateDayIncome($dayBookings),
+                'expense' => 0
+            ];
+        })
+        ->values();
+    }
+    
+    private function calculateDayIncome($dayBookings)
+    {
+        return $dayBookings->sum(function ($booking) {
+            return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ? $booking->final_price : 0;
+        });
     }
 
     public function earningReport(): array

@@ -144,7 +144,7 @@
             <div class="coupons-tabs">
                 <ul class="nav nav-pills mb-3" role="tablist">
                     <li class="nav-item">
-                        <button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#income" aria-current="page" aria-selected="true">{{__('admin.reports.income')}}</button>
+                        <button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#income" aria-current="page">{{__('admin.reports.income')}}</button>
                     </li>
                 </ul>
                 <div class="tab-content pb-3">
