@@ -19,23 +19,24 @@ class AnnouncementRepository implements AnnouncementRepositoryInterface
                 'announcement_type',
                 'status',
             ]);
+
+            // --- Data Preparation (Unchanged) ---
             $typeMapping = [
                 'general'   => 1,
                 'important' => 2,
                 'urgent'    => 3,
             ];
-
             $typeInput = $data['announcement_type'] ?? 'general';
             $data['announcement_type'] = $typeMapping[$typeInput] ?? 1;
+            $data['status'] = $data['status'] ?? 1; // Simplified status default
 
-            if (!isset($data['status'])) {
-                $data['status'] = 1;
-            }
-
+            // --- Refactored Logic ---
             if ($request->id) {
+                // Handle Update
                 $announcement = Announcement::find($request->id);
 
                 if (!$announcement) {
+                    // Return 1: Not Found
                     return [
                         'code'    => 404,
                         'success' => false,
@@ -44,24 +45,22 @@ class AnnouncementRepository implements AnnouncementRepositoryInterface
                 }
 
                 $announcement->update($data);
-
-                return [
-                    'code'    => 200,
-                    'success' => true,
-                    'message' => __('admin.support.announcement_update_success'),
-                    'data'    => $announcement,
-                ];
+                $message = __('admin.support.announcement_update_success');
+            } else {
+                // Handle Create
+                $announcement = Announcement::create($data);
+                $message = __('admin.support.announcement_create_success');
             }
 
-            $announcement = Announcement::create($data);
-
+            // Return 2: Consolidated Success Response
             return [
                 'code'    => 200,
                 'success' => true,
-                'message' => __('admin.support.announcement_create_success'),
+                'message' => $message,
                 'data'    => $announcement,
             ];
         } catch (\Exception $e) {
+            // Return 3: Error Response
             return [
                 'code'    => 500,
                 'success' => false,
@@ -88,9 +87,9 @@ class AnnouncementRepository implements AnnouncementRepositoryInterface
             }
 
             $announcements = Announcement::select('announcements.*')
-                ->when($request->input('user_type'), fn ($q, $userType) => $q->where('announcements.user_type', $userType))
-                ->when($request->input('status') !== null && $request->status !== 'all', fn ($q) => $q->where('announcements.status', $request->status))
-                ->when($request->input('title'), fn ($q, $title) => $q->where('announcements.announcement_title', 'like', '%' . $title . '%'))
+                ->when($request->input('user_type'), fn($q, $userType) => $q->where('announcements.user_type', $userType))
+                ->when($request->input('status') !== null && $request->status !== 'all', fn($q) => $q->where('announcements.status', $request->status))
+                ->when($request->input('title'), fn($q, $title) => $q->where('announcements.announcement_title', 'like', '%' . $title . '%'))
                 ->when($request->input('sort'), function ($query, $sort) {
                     switch ($sort) {
                         case 'ascending':
