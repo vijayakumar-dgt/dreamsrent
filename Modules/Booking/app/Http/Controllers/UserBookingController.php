@@ -26,7 +26,7 @@ class UserBookingController extends Controller
         $this->userBookingRepository = $userBookingRepository;
     }
 
-    public function redirectToBooking(Request $request): View|RedirectResponse
+    public function redirectToBooking(): View|RedirectResponse
     {
         if (session()->has('intended_booking')) {
             $booking = session('intended_booking');
