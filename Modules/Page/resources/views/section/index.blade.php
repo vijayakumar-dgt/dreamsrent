@@ -47,7 +47,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <label class="form-label" for="section_title_one">{{ __('admin.cms.title') }}</label>
                         <input type="text" name="section_title_one" id="section_title_one" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_one_error"></div>
@@ -55,17 +55,17 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
+                        <label class="form-label" for="thumbnail_image_one">{{ __('admin.cms.thumbnail_image') }}</label>
                         <input type="file" name="thumbnail_image_one" id="thumbnail_image_one" class="form-control"
                             accept="image/*" onchange="previewThumbnailOne(this)">
                         <div class="invalid-feedback" id="thumbnail_image_one_error"></div>
                     </div>
                     <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_one"
-                        class="mt-2 img-preview-thumb" alt="Thumbnail Image">
+                        class="mt-2 img-preview-thumb" alt="Thumbnail">
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <label class="form-label" for="label_one">{{ __('admin.cms.label') }}</label>
                         <input type="text" name="label_one" id="label_one" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_error"></div>
@@ -73,7 +73,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.line_one') }}</label>
+                        <label class="form-label" for="line_one">{{ __('admin.cms.line_one') }}</label>
                         <input type="text" name="line_one" id="line_one" class="form-control"
                             placeholder="{{ __('admin.cms.enter_line_one') }}">
                         <div class="invalid-feedback" id="line_one_error"></div>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.line_two') }}</label>
+                        <label class="form-label" for="line_two">{{ __('admin.cms.line_two') }}</label>
                         <input type="text" name="line_two" id="line_two" class="form-control"
                             placeholder="{{ __('admin.cms.enter_line_two') }}">
                         <div class="invalid-feedback" id="line_two_error"></div>
@@ -89,7 +89,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }}</label>
+                        <label class="form-label" for="description_one">{{ __('admin.common.description') }}</label>
                         <textarea type="text" name="description_one" id="description_one" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_error"></div>
@@ -102,7 +102,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <label class="form-label" for="section_title_two">{{ __('admin.cms.title') }}</label>
                         <input type="text" name="section_title_two" id="section_title_two" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_two_error"></div>
@@ -110,17 +110,17 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
+                        <label class="form-label" for="thumbnail_image_two">{{ __('admin.cms.thumbnail_image') }}</label>
                         <input type="file" name="thumbnail_image_two" id="thumbnail_image_two" class="form-control"
                             accept="image/*" onchange="previewThumbnailTwo(this)">
                         <div class="invalid-feedback" id="thumbnail_image_two_error"></div>
                     </div>
                     <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_two"
-                        class="mt-2 img-preview-thumb" alt="Image">
+                        class="mt-2 img-preview-thumb" alt="Thumbnail">
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <label class="form-label" for="label_two">{{ __('admin.cms.label') }}</label>
                         <input type="text" name="label_two" id="label_two" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_two_error"></div>
@@ -128,7 +128,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }}</label>
+                        <label class="form-label" for="description_two">{{ __('admin.common.description') }}</label>
                         <textarea type="text" name="description_two" id="description_two" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_two_error"></div>
@@ -141,7 +141,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <label class="form-label" for="section_title_three">{{ __('admin.cms.title') }}</label>
                         <input type="text" name="section_title_three" id="section_title_three" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_three_error"></div>
@@ -149,7 +149,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.best_vehicle') }}</label>
+                        <label class="form-label" for="vehicle_id">{{ __('admin.cms.best_vehicle') }}</label>
                         <select name="vehicle_id" id="vehicle_id" class="form-control select"
                             data-placeholder="{{ __('admin.common.select') }}">
                             @foreach ($vehicles as $vehicle)
@@ -161,7 +161,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 1</label>
+                        <label class="form-label" for="label_1">{{ __('admin.cms.label') }} 1</label>
                         <input type="text" name="label_1" id="label_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="label_1_error"></div>
@@ -169,7 +169,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 1</label>
+                        <label class="form-label" for="dis_1">{{ __('admin.common.description') }} 1</label>
                         <input type="text" name="dis_1" id="dis_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
                         <div class="invalid-feedback" id="dis_1_error"></div>
@@ -177,7 +177,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 2</label>
+                        <label class="form-label" for="label_2">{{ __('admin.cms.label') }} 2</label>
                         <input type="text" name="label_2" id="label_2" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="label_2_error"></div>
@@ -185,7 +185,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 2</label>
+                        <label class="form-label" for="dis_2">{{ __('admin.common.description') }} 2</label>
                         <input type="text" name="dis_2" id="dis_2" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
                         <div class="invalid-feedback" id="dis_2_error"></div>
@@ -193,7 +193,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 3</label>
+                        <label class="form-label" for="label_3">{{ __('admin.cms.label') }} 3</label>
                         <input type="text" name="label_3" id="label_3" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="label_3_error"></div>
@@ -201,7 +201,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 3</label>
+                        <label class="form-label" for="dis_3">{{ __('admin.common.description') }} 3</label>
                         <input type="text" name="dis_3" id="dis_3" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
                         <div class="invalid-feedback" id="dis_3_error"></div>
@@ -209,7 +209,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 4</label>
+                        <label class="form-label" for="label_4">{{ __('admin.cms.label') }} 4</label>
                         <input type="text" name="label_4" id="label_4" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="label_4_error"></div>
@@ -217,7 +217,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 4</label>
+                        <label class="form-label" for="dis_4">{{ __('admin.common.description') }} 4</label>
                         <input type="text" name="dis_4" id="dis_4" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
                         <div class="invalid-feedback" id="dis_4_error"></div>
@@ -225,7 +225,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 5</label>
+                        <label class="form-label" for="label_5">{{ __('admin.cms.label') }} 5</label>
                         <input type="text" name="label_5" id="label_5" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="label_5_error"></div>
@@ -233,7 +233,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 5</label>
+                        <label class="form-label" for="dis_5">{{ __('admin.common.description') }} 5</label>
                         <input type="text" name="dis_5" id="dis_5" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
                         <div class="invalid-feedback" id="dis_5_error"></div>
@@ -241,7 +241,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 6</label>
+                        <label class="form-label" for="label_6">{{ __('admin.cms.label') }} 6</label>
                         <input type="text" name="label_6" id="label_6" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="label_6_error"></div>
@@ -249,7 +249,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 6</label>
+                        <label class="form-label" for="dis_6">{{ __('admin.common.description') }} 6</label>
                         <input type="text" name="dis_6" id="dis_6" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
                         <div class="invalid-feedback" id="dis_6_error"></div>
@@ -262,7 +262,7 @@
             <div class="row">
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <label class="form-label" for="section_title_four">{{ __('admin.cms.title') }}</label>
                         <input type="text" name="section_title_four" id="section_title_four" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_four_error"></div>
@@ -270,17 +270,17 @@
                 </div>
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.icon') }} 1 (40x40, JPG/PNG/SVG)</label>
+                        <label class="form-label" for="why_icon_1">{{ __('admin.cms.icon') }} 1 (40x40, JPG/PNG/SVG)</label>
                         <input type="file" name="why_icon_1" id="why_icon_1" class="form-control"
                             accept=".jpg,.jpeg,.png,.svg">
                         <div class="invalid-feedback" id="why_icon_1_error"></div>
                         <div class="mt-2">
                             <img src="{{ uploadedAsset('', 'default2') }}" id="preview_why_icon_1"
-                                class="img-thumbnail d-none sectionImage" alt="Image">
+                                class="img-thumbnail d-none sectionImage" alt="Icon">
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 1</label>
+                        <label class="form-label" for="why_label_1">{{ __('admin.cms.label') }} 1</label>
                         <input type="text" name="why_label_1" id="why_label_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="why_label_1_error"></div>
@@ -288,7 +288,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 1</label>
+                        <label class="form-label" for="why_dis_1">{{ __('admin.common.description') }} 1</label>
                         <input type="text" name="why_dis_1" id="why_dis_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="200">
                         <div class="invalid-feedback" id="why_dis_1_error"></div>
@@ -296,17 +296,17 @@
                 </div>
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.icon') }} 2 (40x40, JPG/PNG/SVG)</label>
+                        <label class="form-label" for="why_icon_2">{{ __('admin.cms.icon') }} 2 (40x40, JPG/PNG/SVG)</label>
                         <input type="file" name="why_icon_2" id="why_icon_2" class="form-control"
                             accept=".jpg,.jpeg,.png,.svg">
                         <div class="invalid-feedback" id="why_icon_2_error"></div>
                         <div class="mt-2">
                             <img src="{{ uploadedAsset('', 'default') }}" id="preview_why_icon_2"
-                                class="img-thumbnail d-none sectionImage" alt="Image">
+                                class="img-thumbnail d-none sectionImage" alt="Icon">
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 2</label>
+                        <label class="form-label" for="label_2">{{ __('admin.cms.label') }} 2</label>
                         <input type="text" name="why_label_2" id="why_label_2" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="why_label_2_error"></div>
@@ -314,7 +314,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 2</label>
+                        <label class="form-label" for="dis_2">{{ __('admin.common.description') }} 2</label>
                         <input type="text" name="why_dis_2" id="why_dis_2" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="200">
                         <div class="invalid-feedback" id="why_dis_2_error"></div>
@@ -322,17 +322,17 @@
                 </div>
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.icon') }} 3 (40x40, JPG/PNG/SVG)</label>
+                        <label class="form-label" for="why_icon_3">{{ __('admin.cms.icon') }} 3 (40x40, JPG/PNG/SVG)</label>
                         <input type="file" name="why_icon_3" id="why_icon_3" class="form-control"
                             accept=".jpg,.jpeg,.png,.svg">
                         <div class="invalid-feedback" id="why_icon_3_error"></div>
                         <div class="mt-2">
                             <img src="{{ uploadedAsset('', 'default2') }}" id="preview_why_icon_3"
-                                class="img-thumbnail d-none sectionImage" alt="Image">
+                                class="img-thumbnail d-none sectionImage" alt="Icon">
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 3</label>
+                        <label class="form-label" for="label_3">{{ __('admin.cms.label') }} 3</label>
                         <input type="text" name="why_label_3" id="why_label_3" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="why_label_3_error"></div>
@@ -340,7 +340,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 3</label>
+                        <label class="form-label" for="dis_3">{{ __('admin.common.description') }} 3</label>
                         <input type="text" name="why_dis_3" id="why_dis_3" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="200">
                         <div class="invalid-feedback" id="why_dis_3_error"></div>
@@ -353,7 +353,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <label class="form-label" for="section_title_five">{{ __('admin.cms.title') }}</label>
                         <input type="text" name="section_title_five" id="section_title_five" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_five_error"></div>
@@ -361,17 +361,17 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
+                        <label class="form-label" for="thumbnail_image_four">{{ __('admin.cms.thumbnail_image') }}</label>
                         <input type="file" name="thumbnail_image_four" id="thumbnail_image_four" class="form-control"
                             accept="image/*" onchange="previewThumbnailTwo(this)">
                         <div class="invalid-feedback" id="thumbnail_image_four_error"></div>
                     </div>
                     <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_four"
-                        class="mt-2 img-preview-thumb" alt="Image">
+                        class="mt-2 img-preview-thumb" alt="Thumbnail">
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <label class="form-label" for="label_three_one">{{ __('admin.cms.label') }}</label>
                         <input type="text" name="label_three_one" id="label_three_one" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_three_one_error"></div>
@@ -379,7 +379,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <label class="form-label" for="label_three_two">{{ __('admin.cms.label') }}</label>
                         <input type="text" name="label_three_two" id="label_three_two" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_three_two_error"></div>
@@ -387,7 +387,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <label class="form-label" for="label_three_three">{{ __('admin.cms.label') }}</label>
                         <input type="text" name="label_three_three" id="label_three_three" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_three_three_error"></div>
@@ -395,7 +395,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }}</label>
+                        <label class="form-label" for="description_three">{{ __('admin.common.description') }}</label>
                         <textarea type="text" name="description_three" id="description_three" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_three_error"></div>
@@ -408,7 +408,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <label class="form-label" for="section_title_boat">{{ __('admin.cms.title') }}</label>
                         <input type="text" name="section_title_boat" id="section_title_boat" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_boat_error"></div>
@@ -416,18 +416,18 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
+                        <label class="form-label" for="thumbnail_image_boat">{{ __('admin.cms.thumbnail_image') }}</label>
                         <input type="file" name="thumbnail_image_boat[]" id="thumbnail_image_boat" class="form-control"
                             accept="image/*" multiple onchange="previewMultipleThumbnails(this)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_error"></div>
                         <div id="thumbnail_preview_boat_container" class="mt-2 d-flex flex-wrap gap-2"></div>
                     </div>
                     <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat"
-                        class="mt-2 img-preview-thumb" alt="Image">
+                        class="mt-2 img-preview-thumb" alt="Thumbnail">
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <label class="form-label" for="label_boat_one">{{ __('admin.cms.label') }}</label>
                         <input type="text" name="label_boat_one" id="label_boat_one" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_boat_one_error"></div>
@@ -435,7 +435,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <label class="form-label" for="label_boat_two">{{ __('admin.cms.label') }}</label>
                         <input type="text" name="label_boat_two" id="label_boat_two" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_boat_two_error"></div>
@@ -443,7 +443,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <label class="form-label" for="label_boat_three">{{ __('admin.cms.label') }}</label>
                         <input type="text" name="label_boat_three" id="label_boat_three" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_boat_three_error"></div>
@@ -451,7 +451,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }}</label>
+                        <label class="form-label" for="description_boat">{{ __('admin.common.description') }}</label>
                         <textarea type="text" name="description_boat" id="description_boat" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_boat_error"></div>
@@ -465,7 +465,7 @@
                 <!-- Title -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <label class="form-label" for="section_title_boat_benefits">{{ __('admin.cms.title') }}</label>
                         <input type="text" name="section_title_boat_benefits" id="section_title_boat_benefits" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_boat_benefits_error"></div>
@@ -473,155 +473,155 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
+                    <label class="form-label" for="thumbnail_image_boat_benefits_main">{{ __('admin.cms.thumbnail_image') }}</label>
                     <input type="file" name="thumbnail_image_boat_benefits_main" id="thumbnail_image_boat_benefits_main" class="form-control"
                         accept="image/*" onchange="previewThumbnailBenefits(this, 1)">
                     <div class="invalid-feedback" id="thumbnail_image_boat_benefits_main_error"></div>
                     <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_main"
-                        class="mt-2 img-preview-thumb" alt="Image">
+                        class="mt-2 img-preview-thumb" alt="Thumbnail">
                 </div>
 
                 <!-- Label 1 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 1</label>
+                        <label class="form-label" for="label_boat_benefits_1">{{ __('admin.cms.label') }} 1</label>
                         <input type="text" name="label_boat_benefits_1" id="label_boat_benefits_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_boat_benefits_1_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 1</label>
+                        <label class="form-label" for="description_boat_benefits_1">{{ __('admin.common.description') }} 1</label>
                         <textarea name="description_boat_benefits_1" id="description_boat_benefits_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_boat_benefits_1_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <label class="form-label" for="thumbnail_image_boat_benefits_1">{{ __('admin.cms.thumbnail_image') }} 1</label>
                         <input type="file" name="thumbnail_image_boat_benefits_1" id="thumbnail_image_boat_benefits_1" class="form-control"
                             accept="image/*" onchange="previewThumbnailBenefits(this, 1)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_benefits_1_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_1"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
 
                 <!-- Label 2 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 2</label>
+                        <label class="form-label" for="label_2">{{ __('admin.cms.label') }} 2</label>
                         <input type="text" name="label_boat_benefits_2" id="label_boat_benefits_2" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_boat_benefits_2_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 2</label>
+                        <label class="form-label" for="dis_2">{{ __('admin.common.description') }} 2</label>
                         <textarea name="description_boat_benefits_2" id="description_boat_benefits_2" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_boat_benefits_2_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 2</label>
+                        <label class="form-label" for="thumbnail_image_boat_benefits_2">{{ __('admin.cms.thumbnail_image') }} 2</label>
                         <input type="file" name="thumbnail_image_boat_benefits_2" id="thumbnail_image_boat_benefits_2" class="form-control"
                             accept="image/*" onchange="previewThumbnailBenefits(this, 2)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_benefits_2_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_2"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
 
                 <!-- Label 3 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 3</label>
+                        <label class="form-label" for="label_3">{{ __('admin.cms.label') }} 3</label>
                         <input type="text" name="label_boat_benefits_3" id="label_boat_benefits_3" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_boat_benefits_3_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 3</label>
+                        <label class="form-label" for="dis_3">{{ __('admin.common.description') }} 3</label>
                         <textarea name="description_boat_benefits_3" id="description_boat_benefits_3" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_boat_benefits_3_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 3</label>
+                        <label class="form-label" for="thumbnail_image_boat_benefits_3">{{ __('admin.cms.thumbnail_image') }} 3</label>
                         <input type="file" name="thumbnail_image_boat_benefits_3" id="thumbnail_image_boat_benefits_3" class="form-control"
                             accept="image/*" onchange="previewThumbnailBenefits(this, 3)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_benefits_3_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_3"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
 
                 <!-- Label 4 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 4</label>
+                        <label class="form-label" for="label_4">{{ __('admin.cms.label') }} 4</label>
                         <input type="text" name="label_boat_benefits_4" id="label_boat_benefits_4" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_boat_benefits_4_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 4</label>
+                        <label class="form-label" for="dis_4">{{ __('admin.common.description') }} 4</label>
                         <textarea name="description_boat_benefits_4" id="description_boat_benefits_4" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_boat_benefits_4_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 4</label>
+                        <label class="form-label" for="thumbnail_image_boat_benefits_4">{{ __('admin.cms.thumbnail_image') }} 4</label>
                         <input type="file" name="thumbnail_image_boat_benefits_4" id="thumbnail_image_boat_benefits_4" class="form-control"
                             accept="image/*" onchange="previewThumbnailBenefits(this, 4)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_benefits_4_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_4"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
 
                 <!-- Label 5 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 5</label>
+                        <label class="form-label" for="label_5">{{ __('admin.cms.label') }} 5</label>
                         <input type="text" name="label_boat_benefits_5" id="label_boat_benefits_5" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_boat_benefits_5_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 5</label>
+                        <label class="form-label" for="dis_5">{{ __('admin.common.description') }} 5</label>
                         <textarea name="description_boat_benefits_5" id="description_boat_benefits_5" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_boat_benefits_5_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 5</label>
+                        <label class="form-label" for="thumbnail_image_boat_benefits_5">{{ __('admin.cms.thumbnail_image') }} 5</label>
                         <input type="file" name="thumbnail_image_boat_benefits_5" id="thumbnail_image_boat_benefits_5" class="form-control"
                             accept="image/*" onchange="previewThumbnailBenefits(this, 5)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_benefits_5_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_5"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
 
                 <!-- Label 6 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 6</label>
+                        <label class="form-label" for="label_6">{{ __('admin.cms.label') }} 6</label>
                         <input type="text" name="label_boat_benefits_6" id="label_boat_benefits_6" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_boat_benefits_6_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 6</label>
+                        <label class="form-label" for="dis_6">{{ __('admin.common.description') }} 6</label>
                         <textarea name="description_boat_benefits_6" id="description_boat_benefits_6" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_boat_benefits_6_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 6</label>
+                        <label class="form-label" for="thumbnail_image_boat_benefits_6">{{ __('admin.cms.thumbnail_image') }} 6</label>
                         <input type="file" name="thumbnail_image_boat_benefits_6" id="thumbnail_image_boat_benefits_6" class="form-control"
                             accept="image/*" onchange="previewThumbnailBenefits(this, 6)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_benefits_6_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_6"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
             </div>
@@ -632,7 +632,7 @@
                 <!-- Title -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <label class="form-label" for="section_title_boat_experience">{{ __('admin.cms.title') }}</label>
                         <input type="text" name="section_title_boat_experience" id="section_title_boat_experience" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_boat_experience_error"></div>
@@ -642,32 +642,32 @@
                 <!-- Label 1 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 1</label>
+                        <label class="form-label" for="label_boat_experience_1">{{ __('admin.cms.label') }} 1</label>
                         <input type="text" name="label_boat_experience_1" id="label_boat_experience_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_boat_experience_1_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 1</label>
+                        <label class="form-label" for="description_boat_experience_1">{{ __('admin.common.description') }} 1</label>
                         <textarea name="description_boat_experience_1" id="description_boat_experience_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
                         <div class="invalid-feedback" id="description_boat_experience_1_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <label class="form-label" for="thumbnail_image_boat_experience_1">{{ __('admin.cms.thumbnail_image') }} 1</label>
                         <input type="file" name="thumbnail_image_boat_experience_1" id="thumbnail_image_boat_experience_1" class="form-control"
                             accept="image/*" onchange="previewThumbnailExperience(this, 1)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_experience_1_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_experience_1"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 2</label>
+                        <label class="form-label" for="thumbnail_image_boat_experience_2">{{ __('admin.cms.thumbnail_image') }} 2</label>
                         <input type="file" name="thumbnail_image_boat_experience_2" id="thumbnail_image_boat_experience_2" class="form-control"
                             accept="image/*" onchange="previewThumbnailExperience(this, 2)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_experience_2_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_experience_2"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
             </div>
@@ -678,7 +678,7 @@
                 <!-- Title -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <label class="form-label" for="section_title_bike_experience">{{ __('admin.cms.title') }}</label>
                         <input type="text" name="section_title_bike_experience" id="section_title_bike_experience" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_bike_experience_error"></div>
@@ -688,18 +688,18 @@
                 <!-- Label 1 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 1</label>
+                        <label class="form-label" for="label_bike_experience_1">{{ __('admin.cms.label') }} 1</label>
                         <input type="text" name="label_bike_experience_1" id="label_bike_experience_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}">
                         <div class="invalid-feedback" id="label_bike_experience_1_error"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <label class="form-label" for="thumbnail_image_bike_experience_1">{{ __('admin.cms.thumbnail_image') }} 1</label>
                         <input type="file" name="thumbnail_image_bike_experience_1" id="thumbnail_image_bike_experience_1" class="form-control"
                             accept="image/*" onchange="previewThumbnailExperience(this, 1)">
                         <div class="invalid-feedback" id="thumbnail_image_bike_experience_1_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_bike_experience_1"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
             </div>
@@ -710,8 +710,8 @@
                 <!-- Title -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
-                        <input type="text" name="section_title_boat_seasonal " id="section_title_boat_seasonal" class="form-control"
+                        <label class="form-label" for="section_title_boat_seasonal">{{ __('admin.cms.title') }}</label>
+                        <input type="text" name="section_title_boat_seasonal" id="section_title_boat_seasonal" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_boat_seasonal_error"></div>
                     </div>
@@ -720,12 +720,12 @@
                 <!-- Label 1 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <label class="form-label" for="thumbnail_image_boat_seasonal">{{ __('admin.cms.thumbnail_image') }} 1</label>
                         <input type="file" name="thumbnail_image_boat_seasonal" id="thumbnail_image_boat_seasonal" class="form-control"
                             accept="image/*" onchange="previewThumbnailExperience(this, 1)">
-                        <div class="invalid-feedback" id="thumbnail_image_bike_experience_1_error"></div>
+                        <div class="invalid-feedback" id="thumbnail_image_boat_seasonal_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_seasonal"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
             </div>
@@ -736,8 +736,8 @@
                 <!-- Title -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
-                        <input type="text" name="section_title_boat_offer " id="section_title_boat_offer" class="form-control"
+                        <label class="form-label" for="section_title_boat_offer">{{ __('admin.cms.title') }}</label>
+                        <input type="text" name="section_title_boat_offer" id="section_title_boat_offer" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_boat_offer_error"></div>
                     </div>
@@ -746,12 +746,12 @@
                 <!-- Label 1 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <label class="form-label" for="thumbnail_image_boat_offer">{{ __('admin.cms.thumbnail_image') }} 1</label>
                         <input type="file" name="thumbnail_image_boat_offer" id="thumbnail_image_boat_offer" class="form-control"
                             accept="image/*" onchange="previewThumbnailExperience(this, 1)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_offer_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_offer"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
             </div>
@@ -762,22 +762,22 @@
                 <!-- Title -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
-                        <input type="text" name="section_title_boat_exclusive " id="section_title_boat_exclusive" class="form-control"
+                        <label class="form-label" for="section_title_boat_exclusive">{{ __('admin.cms.title') }}</label>
+                        <input type="text" name="section_title_boat_exclusive" id="section_title_boat_exclusive" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
-                        <div class="invalid-feedback" id="section_title_boat_offer_error"></div>
+                        <div class="invalid-feedback" id="section_title_boat_exclusive_error"></div>
                     </div>
                 </div>
 
                 <!-- Label 1 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <label class="form-label" for="thumbnail_image_boat_exclusive">{{ __('admin.cms.thumbnail_image') }} 1</label>
                         <input type="file" name="thumbnail_image_boat_exclusive" id="thumbnail_image_boat_exclusive" class="form-control"
                             accept="image/*" onchange="previewThumbnailExperience(this, 1)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_exclusive_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_exclusive"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
             </div>
@@ -787,7 +787,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <label class="form-label" for="section_title_bike">{{ __('admin.cms.title') }}</label>
                         <input type="text" name="section_title_bike" id="section_title_bike" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_bike_error"></div>
@@ -796,18 +796,18 @@
 
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
+                        <label class="form-label" for="thumbnail_image_bike_exclusive">{{ __('admin.cms.thumbnail_image') }}</label>
                         <input type="file" name="thumbnail_image_bike_exclusive" id="thumbnail_image_bike_exclusive" class="form-control"
                             accept="image/*" onchange="previewThumbnailExperience(this, 1)">
                         <div class="invalid-feedback" id="thumbnail_image_bike_exclusive_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_bike_exclusive"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
 
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 1</label>
+                        <label class="form-label" for="bike_label_1">{{ __('admin.cms.label') }} 1</label>
                         <input type="text" name="bike_label_1" id="bike_label_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="bike_label_1_error"></div>
@@ -815,7 +815,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 1</label>
+                        <label class="form-label" for="bike_dis_1">{{ __('admin.common.description') }} 1</label>
                         <input type="text" name="bike_dis_1" id="bike_dis_1" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
                         <div class="invalid-feedback" id="bike_dis_1_error"></div>
@@ -824,7 +824,7 @@
 
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 2</label>
+                        <label class="form-label" for="bike_label_2">{{ __('admin.cms.label') }} 2</label>
                         <input type="text" name="bike_label_2" id="bike_label_2" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="bike_label_2_error"></div>
@@ -832,7 +832,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 2</label>
+                        <label class="form-label" for="bike_dis_2">{{ __('admin.common.description') }} 2</label>
                         <input type="text" name="bike_dis_2" id="bike_dis_2" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
                         <div class="invalid-feedback" id="bike_dis_2_error"></div>
@@ -841,7 +841,7 @@
 
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 3</label>
+                        <label class="form-label" for="bike_label_3">{{ __('admin.cms.label') }} 3</label>
                         <input type="text" name="bike_label_3" id="bike_label_3" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="bike_label_3_error"></div>
@@ -849,7 +849,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 3</label>
+                        <label class="form-label" for="bike_dis_3">{{ __('admin.common.description') }} 3</label>
                         <input type="text" name="bike_dis_3" id="bike_dis_3" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
                         <div class="invalid-feedback" id="bike_dis_3_error"></div>
@@ -858,7 +858,7 @@
 
                 <div class="form-group col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.label') }} 4</label>
+                        <label class="form-label" for="bike_label_4">{{ __('admin.cms.label') }} 4</label>
                         <input type="text" name="bike_label_4" id="bike_label_4" class="form-control"
                             placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                         <div class="invalid-feedback" id="bike_label_4_error"></div>
@@ -866,7 +866,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.description') }} 4</label>
+                        <label class="form-label" for="bike_dis_4">{{ __('admin.common.description') }} 4</label>
                         <input type="text" name="bike_dis_4" id="bike_dis_4" class="form-control"
                             placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
                         <div class="invalid-feedback" id="bike_dis_4_error"></div>
@@ -880,8 +880,8 @@
                 <!-- Title -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.title') }}</label>
-                        <input type="text" name="section_title_car_ad " id="section_title_car_ad" class="form-control"
+                        <label class="form-label" for="section_title_car_ad">{{ __('admin.cms.title') }}</label>
+                        <input type="text" name="section_title_car_ad" id="section_title_car_ad" class="form-control"
                             placeholder="{{ __('admin.cms.enter_section_title') }}">
                         <div class="invalid-feedback" id="section_title_car_ad_error"></div>
                     </div>
@@ -890,12 +890,12 @@
                 <!-- Label 1 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <label class="form-label" for="thumbnail_image_car_ad">{{ __('admin.cms.thumbnail_image') }} 1</label>
                         <input type="file" name="thumbnail_image_car_ad" id="thumbnail_image_car_ad" class="form-control"
                             accept="image/*" onchange="previewThumbnailExperience(this, 1)">
                         <div class="invalid-feedback" id="thumbnail_image_car_ad_error"></div>
                         <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_car_ad"
-                            class="mt-2 img-preview-thumb" alt="Image">
+                            class="mt-2 img-preview-thumb" alt="Thumbnail">
                     </div>
                 </div>
             </div>

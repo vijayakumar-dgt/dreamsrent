@@ -116,7 +116,7 @@
                                             @endif
                                         </tr>
                                         @endforeach
-                                    </tbody>	
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -135,7 +135,7 @@
                 <p>{{ __('admin.user_management.no_permission_available') }}</p>
             @endif
             <!-- Custom Data Table -->
-            <div class="table-footer"></div>			
+            <div class="table-footer"></div>
         </div>
         @include('admin.partials.footer')
     </div>
