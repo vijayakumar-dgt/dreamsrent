@@ -21,7 +21,7 @@
                                 <p class="mb-0">{{ __('admin.auth.enter_new_password') }}</p>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">{{ __('admin.general_settings.new_password') }} <span class="text-danger">*</span></label>
+                                <label for="password" class="form-label">{{ __('admin.general_settings.new_password') }} <span class="text-danger">*</span></label>
                                 <div class="pass-group">
                                     <input type="password" class="pass-input form-control" name="password" id="password">
                                     <span class="ti toggle-password ti-eye-off"></span>
@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">{{ __('admin.general_settings.confirm_password') }} <span class="text-danger">*</span></label>
+                                <label for="password_confirmation" class="form-label">{{ __('admin.general_settings.confirm_password') }} <span class="text-danger">*</span></label>
                                 <div class="pass-group">
                                     <input type="password" class="pass-inputs form-control" name="password_confirmation" id="password_confirmation">
                                     <span class="ti toggle-passwords ti-eye-off"></span>

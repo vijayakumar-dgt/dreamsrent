@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Invoice;
+use App\Models\User;
 use App\Repositories\Contracts\DashboardRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -128,12 +129,14 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select(
                 'bookings.*',
-                'vehicle_info.*',
+                'vehicle_info.name',
+                'vehicle_info.vehicle_image',
                 'driving_types.name as driving_name',
                 'car_fuels.fuel_type',
-                'user_details.profile_image'
+                'user_details.profile_image',
             )
             ->where('bookings.deleted_at', null)
+            ->where('booking_by', '!=', 'quotation')
             ->orderBy('bookings.id', 'desc')
             ->limit(5)
             ->get();
@@ -151,8 +154,7 @@ class DashboardRepository implements DashboardRepositoryInterface
             return $booking;
         });
 
-        $users = DB::table('users')
-            ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+        $users = User::leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->whereNull('users.deleted_at')
             ->where('users.user_type', 3)
             ->orderByDesc('users.id')
@@ -162,6 +164,7 @@ class DashboardRepository implements DashboardRepositoryInterface
                 $user->name = empty($user->first_name)
                     ? ucwords($user->name)
                     : ucwords($user->first_name . ' ' . $user->last_name);
+                $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
                 return $user;
             });
 

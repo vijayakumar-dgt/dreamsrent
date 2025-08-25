@@ -20,7 +20,7 @@
                                 <p class="mb-0">{{ __('admin.auth.forgot_password_info') }}</p>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">{{ __('admin.common.email') }} <span class="text-danger">*</span></label>
+                                <label for="email" class="form-label">{{ __('admin.common.email') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input type="email" class="form-control" name="email" id="email">
                                     <span class="input-group-text border-start-0">

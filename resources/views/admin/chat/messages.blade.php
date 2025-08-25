@@ -5,8 +5,8 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content pb-0">
-            <x-admin.breadcrumb 
-				:title="__('admin.others.chat')" 
+            <x-admin.breadcrumb
+				:title="__('admin.others.chat')"
 				:breadcrumbs="[
 					__('admin.others.chat') => ''
 				]"
@@ -47,7 +47,7 @@
                                             <div class="chat-list">
                                                 <a href="javascript:void(0);" class="chat-user-list userprofile" data-userid="{{ $user->id }}" data-username="{{ getCurrentUserFullname($user->id) }}" data-avatar="{{ uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default','profile') }}">
                                                     <div class="avatar avatar-lg  me-2">
-                                                        <img src="{{ uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default','profile') }}"  class="rounded-circle avatarimg" alt="Profile Image">
+                                                        <img src="{{ uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default','profile') }}"  class="rounded-circle avatarimg" alt="Profile">
                                                     </div>
                                                     <div class="chat-user-info">
                                                         <div class="chat-user-msg">
@@ -77,10 +77,10 @@
                                     </a>
                                 </div>
                                 <div class="avatar avatar-lg  flex-shrink-0">
-                                    <img src="{{ uploadedAsset('default','profile') }}" class="rounded-circle" id="chat_avatar" alt="Profile Image" data-userid="">
+                                    <img src="{{ uploadedAsset('default','profile') }}" class="rounded-circle" id="chat_avatar" alt="Profile" data-userid="">
                                 </div>
                                 <div class="ms-2 overflow-hidden">
-                                    <h6 class="chat-user-name"></h6>
+                                    <h6 class="chat-user-name" aria-label="Chat user name"></h6>
                                     <span class="last-seen"></span>
                                 </div>
                             </div>

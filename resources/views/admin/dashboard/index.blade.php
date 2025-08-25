@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content pb-0">
-            <x-admin.breadcrumb 
-                :title="__('admin.dashboard.dashboard')" 
+            <x-admin.breadcrumb
+                :title="__('admin.dashboard.dashboard')"
                 :breadcrumbs="[
                     __('admin.dashboard.admin_dashboard') => ''
                 ]"
@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-5">
-                                    <img src="{{asset('/backend/assets/img/icons/car.svg')}}" alt="Image Preview">
+                                    <img src="{{asset('/backend/assets/img/icons/car.svg')}}" alt="Vehicle Preview">
                                 </div>
                             </div>
                         </div>
@@ -137,7 +137,7 @@
                                 @php
                                 $imagePath = ($carTypes[0]->vehicle_image ?? " ");
                                 @endphp
-                                <img src="{{ uploadedAsset($imagePath, 'default2') }}" class="dash-height rounded w-100" alt="Vehicle Image">
+                                <img src="{{ uploadedAsset($imagePath, 'default2') }}" class="dash-height rounded w-100" alt="Vehicle">
                             </div>
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                                 <div>
@@ -179,7 +179,7 @@
             </div>
             <div class="row">
                 @if (haspermission($permissions, 'reservations', 'view') && isAccessMenu('reservation'))
-                <!-- Customers -->
+                <!-- Recent Reservations -->
                 <div class="col-xl-12 d-flex">
                     <div class="card flex-fill">
                         <div class="card-body pb-1">
@@ -194,7 +194,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar flex-shrink-0">
+                                                <div target="_blank" class="avatar flex-shrink-0">
                                                     @php
                                                     $imagePath = $reservation->vehicle_image ?? "";
                                                     $filename = basename($imagePath);
@@ -204,8 +204,8 @@
                                                         $imagePath = $newpath;
                                                     }
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" class="admin-vehicle-image" alt="Vehicle Image">
-                                                </a>
+                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" class="admin-vehicle-image" alt="Vehicle">
+                                                </div>
                                                 <?php
                                                 $start = \Carbon\Carbon::parse($reservation->start_datetime);
                                                 $end = \Carbon\Carbon::parse($reservation->end_datetime);
@@ -214,7 +214,7 @@
                                                 ?>
                                                 <div class="flex-grow-1 ms-2">
                                                     <p class="d-flex align-items-center fs-13 text-default mb-1">{{number_format($reservation->day_count, 0)}} {{ __('admin.dashboard.days') }}<i class="ti ti-circle-filled text-primary fs-5 mx-1"></i>{{$reservation->driving_name}}</p>
-                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{$reservation->name}}</a></h6>
+                                                    <h6 class="fs-14 fw-semibold mb-1">{{$reservation->name}}</h6>
                                                 </div>
                                             </div>
                                         </td>
@@ -235,12 +235,12 @@
                                         <td>
                                             <div class="d-flex align-items-center gap-3">
                                                 <h6 class="fs-14 fw-semibold">{{$symbol}}{{ json_decode($reservation->vehicle_price)[0]->daily ?? 0 }}<span class="fw-normal text-default">/{{ __('admin.dashboard.day') }}</span></h6>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm">
+                                                <div class="avatar avatar-sm">
                                                     @php
                                                     $imagePath = $reservation->profile_image ?? "";
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" class="rounded-circle" alt="Profile Image">
-                                                </a>
+                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" class="rounded-circle" alt="Profile">
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -274,14 +274,14 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar flex-shrink-0">
+                                                <div class="avatar flex-shrink-0">
                                                     @php
                                                     $imagePath = $user->profile_image ?? "";
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" class="rounded-circle" alt="Profile Image">
-                                                </a>
+                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" class="rounded-circle" alt="Profile">
+                                                </div>
                                                 <div class="flex-grow-1 ms-2">
-                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{ucfirst($user->name)}}</a></h6>
+                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="{{ route('admin.customer-details', $user->encrypted_id) }}" target="_blank">{{ucfirst($user->name)}}</a></h6>
                                                 </div>
                                             </div>
                                         </td>
@@ -370,7 +370,7 @@
                                                             $imagePath = $newpath;
                                                         }
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" class="admin-vehicle-image" alt="Profile Image">
+                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" class="admin-vehicle-image" alt="Vehicle">
                                                 </a>
                                                 <div class="flex-grow-1 ms-2">
                                                     <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{$maintenance->name}}</a></h6>
@@ -433,14 +433,14 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar flex-shrink-0">
+                                                <div class="avatar flex-shrink-0">
                                                     @php
                                                         $imagePath = $driver->image ?? "";
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" class="rounded-circle" alt="Profile Image">
-                                                </a>
+                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" class="rounded-circle" alt="Driver Profile">
+                                                </div>
                                                 <div class="flex-grow-1 ms-2">
-                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{$driver->driver_name}}</a></h6>
+                                                    <h6 class="fs-14 fw-semibold mb-1">{{$driver->driver_name}}</h6>
                                                     <p class="fs-13 text-default">{{ __('admin.dashboard.no_of_raids') }} : {{ $driver->total_bookings }}</p>
                                                 </div>
                                             </div>
@@ -495,17 +495,17 @@
                                         @if(count($invoices) != 0)
                                         @foreach($invoices as $invoice)
                                         <tr>
-                                            <td><a href="javascript:void(0);" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
+                                            <td><div class="fs-12 fw-medium">#{{$invoice->invoice_number}}</div></td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0">
+                                                    <div class="avatar avatar-rounded me-2 flex-shrink-0">
                                                         @php
                                                         $imagePath = $invoice->profile_image ?? "";
                                                         @endphp
-                                                        <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="Profile Image">
-                                                    </a>
+                                                        <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="Customer Profile">
+                                                    </div>
                                                     <div>
-                                                        <h6 class="fs-14"><a href="javascript:void(0);">{{$invoice->full_name}}</a></h6>
+                                                        <h6 class="fs-14 fw-semibold">{{$invoice->full_name}}</h6>
                                                     </div>
                                                 </div>
                                             </td>
