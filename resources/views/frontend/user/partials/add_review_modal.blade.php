@@ -16,15 +16,15 @@
                                         <p>{{__('web.home.service')}}</p>
                                         <div class="rating-selection" id="service_ratings">
                                             <input type="checkbox" id="service1" class="service_ratings" value="1">
-                                            <label for="service1"></label>
+                                            <label for="service1" class="visually-hidden">1</label>
                                             <input type="checkbox" id="service2" class="service_ratings" value="2">
-                                            <label for="service2"></label>
+                                            <label for="service2" class="visually-hidden">2</label>
                                             <input type="checkbox" id="service3" class="service_ratings" value="3">
-                                            <label for="service3"></label>
+                                            <label for="service3" class="visually-hidden">3</label>
                                             <input type="checkbox" id="service4" class="service_ratings" value="4">
-                                            <label for="service4"></label>
+                                            <label for="service4" class="visually-hidden">4</label>
                                             <input type="checkbox" id="service5" class="service_ratings" value="5">
-                                            <label for="service5"></label>
+                                            <label for="service5" class="visually-hidden">5</label>
                                         </div>
                                     </div>
                                 </div>
@@ -33,15 +33,15 @@
                                         <p>{{__('web.user.location')}}</p>
                                         <div class="rating-selection" id="location_ratings">
                                             <input type="checkbox" id="loc1" class="location_ratings" value="1">
-                                            <label for="loc1"></label>
+                                            <label for="loc1" class="visually-hidden">1</label>
                                             <input type="checkbox" id="loc2" class="location_ratings" value="2">
-                                            <label for="loc2"></label>
+                                            <label for="loc2" class="visually-hidden">2</label>
                                             <input type="checkbox" id="loc3" class="location_ratings" value="3">
-                                            <label for="loc3"></label>
+                                            <label for="loc3" class="visually-hidden">3</label>
                                             <input type="checkbox" id="loc4" class="location_ratings" value="4">
-                                            <label for="loc4"></label>
+                                            <label for="loc4" class="visually-hidden">4</label>
                                             <input type="checkbox" id="loc5" class="location_ratings" value="5">
-                                            <label for="loc5"></label>
+                                            <label for="loc5" class="visually-hidden">5</label>
                                         </div>
                                     </div>
                                 </div>
@@ -50,15 +50,15 @@
                                         <p>{{ __('web.home.facilities') }}</p>
                                         <div class="rating-selection" id="facility_ratings">
                                             <input type="checkbox" id="fac1" class="facility_ratings" value="1">
-                                            <label for="fac1"></label>
+                                            <label for="fac1" class="visually-hidden">1</label>
                                             <input type="checkbox" id="fac2" class="facility_ratings" value="2">
-                                            <label for="fac2"></label>
+                                            <label for="fac2" class="visually-hidden">2</label>
                                             <input type="checkbox" id="fac3" class="facility_ratings" value="3">
-                                            <label for="fac3"></label>
+                                            <label for="fac3" class="visually-hidden">3</label>
                                             <input type="checkbox" id="fac4" class="facility_ratings" value="4">
-                                            <label for="fac4"></label>
+                                            <label for="fac4" class="visually-hidden">4</label>
                                             <input type="checkbox" id="fac5" class="facility_ratings" value="5">
-                                            <label for="fac5"></label>
+                                            <label for="fac5" class="visually-hidden">5</label>
                                         </div>
                                     </div>
                                 </div>
@@ -67,15 +67,15 @@
                                         <p>{{ __('web.home.value_for_money') }}</p>
                                         <div class="rating-selection" id="value_for_money_ratings">
                                             <input type="checkbox" id="val1" class="value_for_money_ratings" value="1">
-                                            <label for="val1"></label>
+                                            <label for="val1" class="visually-hidden">1</label>
                                             <input type="checkbox" id="val2" class="value_for_money_ratings" value="2">
-                                            <label for="val2"></label>
+                                            <label for="val2" class="visually-hidden">2</label>
                                             <input type="checkbox" id="val3" class="value_for_money_ratings" value="3">
-                                            <label for="val3"></label>
+                                            <label for="val3" class="visually-hidden">3</label>
                                             <input type="checkbox" id="val4" class="value_for_money_ratings" value="4">
-                                            <label for="val4"></label>
+                                            <label for="val4" class="visually-hidden">4</label>
                                             <input type="checkbox" id="val5" class="value_for_money_ratings" value="5">
-                                            <label for="val5"></label>
+                                            <label for="val5" class="visually-hidden">5</label>
                                         </div>
                                     </div>
                                 </div>
@@ -84,15 +84,15 @@
                                         <p>{{ __('web.home.cleanliness') }}</p>
                                         <div class="rating-selection" id="cleanliness_ratings">
                                             <input type="checkbox" id="clean1" class="cleanliness_ratings" value="1">
-                                            <label for="clean1"></label>
+                                            <label for="clean1" class="visually-hidden">1</label>
                                             <input type="checkbox" id="clean2" class="cleanliness_ratings" value="2">
-                                            <label for="clean2"></label>
+                                            <label for="clean2" class="visually-hidden">2</label>
                                             <input type="checkbox" id="clean3" class="cleanliness_ratings" value="3">
-                                            <label for="clean3"></label>
+                                            <label for="clean3" class="visually-hidden">3</label>
                                             <input type="checkbox" id="clean4" class="cleanliness_ratings" value="4">
-                                            <label for="clean4"></label>
+                                            <label for="clean4" class="visually-hidden">4</label>
                                             <input type="checkbox" id="clean5" class="cleanliness_ratings" value="5">
-                                            <label for="clean5"></label>
+                                            <label for="clean5" class="visually-hidden">5</label>
                                         </div>
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="input-block">
-                                                            <label>{{ __('web.home.comments') }}<span class="text-danger"> *</span></label>
+                                                            <label for="comments">{{ __('web.home.comments') }}<span class="text-danger"> *</span></label>
                                                             <textarea rows="4" class="form-control" name="comments" id="comments" placeholder="{{ __('web.home.comments') }}"></textarea>
                                                             <span class="text-danger error-text" id="comments_error"></span>
                                                         </div>

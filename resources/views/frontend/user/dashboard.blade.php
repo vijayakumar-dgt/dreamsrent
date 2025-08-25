@@ -136,12 +136,11 @@
                             <table class="table" id="bookingTable">
                                 <thead class="d-none">
                                     <tr>
-                                        <th>{{ __('web.user.booking_id') }}</th>
-                                        <th>{{ __('web.user.vehicle') }}</th>
-                                        <th>{{ __('web.user.start_date') }}</th>
-                                        <th>{{ __('web.user.end_date') }}</th>
-                                        <th>{{ __('web.user.status') }}</th>
-                                        <th>{{ __('web.user.total_amount') }}</th>
+                                        <th>{{ __('web.user.vehicle_name') }}</th>
+                                        <th>{{ __('web.home.start_date') }}</th>
+                                        <th>{{ __('web.common.end_date') }}</th>
+                                        <th>{{ __('web.common.price') }}</th>
+                                        <th>{{ __('web.common.status') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
