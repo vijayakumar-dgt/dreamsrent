@@ -134,7 +134,18 @@
                         </div>
                         <div class="table-responsive dashboard-table dashboard-table-info d-none real-table">
                             <table class="table" id="bookingTable">
-                                <tbody></tbody>
+                                <thead class="d-none">
+                                    <tr>
+                                        <th>{{ __('web.user.booking_id') }}</th>
+                                        <th>{{ __('web.user.vehicle') }}</th>
+                                        <th>{{ __('web.user.start_date') }}</th>
+                                        <th>{{ __('web.user.end_date') }}</th>
+                                        <th>{{ __('web.user.status') }}</th>
+                                        <th>{{ __('web.user.total_amount') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
                             </table>
                         </div>
                     </div>

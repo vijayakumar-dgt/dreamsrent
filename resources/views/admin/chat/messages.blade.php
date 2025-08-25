@@ -80,7 +80,9 @@
                                     <img src="{{ uploadedAsset('default','profile') }}" class="rounded-circle" id="chat_avatar" alt="Profile" data-userid="">
                                 </div>
                                 <div class="ms-2 overflow-hidden">
-                                    <h6 class="chat-user-name" aria-label="Chat user name"></h6>
+                                    <h6 class="chat-user-name">
+                                        <span class="visually-hidden">{{ __('admin.common.name') }}</span>
+                                    </h6>
                                     <span class="last-seen"></span>
                                 </div>
                             </div>

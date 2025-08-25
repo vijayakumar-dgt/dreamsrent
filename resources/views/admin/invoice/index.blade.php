@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.finance_accounts.invoices')" 
+            <x-admin.breadcrumb
+                :title="__('admin.finance_accounts.invoices')"
                 :breadcrumbs="[
                     __('admin.finance_accounts.invoices') => ''
                 ]">
@@ -81,14 +81,14 @@
                     <tbody>
                         @foreach($invoices as $invoice)
                         <tr data-created="{{ \Carbon\Carbon::parse($invoice->created_at)->format('Y-m-d') }}">
-                            <td><a href="javascript:void(0);" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
+                            <td><div class="fs-12 fw-medium">#{{$invoice->invoice_number}}</div></td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0">
-                                        <img src="{{ uploadedAsset($invoice->profile_image, 'profile') }}" alt="Profile Image">
-                                    </a>
+                                    <div class="avatar avatar-rounded me-2 flex-shrink-0">
+                                        <img src="{{ uploadedAsset($invoice->profile_image, 'profile') }}" alt="Profile">
+                                    </div>
                                     <div>
-                                        <h6 class="fs-14"><a href="javascript:void(0);">{{$invoice->full_name}}</a></h6>
+                                        <h6 class="fs-14 fw-medium">{{$invoice->full_name}}</h6>
                                     </div>
                                 </div>
                             </td>
@@ -143,9 +143,9 @@
                                         @endif
                                         @if (hasPermission($permissions, 'invoices', 'delete'))
                                         <li>
-                                            <a class="dropdown-item rounded-1" id="delete-invoice-btn" href="javascript:void(0);" data-bs-toggle="modal" data-id="{{$invoice->id}}" data-bs-target="#delete_modal">
+                                            <button type="button" class="dropdown-item rounded-1" id="delete-invoice-btn" data-bs-toggle="modal" data-id="{{$invoice->id}}" data-bs-target="#delete_modal">
                                                 <i class="ti ti-trash me-1"></i>{{ __('admin.common.delete') }}
-                                            </a>
+                                            </button>
                                         </li>
                                         @endif
                                     </ul>

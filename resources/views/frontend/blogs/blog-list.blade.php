@@ -86,7 +86,7 @@
                                                 $imagePath = 'storage/' . $latest->image;
                                                 $defaultImage = asset('/backend/assets/img/default-profile.png');
                                             @endphp
-                                            <img class="img-fluid" src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Post Image">
+                                            <img class="img-fluid" src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Blog Post">
                                         </a>
                                     </div>
                                     <div class="article-content">

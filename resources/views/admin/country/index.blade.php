@@ -87,7 +87,7 @@
         </div>
 
         <div class="mb-3">
-            <label name="code" class="form-label">
+            <label for="code" class="form-label">
                 {{ __('admin.cms.country_code') }} <span class="text-danger">*</span>
             </label>
             <input type="text" class="form-control" name="code" id="code" maxlength="2">

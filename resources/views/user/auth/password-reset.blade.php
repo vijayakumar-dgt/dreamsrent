@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -42,7 +42,7 @@
                             @csrf
                             <div class="input-block">
                                 <input type="hidden" name="email" id="email">
-                                <label class="form-label">
+                                <label for="current_password" class="form-label">
                                     {{ __('web.auth.auth_new_password') }} <span class="text-danger">*</span>
                                 </label>
                                 <div class="pass-group">
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                             <div class="input-block">
-                                <label class="form-label">
+                                <label for="confirm_password" class="form-label">
                                     {{ __('web.auth.confirm_password') }} <span class="text-danger">*</span>
                                 </label>
                                 <div class="pass-group">

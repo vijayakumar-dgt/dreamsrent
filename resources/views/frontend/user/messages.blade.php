@@ -45,7 +45,7 @@
                                     <a href="javascript:void(0);" class="notify-block d-flex open-chat">
                                         <div class="media-img-wrap flex-shrink-0">
                                             <div class="avatar">
-                                                <img src="{{ uploadedAsset($receiver->userDetail->profile_image ?? 'default', 'profile') }}" id="profileavatar" class="avatar-img rounded-circle">
+                                                <img src="{{ uploadedAsset($receiver->userDetail->profile_image ?? 'default', 'profile') }}" id="profileavatar" class="avatar-img rounded-circle" alt="Profile">
                                             </div>
                                         </div>
                                         <div class="media-body chat-custom flex-grow-1">
@@ -75,7 +75,7 @@
                                 <div class="notify-block d-flex">
                                     <div class="media-img-wrap flex-shrink-0">
                                         <div class="avatar">
-                                            <img src="{{ uploadedAsset($receiver->userDetail->profile_image ?? 'default', 'profile') }}" class="avatar-img rounded-circle">
+                                            <img src="{{ uploadedAsset($receiver->userDetail->profile_image ?? 'default', 'profile') }}" class="avatar-img rounded-circle" alt="Profile">
                                         </div>
                                     </div>
                                     <div class="media-body flex-grow-1">

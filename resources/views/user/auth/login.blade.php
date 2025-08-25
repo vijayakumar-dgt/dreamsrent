@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -40,18 +40,18 @@
                         <p class="account-subtitle">{{ __('web.auth.email_confirmation_subtitle') }}</p>
                         <form id="userLoginForm">
                             <div class="input-block">
-                                <label class="form-label">
+                                <label for="email" class="form-label">
                                     {{ __('web.auth.email') }} <span class="text-danger">*</span>
                                 </label>
                                 <input type="email" class="form-control" id="email" name="email" >
                                 <span class="error-text text-danger" id="email_error"></span>
                             </div>
                             <div class="input-block">
-                                <label class="form-label">
+                                <label for="password" class="form-label">
                                     {{ __('web.auth.auth_password') }} <span class="text-danger">*</span>
                                 </label>
                                 <div class="pass-group">
-                                    <input type="password" class="form-control pass-input" id="password" name="password" >
+                                    <input type="password" class="form-control pass-input" id="password" name="password">
                                     <span class="fas fa-eye-slash toggle-password"></span>
                                 </div>
                                 <span class="error-text text-danger" id="password_error"></span>
@@ -63,9 +63,9 @@
                                </button>
                             </div>
                             <div class="input-block m-0">
-                                <label class="custom_check d-inline-flex">
+                                <label for="remember" class="custom_check d-inline-flex">
                                     <span>{{ __('web.auth.remember_me') }}</span>
-                                    <input type="checkbox" name="remember">
+                                    <input type="checkbox" name="remember" id="remember">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>

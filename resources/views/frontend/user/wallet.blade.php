@@ -74,7 +74,7 @@
                                 </div>
                             </div>
                             <div class="form-group wallet-form-group">
-                                <label>{{ __('web.user.add_wallet_credits') }} ($)</label>
+                                <p>{{ __('web.user.add_wallet_credits') }} ($)</p>
                             </div>
                             <div class="wallet-btn d-flex align-items-center wallet-inpts">
                                 <input type="number" class="form-control" id="wallet_amount" name="wallet_amount" placeholder="{{ __('web.user.enter_amount') }}" min="0" max="99999" oninput="if(this.value.length > 5) this.value = this.value.slice(0, 5);">
@@ -161,12 +161,12 @@
                             <input type="hidden" name="wallet_amount" id="wallet_amount">
                             <div class="d-flex justify-content-center">
                                 <div class="choose-payment d-flex gap-3">
-                                    <label class="custom_radio text-center">
+                                    <label for="paypal" class="custom_radio text-center">
                                         <input type="radio" name="payment_one" id="paypal" value="wallet_one" checked>
                                         <span class="checkmark d-block mx-auto"></span>
                                         <img src="{{ asset('frontend/assets/img/icons/payment-1.svg') }}" alt="Icon" class="img-fluid mt-2">
                                     </label>
-                                    <label class="custom_radio text-center">
+                                    <label for="stripe" class="custom_radio text-center">
                                         <input type="radio" name="payment_one" id="stripe" value="wallet_one">
                                         <span class="checkmark d-block mx-auto"></span>
                                         <img src="{{ asset('frontend/assets/img/icons/payment-2.svg') }}" alt="Icon" class="img-fluid mt-2">

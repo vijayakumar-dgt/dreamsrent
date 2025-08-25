@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -46,10 +46,10 @@
                                 {{ __('web.auth.forgot_password_description') }}
                             </p>
                             <div class="input-block">
-                                <label class="form-label">
+                                <label for="email" class="form-label">
                                     {{ __('web.auth.email_address') }} <span class="text-danger">*</span>
                                 </label>
-                                <input type="email" name="email" id="email" class="form-control" placeholder="">
+                                <input type="email" name="email" id="email" class="form-control">
                             </div>
                             <button type="submit" id="forgot_otp" class="btn btn-outline-light w-100 btn-size">
                                 {{ __('web.auth.save_changes') }}

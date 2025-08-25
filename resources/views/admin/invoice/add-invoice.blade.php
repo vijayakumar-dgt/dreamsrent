@@ -24,14 +24,14 @@
                                     <div class="row gx-3">
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.finance_accounts.invoice_number') }}</label>
+                                                <label for="invoice_number" class="form-label">{{ __('admin.finance_accounts.invoice_number') }}</label>
                                                 <input type="text" name="invoice_number" id="invoice_number" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.vehicle') }}</label>
-                                                <select class="select form-control" name="car_id">
+                                                <label for="car_id" class="form-label">{{ __('admin.common.vehicle') }}</label>
+                                                <select class="select form-control" name="car_id" id="car_id">
                                                     <option>{{ __('admin.common.select') }}</option>
                                                     @foreach($cars as $car)
                                                     <option value="{{$car->id}}">{{$car->name}}</option>
@@ -41,9 +41,9 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.finance_accounts.from_date') }}</label>
+                                                <label for="from_date" class="form-label">{{ __('admin.finance_accounts.from_date') }}</label>
                                                 <div class="input-icon-end position-relative">
-                                                    <input type="text" name="from_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
+                                                    <input type="text" name="from_date" id="from_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
                                                     <span class="input-icon-addon">
                                                         <i class="ti ti-calendar"></i>
                                                     </span>
@@ -52,9 +52,9 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.finance_accounts.due_date') }}</label>
+                                                <label for="to_date" class="form-label">{{ __('admin.finance_accounts.due_date') }}</label>
                                                 <div class="input-icon-end position-relative">
-                                                    <input type="text" name="to_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
+                                                    <input type="text" name="to_date" id="to_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
                                                     <span class="input-icon-addon">
                                                         <i class="ti ti-calendar"></i>
                                                     </span>
@@ -63,8 +63,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.finance_accounts.currency') }}</label>
-                                                <select class="select form-control" name="currency_id">
+                                                <label for="currency_id" class="form-label">{{ __('admin.finance_accounts.currency') }}</label>
+                                                <select class="select form-control" name="currency_id" id="currency_id">
                                                     <option>{{ __('admin.common.select') }}</option>
                                                     @foreach($currencies as $currency)
                                                     <option value="{{$currency->id}}">{{$currency->currency_name}}</option>
@@ -74,8 +74,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.status') }}</label>
-                                                <select class="select form-control" name="status">
+                                                <label for="status" class="form-label">{{ __('admin.common.status') }}</label>
+                                                <select class="select form-control" name="status" id="status">
                                                     <option>{{ __('admin.common.select') }}</option>
                                                     <option value="Paid">{{ __('admin.finance_accounts.paid') }}</option>
                                                     <option value="Pending">{{ __('admin.finance_accounts.pending') }}</option>
@@ -93,17 +93,17 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.from') }}</label>
-                                                <input type="text" class="form-control" name="biller" value='{{ getCurrentUserFullname() ?? '' }}' readonly>
+                                                <label for="biller" class="form-label">{{ __('admin.common.from') }}</label>
+                                                <input type="text" class="form-control" name="biller" id="biller" value='{{ getCurrentUserFullname() ?? '' }}' readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="mb-3">
                                                 <div class="d-flex align-items-center justify-content-between">
-                                                    <label class="form-label">{{ __('admin.common.to') }}</label>
+                                                    <label for="customer_id" class="form-label">{{ __('admin.common.to') }}</label>
                                                     <a href="{{ route('admin.customers') }}" class="text-info d-block mb-1">{{ __('admin.common.add_new') }}</a>
                                                 </div>
-                                                <select class="select" name="customer_id">
+                                                <select class="select" name="customer_id" id="customer_id">
                                                     <option>{{ __('admin.finance_accounts.select_customer') }}</option>
                                                     @foreach($users as $user)
                                                     <option value="{{$user->id}}">{{$user->full_name}}</option>
@@ -169,8 +169,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{__('admin.blog.language')}} <span class="text-danger">*</span></label>
-                                                    <select class="select" name="language_id">
+                                                    <label for="language_id" class="form-label">{{__('admin.blog.language')}} <span class="text-danger">*</span></label>
+                                                    <select class="select" name="language_id" id="language_id">
                                                         @foreach($languages as $language)
                                                         <option value="{{ $language->language_id }}">
                                                             {{ $language->transLang->name ?? 'N/A' }}
@@ -181,8 +181,8 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.finance_accounts.payment_method') }}</label>
-                                                    <select class="select" name="payment_method">
+                                                    <label for="payment_method" class="form-label">{{ __('admin.finance_accounts.payment_method') }}</label>
+                                                    <select class="select" name="payment_method" id="payment_method">
                                                         @foreach($payments as $payment)
                                                         <?php
                                                         $paymentKey = Illuminate\Support\Str::before($payment->key, '_');
@@ -199,14 +199,14 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.common.terms_and_conditions') }} <span class="text-danger">*</span></label>
-                                                    <textarea class="form-control" rows="3" name="terms"></textarea>
+                                                    <label for="terms" class="form-label">{{ __('admin.common.terms_and_conditions') }} <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control" rows="3" name="terms" id="terms"></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.finance_accounts.notes') }} <span class="text-danger">*</span></label>
-                                                    <textarea class="form-control" rows="3" name="notes"></textarea>
+                                                    <label for="notes" class="form-label">{{ __('admin.finance_accounts.notes') }} <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control" rows="3" name="notes" id="notes"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -291,25 +291,27 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
+                                        <div class="avatar me-2 flex-shrink-0">
                                             @php
                                             $imagePath = $booking->vehicle_image ?? '';
                                             @endphp
-                                            <img src="{{ uploadedAsset($imagePath) }}" alt="Vehicle Image">
-                                        </a>
+                                            <img src="{{ uploadedAsset($imagePath) }}" alt="Vehicle">
+                                        </div>
                                         <div>
-                                            <h6 class="fs-14"><a href="javascript:void(0);">{{$booking->vehicle}}</a></h6>
+                                            <h6 class="fs-14">{{$booking->vehicle}}</h6>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0"> @php
+                                        <div class="avatar avatar-rounded me-2 flex-shrink-0">
+                                            @php
                                             $imagePath = $booking->profile_image ?? '';
                                             @endphp
-                                            <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="Profile Image"></a>
+                                            <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="Profile">
+                                        </div>
                                         <div>
-                                            <h6 class="mb-1 fs-14"><a href="javascript:void(0);">{{$booking->full_name}}</a></h6>
+                                            <h6 class="mb-1 fs-14">{{$booking->full_name}}</h6>
                                         </div>
                                     </div>
                                 </td>
@@ -354,7 +356,7 @@
             <div class="modal-footer">
                 <div class="d-flex justify-content-center">
                     <a href="{{ route('admin.invoice') }}" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                    <a href="javascript:void(0);" class="btn btn-primary">{{ __('admin.common.create_new') }}</a>
+                    <a href="{{ route('reservation.create') }}" class="btn btn-primary">{{ __('admin.common.create_new') }}</a>
                 </div>
             </div>
         </div>

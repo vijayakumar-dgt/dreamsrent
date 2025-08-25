@@ -47,7 +47,7 @@
             initComplete: function () {
                 $(".table-loader, .input-loader, .label-loader").hide();
                 $(".real-table, .real-label, .real-input").removeClass("d-none");
-                if (table.rows().count() === 0) {
+                if ($("#linkReservationTable").length === 0) {
                     $(".table-footer").addClass("d-none");
                 } else {
                     $(".table-footer").removeClass("d-none");

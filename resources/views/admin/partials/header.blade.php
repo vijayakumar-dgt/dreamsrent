@@ -34,7 +34,7 @@
                     @if(!empty($language_switcher) && $language_switcher == 1)
                     <div class="nav-item dropdown has-arrow flag-nav nav-item-box">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
-                            role="button" aria-expanded="false" tabindex="0" aria-haspopup="true">
+                            role="button" aria-expanded="false" tabindex="0" aria-haspopup="true" onkeydown="if(event.key === 'Enter' || event.key === ' ') this.click();">
                             <img src="{{ asset('/backend/assets/img/flags/'. app()->getLocale() .'.svg') }}" class="img-fluid" alt="{{ strtoupper(app()->getLocale()) }} Flag">
                         </a>
                         <ul class="dropdown-menu p-2">
@@ -52,14 +52,6 @@
                     </div>
                     @endif
                     <!-- /Flag -->
-                    <div class="theme-item">
-                        <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle btn btn-menubar">
-                            <i class="ti ti-moon"></i>
-                        </a>
-                        <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle d-none btn btn-menubar">
-                            <i class="ti ti-sun-high"></i>
-                        </a>
-                    </div>
                     <div class="notification_item">
                         <a href="#" class="btn btn-menubar position-relative" id="notification_popup" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                             <i class="ti ti-bell"></i>
@@ -70,7 +62,6 @@
                                 <h5 class="notification-title">{{ __('web.user.notifications') }}</h5>
                             </div>
                             <div class="noti-content">
-
                             </div>
                             <div class="d-flex align-items-center justify-content-between topnav-dropdown-footer">
                                 <div class="d-flex align-items-center">

@@ -189,6 +189,13 @@
                             </div>
                             <div class="table-responsive">
                                 <table class="table custom-table1">
+                                    <thead class="d-none">
+                                        <tr>
+                                            <th>{{ __('admin.common.vehicle') }}</th>
+                                            <th>{{ __('admin.cms.locations') }}</th>
+                                            <th>{{ __('admin.common.customer') }}</th>
+                                        </tr>
+                                    </thead>
                                     @if(count($reservations) != 0)
                                     @foreach($reservations as $reservation)
                                     <tr>
@@ -270,6 +277,12 @@
                             </div>
                             <div class="table-responsive">
                                 <table class="table custom-table1">
+                                    <thead class="d-none">
+                                        <tr>
+                                            <th>{{ __('admin.common.customer') }}</th>
+                                            <th>{{ __('admin.dashboard.no_of_bookings') }}</th>
+                                        </tr>
+                                    </thead>
                                     @foreach($users as $user)
                                     <tr>
                                         <td>
@@ -355,12 +368,18 @@
                             </div>
                             <div class="table-responsive">
                                 <table class="table custom-table1">
+                                    <thead class="d-none">
+                                        <tr>
+                                            <th>{{ __('admin.common.vehicle') }}</th>
+                                            <th>{{ __('admin.main.maintenance') }}</th>
+                                        </tr>
+                                    </thead>
                                     @if(count($maintenances) != 0)
                                     @foreach($maintenances as $maintenance)
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar flex-shrink-0">
+                                                <div class="avatar flex-shrink-0">
                                                     @php
                                                         $imagePath = $maintenance->vehicle_image ?? "";
                                                         $filename = basename($imagePath);
@@ -371,9 +390,9 @@
                                                         }
                                                     @endphp
                                                     <img src="{{ uploadedAsset($imagePath, 'default') }}" class="admin-vehicle-image" alt="Vehicle">
-                                                </a>
+                                                </div>
                                                 <div class="flex-grow-1 ms-2">
-                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{$maintenance->name}}</a></h6>
+                                                    <h6 class="fs-14 fw-semibold mb-1">{{$maintenance->name}}</h6>
                                                     <p class="fs-13 text-default">{{$maintenance->model_name}}</p>
                                                 </div>
                                             </div>
@@ -428,6 +447,12 @@
                             </div>
                             <div class="table-responsive">
                                 <table class="table custom-table1">
+                                    <thead class="d-none">
+                                        <tr>
+                                            <th>{{ __('admin.common.driver') }}</th>
+                                            <th>{{ __('admin.common.recent_rents') }}</th>
+                                        </tr>
+                                    </thead>
                                     @if(count($drivers) != 0)
                                     @foreach($drivers as $driver)
                                     <tr>

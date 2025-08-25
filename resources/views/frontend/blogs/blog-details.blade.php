@@ -13,7 +13,7 @@
                             $imagePath = 'storage/' . $blogPosts->profile_image;
                             $defaultImage = asset('assets/img/default-profile.png');
                             @endphp
-                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Post Image">
+                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Profile">
                         </div>
                         <a href="javascript:void(0)"><span>{{ $blogPosts->full_name ?? $blogPosts->customer }}</span></a>
                     </div>
@@ -29,7 +29,7 @@
             <div class="row g-4 g-lg-6">
                 <div class="col-lg-8 mx-auto">
                     <div class="bloginner-img mt-0">
-                        <img src="{{ asset('/storage/' . $blogPosts->image) }}" class="img-fluid" alt="Blog">
+                        <img src="{{ asset('/storage/' . $blogPosts->image) }}" class="img-fluid" alt="Blog Post">
                     </div>
                     <div class="blog-description">
                         {!! $blogPosts->description !!}
@@ -81,7 +81,7 @@
                             <div class="review-header-group">
                                 <div class="review-widget-header">
                                     <span class="review-widget-img">
-                                        <img class="img-fluid" src="{{ uploadedAsset('default','profile') }}" alt="Post Image">
+                                        <img class="img-fluid" src="{{ uploadedAsset('default','profile') }}" alt="Blog Post">
                                     </span>
                                     <div class="review-design">
                                         <h6>{{ $review->name }}</h6>
@@ -109,8 +109,8 @@
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="input-block">
-                                                            <label>{{ __('web.blog.comments') }}</label>
-                                                            <textarea rows="4" name="comment" class="form-control" required></textarea>
+                                                            <label for="comment" class="form-label">{{ __('web.blog.comments') }}</label>
+                                                            <textarea rows="4" name="comment" id="comment" class="form-control" required></textarea>
                                                         </div>
                                                     </div>
                                                 </div>

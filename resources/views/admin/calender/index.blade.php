@@ -186,7 +186,9 @@
                                 <img src="{{ uploadedAsset('', 'profile')}}" class="admin-vehicle-image" id="car_img" alt="Vehicle">
                             </span>
                             <div>
-                                <h6 id="car_title" class="fs-14 mb-1" aria-label="Vehicle title"></h6>
+                                <h6 id="car_title" class="fs-14 mb-1">
+                                    <span class="visually-hidden">{{ __('admin.common.vehicle') }}</span>
+                                </h6>
                                 <p id="car_type"></p>
                             </div>
                         </div>
@@ -244,7 +246,9 @@
                         <img src="{{ uploadedAsset('', 'profile')}}" id="customer_img" alt="Customer Profile">
                     </span>
                     <div>
-                        <h6 class="fs-14 fw-medium mb-1" id="customer_name" aria-label="Customer name"></h6>
+                        <h6 class="fs-14 fw-medium mb-1" id="customer_name">
+                            <span class="visually-hidden">{{ __('admin.common.name') }}</span>
+                        </h6>
                         <p id="customer_num"></p>
                     </div>
                 </div>
@@ -258,7 +262,9 @@
                         <img src="{{ uploadedAsset('', 'profile')}}" id="driver_img" alt="Driver Profile">
                     </span>
                     <div>
-                        <h6 class="fs-14 fw-medium mb-1" id="driver_name" aria-label="Driver name"></h6>
+                        <h6 class="fs-14 fw-medium mb-1" id="driver_name">
+                            <span class="visually-hidden">{{ __('admin.common.name') }}</span>
+                        </h6>
                         <p id="driver_num"></p>
                     </div>
                 </div>
@@ -284,7 +290,9 @@
         </div>
         <div class="d-flex align-items-center justify-content-between">
             <h6>{{ __('admin.finance_accounts.total_price') }}</h6>
-            <h6 id="final_price" aria-label="Total price"></h6>
+            <h6 id="final_price">
+                <span class="visually-hidden">{{ __('admin.common.total_price') }}</span>
+            </h6>
         </div>
     </x-slot>
 </x-admin.modal>

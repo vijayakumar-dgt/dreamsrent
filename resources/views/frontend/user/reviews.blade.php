@@ -167,11 +167,11 @@
             <div class="modal-body">
                 <form action="#">
                     <div class="modal-form-group">
-                        <label>{{ __('web.common.start_date') }} <span class="text-danger">*</span></label>
+                        <label for="custom_from_date">{{ __('web.common.start_date') }} <span class="text-danger">*</span></label>
                         <input type="date" class="form-control" id="custom_from_date">
                     </div>
                     <div class="modal-form-group">
-                        <label>{{ __('web.common.end_date') }} <span class="text-danger">*</span></label>
+                        <label for="custom_to_date">{{ __('web.common.end_date') }} <span class="text-danger">*</span></label>
                         <input type="date" class="form-control" id="custom_to_date">
                     </div>
                     <span class="text-danger error-text" id="custom_date_error"></span>
