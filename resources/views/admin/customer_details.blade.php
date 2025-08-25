@@ -19,7 +19,7 @@
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
                                 <div class="d-flex align-items-center">
                                     <span class="avatar avatar-lg me-3">
-                                        <img src="{{ $customer->profile_image }}" alt="Profile Image">
+                                        <img src="{{ $customer->profile_image }}" alt="Customer Profile">
                                     </span>
                                     <div>
                                         <h6 class="mb-1">{{ $customer->customer_full_name ?? '' }}</h6>
@@ -130,7 +130,7 @@
                                                                     <div class="col-lg-4">
                                                                         <div class="d-flex align-items-center">
                                                                             <span class="avatar flex-shrink-0 me-2">
-                                                                                <img src="{{ $booking->vehicle_image_url }}" alt="Vehicle Image">
+                                                                                <img src="{{ $booking->vehicle_image_url }}" alt="Vehicle">
                                                                             </span>
                                                                             <div>
                                                                                 <div class="text-info">{{ $booking->reservation_id }}</div>

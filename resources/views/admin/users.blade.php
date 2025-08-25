@@ -7,7 +7,7 @@
     <div class="page-wrapper">
         <div class="content me-4">
             <x-admin.breadcrumb 
-                :title="__('admin.common.users')" 
+                :title="__('admin.common.users')"
                 :breadcrumbs="[
                     __('admin.common.users') => ''
                 ]"
@@ -43,9 +43,13 @@
                         </ul>
                     </div>
                     <div class="dropdown">
-                        <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
+                        <button type="button" class="filtercollapse coloumn d-inline-flex align-items-center"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#filtercollapse"
+                            aria-expanded="false"
+                            aria-controls="filtercollapse">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
-                        </a>
+                        </button>
                     </div>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
@@ -141,10 +145,10 @@
 		<x-slot name="body">
             <div class="row">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
+                    <label for="image" class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
                     <div class="d-flex align-items-center flex-wrap row-gap-3">
                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-                            <img src="{{ uploadedAsset('', 'profile') }}" class="img-fluid rounded d-none" id="imagePreview" alt="Profile Image">
+                            <img src="{{ uploadedAsset('', 'profile') }}" class="img-fluid rounded d-none" id="imagePreview" alt="Profile">
                             <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
                         </div>
                         <div class="profile-upload">
@@ -164,21 +168,21 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
+                        <label for="first_name" class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
                         <input type="text" class="form-control" name="first_name" id="first_name">
                         <span class="text-danger error-text" id="first_name_error"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
+                        <label for="last_name" class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
                         <input type="text" class="form-control" name="last_name" id="last_name">
                         <span class="text-danger error-text" id="last_name_error"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.user_management.role') }}<span class="text-danger"> *</span></label>
+                        <label for="role_id" class="form-label">{{ __('admin.user_management.role') }}<span class="text-danger"> *</span></label>
                         <select class="form-control role" name="role_id" id="role_id" data-placeholder="{{ __('admin.common.select') }}">
                             <option value="">{{ __('admin.common.select') }}</option>
                             @if ($roles)
@@ -192,7 +196,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
+                        <label for="phone_number" class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
                         <input type="text" class="form-control user_phone_number" id="phone_number" name="phone_number">
                         <input type="hidden" id="international_phone_number" name="international_phone_number">
                         <span id="phone_number_error" class="text-danger error-text"></span>
@@ -200,14 +204,14 @@
                 </div>
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+                        <label for="email" class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
                         <input class="form-control" type="text" name="email" id="email">
                         <span id="email_error" class="text-danger error-text"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.auth_password') }}<span class="text-danger"> *</span></label>
+                        <label for="password" class="form-label">{{ __('admin.common.auth_password') }}<span class="text-danger"> *</span></label>
                         <div class="pass-group">
                             <input type="password" class="pass-inputs form-control" name="password" id="password">
                             <span class="ti toggle-passwords ti-eye-off"></span>
@@ -217,7 +221,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.confirm_password') }}<span class="text-danger"> *</span></label>
+                        <label for="confirm_password" class="form-label">{{ __('admin.common.confirm_password') }}<span class="text-danger"> *</span></label>
                         <div class="pass-group">
                             <input type="password" class="form-control pass-inputa" name="confirm_password" id="confirm_password">
                             <span class="ti toggle-passworda ti-eye-off"></span>
@@ -250,10 +254,10 @@
             <input type="hidden" name="id" id="id">
             <div class="row">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
+                    <label for="edit_image" class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
                     <div class="d-flex align-items-center flex-wrap row-gap-3">
                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-                            <img src="{{ uploadedAsset('', 'profile') }}" class="img-fluid rounded d-none" id="editImagePreview" alt="Profile Image">
+                            <img src="{{ uploadedAsset('', 'profile') }}" class="img-fluid rounded d-none" id="editImagePreview" alt="Profile">
                             <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
                         </div>
                         <div class="profile-upload">
@@ -273,21 +277,21 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
+                        <label for="edit_first_name" class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
                         <input type="text" class="form-control" name="first_name" id="edit_first_name">
                         <span class="text-danger error-text" id="edit_first_name_error"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
+                        <label for="edit_last_name" class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
                         <input type="text" class="form-control" name="last_name" id="edit_last_name">
                         <span class="text-danger error-text" id="edit_last_name_error"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.user_management.role') }}<span class="text-danger"> *</span></label>
+                        <label for="edit_role_id" class="form-label">{{ __('admin.user_management.role') }}<span class="text-danger"> *</span></label>
                         <select class="form-control edit_role" name="role_id" id="edit_role_id" data-placeholder="{{ __('admin.common.select') }}">
                             <option value="">{{ __('admin.common.select') }}</option>
                             @if ($roles)
@@ -301,7 +305,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
+                        <label for="edit_phone_number" class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
                         <input type="text" class="form-control edit_user_phone_number" id="edit_phone_number" name="phone_number">
                         <input type="hidden" id="edit_international_phone_number" name="international_phone_number">
                         <span id="edit_phone_number_error" class="text-danger error-text"></span>
@@ -309,7 +313,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+                        <label for="edit_email" class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
                         <input class="form-control" type="text" name="email" id="edit_email">
                         <span id="edit_email_error" class="text-danger error-text"></span>
                     </div>
@@ -320,7 +324,7 @@
 			<div class="d-flex justify-content-between align-items-center w-100">
                 <div class="form-check form-check-md form-switch me-2">
                     <label for="status" class="form-check-label form-label mt-0 mb-0">
-                    <input class="form-check-input form-label me-2 status" id="status" name="status" type="checkbox" role="switch">
+                    <input class="form-check-input form-label me-2 status" id="status" name="status" type="checkbox" role="switch" aria-checked="false">
                         {{ __('admin.common.status') }}
                     </label>
                 </div>

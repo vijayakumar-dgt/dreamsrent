@@ -7,7 +7,7 @@
 <div class="page-wrapper">
 	<div class="content me-4">
 		<x-admin.breadcrumb 
-			:title="__('admin.cms.locations')" 
+			:title="__('admin.cms.locations')"
 			:breadcrumbs="[
 				__('admin.common.country') => ''
 			]"
@@ -79,7 +79,7 @@
         <input type="hidden" name="id" id="id">
 
         <div class="mb-3">
-            <label class="form-label">
+            <label for="name" class="form-label">
                 {{ __('admin.common.country') }} <span class="text-danger">*</span>
             </label>
             <input type="text" class="form-control" name="name" id="name" maxlength="50">
@@ -87,7 +87,7 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">
+            <label name="code" class="form-label">
                 {{ __('admin.cms.country_code') }} <span class="text-danger">*</span>
             </label>
             <input type="text" class="form-control" name="code" id="code" maxlength="2">
@@ -98,8 +98,8 @@
     <x-slot name="footer">
         <div class="d-flex justify-content-between align-items-center w-100">
             <div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
-                <label class="form-check-label form-label mt-0 mb-0">
-                    <input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
+                <label for="status" class="form-check-label form-label mt-0 mb-0">
+                    <input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked aria-checked="true">
                     {{ __('admin.common.status') }}
                 </label>
             </div>
@@ -115,7 +115,6 @@
     </x-slot>
 </x-admin.modal>
 <!-- /Add Country -->
-
 
 <!-- Delete Country -->
 <x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="delateCountry"

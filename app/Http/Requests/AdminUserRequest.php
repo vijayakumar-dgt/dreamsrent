@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 use Illuminate\Validation\Rule;
 
-class AdminUserRequest extends FormRequest
+class AdminUserRequest extends CustomFailedValidation
 {
     public function authorize(): bool
     {

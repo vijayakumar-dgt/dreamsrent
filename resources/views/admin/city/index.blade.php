@@ -7,7 +7,7 @@
 	<div class="page-wrapper">
 		<div class="content me-4">
 			<x-admin.breadcrumb 
-				:title="__('admin.cms.locations')" 
+				:title="__('admin.cms.locations')"
 				:breadcrumbs="[
 					__('admin.common.city') => ''
 				]"
@@ -81,13 +81,13 @@
 			<input type="hidden" name="id" id="id">
 
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.common.city') }} <span class="text-danger">*</span></label>
+				<label for="name" class="form-label">{{ __('admin.common.city') }} <span class="text-danger">*</span></label>
 				<input type="text" class="form-control" name="name" id="name" maxlength="50">
 				<span id="name_error" class="text-danger error-text"></span>
 			</div>
 
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.common.state') }} <span class="text-danger">*</span></label>
+				<label for="state_id" class="form-label">{{ __('admin.common.state') }} <span class="text-danger">*</span></label>
 				<select class="form-control select2" name="state_id" id="state_id">
 					<option value="">{{ __('admin.general_settings.select_state') }}</option>
 					@foreach ($state_ids as $state)
@@ -102,7 +102,7 @@
 			<div class="d-flex justify-content-between align-items-center w-100" id="modalfootdiv">
 				<div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
 					<label class="form-check-label form-label mt-0 mb-0">
-						<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked name="status">
+						<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked name="status" aria-checked="true">
 						{{ __('admin.common.status') }}
 					</label>
 				</div>
@@ -118,7 +118,6 @@
 		</x-slot>
 	</x-admin.modal>
 	<!-- /Add City -->
-
 
 	<!-- Delete City -->
 	<x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="delateCity"

@@ -34,7 +34,7 @@
                     @if(!empty($language_switcher) && $language_switcher == 1)
                     <div class="nav-item dropdown has-arrow flag-nav nav-item-box">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
-                            role="button">
+                            role="button" aria-expanded="false" tabindex="0" aria-haspopup="true">
                             <img src="{{ asset('/backend/assets/img/flags/'. app()->getLocale() .'.svg') }}" class="img-fluid" alt="{{ strtoupper(app()->getLocale()) }} Flag">
                         </a>
                         <ul class="dropdown-menu p-2">
@@ -93,13 +93,13 @@
                     <div class="dropdown profile-dropdown">
                         <a href="javascript:void(0);" class="d-flex align-items-center" data-bs-toggle="dropdown"  data-bs-auto-close="outside">
                             <span class="avatar avatar-sm">
-                                <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : uploadedAsset('','profile') }}" class="img-fluid rounded-circle" alt="Profile Image">
+                                <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : uploadedAsset('','profile') }}" class="img-fluid rounded-circle" alt="Profile">
                             </span>
                         </a>
                         <div class="dropdown-menu">
                             <div class="profileset d-flex align-items-center">
                                 <span class="user-img me-2">
-                                    <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : uploadedAsset('','profile') }}" alt="Profile Image">
+                                    <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : uploadedAsset('','profile') }}" alt="Profile">
                                 </span>
                                 <div>
                                     <h6 class="fw-semibold mb-1"> {{ getCurrentUserFullname() }} </h6>

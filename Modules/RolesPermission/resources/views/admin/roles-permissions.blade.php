@@ -7,7 +7,7 @@
     <div class="page-wrapper">
         <div class="content me-4">
             <x-admin.breadcrumb 
-                :title="__('admin.user_management.roles')" 
+                :title="__('admin.user_management.roles')"
                 :breadcrumbs="[
                     __('admin.user_management.roles') => ''
                 ]"

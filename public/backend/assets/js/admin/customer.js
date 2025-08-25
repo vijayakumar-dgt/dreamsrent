@@ -19,7 +19,8 @@
                     utilsScript: window.location.origin + "/backend/assets/plugins/intltelinput/js/utils.js",
                     separateDialCode: true,
                     placeholderNumberType: "",
-                    autoPlaceholder: "off"
+                    autoPlaceholder: "off",
+                    formatOnDisplay: false
                 });
 
                 userPhoneInput.classList.add("iti");
@@ -737,7 +738,8 @@
                             utilsScript: window.location.origin + "/backend/assets/plugins/intltelinput/js/utils.js",
                             separateDialCode: true,
                             placeholderNumberType: "",
-                            autoPlaceholder: "off"
+                            autoPlaceholder: "off",
+                            formatOnDisplay: false,
                         });
                         $(phoneInput).data('itiInstance', iti);
                 

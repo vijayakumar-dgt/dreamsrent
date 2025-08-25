@@ -7,7 +7,7 @@
 	<div class="page-wrapper">
 		<div class="content me-4">
 			<x-admin.breadcrumb 
-				:title="__('admin.cms.locations')" 
+				:title="__('admin.cms.locations')"
 				:breadcrumbs="[
 					__('admin.common.state') => ''
 				]"
@@ -80,13 +80,13 @@
 			<input type="hidden" name="id" id="id">
 
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.common.state') }}<span class="text-danger"> *</span></label>
+				<label for="name" class="form-label">{{ __('admin.common.state') }}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="name" id="name" maxlength="50">
 				<span id="name_error" class="text-danger error-text"></span>
 			</div>
 
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.common.country') }}<span class="text-danger"> *</span></label>
+				<label for="country_id" class="form-label">{{ __('admin.common.country') }}<span class="text-danger"> *</span></label>
 				<select class="form-control select2" name="country_id" id="country_id">
 					<option value="">{{ __('admin.common.select') }}</option>
 					@foreach ($country_ids as $country)
@@ -101,14 +101,14 @@
 			<div class="d-flex justify-content-between align-items-center w-100">
 				<div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
 					<label for="status" class="form-check-label form-label mt-0 mb-0">
-						<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch">
+						<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" aria-checked="false">
 						{{ __('admin.common.status') }}
 					</label>
 				</div>
 				<div class="d-flex justify-content-center">
-					<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">
+					<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
 						{{ __('admin.common.cancel') }}
-					</a>
+					</button>
 					<button type="submit" class="btn btn-primary submitbtn">
 						{{ __('admin.common.create_new') }}
 					</button>
