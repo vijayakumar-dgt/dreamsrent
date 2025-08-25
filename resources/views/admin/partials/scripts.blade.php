@@ -42,7 +42,7 @@
 @endif
 
 <!-- Select2 JS -->
-<script src="{{ asset('backend/assets/plugins/select2/js/select2.min.js') }}"></script>
+<script src="{{ asset('frontend/assets/plugins/select2/js/select2.min.js') }}"></script>
 
 <!-- summernote JS -->
 <script src="{{ asset('backend/assets/plugins/summernote/summernote-bs5.min.js') }}"></script>

@@ -112,15 +112,14 @@ class ContactMessagesRepository implements ContactMessagesRepositoryInterface
                 'success' => true,
                 'message' => __('admin.support.contact_message_delete_success')
             ];
-        } catch ((\Exception $e) {
-            // Handle the specific case of the model not being found
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Handle specific not found case
             return [
                 'code'    => 404,
                 'success' => false,
                 'message' => 'Contact not found.'
             ];
         } catch (\Exception $e) {
-            // Return 3: General Error
             return [
                 'code'    => 500,
                 'success' => false,

@@ -165,8 +165,8 @@
     <!-- /Page Content -->
     @endsection
     @push('scripts')
-    
+
     <!-- IntlTelInput JS -->
-    <script src="{{ asset('frontend/assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
+    <script src="{{ asset('backend/assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/user/userprofile.js') }}"></script>
     @endpush
