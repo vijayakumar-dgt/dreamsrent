@@ -12,13 +12,13 @@
                     <div class="listing-tabs-group">
                         <ul class="nav listing-buttons gap-3" role="tablist">
                             @foreach($vehicleBrand as $brand)
-                                <li role="presentation">
-                                    <a 
-                                        class="{{ $loop->first ? 'active' : '' }}" 
-                                        {{ $loop->first ? 'aria-selected=true' : 'aria-selected=false' }} 
+                                <li>
+                                    <a
+                                        class="{{ $loop->first ? 'active' : '' }}"
+                                        {{ $loop->first ? 'aria-selected=true' : 'aria-selected=false' }}
                                         role="tab"
-                                        data-bs-toggle="tab" 
-                                        href="#tab_{{ $brand->id ?? '' }}" 
+                                        data-bs-toggle="tab"
+                                        href="#tab_{{ $brand->id ?? '' }}"
                                         id="tab_{{ $brand->id ?? '' }}-tab"
                                         aria-controls="tab_{{ $brand->id ?? '' }}">
                                         <span>
@@ -28,7 +28,7 @@
                                     </a>
                                 </li>
                             @endforeach
-                        </ul>                        
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                                         @foreach($vehicle['multiple_vehicle_images'] as $image)
                                         <div class="slide-images">
                                             <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">
-                                                <img src="{{ $image }}" class="img-fluid" alt="{{ ucfirst($vehicle['name'] ?? '') }} - Vehicle Image">
+                                                <img src="{{ $image }}" class="img-fluid" alt="{{ ucfirst($vehicle['name'] ?? '') }} - Vehicle">
                                             </a>
                                         </div>
                                         @endforeach

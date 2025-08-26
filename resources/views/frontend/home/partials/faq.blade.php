@@ -1,6 +1,6 @@
    <!-- Faq Section -->
    <section class="section faq-section bg-light-primary">
-        <div class="container">				
+        <div class="container">
             <!-- Heading title-->
             <div class="section-heading" data-aos="fade-down">
                 <h2>{{ $section['section_title'] ?? "" }}</h2>
@@ -19,14 +19,14 @@
                         <div id="faq-{{ $faq->id ?? $loop->index }}" class="card-collapse collapse @if($loop->first) show @endif">
                             <p>{{ ucfirst($faq->answer ?? "") }}</p>
                         </div>
-                    </div>	
-                @endforeach								
+                    </div>
+                @endforeach
                 @else
                 <div class="col-12">
                     <p class="text-center">{{ __('web.common.empty_table') }}</p>
                 </div>
-                @endif	
-            </div>		
-        </div>	
+                @endif
+            </div>
+        </div>
     </section>
     <!-- /Faq Section -->

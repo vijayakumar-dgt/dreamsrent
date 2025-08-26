@@ -11,7 +11,7 @@
                 <div class="col-lg-4 col-md-6 d-flex">
                     <div class="testimonial-item testimonial-item-two flex-fill">
                         <div class="user-img">
-                            <img src="{{ $content->image }}" class="img-fluid">
+                            <img src="{{ $content->image }}" class="img-fluid" alt="User Profile">
                         </div>
                         @php
                         $review = $content->review ?? "";
