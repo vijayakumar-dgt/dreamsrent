@@ -6,7 +6,7 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
+            <x-admin.breadcrumb
                 :title="__('admin.common.users')"
                 :breadcrumbs="[
                     __('admin.common.users') => ''
@@ -133,7 +133,7 @@
     <!-- /Page Wrapper -->
 
     <!-- Add User -->
-    <x-admin.modal 
+    <x-admin.modal
 		className="addmodal"
 		id="add_user_modal"
         dialogClassName="modal-lg"
@@ -241,7 +241,7 @@
     <!-- /Add User -->
 
     <!-- Edit User -->
-    <x-admin.modal 
+    <x-admin.modal
 		className="addmodal"
 		id="edit_user_modal"
         dialogClassName="modal-lg"

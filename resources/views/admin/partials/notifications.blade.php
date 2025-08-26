@@ -17,17 +17,17 @@
                                     <a href="javascript:void(0);" class="btn btn-sm btn-outline-danger" id="deleteAll"><i class="feather-trash-2"></i> {{__('web.user.delete_all')}}</a>
                                 </div>
                             </div>
-                        
+
                             <div class="notification-list" id="notification-list">
-                                
+
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="float-end" id="pagination-container">
-                                      
+
                                     </div>
                                 </div>
-                            </div>                        
+                            </div>
                       </div>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                                 <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary w-100">
                                     {{__('web.common.cancel')}}
                                 </a>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>

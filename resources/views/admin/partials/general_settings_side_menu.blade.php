@@ -68,7 +68,7 @@
                             <a href="{{ route('admin.ai-configuration') }}">
                                 <i class="ti ti-grain me-2"></i><span>{{ __('admin.general_settings.ai_configuration') }}</span>
                             </a>
-                        </li>                       
+                        </li>
                         <li class="{{ request()->routeIs('admin.theme-settings') ? 'active' : '' }}">
                             <a href="{{ route('admin.theme-settings') }}">
                                 <i class="ti ti-template me-2"></i><span>{{ __('admin.general_settings.theme_settings') }}</span>
@@ -157,7 +157,7 @@
                             <a href="{{ route('admin.paymentIndex-settings') }}">
                                 <i class="ti ti-lock me-2"></i><span>{{ __('admin.general_settings.payment_methods') }}</span>
                             </a>
-                        </li>                        
+                        </li>
                         <li class="{{ request()->routeIs('admin.tax-rates') ? 'active' : '' }}">
                             <a href="{{ route('admin.tax-rates') }}">
                                 <i class="ti ti-file-percent me-2"></i><span>{{ __('admin.general_settings.tax_rates') }}</span>

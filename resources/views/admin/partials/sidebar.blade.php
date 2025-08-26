@@ -471,7 +471,7 @@
                             <ul>
                                 <li>
                                     <a href="{{ route('admin.paymentIndex-settings') }}" class="{{ request()->routeIs('admin.paymentIndex-settings') ? 'active' : '' }}">{{ __('admin.general_settings.payment_methods') }}</a>
-                                </li>                               
+                                </li>
                                 <li>
                                     <a href="{{ route('admin.tax-rates') }}" class="{{ request()->routeIs('admin.tax-rates') ? 'active' : '' }}">{{ __('admin.general_settings.tax_rates') }}</a>
                                 </li>

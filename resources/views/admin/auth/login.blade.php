@@ -56,7 +56,7 @@
                         <div class="mt-3 mb-3">
                             <button type="submit" class="btn btn-dark w-100 submitbtn" disabled>{{ __('admin.auth.login') }}</button>
                         </div>
-                        </form> 
+                        </form>
                         <div class="mb-0">
                             <h6 class="fs-16 mb-1">{{ __('admin.auth.login_info') }}:</h6>
                             <div class="p-3 border d-flex flex-wrap align-items-center justify-content-between">
@@ -71,8 +71,8 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>                        
-                    </div>                         
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

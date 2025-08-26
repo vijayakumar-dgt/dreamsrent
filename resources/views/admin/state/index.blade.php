@@ -6,7 +6,7 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
+			<x-admin.breadcrumb
 				:title="__('admin.cms.locations')"
 				:breadcrumbs="[
 					__('admin.common.state') => ''
@@ -117,11 +117,11 @@
 		</x-slot>
 	</x-admin.modal>
 	<!-- /Add/Edit State Modal -->
-	 
+
 	<!-- Delete State Modal -->
 	<x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="delateState"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.cms.delete_state')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.cms.delete_state')"
 		:description="__('admin.cms.state_delete_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete State Modal -->

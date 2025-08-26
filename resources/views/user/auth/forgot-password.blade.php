@@ -84,7 +84,7 @@
                                         </p>
                                     </div>
                                     <div class="mb-3 d-flex justify-content-center">
-                                        <p>{{ __('web.auth.didnt_get_otp') }}  
+                                        <p>{{ __('web.auth.didnt_get_otp') }}
                                             <button type="button" class="resendEmailOtpForgot btn btn-link text-primary p-0">
                                                 {{ __('web.auth.resend_otp') }}
                                             </button>
@@ -103,7 +103,7 @@
             </div>
         </div>
         @include('frontend.toast')
-    
+
     </div>
     <!-- /Main Wrapper -->
 
@@ -120,7 +120,7 @@
 
     <!-- Bootstrap Core JS -->
     <script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
-    
+
     <!-- Custom JS -->
     <script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/user/forgot-password.js') }}"></script>
