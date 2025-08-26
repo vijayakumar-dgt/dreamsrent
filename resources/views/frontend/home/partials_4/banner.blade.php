@@ -1,11 +1,11 @@
-@php 
+@php
     $sectionContent = $section['section_content'];
     $sectionContent = isset($section['section_content'][0]) ? $section['section_content'][0] : [];
     $vehicle_types = $data['vehicle_types'] ?? [];
     $locations = $data['locations'] ?? [];
 @endphp
 <!-- Banner -->
-<section class="banner-section banner-sec-two banner-slider">	
+<section class="banner-section banner-sec-two banner-slider">
     <div class="banner-img-slider owl-carousel">
         @if(!empty($sectionContent->thumbnail_images) && count($sectionContent->thumbnail_images) > 0)
             @foreach($sectionContent->thumbnail_images as $image)
@@ -14,14 +14,14 @@
         </div>
             @endforeach
         @endif
-    </div>	
+    </div>
     <div class="container">
-        <div class="home-banner">		
-            <div class="row align-items-center">					    
+        <div class="home-banner">
+            <div class="row align-items-center">
                 <div class="col-md-12">
                     <div class="hero-sec-contents">
                         <div class="banner-title">
-                            <h1>{{ $sectionContent->label ?? "" }} 
+                            <h1>{{ $sectionContent->label ?? "" }}
                                 <span>{{ $sectionContent->higlight_label ?? "" }}</span>
                             </h1>
                             <p>{{ $sectionContent->description ?? ""}}</p>
@@ -30,8 +30,8 @@
                             <form action="{{ route('list') }}">
                                 <div class="banner-search-list">
                                     <div class="input-block">
-                                        <label><i class="bx bx-map"></i>{{ __('web.user.location') }}</label>
-                                        <select class="select" name="pickuplocation">
+                                        <label for="pickuplocation"><i class="bx bx-map"></i>{{ __('web.user.location') }}</label>
+                                        <select class="select" id="pickuplocation" name="pickuplocation">
                                            <option value="">{{ __('web.common.select') }}</option>
                                             @if(!empty($locations) && count($locations) > 0)
                                             @foreach ($locations as $location)
@@ -41,24 +41,24 @@
                                         </select>
                                     </div>
                                     <div class="input-block">
-                                        <label><i class="bx bx-calendar"></i>{{ __('web.home.pickup_date') }}</label>
-                                        <div class="date-widget">												
+                                        <label for="pickupdate"><i class="bx bx-calendar"></i>{{ __('web.home.pickup_date') }}</label>
+                                        <div class="date-widget">
                                             <div class="group-img">
-                                            <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY" name="pickupdate">
+                                            <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY" id="pickupdate" name="pickupdate">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="input-block">
-                                        <label><i class="bx bx-calendar"></i>{{ __('web.home.return_date') }}</label>
-                                        <div class="date-widget">												
+                                        <label for="returndate"><i class="bx bx-calendar"></i>{{ __('web.home.return_date') }}</label>
+                                        <div class="date-widget">
                                             <div class="group-img">
-                                            <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY" name="returndate">
+                                            <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY" id="returndate" name="returndate">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="input-block">
-                                        <label><i class="bx bxs-ship"></i>{{ __('web.home.yacht_type') }}</label>
-                                        <select class="select" name="category">
+                                        <label for="vehicle-category"><i class="bx bxs-ship"></i>{{ __('web.home.yacht_type') }}</label>
+                                        <select class="select" id="vehicle-category" name="category">
                                             <option value="">{{ __('web.common.select') }}</option>
                                             @if(!empty($vehicle_types) && count($vehicle_types) > 0)
                                             @foreach ($vehicle_types as $vehicle_type)
@@ -90,12 +90,12 @@
                                 </li>
                             </ul>
                         </div>
-                        
+
                     </div>
-                    
+
                 </div>
             </div>
-        </div>	
+        </div>
         <div class="video-btn text-center">
             <a href="https://www.youtube.com/embed/ExJZAegsOis" data-fancybox><span><i class="bx bx-play"></i></span></a>
             <h6>{{ __('web.home.check_our_video') }}</h6>

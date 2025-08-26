@@ -33,7 +33,7 @@
                                 <h6>{{ $item['bike_label'] ?? '' }}</h6>
                                 <p>{{ $item['bike_dis'] ?? '' }}</p>
                             </div>
-                        </div>                        
+                        </div>
                     @endforeach
                     @else
                     <div class="col-md-12">

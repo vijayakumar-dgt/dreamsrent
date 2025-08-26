@@ -1,4 +1,4 @@
-@php 
+@php
     $sectionContent = $section['section_content'];
     $tags = array_column($sectionContent, 'text');
 @endphp

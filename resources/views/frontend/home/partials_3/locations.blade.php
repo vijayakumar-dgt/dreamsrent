@@ -1,4 +1,4 @@
-@php 
+@php
     $sectionContent = $section['section_content'];
     $titleRaw = $section['section_title'];
     $titleWords = explode(' ', $titleRaw);
@@ -14,8 +14,8 @@
     <div class="destination-bg">
         <img src="{{ asset('frontend/assets/img/bg/destination-bg-01.png') }}" class="img-fluid shape-01" alt="img">
         <img src="{{ asset('frontend/assets/img/bg/destination-bg-02.png') }}" class="img-fluid shape-02" alt="img">
-    </div>		
-    <div class="container">	
+    </div>
+    <div class="container">
         <!-- Heading title-->
         <div class="row">
             <div class="col-lg-12 mx-auto">
@@ -26,14 +26,14 @@
             </div>
         </div>
         <!-- /Heading title -->
-        
+
         <div class="row">
             @if(!empty($sectionContent) && count($sectionContent) > 0)
             @foreach($sectionContent as $location)
             <div class="col-lg-3 col-sm-6 order-lg-1 order-sm-1">
                 <div class="destination-wrap" data-aos="fade-down">
                     <div class="destination-img">
-                        <img src="{{ $location->image ?? "" }}" alt="image" class="img-fluid">
+                        <img src="{{ $location->image ?? "" }}" alt="Destination" class="img-fluid">
                     </div>
                     <div class="destination-content">
                         <h5>{{ $location->name ?? "" }}</h5>

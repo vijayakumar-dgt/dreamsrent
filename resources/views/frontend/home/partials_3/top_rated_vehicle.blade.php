@@ -1,4 +1,4 @@
-@php 
+@php
     $sectionContent = $section['section_content'];
     $titleRaw = $section['section_title'];
     $titleWords = explode(' ', $titleRaw);
@@ -15,8 +15,8 @@
     }
 @endphp
 <!-- Featured Services -->
-<section class="section features-section">		
-    <div class="container">	
+<section class="section features-section">
+    <div class="container">
         <div class="row">
             <div class="col-md-12">
 
@@ -30,7 +30,7 @@
                 <div class="bike-feature-slider nav-center owl-carousel">
                     @foreach($vehicles as $vehicle)
                     <div class="item">
-                        <div class="listing-item bike-list">											
+                        <div class="listing-item bike-list">
                             <div class="listing-img">
                                 <div class="image-slider owl-carousel">
                                     @if(!empty($vehicle['multiple_vehicle_images']) && count($vehicle['multiple_vehicle_images']) > 0)
@@ -47,30 +47,30 @@
                                     <span class="img-count"><i class="feather-image"></i>{{ isset($vehicle['multiple_vehicle_images']) ? count($vehicle['multiple_vehicle_images']) : 0 }}</span>
                                     <a href="javascript:void(0)" class="author-img">
                                         <img src="{{ asset('frontend/assets/img/profiles/avatar-04.jpg') }}" alt="author">
-                                    </a>								
-                                </div>	
-                            </div>									
-                            @php 
+                                    </a>
+                                </div>
+                            </div>
+                            @php
                             $filledStars = floor($vehicle['rating'] ?? 0);
                             $emptyStars = 5 - $filledStars;
-                            @endphp	
+                            @endphp
                             <div class="listing-content">
                                 <div class="listing-features d-flex align-items-center justify-content-between">
-                                    <div class="list-rating">												  
-                                        <div class="list-ratings">	
-                                            @for ($i = 0; $i < $filledStars; $i++)						
+                                    <div class="list-rating">
+                                        <div class="list-ratings">
+                                            @for ($i = 0; $i < $filledStars; $i++)
                                             <i class="fas fa-star filled"></i>
                                             @endfor
-                                            @for ($i = 0; $i < $emptyStars; $i++)						
+                                            @for ($i = 0; $i < $emptyStars; $i++)
                                             <i class="fas fa-star"></i>
                                             @endfor
                                             <span>{{ $vehicle['total_review'] ?? 0 }} {{ __('web.home.reviews') }}</span>
                                         </div>
                                         <h3 class="listing-title">
                                             <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] ?? "" }}</a>
-                                        </h3>					
+                                        </h3>
                                     </div>
-                                </div> 
+                                </div>
                                 <div class="listing-details-group">
                                     <ul>
                                         <li>
@@ -91,7 +91,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                @php    
+                                @php
                                     $prices = array_slice($vehicle['price'][0], 0, 1);
                                 @endphp
                                 <div class="listing-button">
@@ -116,7 +116,7 @@
                                 @elseif($vehicle['is_top_rated'] == 1)
                                 <div class="feature-text">
                                     <span class="bg-warning">{{ __('web.home.top_rated') }}</span>
-                                </div>			
+                                </div>
                                 @endif
                             </div>
                         </div>
@@ -135,6 +135,6 @@
     <div class="feature-bg">
         <img src="{{ asset('frontend/assets/img/bg/destination-bg-01.png') }}" class="img-fluid shape-01" alt="img">
         <img src="{{ asset('frontend/assets/img/bg/feature-bg.png') }}" class="img-fluid shape-02" alt="img">
-    </div>		
+    </div>
 </section>
 <!-- /Featured Services -->

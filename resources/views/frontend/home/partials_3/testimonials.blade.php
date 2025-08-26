@@ -1,4 +1,4 @@
-@php 
+@php
     $sectionContent = $section['section_content'];
     $titleRaw = $section['section_title'];
     $titleWords = explode(' ', $titleRaw);
@@ -45,13 +45,13 @@
                     <div class="testimonial-slider">
                         @if(!empty($sectionContent) && count($sectionContent) > 0)
                         @foreach($sectionContent as $testimonial)
-                        <div class="testimonial-wrap">	
+                        <div class="testimonial-wrap">
                             <div class="users-info">
                                 <div class="testimonial-name">
                                     <h6>{{ $testimonial->customer_name ?? "" }}</h6>
                                     <p>{{ $testimonial->location ?? "" }}</p>
                                 </div>
-                                @php 
+                                @php
                                     $rating = $testimonial->ratings ?? 0;
                                     $rating = round($rating);
                                     $emptyStars = 5 - $rating;
@@ -68,8 +68,8 @@
                                     </div>
                                     <p><i class="bx bxs-check-circle"></i>{{ __('web.home.verified') }}</p>
                                 </div>
-                            </div>	
-                            <div class="testimonial-content">					
+                            </div>
+                            <div class="testimonial-content">
                                 <p>{{ $testimonial->review ?? "" }}</p>
                             </div>
                         </div>
@@ -83,16 +83,16 @@
                     <div class="slider testimonial-thumbnails">
                         @if(!empty($sectionContent) && count($sectionContent) > 0)
                         @foreach($sectionContent as $testimonial)
-                        <div><img src="{{ $testimonial->image }}" alt="image"></div>
+                        <div><img src="{{ $testimonial->image }}" alt="Testimonial Thumbnail"></div>
                         @endforeach
                         @endif
                     </div>
                 </div>
             </div>
-        </div>				
+        </div>
     </div>
     <div class="testimonial-bg">
-        <img class="img-fluid shape-01" src="{{ asset('frontend/assets/img/bg/ban-bg-04.png') }}" alt="Image">
+        <img class="img-fluid shape-01" src="{{ asset('frontend/assets/img/bg/ban-bg-04.png') }}" alt="Testimonial">
         <img src="{{ asset('frontend/assets/img/bg/ban-bg-01.png') }}" class="img-fluid shape-02" alt="img">
     </div>
 </section>

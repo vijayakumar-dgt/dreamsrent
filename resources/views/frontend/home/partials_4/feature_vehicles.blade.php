@@ -41,7 +41,7 @@
                                     <h4><a href="{{ route('vehicleDetails', $yacht['slug']) }}">{{ $yacht['name'] ?? "" }}</a></h4>
                                     <span class="d-flex align-items-center"><i class="bx bx-map me-2"></i>{{ $yacht['location'] ?? "" }}</span>
                                 </div>
-                                @php 
+                                @php
                                     $filledStars = floor($yacht['rating']);
                                     $emptyStars = 5 - $filledStars;
                                 @endphp
@@ -76,7 +76,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            @php    
+                            @php
                                 $prices = array_slice($yacht['price'][0], 0, 1);
                             @endphp
                             <div class="yacht-content-footer">

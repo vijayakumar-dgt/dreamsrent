@@ -56,13 +56,13 @@
                     <a href="{{ route('blogs.list') }}" class="btn btn-secondary">{{ __('web.home.view_all_blogs') }}</a>
                 </div>
             </div>
-            @else 
+            @else
             <div class="col-md-12">
                 <p>{{ __('web.common.empty_table') }}</p>
             </div>
             @endif
         </div>
-        
+
     </div>
 </section>
 <!-- /News & Insights -->

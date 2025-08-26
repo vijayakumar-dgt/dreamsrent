@@ -111,7 +111,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                @php    
+                                @php
                                     $prices = array_slice($yacht['price'][0], 0, 1);
                                 @endphp
                                 <div class="yacht-content-footer">

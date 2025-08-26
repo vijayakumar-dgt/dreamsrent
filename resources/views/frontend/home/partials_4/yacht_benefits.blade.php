@@ -16,7 +16,7 @@
             <h2>{{ $section['section_title'] ?? "" }}</h2>
             <p>{{ $section['section_label'] ?? "" }}</p>
         </div>
-        @php 
+        @php
             $firstHalfPoints = !empty($section['section_content']['items']) && count($section['section_content']['items']) > 0 ? array_slice($section['section_content']['items'], 0, 3) : [];
             $lastHalfPoints = !empty($section['section_content']['items']) && count($section['section_content']['items']) > 0 ? array_slice($section['section_content']['items'], 3) : [];
         @endphp

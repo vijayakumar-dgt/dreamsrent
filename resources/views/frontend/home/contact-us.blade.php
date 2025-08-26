@@ -49,21 +49,21 @@
                                     <h1>{{ __('web.home.get_in_touch') }}</h1>
                                     <div class="col-md-12">
                                         <div class="input-block">
-                                            <label>{{ __('web.home.name') }} <span class="text-danger">*</span></label>
+                                            <label for="contact_name">{{ __('web.home.name') }} <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" name="contact_name" id="contact_name" placeholder="{{ __('web.home.name_placeholder') }}">
                                             <span class="error-text text-danger" id="contact_name_error"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="input-block">
-                                            <label>{{ __('web.home.email_address') }} <span class="text-danger">*</span></label>
+                                            <label for="contact_email">{{ __('web.home.email_address') }} <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" name="contact_email" id="contact_email" placeholder="{{ __('web.home.email_placeholder') }}">
                                             <span class="error-text text-danger" id="contact_email_error"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="input-block">
-                                            <label>{{ __('web.home.phone_number') }} <span class="text-danger">*</span></label>
+                                            <label for="contact_phone">{{ __('web.home.phone_number') }} <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="contact_phone" name="contact_phone" placeholder="{{ __('web.home.phone_number_placeholder') }}">
                                             <input type="hidden" name="phone_number" id="international_phone_number">
                                             <span class="error-text text-danger" id="contact_phone_error"></span>
@@ -71,7 +71,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="input-block">
-                                            <label>{{ __('web.home.comments') }} <span class="text-danger">*</span></label>
+                                            <label for="contact_comments">{{ __('web.home.comments') }} <span class="text-danger">*</span></label>
                                             <textarea class="form-control" rows="4" name="contact_comments" id="contact_comments" required cols="50" placeholder="{{ __('web.home.comments_placeholder') }}"></textarea>
                                             <span class="error-text text-danger" id="contact_comments_error"></span>
                                         </div>

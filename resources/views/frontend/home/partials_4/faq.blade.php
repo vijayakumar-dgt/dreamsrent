@@ -99,23 +99,23 @@
                             @foreach($faqs as $k => $faq)
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="faq-{{ $k }}">
-                                    <a href="javascript:void(0);" 
-                                    class="accordion-button {{ $k != 0 ? 'collapsed' : '' }}" 
-                                    data-bs-toggle="collapse" 
-                                    data-bs-target="#collapse-{{ $k }}" 
-                                    aria-expanded="{{ $k == 0 ? 'true' : 'false' }}" 
+                                    <a href="javascript:void(0);"
+                                    class="accordion-button {{ $k != 0 ? 'collapsed' : '' }}"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapse-{{ $k }}"
+                                    aria-expanded="{{ $k == 0 ? 'true' : 'false' }}"
                                     aria-controls="collapse-{{ $k }}">
                                         {{ $faq->question ?? '' }}
                                     </a>
                                 </h2>
-                                <div id="collapse-{{ $k }}" 
-                                    class="accordion-collapse collapse {{ $k == 0 ? 'show' : '' }}" 
-                                    aria-labelledby="faq-{{ $k }}" 
+                                <div id="collapse-{{ $k }}"
+                                    class="accordion-collapse collapse {{ $k == 0 ? 'show' : '' }}"
+                                    aria-labelledby="faq-{{ $k }}"
                                     data-bs-parent="#faq-details">
                                     <div class="accordion-body">
                                         <div class="accordion-content">
                                             <p>{!! $faq->answer ?? '' !!}</p>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
