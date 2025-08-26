@@ -1,6 +1,6 @@
 <!-- Footer -->
-<footer class="footer footer-three">	
-    <!-- Footer Top -->	
+<footer class="footer footer-three">
+    <!-- Footer Top -->
     <div class="footer-top aos" data-aos="fade-up">
         <div class="container">
             <div class="row">
@@ -21,7 +21,7 @@
                                     <a href="mailto:{{ $companyEmail ?? "" }}"><i class="bx bxs-envelope"></i>{{ $companyEmail ?? "" }}</a>
                                 </div>
                             </div>
-                        </div>	
+                        </div>
                         <ul class="store-icon">
                             <li>
                                 <a href="javascript:void(0);">
@@ -61,9 +61,9 @@
                             <!-- /Footer Widget -->
                         </div>
                     @endforeach
-                @endif	
-                
-            </div>					
+                @endif
+
+            </div>
         </div>
     </div>
     <!-- /Footer Top -->
@@ -110,6 +110,6 @@
             <!-- /Copyright -->
         </div>
     </div>
-    <!-- /Footer Bottom -->			
+    <!-- /Footer Bottom -->
 </footer>
 <!-- /Footer -->

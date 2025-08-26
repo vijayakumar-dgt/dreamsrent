@@ -16,20 +16,20 @@
                             <li class="breadcrumb-item"><a href="{{ route('list') }}">{{ __('web.common.vehicles') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('web.home.car_listings') }}</li>
                         </ol>
-                    </nav>							
+                    </nav>
                 </div>
             </div>
         </div>
     </div>
     <!-- /Breadscrumb Section -->
-    <!-- Search -->	
-    <div class="section-search page-search"> 
-        <div class="container">	  
+    <!-- Search -->
+    <div class="section-search page-search">
+        <div class="container">
             <div class="search-box-banner">
                 <ul class="align-items-center">
                     <li class="column-group-main">
                         <div class="input-block">
-                            <label>{{ __('web.home.pickup_location') }}</label>												
+                            <label for="pickuplocation">{{ __('web.home.pickup_location') }}</label>
                             <div class="group-img">
                                 <input type="text" class="form-control" autocomplete="off" value="{{ $pickuplocation }}" id="pickuplocation" placeholder="{{ __('web.home.location_place_holder') }}">
                                 <span><i class="feather-map-pin"></i></span>
@@ -39,43 +39,43 @@
                         <input type="hidden" id="initialPickupId" value="{{ $initialPickupLocation->id ?? '' }}">
                         <input type="hidden" id="initialPickupName" value="{{ $initialPickupLocation->name ?? '' }}">
                     </li>
-                    <li class="column-group-main">						
-                        <div class="input-block">																	
-                            <label>{{ __('web.home.pickup_date') }}</label>
+                    <li class="column-group-main">
+                        <div class="input-block">
+                            <label for="pickupdate">{{ __('web.home.pickup_date') }}</label>
                         </div>
                         <div class="input-block-wrapp">
-                            <div class="input-block date-widget">												
+                            <div class="input-block date-widget">
                                 <div class="group-img">
                                 <input type="text" class="form-control listpickupdate" autocomplete="off" id="pickupdate" name="pickupdate" value="{{ $pickupdate }}" placeholder="dd-mm-yyyy">
                                 <span><i class="feather-calendar"></i></span>
                                 </div>
                             </div>
-                            <div class="input-block time-widge">											
+                            <div class="input-block time-widge">
                                 <div class="group-img">
                                 <input type="text" class="form-control listtimepicker" autocomplete="off" id="pickuptime" name="pickuptime" value="{{ $pickuptime }}" placeholder="hh:mm">
                                 <span><i class="feather-clock"></i></span>
                                 </div>
                             </div>
-                        </div>	
+                        </div>
                     </li>
-                    <li class="column-group-main">						
-                        <div class="input-block">																	
-                            <label>{{ __('web.home.return_date') }}</label>
+                    <li class="column-group-main">
+                        <div class="input-block">
+                            <label for="returndate">{{ __('web.home.return_date') }}</label>
                         </div>
                         <div class="input-block-wrapp">
-                            <div class="input-block date-widge">												
+                            <div class="input-block date-widge">
                                 <div class="group-img">
                                 <input type="text" class="form-control listreturndate"  id="returndate" autocomplete="off" name="returndate" value="{{ $returndate }}" placeholder="dd-mm-yyyy">
                                 <span><i class="feather-calendar"></i></span>
                                 </div>
                             </div>
-                            <div class="input-block time-widge">											
+                            <div class="input-block time-widge">
                                 <div class="group-img">
                                 <input type="text" class="form-control listreturntimepicker" autocomplete="off" id="returntime" name="returntime" value="{{ $returntime }}" placeholder="hh:mm">
                                 <span><i class="feather-clock"></i></span>
                                 </div>
                             </div>
-                        </div>	
+                        </div>
                     </li>
                     <li class="column-group-last">
                         <div class="input-block">
@@ -86,10 +86,10 @@
                     </li>
                 </ul>
             </div>
-        </div>	
-    </div>	
+        </div>
+    </div>
     <!-- /Search -->
-    <!-- Sort By -->	
+    <!-- Sort By -->
     <div class="sort-section">
         <div class="container">
             <div class="sortby-sec">
@@ -147,7 +147,7 @@
             </div>
         </div>
     </div>
-    <!-- /Sort By -->	
+    <!-- /Sort By -->
     <div id="global-loader" class="d-none">
         @include('frontend.content-loader')
     </div>

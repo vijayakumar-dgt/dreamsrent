@@ -65,21 +65,21 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="profile-form-group">
-                                                <label>{{ __('web.user.first_name') }} <span class="text-danger">*</span></label>
+                                                <label for="first_name">{{ __('web.user.first_name') }} <span class="text-danger">*</span></label>
                                                 <input type="text" id="first_name" name="first_name" class="form-control" placeholder="{{ __('web.user.enter_first_name') }}" value="{{ $user->userDetail ? $user->userDetail->first_name : '' }}">
                                                 <span id="first_name_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="profile-form-group">
-                                                <label>{{ __('web.user.last_name') }} <span class="text-danger">*</span></label>
+                                                <label for="last_name">{{ __('web.user.last_name') }} <span class="text-danger">*</span></label>
                                                 <input type="text" id="last_name" name="last_name" class="form-control" value="{{ $user->userDetail ? $user->userDetail->last_name : '' }}" placeholder="{{ __('web.user.enter_last_name') }}">
                                                 <span id="last_name_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="profile-form-group">
-                                                <label>{{ __('web.user.phone_number') }} <span class="text-danger">*</span></label>
+                                                <label for="user_phone">{{ __('web.user.phone_number') }} <span class="text-danger">*</span></label>
                                                 <input type="text" id="user_phone" name="user_phone" value="{{ $user->phone_number ? $user->phone_number : '' }}" class="form-control user_phone" placeholder="{{ __('web.user.enter_mobile_number') }}">
                                                 <input type="hidden" id="international_phone_number" name="international_phone_number" value="{{ $user->phone_number ? $user->phone_number : '' }}">
                                                 <span id="user_phone_error" class="text-danger error-text"></span>
@@ -87,7 +87,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="profile-form-group">
-                                                <label>{{ __('web.user.email') }} <span class="text-danger">*</span></label>
+                                                <label for="email">{{ __('web.user.email') }} <span class="text-danger">*</span></label>
                                                 <input type="email" id="email" name="email" class="form-control" value="{{ $user->email ? $user->email : '' }}" placeholder="{{ __('web.user.enter_email') }}">
                                                 <span id="email_error" class="text-danger error-text"></span>
                                             </div>
@@ -105,14 +105,14 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="profile-form-group">
-                                                <label>{{ __('web.user.address') }}</label>
+                                                <label for="address_line">{{ __('web.user.address') }}</label>
                                                 <textarea class="form-control" id="address_line" name="address_line" placeholder="{{ __('web.user.enter_address') }}">{{ $user->userDetail ? $user->userDetail->address : '' }}</textarea>
                                                 <span id="address_line_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="profile-form-group">
-                                                <label>{{ __('web.user.country') }} <span class="text-danger">*</span></label>
+                                                <label for="country">{{ __('web.user.country') }} <span class="text-danger">*</span></label>
                                                 <select name="country" class="form-control custom-select2" id="country" data-placeholder="{{__('web.common.select')}}">
                                                     @if(!empty($countries) && count($countries) > 0)
                                                         @foreach($countries as $country)
@@ -125,7 +125,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="profile-form-group">
-                                                <label>{{ __('web.user.state') }} <span class="text-danger">*</span></label>
+                                                <label for="state">{{ __('web.user.state') }} <span class="text-danger">*</span></label>
                                                 <select name="state" class="form-control custom-select2" id="state" data-default-id="{{ $user->userDetail ? $user->userDetail->state_id : '' }}" data-placeholder="{{__('web.common.select')}}">
                                                 </select>
                                                 <span id="state_error" class="text-danger error-text"></span>
@@ -133,7 +133,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="profile-form-group">
-                                                <label>{{ __('web.user.city') }} <span class="text-danger">*</span></label>
+                                                <label for="city">{{ __('web.user.city') }} <span class="text-danger">*</span></label>
                                                 <select name="city" id="city" class="form-control custom-select2" data-default-id="{{ $user->userDetail ? $user->userDetail->city_id : '' }}" data-placeholder="{{__('web.common.select')}}">
                                                 </select>
                                                 <span id="city_error" class="text-danger error-text"></span>
@@ -141,7 +141,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="profile-form-group">
-                                                <label>{{ __('web.user.pincode') }} <span class="text-danger">*</span></label>
+                                                <label for="postal_code">{{ __('web.user.pincode') }} <span class="text-danger">*</span></label>
                                                 <input type="text" id="postal_code" name="postal_code" value="{{ $user->userDetail ? $user->userDetail->postal_code : '' }}" class="form-control" placeholder="Enter Pincode" maxlength="6">
                                                 <span id="postal_code_error" class="text-danger error-text"></span>
                                             </div>

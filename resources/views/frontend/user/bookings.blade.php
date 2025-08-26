@@ -134,7 +134,7 @@
                         @include('frontend.content-loader')
                     </div>
                 </div>
-                
+
                 <div class="row d-none real-calendar" id="calendar_view">
                     <div class="col-lg-12">
                         <div class="card calendar-card mb-0 ">
@@ -288,8 +288,8 @@
                     <form action="" id="cancelRideForm">
                         <input type="hidden" name="booking_id" id="booking_id">
                         <div class="modal-item">
-                            <label>{{__('web.user.reason')}} <span class="text-danger">*</span></label>
-                            <textarea class="form-control cancel-reason" rows="4" cols="30"></textarea>
+                            <label for="cancel_reason">{{__('web.user.reason')}} <span class="text-danger">*</span></label>
+                            <textarea class="form-control cancel-reason" id="cancel_reason" rows="4" cols="30"></textarea>
                             <span class="text-danger error-text cancel-reason-error"></span>
                         </div>
                         <div class="modal-btn modal-btn-sm text-end">
@@ -389,11 +389,11 @@
                 <div class="modal-body">
                     <form action="#">
                         <div class="modal-form-group">
-                            <label>{{__('web.common.start_date')}} <span class="text-danger">*</span></label>
+                            <label for="custom_from_date">{{__('web.common.start_date')}} <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="custom_from_date">
                         </div>
                         <div class="modal-form-group">
-                            <label>{{__('web.common.end_date')}} <span class="text-danger">*</span></label>
+                            <label for="custom_to_date">{{__('web.common.end_date')}} <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="custom_to_date">
                         </div>
                         <span class="text-danger error-text" id="custom_date_error"></span>

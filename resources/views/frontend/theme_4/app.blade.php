@@ -22,7 +22,7 @@
     @include('frontend.theme_4.partials.styles')
 </head>
 <body class="home-two" data-theme="{{ $theme ?? 1 }}" data-dir="{{ $isRTL ? 'rtl' : 'ltr' }}">
-	
+
 	<div class="main-wrapper">
 
 		<!-- Hero Sec Main -->

@@ -10,22 +10,22 @@
 
 	<!-- Fancybox CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fancybox/fancybox.css') }}">
-	
+
 	<!-- Select2 CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/select2/css/select2.min.css') }}">
 
 	<!-- Datepicker CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap-datetimepicker.min.css') }}">
-	
+
 	<!-- Aos CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/aos/aos.css') }}">
-	
+
     <!-- Fearther CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/feather.css') }}">
 
 	<!-- Boxicons CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/boxicons/css/boxicons.min.css') }}">
-		
+
 	<!-- Owl carousel CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/owl.carousel.min.css') }}">
  	@stack('styles')

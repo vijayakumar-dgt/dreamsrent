@@ -1,4 +1,4 @@
-<!-- Header --> 
+<!-- Header -->
 <header class="header header-two">
     <div class="header-two-top">
         <div class="container">
@@ -19,7 +19,7 @@
                                 <div class="dropdown-menu dropdown-menu-end">
                                     @if ($allLanguages)
                                     @foreach ($allLanguages as $language)
-                                    <a href="javascript:void(0);" type="button" class="dropdown-item change-user-language" 
+                                    <a href="javascript:void(0);" type="button" class="dropdown-item change-user-language"
                                         data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
                                         <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}" alt="Img">
                                          {{ $language->name }}
@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                         </div>
-                        @endif  
+                        @endif
                     </div>
                     <div class="header-top-social-links">
                         <ul>
@@ -72,7 +72,7 @@
                 </a>
                 <a href="{{ route('home') }}" class="navbar-brand logo-small">
                     <img src="{{ $smallLogo }}" class="img-fluid" alt="Logo">
-                </a>					
+                </a>
             </div>
             <div class="main-menu-wrapper">
                 <div class="menu-header">

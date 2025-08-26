@@ -103,7 +103,7 @@
                                 <ul>
                                     <li class="review-box feedbackbox mb-0">
                                         <div class="review-details">
-                                            <form id="reviewForm" autocomplete="off"> 
+                                            <form id="reviewForm" autocomplete="off">
                                                 <input type="hidden" name="vehicle_id" class="vehicle_id">
                                                 <div class="row">
                                                     <div class="col-lg-12">
