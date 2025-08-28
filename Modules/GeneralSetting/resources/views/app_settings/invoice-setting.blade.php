@@ -6,11 +6,11 @@
     <!-- Page Wrapper -->
 	<div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.general_settings.settings')" 
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
                 :breadcrumbs="[
                     __('admin.general_settings.settings') => ''
-                ]" 
+                ]"
             />
             <!-- Settings Prefix -->
             <div class="row">
@@ -31,7 +31,7 @@
                                             <label for="invoice_logo" class="form-label">{{ __('admin.general_settings.invoice_logo') }} <span class="text-danger">*</span></label>
                                             <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                                 <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                                    <img id="profile_photo_preview" src="{{ uploadedAsset('', 'default2')}}" class="img-fluid" alt="Profile Photo">
+                                                    <img id="profile_photo_preview" src="{{ uploadedAsset('', 'default2')}}" class="img-fluid" alt="Profile">
                                                 </div>
                                                 <div class="profile-upload">
                                                     <div class="profile-uploader d-flex align-items-center">
@@ -95,7 +95,7 @@
                                                 </select>
                                                 <div class="ms-3">
                                                     <div class="form-check form-check-md form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="round_off_enabled" name="round_off_enabled" role="switch" checked>
+                                                        <input class="form-check-input" type="checkbox" id="round_off_enabled" name="round_off_enabled" role="switch" checked aria-checked="true">
                                                     </div>
                                                 </div>
                                             </div>
@@ -111,7 +111,7 @@
                                     <div class="col-md-6 col-sm-12">
                                         <div class="">
                                             <div class="form-check form-check-md form-switch">
-                                                <input class="form-check-input" type="checkbox" id="show_company_details" name="show_company_details" role="switch" checked>
+                                                <input class="form-check-input" type="checkbox" id="show_company_details" name="show_company_details" role="switch" checked aria-checked="true">
                                             </div>
                                         </div>
                                     </div>
@@ -154,13 +154,3 @@
 @push('scripts')
 <script src="{{ asset('backend/assets/js/general_setting/invoice-setting.js') }}"></script>
 @endpush
-
-
-
-
-
-
-
-
-
-

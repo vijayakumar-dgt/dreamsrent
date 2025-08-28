@@ -5,11 +5,11 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content">
-            <x-admin.breadcrumb 
-                :title="__('admin.general_settings.settings')" 
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
                 :breadcrumbs="[
                     __('admin.general_settings.settings') => ''
-                ]" 
+                ]"
             />
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
@@ -27,10 +27,10 @@
                                     <h6 class="fw-bold mb-3">{{ __('admin.general_settings.company_settings') }}</h6>
                                     <input type="hidden" name="group_id" id="group_id" class="form-control" value="1">
                                     <div class="mb-3">
-                                        <label class="form-label">{{ __('admin.general_settings.profile_photo') }}</label>
+                                        <label for="company_profile_photo" class="form-label">{{ __('admin.general_settings.profile_photo') }}</label>
                                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                             <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                                <img src="{{ uploadedAsset('', 'default') }}" id="profile_photo_preview" class="img-fluid" alt="Profile Photo">
+                                                <img src="{{ uploadedAsset('', 'default') }}" id="profile_photo_preview" class="img-fluid" alt="Profile">
                                             </div>
                                             <div class="profile-upload">
                                                 <div class="profile-uploader d-flex align-items-center">
@@ -55,7 +55,7 @@
                                         <!-- Organization Name -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.general_settings.organization_name') }} <span class="text-danger">*</span></label>
+                                                <label for="organization_name" class="form-label">{{ __('admin.general_settings.organization_name') }} <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" id="organization_name" name="organization_name" maxlength="30">
                                                 <span id="organization_name_error" class="text-danger error-text"></span>
                                             </div>
@@ -63,7 +63,7 @@
                                         <!-- Owner Name -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.general_settings.owner_name') }} <span class="text-danger">*</span></label>
+                                                <label for="owner_name" class="form-label">{{ __('admin.general_settings.owner_name') }} <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" id="owner_name" name="owner_name" maxlength="30">
                                                 <span id="owner_name_error" class="text-danger error-text"></span>
                                             </div>
@@ -71,7 +71,7 @@
                                         <!-- Email Address -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label ">{{ __('admin.general_settings.email_address') }} <span class="text-danger">*</span></label>
+                                                <label for="company_email" class="form-label ">{{ __('admin.general_settings.email_address') }} <span class="text-danger">*</span></label>
                                                 <input type="email" class="form-control" id="company_email" name="company_email" maxlength="50">
                                                 <span id="company_email_error" class="text-danger error-text"></span>
                                             </div>
@@ -79,7 +79,7 @@
                                         <!-- Phone Number -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.phone_number') }} <span class="text-danger">*</span></label>
+                                                <label for="company_phone" class="form-label">{{ __('admin.common.phone_number') }} <span class="text-danger">*</span></label>
                                                 <div class="">
                                                     <input type="text" class="form-control company_phone" id="company_phone" name="company_phone">
                                                     <input type="hidden" id="international_phone_number" name="international_phone_number">
@@ -87,8 +87,6 @@
                                                 <span id="company_phone_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>
-                                       
-                                       
                                     </div>
                                 </div>
                                 <!-- Address Information Section -->
@@ -98,7 +96,7 @@
                                         <!-- Address Line -->
                                         <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.general_settings.address_line') }}</label>
+                                                <label for="company_address_line" class="form-label">{{ __('admin.general_settings.address_line') }}</label>
                                                 <input type="text" class="form-control" id="company_address_line" name="company_address_line" maxlength="100">
                                                 <span id="company_address_line_error" class="text-danger error-text"></span>
                                             </div>
@@ -106,7 +104,7 @@
                                         <!-- Country -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.country') }} </label>
+                                                <label for="country" class="form-label">{{ __('admin.common.country') }} </label>
                                                 <div class="">
                                                     <select name="country" class="form-control select2" id="country"></select>
                                                 </div>
@@ -116,7 +114,7 @@
                                         <!-- State -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.state') }} </label>
+                                                <label for="state" class="form-label">{{ __('admin.common.state') }} </label>
                                                 <div class="">
                                                     <select name="state" class="form-control select2" id="state"></select>
                                                 </div>
@@ -126,7 +124,7 @@
                                         <!-- City -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.city') }}</label>
+                                                <label for="city" class="form-label">{{ __('admin.common.city') }}</label>
                                                 <div class="">
                                                     <select name="city" id="city" class="form-control select2"></select>
                                                 </div>
@@ -136,7 +134,7 @@
                                         <!-- Postal Code -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.postal_code') }}</label>
+                                                <label for="company_postal_code" class="form-label">{{ __('admin.common.postal_code') }}</label>
                                                 <input type="text" class="form-control" id="company_postal_code" name="company_postal_code" maxlength="6">
                                                 <span id="company_postal_code_error" class="text-danger error-text"></span>
                                             </div>
@@ -149,7 +147,7 @@
                                 <div class="d-flex align-items-center justify-content-end">
                                     <a href="{{ route('dashboard') }}" class="btn btn-light me-2">{{ __('admin.general_settings.cancel') }}</a>
                                     @if (hasPermission($permissions, 'website_settings', 'edit'))
-                                    <button type="submit" class="btn btn-primary companysave">{{ __('admin.general_settings.save_changes') }}s</button>
+                                    <button type="submit" class="btn btn-primary companysave">{{ __('admin.general_settings.save_changes') }}</button>
                                     @endif
                                 </div>
                             </div>

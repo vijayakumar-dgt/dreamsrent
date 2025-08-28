@@ -6,11 +6,11 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.general_settings.settings')" 
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
                 :breadcrumbs="[
                     __('admin.general_settings.settings') => ''
-                ]" 
+                ]"
             />
             <!-- Settings Prefix -->
             <div class="row">
@@ -57,8 +57,8 @@
                                 </div>
                                 <!-- Status Toggle -->
                                 <div class="form-check form-check-md form-switch me-2">
-                                    <label class="form-check-label form-label mt-0 mb-0">
-                                        <input id="maintenance_status" name="maintenance_status" class="form-check-input form-label me-2" type="checkbox" role="switch" checked>
+                                    <label for="maintenance_status" class="form-check-label form-label mt-0 mb-0">
+                                        <input id="maintenance_status" name="maintenance_status" class="form-check-input form-label me-2" type="checkbox" role="switch" checked aria-checked="true">
                                         {{ __('admin.common.status') }}
                                     </label>
                                     <span id="maintenance_status_error" class="text-danger error-text"></span>
@@ -86,13 +86,3 @@
 @push('scripts')
 <script src="{{ asset('backend/assets/js/general_setting/maintenance-setting.js') }}"></script>
 @endpush
-
-
-
-
-
-
-
-
-
-

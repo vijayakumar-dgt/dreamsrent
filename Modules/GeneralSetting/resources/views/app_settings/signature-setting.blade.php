@@ -6,9 +6,12 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb :title="__('admin.general_settings.settings')" :breadcrumbs="[
-            __('admin.general_settings.settings') => ''
-        ]" />
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
+                :breadcrumbs="[
+                    __('admin.general_settings.settings') => ''
+                ]"
+            />
             <!-- Settings Prefix -->
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
@@ -20,7 +23,6 @@
                         <div class="card-body">
                             <h6 class="fw-bold mb-3">{{ __('admin.general_settings.signatures') }}</h6>
                             <div class="d-flex align-items-end justify-content-end flex-wrap row-gap-3 mb-3">
-
                                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                                     @if (hasPermission($permissions, 'app_settings', 'create'))
                                         <button type="button" id="add_signature_btn" data-bs-toggle="modal" data-bs-target="#add_signatures"
@@ -69,7 +71,7 @@
                                 class="text-danger">*</span></label>
                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                             <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 border flex-shrink-0 text-dark">
-                                <img id="image_photo_preview" src="{{ uploadedAsset('', 'default') }}" class="img-fluid" alt="Signature Image">
+                                <img id="image_photo_preview" src="{{ uploadedAsset('', 'default') }}" class="img-fluid" alt="Signature">
                                 <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
                             </div>
                             <div class="profile-upload">
@@ -89,16 +91,14 @@
                         </div>
                         <span id="signature_image_error" class="text-danger error-text"></span>
                     </div>
-
                     <!-- Default Checkbox -->
                     <div class="mb-3">
-                        <label class="form-check-label form-label" for="is_default">
+                        <label for="is_default" class="form-check-label form-label" for="is_default">
                             <input class="form-check-input form-label" type="checkbox" id="is_default" name="is_default" value="1">
                             {{ __('admin.general_settings.mark_as_default') }}
                         </label>
                         <span id="is_default_error" class="text-danger error-text"></span>
                     </div>
-
                     <!-- Signature Name -->
                     <div class="mb-3">
                         <label for="signature_name" class="form-label">{{ __('admin.general_settings.signatures_name') }}
@@ -109,7 +109,6 @@
                     </div>
                 </div>
             </x-slot>
-
             <x-slot name="footer">
                 <div class="d-flex justify-content-center">
                     <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
@@ -129,7 +128,7 @@
                 <div class="row">
                     <!-- Signature Image Upload -->
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
+                        <label for="edit_signature_image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                             <div
                                 class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
@@ -152,20 +151,18 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Default Checkbox -->
                     <div class="mb-3">
-                        <label class="form-check-label form-label" for="edit_signature_default">
+                        <label for="edit_signature_default" class="form-check-label form-label" for="edit_signature_default">
                             <input class="form-check-input form-label" type="checkbox" id="edit_signature_default"
                                 name="is_default" value="1">
                             {{ __('admin.general_settings.mark_as_default') }}
                         </label>
                         <span id="edit_signature_default_error" class="text-danger error-text"></span>
                     </div>
-
                     <!-- Signature Name -->
                     <div class="mb-0">
-                        <label class="form-label">{{ __('admin.general_settings.signatures_name') }} <span
+                        <label for="edit_signature_name" class="form-label">{{ __('admin.general_settings.signatures_name') }} <span
                                 class="text-danger">*</span></label>
                         <input type="text" id="edit_signature_name" name="signature_name" class="form-control">
                         <span id="edit_signature_name_error" class="error-text text-danger"></span>

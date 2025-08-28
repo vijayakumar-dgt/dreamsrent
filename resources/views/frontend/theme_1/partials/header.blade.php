@@ -16,8 +16,7 @@
                     </a>
                     @if(!empty($language_switcher) && $language_switcher == 1)
                     <div class="navbar-brand dropdown has-arrow flag-nav flag-nav1 nav-item-box flag-resposnive">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
-                            role="button">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
                             <img src="{{ asset('/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
                                 alt="Language" class="img-fluid">
                         </a>
@@ -82,24 +81,23 @@
                                                 {{ __('web.home.home') }}
                                                 <i class="fas fa-chevron-down"></i>
                                             </a>
-
                                             <ul class="submenu" role="menu" id="home-submenu" aria-labelledby="home-menu">
-                                                <li role="none">
+                                                <li role="menuitem">
                                                     <a role="menuitem" href="{{ url('/theme/home-01') }}">
                                                         {{ __('web.home.car_theme') }} 1
                                                     </a>
                                                 </li>
-                                                <li role="none">
+                                                <li role="menuitem">
                                                     <a role="menuitem" href="{{ url('/theme/home-02') }}">
                                                         {{ __('web.home.car_theme') }} 2
                                                     </a>
                                                 </li>
-                                                <li role="none">
+                                                <li role="menuitem">
                                                     <a role="menuitem" href="{{ url('/theme/home-03') }}">
                                                         {{ __('web.home.bike') }}
                                                     </a>
                                                 </li>
-                                                <li role="none">
+                                                <li role="menuitem">
                                                     <a role="menuitem" href="{{ url('/theme/home-04') }}">
                                                         {{ __('web.home.yacht') }}
                                                     </a>
@@ -139,8 +137,7 @@
                     @if(!empty($language_switcher) && $language_switcher == 1)
                     <li class="nav-item">
                         <div class="nav-item dropdown has-arrow flag-nav flag-nav1 nav-item-box">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
-                                role="button">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
                                 <img src="{{ asset('/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
                                     alt="Language" class="img-fluid">
                             </a>

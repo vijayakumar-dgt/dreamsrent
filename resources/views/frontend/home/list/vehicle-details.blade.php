@@ -55,7 +55,9 @@
                             </li>
                         </ul>
                         <div class="camaro-info">
-                            <h3 class="vehicle_name"></h3>
+                            <h3 class="vehicle_name">
+                                <span class="visually-hidden"></span>
+                            </h3>
                             <div class="camaro-location">
                                 <div class="camaro-location-inner">
                                     <i class='bx bx-map'></i>
@@ -131,7 +133,9 @@
                                         </div>
                                         <div class="featues-info">
                                             <span>{{__('web.home.body')}} </span>
-                                            <h6 class="vehicle_type"> </h6>
+                                            <h6 class="vehicle_type">
+                                                <span class="visually-hidden"></span>
+                                            </h6>
                                         </div>
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -140,7 +144,9 @@
                                         </div>
                                         <div class="featues-info">
                                             <span>{{__('web.home.make')}} </span>
-                                            <h6 class="vehicle_brand"> </h6>
+                                            <h6 class="vehicle_brand">
+                                                <span class="visually-hidden"></span>
+                                            </h6>
                                         </div>
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -149,7 +155,9 @@
                                         </div>
                                         <div class="featues-info">
                                             <span>{{__('web.home.transmission')}} </span>
-                                            <h6 class="vehicle_transmission"></h6>
+                                            <h6 class="vehicle_transmission">
+                                                <span class="visually-hidden"></span>
+                                            </h6>
                                         </div>
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -158,7 +166,9 @@
                                         </div>
                                         <div class="featues-info">
                                             <span>{{ __('web.home.fuel_type') }}</span>
-                                            <h6 class="vehicle_fuel"></h6>
+                                            <h6 class="vehicle_fuel">
+                                                <span class="visually-hidden"></span>
+                                            </h6>
                                         </div>
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -167,7 +177,9 @@
                                         </div>
                                         <div class="featues-info">
                                             <span>{{__('web.home.mileage')}} </span>
-                                            <h6 class="vehicle_mileage"></h6>
+                                            <h6 class="vehicle_mileage">
+                                                <span class="visually-hidden"></span>
+                                            </h6>
                                         </div>
                                     </div>
 
@@ -177,7 +189,9 @@
                                         </div>
                                         <div class="featues-info">
                                             <span>{{ __('web.home.year') }}</span>
-                                            <h6 class="vehicle_year"> </h6>
+                                            <h6 class="vehicle_year">
+                                                <span class="visually-hidden"></span>
+                                            </h6>
                                         </div>
                                     </div>
 
@@ -191,7 +205,9 @@
                                         </div>
                                         <div class="featues-info">
                                             <span>{{ __('web.home.vin') }} </span>
-                                            <h6 id="vin"> </h6>
+                                            <h6 id="vin">
+                                                <span class="visually-hidden"></span>
+                                            </h6>
                                         </div>
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -205,10 +221,14 @@
                                         <div class="featues-info">
                                             @if(in_array($vehicle->category_id, [3, 6]))
                                             <span>{{ __('web.home.hatch') }} </span>
-                                            <h6 class="vehicle_hatch"></h6>
+                                            <h6 class="vehicle_hatch">
+                                                <span class="visually-hidden"></span>
+                                            </h6>
                                             @else
                                             <span>{{ __('web.home.door') }} </span>
-                                            <h6 class="vehicle_doors"></h6>
+                                            <h6 class="vehicle_doors">
+                                                <span class="visually-hidden"></span>
+                                            </h6>
                                             @endif
                                         </div>
                                     </div>
@@ -254,7 +274,6 @@
                         <div class="review-header">
                             <h4>{{ __('web.home.gallery') }}</h4>
                         </div>
-
                     </div>
                     <!-- /Gallery -->
                     <!-- Video -->
@@ -305,7 +324,9 @@
                             <div class="rating-wraps">
                                 <h2 id="overall_ratings"><span>/5</span></h2>
                                 <p id="rating_description"></p>
-                                <h6 id="total_reviews"></h6>
+                                <h6 id="total_reviews">
+                                    <span class="visually-hidden">0</span>
+                                </h6>
                             </div>
                             <div class="rating-progress">
                                 <div class="progress-info">
@@ -347,10 +368,11 @@
                         </div>
                         <div class="review-card" id="review_list_main_card">
                             <div class="review-head">
-                                <h6 id="total_reviews_count"></h6>
+                                <h6 id="total_reviews_count">
+                                    <span class="visually-hidden">0</span>
+                                </h6>
                             </div>
                             <ul id="review_list_container">
-
                             </ul>
                         </div>
                     </div>
@@ -360,7 +382,6 @@
                     <div class="review-sec mt-0">
                         <form id="validateVehicleBook" autocomplete="off" method="POST" action="{{ route('booking.checkout', ['slug' => $slug]) }}">
                             @csrf
-
                             <div class="review-header">
                                 <h4>{{ __('web.home.pricing') }}</h4>
                             </div>

@@ -6,11 +6,11 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.general_settings.settings')" 
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
                 :breadcrumbs="[
                     __('admin.general_settings.settings') => ''
-                ]" 
+                ]"
             />
             <!-- Settings Prefix -->
             <div class="row">
@@ -34,19 +34,19 @@
                                                 <div class="d-flex align-items-center gap-2">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="notificationPreference" id="notifyAll">
-                                                        <label class="form-check-label" for="notifyAll">
+                                                        <label for="notifyAll" class="form-check-label" for="notifyAll">
                                                             {{ __('admin.general_settings.all_new_messages') }}
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="notificationPreference" id="notifyMentions">
-                                                        <label class="form-check-label" for="notifyMentions">
+                                                        <label for="notifyMentions" class="form-check-label" for="notifyMentions">
                                                             {{ __('admin.general_settings.mentions_only') }}
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="notificationPreference" id="notifyNothing">
-                                                        <label class="form-check-label" for="notifyNothing">
+                                                        <label for="notifyNothing" class="form-check-label" for="notifyNothing">
                                                             {{ __('admin.general_settings.nothing') }}
                                                         </label>
                                                     </div>
@@ -64,7 +64,7 @@
                                                 </div>
                                                 <div class="d-flex justify-content-end">
                                                     <div class="form-check form-check-md form-switch me-2">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="desktopNotifications" name="desktopNotifications" checked>
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="desktopNotifications" name="desktopNotifications" checked aria-checked="true">
                                                     </div>
                                                 </div>
                                             </div>
@@ -80,7 +80,7 @@
                                                 </div>
                                                 <div class="d-flex justify-content-end">
                                                     <div class="form-check form-check-md form-switch me-2">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="unreadBadge" name="unreadBadge" checked>
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="unreadBadge" name="unreadBadge" checked aria-checked="true">
                                                     </div>
                                                 </div>
                                             </div>
@@ -98,7 +98,7 @@
                                                     </div>
                                                     <div class="d-flex justify-content-end">
                                                         <div class="form-check form-check-md form-switch me-2">
-                                                            <input class="form-check-input" type="checkbox" role="switch" id="bookingUpdates" name="bookingUpdates" checked>
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="bookingUpdates" name="bookingUpdates" checked aria-checked="true">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -112,7 +112,7 @@
                                                     </div>
                                                     <div class="d-flex justify-content-end">
                                                         <div class="form-check form-check-md form-switch me-2">
-                                                            <input class="form-check-input" type="checkbox" role="switch" id="paymentNotifications" name="paymentNotifications" checked>
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="paymentNotifications" name="paymentNotifications" checked aria-checked="true">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -126,7 +126,7 @@
                                                     </div>
                                                     <div class="d-flex justify-content-end">
                                                         <div class="form-check form-check-md form-switch me-2">
-                                                            <input class="form-check-input" type="checkbox" role="switch" id="userTenantNotifications" name="userTenantNotifications" checked>
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="userTenantNotifications" name="userTenantNotifications" checked aria-checked="true">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -140,7 +140,7 @@
                                                     </div>
                                                     <div class="d-flex justify-content-end">
                                                         <div class="form-check form-check-md form-switch me-2">
-                                                            <input class="form-check-input" type="checkbox" role="switch" id="vehicleManagement" name="vehicleManagement" checked>
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="vehicleManagement" name="vehicleManagement" checked aria-checked="true">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -154,7 +154,7 @@
                                                     </div>
                                                     <div class="d-flex justify-content-end">
                                                         <div class="form-check form-check-md form-switch me-2">
-                                                            <input class="form-check-input" type="checkbox" role="switch" id="discountOffers" name="discountOffers" checked>
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="discountOffers" name="discountOffers" checked aria-checked="true">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -184,13 +184,3 @@
 @push('scripts')
 <script src="{{ asset('backend/assets/js/general_setting/notificationsSetting.js') }}"></script>
 @endpush
-
-
-
-
-
-
-
-
-
-

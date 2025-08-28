@@ -16,8 +16,7 @@
                 </a>
                 @if(!empty($language_switcher) && $language_switcher == 1)
                 <div class="navbar-brand dropdown has-arrow flag-nav flag-nav1 nav-item-box flag-resposnive">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
-                        role="button">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
                         <img src="{{ asset('/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
                             alt="Language" class="img-fluid">
                     </a>
@@ -111,8 +110,7 @@
                 @if(!empty($language_switcher) && $language_switcher == 1)
                 <li class="nav-item">
                     <div class="nav-item dropdown has-arrow flag-nav flag-nav1 nav-item-box">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
-                            role="button">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
                             <img src="{{ asset('/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
                                 alt="Language" class="img-fluid">
                         </a>

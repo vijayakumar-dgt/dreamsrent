@@ -12,7 +12,7 @@
                     <div class="listing-tabs-group">
                         <ul class="nav listing-buttons gap-3" role="tablist">
                             @foreach($vehicleBrand as $brand)
-                                <li>
+                                <li role="presentation">
                                     <a
                                         class="{{ $loop->first ? 'active' : '' }}"
                                         {{ $loop->first ? 'aria-selected=true' : 'aria-selected=false' }}

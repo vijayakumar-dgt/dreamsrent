@@ -5,9 +5,12 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content">
-            <x-admin.breadcrumb :title="__('admin.general_settings.settings')" :breadcrumbs="[
-            __('admin.general_settings.settings') => ''
-        ]" />
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
+                :breadcrumbs="[
+                    __('admin.general_settings.settings') => ''
+                ]"
+            />
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-xl-9">
@@ -68,18 +71,16 @@
         <x-slot name="body">
             @csrf
             <input type="hidden" name="id" id="id">
-
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.general_settings.currency_name') }} <span
+                <label for="currency_name" class="form-label">{{ __('admin.general_settings.currency_name') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="currency_name" id="currency_name">
                 <span id="currency_name_error" class="text-danger error-text"></span>
             </div>
-
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.general_settings.code') }} <span
+                        <label for="code" class="form-label">{{ __('admin.general_settings.code') }} <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="code" id="code">
                         <span id="code_error" class="text-danger error-text"></span>
@@ -87,7 +88,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.general_settings.symbol') }} <span
+                        <label for="symbol" class="form-label">{{ __('admin.general_settings.symbol') }} <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="symbol" id="symbol">
                         <span id="symbol_error" class="text-danger error-text"></span>
@@ -95,13 +96,12 @@
                 </div>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex justify-content-between align-items-center w-100" id="modalfootdiv">
                 <div class="form-check form-check-md form-switch me-2 d-none" id="status_div">
-                    <label class="form-check-label form-label mt-0 mb-0">
+                    <label for="status" class="form-check-label form-label mt-0 mb-0">
                         <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status"
-                            id="status">
+                            id="status" aria-checked="false">
                         {{ __('admin.common.status') }}
                     </label>
                 </div>
@@ -116,7 +116,6 @@
             </div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add Currency -->
 
     <!-- Delete Currency -->
@@ -124,8 +123,6 @@
         :hiddenInputs="['id' => '']" :title="__('admin.general_settings.delete_currency')"
         :description="__('admin.general_settings.delete_currency_confirmation')">
     </x-admin.delete-modal>
-
-
     <!-- /Delete Currency -->
 @endsection
 
