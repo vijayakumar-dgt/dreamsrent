@@ -10,13 +10,13 @@
 <!-- Category  Section -->
 <section class="section category-section">
     <div class="category-bg">
-        <img src="{{ asset('frontend/assets/img/bg/category-bg.png') }}" class="img-fluid shape-01" alt="image">
-        <img src="{{ asset('frontend/assets/img/bg/ban-bg-05.png') }}" class="img-fluid shape-02" alt="image">
-    </div>		
-    <div class="container">	
-        <div class="row">	
-            <div class="col-md-12">	
-                
+        <img src="{{ asset('frontend/assets/img/bg/category-bg.png') }}" class="img-fluid shape-01" alt="Category">
+        <img src="{{ asset('frontend/assets/img/bg/ban-bg-05.png') }}" class="img-fluid shape-02" alt="Category">
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
                 <!-- Heading title-->
                 <div class="section-heading heading-three" data-aos="fade-down">
                     <h2>{{ $title }} <span>{{ $titlelastpart }}</span></h2>
@@ -31,7 +31,7 @@
                     <div class="item">
                         <a href="javascript:void(0);" class="category-wrap">
                             <span class="category-img">
-                                <img src="{{ $vehicleType->image_url }}" class="img-fluid" alt="image">
+                                <img src="{{ $vehicleType->image_url }}" class="img-fluid" alt="Vehicle">
                             </span>
                             <h6>{{ $vehicleType->name }} </h6>
                             <p>{{ $vehicleType->car_count }} {{ __('web.home.bikes') }}</p>

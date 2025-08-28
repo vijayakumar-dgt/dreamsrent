@@ -14,7 +14,7 @@
         <div class="container">
             <div class="row align-items-center text-center">
                 <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title vehicle_name" id="slug" data-slug="{{ $slug }}"></h2>
+                    <h2 class="breadcrumb-title vehicle_name" id="slug" data-slug="{{ $slug }}">{{ $slug }}</h2>
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">{{__('web.home.home')}}</a></li>
@@ -263,7 +263,7 @@
                             <h4>{{ __('web.home.video') }}</h4>
                         </div>
                         <div class="short-video">
-                            <img class="img-fluid" alt="Image" src="{{asset('frontend/assets/img/video-img.jpg')}}" id="video_thumb">
+                            <img class="img-fluid" alt="Short Video" src="{{asset('frontend/assets/img/video-img.jpg')}}" id="video_thumb">
                             <a href="#" data-fancybox="video" class="video-icon" id="video">
                                 <i class="bx bx-play"></i>
                             </a>
@@ -400,7 +400,7 @@
                                             <div id="devliveryCOntainer">
                                                 <li class="column-group-main">
                                                     <div class="input-block">
-                                                        <label>{{ __('web.home.delivery_location') }}</label>
+                                                        <label for="delivery_location">{{ __('web.home.delivery_location') }}</label>
                                                         <div class="group-img">
                                                             <div class="form-wrap">
                                                                 <select name="delivery_location" id="delivery_location" class="form-control select2">
@@ -418,7 +418,7 @@
                                                 </li>
                                                 <li class="column-group-main">
                                                     <div class="input-block">
-                                                        <label class="custom_check d-inline-flex location-check m-0"><span>{{__('web.home.return_to_same_location')}}</span>
+                                                        <label class="custom_check d-inline-flex location-check m-0" for="delivery_remeber"><span>{{__('web.home.return_to_same_location')}}</span>
                                                             <input type="checkbox" name="delivery_remeber" id="delivery_remeber">
                                                             <span class="checkmark"></span>
                                                         </label>
@@ -426,7 +426,7 @@
                                                 </li>
                                                 <li class="column-group-main">
                                                     <div class="input-block">
-                                                        <label>{{ __('web.home.return_location') }}</label>
+                                                        <label for="delivery_return_location">{{ __('web.home.return_location') }}</label>
                                                         <div class="group-img">
                                                             <div class="form-wrap">
                                                                 <select name="delivery_return_location" id="delivery_return_location" class="form-control select2">
@@ -446,10 +446,10 @@
                                             <div id="selfCOntainer">
                                                 <li class="column-group-main">
                                                     <div class="input-block">
-                                                        <label>{{ __('web.home.pickup_location') }}</label>
+                                                        <label for="pickup_location_id">{{ __('web.home.pickup_location') }}</label>
                                                         <div class="group-img">
                                                             <div class="form-wrap">
-                                                                <input type="hidden" name="pickup_location_id" value="{{ $mainLocation->id }}">
+                                                                <input type="hidden" name="pickup_location_id" id="pickup_location_id" value="{{ $mainLocation->id }}">
                                                                 <select name="pickup_location" id="pickup_location" class="form-control select2">
                                                                     <option value="">{{ __('web.home.select_delivery_location') }}</option>
                                                                     @foreach($allLocation as $location)
@@ -462,7 +462,7 @@
                                                 </li>
                                                 <li class="column-group-main">
                                                     <div class="input-block">
-                                                        <label class="custom_check d-inline-flex location-check m-0"><span>{{__('web.home.return_to_same_location')}}</span>
+                                                        <label class="custom_check d-inline-flex location-check m-0" for="pickup_remeber"><span>{{__('web.home.return_to_same_location')}}</span>
                                                             <input type="checkbox" name="pickup_remeber" id="pickup_remeber">
                                                             <span class="checkmark"></span>
                                                         </label>
@@ -470,7 +470,7 @@
                                                 </li>
                                                 <li class="column-group-main">
                                                     <div class="input-block">
-                                                        <label>{{ __('web.home.return_location') }}</label>
+                                                        <label for="pickup_return_location">{{ __('web.home.return_location') }}</label>
                                                         <div class="group-img">
                                                             <div class="form-wrap">
                                                                 <input type="hidden" name="pickup_return_location_id" value="{{ $mainLocation->id }}">
@@ -488,7 +488,7 @@
                                             <input type="hidden" id="has_pickup_date" value="{{request()->has('pd') ? request()->pd : ''}}">
                                             <li class="column-group-main">
                                                 <div class="input-block m-0">
-                                                    <label>{{__('web.home.pickup_date')}}</label>
+                                                    <label for="pickup_date">{{__('web.home.pickup_date')}}</label>
                                                 </div>
                                                 <div class="input-block-wrapp sidebar-form">
                                                     <div class="input-block  me-lg-2">
@@ -514,7 +514,7 @@
                                                 </div>
                                             </li>
                                             <li class="column-group-main">
-                                                <div class="input-block m-0"> <label>{{__('web.home.return_date')}}</label>
+                                                <div class="input-block m-0"> <label for="return_date">{{__('web.home.return_date')}}</label>
                                                 </div>
                                                 <div class="input-block-wrapp sidebar-form">
                                                     <div class="input-block me-lg-2">
@@ -621,27 +621,27 @@
                             </div>
                         </div>
                         <div class="modal-form-group">
-                            <label>{{ __('web.home.name') }} <em class="text-danger">*</em></label>
+                            <label for="enquiry_name">{{ __('web.home.name') }} <em class="text-danger">*</em></label>
                             <input type="text" class="form-control" name="enquiry_name" id="enquiry_name" placeholder="{{__('web.blog.full_name')}}" @auth value="{{ getCurrentUserFullname(Auth::guard('web')->user()->id) ?? '' }}" @endauth>
                             <span class="error-text text-danger" id="enquiry_name_error"></span>
                         </div>
                         <div class="modal-form-group">
-                            <label>{{ __('web.home.email') }} <em class="text-danger">*</em></label>
+                            <label for="enquiry_email">{{ __('web.home.email') }} <em class="text-danger">*</em></label>
                             <input type="email" class="form-control" name="enquiry_email" id="enquiry_email" placeholder="{{__('web.user.enter_email')}}" value="{{ Auth::guard('web')->user()->email ?? '' }}">
                             <span class="error-text text-danger" id="enquiry_email_error"></span>
                         </div>
                         <div class="modal-form-group">
-                            <label>{{ __('web.home.phone_number') }} <em class="text-danger">*</em></label>
+                            <label for="enquiry_phone">{{ __('web.home.phone_number') }} <em class="text-danger">*</em></label>
                             <input type="text" class="form-control" name="enquiry_phone" id="enquiry_phone" placeholder="{{__('web.home.enter_phone_number')}}" value="{{ Auth::guard('web')->user()->phone_number ?? '' }}">
                             <input type="hidden" name="international_phone_number" id="international_phone_number" class="international_phone_number">
                             <span class="error-text text-danger" id="enquiry_phone_error"></span>
                         </div>
                         <div class="modal-form-group">
-                            <label>{{ __('web.home.message') }} <em class="text-danger">*</em></label>
+                            <label for="enquiry_message">{{ __('web.home.message') }} <em class="text-danger">*</em></label>
                             <textarea class="form-control" rows="4" required id="enquiry_message" name="enquiry_message" placeholder="{{__('web.home.message')}}"></textarea>
                             <span class="error-text text-danger" id="enquiry_message_error"></span>
                         </div>
-                        <label class="custom_check w-100">
+                        <label class="custom_check w-100" for="terms">
                             <input type="checkbox" name="terms" id="terms" value="1">
                             <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="{{ route('pages', 'terms-conditions') }}">{{ __('web.home.terms_of_service') }}</a> & <button type="button" class="border-0 bg-white">{{ __('web.home.privacy_policy') }}</button>
                         </label>

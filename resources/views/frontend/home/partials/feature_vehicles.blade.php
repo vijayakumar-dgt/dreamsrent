@@ -18,7 +18,7 @@
                                 <div class="listing-img">
                                     <a href="{{route('vehicleDetails', $vehicle['slug']) }}">
                                         <img src="{{ $vehicle['vehicle_image'] }}" class="img-fluid"
-                                            alt="{{ ucfirst($vehicle['name']) }} - Vehicle Image">
+                                            alt="{{ ucfirst($vehicle['name']) }} - Vehicle">
                                     </a>
                                     <div class="fav-item justify-content-end">
                                         @if(Auth::guard('web')->check())

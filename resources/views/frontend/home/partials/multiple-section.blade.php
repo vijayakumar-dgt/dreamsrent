@@ -1,3 +1,3 @@
 <div class="section privacy-section">
-    {!! $sectionContent !!}	
-</div>	
+    {!! $sectionContent !!}
+</div>

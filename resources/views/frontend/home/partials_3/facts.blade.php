@@ -1,8 +1,8 @@
 <!-- FAQ  -->
 <section class="section faq-section-three">
-    <div class="container">	
-        <div class="row align-items-center">		
-            <div class="col-lg-6">		
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
                 <!-- Heading title-->
                 <div class="section-heading heading-three" data-aos="fade-down">
                     <h2>{{ $section['section_title'] ?? "" }}</h2>
@@ -19,19 +19,19 @@
                         <div id="faq{{ $faq->id ?? $loop->index }}" class="card-collapse collapse">
                             <p>{{ ucfirst($faq->answer ?? "") }}</p>
                         </div>
-                    </div>	
+                    </div>
                     @endforeach
                     @else
                     <div class="col-12">
                         <p class="text-center">{{ __('web.common.empty_table') }}</p>
                     </div>
-                    @endif												
-                </div>	
+                    @endif
+                </div>
             </div>
             <div class="col-lg-6">
                 <div class="customer-content">
                     <p>{{ __('web.home.theme_3_fact_desc') }}</p>
-                    @php 
+                    @php
                         $factsContent = $section['facts_content'];
 
                         $mappedFacts = [];
@@ -95,12 +95,12 @@
                     </div>
                 </div>
             </div>
-        </div>	
-    </div>	
+        </div>
+    </div>
     <div class="faq-bg">
         <img src="{{ asset('frontend/assets/img/bg/ban-bg-01.png') }}" class="img-fluid shape-01" alt="img">
         <img src="{{ asset('frontend/assets/img/bg/faq-bg-01.png') }}" class="img-fluid shape-02" alt="img">
         <img src="{{ asset('frontend/assets/img/bg/faq-bg-02.png') }}" class="img-fluid shape-03" alt="img">
-    </div>	
-</section>	
+    </div>
+</section>
 <!-- /FAQ -->

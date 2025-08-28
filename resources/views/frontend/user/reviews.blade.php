@@ -30,7 +30,7 @@
 <!-- Page Content -->
 <div class="content">
     <div class="container">
-        
+
         <div class="row">
             <!-- Reviews -->
             <div class="col-lg-12">
@@ -69,7 +69,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                   
+
                                     <div class="sort-relevance sort">
                                         <div class="dropdown dropdown-action">
                                             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

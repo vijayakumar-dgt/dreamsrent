@@ -85,7 +85,7 @@
                 </div>
                 <h6>50+ Guests</h6>
             </div>
-            
+
         </div>
         <div class="section-header-two">
             <h2>{{ $section['section_title'] ?? "" }}</h2>
@@ -93,7 +93,7 @@
         </div>
         @php
             $yachtTypes = collect($section['section_content'] ?? []);
-                        
+
             if ($yachtTypes->count() == 10) {
                 $yachtTypes = $yachtTypes->take(10);
             } elseif ($yachtTypes->count() >= 5 && $yachtTypes->count() < 10) {
@@ -123,7 +123,7 @@
                     <a href="{{ route('list') }}" class="btn btn-secondary">{{ __('web.home.view_all_categories') }}</a>
                 </div>
             </div>
-            @else 
+            @else
             <div class="col-md-12">
                 <p class="text-center">{{ __('web.common.empty_table') }}</p>
             </div>

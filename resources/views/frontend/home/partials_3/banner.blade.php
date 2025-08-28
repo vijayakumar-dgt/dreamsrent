@@ -1,4 +1,4 @@
-@php 
+@php
     $section_content = $section['section_content'];
     $titleRaw = $section['section_title'];
     $titleWords = explode(' ', $titleRaw);
@@ -13,10 +13,10 @@
     $locations = $data['locations'] ?? [];
 @endphp
 <!-- Banner -->
-<section class="banner-section banner-slider">		
+<section class="banner-section banner-slider">
     <div class="container">
-        <div class="home-banner">		
-            <div class="row align-items-center">					    
+        <div class="home-banner">
+            <div class="row align-items-center">
                 <div class="col-lg-7" data-aos="fade-down">
                     <h1>{{ $titleMain ?? "" }} <span>{{ $titleLastPart ?? "" }} </span></h1>
                     <h4>{{ $section_content[0]->description ?? ""}}</h4>
@@ -24,8 +24,8 @@
                         <form action="{{ route('list') }}" class="form-block d-flex align-items-center">
                             <div class="search-input">
                                 <div class="input-block">
-                                    <label>{{ __('web.home.any_type') }}</label>
-                                    <select class="select" name="category">
+                                    <label for="vehicle_type">{{ __('web.home.any_type') }}</label>
+                                    <select class="select" id="vehicle_type" name="category">
                                         <option value="">{{ __('web.common.select') }}</option>
                                         @if(!empty($vehicle_types) && count($vehicle_types) > 0)
                                         @foreach ($vehicle_types as $vehicle_type)
@@ -37,8 +37,8 @@
                             </div>
                             <div class="search-input">
                                 <div class="input-block">
-                                    <label>{{ __('web.home.model') }}</label>
-                                    <select class="select" name="vm">
+                                    <label for="vehicle_model">{{ __('web.home.model') }}</label>
+                                    <select class="select" id="vehicle_model" name="vm">
                                         <option value="">{{ __('web.common.select') }}</option>
                                         @if(!empty($vehicle_models) && count($vehicle_models) > 0)
                                         @foreach ($vehicle_models as $vehicle_model)
@@ -50,8 +50,8 @@
                             </div>
                             <div class="search-input">
                                 <div class="input-block">
-                                    <label>{{ __('web.user.location') }}</label>
-                                    <select class="select" name="pickuplocation">
+                                    <label for="pickuplocation">{{ __('web.user.location') }}</label>
+                                    <select class="select" id="pickuplocation" name="pickuplocation">
                                         <option value="">{{ __('web.common.select') }}</option>
                                         @if(!empty($locations) && count($locations) > 0)
                                         @foreach ($locations as $location)
@@ -73,7 +73,7 @@
                                 @if(!empty($section_content[0]->customer_images) && count($section_content[0]->customer_images) > 0)
                                 @foreach ($section_content[0]->customer_images as $avatar)
                                 <li>
-                                    <img src="{{ $avatar }}" class="img-fluid aos" alt="bannerimage">
+                                    <img src="{{ $avatar }}" class="img-fluid aos" alt="User Profile">
                                 </li>
                                 @endforeach
                                 @endif
@@ -89,7 +89,7 @@
                     </div>
                 </div>
             </div>
-        </div>	
+        </div>
     </div>
     <div class="banner-image">
         <div class="banner-bg-img"   data-aos="fade-left">

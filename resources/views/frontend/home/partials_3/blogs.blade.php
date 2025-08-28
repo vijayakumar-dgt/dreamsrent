@@ -1,4 +1,4 @@
-@php 
+@php
     $sectionContent = $section['section_content'];
     $titleRaw = $section['section_title'];
     $titleWords = explode(' ', $titleRaw);
@@ -26,7 +26,7 @@
                     @foreach($sectionContent as $blog)
                     <div class="blog grid-blog">
                         <div class="blog-image">
-                            <a href="{{ route('blogs.detail', $blog['slug']) }}"><img class="img-fluid" src="{{ $blog['image'] ?? "" }}" alt="Post Image"></a>
+                            <a href="{{ route('blogs.detail', $blog['slug']) }}"><img class="img-fluid" src="{{ $blog['image'] ?? "" }}" alt="Blog"></a>
                         </div>
                         @php
                             $desc = strip_tags($blog['description']);

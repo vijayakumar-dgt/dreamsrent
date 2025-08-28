@@ -6,7 +6,7 @@
 <!-- Page Wrapper -->
 <div class="page-wrapper">
 	<div class="content me-4">
-		<x-admin.breadcrumb 
+		<x-admin.breadcrumb
 			:title="__('admin.cms.locations')"
 			:breadcrumbs="[
 				__('admin.common.country') => ''

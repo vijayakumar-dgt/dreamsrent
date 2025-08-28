@@ -6,7 +6,7 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
+            <x-admin.breadcrumb
                 :title="__('admin.rentals.reviews')"
                 :breadcrumbs="[
                     __('admin.rentals.reviews') => ''
@@ -82,7 +82,7 @@
                 </table>
             </div>
             <!-- Custom Data Table -->
-            <div class="table-footer d-none"></div>			
+            <div class="table-footer d-none"></div>
         </div>
         @include('admin.partials.footer')
     </div>

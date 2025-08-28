@@ -6,7 +6,7 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
+            <x-admin.breadcrumb
 				:title="__('admin.finance_accounts.payments')"
 				:breadcrumbs="[
 					__('admin.finance_accounts.payments') => ''
@@ -37,7 +37,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">    
+                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                     <div class="top-search me-2">
                         <div class="top-search-group">
                             <span class="input-icon">

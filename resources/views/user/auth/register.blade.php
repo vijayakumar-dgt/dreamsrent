@@ -42,7 +42,7 @@
                         <h1>{{ __('web.auth.sign_up') }}</h1>
                         <p class="account-subtitle">{{ __('web.auth.email_confirmation_subtitle') }}</p>
                         <form id="userRegisterForm">
-                            @csrf                           
+                            @csrf
                             <div class="input-block">
                                 <label class="form-label" for="first_name">
                                     {{ __('web.auth.first_name') }} <span class="text-danger">*</span>
@@ -76,8 +76,8 @@
                             </div>
                             <button type="submit" class="btn btn-outline-light w-100 btn-size mt-1">
                                 {{ __('web.auth.sign_up') }}
-                            </button>                           
-                           
+                            </button>
+
                             <div class="text-center dont-have">
                                 {{ __('web.auth.already_have_account') }}
                                 <a href="{{ route('user-login') }}">{{ __('web.auth.sign_in') }}</a>
@@ -130,7 +130,7 @@
             </div>
         </div>
         @include('frontend.toast')
-       
+
     </div>
     <!-- /Main Wrapper -->
 
@@ -146,7 +146,7 @@
 
     <!-- Bootstrap Core JS -->
     <script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
-    
+
     <!-- Custom JS -->
     <script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>

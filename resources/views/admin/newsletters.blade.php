@@ -52,7 +52,7 @@
 								<button type="button" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</button>
 							</li>
 						</ul>
-					</div> 
+					</div>
 				</div>
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 					<div class="top-search">
@@ -86,12 +86,12 @@
 							@endif
 						</tr>
 					</thead>
-					<tbody>                                              
-					</tbody>	
+					<tbody>
+					</tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->
-			<div class="table-footer d-none"></div>			
+			<div class="table-footer d-none"></div>
 		</div>
 		@include('admin.partials.footer')
 	</div>

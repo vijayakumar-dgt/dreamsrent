@@ -1,5 +1,5 @@
 @php
-    $sectionContent = $section['section_content'];    
+    $sectionContent = $section['section_content'];
 @endphp
 <!-- Brand Slider -->
  <div class = "custom-brand-section section overflow-hidden">

@@ -1,4 +1,4 @@
-@php 
+@php
     $sectionContent = $section['section_content'];
     $titleRaw = $section['section_title'];
     $titleWords = explode(' ', $titleRaw);
@@ -30,7 +30,7 @@
                     @if(!empty($vehicles) && count($vehicles) > 0)
                     @foreach ($vehicles as $vehicle)
                     <div class="col-lg-6">
-                        <div class="listing-item bike-list">											
+                        <div class="listing-item bike-list">
                             <div class="listing-img">
                                 <div class="img-slider owl-carousel">
                                     @if(!empty($vehicle['multiple_vehicle_images']) && count($vehicle['multiple_vehicle_images']) > 0)
@@ -46,30 +46,30 @@
                                 <div class="fav-item justify-content-start">
                                     <a href="javascript:void(0)" class="author-img">
                                         <img src="{{ $vehicle['avatar_image'] }}" alt="author">
-                                    </a>								
-                                </div>	
-                            </div>										
+                                    </a>
+                                </div>
+                            </div>
                             @php
                               $filledStars = floor($vehicle['rating']);
-                              $emptyStars = 5 - $filledStars;                                
+                              $emptyStars = 5 - $filledStars;
                             @endphp
                             <div class="listing-content">
                                 <div class="listing-features d-flex justify-content-between">
-                                    <div class="list-rating">												  
-                                        <div class="list-ratings">							
-                                            @for ($i = 0; $i < $filledStars; $i++)						
+                                    <div class="list-rating">
+                                        <div class="list-ratings">
+                                            @for ($i = 0; $i < $filledStars; $i++)
                                             <i class="fas fa-star filled"></i>
                                             @endfor
-                                            @for ($i = 0; $i < $emptyStars; $i++)						
+                                            @for ($i = 0; $i < $emptyStars; $i++)
                                             <i class="fas fa-star"></i>
                                             @endfor
                                             <span>{{ $vehicle['total_review'] }} {{ __('web.home.reviews') }}</span>
                                         </div>
                                         <h3 class="listing-title">
                                             <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] ?? "" }}</a>
-                                        </h3>					
+                                        </h3>
                                     </div>
-                                </div> 
+                                </div>
                                 <div class="listing-details-group">
                                     <ul>
                                         <li>
@@ -89,8 +89,8 @@
                                             <p>{{ $vehicle['tube_type'] ?? "" }}</p>
                                         </li>
                                     </ul>
-                                </div>	
-                                @php    
+                                </div>
+                                @php
                                     $prices = array_slice($vehicle['price'][0], 0, 1);
                                 @endphp
                                 <div class="listing-button">
@@ -104,10 +104,10 @@
                                         <a href="javascript:void(0)" class="fav-icon wishlist-icon @if($vehicle['wishlist'] == 1) selected @endif" data-id="{{ $vehicle['id'] }}">
                                             <i class="feather-heart"></i>
                                         </a>
-                                        @endauth		
+                                        @endauth
                                         <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order">{{ __('web.home.book_now') }}</a>
                                     </div>
-                                </div>	
+                                </div>
                             </div>
                         </div>
                     </div>

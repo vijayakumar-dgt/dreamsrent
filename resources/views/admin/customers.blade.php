@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.common.customers')" 
+            <x-admin.breadcrumb
+                :title="__('admin.common.customers')"
                 :breadcrumbs="[
                     __('admin.common.customers') => ''
                 ]"
@@ -289,7 +289,7 @@
                                     <label for="documents" class="form-label">{{ __('admin.common.documents') }}</label></label>
                                     <div class="document-upload text-center br-3 mb-3">
                                         <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="{{ __('admin.common.upload') }}">
-                                        <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} 
+                                        <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }}
                                             <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span>
                                         </p>
                                         <p class="fs-12 mb-0">{{ __('admin.common.maximum_size', ['size' => 5]) }}</p>
@@ -449,7 +449,7 @@
                                     <label for="edit_documents" class="form-label">{{ __('admin.common.documents') }}</label></label>
                                     <div class="document-upload text-center br-3 mb-3">
                                         <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="{{ __('admin.common.upload') }}">
-                                        <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} 
+                                        <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }}
                                             <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span>
                                         </p>
                                         <p class="fs-12 mb-0">{{ __('admin.common.maximum_size', ['size' => 5]) }}</p>

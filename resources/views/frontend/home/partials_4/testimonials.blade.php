@@ -30,7 +30,7 @@
                 </div>
             </div>
             @endforeach
-            @else 
+            @else
             <div class="col-md-12">
                 <p>{{ __('web.common.empty_table') }}</p>
             </div>

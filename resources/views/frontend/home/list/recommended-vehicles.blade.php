@@ -32,7 +32,7 @@
                                                 <h3 class="listing-title text-start">
                                                     <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] }}</a>
                                                 </h3>
-                                                @php 
+                                                @php
                                                     $rating = $vehicle['rating'] ?? 0;
                                                     $rating = is_numeric($rating) ? round($rating) : 0;
                                                     $emptyStars = 5 - $rating;
@@ -83,7 +83,7 @@
                                             </ul>
                                         </div>
                                         @php
-                                            $firstPrice = $vehicle['price'][0]; 
+                                            $firstPrice = $vehicle['price'][0];
                                             $price_type = array_key_first($firstPrice);
                                             $price_val = $firstPrice[$price_type];
                                         @endphp

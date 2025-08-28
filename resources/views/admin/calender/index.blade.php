@@ -172,7 +172,7 @@
 <!-- /Page Wrapper -->
 
 <!-- Booking Details -->
-<x-admin.modal 
+<x-admin.modal
     className="addmodal"
     id="booking_details_modal"
     :title="__('admin.bookings.booking_details')">

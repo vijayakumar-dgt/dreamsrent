@@ -1,5 +1,5 @@
     <section class="brand-section">
-        <div class="container">	
+        <div class="container">
             <div class="section-heading heading-four" data-aos="fade-down">
                 <h2 class="text-white">{{ ucfirst($section['section_title'] ?? "") }}</h2>
                 <p>{{ $section['section_label'] ?? "" }}</p>

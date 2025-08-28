@@ -34,7 +34,7 @@
                                 <li>{{ __('web.home.people') }} : {{ $yacht['passenger_capacity'] ?? 0 }}</li>
                                 <li>{{ __('web.common.color') }} : {{ $yacht['color'] ?? "" }}</li>
                             </ul>
-                            @php    
+                            @php
                                 $prices = array_slice($yacht['price'][0], 0, 1);
                             @endphp
                             <div class="ship-pricing">
@@ -44,7 +44,7 @@
                                 <a href="{{ route('vehicleDetails', $yacht['slug']) }}" class="btn btn-primary btn-buy">{{ __('web.home.book_now') }}</a>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 @endforeach

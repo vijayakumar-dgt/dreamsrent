@@ -13,7 +13,7 @@
                                         @if(!empty($section['section_content'][0]->customer_images) && count($section['section_content'][0]->customer_images) > 0)
                                             @foreach($section['section_content'][0]->customer_images as $image)
                                         <li>
-                                            <img src="{{ $image }}" class="img-fluid aos" alt="bannerimage">
+                                            <img src="{{ $image }}" class="img-fluid aos" alt="User Profile">
                                         </li>
                                             @endforeach
                                         @endif
@@ -53,7 +53,7 @@
                 <form action="{{ route('list') }}" method="GET" class="form-block d-flex align-items-center">
                     <div class="search-input">
                         <div class="input-block">
-                            <label>{{ __('web.home.pickup_location') }}</label>
+                            <label for="pickup-location-input">{{ __('web.home.pickup_location') }}</label>
                             <div class="group-img position-relative">
                                     <input type="text" name="pickuplocation" id="pickup-location-input" autocomplete="off" class="form-control" placeholder="{{ __('web.home.location_place_holder') }}">
                                     <span><i class="feather-map-pin"></i></span>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="search-input">
                         <div class="input-block">
-                            <label>{{ __('web.user.drop_location') }}</label>
+                            <label for="drop-location-input">{{ __('web.user.drop_location') }}</label>
                             <div class="group-img position-relative">
                                 <input type="text" name="droplocation" id="drop-location-input" autocomplete="off" class="form-control" placeholder="{{ __('web.home.location_place_holder') }}">
                                 <span><i class="feather-map-pin"></i></span>
@@ -73,18 +73,18 @@
                     </div>
                     <div class="search-input">
                         <div class="input-block">
-                            <label>{{ __('web.home.pickup_date_time') }}</label>
+                            <label for="pickupdatetime">{{ __('web.home.pickup_date_time') }}</label>
                             <div class="input-wrap">
-                                    <input type="text" name="pickupdatetime" class="form-control flatpickr-pickupadtetime" autocomplete="off" placeholder="YYYY-MM-DD HH:MM">
+                                    <input type="text" id="pickupdatetime" name="pickupdatetime" class="form-control flatpickr-pickupadtetime" autocomplete="off" placeholder="YYYY-MM-DD HH:MM">
                                     <span class="input-icon"><i class="bx bx-chevron-down"></i></span>
                             </div>
                         </div>
                     </div>
                     <div class="search-input input-end">
                         <div class="input-block">
-                            <label>{{ __('web.home.return_date_time') }}</label>
+                            <label for="returndatetime">{{ __('web.home.return_date_time') }}</label>
                             <div class="input-wrap">
-                                    <input type="text" name="returndatetime" class="form-control flatpickr-dropdatetime" autocomplete="off" placeholder="YYYY-MM-DD HH:MM">
+                                    <input type="text" id="returndatetime" name="returndatetime" class="form-control flatpickr-dropdatetime" autocomplete="off" placeholder="YYYY-MM-DD HH:MM">
                                     <span class="input-icon"><i class="bx bx-chevron-down"></i></span>
                                 </div>
                         </div>
