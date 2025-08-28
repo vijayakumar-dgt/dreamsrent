@@ -23,10 +23,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label class="form-label">{{__('admin.blog.featured_image')}} <span class="text-danger">*</span></label>
+                                        <label for="featured_image_add" class="form-label">{{__('admin.blog.featured_image')}} <span class="text-danger">*</span></label>
                                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                             <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames p-2 preview-image-add">
-                                                <img src="{{ asset('/backend/assets/img/default-image-02.jpg') }}" class="rounded-2 img-fluid" alt="Image Preview">
+                                                <img src="{{ asset('/backend/assets/img/default-image-02.jpg') }}" class="rounded-2 img-fluid" alt="Blog">
                                             </div>
                                             <div class="profile-upload">
                                                 <div class="profile-uploader d-flex align-items-center">
@@ -46,13 +46,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">{{__('admin.blog.title')}} <span class="text-danger">*</span></label>
+                                        <label for="blog_title" class="form-label">{{__('admin.blog.title')}} <span class="text-danger">*</span></label>
                                         <input type="text" name="title" id="blog_title" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">{{__('admin.blog.language')}} <span class="text-danger">*</span></label>
+                                        <label for="blog_language" class="form-label">{{__('admin.blog.language')}} <span class="text-danger">*</span></label>
                                         <select class="select" id="blog_language" name="language_id">
                                             @foreach($languages as $language)
                                             <option value="{{ $language->language_id }}">
@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">{{__('admin.blog.category')}} <span class="text-danger">*</span></label>
+                                        <label for="blog_category" class="form-label">{{__('admin.blog.category')}} <span class="text-danger">*</span></label>
                                         <select class="select" id="blog_category" name="category_id" required>
                                             @foreach($categories as $category)
                                             <option value="{{$category->id}}">{{$category->name}}</option>
@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">{{__('admin.blog.tags')}} <span class="text-danger">*</span></label>
+                                        <label for="blog_tags" class="form-label">{{__('admin.blog.tags')}} <span class="text-danger">*</span></label>
                                         <select class="select" id="blog_tags" name="tag_id[]" multiple required>
                                             @foreach($tags as $tag)
                                             <option value="{{ $tag->id }}">{{ $tag->name }}</option>
@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-0">
-                                        <label class="form-label">{{__('admin.blog.description')}} <span class="text-danger">*</span></label>
+                                        <label for="blog_description" class="form-label">{{__('admin.blog.description')}} <span class="text-danger">*</span></label>
                                         <textarea id="editor" name="description" class="summernote form-control" required>
                                         {{ old('description', $blog->description ?? '') }}
                                         </textarea>
@@ -94,8 +94,8 @@
                         </div>
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</a>
-                                <a href="javascript:void(0);" class="btn btn-primary" id="create_blog_btn">{{__('admin.blog.create_new')}}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</button>
+                                <button type="button" class="btn btn-primary" id="create_blog_btn">{{__('admin.blog.create_new')}}</button>
                             </div>
                         </div>
                     </div>

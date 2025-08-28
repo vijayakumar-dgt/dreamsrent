@@ -24,17 +24,17 @@
                                 <!-- Featured Image -->
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label class="form-label">{{__('admin.blog.featured_image')}} <span class="text-danger">*</span></label>
+                                        <label for="image" class="form-label">{{__('admin.blog.featured_image')}} <span class="text-danger">*</span></label>
                                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                             <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames p-2">
-                                                <img src="{{ asset('/storage/'.$blog->image) }}" class="rounded-2 img-fluid preview-image" alt="Image Preview">
+                                                <img src="{{ asset('/storage/'.$blog->image) }}" class="rounded-2 img-fluid preview-image" alt="Blog">
                                             </div>
                                             <div class="profile-upload">
                                                 <div class="profile-uploader d-flex align-items-center">
                                                     <div class="drag-upload-btn btn btn-md btn-dark">
                                                         <i class="ti ti-photo-up fs-14"></i>
                                                         {{__('admin.blog.upload')}}
-                                                        <input type="file" name="image" class="form-control image-sign" id="imageInput">
+                                                        <input type="file" name="image" id="image" class="form-control image-sign" id="imageInput">
                                                     </div>
                                                     <span id="selectedFileName" class="fs-14 text-muted">{{__('admin.blog.no_file_chosen')}}</span>
                                                 </div>
@@ -47,13 +47,13 @@
                                 </div>
                                 <!-- Title -->
                                 <div class="mb-3">
-                                    <label class="form-label">{{__('admin.blog.title')}} <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="title" value="{{ $blog->title }}">
+                                    <label for="title" class="form-label">{{__('admin.blog.title')}} <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="title" id="title" value="{{ $blog->title }}">
                                 </div>
                                 <!-- Category -->
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">{{__('admin.blog.category')}} <span class="text-danger">*</span></label>
+                                        <label for="blog_category" class="form-label">{{__('admin.blog.category')}} <span class="text-danger">*</span></label>
                                         <select class="select form-control" id="blog_category" name="category_id">
                                             @foreach($categories as $category)
                                             <option value="{{ $category->id }}"
@@ -67,7 +67,7 @@
                                 <!-- Tags -->
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">{{__('admin.blog.tags')}} <span class="text-danger">*</span></label>
+                                        <label for="blog_tags" class="form-label">{{__('admin.blog.tags')}} <span class="text-danger">*</span></label>
                                         <select class="select form-control" id="blog_tags" name="tag_id[]" multiple>
                                             @php
                                                 $selectedTags = is_array($blog->tags) ? $blog->tags : json_decode($blog->tags, true);
@@ -83,8 +83,8 @@
                                 <!-- Description -->
                                 <div class="col-md-12">
                                     <div class="mb-0">
-                                        <label class="form-label">{{__('admin.blog.description')}}</label>
-                                        <textarea id="editor" name="description" class="summernote form-control">{{ $blog->description }}</textarea>
+                                        <label for="description" class="form-label">{{__('admin.blog.description')}}</label>
+                                        <textarea id="editor" name="description" id="description" class="summernote form-control">{{ $blog->description }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -93,9 +93,9 @@
                         <div class="card-footer">
                             <div class="d-flex justify-content-between align-items-center w-100 flex-wrap gap-2">
                                 <div class="form-check form-check-md form-switch me-2">
-                                    <label class="form-check-label form-label mt-0 mb-0">
-                                        <input class="form-check-input form-label me-2" name="status" type="checkbox" role="switch"
-                                            {{ (int) $blog->status == 1 ? 'checked' : '' }}>
+                                    <label for="status" class="form-check-label form-label mt-0 mb-0">
+                                        <input class="form-check-input form-label me-2" name="status" id="status" type="checkbox" role="switch"
+                                            {{ (int) $blog->status == 1 ? 'checked' : '' }} aria-checked="{{ (int) $blog->status == 1 ? 'true' : 'false' }}">
                                         {{__('admin.blog.status')}}
                                     </label>
                                 </div>

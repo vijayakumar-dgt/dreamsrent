@@ -14,7 +14,8 @@
             :buttonText="__('admin.blog.add_tag')"
             :modalId="'add_Tag'"
             :buttonId="'addTagButton'"
-            :permissionModule="'blogs'" />
+            :permissionModule="'blogs'"
+        />
         <!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">
@@ -122,7 +123,7 @@
     <x-slot name="body">
         <!-- Language Field -->
         <div class="mb-3">
-            <label class="form-label" for="language">{{__('admin.general_settings.language')}} <span class="text-danger">*</span></label>
+            <label class="form-label" for="add_language">{{__('admin.general_settings.language')}} <span class="text-danger">*</span></label>
             <select class="form-select" id="add_language" name="language_id">
                 @foreach($languages as $language)
                 <option value="{{ $language->language_id }}">
@@ -133,7 +134,7 @@
             <span class="text-danger" id="language_error"></span>
         </div>
         <div>
-            <label class="form-label">{{__('admin.blog.tag')}} <span class="text-danger">*</span></label>
+            <label for="add_tag_name" class="form-label">{{__('admin.blog.tag')}} <span class="text-danger">*</span></label>
             <input type="text" name="name" id="add_tag_name" class="form-control" required>
         </div>
     </x-slot>
@@ -158,8 +159,8 @@
     <x-slot name="footer">
         <div class="d-flex justify-content-between align-items-center w-100">
             <div class="form-check form-check-md form-switch me-2">
-                <label class="form-check-label form-label mt-0 mb-0">
-                    <input class="form-check-input form-label me-2" id="edit_tag_status" type="checkbox" role="switch">
+                <label for="edit_tag_status" class="form-check-label form-label mt-0 mb-0">
+                    <input class="form-check-input form-label me-2" id="edit_tag_status" type="checkbox" role="switch" aria-checked="false">
                     {{__('admin.blog.status')}}
                 </label>
             </div>
@@ -174,11 +175,11 @@
 
 <!-- Delete Tag -->
 <x-admin.delete-modal
-        className="deletemodal"
-        id="delete_Tag"
-        :title="__('admin.blog.delete_tag')"
-        :hiddenInputs="['delete_tag_id' => '']"
-        :description="__('admin.blog.are_you_sure_you_want_to_delete_this_tag')">
+    className="deletemodal"
+    id="delete_Tag"
+    :title="__('admin.blog.delete_tag')"
+    :hiddenInputs="['delete_tag_id' => '']"
+    :description="__('admin.blog.are_you_sure_you_want_to_delete_this_tag')">
 </x-admin.delete-modal>
 <!-- /Delete Tag -->
 @endsection

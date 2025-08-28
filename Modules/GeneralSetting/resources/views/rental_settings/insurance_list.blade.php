@@ -121,7 +121,7 @@
                 <div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
                     <label for="status" class="form-check-label form-label mt-0 mb-0">
                         <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status"
-                            id="status" checked>
+                            id="status" checked aria-checked="false">
                         {{ __('admin.common.status') }}
                     </label>
                 </div>

@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.blog.blogs')" 
+            <x-admin.breadcrumb
+                :title="__('admin.blog.blogs')"
                 :breadcrumbs="[
                     __('admin.blog.blogs') => ''
                 ]">
@@ -45,9 +45,13 @@
                         </ul>
                     </div>
                     <div class="dropdown">
-                        <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-                            <i class="ti ti-filter me-1"></i> {{__('admin.blog.filter')}}
-                        </a>
+                        <button type="button" class="filtercollapse coloumn d-inline-flex align-items-center"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#filtercollapse"
+                            aria-expanded="false"
+                            aria-controls="filtercollapse">
+                            <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
+                        </button>
                     </div>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
@@ -72,10 +76,10 @@
                         <ul class="dropdown-menu dropdown-menu-lg p-2">
                             @foreach($categories as $category)
                             <li>
-                                <label class="dropdown-item d-flex align-items-center rounded-1">
+                                <button type="button" class="dropdown-item d-flex align-items-center rounded-1">
                                     <input class="form-check-input m-0 me-2 category-checkbox" type="checkbox" value="{{$category->id}}">
                                     {{$category->name}}
-                                </label>
+                                </button>
                             </li>
                             @endforeach
                         </ul>
@@ -97,7 +101,7 @@
                                         $imagePath = 'storage/' . $blogPost->image;
                                         $defaultImage = asset('backend/assets/img/default-image-02.jpg');
                                     @endphp
-                                    <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image Preview">
+                                    <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Blog">
                                 </a>
                                 <div class="edit-delete-btns d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
@@ -119,13 +123,13 @@
                             <div class="blog-content">
                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                     <div class="d-flex align-items-center">
-                                        <a href="javascript:void(0);">
+                                        <div>
                                             @php
                                                 $imagePath = 'storage/' . $blogPost->profile_image;
                                                 $defaultImage = asset('backend/assets/img/default-profile.png');
                                             @endphp
-                                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" class="avatar avatar-sm rounded-circle me-1" alt="Image Preview">
-                                        </a>
+                                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" class="avatar avatar-sm rounded-circle me-1" alt="Profile">
+                                        </div>
                                         <a href="javascript:void(0);" class="fs-16">{{$blogPost->full_name}}</a>
                                     </div>
                                     <span class="d-flex align-items-center fs-16">

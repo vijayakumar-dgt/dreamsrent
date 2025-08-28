@@ -25,7 +25,7 @@
                         placeholder="Enter Database Name Here">
                     <div class="my-3 d-none" id="reset_database_switcher">
                         <input class="form-check-input" type="checkbox" role="switch" id="reset_database"
-                            name="reset_database" {{ old('reset_database') ? 'checked' : '' }}>
+                            name="reset_database" {{ old('reset_database') ? 'checked' : '' }} aria-checked="{{ old('reset_database') ? 'true' : 'false' }}">
                         <label for="reset_database" class="text-danger"><b><small>Database not empty. Are you sure
                                     want to clean this
                                     database?</small></b> </label>

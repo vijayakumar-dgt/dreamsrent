@@ -171,7 +171,7 @@
                     </div>
                     <div class="book-amount">
                         <p>{{__('web.common.total')}} {{__('web.common.amount')}}</p>
-                        <h6><span class="bk-amount"></span></h6>
+                        <h6><span class="bk-amount">0</span></h6>
                     </div>
                 </div>
                 <div class="booking-group">

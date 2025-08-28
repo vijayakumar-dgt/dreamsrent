@@ -6,52 +6,56 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.general_settings.testimonials')" 
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.testimonials')"
                 :breadcrumbs="[
                     __('admin.general_settings.testimonials') => ''
                 ]"
                 :buttonText="__('admin.cms.add_new_testimonial')"
                 :modalId="'add_testimonial'"
                 :buttonId="'add_testimonial_btn'"
-                :permissionModule="'testimonials'" />
+                :permissionModule="'testimonials'"
+            />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                             data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1"></i><span class="ms-1 sort"
                                 id="current_sort">{{ __('admin.common.sort_by') }} : {{ __('admin.common.latest') }}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2 sort_by_list">
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option"
-                                    data-sort="latest">{{ __('admin.common.latest') }}</a>
+                                <button type="button" class="dropdown-item rounded-1 sort-option"
+                                    data-sort="latest">{{ __('admin.common.latest') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option"
-                                    data-sort="ascending">{{ __('admin.common.ascending') }}</a>
+                                <button type="button" class="dropdown-item rounded-1 sort-option"
+                                    data-sort="ascending">{{ __('admin.common.ascending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option"
-                                    data-sort="descending">{{ __('admin.common.descending') }}</a>
+                                <button type="button" class="dropdown-item rounded-1 sort-option"
+                                    data-sort="descending">{{ __('admin.common.descending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option"
-                                    data-sort="last month">{{ __('admin.common.last_month') }}</a>
+                                <button type="button" class="dropdown-item rounded-1 sort-option"
+                                    data-sort="last month">{{ __('admin.common.last_month') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option"
-                                    data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</a>
+                                <button type="button" class="dropdown-item rounded-1 sort-option"
+                                    data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</button>
                             </li>
                         </ul>
                     </div>
                     <div class="dropdown">
-                        <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center"
-                            data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
+                        <button type="button" class="filtercollapse coloumn d-inline-flex align-items-center"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#filtercollapse"
+                            aria-expanded="false"
+                            aria-controls="filtercollapse">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
-                        </a>
+                        </button>
                     </div>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
@@ -71,10 +75,10 @@
                 <div class="filterbox mb-3 d-flex align-items-center">
                     <h6 class="me-3">{{ __('admin.common.filters') }}</h6>
                     <div class="dropdown me-3">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                             data-bs-toggle="dropdown" data-bs-auto-close="outside">
                             {{ __('admin.cms.rating') }}
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-lg p-2">
                             <li>
                                 <div class="top-search m-2 d-none">
@@ -114,8 +118,8 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="javascript:void(0);" class="me-2 text-purple links">{{ __('admin.common.apply') }}</a>
-                    <a href="javascript:void(0);" class="text-danger links">{{ __('admin.common.clear_all') }}</a>
+                    <button type="button" class="text-purple links bg-transparent border-0">{{ __('admin.common.apply') }}</button>
+                    <button type="button" class="text-danger links bg-transparent border-0">{{ __('admin.common.clear_all') }}</button>
                 </div>
             </div>
             <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
@@ -152,7 +156,7 @@
             @csrf
             {{-- Image Upload --}}
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
+                <label for="image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                 <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                     <div
                         class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
@@ -175,17 +179,15 @@
                 </div>
                 <span class="text-danger error-message" id="testimonial_image_error"></span>
             </div>
-
             {{-- Customer Name --}}
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.common.customer') }} <span class="text-danger">*</span></label>
+                <label for="customer_name" class="form-label">{{ __('admin.common.customer') }} <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="customer_name" name="customer_name" maxlength="30">
                 <span class="text-danger error-message" id="customer_name_error"></span>
             </div>
-
             {{-- Rating --}}
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.cms.rating') }} <span class="text-danger">*</span></label>
+                <label for="customer_rating" class="form-label">{{ __('admin.cms.rating') }} <span class="text-danger">*</span></label>
                 <select class="select form-control" id="customer_rating" name="customer_rating"
                     data-placeholder="{{ __('admin.common.select') }}">
                     <option value="">{{ __('admin.common.select') }}</option>
@@ -195,10 +197,9 @@
                 </select>
                 <span class="text-danger error-message" id="customer_rating_error"></span>
             </div>
-
             {{-- Language --}}
             <div class="mb-3 d-none">
-                <label class="form-label" for="language">{{__('admin.general_settings.language')}} <span
+                <label for="language" class="form-label" for="language">{{__('admin.general_settings.language')}} <span
                         class="text-danger">*</span></label>
                 <select class="form-select" id="language" name="language">
                     @foreach($languages as $language)
@@ -207,15 +208,13 @@
                 </select>
                 <span class="text-danger" id="language_error"></span>
             </div>
-
             {{-- Review --}}
             <div class="mb-0">
-                <label class="form-label">{{ __('admin.cms.review') }} <span class="text-danger">*</span></label>
+                <label for="customer_review" class="form-label">{{ __('admin.cms.review') }} <span class="text-danger">*</span></label>
                 <textarea class="form-control" id="customer_review" name="customer_review" maxlength="500"></textarea>
                 <span class="text-danger error-message" id="customer_review_error"></span>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
@@ -227,7 +226,6 @@
             </div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add Testimonial Service -->
 
     <!-- Edit Testimonial -->
@@ -235,10 +233,9 @@
         formId="editTestimonialForm" dialogClass="modal-dialog-centered modal-md">
         <x-slot name="body">
             <input type="hidden" id="edit_testimonial_id">
-
             {{-- Image Upload --}}
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
+                <label for="edit_testimonial_image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                 <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                     <div
                         class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames p-2">
@@ -260,17 +257,15 @@
                 </div>
                 <span id="edit_testimonial_image_error" class="text-danger fs-14"></span>
             </div>
-
             {{-- Customer Name --}}
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.common.customer') }} <span class="text-danger">*</span></label>
+                <label for="edit_testimonial_name" class="form-label">{{ __('admin.common.customer') }} <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="edit_testimonial_name" maxlength="30">
                 <span id="edit_testimonial_name_error" class="text-danger fs-14"></span>
             </div>
-
             {{-- Rating --}}
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.cms.rating') }} <span class="text-danger">*</span></label>
+                <label for="edit_testimonial_ratings" class="form-label">{{ __('admin.cms.rating') }} <span class="text-danger">*</span></label>
                 <select class="select form-control" id="edit_testimonial_ratings"
                     data-placeholder="{{ __('admin.common.select') }}">
                     @for($i = 5; $i >= 1; $i--)
@@ -279,10 +274,9 @@
                 </select>
                 <span id="edit_testimonial_ratings_error" class="text-danger fs-14"></span>
             </div>
-
             {{-- Language --}}
             <div class="mb-3 d-none">
-                <label class="form-label" for="language">{{__('admin.general_settings.language')}} <span
+                <label for="language" class="form-label" for="language">{{__('admin.general_settings.language')}} <span
                         class="text-danger">*</span></label>
                 <select class="form-select" id="language" name="language">
                     @foreach($languages as $language)
@@ -291,21 +285,19 @@
                 </select>
                 <span class="text-danger" id="language_error"></span>
             </div>
-
             {{-- Review --}}
             <div class="mb-0">
-                <label class="form-label">{{ __('admin.cms.review') }} <span class="text-danger">*</span></label>
+                <label for="edit_testimonial_review" class="form-label">{{ __('admin.cms.review') }} <span class="text-danger">*</span></label>
                 <textarea class="form-control" id="edit_testimonial_review"></textarea>
                 <span id="edit_testimonial_review_error" class="text-danger fs-14"></span>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex justify-content-between align-items-center w-100">
                 <div class="form-check form-check-md form-switch me-2">
-                    <label class="form-check-label form-label mt-0 mb-0">
+                    <label for="edit_testimonial_status" class="form-check-label form-label mt-0 mb-0">
                         <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status"
-                            id="edit_testimonial_status">
+                            id="edit_testimonial_status" aria-checked="false">
                         {{ __('admin.common.status') }}
                     </label>
                 </div>
@@ -320,7 +312,6 @@
             </div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Edit Testimonial -->
 
     <!-- Delete Testimonial -->
@@ -329,7 +320,6 @@
         :description="__('admin.cms.delete_testimonial_confirmation')">
     </x-admin.delete-modal>
     <!-- /Delete Testimonial -->
-
 @endsection
 
 @push('scripts')

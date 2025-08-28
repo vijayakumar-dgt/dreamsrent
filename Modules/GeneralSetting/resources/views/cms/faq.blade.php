@@ -7,9 +7,13 @@
     <div class="page-wrapper">
         <div class="content me-4">
             <x-admin.breadcrumb :title="__('admin.general_settings.faq')" :breadcrumbs="[
-            __('admin.general_settings.faq') => ''
-        ]" :buttonText="__('admin.general_settings.add_faq')" :modalId="'add_FAQ'" :buttonId="'add_faq_btn'"
-                :permissionModule="'faq'" />
+                    __('admin.general_settings.faq') => ''
+                ]" 
+                :buttonText="__('admin.general_settings.add_faq')"
+                :modalId="'add_FAQ'"
+                :buttonId="'add_faq_btn'"
+                :permissionModule="'faq'"
+            />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap gap-2">
@@ -35,10 +39,13 @@
                     </div>
                     <!-- Filter Collapse -->
                     <div class="dropdown">
-                        <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center"
-                            data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-                            <i class="ti ti-filter me-1"></i> {{ __('admin.general_settings.filter') }}
-                        </a>
+                        <button type="button" class="filtercollapse coloumn d-inline-flex align-items-center"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#filtercollapse"
+                            aria-expanded="false"
+                            aria-controls="filtercollapse">
+                            <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
+                        </button>
                     </div>
                     <!-- Language Select -->
                     <div class="">
@@ -130,14 +137,12 @@
                 </select>
                 <span class="text-danger error-text" id="language_error"></span>
             </div>
-
             <div class="mb-3">
                 <label class="form-label" for="question">{{ __('admin.general_settings.question') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="question" name="question">
                 <span class="text-danger error-text" id="question_error"></span>
             </div>
-
             <div class="mb-0">
                 <label class="form-label" for="answer">{{ __('admin.general_settings.answer') }} <span
                         class="text-danger">*</span></label>
@@ -145,7 +150,6 @@
                 <span class="text-danger error-text" id="answer_error"></span>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3"
@@ -155,7 +159,6 @@
             </div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add FAQ -->
 
     <!-- Edit FAQ -->
@@ -164,7 +167,6 @@
         <x-slot name="body">
             @csrf
             <input type="hidden" name="id" id="id">
-
             <div class="mb-3">
                 <label class="form-label" for="editFaqLanguage">{{ __('admin.general_settings.language') }} <span
                         class="text-danger">*</span></label>
@@ -177,14 +179,12 @@
                 </select>
                 <span class="text-danger error-text" id="editFaqLanguageError"></span>
             </div>
-
             <div class="mb-3">
                 <label class="form-label" for="editFaqQuestion">{{ __('admin.general_settings.question') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" id="editFaqQuestion" name="question" class="form-control">
                 <span class="text-danger error-text" id="editFaqQuestionError"></span>
             </div>
-
             <div class="mb-3">
                 <label class="form-label" for="editFaqAnswer">{{ __('admin.general_settings.answer') }} <span
                         class="text-danger">*</span></label>
@@ -192,13 +192,12 @@
                 <span class="text-danger error-text" id="editFaqAnswerError"></span>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex justify-content-between align-items-center w-100">
                 <div class="form-check form-check-md form-switch me-2">
                     <label class="form-check-label form-label mt-0 mb-0">
                         <input id="editFaqStatus" name="editFaqStatus" class="form-check-input form-label me-2"
-                            type="checkbox" role="switch">
+                            type="checkbox" role="switch" aria-checked="false">
                         {{ __('admin.general_settings.status') }}
                     </label>
                 </div>
@@ -211,7 +210,6 @@
             </div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Edit FAQ -->
 
     <!-- Delete FAQ -->

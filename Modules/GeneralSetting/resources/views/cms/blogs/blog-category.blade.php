@@ -14,7 +14,8 @@
             :buttonText="__('admin.blog.add_category')"
             :modalId="'add_Category'"
             :buttonId="'addCategoryButton'"
-            :permissionModule="'blogs'" />
+            :permissionModule="'blogs'"
+        />
         <!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">
@@ -145,7 +146,7 @@
     <x-slot name="body">
         <!-- Language Field -->
         <div class="mb-3">
-            <label class="form-label" for="language">{{__('admin.general_settings.language')}} <span class="text-danger">*</span></label>
+            <label class="form-label" for="add_language">{{__('admin.general_settings.language')}} <span class="text-danger">*</span></label>
             <select class="form-select" id="add_language" name="language_id">
                 @foreach($languages as $language)
                 <option value="{{ $language->language_id }}">
@@ -156,13 +157,13 @@
             <span class="text-danger" id="language_error"></span>
         </div>
         <div>
-            <label class="form-label">{{__('admin.blog.category')}} <span class="text-danger">*</span></label>
+            <label for="add_category_name" class="form-label">{{__('admin.blog.category')}} <span class="text-danger">*</span></label>
             <input type="text" name="name" id="add_category_name" class="form-control" required>
         </div>
     </x-slot>
     <x-slot name="footer">
         <div class="d-flex justify-content-center">
-            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</a>
+            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</button>
             <button type="submit" id="create_category_btn" class="btn btn-primary">{{__('admin.blog.create_new')}}</button>
         </div>
     </x-slot>
@@ -174,15 +175,15 @@
     <x-slot name="body">
         <div>
             <input type="hidden" id="edit_category_id">
-            <label class="form-label">{{__('admin.blog.category')}}<span class="text-danger"> *</span></label>
+            <label for="edit_category_name" class="form-label">{{__('admin.blog.category')}}<span class="text-danger"> *</span></label>
             <input type="text" class="form-control" id="edit_category_name">
         </div>
     </x-slot>
     <x-slot name="footer">
         <div class="d-flex justify-content-between align-items-center w-100">
             <div class="form-check form-check-md form-switch me-2">
-                <label class="form-check-label form-label mt-0 mb-0">
-                    <input class="form-check-input form-label me-2" id="edit_category_status" type="checkbox" role="switch">
+                <label for="edit_category_status" class="form-check-label form-label mt-0 mb-0">
+                    <input class="form-check-input form-label me-2" id="edit_category_status" type="checkbox" role="switch" aria-checked="false">
                     {{__('admin.blog.status')}}
                 </label>
             </div>
@@ -197,11 +198,11 @@
 
 <!-- Delete Category -->
 <x-admin.delete-modal
-        className="deletemodal"
-        id="delete_Category"
-        :title="__('admin.blog.delete_category')"
-        :hiddenInputs="['delete_category_id' => '']"
-        :description="__('admin.blog.are_you_sure_you_want_to_delete_this_category')">
+    className="deletemodal"
+    id="delete_Category"
+    :title="__('admin.blog.delete_category')"
+    :hiddenInputs="['delete_category_id' => '']"
+    :description="__('admin.blog.are_you_sure_you_want_to_delete_this_category')">
 </x-admin.delete-modal>
 <!-- /Delete Category -->
 @endsection
