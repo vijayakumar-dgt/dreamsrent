@@ -71,14 +71,14 @@
                                             <label class="form-check-label form-label mt-0 mb-0" for="login">
                                                 {{ __('admin.general_settings.login') }}
                                             </label>
-                                            <input id="login" name="login" class="form-check-input form-label me-2" type="checkbox" role="switch" checked>
+                                            <input id="login" name="login" class="form-check-input form-label me-2" type="checkbox" role="switch" checked aria-checked="true">
                                             <span id="login_error" class="text-danger error-text"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check form-check-md form-switch me-2">
                                             <label class="form-check-label form-label mt-0 mb-0">{{ __('admin.general_settings.register') }}
-                                                <input id="register" name="register" class="form-check-input form-label me-2" type="checkbox" role="switch" checked>
+                                                <input id="register" name="register" class="form-check-input form-label me-2" type="checkbox" role="switch" checked aria-checked="true">
                                             </label>
                                             <span id="register_error" class="text-danger error-text"></span>
                                         </div>

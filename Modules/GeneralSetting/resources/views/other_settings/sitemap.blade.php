@@ -5,9 +5,12 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb :title="__('admin.general_settings.settings')" :breadcrumbs="[
-            __('admin.general_settings.settings') => ''
-        ]" />
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
+                :breadcrumbs="[
+                    __('admin.general_settings.settings') => ''
+                ]"
+            />
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-xl-9">
@@ -73,13 +76,12 @@
         <x-slot name="body">
             @csrf
             <div class="mb-0">
-                <label class="form-label">{{ __('admin.general_settings.sitemap_url') }} <span
+                <label for="url" class="form-label">{{ __('admin.general_settings.sitemap_url') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="url" id="url">
                 <span id="url_error" class="text-danger error-text"></span>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3"

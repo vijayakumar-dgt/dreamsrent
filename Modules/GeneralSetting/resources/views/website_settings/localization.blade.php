@@ -5,11 +5,11 @@
 @section('content')
 <div class="page-wrapper">
     <div class="content">
-        <x-admin.breadcrumb 
-            :title="__('admin.general_settings.settings')" 
+        <x-admin.breadcrumb
+            :title="__('admin.general_settings.settings')"
             :breadcrumbs="[
                 __('admin.general_settings.settings') => ''
-            ]" 
+            ]"
         />
         <div class="row">
             @include('admin.partials.general_settings_side_menu')
@@ -96,7 +96,7 @@
                                         <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.language_switcher') }} <span class="text-danger">*</span></p>
                                         <div>
                                             <div class="form-check form-check-md form-switch me-2 d-none real-input">
-                                                <input class="form-check-input form-label" type="checkbox" role="switch" name="language_switcher" id="language_switcher" checked>
+                                                <input class="form-check-input form-label" type="checkbox" role="switch" name="language_switcher" id="language_switcher" checked aria-checked="true">
                                             </div>
                                             <span class="text-danger error-text" id="language_switcher_error"></span>
                                         </div>
@@ -141,7 +141,7 @@
                                         <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.currency_switcher') }} <span class="text-danger">*</span></p>
                                         <div>
                                             <div class="form-check form-check-md form-switch me-2 d-none real-input">
-                                                <input class="form-check-input form-label" type="checkbox" role="switch" name="currency_switcher" id="currency_switcher" checked>
+                                                <input class="form-check-input form-label" type="checkbox" role="switch" name="currency_switcher" id="currency_switcher" checked aria-checked="true">
                                             </div>
                                             <span class="text-danger error-text" id="currency_switcher_error"></span>
                                         </div>

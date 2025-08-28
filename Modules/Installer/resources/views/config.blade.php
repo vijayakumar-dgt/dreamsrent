@@ -12,7 +12,7 @@
         <div class="card-body">
             <form id="config_form" autocomplete="off">
                 <div class="mb-3">
-                    <label>App Name <span class="text-danger">*</span></label>
+                    <label for="config_app_name">App Name <span class="text-danger">*</span></label>
                     <input type="text" id="config_app_name" name="config_app_name" class="form-control"
                         value="{{ old('config_app_name', $app_name ?? null) }}" placeholder="Enter Your App Name">
                 </div>

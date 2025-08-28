@@ -143,7 +143,7 @@
             <div class="modal-body">
                 <div class="total-payment">
                     <p>{{ __('web.user.available_balance') }}</p>
-                    <h6 class="available_balance"></h6>
+                    <h6 class="available_balance">0</h6>
                 </div>
                 <form id="add_wallet">
                     <div class="choose-payment-info">

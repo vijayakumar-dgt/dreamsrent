@@ -81,24 +81,24 @@
                                                 {{ __('web.home.home') }}
                                                 <i class="fas fa-chevron-down"></i>
                                             </a>
-                                            <ul class="submenu" role="menu" id="home-submenu" aria-labelledby="home-menu">
-                                                <li role="menuitem">
-                                                    <a role="menuitem" href="{{ url('/theme/home-01') }}">
+                                            <ul class="submenu" id="home-submenu" aria-labelledby="home-menu">
+                                                <li>
+                                                    <a href="{{ url('/theme/home-01') }}">
                                                         {{ __('web.home.car_theme') }} 1
                                                     </a>
                                                 </li>
-                                                <li role="menuitem">
-                                                    <a role="menuitem" href="{{ url('/theme/home-02') }}">
+                                                <li>
+                                                    <a href="{{ url('/theme/home-02') }}">
                                                         {{ __('web.home.car_theme') }} 2
                                                     </a>
                                                 </li>
-                                                <li role="menuitem">
-                                                    <a role="menuitem" href="{{ url('/theme/home-03') }}">
+                                                <li>
+                                                    <a href="{{ url('/theme/home-03') }}">
                                                         {{ __('web.home.bike') }}
                                                     </a>
                                                 </li>
-                                                <li role="menuitem">
-                                                    <a role="menuitem" href="{{ url('/theme/home-04') }}">
+                                                <li>
+                                                    <a href="{{ url('/theme/home-04') }}">
                                                         {{ __('web.home.yacht') }}
                                                     </a>
                                                 </li>
@@ -164,7 +164,7 @@
                     <li class="nav-item dropdown logged-item noti-nav noti-wrapper">
                         <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                             <span class="bell-icon">
-                                <img src="{{ asset('frontend/assets/img/icons/bell-icon.svg') }}" alt="" role="presentation">
+                                <img src="{{ asset('frontend/assets/img/icons/bell-icon.svg') }}" alt="Bell Icon">
                             </span>
                             <span class="badge badge-pill d-none" id="newNotificationBadge"></span>
                         </a>

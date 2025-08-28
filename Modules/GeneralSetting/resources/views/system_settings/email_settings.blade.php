@@ -6,9 +6,12 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 pb-0">
-            <x-admin.breadcrumb :title="__('admin.general_settings.settings')" :breadcrumbs="[
-            __('admin.general_settings.settings') => ''
-        ]" />
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
+                :breadcrumbs="[
+                    __('admin.general_settings.settings') => ''
+                ]"
+            />
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-xl-9">
@@ -61,7 +64,7 @@
                                                 @if (hasPermission($permissions, 'system_settings', 'edit'))
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input status-switch" type="checkbox"
-                                                            role="switch" name="phpmail" id="phpmail_status">
+                                                            role="switch" name="phpmail" id="phpmail_status" aria-checked="false">
                                                     </div>
                                                 @endif
                                             </div>
@@ -100,7 +103,7 @@
                                                 @if (hasPermission($permissions, 'system_settings', 'edit'))
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input status-switch" type="checkbox"
-                                                            role="switch" name="smtp" id="smtp_status">
+                                                            role="switch" name="smtp" id="smtp_status" aria-checked="false">
                                                     </div>
                                                 @endif
                                             </div>
@@ -140,7 +143,7 @@
                                                 @if (hasPermission($permissions, 'system_settings', 'edit'))
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input status-switch" type="checkbox"
-                                                            role="switch" name="sendgrid" id="sendgrid_status">
+                                                            role="switch" name="sendgrid" id="sendgrid_status" aria-checked="false">
                                                     </div>
                                                 @endif
                                             </div>
@@ -163,36 +166,34 @@
         <x-slot name="body">
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.from_email_address') }}<span
+                    <label for="phpmail_from_email" class="form-label">{{ __('admin.general_settings.from_email_address') }}<span
                             class="text-danger"> *</span></label>
                     <input class="form-control" type="text" name="phpmail_from_email" id="phpmail_from_email">
                     <span class="error-text text-danger" id="phpmail_from_email_error"></span>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.email_password') }}<span class="text-danger">
+                    <label for="phpmail_password" class="form-label">{{ __('admin.general_settings.email_password') }}<span class="text-danger">
                             *</span></label>
                     <input class="form-control" type="password" name="phpmail_password" id="phpmail_password">
                     <span class="error-text text-danger" id="phpmail_password_error"></span>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.from_email_name') }}<span class="text-danger">
+                    <label for="phpmail_from_name" class="form-label">{{ __('admin.general_settings.from_email_name') }}<span class="text-danger">
                             *</span></label>
                     <input class="form-control" type="text" name="phpmail_from_name" id="phpmail_from_name">
                     <span class="error-text text-danger" id="phpmail_from_name_error"></span>
                 </div>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0);" class="btn btn-light me-3"
-                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                <button type="button" class="btn btn-light me-3"
+                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                 <button type="submit" class="btn btn-primary submitBtn"
                     data-submit="{{ __('submit') }}">{{ __('admin.common.submit') }}</button>
             </div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add php mailer -->
 
     <!-- Add Testmail -->
@@ -201,23 +202,21 @@
         <x-slot name="body">
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.email_address') }}<span class="text-danger">
+                    <label for="email_address" class="form-label">{{ __('admin.general_settings.email_address') }}<span class="text-danger">
                             *</span></label>
                     <input class="form-control" type="text" name="email_address" id="email_address">
                     <span class="error-text text-danger" id="email_address_error"></span>
                 </div>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0);" class="btn btn-light me-3"
-                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                <button type="button" class="btn btn-light me-3"
+                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                 <button type="submit" class="btn btn-primary submitBtn">{{ __('admin.common.send') }}</button>
             </div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add Testmail -->
 
     <!-- Add smtp -->
@@ -226,47 +225,45 @@
         <x-slot name="body">
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.from_email_address') }}<span
+                    <label for="smtp_from_email" class="form-label">{{ __('admin.general_settings.from_email_address') }}<span
                             class="text-danger"> *</span></label>
                     <input class="form-control" type="text" name="smtp_from_email" id="smtp_from_email">
                     <span class="error-text text-danger" id="smtp_from_email_error"></span>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.email_password') }}<span class="text-danger">
+                    <label for="smtp_password" class="form-label">{{ __('admin.general_settings.email_password') }}<span class="text-danger">
                             *</span></label>
                     <input class="form-control" type="password" name="smtp_password" id="smtp_password">
                     <span class="error-text text-danger" id="smtp_password_error"></span>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.from_email_name') }}<span class="text-danger">
+                    <label for="smtp_from_name" class="form-label">{{ __('admin.general_settings.from_email_name') }}<span class="text-danger">
                             *</span></label>
                     <input class="form-control" type="text" name="smtp_from_name" id="smtp_from_name">
                     <span class="error-text text-danger" id="smtp_from_name_error"></span>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.email_host') }}<span class="text-danger">
+                    <label for="smtp_host" class="form-label">{{ __('admin.general_settings.email_host') }}<span class="text-danger">
                             *</span></label>
                     <input class="form-control" type="text" name="smtp_host" id="smtp_host">
                     <span class="error-text text-danger" id="smtp_host_error"></span>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.port') }}<span class="text-danger">
+                    <label for="smtp_port" class="form-label">{{ __('admin.general_settings.port') }}<span class="text-danger">
                             *</span></label>
                     <input class="form-control" type="text" name="smtp_port" id="smtp_port">
                     <span class="error-text text-danger" id="smtp_port_error"></span>
                 </div>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0);" class="btn btn-light me-3"
-                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                <button type="button" class="btn btn-light me-3"
+                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                 <button type="submit" class="btn btn-primary submitBtn">{{ __('admin.common.submit') }}</button>
             </div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add smtp -->
 
     <!-- Add sendgrid -->
@@ -275,29 +272,27 @@
         <x-slot name="body">
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.from_email_address') }}<span
+                    <label for="sendgrid_from_email" class="form-label">{{ __('admin.general_settings.from_email_address') }}<span
                             class="text-danger"> *</span></label>
                     <input class="form-control" type="text" name="sendgrid_from_email" id="sendgrid_from_email">
                     <span class="error-text text-danger" id="sendgrid_from_email_error"></span>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.sendgrid_key') }}<span class="text-danger">
+                    <label for="sendgrid_key" class="form-label">{{ __('admin.general_settings.sendgrid_key') }}<span class="text-danger">
                             *</span></label>
                     <input class="form-control" type="text" name="sendgrid_key" id="sendgrid_key">
                     <span class="error-text text-danger" id="sendgrid_key_error"></span>
                 </div>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0);" class="btn btn-light me-3"
-                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                <button type="button" class="btn btn-light me-3"
+                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                 <button type="submit" class="btn btn-primary submitBtn">{{ __('admin.common.submit') }}</button>
             </div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add sendgrid -->
 @endsection
 

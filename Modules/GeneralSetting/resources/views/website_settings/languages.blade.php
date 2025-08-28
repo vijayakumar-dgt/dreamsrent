@@ -6,11 +6,11 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 pb-0 me-lg-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.general_settings.settings')" 
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
                 :breadcrumbs="[
                     __('admin.general_settings.settings') => ''
-                ]" 
+                ]"
             />
             <!-- Language -->
             <div class="row">
@@ -29,13 +29,13 @@
                                         <a href="javascript:void(0);"class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                                             <i class="ti ti-language me-1"></i><span id="langText">{{ __('admin.general_settings.add_new_language') }}</span>
                                         </a>
-                                        <ul class="dropdown-menu dropdown-menu-lg p-2" id="langDropdownMenu">
+                                        <ul class="dropdown-menu dropdown-menu-lg p-2 custom-scroll" id="langDropdownMenu">
                                             @if(!empty($translationLanguages) && count($translationLanguages) > 0)
                                                 @foreach($translationLanguages as $translationLanguage)
                                                     <li>
-                                                        <label class="dropdown-item d-flex align-items-center rounded-1" data-lang="{{ $translationLanguage->id }}" data-lang_title="{{ $translationLanguage->name }}">
+                                                        <button type="button" class="dropdown-item d-flex align-items-center rounded-1" data-lang="{{ $translationLanguage->id }}" data-lang_title="{{ $translationLanguage->name }}">
                                                             {{ $translationLanguage->name }}
-                                                        </label>
+                                                        </button>
                                                     </li>
                                                 @endforeach
                                             @endif

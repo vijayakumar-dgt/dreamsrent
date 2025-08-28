@@ -176,6 +176,12 @@
                                 @include('frontend.content-loader')
                             </div>
                             <table class="table d-none trans-real-table" id="transactionTable">
+                                <thead class="d-none">
+                                    <tr>
+                                        <th>{{ __('web.user.vehicle_name') }}</th>
+                                        <th>{{ __('web.common.status') }}</th>
+                                    </tr>
+                                </thead>
                                 <tbody></tbody>
                             </table>
                         </div>

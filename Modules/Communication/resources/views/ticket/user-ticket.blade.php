@@ -86,12 +86,6 @@
                 </div>
             </div>
             <!-- /Ticket Table -->
-            <div class="table-responsive dashboard-table dashboard-table-info d-none real-table">
-                <table class="table" id="userTickerTable">
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
     <!-- /Page Content -->
@@ -149,7 +143,7 @@
                             <div class="col-md-12">
                                 <label for="document" class="form-label">{{__('web.user.document')}}</label>
                                 <div class="document-upload text-center br-3 mb-3">
-                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="img">
+                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="Icon">
                                     <p class="mb-2">
                                         {{__('web.user.drop_file_here')}} <span class="text-info text-decoration-underline">{{__('web.user.browse')}}</span>
                                     </p>

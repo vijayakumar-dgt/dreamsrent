@@ -6,11 +6,11 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.general_settings.settings')" 
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
                 :breadcrumbs="[
                     __('admin.general_settings.settings') => ''
-                ]" 
+                ]"
             />
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
@@ -99,7 +99,7 @@
                                         </div>
                                         <div class="col-xl-6">
                                             <div class="form-check form-check-md form-switch">
-                                                <input class="form-check-input" type="checkbox" id="showDeclineButton" name="showDeclineButton" role="switch" value="1" checked>
+                                                <input class="form-check-input" type="checkbox" id="showDeclineButton" name="showDeclineButton" role="switch" value="1" checked aria-checked="true">
                                             </div>
                                             <span id="showDeclineButton_error" class="text-danger error-text"></span>
                                         </div>
@@ -137,13 +137,3 @@
 @push('scripts')
 <script src="{{ asset('backend/assets/js/general_setting/cookies-setting.js') }}"></script>
 @endpush
-
-
-
-
-
-
-
-
-
-

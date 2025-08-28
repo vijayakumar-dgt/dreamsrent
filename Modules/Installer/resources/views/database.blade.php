@@ -10,17 +10,17 @@
         <form id="database_migrate_form" autocomplete="off">
             <div class="card-body">
                 <div class="mb-3">
-                    <label>Host <span class="text-danger">*</span></label>
+                    <label for="host">Host <span class="text-danger">*</span></label>
                     <input type="text" name="host" id="host" class="form-control"
                         value="{{ old('host') ?: '127.0.0.1' }}" placeholder="Enter Database Host">
                 </div>
                 <div class="mb-3">
-                    <label>Port <span class="text-danger">*</span></label>
+                    <label for="port">Port <span class="text-danger">*</span></label>
                     <input type="text" name="port" id="port" class="form-control"
                         value="{{ old('port') ?: '3306' }}" placeholder="Enter Database Port. Default Is 3306">
                 </div>
                 <div class="mb-3">
-                    <label>Database Name <span class="text-danger">*</span></label>
+                    <label for="database">Database Name <span class="text-danger">*</span></label>
                     <input type="text" name="database" id="database" value="{{ old('database') }}" class="form-control"
                         placeholder="Enter Database Name Here">
                     <div class="my-3 d-none" id="reset_database_switcher">
@@ -32,12 +32,12 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label>Database User <span class="text-danger">*</span></label>
+                    <label for="user">Database User <span class="text-danger">*</span></label>
                     <input autocomplete="off" type="text" name="user" id="user" value="{{ old('user') }}"
                         class="form-control" placeholder="Enter Database User Here">
                 </div>
                 <div class="mb-3">
-                    <label>Database User Password @if (isset($isLocalHost) && !$isLocalHost)
+                    <label for="password">Database User Password @if (isset($isLocalHost) && !$isLocalHost)
                             <span class="text-danger">*</span>
                         @endif
                     </label>
@@ -50,11 +50,9 @@
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-end ">
-
                 <button type="submit" id="submit_btn" class="btn btn-lg btn-primary">Setup Database</button>
             </div>
         </form>
-       
     </div>
 @endsection
 

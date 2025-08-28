@@ -6,9 +6,12 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb :title="__('admin.general_settings.settings')" :breadcrumbs="[
-            __('admin.general_settings.settings') => ''
-        ]" />
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
+                :breadcrumbs="[
+                    __('admin.general_settings.settings') => ''
+                ]"
+            />
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-xl-9">
@@ -44,7 +47,7 @@
                                                         <div class="form-check form-check-md form-switch">
                                                             <input id="nexmo-switch" name="nexmo"
                                                                 class="form-check-input form-label gateway-switch"
-                                                                type="checkbox" role="switch" checked>
+                                                                type="checkbox" role="switch" checked aria-checked="true">
                                                         </div>
                                                     @endif
                                                 </div>
@@ -73,7 +76,7 @@
                                                         <div class="form-check form-check-md form-switch">
                                                             <input id="twofactor-switch" name="twofactor"
                                                                 class="form-check-input form-label gateway-switch"
-                                                                type="checkbox" role="switch" checked>
+                                                                type="checkbox" role="switch" checked aria-checked="true">
                                                         </div>
                                                     @endif
                                                 </div>
@@ -103,7 +106,7 @@
                                                         <div class="form-check form-check-md form-switch">
                                                             <input id="twilio-switch" name="twilio"
                                                                 class="form-check-input form-label gateway-switch"
-                                                                type="checkbox" role="switch" checked>
+                                                                type="checkbox" role="switch" checked aria-checked="true">
                                                         </div>
                                                     @endif
                                                 </div>
@@ -126,21 +129,18 @@
         formId="addNexmoForm" dialogClass="modal-dialog-centered modal-md">
         <x-slot name="body">
             <input type="hidden" name="type" value="nexmo">
-
             <div class="mb-3">
                 <label for="nexmo_api_key" class="form-label">{{ __('admin.general_settings.api_key') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" id="nexmo_api_key" name="nexmo_api_key" class="form-control">
                 <span id="nexmo_api_key_error" class="text-danger error-text"></span>
             </div>
-
             <div class="mb-3">
                 <label for="nexmo_secret_key" class="form-label">{{ __('admin.general_settings.api_secret_key') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" id="nexmo_secret_key" name="nexmo_secret_key" class="form-control">
                 <span id="nexmo_secret_key_error" class="text-danger error-text"></span>
             </div>
-
             <div class="mb-3">
                 <label for="nexmo_sender_id" class="form-label">{{ __('admin.general_settings.sender_id') }} <span
                         class="text-danger">*</span></label>
@@ -148,14 +148,12 @@
                 <span id="nexmo_sender_id_error" class="text-danger error-text"></span>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <button type="button" class="btn btn-light me-2"
                 data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
             <button type="submit" class="btn btn-primary">{{ __('admin.common.submit') }}</button>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add nexom -->
 
     <!-- Add Twilio -->
@@ -163,14 +161,12 @@
         formId="addTwilioForm" dialogClass="modal-dialog-centered modal-md">
         <x-slot name="body">
             <input type="hidden" name="type" value="twilio">
-
             <div class="mb-3">
                 <label for="twilio_api_key" class="form-label">{{ __('admin.general_settings.account_sid') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" id="twilio_api_key" name="twilio_api_key" class="form-control">
                 <span id="twilio_api_key_error" class="text-danger error-text"></span>
             </div>
-
             <div class="mb-3">
                 <label for="twilio_secret_key"
                     class="form-label">{{ __('admin.general_settings.api_secret_key_with_token') }} <span
@@ -178,7 +174,6 @@
                 <input type="text" id="twilio_secret_key" name="twilio_secret_key" class="form-control">
                 <span id="twilio_secret_key_error" class="text-danger error-text"></span>
             </div>
-
             <div class="mb-3">
                 <label for="twilio_sender_id"
                     class="form-label">{{ __('admin.general_settings.sender_twilio_phone_number') }} <span
@@ -187,14 +182,12 @@
                 <span id="twilio_sender_id_error" class="text-danger error-text"></span>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <button type="button" class="btn btn-light me-2"
                 data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
             <button type="submit" class="btn btn-primary">{{ __('admin.common.submit') }}</button>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add Twilio -->
 
     <!-- Add 2factor -->
@@ -202,21 +195,18 @@
         formId="add2FactorForm" dialogClass="modal-dialog-centered modal-md">
         <x-slot name="body">
             <input type="hidden" name="type" value="twofactor">
-
             <div class="mb-3">
                 <label for="twofactor_api_key" class="form-label">{{ __('admin.general_settings.api_key') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" id="twofactor_api_key" name="twofactor_api_key" class="form-control">
                 <span id="twofactor_api_key_error" class="text-danger error-text"></span>
             </div>
-
             <div class="mb-3">
                 <label for="twofactor_secret_key" class="form-label">{{ __('admin.general_settings.api_secret_key') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" id="twofactor_secret_key" name="twofactor_secret_key" class="form-control">
                 <span id="twofactor_secret_key_error" class="text-danger error-text"></span>
             </div>
-
             <div class="mb-3">
                 <label for="twofactor_sender_id" class="form-label">{{ __('admin.general_settings.sender_id') }} <span
                         class="text-danger">*</span></label>
@@ -224,14 +214,12 @@
                 <span id="twofactor_sender_id_error" class="text-danger error-text"></span>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <button type="button" class="btn btn-light me-2"
                 data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
             <button type="submit" class="btn btn-primary">{{ __('admin.common.submit') }}</button>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add 2factor -->
 @endsection
 

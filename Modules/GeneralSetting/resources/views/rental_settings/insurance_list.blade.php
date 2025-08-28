@@ -6,9 +6,12 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4 pb-0">
-            <x-admin.breadcrumb :title="__('admin.general_settings.settings')" :breadcrumbs="[
-            __('admin.general_settings.settings') => ''
-        ]" />
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
+                :breadcrumbs="[
+                    __('admin.general_settings.settings') => ''
+                ]"
+            />
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-xl-9">
@@ -72,16 +75,16 @@
         <x-slot name="body">
             <input type="hidden" name="id" id="id">
             <input type="hidden" name="language_id" id="language_id">
-
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.general_settings.insurance_name') }} <span
+                <label for="insurance_name" class="form-label">{{ __('admin.general_settings.insurance_name') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="insurance_name" id="insurance_name">
                 <span class="error-text text-danger" id="insurance_name_error"></span>
             </div>
-
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.common.price_type') }} <span class="text-danger">*</span></label>
+                <span class="form-label d-block">
+                    {{ __('admin.common.price_type') }} <span class="text-danger">*</span>
+                </span>
                 <div class="d-flex align-items-center">
                     @foreach ($priceTypes ?? [] as $priceType)
                         <div class="form-check me-3">
@@ -96,31 +99,27 @@
                 </div>
                 <span class="error-text text-danger" id="price_type_error"></span>
             </div>
-
             <div class="mb-3">
-                <label class="form-label" id="price_label">{{ __('admin.common.price') }} <span
+                <label for="price" class="form-label" id="price_label">{{ __('admin.common.price') }} <span
                         class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="price" id="price">
                 <span class="error-text text-danger" id="price_error"></span>
             </div>
-
             <div class="add-insurance-benefit">
                 <div class="mb-1">
-                    <label class="form-label">{{ __('admin.common.benefit') }} <span class="text-danger">*</span></label>
+                    <label for="benefit" class="form-label">{{ __('admin.common.benefit') }} <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="benefit[]" id="benefit">
                     <span class="error-text text-danger" id="benefit_error"></span>
                 </div>
             </div>
-
             <a href="#" class="d-inline-flex align-items-center text-info" id="add_new_benefit">
                 <i class="ti ti-plus me-1"></i>{{ __('admin.common.add_new') }}
             </a>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex justify-content-between align-items-center w-100" id="modalfootdiv">
                 <div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
-                    <label class="form-check-label form-label mt-0 mb-0">
+                    <label for="status" class="form-check-label form-label mt-0 mb-0">
                         <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status"
                             id="status" checked>
                         {{ __('admin.common.status') }}
@@ -146,7 +145,6 @@
             <div id="benefitsList"></div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Insurance Benefits -->
 
     <!-- Delete Insurance -->

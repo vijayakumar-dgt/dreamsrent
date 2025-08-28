@@ -10,11 +10,11 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12" data-aos="fade-down">
                     <div class="listing-tabs-group">
-                        <ul class="nav listing-buttons gap-3" role="tablist">
+                        <ul class="nav listing-buttons gap-3" aria-label="Vehicle brands">
                             @foreach($vehicleBrand as $brand)
-                                <li role="presentation">
+                                <li class="nav-item" role="presentation">
                                     <a
-                                        class="{{ $loop->first ? 'active' : '' }}"
+                                        class="nav-link {{ $loop->first ? 'active' : '' }}"
                                         {{ $loop->first ? 'aria-selected=true' : 'aria-selected=false' }}
                                         role="tab"
                                         data-bs-toggle="tab"
@@ -32,7 +32,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="tab-content">
                 @if(!empty($vehicleBrand) && count($vehicleBrand) > 0)
                 @foreach($vehicleBrand as $brand)

@@ -62,7 +62,7 @@
                                     <label class="form-label" for="metaImage">{{ __('admin.general_settings.meta_image') }} <span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                            <img src="{{ uploadedAsset('', 'default2') }}" id="seo_photo_preview"  class="img-fluid" alt="Profile Photo">
+                                            <img src="{{ uploadedAsset('', 'default2') }}" id="seo_photo_preview"  class="img-fluid" alt="Profile">
                                         </div>
                                         <div class="profile-upload">
                                             <div class="profile-uploader d-flex align-items-center">
@@ -114,13 +114,3 @@
 @push('scripts')
 <script src="{{ asset('backend/assets/js/general_setting/seo-setting.js') }}"></script>
 @endpush
-
-
-
-
-
-
-
-
-
-

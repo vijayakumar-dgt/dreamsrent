@@ -11,25 +11,25 @@
         <div class="card-body">
             <form id="account_form" method="POST" action="{{ route('setup.account.submit') }}" autocomplete="off" autocomplete="off">
             <div class="mb-3">
-                <label>Full Name <span class="text-danger">*</span></label>
+                <label for="name">Full Name <span class="text-danger">*</span></label>
                 <input type="text" name="name" id="name" class="form-control"
                     value="{{ old('name', $admin?->name) }}" placeholder="Enter Your Full Name">
             </div>
 
             <div class="mb-3">
-                <label>E-Mail <span class="text-danger">*</span></label>
+                <label for="email">E-Mail <span class="text-danger">*</span></label>
                 <input type="text" name="email" id="email" class="form-control"
                     value="{{ old('email', $admin?->email) }}" placeholder="Enter Your E-Mail Address">
             </div>
 
             <div class="mb-3">
-                <label>Password <span class="text-danger">*</span></label>
+                <label for="password">Password <span class="text-danger">*</span></label>
                 <input autocomplete="new-password" id="password" type="password" name="password"
                     value="{{ old('password') }}" class="form-control" placeholder="Enter Your Password">
             </div>
 
             <div class="mb-3">
-                <label>Re-Type Password <span class="text-danger">*</span></label>
+                <label for="confirm_password">Re-Type Password <span class="text-danger">*</span></label>
                 <input autocomplete="new-password" id="confirm_password" type="password" name="confirm_password"
                     value="{{ old('password') }}" class="form-control" placeholder="Confirm Your Password">
             </div>

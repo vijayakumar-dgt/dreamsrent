@@ -6,11 +6,11 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.general_settings.settings')" 
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
                 :breadcrumbs="[
                     __('admin.general_settings.settings') => ''
-                ]" 
+                ]"
             />
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
@@ -25,7 +25,7 @@
                                 <h6 class="fw-bold mb-3">{{ __('admin.general_settings.ai_configuration') }}</h6>
                                 <div class="row align-items-center mb-3">
                                     <div class="col-md-4">
-                                        <label class="form-label mb-0">{{ __('admin.general_settings.api_key') }}<span class="text-danger ms-1">*</span></label>
+                                        <label for="ai_api_key" class="form-label mb-0">{{ __('admin.general_settings.api_key') }}<span class="text-danger ms-1">*</span></label>
                                     </div>
                                     <div class="col-md-4">
                                         <input type="text" class="form-control" name="ai_api_key" id="ai_api_key">
@@ -34,41 +34,40 @@
                                 </div>
                                 <div class="row align-items-center mb-3">
                                     <div class="col-md-4">
-                                        <label class="form-label mb-0">{{ __('admin.general_settings.enable_ai_globally') }}</label>
+                                        <label for="ai_global_status" class="form-label mb-0">{{ __('admin.general_settings.enable_ai_globally') }}</label>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check form-check-md form-switch">
-                                            <input class="form-check-input form-label" type="checkbox" name="ai_global_status" id="ai_global_status" role="switch">
+                                            <input class="form-check-input form-label" type="checkbox" name="ai_global_status" id="ai_global_status" role="switch" aria-checked="false">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-3">
                                     <div class="col-md-4">
-                                        <label class="form-label mb-0">{{ __('admin.general_settings.enable_ai_admin') }}</label>
+                                        <label for="ai_admin_status" class="form-label mb-0">{{ __('admin.general_settings.enable_ai_admin') }}</label>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check form-check-md form-switch">
-                                            <input class="form-check-input form-label" type="checkbox" role="switch" name="ai_admin_status" id="ai_admin_status">
+                                            <input class="form-check-input form-label" type="checkbox" role="switch" name="ai_admin_status" id="ai_admin_status" aria-checked="false">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-3">
                                     <div class="col-md-4">
-                                        <label class="form-label mb-0">{{ __('admin.general_settings.enable_ai_user') }}</label>
+                                        <label for="ai_user_status" class="form-label mb-0">{{ __('admin.general_settings.enable_ai_user') }}</label>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check form-check-md form-switch">
-                                            <input class="form-check-input form-label" type="checkbox" role="switch" name="ai_user_status" id="ai_user_status">
+                                            <input class="form-check-input form-label" type="checkbox" role="switch" name="ai_user_status" id="ai_user_status" aria-checked="false">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 <div class="d-flex justify-content-end">
-                                    <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
                                     @if (hasPermission($permissions, 'website_settings', 'edit'))
                                     <button type="submit" class="btn btn-primary submitBtn">{{ __('admin.common.save_changes') }}</button>
-                                @endif
+                                    @endif
                                 </div>
                             </div>
                         </form>
@@ -82,5 +81,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/general_setting/ai-configuration.js') }}"></script-->
+<script src="{{ asset('backend/assets/js/general_setting/ai-configuration.js') }}"></script>
 @endpush

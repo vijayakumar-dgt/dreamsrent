@@ -163,13 +163,15 @@
                             <img src="{{ uploadedAsset('', 'default') }}" class="bk-img" alt="img">
                         </div>
                         <div class="book-info">
-                            <h6 class="bk-name"></h6>
+                            <h6 class="bk-name">
+                                <span class="visually-hidden">{{ __('web.common.name') }}</span>
+                            </h6>
                             <p><i class="feather-map-pin"></i> <span class="bk-location">{{__('web.user.location')}}</span></p>
                         </div>
                     </div>
                     <div class="book-amount">
                         <p>{{__('web.common.total')}} {{__('web.common.amount')}}</p>
-                        <h6><span class="bk-amount"></span><a href="javascript:void(0);"></a></h6>
+                        <h6><span class="bk-amount"></span></h6>
                     </div>
                 </div>
                 <div class="booking-group">
@@ -177,7 +179,6 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5 class="mb-0">{{ __('web.user.booking') }} {{ __('web.user.details') }}</h5>
                             <div class="modal_footer">
-
                             </div>
                         </div>
                         <div class="row text-start mb-3">

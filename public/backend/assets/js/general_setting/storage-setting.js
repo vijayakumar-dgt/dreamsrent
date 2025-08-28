@@ -32,6 +32,7 @@
                 },
                 success: function (data) {
                     if (data.success) {
+                        showToast("success", data.message);
                         if (typeof loadStorageSettings === "function") {
                             loadStorageSettings();
                         }

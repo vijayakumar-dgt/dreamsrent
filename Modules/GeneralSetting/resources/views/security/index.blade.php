@@ -79,9 +79,9 @@
                                             </div>
                                             <div class="col-xl-4">
                                                 <div>
-                                                    <p><i
-                                                            class="ti ti-circle-check-filled text-success me-1"></i>{{ __('admin.general_settings.verify_email') }}<span
-                                                            class="verified_emailtxt"></span></p>
+                                                    <p><i class="ti ti-circle-check-filled text-success me-1"></i>{{ __('admin.general_settings.verify_email') }}
+                                                        <span class="verified_emailtxt"></span>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="col-xl-3">
@@ -145,7 +145,7 @@
         formId="changePasswordForm">
         <x-slot name="body">
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.general_settings.current_password') }}<span
+                <label for="current_password" class="form-label">{{ __('admin.general_settings.current_password') }}<span
                         class="text-danger">*</span></label>
                 <div class="pass-group">
                     <div class="position-relative">
@@ -160,7 +160,7 @@
 
             <div class="input-block mb-3">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.general_settings.new_password') }}<span
+                    <label for="new_password" class="form-label">{{ __('admin.general_settings.new_password') }}<span
                             class="text-danger">*</span></label>
                     <div class="pass-group" id="passwordInput">
                         <div class="position-relative">
@@ -180,9 +180,8 @@
                 <div id="passwordInfo" class="mb-2"></div>
                 <p class="fs-12">{{ __('admin.general_settings.password_characters_symbols') }}</p>
             </div>
-
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.general_settings.confirm_password') }}<span
+                <label for="confirm_password" class="form-label">{{ __('admin.general_settings.confirm_password') }}<span
                         class="text-danger">*</span></label>
                 <div class="pass-group">
                     <div class="position-relative">
@@ -195,7 +194,6 @@
                 </div>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3"
@@ -205,7 +203,6 @@
             </div>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Change-password -->
 
     <!-- Change-phone-number -->
@@ -213,7 +210,7 @@
         formId="changePhoneNumberForm">
         <x-slot name="body">
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.general_settings.current_phone_number') }}<span
+                <label for="current_phonenumber" class="form-label">{{ __('admin.general_settings.current_phone_number') }}<span
                         class="text-danger">*</span></label>
                 <div>
                     <input type="text" class="form-control" name="current_phonenumber" id="current_phonenumber">
@@ -222,7 +219,7 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.general_settings.new_phone_number') }} <span
+                <label for="new_phonenumber" class="form-label">{{ __('admin.general_settings.new_phone_number') }} <span
                         class="text-danger">*</span></label>
                 <div>
                     <input type="text" class="form-control" name="new_phonenumber" id="new_phonenumber">
@@ -233,7 +230,7 @@
                 </p>
             </div>
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.general_settings.current_password') }}<span
+                <label for="phone_current_password" class="form-label">{{ __('admin.general_settings.current_password') }}<span
                         class="text-danger">*</span></label>
                 <div class="pass-group">
                     <div class="position-relative">
@@ -246,7 +243,6 @@
                 </div>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3"
@@ -263,16 +259,15 @@
    <x-admin.modal className="addmodal" id="change_email" :title="__('admin.general_settings.change_email_address')" formId="changeEmailForm">
     <x-slot name="body">
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.general_settings.current_email_address') }} <span class="text-danger">*</span></label>
+            <label for="current_email" class="form-label">{{ __('admin.general_settings.current_email_address') }} <span class="text-danger">*</span></label>
             <div>
                 <input type="email" class="form-control" name="current_email" id="current_email" data-email="{{ auth()->user()->email }}">
                 <span id="current_email_error" class="text-danger error-text"></span>
                 <span id="current_email_success" class="text-success"></span>
             </div>
         </div>
-
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.general_settings.new_email_address') }} <span class="text-danger">*</span></label>
+            <label for="new_email" class="form-label">{{ __('admin.general_settings.new_email_address') }} <span class="text-danger">*</span></label>
             <div>
                 <input type="email" class="form-control" name="new_email" id="new_email">
                 <span id="new_email_error" class="text-danger error-text"></span>
@@ -281,9 +276,8 @@
                 <i class="ti ti-info-circle me-1"></i>{{ __('admin.general_settings.email_address_update_verified') }}
             </p>
         </div>
-
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.general_settings.current_password') }} <span class="text-danger">*</span></label>
+            <label for="email_current_password" class="form-label">{{ __('admin.general_settings.current_password') }} <span class="text-danger">*</span></label>
             <div class="pass-group">
                 <div class="position-relative">
                     <input type="password" class="form-control pass-inputa" name="email_current_password" id="email_current_password">
@@ -293,7 +287,6 @@
             </div>
         </div>
     </x-slot>
-
     <x-slot name="footer">
         <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
@@ -305,7 +298,6 @@
         </div>
     </x-slot>
     </x-admin.modal>
-
     <!-- /Change-email -->
 @endsection
 

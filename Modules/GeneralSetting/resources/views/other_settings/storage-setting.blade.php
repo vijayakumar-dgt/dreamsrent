@@ -6,9 +6,12 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb :title="__('admin.general_settings.settings')" :breadcrumbs="[
-            __('admin.general_settings.settings') => ''
-        ]" />
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.settings')"
+                :breadcrumbs="[
+                    __('admin.general_settings.settings') => ''
+                ]"
+            />
             <!-- Settings Prefix -->
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
@@ -41,7 +44,7 @@
                                                         @if (hasPermission($permissions, 'other_settings', 'edit'))
                                                             <div class="form-check form-check-md form-switch">
                                                                 <input class="form-check-input me-2" id="local_storage"
-                                                                    name="local_storage" type="checkbox" role="switch">
+                                                                    name="local_storage" type="checkbox" role="switch" aria-checked="false">
                                                             </div>
                                                         @endif
                                                     </div>
@@ -72,7 +75,7 @@
                                                             </a>
                                                             <div class="form-check form-check-md form-switch">
                                                                 <input class="form-check-input me-2" id="aws_storage"
-                                                                    name="aws_storage" type="checkbox" role="switch">
+                                                                    name="aws_storage" type="checkbox" role="switch" aria-checked="false">
                                                             </div>
                                                         </div>
                                                     @endif
@@ -139,14 +142,12 @@
                 </div>
             </div>
         </x-slot>
-
         <x-slot name="footer">
             <button type="button" class="btn btn-light me-2"
                 data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
             <button type="submit" class="btn btn-primary">{{ __('admin.common.submit') }}</button>
         </x-slot>
     </x-admin.modal>
-
     <!-- /Add Cronjob -->
 @endsection
 

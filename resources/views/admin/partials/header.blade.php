@@ -33,8 +33,7 @@
                     <!-- Flag -->
                     @if(!empty($language_switcher) && $language_switcher == 1)
                     <div class="nav-item dropdown has-arrow flag-nav nav-item-box">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
-                            role="button" aria-expanded="false" tabindex="0" aria-haspopup="true" onkeydown="if(event.key === 'Enter' || event.key === ' ') this.click();">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
                             <img src="{{ asset('/backend/assets/img/flags/'. app()->getLocale() .'.svg') }}" class="img-fluid" alt="{{ strtoupper(app()->getLocale()) }} Flag">
                         </a>
                         <ul class="dropdown-menu p-2">
