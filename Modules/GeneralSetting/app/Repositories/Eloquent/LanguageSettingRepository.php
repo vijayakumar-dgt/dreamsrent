@@ -240,8 +240,8 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
         $responseArray = [];
 
-        $defaultTranslations = file_exists($filePath) ? include $filePath : [];
-        $translatedTranslations = file_exists($translatedPath) ? include $translatedPath : [];
+        $defaultTranslations = file_exists($filePath) ? require $filePath : [];
+        $translatedTranslations = file_exists($translatedPath) ? require $translatedPath : [];
 
         foreach ($defaultTranslations as $module => $keys) {
             if ($search && !str_contains($module, $search)) {
@@ -297,8 +297,8 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $defaultLang = 'en';
         $filePath = base_path("resources/lang/{$defaultLang}/{$tab}.php");
         $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
-        $defaultTranslations = file_exists($filePath) ? include $filePath : [];
-        $translatedTranslations = file_exists($translatedPath) ? include $translatedPath : [];
+        $defaultTranslations = file_exists($filePath) ? require $filePath : [];
+        $translatedTranslations = file_exists($translatedPath) ? require $translatedPath : [];
         $moduleKeys = $defaultTranslations[$module] ?? [];
         $translatedModuleKeys = $translatedTranslations[$module] ?? [];
         $responseArray = [];
@@ -356,7 +356,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
         $langCode = $language->transLang->code ?? null;
         $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
-        $translatedTranslations = file_exists($translatedPath) ? include $translatedPath : [];
+        $translatedTranslations = file_exists($translatedPath) ? require $translatedPath : [];
 
         if (!isset($translatedTranslations[$module])) {
             $translatedTranslations[$module] = [];
@@ -430,7 +430,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
             $destinationPath = base_path("resources/lang/{$langCode}/{$file}");
 
             if (file_exists($sourcePath)) {
-                $translations = include $sourcePath;
+                $translations = require $sourcePath;
                 $clearedTranslations = array_map(function ($module) {
                     return array_map(function () {
                         return '';
@@ -454,7 +454,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
         foreach ($files as $file) {
             $filePath = base_path("resources/lang/{$defaultLang}/{$file}");
             if (file_exists($filePath)) {
-                $defaultTranslations = include $filePath;
+                $defaultTranslations = require $filePath;
                 if (is_array($defaultTranslations)) {
                     $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($defaultTranslations));
                     $totalKeys += iterator_count($iterator);
@@ -472,7 +472,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
         foreach ($files as $file) {
             $filePath = base_path("resources/lang/{$langCode}/{$file}");
             if (file_exists($filePath)) {
-                $translatedKeys = include $filePath;
+                $translatedKeys = require $filePath;
                 if (is_array($translatedKeys)) {
                     $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($translatedKeys));
                     foreach ($iterator as $key => $value) {
@@ -522,8 +522,8 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $defaultPath = base_path("resources/lang/{$defaultLang}/{$tab}.php");
         $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
 
-        $defaultTranslations = file_exists($defaultPath) ? include $defaultPath : [];
-        $translatedTranslations = file_exists($translatedPath) ? include $translatedPath : [];
+        $defaultTranslations = file_exists($defaultPath) ? require $defaultPath : [];
+        $translatedTranslations = file_exists($translatedPath) ? require $translatedPath : [];
 
         $moduleKeys = $defaultTranslations[$module] ?? [];
         $translatedModuleKeys = $translatedTranslations[$module] ?? [];
