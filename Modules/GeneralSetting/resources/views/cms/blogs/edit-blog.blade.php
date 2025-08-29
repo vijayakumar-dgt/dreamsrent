@@ -94,8 +94,8 @@
                             <div class="d-flex justify-content-between align-items-center w-100 flex-wrap gap-2">
                                 <div class="form-check form-check-md form-switch me-2">
                                     <label for="status" class="form-check-label form-label mt-0 mb-0">
-                                        <input class="form-check-input form-label me-2" name="status" id="status" type="checkbox" role="switch"
-                                            {{ (int) $blog->status == 1 ? 'checked' : '' }} aria-checked="{{ (int) $blog->status == 1 ? 'true' : 'false' }}">
+                                        <input class="form-check-input form-label me-2" name="status" id="status" type="checkbox"
+                                            {{ (int) $blog->status == 1 ? 'checked' : '' }}>
                                         {{__('admin.blog.status')}}
                                     </label>
                                 </div>

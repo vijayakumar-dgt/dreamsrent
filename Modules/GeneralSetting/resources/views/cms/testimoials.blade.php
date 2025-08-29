@@ -161,7 +161,7 @@
                     <div
                         class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
                         <img id="testimonial_image_preview" src="{{ uploadedAsset('', 'default2') }}" class="img-fluid"
-                            alt="Profile Photo">
+                            alt="Profile">
                     </div>
                     <div class="profile-upload">
                         <div class="profile-uploader d-flex align-items-center">
@@ -240,7 +240,7 @@
                     <div
                         class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames p-2">
                         <img id="edit_testimonial_preview" src="{{ uploadedAsset('', 'profile') }}"
-                            class="rounded-2 img-fluid" alt="Image">
+                            class="rounded-2 img-fluid" alt="Profile">
                     </div>
                     <div class="profile-upload">
                         <div class="profile-uploader d-flex align-items-center">

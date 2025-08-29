@@ -152,7 +152,7 @@
     <x-slot name="body">
         <div>
             <input type="hidden" id="edit_tag_id">
-            <label class="form-label">{{__('admin.blog.tag')}} <span class="text-danger">*</span></label>
+            <label for="edit_tag_name" class="form-label">{{__('admin.blog.tag')}} <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="edit_tag_name">
         </div>
     </x-slot>
