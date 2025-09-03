@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.general_settings.how_it_works')" 
+            <x-admin.breadcrumb
+                :title="__('admin.general_settings.how_it_works')"
                 :breadcrumbs="[
                     __('admin.general_settings.how_it_works') => ''
                 ]"

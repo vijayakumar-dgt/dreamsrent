@@ -55,7 +55,7 @@
                                                 <div class="row gx-3">
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label class="form-label">{{ __('admin.common.tariff') }}</label>
+                                                            <label for="tariff" class="form-label">{{ __('admin.common.tariff') }}</label>
                                                             <select class="form-control select" name="tariff" id="tariff">
                                                                 <option value="">{{ __('admin.common.select') }}</option>
                                                                 @if ($priceTypes)
@@ -69,7 +69,7 @@
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label class="form-label">{{ __('admin.bookings.driving_type') }}</label>
+                                                            <label for="driving_type" class="form-label">{{ __('admin.bookings.driving_type') }}</label>
                                                             <select class="form-control select" name="driving_type" id="driving_type" data-placeholder="{{ __('admin.common.select') }}">
                                                                 <option value="">{{ __('admin.common.select') }}</option>
                                                                 @if ($drivingTypes)
@@ -83,7 +83,7 @@
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label class="form-label">{{ __('admin.bookings.no_of_passengers') }}</label>
+                                                            <label for="no_of_passengers" class="form-label">{{ __('admin.bookings.no_of_passengers') }}</label>
                                                             <input type="text" class="form-control " name="no_of_passengers" id="no_of_passengers">
                                                             <span class="text-danger error-text" id="no_of_passengers_error"></span>
                                                         </div>
@@ -94,7 +94,7 @@
                                                         <div class="row gx-3">
                                                             <div class="col-md-7">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">{{ __('admin.common.start_date') }}<span class="text-danger"> *</span> </label>
+                                                                    <label for="start_date" class="form-label">{{ __('admin.common.start_date') }}<span class="text-danger"> *</span> </label>
                                                                     <div class="input-icon-end position-relative">
                                                                         <input type="text" class="form-control start_date" name="start_date" id="start_date" placeholder="dd/mm/yyyy">
                                                                         <span class="input-icon-addon">
@@ -106,7 +106,7 @@
                                                             </div>
                                                             <div class="col-md-5">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">{{ __('admin.common.start_time') }}<span class="text-danger"> *</span> </label>
+                                                                    <label for="start_time" class="form-label">{{ __('admin.common.start_time') }}<span class="text-danger"> *</span> </label>
                                                                     <div class="d-flex align-items-center ">
                                                                         <div class="input-icon-end position-relative flex-fill">
                                                                             <input type="text" class="form-control start_time" name="start_time" id="start_time">
@@ -124,7 +124,7 @@
                                                         <div class="row gx-3">
                                                             <div class="col-md-8">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">{{ __('admin.common.end_date') }}<span class="text-danger"> *</span> </label>
+                                                                    <label for="end_date" class="form-label">{{ __('admin.common.end_date') }}<span class="text-danger"> *</span> </label>
                                                                     <div class="input-icon-end position-relative ">
                                                                         <input type="text" class="form-control end_date" name="end_date" id="end_date" placeholder="dd/mm/yyyy">
                                                                         <span class="input-icon-addon">
@@ -136,7 +136,7 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">{{ __('admin.common.end_time') }}<span class="text-danger"> *</span> </label>
+                                                                    <label for="end_time" class="form-label">{{ __('admin.common.end_time') }}<span class="text-danger"> *</span> </label>
                                                                     <div class="input-icon-end position-relative ">
                                                                         <input type="text" class="form-control end_time" name="end_time" id="end_time">
                                                                         <span class="input-icon-addon">
@@ -152,7 +152,7 @@
                                                 <div class="row gx-3">
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label class="form-label">{{ __('admin.bookings.pickup_location') }}<span class="text-danger"> *</span></label>
+                                                            <label for="pickup_location" class="form-label">{{ __('admin.bookings.pickup_location') }}<span class="text-danger"> *</span></label>
                                                             <select class="form-control select2" name="pickup_location" id="pickup_location" data-placeholder="{{ __('admin.common.select') }}">
                                                                 <option value="">{{ __('admin.common.select') }}</option>
                                                                 @if ($locations)
@@ -166,7 +166,7 @@
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label class="form-label">{{ __('admin.bookings.return_location') }}<span class="text-danger"> *</span></label>
+                                                            <label for="return_location" class="form-label">{{ __('admin.bookings.return_location') }}<span class="text-danger"> *</span></label>
                                                             <select class="form-control select2" name="return_location" id="return_location" data-placeholder="{{ __('admin.common.select') }}">
                                                                 <option value="">{{ __('admin.common.select') }}</option>
                                                                 @if ($locations)
@@ -180,7 +180,7 @@
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label class="form-label">{{ __('admin.bookings.security_deposit') }}</label>
+                                                            <label for="security_deposit" class="form-label">{{ __('admin.bookings.security_deposit') }}</label>
                                                             <input type="text" class="form-control " name="security_deposit" id="security_deposit">
                                                         </div>
                                                     </div>
@@ -381,7 +381,7 @@
                                             <p>{{ __('admin.bookings.add_information_for_customer') }}</p>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.common.customer') }}<span class="text-danger"> *</span></label>
+                                            <label for="customer_id" class="form-label">{{ __('admin.common.customer') }}<span class="text-danger"> *</span></label>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-fill ">
                                                     <select class="select2" name="customer_id" id="customer_id" data-placeholder="{{ __('admin.common.select') }}">
@@ -410,7 +410,7 @@
                                             <p>{{ __('admin.bookings.add_information_for_driver') }}</p>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.common.driver') }}<span class="text-danger"></span></label>
+                                            <label for="driver_id" class="form-label">{{ __('admin.common.driver') }}<span class="text-danger"></span></label>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-fill ">
                                                     <select class="select2" name="driver_id" id="driver_id" data-placeholder="{{ __('admin.common.select') }}">
@@ -585,7 +585,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label">{{ __('admin.bookings.tax_type') }} <span class="text-danger">*</span></label>
+                                                        <label for="tax_type" class="form-label">{{ __('admin.bookings.tax_type') }} <span class="text-danger">*</span></label>
                                                         <select class="select" name="tax_type" id="tax_type">
                                                             <option value="">{{ __('admin.bookings.select') }}</option>
                                                             <option value="percentage" {{ old('tax_type', $booking->tax_type) == 'percentage' ? 'selected' : '' }}>{{ __('admin.bookings.percentage') }}</option>
@@ -596,7 +596,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label">{{ __('admin.bookings.add_tax_value') }} <span class="text-danger">*</span></label>
+                                                        <label for="tax_val" class="form-label">{{ __('admin.bookings.add_tax_value') }} <span class="text-danger">*</span></label>
                                                         <input type="text" name="tax_val" id="tax_val" class="form-control" value="{{ old('tax_val', $booking->tax_val) }}">
                                                         <span class="error-text text-danger" id="tax_val_error"></span>
                                                     </div>
@@ -653,10 +653,10 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></label>
+                    <div class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></div>
                     <div class="d-flex align-items-center mt-2">
                         <div class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
-                            <img src="{{ uploadedAsset('', 'profile') }}" class="edit_driver_img" alt="Profile Image">
+                            <img src="{{ uploadedAsset('', 'profile') }}" class="edit_driver_img" alt="Profile">
                         </div>
                         <div>
                             <div class="d-block fw-semibold edit_driver_name text-black"></div>
@@ -666,7 +666,7 @@
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.common.pricing') }}<span class="text-danger"> *</span></label>
+                    <label for="driver_price" class="form-label">{{ __('admin.common.pricing') }}<span class="text-danger"> *</span></label>
                     <input type="text" name="driver_price" id="driver_price" value="0" class="form-control">
                 </div>
             </div>

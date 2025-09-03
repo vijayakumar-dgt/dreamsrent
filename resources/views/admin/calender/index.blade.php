@@ -868,17 +868,13 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <div class="mb-3" role="group" aria-labelledby="driverGroupLabel">
-                        <span id="driverGroupLabel" class="form-label">
-                            {{ __('admin.manage.drivers') }}<span class="text-danger"> *</span>
-                        </span>
-                        <div class="d-flex align-items-center mt-2">
-                            <div class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
-                                <img src="{{ uploadedAsset('', 'profile')}}" class="edit_driver_img" alt="Driver Profile">
-                            </div>
-                            <div>
-                                <div class="d-block fw-semibold edit_driver_name text-black"></div>
-                            </div>
+                    <div class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></div>
+                    <div class="d-flex align-items-center mt-2">
+                        <div class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
+                            <img src="{{ uploadedAsset('', 'profile') }}" class="edit_driver_img" alt="Profile">
+                        </div>
+                        <div>
+                            <div class="d-block fw-semibold edit_driver_name text-black"></div>
                         </div>
                     </div>
                 </div>

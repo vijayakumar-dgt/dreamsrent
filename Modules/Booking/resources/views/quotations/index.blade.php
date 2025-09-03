@@ -7,7 +7,7 @@
     <div class="page-wrapper">
         <div class="content me-4">
             <x-admin.breadcrumb 
-                :title="__('admin.common.quotations')" 
+                :title="__('admin.common.quotations')"
                 :breadcrumbs="[
                     __('admin.common.quotations') => ''
                 ]">

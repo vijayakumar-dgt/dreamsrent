@@ -17,9 +17,9 @@
                             <span class="badge bg-orange-transparent">{{ $booking->booking_status_text }}</span>
                         </div>
                         <div class="card-body">
-                            <ul class="nav nav-tabs nav-tabs-solid custom-nav-tabs mb-3" role="tablist">
-                                <li class="nav-item" role="presentation"><a class="nav-link active" href="#solid-tab1" data-bs-toggle="tab" aria-selected="true" role="tab">{{ __('admin.common.quotations') }}</a></li>
-                                <li class="nav-item" role="presentation"><a class="nav-link" href="#solid-tab2" data-bs-toggle="tab" aria-selected="false" role="tab">{{ __('admin.common.history') }}</a></li>
+                            <ul class="nav nav-tabs nav-tabs-solid custom-nav-tabs mb-3">
+                                <li class="nav-item"><a class="nav-link active" href="#solid-tab1" data-bs-toggle="tab" aria-selected="true" role="tab">{{ __('admin.common.quotations') }}</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#solid-tab2" data-bs-toggle="tab" aria-selected="false" role="tab">{{ __('admin.common.history') }}</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active show" id="solid-tab1" role="tabpanel">
@@ -28,7 +28,7 @@
                                             <div class="col-8">
                                                 <div class="d-flex align-items-center">
                                                     <span class="avatar flex-shrink-0 me-2">
-                                                        <img src="{{ $booking->vehicle_image }}" class="admin-vehicle-image" alt="Vehicle Image">
+                                                        <img src="{{ $booking->vehicle_image }}" class="admin-vehicle-image" alt="Vehicle">
                                                     </span>
                                                     <div>
                                                         <p class="mb-1">{{ $booking->vehicle_type }}</p>
@@ -87,7 +87,7 @@
                                                     </div>
                                                     <div class="d-flex align-items-center mb-3">
                                                         <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                            <img src="{{ $booking->customer_image }}" alt="Customer Image">
+                                                            <img src="{{ $booking->customer_image }}" alt="Customer">
                                                         </span>
                                                         <div>
                                                             <h6 class="fs-14 fw-medium mb-1">{{ $booking->customer_full_name ? $booking->customer_full_name : $booking->customer_user_name  }}</h6>
@@ -104,7 +104,7 @@
                                                     </div>
                                                     <div class="d-flex align-items-center mb-3">
                                                         <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                            <img src="{{ $booking->driver_image }}" alt="Driver Image">
+                                                            <img src="{{ $booking->driver_image }}" alt="Driver">
                                                         </span>
                                                         <div>
                                                             <h6 class="fs-14 fw-medium mb-1">{{ $booking->driver_name }}</h6>
@@ -157,7 +157,7 @@
                                             <div class="col-8">
                                                 <div class="d-flex align-items-center">
                                                     <span class="avatar flex-shrink-0 me-2">
-                                                        <img src="{{ $booking->vehicle_image }}" alt="Vehicle Image">
+                                                        <img src="{{ $booking->vehicle_image }}" alt="Vehicle">
                                                     </span>
                                                     <div>
                                                         <p class="mb-1">{{ $booking->vehicle_type }}</p>
