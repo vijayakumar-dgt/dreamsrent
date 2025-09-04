@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-				:title="__('admin.rentals.cylinders')" 
+            <x-admin.breadcrumb
+				:title="__('admin.rentals.cylinders')"
 				:breadcrumbs="[
 					__('admin.rentals.cylinders') => ''
 				]"
@@ -74,16 +74,16 @@
     <!-- /Page Wrapper -->
 
     <!-- Add/Edit Cylinder Type Start-->
-    <x-admin.modal className="addmodal" 
+    <x-admin.modal className="addmodal"
 		id="add_cylinder"
-		:title="__('admin.rentals.create_cylinder_type')" 
-		action="{{  route('store_cylinder_type') }}" 
-		formId="cylinderForm" 
+		:title="__('admin.rentals.create_cylinder_type')"
+		action="{{  route('store_cylinder_type') }}"
+		formId="cylinderForm"
 		method="POST">
 		<x-slot name="body">
             <input type="hidden" name="id" id="id">
 			<div class="mb-3">
-                <label class="form-label">{{ __('admin.rentals.cylinder_type') }} <span class="text-danger">*</span></label>
+                <label for="cylinder_type" class="form-label">{{ __('admin.rentals.cylinder_type') }} <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="cylinder_type" id="cylinder_type">
                 <span id="cylinder_type_error" class="text-danger error-text"></span>
             </div>
@@ -106,14 +106,14 @@
     <!-- Add/Edit Cylinder Type End -->
 
     <!-- Delete Modal Start-->
-    <x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('delete_cylinder') }}" 
-		formId="deleteCylinder" 
+    <x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('delete_cylinder') }}"
+		formId="deleteCylinder"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_cylinder_type')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_cylinder_type')"
 		:description="__('admin.rentals.delete_cylinder_type_confirmation')">
 	</x-admin.delete-modal>
     <!-- Delete Modal End -->

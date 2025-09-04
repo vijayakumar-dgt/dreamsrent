@@ -14,7 +14,8 @@
             :buttonText="__('admin.rentals.add_new_vehicle_type')"
             :modalId="'add_type'"
             :buttonId="'add_new_type'"
-            :permissionModule="'vehicle_attributes'" />
+            :permissionModule="'vehicle_attributes'"
+        />
         <!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="top-search me-2">
@@ -79,7 +80,7 @@
         <input type="hidden" name="language_id" id="language_id">
         <div class="col-md-12">
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.rentals.category') }} <span class="text-danger">*</span></label>
+                <label for="vehicle_category_id" class="form-label">{{ __('admin.rentals.category') }} <span class="text-danger">*</span></label>
                 <select name="vehicle_category_id" class="form-control select" id="vehicle_category_id">
                     <option value="">{{ __('admin.rentals.select') }}</option>
                     @foreach($category as $CategoryValues)
@@ -90,12 +91,12 @@
             </div>
         </div>
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.common.name') }} <span class="text-danger">*</span></label>
+            <label for="name" class="form-label">{{ __('admin.common.name') }} <span class="text-danger">*</span></label>
             <input type="text" class="form-control" name="name" id="name">
             <span id="name_error" class="text-danger error-text"></span>
         </div>
         <div class="row mb-3">
-            <label for="icon" class="form-label">{{ __('admin.common.icon') }} <span class="text-danger icon_asterisk">*</span></label>
+            <label for="icon_preview" class="form-label">{{ __('admin.common.icon') }} <span class="text-danger icon_asterisk">*</span></label>
             <div class="col-md-4">
                 <div class="d-flex align-items-center justify-content-center avatar avatar-xxxl border border-dashed me-2 flex-shrink-0 text-dark frames">
                     <img src="{{ uploadedAsset('', 'default') }}" id="icon_preview" class="img-contain rounded d-none" alt="Icon">
@@ -122,7 +123,7 @@
     <x-slot name="footer">
         <div class="d-flex justify-content-between align-items-center w-100" id="submit_div">
             <div class="form-check form-check-md form-switch me-2 d-none" id="status_div">
-                <label class="form-check-label form-label mt-0 mb-0">
+                <label for="status" class="form-check-label form-label mt-0 mb-0">
                     <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status" id="status">
                     {{ __('admin.common.status') }}
                 </label>

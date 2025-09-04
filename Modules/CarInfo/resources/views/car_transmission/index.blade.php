@@ -6,8 +6,8 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
-				:title="__('admin.rentals.vehicle_transmission')" 
+			<x-admin.breadcrumb
+				:title="__('admin.rentals.vehicle_transmission')"
 				:breadcrumbs="[
 					__('admin.rentals.vehicle_transmission') => ''
 				]"
@@ -71,17 +71,17 @@
 	<!-- /Page Wrapper -->
 
 	<!-- Add/Edit Transmission -->
-	<x-admin.modal className="addmodal" 
+	<x-admin.modal className="addmodal"
 		id="car_transmission_modal"
-		:title="__('admin.rentals.create_vehicle_transmission')" 
-		action="{{  route('carTrasmission.store') }}" 
-		formId="carTransmissionForm" 
+		:title="__('admin.rentals.create_vehicle_transmission')"
+		action="{{  route('carTrasmission.store') }}"
+		formId="carTransmissionForm"
 		method="POST">
 		<x-slot name="body">
 			<input type="hidden" name="id" id="id">
 			<input type="hidden" name="language_id" id="language_id">
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.vehicle_transmission') }}<span class="text-danger"> *</span></label>
+				<label for="name" class="form-label">{{ __('admin.rentals.vehicle_transmission') }}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="name" id="name" maxlength="50">
 				<span id="name_error" class="text-danger error-text"></span>
 			</div>
@@ -104,14 +104,14 @@
 	<!-- /Add/Edit Transmission -->
 
 	<!-- Delete Transmission -->
-	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('carTrasmission.delete') }}" 
-		formId="delateCarTransmissionForm" 
+	<x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('carTrasmission.delete') }}"
+		formId="delateCarTransmissionForm"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_vehicle_transmission')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_vehicle_transmission')"
 		:description="__('admin.rentals.delete_vehicle_transmission_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Transmission -->

@@ -6,8 +6,8 @@
    <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-				:title="__('admin.rentals.damage_types')" 
+            <x-admin.breadcrumb
+				:title="__('admin.rentals.damage_types')"
 				:breadcrumbs="[
 					__('admin.rentals.damage_types') => ''
 				]"
@@ -71,17 +71,17 @@
    <!-- /Page Wrapper -->
 
     <!-- Add/Edit Damage Type Start-->
-    <x-admin.modal className="addmodal" 
+    <x-admin.modal className="addmodal"
 		id="add_damage_type"
-		:title="__('admin.rentals.create_damage_type')" 
-		action="{{  route('store_damage_type') }}" 
-		formId="damageTypeForm" 
+		:title="__('admin.rentals.create_damage_type')"
+		action="{{  route('store_damage_type') }}"
+		formId="damageTypeForm"
 		method="POST">
 		<x-slot name="body">
             <input type="hidden" name="id" id="id">
             <input type="hidden" name="language_id" id="language_id">
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.rentals.damage_type') }} <span class="text-danger">*</span></label>
+                <label for="damage_type" class="form-label">{{ __('admin.rentals.damage_type') }} <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="damage_type" id="damage_type">
                 <span id="damage_type_error" class="text-danger error-text"></span>
             </div>
@@ -89,7 +89,7 @@
 		<x-slot name="footer">
             <div class="d-flex justify-content-between align-items-center w-100">
                 <div class="form-check form-check-md form-switch me-2 d-none" id="status_div">
-                    <label class="form-check-label form-label mt-0 mb-0">
+                    <label for="status" class="form-check-label form-label mt-0 mb-0">
                         <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status" id="status">
                         {{ __('admin.common.status') }}
                     </label>
@@ -104,14 +104,14 @@
     <!-- Add/Edit Damage Type end -->
 
     <!-- Delete Modal Start-->
-    <x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('delete_damage_type') }}" 
-		formId="deleteDamageType" 
+    <x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('delete_damage_type') }}"
+		formId="deleteDamageType"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_damage_type')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_damage_type')"
 		:description="__('admin.rentals.delete_damage_type_confirmation')">
 	</x-admin.delete-modal>
     <!-- Delete Modal End -->

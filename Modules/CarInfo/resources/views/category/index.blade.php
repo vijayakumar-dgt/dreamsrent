@@ -7,7 +7,7 @@
 	<div class="page-wrapper">
 		<div class="content me-4">
 			<x-admin.breadcrumb 
-				:title="__('admin.rentals.category')" 
+				:title="__('admin.rentals.category')"
 				:breadcrumbs="[
 					__('admin.rentals.category') => ''
 				]"
@@ -71,17 +71,17 @@
 	<!-- /Page Wrapper -->
 
 	<!-- Add/Edit Category -->
-	<x-admin.modal className="addmodal" 
+	<x-admin.modal className="addmodal"
 		id="category_modal"
-		:title="__('admin.rentals.create_category')" 
-		action="{{  route('category.store') }}" 
-		formId="categoryForm" 
+		:title="__('admin.rentals.create_category')"
+		action="{{  route('category.store') }}"
+		formId="categoryForm"
 		method="POST">
 		<x-slot name="body">
 			<input type="hidden" name="id" id="id">
 			<input type="hidden" name="language_id" id="language_id">
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.common.category') }}<span class="text-danger"> *</span></label>
+				<label for="name" class="form-label">{{ __('admin.common.category') }}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="name" id="name" maxlength="50">
 				<span id="name_error" class="text-danger error-text"></span>
 			</div>
@@ -104,14 +104,14 @@
 	<!-- /Add Category -->
 
 	<!-- Delete Category -->
-	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('category.delete') }}" 
-		formId="deleteCategory" 
+	<x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('category.delete') }}"
+		formId="deleteCategory"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_category')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_category')"
 		:description="__('admin.rentals.delete_category_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Category -->

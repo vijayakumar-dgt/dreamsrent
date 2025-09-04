@@ -6,8 +6,8 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
-				:title="__('admin.rentals.steering_types')" 
+			<x-admin.breadcrumb
+				:title="__('admin.rentals.steering_types')"
 				:breadcrumbs="[
 					__('admin.rentals.steering_types') => ''
 				]"
@@ -71,16 +71,16 @@
 	<!-- /Page Wrapper -->
 
 	<!-- Add/Edit Steering -->
-	<x-admin.modal className="addmodal" 
+	<x-admin.modal className="addmodal"
 		id="steering_type_modal"
-		:title="__('admin.rentals.create_steering_type')" 
-		action="{{  route('steeringType.store') }}" 
-		formId="steeringTypeForm" 
+		:title="__('admin.rentals.create_steering_type')"
+		action="{{  route('steeringType.store') }}"
+		formId="steeringTypeForm"
 		method="POST">
        <x-slot name="body">
 			<input type="hidden" name="id" id="id">
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.steering_type') }}<span class="text-danger"> *</span></label>
+				<label for="steering_type" class="form-label">{{ __('admin.rentals.steering_type') }}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="steering_type" id="steering_type" maxlength="50">
 				<span id="steering_type_error" class="text-danger error-text"></span>
 			</div>
@@ -103,14 +103,14 @@
 	<!-- /Add/Edit Steering -->
 
 	<!-- Delete Car Steering -->
-	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('steeringType.delete') }}" 
-		formId="deleteSteeringType" 
+	<x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('steeringType.delete') }}"
+		formId="deleteSteeringType"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_steering_type')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_steering_type')"
 		:description="__('admin.rentals.delete_steering_type_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Car Steering -->
