@@ -6,7 +6,7 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
+            <x-admin.breadcrumb
                 :title="__('admin.user_management.roles')"
                 :breadcrumbs="[
                     __('admin.user_management.roles') => ''
@@ -58,7 +58,7 @@
     <!-- /Page Wrapper -->
 
     <!-- Add/Edit Role -->
-    <x-admin.modal 
+    <x-admin.modal
         className="addmodal"
         id="role_modal"
         :title="__('admin.user_management.create_role')"

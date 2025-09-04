@@ -1,51 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-		<title>{{ isset($title) ? $title : config('app.name') }}</title>
 
-		<!-- Favicon -->
-		<link rel="shortcut icon" href="{{ asset('frontend/assets/img/favicon.png') }}">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<title>{{ isset($title) ? $title : config('app.name') }}</title>
 
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="{{ asset('frontend/assets/img/favicon.png') }}">
 
-		<!-- Fontawesome CSS -->
-		<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/all.min.css') }}">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
 
-		<!-- Fearther CSS -->
-		<link rel="stylesheet" href="{{ asset('frontend/assets/css/feather.css') }}">
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/all.min.css') }}">
 
-		<!-- Main CSS -->
-		<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
-	</head>
-    <body class="error-page">
+	<!-- Fearther CSS -->
+	<link rel="stylesheet" href="{{ asset('frontend/assets/css/feather.css') }}">
 
-		<!-- Main Wrapper -->
-        <div class="main-wrapper">
+	<!-- Main CSS -->
+	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
+</head>
 
-			<div class="error-box">
-				<img src="{{ $response['image'] ?? asset('frontend/assets/img/maintenance.png') }}" class="img-fluid" alt="Maintenance">
-				<h2 class="coming-soon pt-0">{{ __('web.home.maintenence_heading') }}</h2>
-				<p>{!! $response['description'] ?? 'Our website is currently undergoing scheduled maintenance, will be right
-					back in a few minutes.' !!}</p>
-				<h6>{{ __('web.home.maintenence_text') }}</h6>
-				<a href="{{ route('home') }}" class="btn-maintance btn btn-primary mt-3">{{ __('web.home.back_to_home') }}</a>
-			</div>
+<body class="error-page">
 
-        </div>
-		<!-- /Main Wrapper -->
+	<!-- Main Wrapper -->
+	<div class="main-wrapper">
 
-		<!-- jQuery -->
-		<script src="{{ asset('frontend/assets/js/jquery-3.7.1.min.js') }}"></script>
+		<div class="error-box">
+			<img src="{{ $response['image'] ?? asset('frontend/assets/img/maintenance.png') }}" class="img-fluid" alt="Maintenance">
+			<h2 class="coming-soon pt-0">{{ __('web.home.maintenence_heading') }}</h2>
+			<p>{!! $response['description'] ?? 'Our website is currently undergoing scheduled maintenance, will be right
+				back in a few minutes.' !!}</p>
+			<h6>{{ __('web.home.maintenence_text') }}</h6>
+			<a href="{{ route('home') }}" class="btn-maintance btn btn-primary mt-3">{{ __('web.home.back_to_home') }}</a>
+		</div>
 
-		<!-- Bootstrap Core JS -->
-		<script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
+	</div>
+	<!-- /Main Wrapper -->
 
-		<!-- Custom JS -->
-		<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
+	<!-- jQuery -->
+	<script src="{{ asset('frontend/assets/js/jquery-3.7.1.min.js') }}"></script>
 
-	</body>
+	<!-- Bootstrap Core JS -->
+	<script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
+
+	<!-- Custom JS -->
+	<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
+
+</body>
+
 </html>
