@@ -90,28 +90,30 @@ class ContactMessagesRepository implements ContactMessagesRepositoryInterface
     {
         try {
             $idInput = $request->id;
+            $response = [];
 
             // Still need to validate the input format
             if (!is_numeric($idInput)) {
-                // Return 1: Bad Request
-                return [
+                // Bad Request
+                $response = [
                     'code'    => 400,
                     'success' => false,
                     'message' => 'Invalid contact ID format.'
                 ];
+            } else {
+                // findOrFail throws an exception if not found, which is caught below
+                $contact = Contact::findOrFail((int) $idInput);
+                $contact->delete();
+
+                // Success
+                $response = [
+                    'code'    => 200,
+                    'success' => true,
+                    'message' => __('admin.support.contact_message_delete_success')
+                ];
             }
 
-            // findOrFail throws an exception if not found, which is caught below
-            $contact = Contact::findOrFail((int) $idInput);
-
-            $contact->delete();
-
-            // Return 2: Success
-            return [
-                'code'    => 200,
-                'success' => true,
-                'message' => __('admin.support.contact_message_delete_success')
-            ];
+            return $response;
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             // Handle specific not found case
             return [

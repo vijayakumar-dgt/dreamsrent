@@ -150,7 +150,7 @@
                     <i class="ti ti-loader me-1"></i> {{__('admin.blog.load_more')}}
                 </a>
                 @elseif(count($blogPosts) == 0)
-                <p>{{__('admin.blog.no_blog_found')}}</p> 
+                <p>{{__('admin.blog.no_blog_found')}}</p>
                 @endif
             </div>
             <!-- Blogs -->

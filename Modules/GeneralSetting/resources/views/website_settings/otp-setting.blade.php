@@ -26,7 +26,7 @@
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-lg-9">
                     <form id="otpSettingForm">
-                         @csrf 
+                         @csrf
                         <div class="card h-100">
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
@@ -38,7 +38,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label" for="otp_type">{{ __('admin.general_settings.otp_type') }}<span class="text-danger"> *</span></label>
-                                            <select class="form-control" name="otp_type" id="otp_type" >                                             
+                                            <select class="form-control" name="otp_type" id="otp_type" >
                                                 <option value="email">{{ __('Email') }}</option>
                                             </select>
                                             <span class="text-danger error-text" id="otp_type_error"></span>

@@ -297,3 +297,4 @@
     <script src="{{ asset('backend/assets/plugins/summernote/summernote-bs5.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/purify.min.js') }}"></script>
     @endpush
+    

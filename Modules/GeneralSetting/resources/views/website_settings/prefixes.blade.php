@@ -69,7 +69,7 @@
                                             <input type="text" name="inspection_prefix" id="inspection_prefix" class="form-control" placeholder="{{ __('admin.general_settings.enter_prefix') }}" maxlength="10">
                                             <span class="text-danger error-text" id="inspection_prefix_error"></span>
                                         </div>
-                                    </div>                                   
+                                    </div>
                                     <div class="col-md-3">
                                         <div class="mb-3">
                                             <label class="form-label" for="report_prefix">{{ __('admin.common.reports') }}<span class="text-danger"> *</span></label>
@@ -108,13 +108,3 @@
 @push('scripts')
 <script src="{{ asset('backend/assets/js/general_setting/prefixes-setting.js') }}"></script>
 @endpush
-
-
-
-
-
-
-
-
-
-
