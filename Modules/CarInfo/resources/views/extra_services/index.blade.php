@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-				:title="__('admin.rentals.extra_services')" 
+            <x-admin.breadcrumb
+				:title="__('admin.rentals.extra_services')"
 				:breadcrumbs="[
 					__('admin.rentals.extra_services') => ''
 				]"
@@ -76,7 +76,7 @@
     <!-- /Page Wrapper -->
 
     <!-- Add/Edit Extra Service Start-->
-    <x-admin.modal 
+    <x-admin.modal
 		className="addmodal"
 		id="add_extra_service"
 		:title="__('admin.rentals.create_extra_service')"
@@ -88,7 +88,7 @@
 			<input type="hidden" name="id" id="id">
 			<input type="hidden" name="language_id" id="language_id">
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.common.name') }} <span class="text-danger">*</span></label>
+                <label for="name" class="form-label">{{ __('admin.common.name') }} <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="name" id="name">
                 <span id="name_error" class="text-danger error-text"></span>
             </div>
@@ -122,7 +122,7 @@
                 <label for="image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger icon_asterisk">*</span></label>
                 <div class="col-md-4">
                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxxl border border-dashed me-2 flex-shrink-0 text-dark">
-                        <img src="{{ uploadedAsset('', 'default') }}" id="image_preview" class="img-fluid d-none" alt="Image">
+                        <img src="{{ uploadedAsset('', 'default') }}" id="image_preview" class="img-fluid d-none" alt="Extra Service">
                         <i class="ti ti-photo-plus image_placeholder"></i>
                     </div>
                 </div>

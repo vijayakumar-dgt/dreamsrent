@@ -126,7 +126,7 @@
 	<!-- /Page Wrapper -->
 
 	<!-- Add Driver -->
-	<x-admin.modal 
+	<x-admin.modal
 		className="addmodal"
 		id="add_driver_modal"
 		dialogClassName="modal-lg"
@@ -139,10 +139,10 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
+						<label for="image" class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
 						<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 							<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-								<img src="{{ uploadedAsset('', 'profile') }}" id="imagePreview" class="img-fluid rounded d-none" alt="Profile Image">
+								<img src="{{ uploadedAsset('', 'profile') }}" id="imagePreview" class="img-fluid rounded d-none" alt="Profile">
 								<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
 							</div>
 							<div class="profile-upload">
@@ -163,14 +163,14 @@
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.manage.driver_name') }}<span class="text-danger"> *</span></label>
+						<label for="driver_name" class="form-label">{{ __('admin.manage.driver_name') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="driver_name" id="driver_name">
 						<span id="driver_name_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.gender') }}<span class="text-danger"> *</span></label>
+						<label for="gender" class="form-label">{{ __('admin.common.gender') }}<span class="text-danger"> *</span></label>
 						<select class="select" id="gender" name="gender" data-placeholder="{{ __('admin.common.select') }}">
 							<option value="">{{ __('admin.common.select') }}</option>
 							<option value="male">{{ __('admin.common.male') }}</option>
@@ -182,7 +182,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
+						<label for="phone_number" class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control driver_phone_number" name="phone_number" id="phone_number">
 						<input type="hidden" id="international_phone_number" name="international_phone_number">
 						<span id="phone_number_error" class="text-danger error-text"></span>
@@ -190,21 +190,21 @@
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+						<label for="email" class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="email" id="email">
 						<span id="email_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.address') }}<span class="text-danger"> *</span></label>
+						<label for="address" class="form-label">{{ __('admin.common.address') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="address" id="address">
 						<span id="address_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.manage.assigned_vehicles') }}<span class="text-danger"> *</span></label>
+						<label for="assigned_cars" class="form-label">{{ __('admin.manage.assigned_vehicles') }}<span class="text-danger"> *</span></label>
 						<select class="select select2" id="assigned_cars" name="assigned_cars[]" data-placeholder="Select" multiple>
 							@if ($cars)
 								@foreach ($cars as $car)
@@ -218,28 +218,28 @@
 				<h6 class="fs-16 fw-medium mb-2">{{ __('admin.manage.licence_details') }}</h6>
 				<div class="col-md-4">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.manage.card_number') }}<span class="text-danger"> *</span></label>
+						<label for="card_number" class="form-label">{{ __('admin.manage.card_number') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="card_number" id="card_number">
 						<span id="card_number_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.manage.date_of_issue') }}<span class="text-danger"> *</span></label>
+						<label for="date_of_issue" class="form-label">{{ __('admin.manage.date_of_issue') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control date_of_issue" name="date_of_issue" id="date_of_issue" placeholder="dd-mm-yyyy">
 						<span id="date_of_issue_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.manage.valid_date') }}<span class="text-danger"> *</span></label>
+						<label for="valid_date" class="form-label">{{ __('admin.manage.valid_date') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control valid_date" name="valid_date" id="valid_date" placeholder="dd-mm-yyyy">
 						<span id="valid_date_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
+						<label for="documents" class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
 						<div class="document-upload text-center br-3 mb-3">
 							<img src="{{ asset('/backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="Icon">
 							<p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>
@@ -261,7 +261,7 @@
 	<!-- /Add Driver -->
 
 	<!-- Edit Driver -->
-	<x-admin.modal 
+	<x-admin.modal
 		className="addmodal"
 		id="edit_driver_modal"
 		dialogClassName="modal-lg"
@@ -275,10 +275,10 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
+						<label for="edit_image" class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
 						<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 							<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-								<img src="{{ uploadedAsset('', 'profile') }}" id="editImagePreview" class="img-fluid rounded d-none" alt="Profile Image">
+								<img src="{{ uploadedAsset('', 'profile') }}" id="editImagePreview" class="img-fluid rounded d-none" alt="Profile">
 								<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
 							</div>
 							<div class="profile-upload">
@@ -299,14 +299,14 @@
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.manage.driver_name') }}<span class="text-danger"> *</span></label>
+						<label for="edit_driver_name" class="form-label">{{ __('admin.manage.driver_name') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="driver_name" id="edit_driver_name">
 						<span id="edit_driver_name_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.gender') }}<span class="text-danger"> *</span></label>
+						<label for="edit_gender" class="form-label">{{ __('admin.common.gender') }}<span class="text-danger"> *</span></label>
 						<select class="select" id="edit_gender" name="gender" data-placeholder="{{ __('admin.common.select') }}">
 							<option value="">{{ __('admin.common.select') }}</option>
 							<option value="male">{{ __('admin.common.male') }}</option>
@@ -318,7 +318,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
+						<label for="edit_phone_number" class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control edit_driver_phone_number" name="phone_number" id="edit_phone_number">
 						<input type="hidden" id="edit_international_phone_number" name="international_phone_number">
 						<span id="edit_phone_number_error" class="text-danger error-text"></span>
@@ -326,21 +326,21 @@
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+						<label for="edit_email" class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="email" id="edit_email">
 						<span id="edit_email_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.address') }}<span class="text-danger"> *</span></label>
+						<label for="edit_address" class="form-label">{{ __('admin.common.address') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="address" id="edit_address">
 						<span id="edit_address_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.manage.assigned_vehicles') }}<span class="text-danger"> *</span></label>
+						<label for="edit_assigned_cars" class="form-label">{{ __('admin.manage.assigned_vehicles') }}<span class="text-danger"> *</span></label>
 						<select class="select select2" id="edit_assigned_cars" name="assigned_cars[]" data-placeholder="Select" multiple>
 							@if ($cars)
 								@foreach ($cars as $car)
@@ -354,28 +354,28 @@
 				<h6 class="fs-16 fw-medium mb-2">{{ __('admin.manage.licence_details') }}</h6>
 				<div class="col-md-4">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.manage.card_number') }}<span class="text-danger"> *</span></label>
+						<label for="edit_card_number" class="form-label">{{ __('admin.manage.card_number') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="card_number" id="edit_card_number">
 						<span id="edit_card_number_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.manage.date_of_issue') }}<span class="text-danger"> *</span></label>
+						<label for="edit_date_of_issue" class="form-label">{{ __('admin.manage.date_of_issue') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control date_of_issue" name="date_of_issue" id="edit_date_of_issue" placeholder="dd-mm-yyyy">
 						<span id="edit_date_of_issue_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.manage.valid_date') }}<span class="text-danger"> *</span></label>
+						<label for="edit_valid_date" class="form-label">{{ __('admin.manage.valid_date') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control valid_date" name="valid_date" id="edit_valid_date" placeholder="dd-mm-yyyy">
 						<span id="edit_valid_date_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
+						<label for="edit_documents" class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
 						<div class="document-upload text-center br-3 mb-3">
 							<img src="{{ asset('/backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
 							<p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>

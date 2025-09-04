@@ -6,8 +6,8 @@
 <!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
-				:title="__('admin.rentals.door_types')" 
+			<x-admin.breadcrumb
+				:title="__('admin.rentals.door_types')"
 				:breadcrumbs="[
 					__('admin.rentals.door_types') => ''
 				]"
@@ -72,16 +72,16 @@
 	<!-- /Page Wrapper -->
 
 	<!-- Add/Edit Door Type -->
-	<x-admin.modal className="addmodal" 
+	<x-admin.modal className="addmodal"
 		id="door_type_modal"
-		:title="__('admin.rentals.create_door_type')" 
-		action="{{  route('doorType.store') }}" 
-		formId="doorTypeForm" 
+		:title="__('admin.rentals.create_door_type')"
+		action="{{  route('doorType.store') }}"
+		formId="doorTypeForm"
 		method="POST">
 		<x-slot name="body">
             <input type="hidden" name="id" id="id">
             <div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.door_type') }}<span class="text-danger"> *</span></label>
+				<label for="door_type" class="form-label">{{ __('admin.rentals.door_type') }}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="door_type" id="door_type">
 				<span id="door_type_error" class="text-danger error-text"></span>
 			</div>
@@ -104,14 +104,14 @@
 	<!-- /Add/Edit Door Type -->
 
 	<!-- Delete Door Type -->
-	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('doorType.delete') }}" 
-		formId="deleteDoorType" 
+	<x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('doorType.delete') }}"
+		formId="deleteDoorType"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_door_type')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_door_type')"
 		:description="__('admin.rentals.delete_door_type_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Door Type -->

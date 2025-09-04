@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-				:title="__('admin.common.inspections')" 
+            <x-admin.breadcrumb
+				:title="__('admin.common.inspections')"
 				:breadcrumbs="[
 					__('admin.common.inspections') => ''
 				]"
@@ -86,14 +86,14 @@
     <x-admin.modal className="addmodal"
         dialogClassName="modal-lg"
 		id="add_inspection"
-		:title="__('admin.rentals.create_inspection')" 
-		action="{{  route('inspection.store') }}" 
-		formId="inspectionForm" 
+		:title="__('admin.rentals.create_inspection')"
+		action="{{  route('inspection.store') }}"
+		formId="inspectionForm"
 		method="POST">
 		<x-slot name="body">
             <input type="hidden" name="id" id="id">
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.common.vehicle') }} <span class="text-danger">*</span></label>
+                <label for="vehicle_info_id" class="form-label">{{ __('admin.common.vehicle') }} <span class="text-danger">*</span></label>
                 <select name="vehicle_info_id" id="vehicle_info_id" class="form-control" data-placeholder="{{ __('admin.common.select') }}">
                     <option value="">{{ __('admin.common.select') }}</option>
                 </select>
@@ -140,7 +140,7 @@
                     @foreach ($checklists as $checklist)
                         <div class="col-md-6">
                             <div class="form-check form-check-md">
-                                <label class="form-check-label form-label mt-0 mb-0">
+                                <label for="checklist_id_{{ $checklist->id }}" class="form-check-label form-label mt-0 mb-0">
                                     <input class="form-check-input form-label me-2 checklist" type="checkbox" value="{{ $checklist->id }}" name="checklist_id[]" id="checklist_id_{{ $checklist->id }}">
                                     {{ $checklist->name }}
                                 </label>
@@ -154,7 +154,7 @@
                 @endif
             </div>
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.rentals.notes') }}</label>
+                <label for="notes" class="form-label">{{ __('admin.rentals.notes') }}</label>
                 <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>
                 <span class="text-danger error-text" id="notes_error"></span>
             </div>
@@ -203,14 +203,14 @@
     <!-- Add Inspection Modal End-->
 
     <!-- Delete Modal Start-->
-    <x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('delete_inspection') }}" 
-		formId="deleteInspection" 
+    <x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('delete_inspection') }}"
+		formId="deleteInspection"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_inspection')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_inspection')"
 		:description="__('admin.rentals.delete_inspection_confirmation')">
 	</x-admin.delete-modal>
     <!-- Delete Modal End -->
