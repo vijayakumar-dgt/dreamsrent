@@ -11,6 +11,5 @@ class InstallerDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
     }
 }

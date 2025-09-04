@@ -69,7 +69,7 @@
 <script src="{{ asset('frontend/global/js/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('frontend/global/toastr/toastr.min.js') }}"></script>
 <script src="{{ asset('backend/assets/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('frontend/assets/js/installer/app.js') }}"></script>   
+<script src="{{ asset('frontend/assets/js/installer/app.js') }}"></script>
 
 @stack('scripts')
 

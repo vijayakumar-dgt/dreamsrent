@@ -24,36 +24,35 @@ class PurchaseVerifyMiddleware
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        $appMode = config('app.app_mode');
+        $appMode  = config('app.app_mode');
+        $response = $this->invalidHashed();
 
         if (is_string($appMode) && strtolower($appMode) === 'demo') {
-            return $next($request);
-        }
-
-        if (InstallerInfo::licenseFileExist()) {
+            $response = $next($request);
+        } elseif (InstallerInfo::licenseFileExist()) {
             $filepath = InstallerInfo::getLicenseFilePath();
 
             if (!InstallerInfo::isRemoteLocal() && InstallerInfo::licenseFileDataHasLocalTrue()) {
-                $response = purchaseVerificationHashed($filepath, true);
-                if (InstallerInfo::rewriteHashedFile($response)) {
-                    return $next($request);
+                $verification = purchaseVerificationHashed($filepath, true);
+                if (InstallerInfo::rewriteHashedFile($verification)) {
+                    $response = $next($request);
                 } else {
                     InstallerInfo::deleteLicenseFile();
-                    return $this->invalidHashed();
+                    $response = $this->invalidHashed();
                 }
             } elseif (Carbon::now()->day == 1) {
-                $response = purchaseVerificationHashed($filepath);
-                if ($response['success']) {
-                    return $next($request);
+                $verification = purchaseVerificationHashed($filepath);
+                if ($verification['success']) {
+                    $response = $next($request);
+                } else {
+                    $response = $this->invalidHashed();
                 }
-
-                return $this->invalidHashed();
+            } else {
+                $response = $next($request);
             }
-
-            return $next($request);
         }
 
-        return $this->invalidHashed();
+        return $response;
     }
 
     /**

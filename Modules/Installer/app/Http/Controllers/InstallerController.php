@@ -59,88 +59,91 @@ class InstallerController extends Controller
 
     public function databaseSubmit(DatabaseSubmitRequest $request): JsonResponse|RedirectResponse
     {
-        if (!$this->requirementsCompleteStatus()) {
-            return redirect()->route('setup.requirements')
-                ->withInput()
-                ->withErrors(['errors' => 'Your server does not meet the minimum requirements.']);
-        }
+        $response = redirect()->route('setup.requirements')
+            ->withInput()
+            ->withErrors(['errors' => 'Your server does not meet the minimum requirements.']);
 
-        try {
-            $validated = $request->validated();
+        if ($this->requirementsCompleteStatus()) {
+            try {
+                $validated = $request->validated();
 
-            $databaseDetails = [
-                'host'           => $validated['host'],
-                'port'           => is_numeric($validated['port']) ? (int)$validated['port'] : $validated['port'],
-                'database'       => $validated['database'],
-                'user'           => $validated['user'],
-                'password'       => $validated['db_pass'] ?? '',
-                'reset_database' => $validated['reset_database'] ?? null,
-            ];
+                $databaseDetails = [
+                    'host'           => $validated['host'],
+                    'port'           => is_numeric($validated['port']) ? (int)$validated['port'] : $validated['port'],
+                    'database'       => $validated['database'],
+                    'user'           => $validated['user'],
+                    'password'       => $validated['db_pass'] ?? '',
+                    'reset_database' => $validated['reset_database'] ?? null,
+                ];
 
-            $databaseCreate = $this->createDatabaseConnection($databaseDetails);
+                $databaseCreate = $this->createDatabaseConnection($databaseDetails);
 
-            if ($databaseCreate !== true) {
-                if ($databaseCreate === 'not-found') {
-                    return response()->json([
-                        'create_database' => true,
-                        'message'         => 'Database not found! Please create the database first.'
-                    ], 200);
-                } elseif ($databaseCreate === 'table-exist') {
-                    return response()->json([
-                        'reset_database' => true,
-                        'message'        => 'This database has tables already. Please create a new database or reset existing tables first to continue'
-                    ], 200);
+                if ($databaseCreate !== true) {
+                    if ($databaseCreate === 'not-found') {
+                        $response = response()->json([
+                            'create_database' => true,
+                            'message'         => 'Database not found! Please create the database first.'
+                        ], 200);
+                    } elseif ($databaseCreate === 'table-exist') {
+                        $response = response()->json([
+                            'reset_database' => true,
+                            'message'        => 'This database has tables already. Please create a new database or reset existing tables first to continue'
+                        ], 200);
+                    } else {
+                        $response = response()->json([
+                            'success' => false,
+                            'message' => $databaseCreate
+                        ], 200);
+                    }
+                } else {
+                    $deleteDummyData = false;
+                    if ($request->boolean('fresh_install')) {
+                        $deleteDummyData = true;
+                        Cache::put('fresh_install', true, now()->addMinutes(60));
+                        $migration = $this->importDatabase(InstallerInfo::getFreshDatabaseFilePath());
+                    } else {
+                        $migration = $this->importDatabase(InstallerInfo::getDummyDatabaseFilePath());
+                    }
+
+                    if ($migration !== true) {
+                        $response = response()->json([
+                            'success' => false,
+                            'message' => $migration
+                        ], 200);
+                    } else {
+                        $envConfig = [
+                            'host'     => $validated['host'],
+                            'port'     => $databaseDetails['port'],
+                            'database' => $validated['database'],
+                            'user'     => $validated['user'],
+                            'password' => $validated['password'] ?? '',
+                        ];
+                        $this->changeEnvDatabaseConfig($envConfig);
+
+                        if ($deleteDummyData) {
+                            $this->removeDummyFiles();
+                        }
+
+                        Cache::forget('fresh_install');
+                        session()->put('step-3-complete', true);
+                        Configuration::updateStep(1);
+
+                        $response = response()->json([
+                            'success' => true,
+                            'message' => 'Successfully setup the database'
+                        ], 200);
+                    }
                 }
-                return response()->json([
+            } catch (Exception $e) {
+                Log::error($e->getMessage());
+                $response = response()->json([
                     'success' => false,
-                    'message' => $databaseCreate
-                ], 200);
+                    'message' => 'Database connection failed! Look like you have entered wrong database credentials (host, port, database, user or password).'
+                ], 500);
             }
-
-            $deleteDummyData = false;
-            if ($request->boolean('fresh_install')) {
-                $deleteDummyData = true;
-                Cache::put('fresh_install', true, now()->addMinutes(60));
-                $migration = $this->importDatabase(InstallerInfo::getFreshDatabaseFilePath());
-            } else {
-                $migration = $this->importDatabase(InstallerInfo::getDummyDatabaseFilePath());
-            }
-
-            if ($migration !== true) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $migration
-                ], 200);
-            }
-
-            $envConfig = [
-                'host'     => $validated['host'],
-                'port'     => $databaseDetails['port'],
-                'database' => $validated['database'],
-                'user'     => $validated['user'],
-                'password' => $validated['password'] ?? '',
-            ];
-            $this->changeEnvDatabaseConfig($envConfig);
-
-            if ($deleteDummyData) {
-                $this->removeDummyFiles();
-            }
-
-            Cache::forget('fresh_install');
-            session()->put('step-3-complete', true);
-            Configuration::updateStep(1);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Successfully setup the database'
-            ], 200);
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Database connection failed! Look like you have entered wrong database credentials (host, port, database, user or password).'
-            ], 500);
         }
+
+        return $response;
     }
 
     /**
@@ -307,6 +310,8 @@ class InstallerController extends Controller
     {
         session()->put('step-7-complete', true);
 
+        $response = redirect()->back()->withInput()->withErrors(['errors' => 'Setup Is Incomplete hh']);
+
         if (Configuration::setupStepCheck(4) && $this->requirementsCompleteStatus()) {
             $envContent = File::get(base_path('.env'));
             $envContent = preg_replace(
@@ -320,18 +325,14 @@ class InstallerController extends Controller
 
             /** @var view-string $view */
             $view = 'installer::complete';
-            return response(view($view));
+            $response = response(view($view));
+        } elseif (Configuration::setupStepCheck(5) && $this->requirementsCompleteStatus()) {
+            $response = $this->completedSetup('home');
+        } elseif (Configuration::stepExists() < 4) {
+            $response = redirect()->route('setup.smtp');
         }
 
-        if (Configuration::setupStepCheck(5) && $this->requirementsCompleteStatus()) {
-            return $this->completedSetup('home');
-        }
-
-        if (Configuration::stepExists() < 4) {
-            return redirect()->route('setup.smtp');
-        }
-
-        return redirect()->back()->withInput()->withErrors(['errors' => 'Setup Is Incomplete hh']);
+        return $response;
     }
 
     /**

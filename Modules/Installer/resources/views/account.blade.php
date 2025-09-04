@@ -42,5 +42,5 @@
     </div>
 @endsection
 @push('scripts')
-     <script src="{{ asset('frontend/assets/js/installer/account.js') }}"></script>   
+     <script src="{{ asset('frontend/assets/js/installer/account.js') }}"></script>
 @endpush

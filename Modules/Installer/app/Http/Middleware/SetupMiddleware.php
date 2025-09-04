@@ -23,19 +23,18 @@ class SetupMiddleware
         }
 
         $setupStatus = setupStatus();
+        $response    = $next($request);
 
         if ($request->is('setup/*')) {
             if ($setupStatus) {
-                return redirect()->route('home');
+                $response = redirect()->route('home');
+            } else {
+                $response = $next($request);
             }
-
-            return $next($request);
+        } elseif (! $setupStatus) {
+            $response = redirect()->route('setup.verify');
         }
 
-        if (! $setupStatus) {
-            return redirect()->route('setup.verify');
-        }
-
-        return $next($request);
+        return $response;
     }
 }

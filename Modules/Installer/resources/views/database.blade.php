@@ -75,5 +75,5 @@
 
 @push('scripts')
     <script src="{{ asset('backend/assets/js/bootstrap-toggle.jquery.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/installer/database.js') }}"></script>    
+    <script src="{{ asset('frontend/assets/js/installer/database.js') }}"></script>
 @endpush

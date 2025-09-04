@@ -10,8 +10,6 @@ use Modules\Installer\Http\Middleware\SetupMiddleware;
 Route::prefix('setup')->withoutMiddleware(PurchaseVerifyMiddleware::class)->group(function () {
 
     Route::controller(PuchaseVerificationController::class)->group(function () {
-        // echo('installer route2');
-        // exit;
         Route::get('verify', 'index')->name('setup.verify');
         Route::post('verify', 'validatePurchase')->name('setup.checkParchase');
     });

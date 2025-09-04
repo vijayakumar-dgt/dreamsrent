@@ -43,58 +43,59 @@ if (!function_exists('setupStatus')) {
  */
 function purchaseVerificationHashed(string $filepath, bool $isLocal = false): array
 {
+    $result = ['success' => false, 'message' => 'Unknown error'];
+
     // Skip verification in demo mode
     $appMode = config('app.app_mode');
     if (is_string($appMode) && strtolower($appMode) === 'demo') {
-        return ['success' => true, 'message' => 'Demo mode - verification bypassed'];
-    }
-
-    // Proceed only if the license file exists
-    if (file_exists($filepath)) {
+        $result = ['success' => true, 'message' => 'Demo mode - verification bypassed'];
+    } elseif (file_exists($filepath)) {
         $licenseFile = InstallerInfo::getLicenseFileData();
 
         if (!is_array($licenseFile)) {
-            return ['success' => false, 'message' => 'Invalid license file format'];
-        }
+            $result = ['success' => false, 'message' => 'Invalid license file format'];
+        } else {
+            $data = [];
 
-        $data = [];
+            if ($isLocal) {
+                $data['isLocal'] = InstallerInfo::licenseFileDataHasLocalTrue() ? 'false' : 'true';
+                if (isset($licenseFile['purchase_code']) && is_string($licenseFile['purchase_code'])) {
+                    $data['purchase_code'] = $licenseFile['purchase_code'];
+                }
+            }
 
-        if ($isLocal) {
-            $data['isLocal'] = InstallerInfo::licenseFileDataHasLocalTrue() ? 'false' : 'true';
-            if (isset($licenseFile['purchase_code']) && is_string($licenseFile['purchase_code'])) {
-                $data['purchase_code'] = $licenseFile['purchase_code'];
+            if (isset($licenseFile['verification_hashed']) && is_string($licenseFile['verification_hashed'])) {
+                $data['verification_hashed'] = $licenseFile['verification_hashed'];
+            }
+
+            $data['incoming_url'] = InstallerInfo::getHost();
+            $data['incoming_ip'] = InstallerInfo::getRemoteAddr();
+
+            $response = Http::post(
+                InstallerInfo::VERIFICATION_HASHED_URL->value,
+                $data
+            )->json();
+
+            // Strict type validation of the response
+            if (
+                !is_array($response)
+                || !array_key_exists('success', $response)
+                || !is_bool($response['success'])
+                || !array_key_exists('message', $response)
+                || !is_string($response['message'])
+            ) {
+                $result = ['success' => false, 'message' => 'Invalid verification response'];
+            } else {
+                /** @var array{success: bool, message: string} $response */
+                $result = $response;
             }
         }
-
-        if (isset($licenseFile['verification_hashed']) && is_string($licenseFile['verification_hashed'])) {
-            $data['verification_hashed'] = $licenseFile['verification_hashed'];
-        }
-
-        $data['incoming_url'] = InstallerInfo::getHost();
-        $data['incoming_ip'] = InstallerInfo::getRemoteAddr();
-
-        $response = Http::post(
-            InstallerInfo::VERIFICATION_HASHED_URL->value,
-            $data
-        )->json();
-
-        // Strict type validation of the response
-        if (
-            !is_array($response)
-            || !array_key_exists('success', $response)
-            || !is_bool($response['success'])
-            || !array_key_exists('message', $response)
-            || !is_string($response['message'])
-        ) {
-            return ['success' => false, 'message' => 'Invalid verification response'];
-        }
-
-        /** @var array{success: bool, message: string} $response */
-        return $response;
+    } else {
+        // Treat missing file as demo
+        $result = ['success' => true, 'message' => 'Demo mode - verification bypassed'];
     }
 
-    // Treat missing file as demo
-    return ['success' => true, 'message' => 'Demo mode - verification bypassed'];
+    return $result;
 }
 
 if (! function_exists('changeEnvValues')) {
@@ -139,6 +140,7 @@ if (! function_exists('updateChecking')) {
     function updateChecking(string $last_update_date): string|false
     {
         $cacheKey = 'update_url';
+        $result   = false;
 
         if (!Cache::has($cacheKey)) {
             try {
@@ -155,24 +157,23 @@ if (! function_exists('updateChecking')) {
                 // Validate response structure
                 if (is_array($response) && isset($response['success']) && $response['success'] === true) {
                     $updateUrl = $response['update_url'] ?? false;
-                    $finalUrl = is_string($updateUrl) ? $updateUrl : false;
+                    $finalUrl  = is_string($updateUrl) ? $updateUrl : false;
 
                     Cache::put($cacheKey, $finalUrl, now()->addDay());
-
-                    return $finalUrl;
+                    $result = $finalUrl;
+                } else {
+                    Cache::put($cacheKey, false, now()->addDay());
                 }
-
-                Cache::put($cacheKey, false, now()->addDay());
-                return false;
             } catch (Exception $e) {
                 Log::error($e->getMessage());
                 Cache::put($cacheKey, false, now()->addDay());
-                return false;
             }
+        } else {
+            $cachedValue = Cache::get($cacheKey);
+            $result      = is_string($cachedValue) ? $cachedValue : false;
         }
 
-        $cachedValue = Cache::get($cacheKey);
-        return is_string($cachedValue) ? $cachedValue : false;
+        return $result;
     }
 }
 

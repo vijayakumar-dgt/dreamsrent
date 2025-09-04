@@ -84,22 +84,20 @@ enum InstallerInfo: string
 
     public static function getLicenseFileData(bool $isJson = true): mixed
     {
+        $result = null;
+
         if (self::licenseFileExist()) {
             $fileContent = file_get_contents(self::getLicenseFilePath());
 
             if ($fileContent === false) {
                 Log::error('Failed to read the license file.');
-                return null;
+                $result = null;
+            } else {
+                $result = $isJson ? json_decode($fileContent, true) : $fileContent;
             }
-
-            if ($isJson) {
-                return json_decode($fileContent, true);
-            }
-
-            return $fileContent;
         }
 
-        return null;
+        return $result;
     }
 
     public static function licenseFileDataHasLocalTrue(): bool
@@ -224,42 +222,33 @@ enum InstallerInfo: string
      */
     public static function localValidatePurchase(string $purchaseCode): array
     {
+        $result = [
+            'success' => false,
+            'message' => 'Unknown error.',
+        ];
+
         $licenseData = self::getLicenseFileData();
 
-        // First verify we have an array
         if (!is_array($licenseData)) {
-            return [
-                'success' => false,
-                'message' => 'License file does not exist or is invalid.',
-            ];
-        }
-
-        // Check purchase code exists and matches
-        if (
+            $result['message'] = 'License file does not exist or is invalid.';
+        } elseif (
             !array_key_exists('purchase_code', $licenseData) ||
             !is_string($licenseData['purchase_code']) ||
             $licenseData['purchase_code'] !== $purchaseCode
         ) {
-            return [
-                'success' => false,
-                'message' => 'Invalid purchase code.',
-            ];
-        }
-
-        // Check isLocal flag if it exists
-        if (
+            $result['message'] = 'Invalid purchase code.';
+        } elseif (
             array_key_exists('isLocal', $licenseData) &&
             $licenseData['isLocal'] === false
         ) {
-            return [
-                'success' => false,
-                'message' => 'License is not marked as local.',
+            $result['message'] = 'License is not marked as local.';
+        } else {
+            $result = [
+                'success' => true,
+                'message' => 'Purchase code validated successfully.',
             ];
         }
 
-        return [
-            'success' => true,
-            'message' => 'Purchase code validated successfully.',
-        ];
+        return $result;
     }
 }

@@ -168,41 +168,44 @@ trait InstallerMethods
             DB::purge($defaultConnectionName);
             DB::reconnect($defaultConnectionName);
 
+            $result = true; // default return value
+
             // Check if the target database exists
             $databaseExists = DB::connection($defaultConnectionName)
                 ->select('SELECT SCHEMA_NAME FROM SCHEMATA WHERE SCHEMA_NAME = ?', [$details['database']]);
 
             if (empty($databaseExists)) {
-                return 'not-found';
-            }
+                $result = 'not-found';
+            } else {
+                // Now set the connection to the target database
+                $connection['database'] = $details['database'];
+                Config::set("database.connections.$defaultConnectionName", $connection);
+                DB::purge($defaultConnectionName);
+                DB::reconnect($defaultConnectionName);
 
-            // Now set the connection to the target database
-            $connection['database'] = $details['database'];
-            Config::set("database.connections.$defaultConnectionName", $connection);
-            DB::purge($defaultConnectionName);
-            DB::reconnect($defaultConnectionName);
-
-            // Check if the target database has existing tables
-            $tables = DB::connection($defaultConnectionName)->select('SHOW TABLES');
-            if (count($tables) > 0) {
-                if (!empty($details['reset_database']) && $details['reset_database'] === 'on') {
-                    // Drop all existing tables if reset is requested
-                    foreach ($tables as $table) {
-                        $tableArray = get_object_vars($table);
-                        if (empty($tableArray)) {
-                            continue;
+                // Check if the target database has existing tables
+                $tables = DB::connection($defaultConnectionName)->select('SHOW TABLES');
+                if (count($tables) > 0) {
+                    if (!empty($details['reset_database']) && $details['reset_database'] === 'on') {
+                        // Drop all existing tables if reset is requested
+                        foreach ($tables as $table) {
+                            $tableArray = get_object_vars($table);
+                            if (empty($tableArray)) {
+                                continue;
+                            }
+                            $tableName = array_values($tableArray)[0];
+                            if (is_string($tableName)) {
+                                Schema::drop($tableName);
+                            }
                         }
-                        $tableName = array_values($tableArray)[0];
-                        if (is_string($tableName)) {
-                            Schema::drop($tableName);
-                        }
+                        $result = true;
+                    } else {
+                        $result = 'table-exist';
                     }
-                    return true;
                 }
-                return 'table-exist';
             }
 
-            return true;
+            return $result;
         } catch (Exception $e) {
             Log::error($e->getMessage());
             return 'Database connection failed! It looks like you have entered wrong database credentials (host, port, database, user, or password).';
