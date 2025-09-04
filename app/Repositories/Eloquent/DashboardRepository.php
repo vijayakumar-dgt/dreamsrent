@@ -207,10 +207,10 @@ class DashboardRepository implements DashboardRepositoryInterface
                 'drivers.image',
                 DB::raw('COUNT(bookings.id) as total_bookings'),
                 DB::raw("SUM(
-            CASE 
-                WHEN bookings.start_datetime <= '$now' AND bookings.end_datetime >= '$now' 
-                THEN 1 
-                ELSE 0 
+            CASE
+                WHEN bookings.start_datetime <= '$now' AND bookings.end_datetime >= '$now'
+                THEN 1
+                ELSE 0
             END
         ) as currently_in_ride")
             )

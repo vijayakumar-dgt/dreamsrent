@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         using: function () {
             Route::group(['middleware' => ['web']], function () {
                 require __DIR__ . '/../routes/web.php';
-                require __DIR__ . '/../routes/admin.php';   
+                require __DIR__ . '/../routes/admin.php';
             });
         }
     )

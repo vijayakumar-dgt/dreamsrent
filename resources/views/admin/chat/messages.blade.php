@@ -16,7 +16,7 @@
                 <div class="sidebar-group">
                     <div id="chats" class="sidebar-content active">
                         <div class="slimscroll">
-                            <div class="chat-search-header border-bottom">                            
+                            <div class="chat-search-header border-bottom">
                                 <div class="header-title d-flex align-items-center justify-content-between">
                                     <h4>{{ __('admin.others.chats') }}</h4>
                                     <div class="chat-options">
@@ -54,18 +54,18 @@
                                                             <h6>{{ getCurrentUserFullname($user->id) }}</h6>
                                                         </div>
                                                         <div class="chat-user-time">
-                                                        </div>    
+                                                        </div>
                                                     </div>
-                                                </a>    
+                                                </a>
                                             </div>
                                         @endforeach
-                                    @endif   
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- / Chats sidebar -->					
+                <!-- / Chats sidebar -->
                 <!-- Chat -->
                 <div class="chat chat-messages show" id="middle">
                     <div>
@@ -105,8 +105,8 @@
                                 <input type="text" class="form-control me-3" id="messageinput" placeholder="{{ __('admin.others.type_your_message') }}">
                                 <button class="btn btn-primary" type="button" id="sendmsg" data-senderid="{{ $sender->id }}">
                                     <i class="ti ti-send"></i>
-                                </button> 
-                            </div>                      
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
         </div>
         @include('admin.partials.footer')
     </div>
-@endsection 
+@endsection
 
 @push('scripts')
 <script src="{{ asset('/backend/assets/js/others/mqtt.min.js') }}"></script>
