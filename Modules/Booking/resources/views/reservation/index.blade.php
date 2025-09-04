@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.bookings.all_reservations')" 
+            <x-admin.breadcrumb
+                :title="__('admin.bookings.all_reservations')"
                 :breadcrumbs="[
                     __('admin.bookings.all_reservations') => ''
                 ]"

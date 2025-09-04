@@ -549,6 +549,9 @@ return [
         'notice'                   => 'Notice',
         'color'                    => 'Color',
         'seats'                    => 'Seats',
+        'payment_failed_message'   => 'Oops! Payment Failed!',
+        'payment_fail_description' => 'The payment could not be processed. Please try again or contact support if the issue persists.',
+        'insurance_benefits'       => 'Insurance Benefits',
     ],
     'user' => [
         'user_dashboard'                                => 'User Dashboard',

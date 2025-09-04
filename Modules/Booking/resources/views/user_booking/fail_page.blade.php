@@ -2,10 +2,10 @@
 @section('content')
 <div class="error-box">
     <img src="/backend/assets/img/warning-sign.png" class="img-fluid paymentFailImg" alt="Payment Failed">
-    <h3>Oops! Payment Failed!</h3>
-    <p>The payment could not be processed. Please try again or contact support if the issue persists.</p>
+    <h3>{{ __('web.common.payment_failed_message') }}</h3>
+    <p>{{ __('web.common.payment_fail_description') }}</p>
     <div class="back-button">
-        <a href="{{ route('home') }}" class="btn btn-secondary">Back to Home</a>
+        <a href="{{ route('home') }}" class="btn btn-secondary">{{ __('web.common.back_to_home') }}</a>
     </div>
 </div>
 @endsection

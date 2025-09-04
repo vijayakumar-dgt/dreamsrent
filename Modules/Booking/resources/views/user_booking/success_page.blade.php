@@ -176,7 +176,6 @@
                                     <p>{{ __('web.home.no_extra_service_added') }}</p>
                                 </li>
                                 @endif
-
                                 <li class="total">
                                     <p>{{ __('web.home.extra_services_charges_rate') }}</p>
                                     <span>{{ $currencySymbol }}{{ $booking->total_extra_service_price ?? 0 }}</span>
@@ -272,13 +271,11 @@
                     </div>
                 </div>
                 <!-- /Additional Information -->
-
             </div>
         </div>
         <div class="print-btn text-center">
             <a href="{{ route('user.bookings') }}" class="btn btn-secondary">{{ __('web.user.view_all_bookings') }}</a>
         </div>
     </div>
-
 </div>
 @endsection

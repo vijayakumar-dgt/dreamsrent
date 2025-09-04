@@ -548,6 +548,9 @@ return  [
     'view_reply'               => 'عرض والرد',
     'color'                    => 'لون',
     'seats'                    => 'مقاعد',
+    'payment_failed_message'   => 'عذرًا! فشل الدفع!',
+    'payment_fail_description' => 'تعذر معالجة الدفع. يرجى المحاولة مرة أخرى أو التواصل مع الدعم إذا استمرت المشكلة.',
+    'insurance_benefits'       => 'مزايا التأمين',
   ],
   'user' =>
    [

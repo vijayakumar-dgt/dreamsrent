@@ -28,7 +28,7 @@
                                         <div class="col-8">
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar flex-shrink-0 me-2">
-                                                    <img src="{{ $booking->vehicle_image }}" class="admin-vehicle-image" alt="Vehicle Image">
+                                                    <img src="{{ $booking->vehicle_image }}" class="admin-vehicle-image" alt="Vehicle">
                                                 </span>
                                                 <div>
                                                     <p class="mb-1">{{ $booking->vehicle_type }}</p>
@@ -91,7 +91,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center mb-3">
                                                     <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                        <img src="{{ $booking->customer_image }}" alt="Profile Image">
+                                                        <img src="{{ $booking->customer_image }}" alt="Profile">
                                                     </span>
                                                     <div>
                                                         <h6 class="fs-14 fw-medium mb-1">
@@ -110,7 +110,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center mb-3">
                                                     <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                        <img src="{{ $booking->driver_image }}" alt="Profile Image">
+                                                        <img src="{{ $booking->driver_image }}" alt="Profile">
                                                     </span>
                                                     <div>
                                                         <h6 class="fs-14 fw-medium mb-1">{{ $booking->driver_name }}</h6>
@@ -171,7 +171,7 @@
                                         <div class="col-8">
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar flex-shrink-0 me-2">
-                                                    <img src="{{ $booking->vehicle_image }}" alt="Vehicle Image">
+                                                    <img src="{{ $booking->vehicle_image }}" alt="Vehicle">
                                                 </span>
                                                 <div>
                                                     <p class="mb-1">{{ $booking->vehicle_type }}</p>
@@ -237,7 +237,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.bookings.cancel_reason') }}<span class="text-danger"> *</span></label>
+                    <label for="cancel_reason" class="form-label">{{ __('admin.bookings.cancel_reason') }}<span class="text-danger"> *</span></label>
                     <textarea class="form-control" rows="4" name="cancel_reason" id="cancel_reason"></textarea>
                     <span class="text-danger error-text" id="cancel_reason_error"></span>
                 </div>

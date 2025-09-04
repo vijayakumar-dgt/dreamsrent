@@ -73,7 +73,7 @@
                                     <ul class="booking-radio-btns">
 
                                         <li class="disabled pe-none cursor-not-allowed">
-                                            <label class="booking_custom_check">
+                                            <label for="location_pickup" class="booking_custom_check">
                                                 <input type="radio" name="rent_type" id="location_pickup"
                                                     {{ request('rent_value') == 'self_pickup' ? 'checked' : '' }} value="self_pickup">
                                                 <span class="booking_checkmark">
@@ -95,7 +95,7 @@
                                 <input type="hidden" name="pickup_return_location_id" id="pickup_return_location_id" value="{{ old('pickup_return_location_id', request('pickup_return_location_id')) }}">
                                 <div class="booking-info-body" id="devliveryCOntainer">
                                     <div class="form-custom input-block">
-                                        <label class="form-label">{{__('web.home.delivery_location')}}</label>
+                                        <label for="delivery_location" class="form-label">{{__('web.home.delivery_location')}}</label>
                                         <div class="d-flex align-items-center">
                                             <select name="delivery_location" id="delivery_location" class="form-control select2">
                                                 <option value="">{{__('web.home.select_delivery_location')}}</option>
@@ -110,7 +110,7 @@
                                         <span class="invalid-feedback" id="delivery_location_error"></span>
                                     </div>
                                     <div class="input-block m-0">
-                                        <label class="custom_check d-inline-flex location-check">
+                                        <label for="delivery_remeber" class="custom_check d-inline-flex location-check">
                                             <span>{{__('web.home.return_to_same_location')}}</span>
                                             <input type="checkbox" name="delivery_remeber" id="delivery_remeber"
                                                 {{ request('delivery_remeber') == 'on' ? 'checked' : '' }}>
@@ -118,7 +118,7 @@
                                         </label>
                                     </div>
                                     <div class="form-custom input-block">
-                                        <label class="form-label">{{__('web.home.return_location')}}</label>
+                                        <label for="delivery_return_location" class="form-label">{{__('web.home.return_location')}}</label>
                                         <div class="d-flex align-items-center">
                                             <select name="delivery_return_location" id="delivery_return_location" class="form-control select2">
                                                 <option value="">{{__('web.home.select_return_location')}}</option>
@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="booking-info-body" id="selfCOntainer">
                                     <div class="form-custom input-block">
-                                        <label class="form-label">{{__('web.home.pickup_location')}}</label>
+                                        <label for="pickup_location" class="form-label">{{__('web.home.pickup_location')}}</label>
                                         <div class="d-flex align-items-center">
                                             <select name="pickup_location" id="pickup_location" class="form-control select2">
                                                 <option value="">{{__('web.home.select_delivery_location')}}</option>
@@ -150,14 +150,14 @@
                                         <span class="invalid-feedback text-danger" id="pickup_location_error"></span>
                                     </div>
                                     <div class="input-block m-0">
-                                        <label class="custom_check d-inline-flex location-check"><span>{{__('web.home.return_to_same_location')}}</span>
+                                        <label for="pickup_remeber" class="custom_check d-inline-flex location-check"><span>{{__('web.home.return_to_same_location')}}</span>
                                             <input type="checkbox" name="pickup_remeber" id="pickup_remeber"
                                                 {{ request('pickup_remeber') == 'on' ? 'checked' : '' }}>
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
                                     <div class="form-custom input-block">
-                                        <label class="form-label">{{__('web.home.return_location')}}</label>
+                                        <label for="pickup_return_location" class="form-label">{{__('web.home.return_location')}}</label>
                                         <div class="d-flex align-items-center">
                                             <select name="pickup_return_location" id="pickup_return_location" class="form-control select2">
                                                 <option value="">{{__('web.home.select_delivery_location')}}</option>
@@ -196,7 +196,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="input-block date-widget">
-                                                    <label class="form-label">{{__('web.home.start_date')}}</label>
+                                                    <label for="pickup_date" class="form-label">{{__('web.home.start_date')}}</label>
                                                     <div class="group-img">
                                                         <input type="text" class="form-control datetimepicker"
                                                             name="pickup_date" id="pickup_date"
@@ -208,7 +208,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="input-block time-widget">
-                                                    <label class="form-label">{{__('web.home.start_time')}}</label>
+                                                    <label for="pickup_time" class="form-label">{{__('web.home.start_time')}}</label>
                                                     <div class="group-img">
                                                         <input type="text" class="form-control userTimepicker"
                                                             name="pickup_time" id="pickup_time"
@@ -220,7 +220,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="input-block date-widget">
-                                                    <label class="form-label">{{ __('web.home.return_date') }}</label>
+                                                    <label for="return_date" class="form-label">{{ __('web.home.return_date') }}</label>
                                                     <div class="group-img">
                                                         <input type="text" class="form-control datetimepicker"
                                                             name="return_date" id="return_date"
@@ -232,7 +232,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="input-block time-widget">
-                                                    <label class="form-label">{{__('web.home.return_time')}}</label>
+                                                    <label for="return_time" class="form-label">{{__('web.home.return_time')}}</label>
                                                     <div class="group-img">
                                                         <input type="text" class="form-control userTimepicker"
                                                             name="return_time" id="return_time"
@@ -321,7 +321,7 @@
                                 <div class="booking-info-body">
                                     <ul class="booking-radio-btns">
                                         <li>
-                                            <label class="booking_custom_check">
+                                            <label for="self_driver" class="booking_custom_check">
                                                 <input type="radio" name="driver_type" id="self_driver" checked>
                                                 <span class="booking_checkmark">
                                                     <span class="checked-title">{{__('web.home.self_driver')}}</span>
@@ -330,7 +330,7 @@
                                         </li>
                                         @if(!empty($driverInfo->driver_name))
                                         <li>
-                                            <label class="booking_custom_check">
+                                            <label for="acting_driver" class="booking_custom_check">
                                                 <input type="radio" name="driver_type" id="acting_driver">
                                                 <span class="booking_checkmark">
                                                     <span class="checked-title">{{ __('web.home.acting_driver') }}</span>
@@ -348,42 +348,42 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="input-block date-widget">
-                                                    <label class="form-label">{{ __('web.user.first_name') }} <span class="text-danger"> *</span></label>
+                                                    <label for="driver_first_name" class="form-label">{{ __('web.user.first_name') }} <span class="text-danger"> *</span></label>
                                                     <input type="text" name="driver_first_name" id="driver_first_name" value="{{ $user->userDetail ? $user->userDetail->first_name : '' }}" maxlength="30" class="form-control" placeholder="{{__('web.user.enter_first_name')}}">
                                                     <span class="invalid-feedback" id="driver_first_name_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="input-block date-widget">
-                                                    <label class="form-label">{{__('web.user.last_name')}} <span class="text-danger"> *</span></label>
+                                                    <label for="driver_last_name" class="form-label">{{__('web.user.last_name')}} <span class="text-danger"> *</span></label>
                                                     <input type="text" name="driver_last_name" id="driver_last_name" value="{{ $user->userDetail ? $user->userDetail->last_name : '' }}" maxlength="30" class="form-control" placeholder="{{__('web.user.enter_last_name')}}">
                                                     <span class="invalid-feedback" id="driver_last_name_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="input-block date-widget">
-                                                    <label class="form-label">{{ __('web.home.driver_age') }} <span class="text-danger"> *</span></label>
+                                                    <label for="driver_age" class="form-label">{{ __('web.home.driver_age') }} <span class="text-danger"> *</span></label>
                                                     <input type="text" name="driver_age" id="driver_age" maxlength="2" class="form-control Number" placeholder="{{__('web.home.enter_age_of_driver')}}">
                                                     <span class="invalid-feedback" id="driver_age_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="input-block date-widget">
-                                                    <label class="form-label">{{__('web.home.phone_number')}} <span class="text-danger"> *</span></label>
+                                                    <label for="driver_mobile_number" class="form-label">{{__('web.home.phone_number')}} <span class="text-danger"> *</span></label>
                                                     <input type="text" name="driver_mobile_number" id="driver_mobile_number" value="{{ $user->phone_number ? $user->phone_number : '' }}" maxlength="12" class="form-control Number" placeholder="{{__('web.home.enter_phone_number')}}">
                                                     <span class="invalid-feedback" id="driver_mobile_number_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="input-block date-widget">
-                                                    <label class="form-label">{{__('web.home.driving_licence_number')}} <span class="text-danger"> *</span></label>
+                                                    <label for="driver_licence" class="form-label">{{__('web.home.driving_licence_number')}} <span class="text-danger"> *</span></label>
                                                     <input type="text" name="driver_licence" id="driver_licence" maxlength="20" class="form-control" placeholder="{{__('web.home.enter_driving_licence_number')}}">
                                                     <span class="invalid-feedback" id="driver_licence_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="input-block date-widget">
-                                                    <label class="form-label">{{__('web.home.upload_documents')}}</label>
+                                                    <label for="driver_file" class="form-label">{{__('web.home.upload_documents')}}</label>
                                                     <div class="upload-div">
                                                         <input type="file" name="driver_file" id="driver_file">
                                                         <div class="upload-photo-drag">
@@ -402,7 +402,7 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="input-block m-0">
-                                                    <label class="custom_check d-inline-flex location-check m-0"><span>{{__('web.home.driver_age_confirm')}}</span>
+                                                    <label for="driver_check" class="custom_check d-inline-flex location-check m-0"><span>{{__('web.home.driver_age_confirm')}}</span>
                                                         <input type="checkbox" name="driver_check" id="driver_check">
                                                         <span class="checkmark"></span>
                                                     </label>
@@ -517,21 +517,21 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="input-block mb-1">
-                                                <label class="form-label">{{__('web.user.first_name')}} <span class="text-danger"> *</span></label>
+                                                <label for="first_name" class="form-label">{{__('web.user.first_name')}} <span class="text-danger"> *</span></label>
                                                 <input type="text" name="first_name" id="first_name" class="form-control" value="{{ $user->userDetail ? $user->userDetail->first_name : '' }}" maxlength="30" placeholder="{{__('web.user.enter_first_name')}}">
                                                 <span class="invalid-feedback" id="first_name_error"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-block">
-                                                <label class="form-label">{{__('web.user.last_name')}} <span class="text-danger"> *</span></label>
+                                                <label for="last_name" class="form-label">{{__('web.user.last_name')}} <span class="text-danger"> *</span></label>
                                                 <input type="text" name="last_name" id="last_name" class="form-control" value="{{ $user->userDetail ? $user->userDetail->last_name : '' }}" maxlength="30" placeholder="{{__('web.user.enter_last_name')}}">
                                                 <span class="invalid-feedback" id="last_name_error"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-block">
-                                                <label class="form-label">
+                                                <label for="no_person" class="form-label">
                                                     {{ __('web.home.no_of_persons') }} <span class="text-danger">*</span>
                                                 </label>
                                                 <select name="no_person" id="no_person" class="form-control select select2">
@@ -545,20 +545,20 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-block">
-                                                <label class="form-label">{{__('web.home.company')}}</label>
+                                                <label for="company" class="form-label">{{__('web.home.company')}}</label>
                                                 <input type="text" class="form-control" name="company" id="company" maxlength="50" placeholder="{{__('web.home.enter_company_name')}}">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="input-block">
-                                                <label class="form-label">{{__('web.home.street_address')}} <span class="text-danger"> *</span></label>
+                                                <label for="address" class="form-label">{{__('web.home.street_address')}} <span class="text-danger"> *</span></label>
                                                 <input type="text" class="form-control" id="address" name="address" value="{{ $user->userDetail ? $user->userDetail->address : '' }}" maxlength="100" placeholder="{{__('web.home.enter_address')}}">
                                                 <span class="invalid-feedback" id="address_error"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-block">
-                                                <label class="form-label">{{__('web.user.country')}} <span class="text-danger"> *</span></label>
+                                                <label for="country" class="form-label">{{__('web.user.country')}} <span class="text-danger"> *</span></label>
                                                 <select class="form-control select" name="country_id" id="country_id">
                                                     <option value="">{{__('web.home.select_country')}}</option>
                                                     @foreach ($countries as $country)
@@ -573,7 +573,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-block">
-                                                <label class="form-label">{{__('web.home.state')}} <span class="text-danger">*</span></label>
+                                                <label for="state" class="form-label">{{__('web.home.state')}} <span class="text-danger">*</span></label>
                                                 <input type="hidden" id="selected_state_id" value="{{ optional($user->userDetail)->state_id }}">
                                                 <select class="form-control select" name="state_id" id="state_id">
                                                     <option value="">{{__('web.home.select_state')}}</option>
@@ -583,7 +583,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-block">
-                                                <label class="form-label">{{__('web.home.city')}} <span class="text-danger"></span></label>
+                                                <label for="city" class="form-label">{{__('web.home.city')}} <span class="text-danger"></span></label>
                                                 <input type="hidden" id="selected_city_id" value="{{ optional($user->userDetail)->city_id }}">
                                                 <select class="form-control select2" name="city_id" id="city_id">
                                                     <option value="">{{__('web.home.select_city')}}</option>
@@ -593,34 +593,34 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-block">
-                                                <label class="form-label">{{__('web.home.pincode')}} <span class="text-danger"> *</span></label>
+                                                <label for="pincode" class="form-label">{{__('web.home.pincode')}} <span class="text-danger"> *</span></label>
                                                 <input type="text" name="pincode" id="pincode" value="{{ $user->userDetail ? $user->userDetail->postal_code : '' }}" class="form-control Number" maxlength="6" placeholder="{{__('web.home.enter_pincode')}}">
                                                 <span class="invalid-feedback" id="pincode_error"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-block">
-                                                <label class="form-label">{{ __('web.home.email_address') }}<span class="text-danger"> *</span></label>
+                                                <label for="email" class="form-label">{{ __('web.home.email_address') }}<span class="text-danger"> *</span></label>
                                                 <input type="email" name="email" id="email" value="{{ $user->email ? $user->email : '' }}" class="form-control" maxlength="60" placeholder="{{__('web.home.email_placeholder')}}">
                                                 <span class="invalid-feedback" id="email_error"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-block">
-                                                <label class="form-label">{{__('web.home.phone_number')}} <span class="text-danger"> *</span></label>
+                                                <label for="phone_number" class="form-label">{{__('web.home.phone_number')}} <span class="text-danger"> *</span></label>
                                                 <input type="text" name="phone_number" id="phone_number" value="{{ $user->phone_number ? $user->phone_number : '' }}" class="form-control Number" maxlength="20" placeholder="{{__('web.home.phone_number_placeholder')}}">
                                                 <span class="invalid-feedback" id="phone_number_error"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="input-block">
-                                                <label class="form-label">{{__('web.home.additional_information')}}</label>
+                                                <label for="add_info" class="form-label">{{__('web.home.additional_information')}}</label>
                                                 <textarea class="form-control" name="add_info" id="add_info" maxlength="120" placeholder="{{__('web.home.enter_additional_information')}}" rows="5"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="input-block m-0">
-                                                <label class="custom_check d-inline-flex location-check m-0 ml-2"><span>{{__('web.home.readed_terms')}}</span> <span class="text-danger">*</span>
+                                                <label for="terms" class="custom_check d-inline-flex location-check m-0 ml-2"><span>{{__('web.home.readed_terms')}}</span> <span class="text-danger">*</span>
                                                     <input type="checkbox" name="terms" id="terms">
                                                     <span class="checkmark"></span>
                                                 </label>
@@ -655,7 +655,7 @@
                                         <ul>
                                             @if ($paypalStatus == 1)
                                             <li>
-                                                <label class="payment_custom_check">
+                                                <label for="paypal" class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="paypal" value="paypal">
                                                     <span class="payment_checkmark">
                                                         <span class="checked-title">
@@ -667,7 +667,7 @@
                                             @endif
                                             @if ($stripeStatus == 1)
                                             <li>
-                                                <label class="payment_custom_check">
+                                                <label for="stripe" class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="stripe" value="stripe">
                                                     <span class="payment_checkmark">
                                                         <span class="checked-title"><img src="{{ asset('backend/assets/img/icons/payment-method-02.svg') }}" alt="Img"></span>
@@ -677,7 +677,7 @@
                                             @endif
                                             @if ($codStatus == 1)
                                             <li>
-                                                <label class="payment_custom_check">
+                                                <label for="cod" class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="cod" value="cod">
                                                     <span class="payment_checkmark">
                                                         <span class="checked-title"><img src="{{ asset('backend/assets/img/icons/cash-delivery-icon.svg') }}" alt="Img"></span>
@@ -687,7 +687,7 @@
                                             @endif
                                             @if ($walletStatus == 1)
                                             <li>
-                                                <label class="payment_custom_check">
+                                                <label for="wallet" class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="wallet" value="wallet">
                                                     <span class="payment_checkmark">
                                                         <span class="checked-title">
@@ -716,11 +716,15 @@
                         <div class="booking-sidebar-card">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header">
-                                    <div class="accordion-button collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_one" aria-expanded="true">
+                                    <button class="accordion-button collapsed" 
+                                            type="button"
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#accordion_collapse_one" 
+                                            aria-expanded="true">
                                         <div class="booking-sidebar-head">
                                             <h5>{{__('web.home.booking_details')}}<i class="fas fa-chevron-down"></i></h5>
                                         </div>
-                                    </div>
+                                    </button>
                                 </div>
                                 <div id="accordion_collapse_one" class="accordion-collapse collapse">
                                     <div class="booking-sidebar-body">
@@ -751,11 +755,15 @@
                         <div class="booking-sidebar-card d-none" id="location-card">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header p-3 d-flex align-center justify-content-between">
-                                    <div class="accordion-button collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_three" aria-expanded="true">
+                                    <button class="accordion-button collapsed" 
+                                            type="button"
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#accordion_collapse_three" 
+                                            aria-expanded="true">
                                         <div class="booking-sidebar-head p-0 d-flex justify-content-between align-items-center">
-                                            <h5>{{__('web.home.location_and_time')}}<i class="fas fa-chevron-down"></i></h5>
+                                            <h5>{{ __('web.home.location_and_time') }}<i class="fas fa-chevron-down"></i></h5>
                                         </div>
-                                    </div>
+                                    </button>
                                     <a class="d-flex align-items-center sidebar-edit locationBack"><i class="bx bx-edit-alt me-2"></i>{{__('web.home.edit')}}</a>
                                 </div>
                                 <div id="accordion_collapse_three" class="accordion-collapse collapse">
@@ -764,13 +772,11 @@
                                         use Illuminate\Support\Str;
                                         use Carbon\Carbon;
                                         @endphp
-
                                         <ul class="location-address-info">
                                             <li>
                                                 <h6>{{__('web.common.rental_type')}}</h6>
                                                 <p id="rentalTypeText"></p>
                                             </li>
-
                                             <li>
                                                 <h6>{{__('web.home.delivery_location_and_time')}}</h6>
 
@@ -796,12 +802,18 @@
                         <div class="booking-sidebar-card d-none" id="extra-card">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header d-flex align-center justify-content-between p-3">
-                                    <div class="accordion-button collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_four" aria-expanded="true">
+                                    <button class="accordion-button collapsed" 
+                                            type="button"
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#accordion_collapse_four" 
+                                            aria-expanded="true">
                                         <div class="booking-sidebar-head p-0 d-flex justify-content-between align-items-center">
-                                            <h5>{{__('web.home.extra_services_and_insurance')}}<i class="fas fa-chevron-down"></i></h5>
+                                            <h5>{{ __('web.home.extra_services_and_insurance') }}<i class="fas fa-chevron-down"></i></h5>
                                         </div>
-                                        <a class="d-flex align-items-center sidebar-edit backExtra"><i class="bx bx-edit-alt me-2"></i>{{__('web.home.edit')}}</a>
-                                    </div>
+                                        <a class="d-flex align-items-center sidebar-edit backExtra" href="#">
+                                            <i class="bx bx-edit-alt me-2"></i>{{ __('web.home.edit') }}
+                                        </a>
+                                    </button>
                                 </div>
                                 <div id="accordion_collapse_four" class="accordion-collapse collapse">
                                     <div class="booking-sidebar-body">
@@ -815,9 +827,7 @@
                                                     <h5 class="extra-services-total">$0.00</h5>
                                                 </li>
                                             </ul>
-
                                             <br>
-
                                             <p class="fw-bold mb-1">{{__('web.home.insurance')}} :</p>
                                             <ul class="mt-0 insurance-charges-list">
                                             </ul>
@@ -852,7 +862,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </li>
                                             </ul>
                                         </div>
@@ -866,7 +875,6 @@
                                                     <h5>{{ $currencySymbol }}{{ number_format($tax['amount'], 2) }}</h5>
                                                 </li>
                                                 @endforeach
-
                                                 <li class="total-rate">
                                                     <h6>{{ __('web.home.total_tax') }}</h6>
                                                     <input type="hidden" name="tax_val" id="tax_val" value="{{ number_format($totalTax, 2) }}">
@@ -884,12 +892,16 @@
                         <div class="booking-sidebar-card d-none">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header">
-                                    <div class="accordion-button collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_two" aria-expanded="true">
+                                    <button class="accordion-button collapsed" 
+                                            type="button"
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#accordion_collapse_two" 
+                                            aria-expanded="true">
                                         <div class="booking-sidebar-head d-flex justify-content-between align-items-center">
-                                            <h5>{{__('web.home.coupon')}}<i class="fas fa-chevron-down"></i></h5>
-                                            <a href="#" class="coupon-view">{{__('web.home.view_coupons')}}</a>
+                                            <h5>{{ __('web.home.coupon') }}<i class="fas fa-chevron-down"></i></h5>
+                                            <a href="#" class="coupon-view">{{ __('web.home.view_coupons') }}</a>
                                         </div>
-                                    </div>
+                                    </button>
                                 </div>
                                 <div id="accordion_collapse_two" class="accordion-collapse collapse">
                                     <div class="booking-sidebar-body">
@@ -901,7 +913,6 @@
                                                 <button type="button" class="btn btn-secondary apply-coupon-btn d-flex align-items-center ms-2">{{__('web.common.apply')}}<i class="feather-arrow-right ms-2"></i></button>
                                             </div>
                                         </form>
-
                                     </div>
                                 </div>
                             </div>
@@ -926,19 +937,16 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
 
 <div class="modal fade" id="show_benifit" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
             <div class="modal-header border-0">
-                <h5 class="modal-title text-start w-100">Insurance Benefits</h5>
+                <h5 class="modal-title text-start w-100">{{ __('web.common.insurance_benefits')  }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <div class="modal-body">
                 <ul id="benefit-list" class="ps-3">
                 </ul>
