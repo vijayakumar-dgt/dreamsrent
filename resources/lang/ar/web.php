@@ -325,6 +325,7 @@ return  [
     'view_vehicle_details'                     => 'عرض تفاصيل المركبة',
     'subtotal'                                 => 'المجموع الفرعي',
     'total_tax'                                => 'إجمالي الضريبة',
+    'tax_rate'                                 => 'معدل الضريبة',
     'estimated_total'                          => 'الإجمالي المقدر',
     'edit'                                     => 'تعديل',
     'booking_type'                             => 'نوع الحجز',
@@ -401,6 +402,8 @@ return  [
     'print_order'                              => 'طباعة الطلب',
     'daily'                                    => 'يومي',
     'weekly'                                   => 'اسبوعي',
+    'hatch'                                    => 'حطة',
+    'door'                                     => 'باب',
     'monthly'                                  => 'شهري',
     'yearly'                                   => 'سنوي',
     'newest'                                   => 'الأحدث',
@@ -430,6 +433,7 @@ return  [
     'bikes'                                    => 'دراجات',
     'view_all_categories'                      => 'عرض كل الفئات',
     'explore_all_bikes'                        => 'تصفح جميع الدراجات',
+    'greate'                                   => 'ممتاز',
     'trustpilot'                               => 'Trustpilot',
     'verified'                                 => 'تم التحقق',
     'get_started'                              => 'ابدأ الآن',
@@ -455,6 +459,7 @@ return  [
   ],
   'common' =>
    [
+    'updated_on'               => 'تم التحديث في',
     'back_to_home'             => 'العودة إلى الصفحة الرئيسية',
     'search'                   => 'بحث',
     'minlength_3'              => 'يجب أن لا يقل عن 3 أحرف.',

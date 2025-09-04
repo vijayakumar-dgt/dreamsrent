@@ -4,6 +4,7 @@ namespace Modules\GeneralSetting\Repositories\Eloquent;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Lang;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Modules\GeneralSetting\Repositories\Contracts\LanguageSettingInterface;
@@ -78,7 +79,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
         }
 
         $languages = $languages->with('transLang')->get();
-        $langDefaultFiles = ['admin.php', 'web.php'];
+        $langDefaultFiles = ['admin', 'web'];
         $responseArray = [];
         $totalKeys = $this->countTotalTranslationKeys($langDefaultFiles);
 
@@ -236,12 +237,9 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
         $langCode = $language->transLang->code ?? null;
         $defaultLang = 'en';
-        $filePath = base_path("resources/lang/{$defaultLang}/{$tab}.php");
-        $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
+        $defaultTranslations = Lang::get($tab, [], $defaultLang);
+        $translatedTranslations = Lang::get($tab, [], $langCode);
         $responseArray = [];
-
-        $defaultTranslations = file_exists($filePath) ? require $filePath : [];
-        $translatedTranslations = file_exists($translatedPath) ? require $translatedPath : [];
 
         foreach ($defaultTranslations as $module => $keys) {
             if ($search && !str_contains($module, $search)) {
@@ -249,7 +247,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
             }
 
             $totalKeys = $this->countKeys($keys);
-            $translatedCount = isset($translatedTranslations[$module])
+            $translatedCount = isset($translatedTranslations[$module]) && is_array($translatedTranslations[$module])
                 ? $this->countKeys($translatedTranslations[$module], true)
                 : 0;
 
@@ -295,10 +293,8 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
         $langCode = $language->transLang->code ?? null;
         $defaultLang = 'en';
-        $filePath = base_path("resources/lang/{$defaultLang}/{$tab}.php");
-        $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
-        $defaultTranslations = file_exists($filePath) ? require $filePath : [];
-        $translatedTranslations = file_exists($translatedPath) ? require $translatedPath : [];
+        $defaultTranslations = Lang::get($tab, [], $defaultLang);
+        $translatedTranslations = Lang::get($tab, [], $langCode);
         $moduleKeys = $defaultTranslations[$module] ?? [];
         $translatedModuleKeys = $translatedTranslations[$module] ?? [];
         $responseArray = [];
@@ -343,27 +339,32 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
     public function updateModuleLanguage(string $code, string $tab, string $module, string $key, string $value): array
     {
-        $language = Language::whereHas('transLang', fn ($query) => $query->where('code', $code))
+        // Fetch the language
+        $language = Language::whereHas('transLang', fn($query) => $query->where('code', $code))
             ->with('transLang')->first();
 
         if (!$language) {
             return [
                 'status'  => 'error',
                 'code'    => 404,
-                'message' => __('admin.general_settings.language_changed_successfully')
+                'message' => __('admin.general_settings.language_not_found')
             ];
         }
 
         $langCode = $language->transLang->code ?? null;
         $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
-        $translatedTranslations = file_exists($translatedPath) ? require $translatedPath : [];
 
-        if (!isset($translatedTranslations[$module])) {
+        $translatedTranslations = [];
+        if (file_exists($translatedPath)) {
+            $translatedTranslations = Lang::get($tab, [], $langCode);
+        }
+
+        if (!isset($translatedTranslations[$module]) || !is_array($translatedTranslations[$module])) {
             $translatedTranslations[$module] = [];
         }
 
         $translatedTranslations[$module][$key] = $value;
-        file_put_contents($translatedPath, '<?php return ' . var_export($translatedTranslations, true) . ';');
+        file_put_contents($translatedPath, "<?php\n\nreturn " . var_export($translatedTranslations, true) . ";\n");
 
         $progress = $this->calculateModuleProgress($langCode, $tab, $module);
         $color = $this->getProgressColor($progress);
@@ -423,27 +424,36 @@ class LanguageSettingRepository implements LanguageSettingInterface
     protected function initializeLanguageFiles(string $langCode): void
     {
         $defaultLang = 'en';
-        $langDefaultFiles = ['admin.php', 'web.php'];
+        $langDefaultFiles = ['admin', 'web'];
 
         foreach ($langDefaultFiles as $file) {
-            $sourcePath = base_path("resources/lang/{$defaultLang}/{$file}");
-            $destinationPath = base_path("resources/lang/{$langCode}/{$file}");
+            $translations = Lang::get($file, [], $defaultLang);
 
-            if (file_exists($sourcePath)) {
-                $translations = require $sourcePath;
-                $clearedTranslations = array_map(function ($module) {
-                    return array_map(function () {
-                        return '';
-                    }, $module);
-                }, $translations);
+            if (is_array($translations) && !empty($translations)) {
+                // Clear all values recursively
+                $clearedTranslations = $this->clearTranslations($translations);
 
-                $exportedTranslations = var_export($clearedTranslations, true);
-                $exportedTranslations = str_replace("array (", "[", $exportedTranslations);
-                $exportedTranslations = str_replace(")", "]", $exportedTranslations);
+                // Prepare PHP array string for saving
+                $exportedTranslations = "<?php\n\nreturn " . var_export($clearedTranslations, true) . ";\n";
 
-                file_put_contents($destinationPath, "<?php\nreturn " . $exportedTranslations . ";\n");
+                // Save to new language file
+                $destinationPath = base_path("resources/lang/{$langCode}/{$file}.php");
+                file_put_contents($destinationPath, $exportedTranslations);
             }
         }
+    }
+
+    /**
+     * Recursively clear translation values
+     */
+    protected function clearTranslations(array $translations): array
+    {
+        return array_map(function ($value) {
+            if (is_array($value)) {
+                return $this->clearTranslations($value);
+            }
+            return ''; // clear string
+        }, $translations);
     }
 
     protected function countTotalTranslationKeys(array $files): int
@@ -452,13 +462,11 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $defaultLang = 'en';
 
         foreach ($files as $file) {
-            $filePath = base_path("resources/lang/{$defaultLang}/{$file}");
-            if (file_exists($filePath)) {
-                $defaultTranslations = require $filePath;
-                if (is_array($defaultTranslations)) {
-                    $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($defaultTranslations));
-                    $totalKeys += iterator_count($iterator);
-                }
+            $defaultTranslations = Lang::get($file, [], $defaultLang);
+
+            if (is_array($defaultTranslations)) {
+                $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($defaultTranslations));
+                $totalKeys += iterator_count($iterator);
             }
         }
 
@@ -470,15 +478,12 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $translatedCount = 0;
 
         foreach ($files as $file) {
-            $filePath = base_path("resources/lang/{$langCode}/{$file}");
-            if (file_exists($filePath)) {
-                $translatedKeys = require $filePath;
-                if (is_array($translatedKeys)) {
-                    $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($translatedKeys));
-                    foreach ($iterator as $key => $value) {
-                        if (!empty($value)) {
-                            $translatedCount++;
-                        }
+            $translatedKeys = Lang::get($file, [], $langCode);
+            if (is_array($translatedKeys)) {
+                $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($translatedKeys));
+                foreach ($iterator as $value) {
+                    if (!empty($value)) {
+                        $translatedCount++;
                     }
                 }
             }
@@ -519,11 +524,8 @@ class LanguageSettingRepository implements LanguageSettingInterface
     protected function calculateModuleProgress(string $langCode, string $tab, string $module): float
     {
         $defaultLang = 'en';
-        $defaultPath = base_path("resources/lang/{$defaultLang}/{$tab}.php");
-        $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
-
-        $defaultTranslations = file_exists($defaultPath) ? require $defaultPath : [];
-        $translatedTranslations = file_exists($translatedPath) ? require $translatedPath : [];
+        $defaultTranslations = Lang::get($tab, [], $defaultLang);
+        $translatedTranslations = Lang::get($tab, [], $langCode);
 
         $moduleKeys = $defaultTranslations[$module] ?? [];
         $translatedModuleKeys = $translatedTranslations[$module] ?? [];
