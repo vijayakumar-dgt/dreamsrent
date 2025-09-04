@@ -139,4 +139,45 @@
 			activeElement.blur();
 		}
 	});
+
+	window.customizeTableFooter = function (tableInstance) {
+		$(".dataTables_info").addClass("d-none");
+		$(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
+
+		let tableWrapper = tableInstance.closest(".dataTables_wrapper");
+		let info = tableWrapper.find(".dataTables_info");
+		let pagination = tableWrapper.find(".dataTables_paginate");
+
+		const footerContent = $('<div class="d-flex justify-content-between align-items-center w-100"></div>')
+			.append(
+				$('<div class="datatable-info"></div>').append(info.clone(true))
+			)
+			.append(
+				$('<div class="datatable-pagination"></div>').append(pagination.clone(true))
+			);
+
+		$(".table-footer").empty().append(footerContent);
+		$(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+	}
+
+	window.getDataTableLanguage = function () {
+		const $langEl = $(".datatable-language-data");
+		if (!$langEl.length) return {};
+
+		return {
+			emptyTable: $langEl.data("empty_table"),
+			info: $langEl.data("info"),
+			infoEmpty: $langEl.data("info_empty"),
+			infoFiltered: $langEl.data("info_filtered"),
+			lengthMenu: $langEl.data("length_menu"),
+			search: $langEl.data("search"),
+			zeroRecords: $langEl.data("zero_records"),
+			paginate: {
+				first: $langEl.data("paginate_first"),
+				last: $langEl.data("paginate_last"),
+				next: $langEl.data("paginate_next"),
+				previous: $langEl.data("paginate_previous"),
+			},
+		};
+	}
 })();

@@ -199,9 +199,14 @@
                                                     <div class="col-lg-8">
                                                         <div class="d-flex align-items-center justify-content-end flex-wrap row-gap-3 mb-3">
                                                             <div class="dropdown me-2">
-                                                                <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="filtercollapse">
+                                                                <button class="filtercollapse coloumn d-inline-flex align-items-center" 
+                                                                        type="button"
+                                                                        data-bs-toggle="collapse" 
+                                                                        data-bs-target="#filtercollapse" 
+                                                                        aria-expanded="false" 
+                                                                        aria-controls="filtercollapse">
                                                                     <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
-                                                                </a>
+                                                                </button>
                                                             </div>
                                                             <div class="top-search me-2">
                                                                 <div class="top-search-group">
@@ -693,7 +698,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.bookings.cancel_reason') }}<span class="text-danger"> *</span></label>
+                    <label for="cancel_reason" class="form-label">{{ __('admin.bookings.cancel_reason') }}<span class="text-danger"> *</span></label>
                     <textarea class="form-control" rows="4" name="cancel_reason" id="cancel_reason"></textarea>
                     <span class="text-danger error-text" id="cancel_reason_error"></span>
                 </div>

@@ -131,5 +131,19 @@
             </div>
         </div>
         <!-- /Mobile Menu -->
+
+        <div class="datatable-language-data d-none"
+            data-empty_table="{{ __('admin.common.empty_table') }}"
+            data-info="{{ __('admin.common.showing') }} _START_ {{ __('admin.common.to') }} _END_ {{ __('admin.common.of') }} _TOTAL_ {{ __('admin.common.entries') }}"
+            data-info_empty="{{ __('admin.common.showing') }} 0 {{ __('admin.common.to') }} 0 {{ __('admin.common.of') }} 0 {{ __('admin.common.entries') }}"
+            data-info_filtered="({{ __('admin.common.filtered_from') }} _MAX_ {{ __('admin.common.total_entries') }})"
+            data-length_menu="{{ __('admin.common.show') }} _MENU_ {{ __('admin.common.entries') }}"
+            data-search="{{ __('admin.common.search') }}:"
+            data-zero_records="{{ __('admin.common.empty_table') }}"
+            data-paginate_first="{{ __('admin.common.first') }}"
+            data-paginate_last="{{ __('admin.common.last') }}"
+            data-paginate_next="{{ __('admin.common.next') }}"
+            data-paginate_previous="{{ __('admin.common.previous') }}">
+        </div>
     </div>
 </div>

@@ -17,9 +17,9 @@
                         <span class="badge bg-orange-transparent">{{ $booking->booking_status_text }}</span>
                     </div>
                     <div class="card-body">
-                        <ul class="nav nav-tabs nav-tabs-solid custom-nav-tabs mb-3" role="tablist">
-                            <li class="nav-item" role="presentation"><a class="nav-link active" href="#solid-tab1" data-bs-toggle="tab" aria-selected="true" role="tab">{{ __('admin.bookings.reservation_info') }}</a></li>
-                            <li class="nav-item" role="presentation"><a class="nav-link" href="#solid-tab2" data-bs-toggle="tab" aria-selected="false" role="tab">{{ __('admin.common.history') }}</a></li>
+                        <ul class="nav nav-tabs nav-tabs-solid custom-nav-tabs mb-3">
+                            <li class="nav-item"><a class="nav-link active" href="#solid-tab1" data-bs-toggle="tab" aria-selected="true" role="tab">{{ __('admin.bookings.reservation_info') }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#solid-tab2" data-bs-toggle="tab" aria-selected="false" role="tab">{{ __('admin.common.history') }}</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active show" id="solid-tab1" role="tabpanel">
