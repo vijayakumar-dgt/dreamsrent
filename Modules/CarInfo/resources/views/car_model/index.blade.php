@@ -7,7 +7,7 @@
 	<div class="page-wrapper">
 		<div class="content me-4">
 			<x-admin.breadcrumb 
-				:title="__('admin.rentals.vehicle_models')" 
+				:title="__('admin.rentals.vehicle_models')"
 				:breadcrumbs="[
 					__('admin.rentals.vehicle_models') => ''
 				]"
@@ -83,12 +83,12 @@
 			<input type="hidden" name="id" id="id">
 			<input type="hidden" name="language_id" id="language_id">                
 			<div class="mb-3">
-				<label class="form-label">{{__('admin.rentals.model_name')}}<span class="text-danger"> *</span></label>
+				<label for="model_name" class="form-label">{{__('admin.rentals.model_name')}}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="model_name" id="model_name">
 				<span id="model_name_error" class="text-danger error-text"></span>
 			</div>
 			<div class="mb-3">
-				<label class="form-label">{{__('admin.rentals.brand')}}<span class="text-danger"> *</span></label>
+				<label for="brand_id" class="form-label">{{__('admin.rentals.brand')}}<span class="text-danger"> *</span></label>
 				<select name="brand_id" id="brand_id" class="form-control" data-placeholder="{{ __('admin.common.select') }}">
 					@if ($brands)
 						@foreach ($brands as $brand)
@@ -118,13 +118,13 @@
 
 	<!-- Delete Vehicle Model -->
 	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('carModel.delete') }}" 
-		formId="deleteCarModel" 
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('carModel.delete') }}"
+		formId="deleteCarModel"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_vehicle_model')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_vehicle_model')"
 		:description="__('admin.rentals.delete_vehicle_model_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Vehicle model -->

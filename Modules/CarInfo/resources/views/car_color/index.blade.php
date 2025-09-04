@@ -6,8 +6,8 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
-				:title="__('admin.rentals.vehicle_colors')" 
+			<x-admin.breadcrumb
+				:title="__('admin.rentals.vehicle_colors')"
 				:breadcrumbs="[
 					__('admin.rentals.vehicle_colors') => ''
 				]"
@@ -82,12 +82,12 @@
 				<input type="hidden" name="id" id="id">
 				<input type="hidden" name="language_id" id="language_id">
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.color_name') }}<span class="text-danger"> *</span></label>
+				<label for="name" class="form-label">{{ __('admin.rentals.color_name') }}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="name" id="name" maxlength="50">
 				<span id="name_error" class="text-danger error-text"></span>
 			</div>
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.color_code') }}<span class="text-danger"> *</span></label>
+				<label for="value" class="form-label">{{ __('admin.rentals.color_code') }}<span class="text-danger"> *</span></label>
 				<input type="color" class="form-control border rounded-0 w-100" name="value" id="value" value="#000000" title="Choose your color">
 				<span id="value_error" class="text-danger error-text"></span>
 			</div>
@@ -111,13 +111,13 @@
 
 	<!-- Delete Vehicle Color -->
 	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('carColor.delete') }}" 
-		formId="delateCarColorForm" 
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('carColor.delete') }}"
+		formId="delateCarColorForm"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_vehicle_color')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_vehicle_color')"
 		:description="__('admin.rentals.delete_vehicle_color_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Vehicle Color -->

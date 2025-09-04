@@ -7,7 +7,7 @@
 	<div class="page-wrapper">
 		<div class="content me-4">
 			<x-admin.breadcrumb 
-				:title="__('admin.rentals.seat_types')" 
+				:title="__('admin.rentals.seat_types')"
 				:breadcrumbs="[
 					__('admin.rentals.seat_types') => ''
 				]"
@@ -81,7 +81,7 @@
        <x-slot name="body">
 			<input type="hidden" name="id" id="id">                
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.seat_type') }}<span class="text-danger"> *</span></label>
+				<label for="seat_type" class="form-label">{{ __('admin.rentals.seat_type') }}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="seat_type" id="seat_type" maxlength="50">
 				<span id="seat_type_error" class="text-danger error-text"></span>
 			</div>
@@ -105,13 +105,13 @@
 
 	<!-- Delete Seat -->
 	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('carSeat.delete') }}" 
-		formId="deleteSeatType" 
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('carSeat.delete') }}"
+		formId="deleteSeatType"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_seat_type')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_seat_type')"
 		:description="__('admin.rentals.delete_seat_type_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Seat -->

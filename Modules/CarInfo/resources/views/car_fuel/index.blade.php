@@ -6,8 +6,8 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
-				:title="__('admin.rentals.fuel_types')" 
+			<x-admin.breadcrumb
+				:title="__('admin.rentals.fuel_types')"
 				:breadcrumbs="[
 					__('admin.rentals.fuel_types') => ''
 				]"
@@ -81,7 +81,7 @@
 			<input type="hidden" name="id" id="id">
 			<input type="hidden" name="language_id" id="language_id">
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.fuel_type') }}<span class="text-danger"> *</span></label>
+				<label for="fuel_type" class="form-label">{{ __('admin.rentals.fuel_type') }}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="fuel_type" id="fuel_type" maxlength="50">
 				<span id="fuel_type_error" class="text-danger error-text"></span>
 			</div>
@@ -105,13 +105,13 @@
 
 	<!-- Delete Fuel -->
 	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('fuelType.delete') }}" 
-		formId="deletefuelType" 
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('fuelType.delete') }}"
+		formId="deletefuelType"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_fuel_type')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_fuel_type')"
 		:description="__('admin.rentals.delete_fuel_type_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Fuel -->

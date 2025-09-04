@@ -14,7 +14,8 @@
 				:buttonText="__('admin.rentals.add_new_brand')"
 				:modalId="'brand_modal'"
 				:buttonId="'add_brand'"
-				:permissionModule="'vehicle_attributes'" />
+				:permissionModule="'vehicle_attributes'"
+			/>
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
 				<div class="d-flex align-items-center flex-wrap row-gap-3">
@@ -88,7 +89,7 @@
 			<input type="hidden" name="language_id" id="language_id">
 			<div class="col-md-12">
 				<div class="mb-3">
-					<label class="form-label">{{ __('admin.rentals.category') }} <span class="text-danger">*</span></label>
+					<label for="vehicle_category_id" class="form-label">{{ __('admin.rentals.category') }} <span class="text-danger">*</span></label>
 					<select name="vehicle_category_id" class="form-control select" id="vehicle_category_id">
 						<option value="">{{ __('admin.rentals.select') }}</option>
 						@foreach($category as $CategoryValues)
@@ -99,10 +100,10 @@
 				</div>
 			</div>
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.brand_image') }}<span class="text-danger"> *</span></label>
+				<label for="brand_image" class="form-label">{{ __('admin.rentals.brand_image') }}<span class="text-danger"> *</span></label>
 				<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 					<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
-						<img src="{{ uploadedAsset('', 'default') }}" id="imagePreview" class="img-fluid d-none" alt="Brand Image">
+						<img src="{{ uploadedAsset('', 'default') }}" id="imagePreview" class="img-fluid d-none" alt="Brand">
 						<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
 					</div>
 					<div class="profile-upload">
@@ -121,7 +122,7 @@
 				</div>
 			</div>
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.brand_icon') }}<span class="text-danger"> *</span></label>
+				<label for="brand_icon" class="form-label">{{ __('admin.rentals.brand_icon') }}<span class="text-danger"> *</span></label>
 				<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 					<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
 						<img src="{{ uploadedAsset('', 'default') }}" id="iconPreview" class="img-fluid d-none" alt="Brand Icon">
@@ -143,7 +144,7 @@
 				</div>
 			</div>
 			<div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.brand_name') }}<span class="text-danger"> *</span></label>
+				<label for="brand_name" class="form-label">{{ __('admin.rentals.brand_name') }}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="brand_name" id="brand_name">
 				<span id="brand_name_error" class="text-danger error-text"></span>
 			</div>

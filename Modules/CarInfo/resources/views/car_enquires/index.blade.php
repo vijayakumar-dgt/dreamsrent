@@ -6,8 +6,8 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
-                :title="__('admin.common.enquiries')" 
+			<x-admin.breadcrumb
+                :title="__('admin.common.enquiries')"
                 :breadcrumbs="[
                     __('admin.common.enquiries') => ''
                 ]"
@@ -83,53 +83,53 @@
 	<!-- /Page Wrapper -->
 
 	<!-- Edit Enquiry -->
-	<x-admin.modal className="addmodal" 
+	<x-admin.modal className="addmodal"
 		id="edit_enquiry_modal"
 		dialogClassName="modal-lg"
-		:title="__('admin.bookings.edit_enquiry')" 
-		action="{{  route('enquire.update') }}" 
-		formId="editEnquiryForm" 
+		:title="__('admin.bookings.edit_enquiry')"
+		action="{{  route('enquire.update') }}"
+		formId="editEnquiryForm"
 		method="POST">
        <x-slot name="body">
 			<div class="row">
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.vehicle') }} </label>
+						<label for="assigned_cars" class="form-label">{{ __('admin.common.vehicle') }} </label>
 						<p class="assigned_cars"></p>
 						<span class="text-danger error-text" id="assigned_cars_error"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.name') }}</label>
+						<label for="customer_name" class="form-label">{{ __('admin.common.name') }}</label>
 						<p class="customer_name"></p>
 						<span id="customer_name_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.email') }}</label>
+						<label for="email" class="form-label">{{ __('admin.common.email') }}</label>
 						<p class="email"></p>
 						<span id="email_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.phone') }}</label>
+						<label for="phone_number" class="form-label">{{ __('admin.common.phone') }}</label>
 						<p class="phone_number"></p>
 						<span id="phone_number_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.bookings.enquiry') }}</label>
+						<label for="enquiry_details" class="form-label">{{ __('admin.bookings.enquiry') }}</label>
 						<p class="enquiry_details"></p>
 						<span id="enquiry_details_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.status') }}<span class="text-danger"> *</span></label>
+						<label for="status" class="form-label">{{ __('admin.common.status') }}<span class="text-danger"> *</span></label>
 						<select id="status" name="status" class="select form-control">
 							<option value="">{{ __('admin.common.select') }}</option>
 							<option value="1">{{ __('admin.common.not_opened') }}</option>
@@ -141,7 +141,7 @@
 				</div>
 				<div class="mb-3">
 					<input type="hidden"  class="form-control id" name="id" id="id">
-					<label class="form-label">{{ __('admin.common.comments') }}<span class="text-danger"> *</span></label>
+					<label for="comment" class="form-label">{{ __('admin.common.comments') }}<span class="text-danger"> *</span></label>
 					<input type="text" class="form-control" name="comment" id="comment">
 					<span id="comment_error" class="text-danger error-text"></span>
 				</div>
@@ -157,14 +157,14 @@
 	<!-- /Edit Enquiry -->
 	
 	<!-- Delete Enquiry -->
-	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('enquiry.delete') }}" 
-		formId="enquiryDeleteForm" 
+	<x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('enquiry.delete') }}"
+		formId="enquiryDeleteForm"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.bookings.delete_enquiry')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.bookings.delete_enquiry')"
 		:description="__('admin.bookings.delete_enquiry_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Enquiry -->
