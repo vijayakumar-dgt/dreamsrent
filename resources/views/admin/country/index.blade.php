@@ -5,75 +5,74 @@
 @section('content')
 <!-- Page Wrapper -->
 <div class="page-wrapper">
-	<div class="content me-4">
-		<x-admin.breadcrumb
-			:title="__('admin.cms.locations')"
-			:breadcrumbs="[
+    <div class="content me-4">
+        <x-admin.breadcrumb :title="__('admin.cms.locations')" :breadcrumbs="[
 				__('admin.common.country') => ''
-			]"
-			:buttonText="__('admin.cms.add_country')"
-			:modalId="'country_modal'"
-			:buttonId="'add_country'"
-			:permissionModule="'cms_locations'"
-		/>
-		<!-- Table Header -->
-		<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-			<div class="d-flex align-items-center flex-wrap row-gap-3">
-				<div class="top-search">
-					<div class="top-search-group">
-						<span class="input-icon">
-							<i class="ti ti-search"></i>
-						</span>
-						<input type="text" class="form-control" id="search" placeholder="{{ __('admin.common.search') }}">
-					</div>
-				</div>
-			</div>
-			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-				<div class="dropdown">
-					<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-						<i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}
-					</button>
-					<ul class="dropdown-menu dropdown-menu-end p-2" id="statusFilter">
-						<li>
-							<button type="button" class="dropdown-item rounded-1 selectStatus" data-status="1">{{ __('admin.common.active') }}</button>
-						</li>
-						<li>
-							<button type="button" class="dropdown-item rounded-1 selectStatus" data-status="0">{{ __('admin.common.inactive') }}</button>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<!-- /Table Header -->
-		<div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
-			@include('admin.content-loader')
-		</div>
-		<!-- Custom Data Table -->
-		<div class="custom-datatable-filter table-responsive brandstable d-none real-table">
-			<table class="table" id="countryTable">
-				<thead class="thead-light">
-					<tr>
-						<th>{{ strtoupper(__('admin.common.name')) }}</th>
-						<th>{{ strtoupper(__('admin.cms.country_code')) }}</th>
-						<th>{{ strtoupper(__('admin.common.status')) }}</th>
-						@if (hasPermission($permissions, 'cms_locations', 'edit') || hasPermission($permissions, 'cms_locations', 'delete'))
-						<th>{{ strtoupper(__('admin.common.action')) }}</th>
-						@endif
-					</tr>
-				</thead>
-				<tbody></tbody>
-			</table>
-		</div>
-		<!-- Custom Data Table -->
-		<div class="table-footer d-none"></div>
-	</div>
-	@include('admin.partials.footer')
+			]" :buttonText="__('admin.cms.add_country')" :modalId="'country_modal'" :buttonId="'add_country'"
+            :permissionModule="'cms_locations'" />
+        <!-- Table Header -->
+        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
+            <div class="d-flex align-items-center flex-wrap row-gap-3">
+                <div class="top-search">
+                    <div class="top-search-group">
+                        <span class="input-icon">
+                            <i class="ti ti-search"></i>
+                        </span>
+                        <input type="text" class="form-control" id="search"
+                            placeholder="{{ __('admin.common.search') }}">
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+                <div class="dropdown">
+                    <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
+                        data-bs-toggle="dropdown">
+                        <i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end p-2" id="statusFilter">
+                        <li>
+                            <button type="button" class="dropdown-item rounded-1 selectStatus"
+                                data-status="1">{{ __('admin.common.active') }}</button>
+                        </li>
+                        <li>
+                            <button type="button" class="dropdown-item rounded-1 selectStatus"
+                                data-status="0">{{ __('admin.common.inactive') }}</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Table Header -->
+        <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+            @include('admin.content-loader')
+        </div>
+        <!-- Custom Data Table -->
+        <div class="custom-datatable-filter table-responsive brandstable d-none real-table">
+            <table class="table" id="countryTable">
+                <thead class="thead-light">
+                    <tr>
+                        <th>{{ strtoupper(__('admin.common.name')) }}</th>
+                        <th>{{ strtoupper(__('admin.cms.country_code')) }}</th>
+                        <th>{{ strtoupper(__('admin.common.status')) }}</th>
+                        @if (hasPermission($permissions, 'cms_locations', 'edit') || hasPermission($permissions,
+                        'cms_locations', 'delete'))
+                        <th>{{ strtoupper(__('admin.common.action')) }}</th>
+                        @endif
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <!-- Custom Data Table -->
+        <div class="table-footer d-none"></div>
+    </div>
+    @include('admin.partials.footer')
 </div>
 <!-- /Page Wrapper -->
 
 <!-- Add Country -->
-<x-admin.modal className="addmodal" id="country_modal" :title="__('admin.cms.create_country')"
-    formId="countryForm" dialogClass="modal-dialog-centered modal-md">
+<x-admin.modal className="addmodal" id="country_modal" :title="__('admin.cms.create_country')" formId="countryForm"
+    dialogClass="modal-dialog-centered modal-md">
     <x-slot name="body">
         @csrf
         <input type="hidden" name="id" id="id">
@@ -99,7 +98,8 @@
         <div class="d-flex justify-content-between align-items-center w-100">
             <div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
                 <label for="status" class="form-check-label form-label mt-0 mb-0">
-                    <input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked aria-checked="true">
+                    <input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch"
+                        checked aria-checked="true">
                     {{ __('admin.common.status') }}
                 </label>
             </div>
@@ -118,8 +118,7 @@
 
 <!-- Delete Country -->
 <x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="delateCountry"
-    :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.cms.delete_country')"
+    :hiddenInputs="['delete_id' => '']" :title="__('admin.cms.delete_country')"
     :description="__('admin.cms.country_delete_confirmation')">
 </x-admin.delete-modal>
 <!-- /Delete Country -->

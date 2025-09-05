@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ isset($seo_title) ? $seo_title : config('app.name') }} | {{ __('web.auth.forgot_password_title') }}</title>
+    <title>{{ isset($seo_title) ? $seo_title : config('app.name') }} | {{ __('web.auth.forgot_password_title') }}
+    </title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('frontend/assets/img/favicon.png') }}">
@@ -22,6 +24,7 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 </head>
+
 <body>
     <!-- Main Wrapper -->
     <div class="main-wrapper login-body">
@@ -39,8 +42,10 @@
                     <div class="login-auth">
                         <div class="login-auth-wrap">
                             <div class="sign-group">
-								<a href="{{ route('home') }}" class="btn sign-up"><span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span>  {{ __('web.common.back_to_home') }}</a>
-							</div>
+                                <a href="{{ route('home') }}" class="btn sign-up"><span><i
+                                            class="fe feather-corner-down-left" aria-hidden="true"></i></span>
+                                    {{ __('web.common.back_to_home') }}</a>
+                            </div>
                             <h1>{{ __('web.auth.forgot_password_title') }}</h1>
                             <p class="account-subtitle">
                                 {{ __('web.auth.forgot_password_description') }}
@@ -59,11 +64,12 @@
                 </form>
             </div>
         </div>
-       <div class="modal fade" id="otp-email-modal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal fade" id="otp-email-modal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center justify-content-end pb-0 border-0">
-                        <button type="button" data-bs-dismiss="modal" aria-label="Close" id="close-otp-modal" class="btn p-0 border-0 bg-transparent">
+                        <button type="button" data-bs-dismiss="modal" aria-label="Close" id="close-otp-modal"
+                            class="btn p-0 border-0 bg-transparent">
                             <i class="ti ti-circle-x-filled fs-20"></i>
                         </button>
                     </div>
@@ -85,13 +91,15 @@
                                     </div>
                                     <div class="mb-3 d-flex justify-content-center">
                                         <p>{{ __('web.auth.didnt_get_otp') }}
-                                            <button type="button" class="resendEmailOtpForgot btn btn-link text-primary p-0">
+                                            <button type="button"
+                                                class="resendEmailOtpForgot btn btn-link text-primary p-0">
                                                 {{ __('web.auth.resend_otp') }}
                                             </button>
                                         </p>
                                     </div>
                                     <div>
-                                        <button type="button" id="verify-email-forgot-otp-btn" class="verify-email-otp-btn btn btn-lg btn-primary w-100">
+                                        <button type="button" id="verify-email-forgot-otp-btn"
+                                            class="verify-email-otp-btn btn btn-lg btn-primary w-100">
                                             {{ __('web.auth.verify_proceed') }}
                                         </button>
                                     </div>
@@ -126,4 +134,5 @@
     <script src="{{ asset('frontend/assets/js/user/forgot-password.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
 </body>
+
 </html>
