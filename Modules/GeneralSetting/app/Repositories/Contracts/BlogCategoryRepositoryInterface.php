@@ -36,5 +36,5 @@ interface BlogCategoryRepositoryInterface
 
     public function blogEdit(int $id): array;
 
-    public function BlogUpdate(Request $request, int $id);
+    public function blogUpdate(Request $request, int $id);
 }

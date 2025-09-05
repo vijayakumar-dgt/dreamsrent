@@ -52,7 +52,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
 
         // Currency
         Route::get('currencies', [CurrencyController::class, 'index'])->name('admin.currencies')->middleware('permission');
-        Route::post('save_currency', [CurrencyController::class, 'save_currency']);
+        Route::post('save_currency', [CurrencyController::class, 'saveCurrency']);
         Route::post('get_currencies', [CurrencyController::class, 'getCurrencies']);
         Route::get('edit_currency/{id}', [CurrencyController::class, 'editCurrency']);
         Route::post('delete-currency', [CurrencyController::class, 'deleteCurrency']);

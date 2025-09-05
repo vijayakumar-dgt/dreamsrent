@@ -6,6 +6,11 @@ use App\Library\CustomFailedValidation;
 
 class CommunicationSettingRequest extends CustomFailedValidation
 {
+    /**
+     * Common rule reused for string-based required fields.
+     */
+    private const REQUIRED_STRING = 'required|string';
+
     public function authorize(): bool
     {
         return true;
@@ -14,7 +19,7 @@ class CommunicationSettingRequest extends CustomFailedValidation
     public function rules(): array
     {
         $rules = [
-        'type' => 'required|string|in:nexmo,twilio,twofactor,phpmail,smtp,sendgrid,fcm',
+            'type' => 'required|string|in:nexmo,twilio,twofactor,phpmail,smtp,sendgrid,fcm',
         ];
         if ($this->routeIs('admin.statusUpdate-settings')) {
             $rules = [
@@ -27,7 +32,7 @@ class CommunicationSettingRequest extends CustomFailedValidation
             $this->routeIs('admin.email-settings-store') ||
             $this->routeIs('admin.smsstore-settings')
         ) {
-            $type = $this->input('type');
+            $type  = $this->input('type');
             $rules = array_merge($rules, $this->getTypeSpecificRules($type));
         }
 
@@ -52,40 +57,40 @@ class CommunicationSettingRequest extends CustomFailedValidation
     {
         return match ($type) {
             'nexmo' => [
-                'nexmo_api_key'    => 'required|string',
-                'nexmo_secret_key' => 'required|string',
-                'nexmo_sender_id'  => 'required|string',
+                'nexmo_api_key'    => self::REQUIRED_STRING,
+                'nexmo_secret_key' => self::REQUIRED_STRING,
+                'nexmo_sender_id'  => self::REQUIRED_STRING,
             ],
             'twofactor' => [
-                'twofactor_api_key'    => 'required|string',
-                'twofactor_secret_key' => 'required|string',
-                'twofactor_sender_id'  => 'required|string',
+                'twofactor_api_key'    => self::REQUIRED_STRING,
+                'twofactor_secret_key' => self::REQUIRED_STRING,
+                'twofactor_sender_id'  => self::REQUIRED_STRING,
             ],
             'twilio' => [
-                'twilio_api_key'    => 'required|string',
-                'twilio_secret_key' => 'required|string',
-                'twilio_sender_id'  => 'required|string',
+                'twilio_api_key'    => self::REQUIRED_STRING,
+                'twilio_secret_key' => self::REQUIRED_STRING,
+                'twilio_sender_id'  => self::REQUIRED_STRING,
             ],
             'smtp' => [
-                'smtp_from_email' => 'required|string',
-                'smtp_password'   => 'required|string',
-                'smtp_from_name'  => 'required|string',
+                'smtp_from_email' => self::REQUIRED_STRING,
+                'smtp_password'   => self::REQUIRED_STRING,
+                'smtp_from_name'  => self::REQUIRED_STRING,
                 'smtp_port'       => 'required',
                 'smtp_host'       => 'required',
             ],
             'phpmail' => [
-                'phpmail_from_email' => 'required|string',
-                'phpmail_password'   => 'required|string',
-                'phpmail_from_name'  => 'required|string',
+                'phpmail_from_email' => self::REQUIRED_STRING,
+                'phpmail_password'   => self::REQUIRED_STRING,
+                'phpmail_from_name'  => self::REQUIRED_STRING,
             ],
             'sendgrid' => [
-                'sendgrid_from_email' => 'required|string',
-                'sendgrid_key'        => 'required|string',
+                'sendgrid_from_email' => self::REQUIRED_STRING,
+                'sendgrid_key'        => self::REQUIRED_STRING,
             ],
             'fcm' => [
-                'project_id'   => 'required|string',
-                'client_email' => 'required|string',
-                'private_key'  => 'required|string',
+                'project_id'   => self::REQUIRED_STRING,
+                'client_email' => self::REQUIRED_STRING,
+                'private_key'  => self::REQUIRED_STRING,
             ],
             default => [],
         };

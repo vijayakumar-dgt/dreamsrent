@@ -8,7 +8,7 @@
         <div class="content me-4">
             <x-admin.breadcrumb :title="__('admin.general_settings.faq')" :breadcrumbs="[
                     __('admin.general_settings.faq') => ''
-                ]" 
+                ]"
                 :buttonText="__('admin.general_settings.add_faq')"
                 :modalId="'add_FAQ'"
                 :buttonId="'add_faq_btn'"

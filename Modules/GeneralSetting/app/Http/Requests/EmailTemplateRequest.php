@@ -14,7 +14,7 @@ class EmailTemplateRequest extends CustomFailedValidation
 
     public function rules()
     {
-        $rules = [
+        return [
             'title'             => 'required|string|max:255',
             'notification_type' => [
                 'required',
@@ -26,8 +26,6 @@ class EmailTemplateRequest extends CustomFailedValidation
             'description'          => 'required|string',
             'status'               => 'sometimes'
         ];
-
-        return $rules;
     }
 
     protected function uniqueNotificationTypeRule()

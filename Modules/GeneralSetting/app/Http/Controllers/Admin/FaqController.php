@@ -18,14 +18,14 @@ use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 
 class FaqController extends Controller
 {
-    public function faq(Request $request): View
+    public function faq(): View
     {
         $languages = Language::with('transLang')->get();
 
         return view('generalsetting::cms.faq', compact('languages'));
     }
 
-    public function howItWorks(Request $request): View
+    public function howItWorks(): View
     {
         $languages = Language::with('transLang')->get();
 
@@ -73,7 +73,7 @@ class FaqController extends Controller
         }
     }
 
-    public function copyright(Request $request): View
+    public function copyright(): View
     {
         $languages = Language::with('transLang')->get();
 

@@ -6,13 +6,18 @@ use App\Library\CustomFailedValidation;
 
 class StoreAwsSettingsRequest extends CustomFailedValidation
 {
+    /**
+     * Common validation rule for required string fields.
+     */
+    private const REQUIRED_STRING = 'required|string';
+
     public function rules(): array
     {
         return [
-            'aws_access_key'  => 'required|string',
-            'aws_secret_key'  => 'required|string',
-            'aws_region'      => 'required|string',
-            'aws_bucket_name' => 'required|string',
+            'aws_access_key'  => self::REQUIRED_STRING,
+            'aws_secret_key'  => self::REQUIRED_STRING,
+            'aws_region'      => self::REQUIRED_STRING,
+            'aws_bucket_name' => self::REQUIRED_STRING,
             'aws_base_url'    => 'required|url',
         ];
     }

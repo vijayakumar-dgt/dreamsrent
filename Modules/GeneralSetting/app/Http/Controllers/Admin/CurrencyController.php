@@ -26,7 +26,7 @@ class CurrencyController extends Controller
         ]);
     }
 
-    public function save_currency(StoreCurrencyRequest $request): JsonResponse
+    public function saveCurrency(StoreCurrencyRequest $request): JsonResponse
     {
         try {
             $data = [

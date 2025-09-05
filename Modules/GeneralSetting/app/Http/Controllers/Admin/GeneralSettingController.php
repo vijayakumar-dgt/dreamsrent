@@ -47,58 +47,58 @@ class GeneralSettingController extends Controller
         return view($view);
     }
 
-    public function logoSettings(Request $request): View
+    public function logoSettings(): View
     {
         return view('generalsetting::website_settings.logo-setting');
     }
 
-    public function company(Request $request): View
+    public function company(): View
     {
         return view('generalsetting::company.index');
     }
 
-    public function notifications(Request $request): View
+    public function notifications(): View
     {
         return view('generalsetting::notifications-setting.index');
     }
 
-    public function prefixes(Request $request): View
+    public function prefixes(): View
     {
         return view('generalsetting::website_settings.prefixes');
     }
 
-    public function maintenance(Request $request): View
+    public function maintenance(): View
     {
         return view('generalsetting::maintenance.index');
     }
 
-    public function seosetup(Request $request): View
+    public function seosetup(): View
     {
         return view('generalsetting::website_settings.seosetup');
     }
 
-    public function gdprCookies(Request $request): View
+    public function gdprCookies(): View
     {
         $languages = Language::with('transLang')->get();
         return view('generalsetting::system_settings.gdpr-cookies', compact('languages'));
     }
 
-    public function storage(Request $request): View
+    public function storage(): View
     {
         return view('generalsetting::other_settings.storage-setting');
     }
 
-    public function invoiceSettings(Request $request): View
+    public function invoiceSettings(): View
     {
         return view('generalsetting::app_settings.invoice-setting');
     }
 
-    public function otpSettings(Request $request): View
+    public function otpSettings(): View
     {
         return view('generalsetting::website_settings.otp-setting');
     }
 
-    public function rentalSettings(Request $request): View
+    public function rentalSettings(): View
     {
         return view('generalsetting::rental_settings.rental-settings');
     }
@@ -444,7 +444,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function security(Request $request)
+    public function security(): View  
     {
         return view('generalsetting::security.index');
     }
@@ -602,7 +602,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function paymentIndex(Request $request): View
+    public function paymentIndex(): View
     {
         return view('generalsetting::payment.index');
     }
@@ -671,7 +671,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function themeSettings(Request $request): View
+    public function themeSettings(): View
     {
         return view('generalsetting::website_settings.theme_settings');
     }

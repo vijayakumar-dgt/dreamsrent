@@ -32,11 +32,15 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
         $authId = current_user();
         $languageId = $authId ? $authId->language_id : null;
         $languages = Language::with('transLang')->get();
-        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->orderBy('name', 'asc')->get();
+        $categories = BlogCategory::where('deleted_at', null)
+            ->where('language_id', $languageId)
+            ->orderBy('name', 'asc')
+            ->get();
 
-        $data = ['languages' => $languages, 'categories' => $categories];
-
-        return $data;
+        return [
+            'languages'  => $languages,
+            'categories' => $categories,
+        ];
     }
 
     public function categoryStore(Request $request): JsonResponse
@@ -76,11 +80,15 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
         $authId = current_user();
         $languageId = $authId ? $authId->language_id : null;
         $languages = Language::with('transLang')->get();
-        $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->orderBy('name', 'asc')->get();
+        $tags = BlogTag::where('deleted_at', null)
+            ->where('language_id', $languageId)
+            ->orderBy('name', 'asc')
+            ->get();
 
-        $data = ['languages' => $languages, 'tags' => $tags];
-
-        return $data;
+        return [
+            'languages' => $languages,
+            'tags'      => $tags,
+        ];
     }
 
     public function tagStore(Request $request): JsonResponse
@@ -116,11 +124,14 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
 
     public function blogComments(): array
     {
-        $comments = BlogReviews::Join('blog_posts', 'blog_reviews.blog_id', '=', 'blog_posts.id')->select('blog_reviews.*', 'blog_posts.title')->where('blog_reviews.deleted_at', null)->get();
+        $comments = BlogReviews::join('blog_posts', 'blog_reviews.blog_id', '=', 'blog_posts.id')
+            ->select('blog_reviews.*', 'blog_posts.title')
+            ->where('blog_reviews.deleted_at', null)
+            ->get();
 
-        $data = ['comments' => $comments];
-
-        return $data;
+        return [
+            'comments' => $comments,
+        ];
     }
 
     public function blogs(): array
@@ -129,7 +140,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
         $authId = current_user();
         $languageId = $authId ? $authId->language_id : null;
         $languages = Language::with('transLang')->get();
-        $blogPosts = BlogPost::Join('users', 'blog_posts.created_by', '=', 'users.id')
+        $blogPosts = BlogPost::join('users', 'blog_posts.created_by', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where('blog_posts.language_id', $languageId)
             ->where('blog_posts.deleted_at', null)
@@ -141,24 +152,36 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
             )
             ->orderBy('blog_posts.id', 'desc')
             ->get();
-        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->get();
-        $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->get();
 
-        $data = ['blogPosts' => $blogPosts, 'languages' => $languages, 'categories' => $categories, 'tags' => $tags];
-        return $data;
+        $categories = BlogCategory::where('deleted_at', null)
+            ->where('language_id', $languageId)
+            ->get();
+
+        $tags = BlogTag::where('deleted_at', null)
+            ->where('language_id', $languageId)
+            ->get();
+
+        return [
+            'blogPosts'  => $blogPosts,
+            'languages'  => $languages,
+            'categories' => $categories,
+            'tags'       => $tags,
+        ];
     }
 
     public function blogDetails(string $id): array
     {
         $languages = Language::with('transLang')->get();
-        $blogPosts = BlogPost::Join('blog_categories', 'blog_posts.category', '=', 'blog_categories.id')
+        $blogPosts = BlogPost::join('blog_categories', 'blog_posts.category', '=', 'blog_categories.id')
             ->leftJoin('blog_tags', 'blog_posts.tags', '=', 'blog_tags.id')
             ->select('blog_posts.*', 'blog_categories.name as category', 'blog_tags.name as tag')
             ->where('blog_posts.slug', $id)
             ->first();
 
-        $data = ['blogPosts' => $blogPosts, 'languages' => $languages];
-        return $data;
+        return [
+            'blogPosts' => $blogPosts,
+            'languages' => $languages,
+        ];
     }
 
     public function blogAdd(): array
@@ -169,8 +192,12 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
         $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
-        $data = ['tags' => $tags, 'languages' => $languages, 'categories' => $categories];
-        return $data;
+
+        return [
+            'tags'       => $tags,
+            'languages'  => $languages,
+            'categories' => $categories,
+        ];
     }
 
     public function blogStore(Request $request): JsonResponse
@@ -211,17 +238,15 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
         $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
 
-        $data = [
+        return [
             'blog'       => $blog,
             'tags'       => $tags,
             'languages'  => $languages,
             'categories' => $categories,
         ];
-
-        return $data;
     }
 
-    public function BlogUpdate(Request $request, int $id): JsonResponse
+    public function blogUpdate(Request $request, int $id): JsonResponse
     {
         $blog = BlogPost::where('id', $id)->firstOrFail();
         $blog->title = $request->input('title');

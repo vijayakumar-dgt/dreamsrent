@@ -7,6 +7,11 @@ use App\Library\CustomFailedValidation;
 class UpdatePrefixRequest extends CustomFailedValidation
 {
     /**
+     * A reusable validation rule for all prefix fields.
+     */
+    private const PREFIX_RULE = 'required|string|max:20';
+
+    /**
     * Determine if the user is authorized to make this request.
     *
     * @return bool
@@ -25,13 +30,13 @@ class UpdatePrefixRequest extends CustomFailedValidation
     {
         return [
             'group_id'           => 'required|integer',
-            'reservation_prefix' => 'required|string|max:20',
-            'quotation_prefix'   => 'required|string|max:20',
-            'enquiry_prefix'     => 'required|string|max:20',
-            'company_prefix'     => 'required|string|max:20',
-            'inspection_prefix'  => 'required|string|max:20',
-            'report_prefix'      => 'required|string|max:20',
-            'customer_prefix'    => 'required|string|max:20',
+            'reservation_prefix' => self::PREFIX_RULE,
+            'quotation_prefix'   => self::PREFIX_RULE,
+            'enquiry_prefix'     => self::PREFIX_RULE,
+            'company_prefix'     => self::PREFIX_RULE,
+            'inspection_prefix'  => self::PREFIX_RULE,
+            'report_prefix'      => self::PREFIX_RULE,
+            'customer_prefix'    => self::PREFIX_RULE,
         ];
     }
 

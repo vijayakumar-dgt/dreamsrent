@@ -38,7 +38,8 @@ class EmailTemplateController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => $message
+                'message' => $message,
+                'data'    => $emailTemplate
             ]);
         } catch (\Throwable $th) {
             return $this->jsonErrorResponse($th);

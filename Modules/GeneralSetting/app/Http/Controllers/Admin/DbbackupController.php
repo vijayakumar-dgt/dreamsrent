@@ -18,12 +18,12 @@ class DbbackupController extends Controller
         $this->dbbackupRepository = $dbbackupRepository;
     }
 
-    public function datebaseSettings(Request $request): View
+    public function datebaseSettings(): View
     {
         return view('generalsetting::other_settings.database-backup');
     }
 
-    public function systemBackupSettings(Request $request): View
+    public function systemBackupSettings(): View
     {
         return view('generalsetting::other_settings.system-backup');
     }

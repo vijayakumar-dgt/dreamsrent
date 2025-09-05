@@ -31,20 +31,17 @@ class BlogsController extends Controller
 
     public function categoryStore(BlogCategoryRequest $request): JsonResponse
     {
-        $response = $this->blogRepository->categoryStore($request);
-        return $response;
+        return $this->blogRepository->categoryStore($request);
     }
 
     public function categoryUpdate(CategoryUpdateRequest $request, int $id): RedirectResponse
     {
-        $response = $this->blogRepository->categoryUpdate($request, $id);
-        return $response;
+        return $this->blogRepository->categoryUpdate($request, $id);
     }
 
     public function categoryDestroy(int $id): RedirectResponse
     {
-        $response = $this->blogRepository->categoryDestroy($id);
-        return $response;
+        return $this->blogRepository->categoryDestroy($id);
     }
 
     public function blogTags(): View
@@ -55,8 +52,7 @@ class BlogsController extends Controller
 
     public function tagStore(BlogTagRequest $request): JsonResponse
     {
-        $response = $this->blogRepository->tagStore($request);
-        return $response;
+        return $this->blogRepository->tagStore($request);
     }
 
     /**
@@ -68,14 +64,12 @@ class BlogsController extends Controller
      */
     public function tagUpdate(TagUpdateRequest $request, $id): RedirectResponse
     {
-        $response = $this->blogRepository->tagUpdate($request, $id);
-        return $response;
+        return $this->blogRepository->tagUpdate($request, $id);
     }
 
     public function tagDestroy(int $id): RedirectResponse
     {
-        $response = $this->blogRepository->tagDestroy($id);
-        return $response;
+        return $this->blogRepository->tagDestroy($id);
     }
 
     public function blogComments(): View
@@ -104,14 +98,12 @@ class BlogsController extends Controller
 
     public function blogStore(BlogPostRequest $request): JsonResponse
     {
-        $response = $this->blogRepository->blogStore($request);
-        return $response;
+        return $this->blogRepository->blogStore($request);
     }
 
     public function blogDestroy(int $id): JsonResponse
     {
-        $response = $this->blogRepository->blogDestroy($id);
-        return $response;
+        return $this->blogRepository->blogDestroy($id);
     }
 
     public function blogEdit(int $id): View
@@ -122,7 +114,6 @@ class BlogsController extends Controller
 
     public function BlogUpdate(Request $request, int $id): JsonResponse
     {
-        $response = $this->blogRepository->BlogUpdate($request, $id);
-        return $response;
+        return $this->blogRepository->blogUpdate($request, $id);
     }
 }

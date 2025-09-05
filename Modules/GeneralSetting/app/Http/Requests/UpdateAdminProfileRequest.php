@@ -6,6 +6,11 @@ use App\Library\CustomFailedValidation;
 
 class UpdateAdminProfileRequest extends CustomFailedValidation
 {
+    /**
+     * Common validation rule for optional numeric fields.
+     */
+    private const NULLABLE_NUMERIC = 'nullable|numeric';
+
     public function authorize(): bool
     {
         return true;
@@ -22,9 +27,9 @@ class UpdateAdminProfileRequest extends CustomFailedValidation
             'phone'         => 'required',
             'address_line'  => 'nullable|string|max:255',
             'postal_code'   => 'nullable|string|max:10',
-            'country'       => 'nullable|numeric',
-            'state'         => 'nullable|numeric',
-            'city'          => 'nullable|numeric',
+            'country'       => self::NULLABLE_NUMERIC,
+            'state'         => self::NULLABLE_NUMERIC,
+            'city'          => self::NULLABLE_NUMERIC,
         ];
     }
 }

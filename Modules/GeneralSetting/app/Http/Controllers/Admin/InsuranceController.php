@@ -51,7 +51,8 @@ class InsuranceController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => $successMsg
+                'message' => $successMsg,
+                'data'    => $insurance
             ]);
         } catch (\Exception $e) {
             $errorMsg = empty($id)

@@ -22,47 +22,49 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
     public function addLanguage(array $data): array
     {
+        $response = [];
+
         $languageTranslation = TranslationLanguage::find($data['lang_id']);
 
         if (!$languageTranslation) {
-            return [
+            $response = [
                 'status'  => 'error',
                 'code'    => 422,
                 'message' => __('admin.general_settings.language_not_found')
             ];
-        }
-
-        if (Language::where('language_id', $languageTranslation->id)->exists()) {
-            return [
+        } elseif (Language::where('language_id', $languageTranslation->id)->exists()) {
+            $response = [
                 'status'  => 'error',
                 'code'    => 422,
                 'message' => __('admin.general_settings.language_already_exist')
             ];
-        }
+        } else {
+            try {
+                $language = Language::create(['language_id' => $languageTranslation->id]);
+                $langPath = base_path('resources/lang/' . $languageTranslation->code);
 
-        try {
-            $language = Language::create(['language_id' => $languageTranslation->id]);
-            $langPath = base_path('resources/lang/' . $languageTranslation->code);
+                if (!file_exists($langPath)) {
+                    mkdir($langPath, 0777, true);
+                }
 
-            if (!file_exists($langPath)) {
-                mkdir($langPath, 0777, true);
+                $this->initializeLanguageFiles($languageTranslation->code);
+
+                $response = [
+                    'status'  => 'success',
+                    'code'    => 200,
+                    'message' => __('admin.general_settings.language_added_successfully')
+                ];
+            } catch (\Exception $e) {
+                $response = [
+                    'status'  => 'error',
+                    'code'    => 422,
+                    'message' => __('admin.general_settings.retrive_error'),
+                    'error'   => $e->getMessage()
+                ];
             }
-
-            $this->initializeLanguageFiles($languageTranslation->code);
-
-            return [
-                'status'  => 'success',
-                'code'    => 200,
-                'message' => __('admin.general_settings.language_added_successfully')
-            ];
-        } catch (\Exception $e) {
-            return [
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
-            ];
         }
+
+        return $response;
     }
 
     public function getLanguages(array $filters = []): array
@@ -507,18 +509,17 @@ class LanguageSettingRepository implements LanguageSettingInterface
 
     protected function getProgressColor(float $progress): string
     {
-        switch (true) {
-            case $progress >= 100:
-                return "bg-success";
-            case $progress >= 75:
-                return "bg-pink";
-            case $progress >= 50:
-                return "bg-warning";
-            case $progress >= 25:
-                return "bg-danger";
-            default:
-                return "bg-danger";
+        $color = 'bg-danger'; // default for <50 (and 25–49)
+
+        if ($progress >= 100) {
+            $color = 'bg-success';
+        } elseif ($progress >= 75) {
+            $color = 'bg-pink';
+        } elseif ($progress >= 50) {
+            $color = 'bg-warning';
         }
+
+        return $color;
     }
 
     protected function calculateModuleProgress(string $langCode, string $tab, string $module): float

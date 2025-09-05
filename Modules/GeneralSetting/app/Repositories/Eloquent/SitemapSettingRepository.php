@@ -26,60 +26,63 @@ class SitemapSettingRepository implements SitemapSettingInterface
 
     public function generateSitemap()
     {
+        $result = '';
+
         try {
             $urls = SitemapUrl::all();
             if ($urls->isEmpty()) {
-                return '';
-            }
-
-            $sitemap = Sitemap::create();
-            foreach ($urls as $url) {
-                $url = $url->url;
-                if ($url) {
-                    $sitemap->add(
-                        Url::create($url)
-                            ->setLastModificationDate(now())
-                            ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-                            ->setPriority(0.8)
-                    );
+                // $result stays '' and will be returned at the end
+            } else {
+                $sitemap = Sitemap::create();
+                foreach ($urls as $item) {
+                    $u = $item->url;
+                    if ($u) {
+                        $sitemap->add(
+                            Url::create($u)
+                                ->setLastModificationDate(now())
+                                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                                ->setPriority(0.8)
+                        );
+                    }
                 }
-            }
 
-            $sitemapFolder = public_path('sitemaps');
-            if (!file_exists($sitemapFolder) && !mkdir($sitemapFolder, 0777, true) && !is_dir($sitemapFolder)) {
-                return '';
-            }
-            $lastBeforeSitemap = SitemapUrl::orderByDesc('id')->skip(1)->first();
+                $sitemapFolder = public_path('sitemaps');
+                if (!file_exists($sitemapFolder) && !mkdir($sitemapFolder, 0777, true) && !is_dir($sitemapFolder)) {
+                    // failed to create/ensure folder -> keep $result = ''
+                } else {
+                    $lastBeforeSitemap = SitemapUrl::orderByDesc('id')->skip(1)->first();
 
-            if ($lastBeforeSitemap && $lastBeforeSitemap->sitemap_path) {
-                $oldPath = public_path($lastBeforeSitemap->sitemap_path);
-                if (file_exists($oldPath)) {
-                    $newFilename = 'sitemaps/sitemap-' . date('Y-m-d-H-i-s') . '-' . rand(1000, 9999) . '.xml';
-                    $newFullPath = public_path($newFilename);
+                    if ($lastBeforeSitemap && $lastBeforeSitemap->sitemap_path) {
+                        $oldPath = public_path($lastBeforeSitemap->sitemap_path);
+                        if (file_exists($oldPath)) {
+                            $newFilename = 'sitemaps/sitemap-' . date('Y-m-d-H-i-s') . '-' . rand(1000, 9999) . '.xml';
+                            $newFullPath = public_path($newFilename);
 
-                    if (rename($oldPath, $newFullPath)) {
-                        $lastBeforeSitemap->sitemap_path = $newFilename;
-                        $lastBeforeSitemap->save();
+                            if (rename($oldPath, $newFullPath)) {
+                                $lastBeforeSitemap->sitemap_path = $newFilename;
+                                $lastBeforeSitemap->save();
+                            }
+                        }
+                    }
+
+                    $relativePath = 'sitemaps/sitemap.xml';
+                    $fullPath = public_path($relativePath);
+                    $sitemap->writeToFile($fullPath);
+
+                    if (file_exists($fullPath)) {
+                        $latestUrl = SitemapUrl::orderByDesc('id')->first();
+                        if ($latestUrl) {
+                            $latestUrl->update(['sitemap_path' => $relativePath]);
+                        }
+                        $result = $relativePath;
                     }
                 }
             }
-
-            $relativePath = 'sitemaps/sitemap.xml';
-            $fullPath = public_path($relativePath);
-            $sitemap->writeToFile($fullPath);
-            if (!file_exists($fullPath)) {
-                return '';
-            }
-
-            $latestUrl = SitemapUrl::orderByDesc('id')->first();
-            if ($latestUrl) {
-                $latestUrl->update(['sitemap_path' => $relativePath]);
-            }
-
-            return $relativePath;
         } catch (\Throwable $e) {
-            return '';
+            // keep $result as '' on error (same behavior as before)
         }
+
+        return $result;
     }
 
     public function getSitemapUrls(array $filters)

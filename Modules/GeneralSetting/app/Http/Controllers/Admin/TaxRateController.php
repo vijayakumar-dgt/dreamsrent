@@ -232,7 +232,7 @@ class TaxRateController extends Controller
         }
     }
 
-    public function getTaxRates(Request $request): JsonResponse
+    public function getTaxRates(): JsonResponse
     {
         try {
             $data = $this->taxRateSettingRepository->getActiveTaxRates();

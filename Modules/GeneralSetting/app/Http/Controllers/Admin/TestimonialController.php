@@ -21,7 +21,7 @@ class TestimonialController extends Controller
         $this->testimonialRepository = $testimonialRepository;
     }
 
-    public function testimoials(Request $request): View
+    public function testimoials(): View
     {
         $languages = Language::with('transLang')->get();
         return view('generalsetting::cms.testimoials', compact('languages'));
