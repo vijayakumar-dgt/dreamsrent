@@ -114,19 +114,19 @@
                                     </div>
                                     <div class="col-xl-9">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.rentals.name') }}<span class="text-danger">*</span></label>
+                                            <label for="title" class="form-label">{{ __('admin.rentals.name') }}<span class="text-danger">*</span></label>
                                             <input type="text" name="title" id="title" class="form-control" value="{{ $query->name }}">
                                             <span class="invalid-feedback" id="title_error"></span>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.rentals.permalink') }}</label>
+                                            <label for="perma_link" class="form-label">{{ __('admin.rentals.permalink') }}</label>
                                             <input type="text" class="form-control" id="perma_link" name="perma_link" value="{{ $query->perma_link }}">
                                             <p class="fs-13 fw-medium mt-1">{{ __('admin.rentals.preview') }} : <a href="#" class="link-info">https://www.example.com/vehicles/</a></p>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.category') }} <span class="text-danger">*</span></label>
+                                                    <label for="vehicle_category_id" class="form-label">{{ __('admin.rentals.category') }} <span class="text-danger">*</span></label>
                                                     <select name="vehicle_category_id" class="form-control select" id="vehicle_category_id">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @foreach($Category as $CategoryValues)
@@ -142,7 +142,7 @@
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between">
-                                                        <label class="form-label">{{ __('admin.rentals.vehicle_type') }} <span class="text-danger">*</span></label>
+                                                        <label for="vehicle_type_id" class="form-label">{{ __('admin.rentals.vehicle_type') }} <span class="text-danger">*</span></label>
                                                     </div>
                                                     <input type="hidden" id="type_id" value="{{ $query->type_id }}">
                                                     <select name="vehicle_type_id" class="form-control select" id="vehicle_type_id">
@@ -154,7 +154,7 @@
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between">
-                                                        <label class="form-label">{{ __('admin.rentals.brand') }} <span class="text-danger">*</span></label>
+                                                        <label for="vehicle_brand_id" class="form-label">{{ __('admin.rentals.brand') }} <span class="text-danger">*</span></label>
                                                     </div>
                                                     <input type="hidden" id="brand_id" value="{{ $query->brand_id }}">
                                                     <select name="vehicle_brand_id" class="form-control select" id="vehicle_brand_id">
@@ -166,7 +166,7 @@
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between">
-                                                        <label class="form-label">{{ __('admin.rentals.model') }} <span class="text-danger">*</span></label>
+                                                        <label for="vehicle_model_id" class="form-label">{{ __('admin.rentals.model') }} <span class="text-danger">*</span></label>
                                                     </div>
                                                     <select name="vehicle_model_id" class="form-control select" id="vehicle_model_id">
                                                         <option value="">{{ __('admin.rentals.select_model') }}</option>
@@ -182,21 +182,21 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.plate_number') }}</label>
+                                                    <label for="plate_number" class="form-label">{{ __('admin.rentals.plate_number') }}</label>
                                                     <input type="text" name="plate_number" id="plate_number" value="{{ $query->plate_number }}" class="form-control">
                                                     <span class="invalid-feedback" id="plate_number_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.vin_number') }}</label>
+                                                    <label for="vin_number" class="form-label">{{ __('admin.rentals.vin_number') }}</label>
                                                     <input type="text" name="vin_number" id="vin_number" value="{{ $query->vin }}" class="form-control">
                                                     <span class="invalid-feedback" id="vin_number_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.main_location') }} <span class="text-danger">*</span></label>
+                                                    <label for="main_location_id" class="form-label">{{ __('admin.rentals.main_location') }} <span class="text-danger">*</span></label>
                                                     <select name="main_location_id" class="form-control select" id="main_location_id">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @foreach($Location as $LocationValues)
@@ -211,7 +211,7 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.link_other_location') }}</label>
+                                                    <label for="other_location_id" class="form-label">{{ __('admin.rentals.link_other_location') }}</label>
                                                     <select class="form-control select" name="other_location_id[]" id="other_location_id" multiple>
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @php
@@ -228,7 +228,7 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.fuel') }}</label>
+                                                    <label for="vehicle_fuel_id" class="form-label">{{ __('admin.rentals.fuel') }}</label>
                                                     <select name="vehicle_fuel_id" class="form-control select" id="vehicle_fuel_id">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @foreach($CarFuel as $CarFuelValues)
@@ -246,14 +246,14 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.odometer') }}</label>
+                                                    <label for="odometer" class="form-label">{{ __('admin.rentals.odometer') }}</label>
                                                     <input name="odometer" id="odometer" maxlength="5" type="text" value="{{ $query->odometer }}" class="form-control">
                                                     <span class="invalid-feedback" id="odometer_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.color') }} <span class="text-danger">*</span></label>
+                                                    <label for="vehicle_color_id" class="form-label">{{ __('admin.rentals.color') }} <span class="text-danger">*</span></label>
                                                     <select name="vehicle_color_id" class="form-control select slectedColor" id="vehicle_color_id">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @foreach($CarColor as $CarColorValues)
@@ -268,7 +268,7 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.year') }} <span class="text-danger">*</span></label>
+                                                    <label for="vehicle_year" class="form-label">{{ __('admin.rentals.year') }} <span class="text-danger">*</span></label>
                                                     <div class="input-icon-end position-relative">
                                                         <input type="text" name="vehicle_year" id="vehicle_year" value="{{ $query->year }}" class="form-control yearpickerVehicle">
                                                         <span class="input-icon-addon">
@@ -280,7 +280,7 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.transmission') }}</label>
+                                                    <label for="vehicle_transmission_id" class="form-label">{{ __('admin.rentals.transmission') }}</label>
                                                     <select name="vehicle_transmission_id" class="form-control select" id="vehicle_transmission_id">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @foreach($Transmission as $TransmissionValues)
@@ -294,19 +294,19 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.mileage') }}</label>
+                                                    <label for="vehicle_mileage" class="form-label">{{ __('admin.rentals.mileage') }}</label>
                                                     <input name="vehicle_mileage" maxlength="2" id="vehicle_mileage" value="{{ $query->mileage !== null ? (int) $query->mileage : '' }}" type="text" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.passengers') }} <span class="text-danger">*</span></label></label>
+                                                    <label for="vehicle_passenger" class="form-label">{{ __('admin.rentals.passengers') }} <span class="text-danger">*</span></label></label>
                                                     <input name="vehicle_passenger" maxlength="2" id="vehicle_passenger" value="{{ $query->passenger_capacity }}" type="text" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4 col-md-6 CarContain">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.no_of_seats') }}</label>
+                                                    <label for="num_seats" class="form-label">{{ __('admin.rentals.no_of_seats') }}</label>
                                                     <select name="num_seats" class="form-control select" id="num_seats">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @foreach ([2, 4, 5, 6, 7, 8, 10, 12, 14] as $seat)
@@ -317,7 +317,7 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6 CarContain car-doors-field">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.no_of_doors') }}</label>
+                                                    <label for="num_doors" class="form-label">{{ __('admin.rentals.no_of_doors') }}</label>
                                                     <select name="num_doors" class="form-control select" id="num_doors">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @for ($i = 2; $i <= 10; $i++)
@@ -328,13 +328,13 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6 CarContain">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.no_of_airbags') }}</label>
+                                                    <label for="num_airbags" class="form-label">{{ __('admin.rentals.no_of_airbags') }}</label>
                                                     <input type="text" class="form-control" maxlength="1" name="num_airbags" id="num_airbags" value="{{ $query->num_airbags }}">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4 col-md-6 BoatContain">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.water_tight') }}</label>
+                                                    <label for="water_tight" class="form-label">{{ __('admin.rentals.water_tight') }}</label>
                                                     <select name="water_tight" class="form-control select" id="water_tight">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @for ($i = 1; $i <= 20; $i++)
@@ -345,7 +345,7 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6 BoatContain">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.sliding') }}</label>
+                                                    <label for="sliding" class="form-label">{{ __('admin.rentals.sliding') }}</label>
                                                     <select name="sliding" class="form-control select" id="sliding">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @for ($i = 1; $i <= 20; $i++)
@@ -356,7 +356,7 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6 BoatContain">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.hatch') }}</label>
+                                                    <label for="hatch" class="form-label">{{ __('admin.rentals.hatch') }}</label>
                                                     <select name="hatch" class="form-control select" id="hatch">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
                                                         @for ($i = 1; $i <= 20; $i++)
@@ -367,7 +367,7 @@
                                             </div>
                                             <div class="col-lg-12 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.description') }}</label>
+                                                    <label for="description" class="form-label">{{ __('admin.rentals.description') }}</label>
                                                     <textarea type="text" class="form-control summernote" maxlength="500" placeholder="Enter description" name="description" id="description">{{ $query->description }}</textarea>
                                                 </div>
                                             </div>
@@ -398,7 +398,7 @@
                                                 <div class="mb-3">
                                                     <div class="form-check mb-0">
                                                         <input class="form-check-input select-all" type="checkbox" id="select-all1">
-                                                        <label class="form-check-label" for="amenity">
+                                                        <label for="select-all1" class="form-check-label" for="amenity">
                                                             Check All
                                                         </label>
                                                     </div>
@@ -452,7 +452,7 @@
                                             @endphp
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.pricing_type') }} <span class="text-danger">*</span></label>
+                                                    <div class="form-label">{{ __('admin.rentals.pricing_type') }} <span class="text-danger">*</span></div>
                                                     <div class="d-flex align-items-center flex-wrap gap-3">
                                                         <div class="form-check mb-0">
                                                             <input class="form-check-input price-checkbox" type="checkbox" name="daily" id="daily"
@@ -479,7 +479,7 @@
                                             </div>
                                             <div class="col-lg-3 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.daily_price') }} <span class="text-danger">*</span></label>
+                                                    <label for="daily_price" class="form-label">{{ __('admin.rentals.daily_price') }} <span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control price-input priceLimit" name="daily_price" id="daily_price"
                                                         value="{{ $dailyPrice > 0 ? $dailyPrice : '' }}" placeholder="{{ __('admin.rentals.enter_daily_price') }}"
                                                         {{ $dailyPrice > 0 ? '' : 'disabled' }}>
@@ -487,7 +487,7 @@
                                             </div>
                                             <div class="col-lg-3 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.weekly_price') }} <span class="text-danger">*</span></label>
+                                                    <label for="weekly_price" class="form-label">{{ __('admin.rentals.weekly_price') }} <span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control price-input priceLimit" name="weekly_price" id="weekly_price"
                                                         value="{{ $weeklyPrice > 0 ? $weeklyPrice : '' }}" placeholder="{{ __('admin.rentals.enter_weekly_price') }}"
                                                         {{ $weeklyPrice > 0 ? '' : 'disabled' }}>
@@ -495,7 +495,7 @@
                                             </div>
                                             <div class="col-lg-3 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.monthly_price') }} <span class="text-danger">*</span></label>
+                                                    <label for="monthly_price" class="form-label">{{ __('admin.rentals.monthly_price') }} <span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control price-input priceLimit" name="monthly_price" id="monthly_price"
                                                         value="{{ $monthlyPrice > 0 ? $monthlyPrice : '' }}" placeholder="{{ __('admin.rentals.enter_monthly_price') }}"
                                                         {{ $monthlyPrice > 0 ? '' : 'disabled' }}>
@@ -503,7 +503,7 @@
                                             </div>
                                             <div class="col-lg-3 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.yearly_price') }} <span class="text-danger">*</span></label>
+                                                    <label for="yearly_price" class="form-label">{{ __('admin.rentals.yearly_price') }} <span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control price-input priceLimit" name="yearly_price" id="yearly_price"
                                                         value="{{ $yearlyPrice > 0 ? $yearlyPrice : '' }}" placeholder="{{ __('admin.rentals.enter_yearly_price') }}"
                                                         {{ $yearlyPrice > 0 ? '' : 'disabled' }}>
@@ -512,14 +512,14 @@
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between">
-                                                        <label class="form-label">{{ __('admin.rentals.base_kilometers_per_day') }} <span class="text-danger">*</span></label>
+                                                        <div class="form-label">{{ __('admin.rentals.base_kilometers_per_day') }} <span class="text-danger">*</span></div>
                                                         <div class="form-check mb-2">
                                                             <input class="form-check-input" type="checkbox"
                                                                 value="{{ $query->vehicle_basekm }}"
                                                                 name="unlimited"
                                                                 id="Baseunlimited"
                                                                 {{ is_null($query->vehicle_basekm) || $query->vehicle_basekm == 0 ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="unlimited">
+                                                            <label class="form-check-label" for="Baseunlimited">
                                                                 {{ __('admin.rentals.unlimited') }}
                                                             </label>
                                                         </div>
@@ -530,7 +530,7 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.extra_kilometers_price') }} <span class="text-danger">*</span></label>
+                                                    <label for="extra_kilometer" class="form-label">{{ __('admin.rentals.extra_kilometers_price') }} <span class="text-danger">*</span></label>
                                                     <input type="text" name="extra_kilometer" id="extra_kilometer" value="{{ $query->vehicle_extrakmprice }}" class="form-control priceLimit">
                                                 </div>
                                                 <span class="invalid-feedback" id="extra_kilometer_error"></span>
@@ -758,7 +758,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="mb-4">
-                                                    <label class="form-label">{{ __('admin.rentals.video_link') }}</label>
+                                                    <label for="car_video" class="form-label">{{ __('admin.rentals.video_link') }}</label>
                                                     <input type="text" class="form-control" name="car_video" id="car_video" value="{{ $query->vehicle_video }}" placeholder="https://www.youtube.com/watch?v=abcd1234">
                                                     <span class="invalid-feedback" id="car_video_error"></span>
                                                 </div>
@@ -850,15 +850,15 @@
                                     </div>
                                     <div class="col-xl-9">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.rentals.seo_meta_title_label') }}</label>
+                                            <label for="seo_title" class="form-label">{{ __('admin.rentals.seo_meta_title_label') }}</label>
                                             <input type="text" name="seo_title" id="seo_title" value="{{ $query->vehicle_metatitle }}" class="form-control">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.rentals.seo_keywords_label') }}</label>
+                                            <label for="seo_key" class="form-label">{{ __('admin.rentals.seo_keywords_label') }}</label>
                                             <input type="text" name="seo_key" value="{{ $query->vehicle_metakeywords }}" id="seo_key" class="form-control">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.rentals.seo_description_label') }}</label>
+                                            <label for="seo_description" class="form-label">{{ __('admin.rentals.seo_description_label') }}</label>
                                             <textarea class="form-control" name="seo_description" id="seo_description" rows="3">{{ $query->vehicle_metakeywords }}</textarea>
                                         </div>
                                     </div>
@@ -884,32 +884,32 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.tariff_name') }} <span class="text-danger">*</span></label>
+                    <label for="t_name" class="form-label">{{ __('admin.rentals.tariff_name') }} <span class="text-danger">*</span></label>
                     <input type="text" name="t_name" id="t_name" maxlength="50" class="form-control">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.daily_price') }} <span class="text-danger">*</span></label>
+                    <label for="t_price" class="form-label">{{ __('admin.rentals.daily_price') }} <span class="text-danger">*</span></label>
                     <input type="text" name="t_price" id="t_price" maxlength="5" class="form-control priceLimit">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.from_days') }} <span class="text-danger">*</span></label>
+                    <label for="t_fromday" class="form-label">{{ __('admin.rentals.from_days') }} <span class="text-danger">*</span></label>
                     <input type="text" name="t_fromday" id="t_fromday" maxlength="10" class="form-control priceLimit">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.to_days') }} <span class="text-danger">*</span></label>
+                    <label for="t_today" class="form-label">{{ __('admin.rentals.to_days') }} <span class="text-danger">*</span></label>
                     <input type="text" name="t_today" id="t_today" maxlength="10" class="form-control priceLimit">
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="mb-3">
                     <div class="d-flex align-items-center justify-content-between">
-                        <label class="form-label">{{ __('admin.rentals.base_km_per_day') }} <span class="text-danger">*</span></label>
+                        <label for="t_base" class="form-label">{{ __('admin.rentals.base_km_per_day') }} <span class="text-danger">*</span></label>
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox" name="unlimited1" id="unlimited1">
                             <label class="form-check-label" for="unlimited1">
@@ -922,7 +922,7 @@
             </div>
             <div class="col-md-12">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.km_extra_price') }} <span class="text-danger">*</span></label>
+                    <label for="t_extra" class="form-label">{{ __('admin.rentals.km_extra_price') }} <span class="text-danger">*</span></label>
                     <input type="text" id="t_extra" name="t_extra" maxlength="5" class="form-control priceLimit">
                 </div>
             </div>
@@ -952,13 +952,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.season_name') }} <span class="text-danger">*</span></label>
+                    <label for="s_name" class="form-label">{{ __('admin.rentals.season_name') }} <span class="text-danger">*</span></label>
                     <input type="text" name="s_name" id="s_name" maxlength="50" class="form-control">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.start_date') }} <span class="text-danger">*</span></label>
+                    <label for="s_strdate" class="form-label">{{ __('admin.rentals.start_date') }} <span class="text-danger">*</span></label>
                     <div class="input-icon-end position-relative">
                         <input type="text" name="s_strdate" id="s_strdate" class="form-control datetimepickerVehicle" placeholder="dd/mm/yyyy">
                         <span class="input-icon-addon">
@@ -969,7 +969,7 @@
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.end_date') }} <span class="text-danger">*</span></label>
+                    <label for="s_enddate" class="form-label">{{ __('admin.rentals.end_date') }} <span class="text-danger">*</span></label>
                     <div class="input-icon-end position-relative">
                         <input type="text" name="s_enddate" id="s_enddate" class="form-control datetimepickerVehicle" placeholder="dd/mm/yyyy">
                         <span class="input-icon-addon">
@@ -980,25 +980,25 @@
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.daily_rate') }} <span class="text-danger">*</span></label>
+                    <label for="s_drate" class="form-label">{{ __('admin.rentals.daily_rate') }} <span class="text-danger">*</span></label>
                     <input type="text" name="s_drate" id="s_drate" maxlength="5" class="form-control priceLimit">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.weekly_rate') }} <span class="text-danger">*</span></label>
+                    <label for="s_wrate" class="form-label">{{ __('admin.rentals.weekly_rate') }} <span class="text-danger">*</span></label>
                     <input type="text" name="s_wrate" id="s_wrate" maxlength="5" class="form-control priceLimit">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.monthly_rate') }} <span class="text-danger">*</span></label>
+                    <label for="s_mrate" class="form-label">{{ __('admin.rentals.monthly_rate') }} <span class="text-danger">*</span></label>
                     <input type="text" name="s_mrate" id="s_mrate" maxlength="5" class="form-control priceLimit">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.late_fees') }} <span class="text-danger">*</span></label>
+                    <label for="s_lrate" class="form-label">{{ __('admin.rentals.late_fees') }} <span class="text-danger">*</span></label>
                     <input type="text" name="s_lrate" id="s_lrate" maxlength="5" class="form-control priceLimit">
                 </div>
             </div>
@@ -1073,12 +1073,12 @@
     modalTitleId="damage_title">
     <x-slot name="body">
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.rentals.damage_image_label') }} <span class="text-danger">*</span></label>
+            <label for="dam_image" class="form-label">{{ __('admin.rentals.damage_image_label') }} <span class="text-danger">*</span></label>
             <input type="file" name="dam_image" id="dam_image" class="form-control">
             <img src="{{ uploadedAsset('', 'default') }}" class="mt-2 d-none" id="image_preview" alt="Damage Preview">
         </div>
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.rentals.damage_location_label') }} <span class="text-danger">*</span></label>
+            <label for="dam_name" class="form-label">{{ __('admin.rentals.damage_location_label') }} <span class="text-danger">*</span></label>
             <select class="form-control custom-select" name="dam_name" id="dam_name">
                 <option>{{ __('admin.rentals.select') }}</option>
                 <option>{{ __('admin.rentals.interior') }}</option>
@@ -1086,7 +1086,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.rentals.damage_type_label') }} <span class="text-danger">*</span></label>
+            <label for="dam_type" class="form-label">{{ __('admin.rentals.damage_type_label') }} <span class="text-danger">*</span></label>
             <select class="form-control custom-select" name="dam_type" id="dam_type">
                 <option value="">{{ __('admin.rentals.select') }}</option>
                 @foreach($DamageTypes as $DamageTypesValue)
@@ -1095,7 +1095,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.rentals.description_label') }}</label>
+            <label for="dam_dis" class="form-label">{{ __('admin.rentals.description_label') }}</label>
             <textarea class="form-control" name="dam_dis" id="dam_dis" maxlength="120" rows="3"></textarea>
         </div>
     </x-slot>
@@ -1122,11 +1122,11 @@
     modalTitleId="faq_title">
     <x-slot name="body">
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.rentals.question_label') }} <span class="text-danger">*</span></label>
+            <label for="f_q" class="form-label">{{ __('admin.rentals.question_label') }} <span class="text-danger">*</span></label>
             <input type="text" name="f_q" id="f_q" maxlength="60" class="form-control">
         </div>
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.rentals.answer_label') }} <span class="text-danger">*</span></label>
+            <label for="f_a" class="form-label">{{ __('admin.rentals.answer_label') }} <span class="text-danger">*</span></label>
             <textarea class="form-control" name="f_a" id="f_a" maxlength="120" rows="3"></textarea>
         </div>
     </x-slot>
@@ -1208,7 +1208,7 @@
     :title="__('admin.rentals.edit_insurance')">
     <x-slot name="body">
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.rentals.price_type') }} <span class="text-danger"> *</span></label>
+            <div class="form-label">{{ __('admin.rentals.price_type') }} <span class="text-danger"> *</span></div>
             <div class="d-flex align-items-center">
                 <div class="form-check me-3">
                     <input class="form-check-input" type="radio" name="Radio" id="Radio-sm" checked>
@@ -1231,7 +1231,7 @@
             </div>
         </div>
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.common.price') }} <span class="text-danger"> *</span></label>
+            <label for="price" class="form-label">{{ __('admin.common.price') }} <span class="text-danger"> *</span></label>
             <input type="text" class="form-control priceLimit" id="price" maxlength="5" value="">
         </div>
     </x-slot>
