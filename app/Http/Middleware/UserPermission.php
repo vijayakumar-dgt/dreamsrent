@@ -19,7 +19,12 @@ class UserPermission
         $user = current_user();
         $userType = $user->user_type ?? '';
 
+        $allowed = true;
+        $redirectRoute = null;
+        $flashMessage = __('admin.common.permission_access_denied');
+
         if ($userType == 2) {
+            $allowed = false; // require explicit permission to proceed
             $permissions = getUserPermissions();
 
             $routeModules = [
@@ -127,35 +132,58 @@ class UserPermission
                 'admin.blog-tags'              => ['module' => 'blogs', 'action' => 'view'],
                 'admin.blog-category'          => ['module' => 'blogs', 'action' => 'view'],
                 'admin.reviews'                => ['module' => 'reviews', 'action' => 'view'],
-
             ];
 
             $moduleDetails = $routeModules[$routeName] ?? null;
 
-            if ($routeName == 'reservation.index' || $routeName == 'reservation.create' || $routeName == 'reservation.edit' || $routeName == 'reservation.details') {
+            $reservationRoutes = [
+                'reservation.index',
+                'reservation.create',
+                'reservation.edit',
+                'reservation.details'
+            ];
+
+            if (in_array($routeName, $reservationRoutes, true)) {
+                // reservation routes have additional "isAccessMenu" check
                 if (isAccessMenu('reservation') !== 0) {
                     if ($moduleDetails && hasPermission($permissions, $moduleDetails['module'], $moduleDetails['action'])) {
-                        return $next($request);
+                        $allowed = true;
+                    } else {
+                        $redirectRoute = hasPermission($permissions, 'dashboard', 'view') ? 'dashboard' : 'admin.profile-settings';
+                        $flashMessage = __('admin.common.permission_access_denied');
                     }
-                    $redirectRoute = hasPermission($permissions, 'dashboard', 'view') ? 'dashboard' : 'admin.profile-settings';
-                    return redirect()->route($redirectRoute)->with('permission-error', __('admin.common.permission_access_denied'));
                 } else {
                     $redirectRoute = hasPermission($permissions, 'dashboard', 'view') ? 'dashboard' : 'admin.profile-settings';
-                    return redirect()->route($redirectRoute)->with('permission-error', 'Currently this menu is disabled!');
+                    $flashMessage = 'Currently this menu is disabled!';
                 }
             } else {
+                // non-reservation routes
                 if ($moduleDetails && hasPermission($permissions, $moduleDetails['module'], $moduleDetails['action'])) {
-                    return $next($request);
+                    $allowed = true;
+                } else {
+                    $redirectRoute = hasPermission($permissions, 'dashboard', 'view') ? 'dashboard' : 'admin.profile-settings';
+                    $flashMessage = __('admin.common.permission_access_denied');
                 }
-                $redirectRoute = hasPermission($permissions, 'dashboard', 'view') ? 'dashboard' : 'admin.profile-settings';
-                return redirect()->route($redirectRoute)->with('permission-error', __('admin.common.permission_access_denied'));
             }
         } elseif ($userType == 1) {
-            if (($routeName == 'reservation.index' || $routeName == 'reservation.create' || $routeName == 'reservation.edit' || $routeName == 'reservation.details') && !isAccessMenu('reservation')) {
-                return redirect()->route('dashboard')->with('permission-error', 'Currently this menu is disabled!');
+            // user type 1 only needs disabled reservation check
+            $reservationRoutes = [
+                'reservation.index',
+                'reservation.create',
+                'reservation.edit',
+                'reservation.details'
+            ];
+            if (in_array($routeName, $reservationRoutes, true) && !isAccessMenu('reservation')) {
+                $allowed = false;
+                $redirectRoute = 'dashboard';
+                $flashMessage = 'Currently this menu is disabled!';
             }
         }
 
-        return $next($request);
+        if ($allowed) {
+            return $next($request);
+        }
+
+        return redirect()->route($redirectRoute)->with('permission-error', $flashMessage);
     }
 }

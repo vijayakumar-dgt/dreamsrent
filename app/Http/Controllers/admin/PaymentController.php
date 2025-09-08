@@ -19,8 +19,8 @@ class PaymentController extends Controller
 
     public function index(): View
     {
-        $GetPayments = $this->paymentRepository->getDistinctPaymentTypes();
-        return view("admin.payment.index", ['GetPayments' => $GetPayments]);
+        $getPayments = $this->paymentRepository->getDistinctPaymentTypes();
+        return view("admin.payment.index", ['GetPayments' => $getPayments]);
     }
 
     public function paymentList(Request $request): JsonResponse

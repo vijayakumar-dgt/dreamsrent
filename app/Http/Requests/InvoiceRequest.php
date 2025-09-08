@@ -7,6 +7,11 @@ use App\Library\CustomFailedValidation;
 class InvoiceRequest extends CustomFailedValidation
 {
     /**
+     * Constant for required string rule
+     */
+    private const REQUIRED_STRING = 'required|string';
+
+    /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
@@ -24,14 +29,14 @@ class InvoiceRequest extends CustomFailedValidation
         return [
             'car_id'              => 'required',
             'currency_id'         => 'required',
-            'status'              => 'required|string',
-            'biller'              => 'required|string',
+            'status'              => self::REQUIRED_STRING,
+            'biller'              => self::REQUIRED_STRING,
             'customer_id'         => 'required',
-            'payment_method'      => 'required|string',
-            'terms'               => 'required|string',
-            'notes'               => 'required|string',
+            'payment_method'      => self::REQUIRED_STRING,
+            'terms'               => self::REQUIRED_STRING,
+            'notes'               => self::REQUIRED_STRING,
             'items'               => 'required',
-            'items.*.description' => 'required|string',
+            'items.*.description' => self::REQUIRED_STRING,
             'items.*.qty'         => 'required|numeric|min:1',
             'items.*.price'       => 'required|numeric|min:0',
             'items.*.total_price' => 'required|numeric|min:0',

@@ -218,39 +218,58 @@ class WalletController extends Controller
 
     public function paypalPaymentSuccessWallet(Request $request): JsonResponse|RedirectResponse
     {
+        $redirectResponse = null;
+        $jsonPayload = null;
+        $statusCode = 500;
+
         try {
             $accessToken = $this->provider->getAccessToken();
             if (!$accessToken) {
-                return response()->json([
+                $jsonPayload = [
                     'code'    => 401,
                     'message' => 'PayPal authentication failed.',
-                ], 401);
-            }
-
-            $response = $this->provider->capturePaymentOrder($request->get('token'));
-
-            if ($response instanceof \Psr\Http\Message\StreamInterface) {
-                $response = json_decode($response->getContents(), true);
-            } elseif (is_string($response)) {
-                $response = json_decode($response, true);
-            }
-
-            if (isset($response['status']) && $response['status'] == 'COMPLETED') {
-                WalletHistory::where('transaction_id', $response['id'])->update(['status' => 'Completed']);
-
-                return redirect()->route('user.wallet', ['transaction_id' => $response['id']]);
+                ];
+                $statusCode = 401;
             } else {
-                return response()->json([
-                    'code'    => 400,
-                    'message' => 'Wallet payment capture failed.',
-                ], 400);
+                $response = $this->provider->capturePaymentOrder($request->get('token'));
+
+                if ($response instanceof \Psr\Http\Message\StreamInterface) {
+                    $response = json_decode($response->getContents(), true);
+                } elseif (is_string($response)) {
+                    $response = json_decode($response, true);
+                }
+
+                if (isset($response['status']) && $response['status'] == 'COMPLETED') {
+                    WalletHistory::where('transaction_id', $response['id'])
+                        ->update(['status' => 'Completed']);
+
+                    $redirectResponse = redirect()->route('user.wallet', ['transaction_id' => $response['id']]);
+                } else {
+                    $jsonPayload = [
+                        'code'    => 400,
+                        'message' => 'Wallet payment capture failed.',
+                    ];
+                    $statusCode = 400;
+                }
             }
         } catch (\Exception $e) {
-            return response()->json([
+            $jsonPayload = [
                 'code'    => 500,
                 'message' => 'An error occurred: ' . $e->getMessage(),
-            ], 500);
+            ];
+            $statusCode = 500;
         }
+
+        // Single redirect return if success
+        if ($redirectResponse !== null) {
+            return $redirectResponse;
+        }
+
+        // Single JSON return for all error cases
+        return response()->json($jsonPayload ?? [
+            'code'    => 500,
+            'message' => 'An unexpected error occurred.',
+        ], $statusCode);
     }
 
     public function stripePaymentSuccessWallet(Request $request): JsonResponse|RedirectResponse
