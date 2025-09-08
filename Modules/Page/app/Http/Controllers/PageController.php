@@ -368,7 +368,6 @@ class PageController extends Controller
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
 
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $banners = DB::table('sections')
@@ -418,7 +417,6 @@ class PageController extends Controller
 
                         // Ensure $limit is cast to an integer
                         $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         // Fetch from sections + section_datas with language-specific data
@@ -475,7 +473,6 @@ class PageController extends Controller
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
 
                         $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $banners = DB::table('sections')
@@ -531,7 +528,6 @@ class PageController extends Controller
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
 
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $banners = DB::table('sections')
@@ -591,7 +587,6 @@ class PageController extends Controller
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
 
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $best_vehicles = DB::table('sections')
@@ -659,7 +654,6 @@ class PageController extends Controller
                     if (is_string($content) && strpos($content, '[brand') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $getCategoryId = getCategoryId();
@@ -691,7 +685,6 @@ class PageController extends Controller
                     if (is_string($content) && strpos($content, '[location') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         asset('frontend/assets/img/placeholder-app-car.jpg');
@@ -737,7 +730,6 @@ class PageController extends Controller
                     ) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
                         $limit = $matches[1] ?? 6;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
                         $categoryId = getCategoryId();
                         $category = Cartype::select('name', 'icon', 'id')
@@ -775,7 +767,6 @@ class PageController extends Controller
                     ) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
                         $limit = $matches[1] ?? 6;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
                         $categoryId = getCategoryId();
                         $category = Cartype::select('name', 'icon', 'id', 'type')
@@ -813,7 +804,6 @@ class PageController extends Controller
                     ) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
                         $limit = $matches[1] ?? 6;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $category = Cartype::select('name', 'icon', 'id', 'type')
@@ -849,7 +839,6 @@ class PageController extends Controller
                         // Parse shortcode parameters
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         // Fetch FAQ data
@@ -892,7 +881,6 @@ class PageController extends Controller
                         // Parse shortcode parameters
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         // Fetch FAQ data
@@ -933,7 +921,6 @@ class PageController extends Controller
                     if (is_string($content) && strpos($content, '[faq') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $faqs = DB::table('faqs')
@@ -958,7 +945,6 @@ class PageController extends Controller
                     if (is_string($content) && strpos($content, '[how_it_work') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         if ($themeId == 3) {
@@ -1009,7 +995,6 @@ class PageController extends Controller
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
-                        $viewAll = $matches[3] ?? 'no';
 
                         $query = VehicleInfo::with([
                             'carType:id,name',
@@ -1091,11 +1076,7 @@ class PageController extends Controller
 
                             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
-                            $user = User::where('id', $vehicle->created_by)
-                                ->first();
 
-                            $user = User::where('id', $vehicle->created_by)->first();
-                            $userDetail = null;
                             $defaultAvatar = asset('/backend/assets/img/default-profile.png');
                             $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
@@ -1154,8 +1135,7 @@ class PageController extends Controller
                     if (isset($section['section_content']) && strpos($section['section_content'], '[bike') !== false) {
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
                         $type = $matches[1] ?? 'all';
-                        $limit = $matches[2] ?? 10;
-                        $viewAll = $matches[3] ?? 'no';
+                        
 
                         $query = VehicleInfo::with([
                             'carType:id,name',
@@ -1241,11 +1221,7 @@ class PageController extends Controller
 
                             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
-                            $user = User::where('id', $vehicle->created_by)
-                                ->first();
 
-                            $user = User::where('id', $vehicle->created_by)->first();
-                            $userDetail = null;
                             $defaultAvatar = asset('/backend/assets/img/default-profile.png');
                             $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
@@ -1308,7 +1284,7 @@ class PageController extends Controller
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
-                        $viewAll = $matches[3] ?? 'no';
+                        
 
                         $query = VehicleInfo::with([
                             'carType:id,name',
@@ -1406,11 +1382,7 @@ class PageController extends Controller
 
                             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
-                            $user = User::where('id', $vehicle->created_by)
-                                ->first();
 
-                            $user = User::where('id', $vehicle->created_by)->first();
-                            $userDetail = null;
                             $defaultAvatar = asset('/backend/assets/img/default-profile.png');
                             $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
@@ -1991,7 +1963,7 @@ class PageController extends Controller
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
-                        $viewAll = $matches[3] ?? 'no';
+                        
 
                         $blogss = DB::table('blog_posts')
                             ->select('id', 'title', 'image', 'slug', 'category', 'description', 'updated_at')
@@ -2425,7 +2397,6 @@ class PageController extends Controller
                 ->get();
 
             $content_sections = collect((array) $data['content_sections']);
-            // dd($content_sections);
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
             } else {
@@ -2785,8 +2756,7 @@ class PageController extends Controller
                     if (isset($section['section_content']) && strpos($section['section_content'], '[vehicle') !== false) {
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
                         $type = $matches[1] ?? 'all';
-                        $limit = $matches[2] ?? 10;
-                        $viewAll = $matches[3] ?? 'no';
+                        
 
                         $query = VehicleInfo::with([
                             'carType:id,name',
@@ -3077,7 +3047,7 @@ class PageController extends Controller
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
-                        $viewAll = $matches[3] ?? 'no';
+                        
 
                         $blogss = DB::table('blog_posts')
                             ->select('id', 'title', 'image', 'slug', 'category', 'description', 'updated_at')

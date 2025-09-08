@@ -220,7 +220,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
         $walletSetting = GeneralSetting::where("key", "wallet_status")->first();
         $walletStatus = ($walletSetting && $walletSetting->value == 1) ? 1 : 0;
-        $data = [
+        return [
             'slug'              => $slug,
             'user'              => $user,
             'vehicleId'         => $vehicleId,
@@ -253,19 +253,16 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             'walletStatus'      => $walletStatus
         ];
 
-        return $data;
     }
 
     public function getStates(int $country_id): Collection
     {
-        $states = State::where('country_id', $country_id)->get(['id', 'name']);
-        return $states;
+        return State::where('country_id', $country_id)->get(['id', 'name']);
     }
 
     public function getCities(int $state_id): Collection
     {
-        $cities = City::where('state_id', $state_id)->get(['id', 'name']);
-        return $cities;
+        return City::where('state_id', $state_id)->get(['id', 'name']);
     }
 
     public function checkBooking(Request $request): array
@@ -275,13 +272,12 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         $vehicleId = $request->input('vehicle_id');
 
         if (empty($pickupDatetime) || empty($returnDatetime) || empty($vehicleId)) {
-            $response = [
+            return  [
                 'status'  => 'error',
                 'code'    => 422,
                 'message' => __('web.home.booking_required_fields')
             ];
 
-            return $response;
         }
 
         $isUnavailable = Booking::where('vehicle_id', $vehicleId)
@@ -292,19 +288,17 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             ->exists();
 
         if ($isUnavailable) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'message' => __('web.home.vehicle_already_booked_for_selected_time'),
                 'code'    => 200
             ];
-            return $response;
         }
-        $response = [
+        return [
             'status'  => 'success',
             'message' => __('web.home.vehicle_available'),
             'code'    => 200
         ];
-        return $response;
     }
 
     public function paymentSuccess(string $transaction_id): array
@@ -336,18 +330,21 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
         $extraServiceIds = collect($extraServices)->pluck('id')->toArray();
 
-        $vehicle = VehicleInfo::select('id', 'name', 'vehicle_image', 'main_location_id', 'vehicle_price')->where('id', $vehicleId)->first();
+        $vehicle = VehicleInfo::select('id', 'name', 'vehicle_image', 'main_location_id', 'vehicle_price')
+            ->where('id', $vehicleId)
+            ->first();
         $vehicleImageUrl = $vehicle ? asset('/storage/' . $vehicle->vehicle_image) : null;
 
         $mainLocation = null;
-
         if ($vehicle) {
             $mainLocation = Location::select('name', 'address')
                 ->where('id', $vehicle->main_location_id)
                 ->first();
         }
+
         $dLocation = Location::select('name', 'address')->where('id', $booking->pickup_location)->first();
         $rLocation = Location::select('name', 'address')->where('id', $booking->return_location)->first();
+
         $vehicleExtraServices = ExtraService::select('id', 'name')
             ->whereIn('id', $extraServiceIds)
             ->get();
@@ -357,8 +354,8 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 ->where('vehicle_id', $vehicleId)
                 ->first(['price', 'value']);
 
-            $service->price = $serviceData->price ?? 0; // Default to 0 if no price found
-            $service->value = $serviceData->value ?? null; // Include value
+            $service->price = $serviceData->price ?? 0;
+            $service->value = $serviceData->value ?? null;
 
             return $service;
         });
@@ -374,7 +371,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         )
             ->join('insurances', 'vehicle_insurances.insurances_id', '=', 'insurances.id')
             ->with(['insuranceBenefits' => function ($query) {
-                $query->select('insurance_id', 'benefit'); // Only select necessary columns
+                $query->select('insurance_id', 'benefit');
             }])
             ->where('vehicle_insurances.vehicle_id', $vehicleId)
             ->get();
@@ -395,7 +392,6 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         $currencySymbol = $currency->symbol ?? "$";
 
         $driverInfo = null;
-
         if (!is_null($booking->driver_id)) {
             $driverInfo = Driver::select("id", "driver_name", "phone_number")
                 ->where("id", $booking->driver_id)
@@ -416,7 +412,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             }
         }
 
-        $data = [
+        return [
             'transaction_id'                => $transaction_id,
             'booking'                       => $booking,
             'vehicleId'                     => $vehicleId,
@@ -435,14 +431,11 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             'startDateTime'                 => $startDateTime,
             'endDateTime'                   => $endDateTime
         ];
-
-        return $data;
     }
 
     public function getBooking(string $transaction_id): object
     {
-        $booking = Booking::where('transaction_id', $transaction_id)->first();
-        return $booking;
+        return Booking::where('transaction_id', $transaction_id)->first();
     }
 
     public function userPayments(Request $request)
@@ -450,11 +443,10 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
         if (!$authUser) {
-            $response = [
+            return [
                 'code'    => 401,
                 'message' => 'Unauthorized',
             ];
-            return $response;
         }
 
         $formattedBookingDate = Carbon::now()->format('Y-m-d H:i:s');
@@ -606,26 +598,23 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 if (userNotificationsEnabled() && $authUser?->email) {
                     sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                 }
-            } catch (\Exception $e) {
-            }
-            $response = [
+            } 
+            return [
                 'code'         => 200,
                 'message'      => __('web.home.booking_successfully_created'),
                 'email'        => $request->email,
                 'cod'          => $booking->transaction_id,
                 'redirect_url' => route('payment.success.page', ['transaction_id' => $booking->transaction_id])
             ];
-            return $response;
         }
 
         if ($request->payment_type == "paypal") {
             if (!$this->provider) {
-                $response = [
+                return [
                     'success' => false,
                     'code'    => 503,
                     'message' => 'PayPal is currently unavailable. Please choose another payment method.',
                 ];
-                return $response;
             }
             $order['intent'] = 'CAPTURE';
 
@@ -688,12 +677,11 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $response = $this->provider->createOrder($order);
 
             if (!is_array($response) || !array_key_exists('id', $response)) {
-                $response = [
+                return  [
                     'success' => false,
                     'code'    => 503,
                     'message' => 'PayPal is currently unavailable. Please choose another payment method.',
                 ];
-                return $response;
             }
 
             $data = [
@@ -791,12 +779,11 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         if ($request->payment_type == "stripe") {
             $stripeSecret = config('services.stripe.secret') ?? '';
             if (empty($stripeSecret)) {
-                $response = [
+                return [
                     'code'    => 503,
                     'success' => false,
                     'message' => 'Stripe is currently unavailable. Please choose another payment method.'
                 ];
-                return $response;
             }
             Stripe::setApiKey(is_string($stripeSecret) ? $stripeSecret : '');
 
@@ -917,12 +904,11 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             ]);
 
             $stripURL = $session->url;
-            $response = [
+            return [
                 'message'  => __('web.home.order_created_successfully'),
                 'stripurl' => $stripURL
             ];
 
-            return $response;
         }
 
         if ($request->payment_type == "wallet") {
@@ -939,12 +925,11 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             $walletTotalAmount = $totalAmount - $totalAmountdebit;
 
             if ($walletTotalAmount < $request->input('total_price')) {
-                $response = [
+                return [
                     'code'    => 422,
                     'message' => __('web.home.insufficient_balance_in_wallet'),
                     'data'    => []
                 ];
-                return $response;
             }
 
             $generateID = 'wallet' . str_pad((string) mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
@@ -1077,9 +1062,8 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 if (userNotificationsEnabled() && $authUser && $authUser->email) {
                     sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                 }
-            } catch (\Exception $e) {
-            }
-            $response = [
+            } 
+            return [
                 'code'         => 200,
                 'message'      => __('web.home.booking_successfully_created'),
                 'email'        => $request->email,
@@ -1087,7 +1071,6 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 'redirect_url' => route('payment.success.page', ['transaction_id' => $booking->transaction_id])
             ];
 
-            return $response;
         }
     }
 
@@ -1158,12 +1141,11 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 return $response;
             }
         } catch (\Exception $e) {
-            $response = [
+           return [
                 'code'    => 400,
                 'message' => 'An error occurred: ' . $e->getMessage(),
                 'error'   => $e
             ];
-            return $response;
         }
     }
 
@@ -1179,11 +1161,10 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                     'payment_status' => 3,
                     'booking_status' => 3,  // Set the booking status to 3 (Failed)
                 ]);
-            $response = [
+           return [
                 'redirect_url' => route('payment.success.fail', ['transaction_id' => $request->token])
             ];
 
-            return $response;
         } catch (\Exception $e) {
             Booking::where('transaction_id', $request->get('token'))
                 ->update([
@@ -1191,11 +1172,10 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                     'booking_status' => 3,  // Set the booking status to 3 (Failed)
                 ]);
 
-            $response = [
+           return [
                 'code'    => 500,
                 'message' => 'An error occurred: ' . $e->getMessage(),
             ];
-            return $response;
         }
     }
 
@@ -1245,18 +1225,16 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 }
             } catch (\Exception $e) {
             }
-            $response = [
+            return [
                 'redirect_url' => route('payment.success.page', ['transaction_id' => $sessionId])
             ];
 
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'code'    => 500,
                 'message' => 'An error occurred: ' . $e->getMessage(),
             ];
 
-            return $response;
         }
     }
 
@@ -1266,12 +1244,10 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         $user = current_user();
 
         if (!$user) {
-            $response = [
+            return [
                 'error' => 'Unauthorized',
                 'code'  => 401
             ];
-
-            return $response;
         }
 
         $sort = $request->input('sort', 'last_7_days');
@@ -1295,12 +1271,10 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             ->get();
 
         if ($transactions->isEmpty()) {
-            $response = [
+            return [
                 'message' => __('web.home.no_transaction_found'),
                 'code'    => 200
             ];
-
-            return $response;
         }
 
         $data = $transactions->map(function ($transaction) {
@@ -1314,30 +1288,31 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 }
             }
             return [
-                'id'             => $transaction->id,
-                'vehicle_name'   => $transaction->vehicle->name ?? 'N/A',
-                'vehicle_image'  => $transaction->vehicle ? uploadedAsset($transaction->vehicle->vehicle_image) : uploadedAsset('default.png'),
-                'rent_type'      => ucfirst((string) ($transaction->rental_type ?? '')),
-                'status'         => $transaction->payment_status,
-                'updated_at'     => $transaction->updated_at->format('d M Y, h:i A'),
+                'id'            => $transaction->id,
+                'vehicle_name'  => $transaction->vehicle->name ?? 'N/A',
+                'vehicle_image' => $transaction->vehicle
+                    ? uploadedAsset($transaction->vehicle->vehicle_image)
+                    : uploadedAsset('default.png'),
+                'rent_type'     => ucfirst((string) ($transaction->rental_type ?? '')),
+                'status'        => $transaction->payment_status,
+                'updated_at'    => $transaction->updated_at->format('d M Y, h:i A'),
             ];
         });
-        $response = [
+
+        return [
             'code'   => 200,
             'data'   => $data,
             'status' => 'success'
         ];
-
-        return $response;
     }
 
     public function getBenefits(Request $request)
     {
         $insuranceId = $request->input('id');
-        $benefits = InsuranceBenefit::where('insurance_id', $insuranceId)
+
+        return InsuranceBenefit::where('insurance_id', $insuranceId)
             ->select('benefit')
             ->get();
-
-        return $benefits;
     }
+
 }

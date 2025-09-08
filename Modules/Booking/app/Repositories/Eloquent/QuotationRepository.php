@@ -584,7 +584,7 @@ class QuotationRepository implements QuotationRepositoryInterface
                 }
             }
 
-            $status = is_numeric($booking->booking_status) ? (int)$booking->booking_status : 4;
+            $status = is_numeric($booking->booking_status) ? (int) $booking->booking_status : 4;
             $booking->booking_status_text = Booking::getStatusLabel($status);
             $booking->currency_symbol = getDefaultCurrencySymbol();
 
@@ -607,9 +607,10 @@ class QuotationRepository implements QuotationRepositoryInterface
             'message',
         ]);
 
-        $data = ['bookingHistories' => $bookingHistories, 'booking' => $booking];
-
-        return $data;
+        return [
+            'bookingHistories' => $bookingHistories,
+            'booking' => $booking,
+        ];
     }
 
     public function delete(Request $request): array
@@ -619,19 +620,17 @@ class QuotationRepository implements QuotationRepositoryInterface
             Booking::where('id', $id)->delete();
             BookingDetail::where('booking_id', $id)->delete();
 
-            $response = [
+            return [
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('admin.bookings.quotation_delete_success')
             ];
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => __('admin.common.default_delete_error'),
             ];
-            return $response;
         }
     }
 }

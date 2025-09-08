@@ -11,6 +11,5 @@ class BookingDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
     }
 }

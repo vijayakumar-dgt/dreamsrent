@@ -67,7 +67,7 @@ class SectionController extends Controller
     public function indexListSection(Request $request): JsonResponse
     {
         $orderBy = $request->input('order_by', 'asc');
-        $sortBy = $request->input('sort_by', 'id');
+        $sortBy  = $request->input('sort_by', 'id');
 
         $authuser = Auth::user();
 
@@ -87,63 +87,51 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four', 'Benefits Of Yacht', 'Yacht Experience', 'Ad Card Two', 'Theme Four AD Card', 'Offer Card', 'Exclusive Yacht', 'Exclusive Bike', 'Ad Card one'];
+        $allowedNames = [
+            'Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle',
+            'Banner Three', 'Banner Four', 'Benefits Of Yacht', 'Yacht Experience',
+            'Ad Card Two', 'Theme Four AD Card', 'Offer Card', 'Exclusive Yacht',
+            'Exclusive Bike', 'Ad Card one'
+        ];
 
         $sections = $this->sectionRepository->getFilteredSections($orderBy, $sortBy, $allowedNames);
 
-        $data = [];
-        $baseUrl = asset('storage');
+        $baseUrl   = asset('storage');
+        $imageKeys = [
+            'thumbnail_image_one',
+            'thumbnail_image_two',
+            'thumbnail_image_four',
+            'thumbnail_image_boat_seasonal',
+            'thumbnail_image_car_ad',
+            'thumbnail_image_boat_offer',
+            'thumbnail_image_boat_exclusive',
+            'thumbnail_image_boat',
+        ];
 
-        foreach ($sections as $section) {
-            $sectionData = $this->sectionRepository->getSectionData($section->id, $languageId);
+        $data = $sections->map(function ($section) use ($languageId, $baseUrl, $imageKeys) {
+            $sectionData  = $this->sectionRepository->getSectionData($section->id, $languageId);
             $decodedDatas = $sectionData ? json_decode($sectionData, true) : [];
 
-            if (!empty($decodedDatas['thumbnail_image_one'])) {
-                $decodedDatas['thumbnail_image_one'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_one'];
-            }
+            foreach ($imageKeys as $key) {
+                if (empty($decodedDatas[$key])) {
+                    continue;
+                }
 
-            if (!empty($decodedDatas['thumbnail_image_two'])) {
-                $decodedDatas['thumbnail_image_two'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_two'];
-            }
-
-            if (!empty($decodedDatas['thumbnail_image_four'])) {
-                $decodedDatas['thumbnail_image_four'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_four'];
-            }
-
-            if (!empty($decodedDatas['thumbnail_image_boat_seasonal'])) {
-                $decodedDatas['thumbnail_image_boat_seasonal'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat_seasonal'];
-            }
-
-            if (!empty($decodedDatas['thumbnail_image_car_ad'])) {
-                $decodedDatas['thumbnail_image_car_ad'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_car_ad'];
-            }
-
-            if (!empty($decodedDatas['thumbnail_image_boat_offer'])) {
-                $decodedDatas['thumbnail_image_boat_offer'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat_offer'];
-            }
-
-            if (!empty($decodedDatas['thumbnail_image_boat_exclusive'])) {
-                $decodedDatas['thumbnail_image_boat_exclusive'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat_exclusive'];
-            }
-
-            if (!empty($decodedDatas['thumbnail_image_boat'])) {
-                if (is_array($decodedDatas['thumbnail_image_boat'])) {
-                    $decodedDatas['thumbnail_image_boat'] = array_map(function ($path) use ($baseUrl) {
-                        return $baseUrl . '/' . $path;
-                    }, $decodedDatas['thumbnail_image_boat']);
+                if ($key === 'thumbnail_image_boat' && is_array($decodedDatas[$key])) {
+                    $decodedDatas[$key] = array_map(fn($path) => $baseUrl . '/' . $path, $decodedDatas[$key]);
                 } else {
-                    $decodedDatas['thumbnail_image_boat'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat'];
+                    $decodedDatas[$key] = $baseUrl . '/' . $decodedDatas[$key];
                 }
             }
 
-            $data[] = array_merge([
+            return array_merge([
                 'id'       => $section->id,
                 'theme_id' => $section->theme_id,
                 'title'    => $section->title,
                 'name'     => $section->name,
                 'status'   => $section->status,
             ], $decodedDatas);
-        }
+        })->toArray();
 
         return response()->json([
             'code'    => 200,
@@ -366,39 +354,27 @@ class SectionController extends Controller
                 );
             }
         } elseif ($sectionId == 72) {
-            $thumbnailPath = $existingData['thumbnail_image_boat_seasonal'] ?? null;
             if ($request->hasFile('thumbnail_image_boat_seasonal')) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_boat_seasonal'), 'general');
-
                 $data = [
-                    'thumbnail_image_boat_seasonal' => $thumbnailPath,
+                    'thumbnail_image_boat_seasonal' => uploadFile($request->file('thumbnail_image_boat_seasonal'), 'general'),
                 ];
             }
         } elseif ($sectionId == 25) {
-            $thumbnailPath = $existingData['thumbnail_image_car_ad'] ?? null;
             if ($request->hasFile('thumbnail_image_car_ad')) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_car_ad'), 'general');
-
                 $data = [
-                    'thumbnail_image_car_ad' => $thumbnailPath,
+                    'thumbnail_image_car_ad' => uploadFile($request->file('thumbnail_image_car_ad'), 'general'),
                 ];
             }
         } elseif ($sectionId == 73) {
-            $thumbnailPath = $existingData['thumbnail_image_boat_offer'] ?? null;
             if ($request->hasFile('thumbnail_image_boat_offer')) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_boat_offer'), 'general');
-
                 $data = [
-                    'thumbnail_image_boat_offer' => $thumbnailPath,
+                    'thumbnail_image_boat_offer' => uploadFile($request->file('thumbnail_image_boat_offer'), 'general'),
                 ];
             }
         } elseif ($sectionId == 74) {
-            $thumbnailPath = $existingData['thumbnail_image_boat_exclusive'] ?? null;
             if ($request->hasFile('thumbnail_image_boat_exclusive')) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_boat_exclusive'), 'general');
-
                 $data = [
-                    'thumbnail_image_boat_exclusive' => $thumbnailPath,
+                    'thumbnail_image_boat_exclusive' => uploadFile($request->file('thumbnail_image_boat_exclusive'), 'general'),
                 ];
             }
         } elseif ($sectionId == 75) {
