@@ -47,11 +47,11 @@
                         </div>
                     </div>
                     <div class="dropdown">
-                        <button class="filtercollapse coloumn d-inline-flex align-items-center" 
+                        <button class="filtercollapse coloumn d-inline-flex align-items-center"
                                 type="button"
-                                data-bs-toggle="collapse" 
-                                data-bs-target="#filtercollapse" 
-                                aria-expanded="false" 
+                                data-bs-toggle="collapse"
+                                data-bs-target="#filtercollapse"
+                                aria-expanded="false"
                                 aria-controls="filtercollapse">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
                         </button>

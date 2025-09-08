@@ -6,7 +6,7 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
+            <x-admin.breadcrumb
                 :title="__('admin.common.quotations')"
                 :breadcrumbs="[
                     __('admin.common.quotations') => ''
@@ -56,11 +56,11 @@
                         </div>
                     </div>
                     <div class="dropdown">
-                        <button class="filtercollapse coloumn d-inline-flex align-items-center" 
+                        <button class="filtercollapse coloumn d-inline-flex align-items-center"
                                 type="button"
-                                data-bs-toggle="collapse" 
-                                data-bs-target="#filtercollapse" 
-                                aria-expanded="false" 
+                                data-bs-toggle="collapse"
+                                data-bs-target="#filtercollapse"
+                                aria-expanded="false"
                                 aria-controls="filtercollapse">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
                         </button>

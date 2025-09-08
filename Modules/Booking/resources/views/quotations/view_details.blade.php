@@ -132,7 +132,7 @@
                                             </h6>
                                             <p>{{ $booking->security_deposit ? $booking->currency_symbol . $booking->security_deposit :  $booking->currency_symbol . '0.00' }}</p>
                                         </div>
-                                        @if ($booking->driver_name) 
+                                        @if ($booking->driver_name)
                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                             <h6 class="fw-medium d-flex align-items-center fs-14">{{ __('admin.bookings.driver_price') }}
                                             </h6>
@@ -140,7 +140,7 @@
                                         </div>
                                         @endif
                                         <div class="d-flex align-items-center justify-content-between mb-2">
-                                            <h6 class="fw-medium d-flex align-items-center fs-14">{{ $booking->insurance_count }} {{ __('admin.common.insurances') }} 
+                                            <h6 class="fw-medium d-flex align-items-center fs-14">{{ $booking->insurance_count }} {{ __('admin.common.insurances') }}
                                                 <a href="javascript:void(0);" class="me-2 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ !empty($booking->insurance_names) ? implode(', ', $booking->insurance_names) : '' }}"><i class="ti ti-info-circle-filled"></i></a>
                                             </h6>
                                             <p>{{ $booking->currency_symbol }}{{ $booking->total_insurance_price }}</p>
@@ -182,7 +182,7 @@
                                                         <h5 class="mb-2">{{ \Carbon\Carbon::parse($history->created_at)->format('d') }}</h5>
                                                         <span class="fw-medium fs-12 bg-primary-transparent p-1 d-inline-block rounded-1 text-gray-9">
                                                             {{ \Carbon\Carbon::parse($history->created_at)->format('M, Y') }}
-                                                        </span>                                                    
+                                                        </span>
                                                     </div>
                                                     <div>
                                                         <h6 class="fs-14 mb-1">{{ $history->message }}</h6>

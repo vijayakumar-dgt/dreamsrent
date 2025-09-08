@@ -716,10 +716,10 @@
                         <div class="booking-sidebar-card">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header">
-                                    <button class="accordion-button collapsed" 
+                                    <button class="accordion-button collapsed"
                                             type="button"
-                                            data-bs-toggle="collapse" 
-                                            data-bs-target="#accordion_collapse_one" 
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#accordion_collapse_one"
                                             aria-expanded="true">
                                         <div class="booking-sidebar-head">
                                             <h5>{{__('web.home.booking_details')}}<i class="fas fa-chevron-down"></i></h5>
@@ -755,10 +755,10 @@
                         <div class="booking-sidebar-card d-none" id="location-card">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header p-3 d-flex align-center justify-content-between">
-                                    <button class="accordion-button collapsed" 
+                                    <button class="accordion-button collapsed"
                                             type="button"
-                                            data-bs-toggle="collapse" 
-                                            data-bs-target="#accordion_collapse_three" 
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#accordion_collapse_three"
                                             aria-expanded="true">
                                         <div class="booking-sidebar-head p-0 d-flex justify-content-between align-items-center">
                                             <h5>{{ __('web.home.location_and_time') }}<i class="fas fa-chevron-down"></i></h5>
@@ -802,10 +802,10 @@
                         <div class="booking-sidebar-card d-none" id="extra-card">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header d-flex align-center justify-content-between p-3">
-                                    <button class="accordion-button collapsed" 
+                                    <button class="accordion-button collapsed"
                                             type="button"
-                                            data-bs-toggle="collapse" 
-                                            data-bs-target="#accordion_collapse_four" 
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#accordion_collapse_four"
                                             aria-expanded="true">
                                         <div class="booking-sidebar-head p-0 d-flex justify-content-between align-items-center">
                                             <h5>{{ __('web.home.extra_services_and_insurance') }}<i class="fas fa-chevron-down"></i></h5>
@@ -892,10 +892,10 @@
                         <div class="booking-sidebar-card d-none">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header">
-                                    <button class="accordion-button collapsed" 
+                                    <button class="accordion-button collapsed"
                                             type="button"
-                                            data-bs-toggle="collapse" 
-                                            data-bs-target="#accordion_collapse_two" 
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#accordion_collapse_two"
                                             aria-expanded="true">
                                         <div class="booking-sidebar-head d-flex justify-content-between align-items-center">
                                             <h5>{{ __('web.home.coupon') }}<i class="fas fa-chevron-down"></i></h5>

@@ -27,9 +27,13 @@ class QuotationRepository implements QuotationRepositoryInterface
     public function create(): array
     {
         $auth = current_user();
-        $locations = Location::where('status', 1)->where('language_id', $auth->language_id)->get();
+        $locations = Location::where('status', 1)
+            ->where('language_id', $auth->language_id)
+            ->get();
+
         $priceTypes = PricingType::where('type', 1)->get();
         $drivingTypes = DB::table('driving_types')->get();
+
         /** @var \Illuminate\Support\Collection<int, \stdClass> $customers */
         $customers = User::select(
             'users.id',
@@ -38,14 +42,18 @@ class QuotationRepository implements QuotationRepositoryInterface
         )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
-            ->get()->map(function ($customer) {
+            ->get()
+            ->map(function ($customer) {
                 $customer->full_name = $customer->full_name ?? $customer->username;
                 return $customer;
             });
 
-        $data = ['locations' => $locations, 'priceTypes' => $priceTypes, 'drivingTypes' => $drivingTypes, 'customers' => $customers];
-
-        return $data;
+        return [
+            'locations'   => $locations,
+            'priceTypes'  => $priceTypes,
+            'drivingTypes'=> $drivingTypes,
+            'customers'   => $customers,
+        ];
     }
 
     public function store(Request $request): array
@@ -194,7 +202,6 @@ class QuotationRepository implements QuotationRepositoryInterface
                             sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
                         }
                     }
-                } catch (\Exception $e) {
                 }
             } else {
                 $data['updated_by'] = Auth::guard('admin')->id();
@@ -223,30 +230,29 @@ class QuotationRepository implements QuotationRepositoryInterface
 
             $encryptedId = (is_int($bookingId) || is_string($bookingId)) ? customEncrypt($bookingId, Booking::$reservationSecretKey) : null;
 
-            $response = [
+            return [
                 'code'             => 200,
                 'message'          => $successMsg,
                 'view_details_url' => route('quotations.details', ['id' => $encryptedId]),
             ];
 
-            return $response;
         } catch (\Exception $e) {
             DB::rollBack();
 
-            $response = [
+            return [
                 'code'    => 500,
                 'message' => $errorMsg,
                 'error'   => $e->getMessage(),
             ];
-            return $response;
         }
     }
 
     public function edit(Request $request, string|int|null $id): array
     {
-        $locations = Location::where('status', 1)->get();
-        $priceTypes = PricingType::where('type', 1)->get();
+        $locations   = Location::where('status', 1)->get();
+        $priceTypes  = PricingType::where('type', 1)->get();
         $drivingTypes = DB::table('driving_types')->get();
+
         $customers = User::select(
             'users.id',
             DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
@@ -254,6 +260,7 @@ class QuotationRepository implements QuotationRepositoryInterface
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get();
+
         $bookingId = customDecrypt(($id ?? ''), Booking::$reservationSecretKey);
 
         $booking = Booking::select(
@@ -263,11 +270,16 @@ class QuotationRepository implements QuotationRepositoryInterface
             'delivery_price',
             'tax_val',
             'tax_type'
-        )->findOrFail($bookingId); // Assuming you have $bookingId
+        )->findOrFail($bookingId);
 
-        $data = ['locations' => $locations, 'priceTypes' => $priceTypes, 'drivingTypes' => $drivingTypes, 'customers' => $customers, 'bookingId' => $bookingId, 'booking' => $booking];
-
-        return $data;
+        return [
+            'locations'   => $locations,
+            'priceTypes'  => $priceTypes,
+            'drivingTypes'=> $drivingTypes,
+            'customers'   => $customers,
+            'bookingId'   => $bookingId,
+            'booking'     => $booking,
+        ];
     }
 
     public function bookingList(Request $request): array
@@ -358,6 +370,9 @@ class QuotationRepository implements QuotationRepositoryInterface
                         $endDate = \Carbon\Carbon::now()->endOfDay();
                         $query->whereBetween('bookings.created_at', [$startDate, $endDate]);
                         break;
+                    default:
+                        $query->orderBy('bookings.created_at', 'desc');
+                        break;
                 }
             }
 
@@ -392,20 +407,18 @@ class QuotationRepository implements QuotationRepositoryInterface
                 return $booking;
             });
 
-            $response = [
+            return [
                 "draw"            => intval($request->input('draw', 0)),
                 "recordsTotal"    => $totalRecords,
                 "recordsFiltered" => $filteredRecords,
                 "data"            => $bookings
             ];
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
                 'error'   => $e->getMessage(),
             ];
-            return $response;
         }
     }
 
@@ -415,12 +428,11 @@ class QuotationRepository implements QuotationRepositoryInterface
             $id = $request->booking_id ?? '';
 
             if (empty($id)) {
-                $response = [
+                return [
                     'status'  => 'error',
                     'code'    => 400,
                     'message' => 'Booking id is required.'
                 ];
-                return $response;
             }
 
             $booking = Booking::select(
@@ -461,19 +473,17 @@ class QuotationRepository implements QuotationRepositoryInterface
                 $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
             }
 
-            $response = [
+            return [
                 'code'    => 200,
                 'message' => 'Success',
                 'data'    => $booking,
             ];
-            return $response;
         } catch (\Exception $e) {
-            $response = [
+            return [
                 'code'    => 500,
                 'message' => __('admin.common.default_retrieve_error'),
                 'error'   => $e->getMessage(),
             ];
-            return $response;
         }
     }
 
