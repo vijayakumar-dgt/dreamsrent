@@ -124,7 +124,7 @@
         <div class="d-flex justify-content-between align-items-center w-100" id="submit_div">
             <div class="form-check form-check-md form-switch me-2 d-none" id="status_div">
                 <label for="status" class="form-check-label form-label mt-0 mb-0">
-                    <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status" id="status">
+                    <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status" id="status" aria-checked="false">
                     {{ __('admin.common.status') }}
                 </label>
             </div>

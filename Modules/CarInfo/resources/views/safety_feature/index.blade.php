@@ -6,8 +6,8 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
-				:title="__('admin.rentals.safety_features')" 
+			<x-admin.breadcrumb
+				:title="__('admin.rentals.safety_features')"
 				:breadcrumbs="[
 					__('admin.rentals.safety_features') => ''
 				]"
@@ -72,17 +72,17 @@
 	<!-- /Page Wrapper -->
 
 	<!-- Add/Edit Safety Feature -->
-	<x-admin.modal className="addmodal" 
+	<x-admin.modal className="addmodal"
 		id="safety_feature_modal"
-		:title="__('admin.rentals.create_safety_feature')" 
-		action="{{  route('safetyFeature.store') }}" 
-		formId="safetyFeatureForm" 
+		:title="__('admin.rentals.create_safety_feature')"
+		action="{{  route('safetyFeature.store') }}"
+		formId="safetyFeatureForm"
 		method="POST">
 		<x-slot name="body">
             <input type="hidden" name="id" id="id">
             <input type="hidden" name="language_id" id="language_id">
             <div class="mb-3">
-				<label class="form-label">{{ __('admin.rentals.feature') }}<span class="text-danger"> *</span></label>
+				<label for="feature" class="form-label">{{ __('admin.rentals.feature') }}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="feature" id="feature">
 				<span id="feature_error" class="text-danger error-text"></span>
 			</div>
@@ -91,7 +91,7 @@
             <div class="d-flex justify-content-between align-items-center w-100">
 				<div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
 					<label for="status" class="form-check-label form-label mt-0 mb-0">
-					<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
+					<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked aria-checked="false">
 						{{ __('admin.common.status') }}
 					</label>
 				</div>
@@ -105,14 +105,14 @@
 	<!-- /Add/Edit Safety Feature -->
 
 	<!-- Delete Safety Feature -->
-	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('safetyFeature.delete') }}" 
-		formId="deleteSafetyFeatureForm" 
+	<x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('safetyFeature.delete') }}"
+		formId="deleteSafetyFeatureForm"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_safety_feature')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_safety_feature')"
 		:description="__('admin.rentals.delete_safety_feature_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Safety Feature -->

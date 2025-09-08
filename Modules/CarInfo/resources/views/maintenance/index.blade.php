@@ -6,8 +6,8 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
-				:title="__('admin.rentals.maintenance')" 
+			<x-admin.breadcrumb
+				:title="__('admin.rentals.maintenance')"
 				:breadcrumbs="[
 					__('admin.rentals.maintenance') => ''
 				]"
@@ -126,11 +126,11 @@
 	<!-- /Page Wrapper -->
 
 	<!-- Add/Edit Maintenance -->
-	<x-admin.modal className="addmodal" 
+	<x-admin.modal className="addmodal"
 		id="maintenance_modal"
-		:title="__('admin.rentals.create_maintenance')" 
-		action="{{  route('maintenance.store') }}" 
-		formId="maintenanceForm" 
+		:title="__('admin.rentals.create_maintenance')"
+		action="{{  route('maintenance.store') }}"
+		formId="maintenanceForm"
 		method="POST">
 		<x-slot name="body">
             <input type="hidden" name="id" id="id">
@@ -197,14 +197,14 @@
 	<!-- /Add/Edit Maintenance -->
 
 	<!-- Delete Maintenance -->
-	<x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('maintenance.delete') }}" 
-		formId="maintenanceDeleteForm" 
+	<x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('maintenance.delete') }}"
+		formId="maintenanceDeleteForm"
 		method="POST"
 		:hiddenInputs="['delete_id' => '']"
-		:title="__('admin.rentals.delete_maintenance')" 
+		:title="__('admin.rentals.delete_maintenance')"
 		:description="__('admin.rentals.delete_maintenance_confirmation')">
 	</x-admin.delete-modal>
 	<!-- /Delete Maintenance -->

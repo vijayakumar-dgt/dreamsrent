@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.manage.locations')" 
+            <x-admin.breadcrumb
+                :title="__('admin.manage.locations')"
                 :breadcrumbs="[
                     __('admin.manage.locations') => ''
                 ]"
@@ -74,7 +74,7 @@
     <!-- /Page Wrapper -->
 
     <!-- Add/Edit Location Start-->
-    <x-admin.modal 
+    <x-admin.modal
 		className="addmodal"
 		id="add_location"
         dialogClassName="modal-lg"
@@ -92,7 +92,7 @@
                 <label for="image" class="form-label">{{ __('admin.common.image') }}</label>
                 <div class="d-flex">
                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxxl border border-dashed me-2 flex-shrink-0 text-dark">
-                        <img src="{{ uploadedAsset('', 'default') }}" id="image_preview" class="img-fluid d-none" alt="Location Image">
+                        <img src="{{ uploadedAsset('', 'default') }}" id="image_preview" class="img-fluid d-none" alt="Location">
                         <i class="ti ti-photo-plus image_placeholder"></i>
                     </div>
                     <div class="d-flex align-items-center">
@@ -113,18 +113,18 @@
                 <span class="text-danger error-text" id="image_error"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.manage.location_title') }} <span class="text-danger">*</span></label>
+                <label for="name" class="form-label">{{ __('admin.manage.location_title') }} <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="name" id="name">
                 <span id="name_error" class="text-danger error-text"></span>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label class="form-label">{{ __('admin.common.email')}} <span class="text-danger">*</span></label>
+                    <label for="email" class="form-label">{{ __('admin.common.email')}} <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="email" id="email">
                     <span id="email_error" class="text-danger error-text"></span>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">{{ __('admin.common.phone')}} <span class="text-danger">*</span></label>
+                    <label for="mobile" class="form-label">{{ __('admin.common.phone')}} <span class="text-danger">*</span></label>
                     <input type="text" class="form-control Number" name="mobile" id="mobile">
                     <input type="hidden" name="international_phone_number" id="international_phone_number">
                     <span id="mobile_error" class="text-danger error-text"></span>
@@ -132,35 +132,33 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <label class="form-label">{{ __('admin.common.address')}} <span class="text-danger">*</span></label>
+                    <label for="address" class="form-label">{{ __('admin.common.address')}} <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="address" id="address">
                     <span id="address_error" class="text-danger error-text"></span>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label class="form-label">{{ __('admin.common.country')}} <span class="text-danger">*</span></label>
+                    <label for="country" class="form-label">{{ __('admin.common.country')}} <span class="text-danger">*</span></label>
                     <select name="country" class="form-control select2" id="country">
-
                     </select>
                     <span id="country_error" class="text-danger error-text"></span>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">{{ __('admin.common.state')}} <span class="text-danger">*</span></label>
+                    <label for="state" class="form-label">{{ __('admin.common.state')}} <span class="text-danger">*</span></label>
                     <select name="state" class="form-control select2" id="state">
-
                     </select>
                     <span id="state_error" class="text-danger error-text"></span>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label class="form-label">{{ __('admin.common.city')}} <span class="text-danger">*</span></label>
+                    <label for="city" class="form-label">{{ __('admin.common.city')}} <span class="text-danger">*</span></label>
                     <select name="city" id="city" class="form-control select2"></select>
                     <span id="city_error" class="text-danger error-text"></span>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">{{ __('admin.common.pincode')}} <span class="text-danger">*</span></label>
+                    <label for="pincode" class="form-label">{{ __('admin.common.pincode')}} <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="pincode" maxlength="6" id="pincode">
                     <span id="pincode_error" class="text-danger error-text"></span>
                 </div>
@@ -170,8 +168,8 @@
             <div class="mb-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="form-check form-check-md form-switch me-3">
-                        <input class="form-check-input working-day-checkbox" value="monday" type="checkbox" role="switch" name="working_days[]" id="monday">
-                        <label class="form-check-label ms-2" for="monday">{{ __('admin.manage.monday') }}</label>
+                        <input class="form-check-input working-day-checkbox" value="monday" type="checkbox" role="switch" name="working_days[]" id="monday" aria-checked="false">
+                        <label for="monday" class="form-check-label ms-2" for="monday">{{ __('admin.manage.monday') }}</label>
                     </div>
                     <div class="d-flex align-items-center">
                         <div class="position-relative">
@@ -189,8 +187,8 @@
             <div class="mb-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="form-check form-check-md form-switch me-3">
-                        <input class="form-check-input working-day-checkbox" value="tuesday" type="checkbox" role="switch" name="working_days[]" id="tuesday">
-                        <label class="form-check-label ms-2" for="tuesday">{{ __('admin.manage.tuesday') }}</label>
+                        <input class="form-check-input working-day-checkbox" value="tuesday" type="checkbox" role="switch" name="working_days[]" id="tuesday" aria-checked="false">
+                        <label for="tuesday" class="form-check-label ms-2" for="tuesday">{{ __('admin.manage.tuesday') }}</label>
                     </div>
                     <div class="d-flex align-items-center">
                         <div class="position-relative">
@@ -208,8 +206,8 @@
             <div class="mb-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="form-check form-check-md form-switch me-3">
-                        <input class="form-check-input working-day-checkbox" value="wednesday" type="checkbox" role="switch" name="working_days[]" id="wednesday">
-                        <label class="form-check-label ms-2" for="wednesday">{{ __('admin.manage.wednesday') }}</label>
+                        <input class="form-check-input working-day-checkbox" value="wednesday" type="checkbox" role="switch" name="working_days[]" id="wednesday" aria-checked="false">
+                        <label for="wednesday" class="form-check-label ms-2" for="wednesday">{{ __('admin.manage.wednesday') }}</label>
                     </div>
                     <div class="d-flex align-items-center">
                         <div class="position-relative">
@@ -227,8 +225,8 @@
             <div class="mb-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="form-check form-check-md form-switch me-3">
-                        <input class="form-check-input working-day-checkbox" value="thursday" type="checkbox" role="switch" name="working_days[]" id="thursday">
-                        <label class="form-check-label ms-2" for="thursday">{{ __('admin.manage.thursday') }}</label>
+                        <input class="form-check-input working-day-checkbox" value="thursday" type="checkbox" role="switch" name="working_days[]" id="thursday" aria-checked="false">
+                        <label for="thursday" class="form-check-label ms-2" for="thursday">{{ __('admin.manage.thursday') }}</label>
                     </div>
                     <div class="d-flex align-items-center">
                         <div class="position-relative">
@@ -246,8 +244,8 @@
             <div class="mb-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="form-check form-check-md form-switch me-3">
-                        <input class="form-check-input working-day-checkbox" value="friday" type="checkbox" role="switch" name="working_days[]" id="friday">
-                        <label class="form-check-label ms-2" for="friday">{{ __('admin.manage.friday') }}</label>
+                        <input class="form-check-input working-day-checkbox" value="friday" type="checkbox" role="switch" name="working_days[]" id="friday" aria-checked="false">
+                        <label for="friday" class="form-check-label ms-2" for="friday">{{ __('admin.manage.friday') }}</label>
                     </div>
                     <div class="d-flex align-items-center">
                         <div class="position-relative">
@@ -265,8 +263,8 @@
             <div class="mb-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="form-check form-check-md form-switch me-3">
-                        <input class="form-check-input working-day-checkbox" value="saturday" type="checkbox" role="switch" name="working_days[]" id="saturday">
-                        <label class="form-check-label ms-2" for="saturday">{{ __('admin.manage.saturday') }}</label>
+                        <input class="form-check-input working-day-checkbox" value="saturday" type="checkbox" role="switch" name="working_days[]" id="saturday" aria-checked="false">
+                        <label for="saturday" class="form-check-label ms-2" for="saturday">{{ __('admin.manage.saturday') }}</label>
                     </div>
                     <div class="d-flex align-items-center">
                         <div class="position-relative">
@@ -284,8 +282,8 @@
             <div class="mb-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="form-check form-check-md form-switch me-3">
-                        <input class="form-check-input working-day-checkbox" value="sunday" type="checkbox" role="switch" name="working_days[]" id="sunday">
-                        <label class="form-check-label ms-2" for="sunday">{{ __('admin.manage.sunday') }}</label>
+                        <input class="form-check-input working-day-checkbox" value="sunday" type="checkbox" role="switch" name="working_days[]" id="sunday" aria-checked="false">
+                        <label for="sunday" class="form-check-label ms-2" for="sunday">{{ __('admin.manage.sunday') }}</label>
                     </div>
                     <div class="d-flex align-items-center">
                         <div class="position-relative">
@@ -304,8 +302,8 @@
 		<x-slot name="footer">
 			<div class="d-flex justify-content-between align-items-center w-100">
                 <div class="form-check form-check-md form-switch me-2 d-none" id="status_div">
-                    <label class="form-check-label form-label mt-0 mb-0">
-                        <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status" id="status">
+                    <label for="status" class="form-check-label form-label mt-0 mb-0">
+                        <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status" id="status" aria-checked="false">
                         {{ __('admin.common.status') }}
                     </label>
                 </div>

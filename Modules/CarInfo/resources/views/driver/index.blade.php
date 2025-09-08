@@ -396,7 +396,7 @@
 			<div class="d-flex justify-content-between align-items-center w-100">
 				<div class="form-check form-check-md form-switch me-2">
 					<label for="status" class="form-check-label form-label mt-0 mb-0">
-					<input class="form-check-input form-label me-2 status" id="status" name="status" type="checkbox" role="switch">
+					<input class="form-check-input form-label me-2 status" id="status" name="status" type="checkbox" role="switch" aria-checked="false">
 						{{ __('admin.common.status') }}
 					</label>
 				</div>

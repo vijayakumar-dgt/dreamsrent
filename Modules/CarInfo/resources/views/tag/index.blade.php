@@ -6,8 +6,8 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-				:title="__('admin.common.tags')" 
+            <x-admin.breadcrumb
+				:title="__('admin.common.tags')"
 				:breadcrumbs="[
 					__('admin.common.tags') => ''
 				]"
@@ -73,11 +73,11 @@
     <!-- /Page Wrapper -->
     
     <!-- Add/Edit Tag Start-->
-    <x-admin.modal className="addmodal" 
+    <x-admin.modal className="addmodal"
 		id="add_tag"
-		:title="__('admin.rentals.create_tag')" 
-		action="{{  route('store_tag') }}" 
-		formId="tagForm" 
+		:title="__('admin.rentals.create_tag')"
+		action="{{  route('store_tag') }}"
+		formId="tagForm"
 		method="POST">
 		<x-slot name="body">
             <input type="hidden" name="id" id="id">
@@ -91,7 +91,7 @@
             <div class="d-flex justify-content-between align-items-center w-100">
                 <div class="form-check form-check-md form-switch me-2 d-none" id="status_div">
                     <label class="form-check-label form-label mt-0 mb-0">
-                        <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status" id="status">
+                        <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status" id="status" aria-checked="false">
                         {{ __('admin.common.status') }}
                     </label>
                 </div>
@@ -105,14 +105,14 @@
     <!-- Add/Edit Tag end -->
 
     <!-- Delete Modal Start-->
-    <x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('delete_tag') }}" 
-		formId="deleteTagForm" 
+    <x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('delete_tag') }}"
+		formId="deleteTagForm"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.rentals.delete_tag')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.rentals.delete_tag')"
 		:description="__('admin.rentals.delete_tag_confirmation')">
 	</x-admin.delete-modal>
     <!-- Delete Modal End -->
