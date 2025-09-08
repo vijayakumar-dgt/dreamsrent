@@ -6,7 +6,7 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
+			<x-admin.breadcrumb
 				:title="__('admin.rentals.vehicle_models')"
 				:breadcrumbs="[
 					__('admin.rentals.vehicle_models') => ''
@@ -18,7 +18,7 @@
 			/>
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-				<div class="d-flex align-items-center flex-wrap row-gap-3"> 
+				<div class="d-flex align-items-center flex-wrap row-gap-3">
 					<div class="top-search">
 						<div class="top-search-group">
 							<span class="input-icon">
@@ -28,8 +28,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">  
-					<input type="hidden" id="sort_by_status">             
+				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+					<input type="hidden" id="sort_by_status">
 					<div class="dropdown">
 						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
@@ -66,22 +66,22 @@
 				</table>
 			</div>
 			<!-- Custom Data Table -->
-			<div class="table-footer d-none"></div>			
-		</div>	
+			<div class="table-footer d-none"></div>
+		</div>
 		@include('admin.partials.footer')
 	</div>
 	<!-- /Page Wrapper -->
 
 	<!-- Add/Edit Vehicle Model -->
-	<x-admin.modal className="addmodal" 
+	<x-admin.modal className="addmodal"
 		id="car_model_modal"
-		:title="__('admin.rentals.create_vehicle_model')" 
-		action="{{  route('carModel.store') }}" 
-		formId="carModelForm" 
+		:title="__('admin.rentals.create_vehicle_model')"
+		action="{{  route('carModel.store') }}"
+		formId="carModelForm"
 		method="POST">
        <x-slot name="body">
 			<input type="hidden" name="id" id="id">
-			<input type="hidden" name="language_id" id="language_id">                
+			<input type="hidden" name="language_id" id="language_id">
 			<div class="mb-3">
 				<label for="model_name" class="form-label">{{__('admin.rentals.model_name')}}<span class="text-danger"> *</span></label>
 				<input type="text" class="form-control" name="model_name" id="model_name">
@@ -92,7 +92,7 @@
 				<select name="brand_id" id="brand_id" class="form-control" data-placeholder="{{ __('admin.common.select') }}">
 					@if ($brands)
 						@foreach ($brands as $brand)
-							<option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>													
+							<option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
 						@endforeach
 					@endif
 				</select>
@@ -117,7 +117,7 @@
 	<!-- /Add/Edit Vehicle Model -->
 
 	<!-- Delete Vehicle Model -->
-	<x-admin.delete-modal 
+	<x-admin.delete-modal
 		className="deletemodal"
 		id="delete-modal"
 		action="{{ route('carModel.delete') }}"

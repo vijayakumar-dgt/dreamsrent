@@ -18,7 +18,7 @@
 			/>
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-				<div class="d-flex align-items-center flex-wrap row-gap-3"> 
+				<div class="d-flex align-items-center flex-wrap row-gap-3">
 					<div class="top-search">
 						<div class="top-search-group">
 							<span class="input-icon">
@@ -28,8 +28,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 ">  
-					<input type="hidden" id="sort_by_status">             
+				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 ">
+					<input type="hidden" id="sort_by_status">
 					<div class="dropdown">
 						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
@@ -52,7 +52,7 @@
 			<!-- Custom Data Table -->
 			<div class="custom-datatable-filter table-responsive brandstable d-none real-table">
 				<table class="table" id="doorTypeTable">
-					<thead class="thead-light"> 
+					<thead class="thead-light">
 						<tr>
 							<th>{{ strtoupper(__('admin.rentals.door_type')) }}</th>
 							<th>{{ strtoupper(__('admin.common.status')) }}</th>
@@ -65,8 +65,8 @@
 				</table>
 			</div>
 			<!-- Custom Data Table -->
-			<div class="table-footer d-none"></div>			
-		</div>			
+			<div class="table-footer d-none"></div>
+		</div>
 		@include('admin.partials.footer')
 	</div>
 	<!-- /Page Wrapper -->

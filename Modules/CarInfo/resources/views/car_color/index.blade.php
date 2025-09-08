@@ -110,7 +110,7 @@
 	<!-- /Add/Edit Vehicle Color -->
 
 	<!-- Delete Vehicle Color -->
-	<x-admin.delete-modal 
+	<x-admin.delete-modal
 		className="deletemodal"
 		id="delete-modal"
 		action="{{ route('carColor.delete') }}"

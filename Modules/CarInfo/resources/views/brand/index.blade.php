@@ -76,7 +76,7 @@
 	<!-- /Page Wrapper -->
 
 	<!-- Add/Edit Brand -->
-	<x-admin.modal 
+	<x-admin.modal
 		className="addmodal"
 		id="brand_modal"
 		:title="__('admin.rentals.create_brand')"

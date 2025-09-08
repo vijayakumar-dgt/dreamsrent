@@ -71,7 +71,7 @@
         @include('admin.partials.footer')
     </div>
     <!-- /Page Wrapper -->
-    
+
     <!-- Add/Edit Tag Start-->
     <x-admin.modal className="addmodal"
 		id="add_tag"
@@ -82,7 +82,7 @@
 		<x-slot name="body">
             <input type="hidden" name="id" id="id">
             <div class="mb-3">
-                <label class="form-label">{{ __('admin.common.tag') }}<span class="text-danger">*</span></label>
+                <label for="tag" class="form-label">{{ __('admin.common.tag') }}<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="tag" id="tag">
                 <span id="tag_error" class="text-danger error-text"></span>
             </div>

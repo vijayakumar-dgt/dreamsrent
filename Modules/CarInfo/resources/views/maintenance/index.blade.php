@@ -49,7 +49,7 @@
 							</span>
 							<input type="text" class="form-control date-range bookingrange" name="sort_by_date" id="sort_by_date" placeholder="dd/mm/yyyy - dd/mm/yyyy">
 						</div>
-					</div>                    
+					</div>
 					<div class="dropdown">
 						<a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
 							<i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
@@ -119,8 +119,8 @@
 				</table>
 			</div>
 			<!-- Custom Data Table -->
-			<div class="table-footer d-none"></div>			
-		</div>	
+			<div class="table-footer d-none"></div>
+		</div>
 		@include('admin.partials.footer')
 	</div>
 	<!-- /Page Wrapper -->
@@ -134,9 +134,9 @@
 		method="POST">
 		<x-slot name="body">
             <input type="hidden" name="id" id="id">
-            <div class="row">     
+            <div class="row">
 				<div class="col-md-6">
-					<label class="form-label">{{ __('admin.common.vehicle') }}<span class="text-danger"> *</span></label>
+					<label for="vehicle_id" class="form-label">{{ __('admin.common.vehicle') }}<span class="text-danger"> *</span></label>
 					<select class="select" id="vehicle_id" name="vehicle_id" data-placeholder="{{ __('admin.common.select') }}">
 						<option value="">{{ __('admin.common.select') }}</option>
 						@if ($vehicles)
@@ -146,37 +146,37 @@
 						@endif
 					</select>
 					<span class="text-danger error-text" id="vehicle_id_error"></span>
-				</div>    
+				</div>
 				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.odometer') }}<span class="text-danger"> *</span></label>
+						<label for="odometer" class="form-label">{{ __('admin.common.odometer') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="odometer" id="odometer">
 						<span id="odometer_error" class="text-danger error-text"></span>
 					</div>
 				</div>
-				<div class="col-md-6">                    
+				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.start_date') }}<span class="text-danger"> *</span></label>
+						<label for="start_date" class="form-label">{{ __('admin.common.start_date') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control custom_date_picker" name="start_date" id="start_date" placeholder="dd-mm-yyyy">
 						<span id="start_date_error" class="text-danger error-text"></span>
 					</div>
 				</div>
-				<div class="col-md-6">                    
+				<div class="col-md-6">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.end_date') }}<span class="text-danger"> *</span></label>
+						<label for="end_date" class="form-label">{{ __('admin.common.end_date') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control custom_date_picker" name="end_date" id="end_date" placeholder="dd-mm-yyyy">
 						<span id="end_date_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.common.details') }}<span class="text-danger"> *</span></label>
+						<label for="details" class="form-label">{{ __('admin.common.details') }}<span class="text-danger"> *</span></label>
 						<textarea class="form-control" rows="4"  name="details" id="details"></textarea>
 						<span id="details_error" class="text-danger error-text"></span>
 					</div>
 				</div>
 				<div class="col-md-12">
-					<label class="form-label">{{ __('admin.common.status') }}<span class="text-danger"> *</span></label>
+					<label for="status" class="form-label">{{ __('admin.common.status') }}<span class="text-danger"> *</span></label>
 					<select class="select" id="status" name="status" data-placeholder="{{ __('admin.common.select') }}">
 						<option value="">{{ __('admin.common.select') }}</option>
 						<option value="1">{{ __('admin.common.planned') }}</option>
@@ -184,7 +184,7 @@
 						<option value="3">{{ __('admin.common.completed') }}</option>
 					</select>
 					<span class="text-danger error-text" id="status_error"></span>
-				</div>    
+				</div>
 			</div>
 		</x-slot>
 		<x-slot name="footer">

@@ -18,7 +18,7 @@
 			/>
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-                <div class="d-flex align-items-center flex-wrap row-gap-3"> 
+                <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="top-search">
                         <div class="top-search-group">
                             <span class="input-icon">
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">               
+                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                     <div class="dropdown">
                         <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-badge me-1"></i><span id="status_text"> {{ __('admin.common.status')}} </span>
@@ -61,10 +61,10 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                </table>	
+                </table>
             </div>
             <div class="table-footer d-none real-table"></div>
-            <!-- Custom Data Table -->		
+            <!-- Custom Data Table -->
         </div>
         @include('admin.partials.footer')
     </div>

@@ -27,7 +27,7 @@
 							<li><button type="button" class="dropdown-item rounded-1 active-sort" data-value="last_7_days">{{ __('admin.common.last_7_days') }}</button></li>
 							<li><button type="button" class="dropdown-item rounded-1 active-sort" data-value="last_month">{{ __('admin.common.last_month') }}</button></li>
 						</ul>
-					</div>					
+					</div>
 					<!-- Status Dropdown -->
 					<div class="dropdown">
 						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
@@ -155,7 +155,7 @@
 	   </x-slot>
 	</x-admin.modal>
 	<!-- /Edit Enquiry -->
-	
+
 	<!-- Delete Enquiry -->
 	<x-admin.delete-modal
 		className="deletemodal"

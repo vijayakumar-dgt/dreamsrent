@@ -5,8 +5,8 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb 
-                :title="__('admin.rentals.all_vehicle')" 
+            <x-admin.breadcrumb
+                :title="__('admin.rentals.all_vehicle')"
                 :breadcrumbs="[
                     __('admin.rentals.all_vehicle') => ''
                 ]">
@@ -224,26 +224,26 @@
     </div>
 
     <!-- Delete Modal-->
-    <x-admin.delete-modal 
-		className="deletemodal" 
-		id="delete-modal" 
-		action="{{ route('vehicle.delete') }}" 
-		formId="deleteVehicle" 
+    <x-admin.delete-modal
+		className="deletemodal"
+		id="delete-modal"
+		action="{{ route('vehicle.delete') }}"
+		formId="deleteVehicle"
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
-		:title="__('admin.common.delete_vehicle')" 
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.common.delete_vehicle')"
 		:description="__('admin.common.delete_vehicle_confirmation')">
 	</x-admin.delete-modal>
     <!-- /Delete Modal-->
 
     <!-- Status Modal-->
-    <x-admin.modal className="addmodal" 
+    <x-admin.modal className="addmodal"
 		id="status-modal"
         dialogClassName="modal-sm"
         isHeader="{{ false }}"
         modalBodyClass="text-center"
-		action="{{  route('admin.setStatus') }}" 
-		formId="statusVehicleForm" 
+		action="{{  route('admin.setStatus') }}"
+		formId="statusVehicleForm"
 		method="POST">
 		<x-slot name="body">
             <input type="hidden" name="status_vehicle_id" id="status_vehicle_id">

@@ -6,8 +6,8 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<x-admin.breadcrumb 
-                :title="__('admin.manage.drivers')" 
+			<x-admin.breadcrumb
+                :title="__('admin.manage.drivers')"
                 :breadcrumbs="[
                     __('admin.manage.drivers') => ''
                 ]"

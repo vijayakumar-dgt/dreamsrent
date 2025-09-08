@@ -18,7 +18,7 @@
 			/>
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-				<div class="d-flex align-items-center flex-wrap row-gap-3"> 
+				<div class="d-flex align-items-center flex-wrap row-gap-3">
 					<div class="top-search">
 						<div class="top-search-group">
 							<span class="input-icon">
@@ -28,7 +28,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">               
+				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 					<div class="dropdown">
 						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> <span id="status_text"> {{ __('admin.common.status') }}</span>
@@ -64,18 +64,18 @@
 				</table>
 			</div>
 			<!-- Custom Data Table -->
-			<div class="table-footer d-none"></div>			
-		</div>	
+			<div class="table-footer d-none"></div>
+		</div>
 		@include('admin.partials.footer')
 	</div>
 	<!-- /Page Wrapper -->
 
 	<!-- Add/Edit Fuel -->
-	<x-admin.modal className="addmodal" 
+	<x-admin.modal className="addmodal"
 		id="fuel_type_modal"
-		:title="__('admin.rentals.create_fuel_type')" 
-		action="{{  route('fuelType.update') }}" 
-		formId="fuelTypeForm" 
+		:title="__('admin.rentals.create_fuel_type')"
+		action="{{  route('fuelType.update') }}"
+		formId="fuelTypeForm"
 		method="POST">
        <x-slot name="body">
 			<input type="hidden" name="id" id="id">
@@ -104,7 +104,7 @@
 	<!-- /Add/Edit Fuel -->
 
 	<!-- Delete Fuel -->
-	<x-admin.delete-modal 
+	<x-admin.delete-modal
 		className="deletemodal"
 		id="delete-modal"
 		action="{{ route('fuelType.delete') }}"
