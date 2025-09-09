@@ -11,6 +11,5 @@ class CarInfoDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
     }
 }

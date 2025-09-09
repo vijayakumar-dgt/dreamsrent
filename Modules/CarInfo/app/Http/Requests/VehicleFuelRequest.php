@@ -17,7 +17,7 @@ class VehicleFuelRequest extends CustomFailedValidation
         $id = $this->id ?? '';
         $languageId = current_user()?->language_id;
 
-        $rules = [
+        return [
             'fuel_type' => [
                 'required',
                 'not_regex:/<\/?script\b[^>]*>/i',
@@ -28,7 +28,6 @@ class VehicleFuelRequest extends CustomFailedValidation
             ],
         ];
 
-        return $rules;
     }
 
     public function messages(): array

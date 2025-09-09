@@ -60,13 +60,12 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         $vechileType = Cartype::orderBy('id', 'desc')->where("language_id", $langID)->get();
         $vechileLocation = Location::orderBy('id', 'desc')->where("language_id", $langID)->get();
 
-        $data = [
+        return [
             'vechileName'     => $vechileName,
             'vechileType'     => $vechileType,
             'vechileLocation' => $vechileLocation,
         ];
 
-        return $data;
     }
 
     public function createVehicle(): array
@@ -75,21 +74,21 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         $authUser = current_user();
         $language_id = $authUser->language_id ?? 1;
         $carTypes = Cartype::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
-        $Brands = Brand::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
-        $CarModel = CarModel::where('status', 1)->orderBy('id', 'desc')->get();
-        $Category = Category::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
-        $Location = Location::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
-        $CarColor = CarColor::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
-        $CarFuel = CarFuel::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
-        $Transmission = Transmission::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
-        $SafetyFeature = SafetyFeature::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
-        $DamageTypes = DamageType::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
-        $ExtraServices = ExtraService::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
+        $brands = Brand::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
+        $carModel = CarModel::where('status', 1)->orderBy('id', 'desc')->get();
+        $category = Category::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
+        $location = Location::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
+        $carColor = CarColor::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
+        $carFuel = CarFuel::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
+        $transmission = Transmission::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
+        $safetyFeature = SafetyFeature::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
+        $damageTypes = DamageType::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
+        $extraServices = ExtraService::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
 
         $query = null;
 
-        $ExtraServiceInfo = VehicleExtraService::where('vehicle_id', $query)
-            ->whereIn('extra_service_id', $ExtraServices->pluck('id'))
+        $extraServiceInfo = VehicleExtraService::where('vehicle_id', $query)
+            ->whereIn('extra_service_id', $extraServices->pluck('id'))
             ->get();
 
         $insurances = Insurance::with('insuranceBenefits', 'priceType')
@@ -110,26 +109,25 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
         $currencySymbol = $currency->symbol ?? "$";
 
-        $data = [
+        return [
             'carTypes'         => $carTypes,
-            'Brands'           => $Brands,
-            'CarModel'         => $CarModel,
-            'Category'         => $Category,
-            'Location'         => $Location,
-            'CarColor'         => $CarColor,
-            'CarFuel'          => $CarFuel,
-            'Transmission'     => $Transmission,
-            'SafetyFeature'    => $SafetyFeature,
-            'DamageTypes'      => $DamageTypes,
-            'ExtraServices'    => $ExtraServices,
-            'ExtraServiceInfo' => $ExtraServiceInfo,
+            'Brands'           => $brands,
+            'CarModel'         => $carModel,
+            'Category'         => $category,
+            'Location'         => $location,
+            'CarColor'         => $carColor,
+            'CarFuel'          => $carFuel,
+            'Transmission'     => $transmission,
+            'SafetyFeature'    => $safetyFeature,
+            'DamageTypes'      => $damageTypes,
+            'ExtraServices'    => $extraServices,
+            'ExtraServiceInfo' => $extraServiceInfo,
             'insurances'       => $insurances,
             'priceType'        => $priceType,
             'authUser'         => $authUser,
             'currencySymbol'   => $currencySymbol,
         ];
 
-        return $data;
     }
 
     public function editVehicle(string $slug, Request $request): array
@@ -234,8 +232,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         }
 
         $carTypes = Cartype::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
-        $Brands = Brand::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
-        $Models = collect();
+        $brands = Brand::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
+        $models = collect();
         if ($query && $query->brand_id) {
             $Models = CarModel::where('status', 1)
                 ->where('brand_id', $query->brand_id)
@@ -243,18 +241,18 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 ->get();
         }
 
-        $Category = Category::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
-        $Location = Location::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
-        $CarFuel = CarFuel::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
-        $CarColor = CarColor::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
-        $Transmission = Transmission::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
-        $SafetyFeature = SafetyFeature::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
-        $DamageTypes = DamageType::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
+        $category = Category::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
+        $location = Location::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
+        $carFuel = CarFuel::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
+        $carColor = CarColor::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
+        $transmission = Transmission::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
+        $safetyFeature = SafetyFeature::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
+        $damageTypes = DamageType::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
 
-        $ExtraServices = ExtraService::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
+        $extraServices = ExtraService::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
 
-        $ExtraServiceInfo = VehicleExtraService::where('vehicle_id', $query->id ?? null)
-            ->whereIn('extra_service_id', $ExtraServices->pluck('id'))
+        $extraServiceInfo = VehicleExtraService::where('vehicle_id', $query->id ?? null)
+            ->whereIn('extra_service_id', $extraServices->pluck('id'))
             ->get();
 
         $authId = current_user()->language_id;
@@ -276,28 +274,27 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
         $currencySymbol = $currency->symbol ?? "$";
 
-        $data = [
+        return [
             'carTypes'         => $carTypes,
-            'Brands'           => $Brands,
-            'Models'           => $Models,
-            'Category'         => $Category,
-            'Location'         => $Location,
-            'CarFuel'          => $CarFuel,
-            'CarColor'         => $CarColor,
-            'Transmission'     => $Transmission,
-            'SafetyFeature'    => $SafetyFeature,
+            'Brands'           => $brands,
+            'Models'           => $models,
+            'Category'         => $category,
+            'Location'         => $location,
+            'CarFuel'          => $carFuel,
+            'CarColor'         => $carColor,
+            'Transmission'     => $transmission,
+            'SafetyFeature'    => $safetyFeature,
             'selectedFeatures' => $selectedFeatures,
             'vehiclePrices'    => $vehiclePrices,
-            'ExtraServices'    => $ExtraServices,
-            'ExtraServiceInfo' => $ExtraServiceInfo,
+            'ExtraServices'    => $extraServices,
+            'ExtraServiceInfo' => $extraServiceInfo,
             'insurances'       => $insurances,
             'priceType'        => $priceType,
-            'DamageTypes'      => $DamageTypes,
+            'DamageTypes'      => $damageTypes,
             'query'            => $query,
             'currencySymbol'   => $currencySymbol,
         ];
 
-        return $data;
     }
 
     public function createVehicleInfo(Request $request)
@@ -334,8 +331,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 }
             }
 
-            $BaseKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('basic_kilometer', null);
-            $ExtraKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('extra_kilometer', null);
+            $baseKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('basic_kilometer', null);
+            $extraKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('extra_kilometer', null);
 
             $category = Category::find($request->vehicle_category_id);
 
@@ -369,8 +366,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 "num_seats"            => $request->num_seats,
                 "num_doors"            => $request->num_doors,
                 "num_airbags"          => $request->num_airbags,
-                "vehicle_basekm"       => $BaseKilo,
-                "vehicle_extrakmprice" => $ExtraKilo,
+                "vehicle_basekm"       => $baseKilo,
+                "vehicle_extrakmprice" => $extraKilo,
                 "vehicle_video"        => $request->car_video,
                 "vehicle_metatitle"    => $request->seo_title,
                 "vehicle_metakeywords" => $request->seo_key,
@@ -683,8 +680,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $vehicleImagePath = $vehicle->vehicle_image;
             }
 
-            $BaseKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('basic_kilometer', null);
-            $ExtraKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('extra_kilometer', null);
+            $baseKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('basic_kilometer', null);
+            $extraKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('extra_kilometer', null);
 
             $category = Category::find($request->vehicle_category_id);
 
@@ -717,8 +714,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 "num_seats"            => $request->num_seats,
                 "num_doors"            => $request->num_doors,
                 "num_airbags"          => $request->num_airbags,
-                "vehicle_basekm"       => $BaseKilo,
-                "vehicle_extrakmprice" => $ExtraKilo,
+                "vehicle_basekm"       => $baseKilo,
+                "vehicle_extrakmprice" => $extraKilo,
                 "vehicle_video"        => $request->car_video,
                 "vehicle_metatitle"    => $request->seo_title,
                 "vehicle_metakeywords" => $request->seo_key,
@@ -1024,6 +1021,12 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     public function adminVehicleList(Request $request): array
     {
+        $response = [
+            'code'    => 500,
+            'status'  => 'error',
+            'message' => __('admin.common.default_retrieve_error'),
+        ];
+
         try {
             /** @var \App\Models\User|null $authId */
             $authId = current_user();
@@ -1033,6 +1036,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                     'message' => __('Unauthorized.'),
                 ];
             }
+
             $languageId = $authId->language_id;
             $query = VehicleInfo::with([
                 'carType:id,name',
@@ -1104,7 +1108,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             // Sorting logic with default to ascending
-            $sortBy = $request->sort_by ?? 'ascending'; // Default to ascending if not provided
+            $sortBy = $request->sort_by ?? 'ascending';
 
             switch ($sortBy) {
                 case 'latest':
@@ -1121,6 +1125,10 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                     break;
                 case 'last_7_days':
                     $query->where('created_at', '>=', now()->subDays(7));
+                    break;
+                default:
+                    // Fallback to ascending order if an invalid sort option is passed
+                    $query->orderBy('name', 'asc');
                     break;
             }
 
@@ -1143,10 +1151,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                             }
                         }
                     } catch (\Exception $e) {
-                        return [
+                        $response = [
                             'code'    => 400,
                             'message' => __('Invalid date format.'),
                         ];
+                        return $response;
                     }
                 }
             }
@@ -1191,19 +1200,17 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 return $vehicle;
             });
 
-            return [
+            $response = [
                 'code'    => 200,
                 'status'  => 'success',
                 'message' => __('Vehicles list retrieved successfully.'),
                 'data'    => $vehicles,
             ];
         } catch (\Exception $e) {
-            return [
-                'code'    => 500,
-                'status'  => 'error',
-                'message' => __('admin.common.default_retrieve_error')
-            ];
+            // $response is already initialized with default error response
         }
+
+        return $response;
     }
 
     public function vehicleLists(Request $request): array

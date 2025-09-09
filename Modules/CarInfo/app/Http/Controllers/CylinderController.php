@@ -11,11 +11,11 @@ use Modules\CarInfo\Repositories\Contracts\CylinderRepositoryInterface;
 
 class CylinderController extends Controller
 {
-    protected CylinderRepositoryInterface $CylinderRepository;
+    protected CylinderRepositoryInterface $cylinderRepository;
 
-    public function __construct(CylinderRepositoryInterface $CylinderRepository)
+    public function __construct(CylinderRepositoryInterface $cylinderRepository)
     {
-        $this->CylinderRepository = $CylinderRepository;
+        $this->cylinderRepository = $cylinderRepository;
     }
 
     public function index(): View
@@ -25,31 +25,31 @@ class CylinderController extends Controller
 
     public function storeCylinderType(CylinderRequest $request): JsonResponse
     {
-        $response = $this->CylinderRepository->storeCylinderType($request);
+        $response = $this->cylinderRepository->storeCylinderType($request);
         return response()->json($response, $response['code']);
     }
 
     public function getCylinders(): JsonResponse
     {
-        $response = $this->CylinderRepository->getCylinders();
+        $response = $this->cylinderRepository->getCylinders();
         return response()->json($response, $response['code']);
     }
 
     public function getCylinder($id): JsonResponse
     {
-        $response = $this->CylinderRepository->getCylinder($id);
+        $response = $this->cylinderRepository->getCylinder($id);
         return response()->json($response, $response['code']);
     }
 
     public function deleteCylinder(Request $request): JsonResponse
     {
-        $result = $this->CylinderRepository->deleteCylinder($request);
+        $result = $this->cylinderRepository->deleteCylinder($request);
         return response()->json($result, $result['code']);
     }
 
     public function getCylinderServerside(Request $request): JsonResponse
     {
-        $result = $this->CylinderRepository->getCylinderServerside($request);
+        $result = $this->cylinderRepository->getCylinderServerside($request);
         return response()->json($result);
     }
 }

@@ -12,11 +12,11 @@ use Modules\CarInfo\Repositories\Contracts\CategoryRepositoryInterface;
 
 class CategoryController extends Controller
 {
-    protected CategoryRepositoryInterface $CategoryRepository;
+    protected CategoryRepositoryInterface $categoryRepository;
 
-    public function __construct(CategoryRepositoryInterface $CategoryRepository)
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
     {
-        $this->CategoryRepository = $CategoryRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     public function index(): View
@@ -26,36 +26,36 @@ class CategoryController extends Controller
 
     public function store(CategoryRequest $request): JsonResponse
     {
-        $result = $this->CategoryRepository->store($request);
+        $result = $this->categoryRepository->store($request);
         return response()->json($result, $result['code']);
     }
 
     public function list(Request $request): JsonResponse
     {
-        $result = $this->CategoryRepository->list($request);
+        $result = $this->categoryRepository->list($request);
         return response()->json($result, $result['code']);
     }
 
     public function edit(Request $request): JsonResponse
     {
-        $result = $this->CategoryRepository->edit($request);
+        $result = $this->categoryRepository->edit($request);
         return response()->json($result, $result['code']);
     }
 
     public function delete(Request $request): JsonResponse
     {
-        $result = $this->CategoryRepository->delete($request);
+        $result = $this->categoryRepository->delete($request);
         return response()->json($result, $result['code']);
     }
 
     public function bulkDelete(Request $request): JsonResponse
     {
-        $result = $this->CategoryRepository->bulkDelete($request);
+        $result = $this->categoryRepository->bulkDelete($request);
         return response()->json($result, $result['code']);
     }
 
     public function pdfExport(Request $request): JsonResponse|Response
     {
-        return $this->CategoryRepository->pdfExport($request);
+        return $this->categoryRepository->pdfExport($request);
     }
 }

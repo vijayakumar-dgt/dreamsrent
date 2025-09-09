@@ -54,8 +54,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class VehicleInfo extends Model
 {
     use SoftDeletes;
-    public ?string $location_name = null;
-    public ?string $image_url = null;
+    public ?string $locationName = null;
+    public ?string $imageUrl = null;
 
     /**
      * The attributes that are mass assignable.

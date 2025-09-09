@@ -11,11 +11,11 @@ use Modules\CarInfo\Repositories\Contracts\SeasonRepositoryInterface;
 
 class SeasonController extends Controller
 {
-    protected SeasonRepositoryInterface $SeasonRepository;
+    protected SeasonRepositoryInterface $seasonRepository;
 
-    public function __construct(SeasonRepositoryInterface $SeasonRepository)
+    public function __construct(SeasonRepositoryInterface $seasonRepository)
     {
-        $this->SeasonRepository = $SeasonRepository;
+        $this->seasonRepository = $seasonRepository;
     }
 
     public function index(): View
@@ -25,25 +25,25 @@ class SeasonController extends Controller
 
     public function save(SeasonRequest $request): JsonResponse
     {
-        $result = $this->SeasonRepository->save($request);
+        $result = $this->seasonRepository->save($request);
         return response()->json($result, $result['code']);
     }
 
     public function getSeasons(Request $request): JsonResponse
     {
-        $result = $this->SeasonRepository->getSeasons($request);
+        $result = $this->seasonRepository->getSeasons($request);
         return response()->json($result, $result['code']);
     }
 
     public function getSeason($id): JsonResponse
     {
-        $response = $this->SeasonRepository->getSeason($id);
+        $response = $this->seasonRepository->getSeason($id);
         return response()->json($response, $response['code']);
     }
 
     public function delete(Request $request): JsonResponse
     {
-        $response = $this->SeasonRepository->delete($request);
+        $response = $this->seasonRepository->delete($request);
         return response()->json($response, $response['code']);
     }
 }

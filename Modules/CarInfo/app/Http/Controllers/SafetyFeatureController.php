@@ -11,11 +11,11 @@ use Modules\CarInfo\Repositories\Contracts\SafetyFeatureRepositoryInterface;
 
 class SafetyFeatureController extends Controller
 {
-    protected SafetyFeatureRepositoryInterface $SafetyFeatureRepository;
+    protected SafetyFeatureRepositoryInterface $safetyFeatureRepository;
 
-    public function __construct(SafetyFeatureRepositoryInterface $SafetyFeatureRepository)
+    public function __construct(SafetyFeatureRepositoryInterface $safetyFeatureRepository)
     {
-        $this->SafetyFeatureRepository = $SafetyFeatureRepository;
+        $this->safetyFeatureRepository = $safetyFeatureRepository;
     }
 
     public function index(): View
@@ -25,25 +25,25 @@ class SafetyFeatureController extends Controller
 
     public function store(SafetyFeatureRequest $request): JsonResponse
     {
-        $response = $this->SafetyFeatureRepository->store($request);
+        $response = $this->safetyFeatureRepository->store($request);
         return response()->json($response, $response['code']);
     }
 
     public function list(Request $request): JsonResponse
     {
-        $response = $this->SafetyFeatureRepository->list($request);
+        $response = $this->safetyFeatureRepository->list($request);
         return response()->json($response, $response['code']);
     }
 
     public function edit(Request $request): JsonResponse
     {
-        $response = $this->SafetyFeatureRepository->edit((int) $request->id);
+        $response = $this->safetyFeatureRepository->edit((int) $request->id);
         return response()->json($response, $response['code']);
     }
 
     public function delete(Request $request): JsonResponse
     {
-        $response = $this->SafetyFeatureRepository->delete((int) $request->id);
+        $response = $this->safetyFeatureRepository->delete((int) $request->id);
         return response()->json($response, $response['code']);
     }
 }
