@@ -4248,7 +4248,6 @@ button:focus {
   position: absolute;
   top: 20px;
   z-index: 1;
-  position: absolute;
   left: 20px;
 }
 
@@ -4852,7 +4851,6 @@ button:focus {
   color: var(--white);
 }
 .right-user-side .slime-grp .chat-footer form .chat_form {
-  border-radius: 20px;
   margin-right: 0px;
   background: var(--white);
   border: 1px solid rgba(145, 158, 171, 0.3);
@@ -5029,7 +5027,6 @@ button:focus {
 
 .audio-volume {
   position: absolute;
-  width: fit-content;
   height: 134px;
   bottom: 20px;
   left: 20px;
@@ -5060,7 +5057,6 @@ button:focus {
 }
 
 .custom-input {
-  width: 100%;
   height: 4px;
   width: 3px;
   height: 100%;
@@ -5926,7 +5922,6 @@ svg.feather-14 {
 .custom-file-container .custom-file-container__custom-file__custom-file-control {
   box-sizing: border-box;
   z-index: 1;
-  height: auto;
   overflow: hidden;
   line-height: 1.5;
   user-select: none;
@@ -5945,7 +5940,6 @@ svg.feather-14 {
   left: 0;
 }
 .custom-file-container .custom-file-container__custom-file__custom-file-control__button {
-  box-sizing: border-box;
   z-index: 6;
   display: block;
   height: auto;
@@ -8979,7 +8973,6 @@ kbd {
   background-color: #E8E9EA;
   font-size: 10px;
   font-weight: 500;
-  padding: 4px;
   color: var(--gray-500);
   padding: 2px 3px;
 }
@@ -9836,7 +9829,6 @@ caption {
 }
 .table thead.table-primary {
   background-color: var(--white);
-  color: var(--bs-table-color);
   --bs-table-color-state: #000;
   --bs-table-color: var(--black);
   --bs-table-bg: rgba(var(--primary-rgb), 0.1);
@@ -9850,7 +9842,6 @@ caption {
 }
 .table thead.table-secondary {
   background-color: var(--white);
-  color: var(--bs-table-color);
   --bs-table-color-state: #000;
   --bs-table-color: var(--black);
   --bs-table-bg: rgba(var(--secondary-rgb), 0.1);
@@ -9864,7 +9855,6 @@ caption {
 }
 .table thead.table-warning {
   background-color: var(--white);
-  color: var(--bs-table-color);
   --bs-table-color-state: #000;
   --bs-table-color: var(--black);
   --bs-table-bg: rgba(var(--warning-rgb), 0.1);
@@ -9878,7 +9868,6 @@ caption {
 }
 .table thead.table-success {
   background-color: var(--white);
-  color: var(--bs-table-color);
   --bs-table-color-state: #000;
   --bs-table-color: var(--black);
   --bs-table-bg: rgba(var(--success-rgb), 0.1);
@@ -9892,7 +9881,6 @@ caption {
 }
 .table thead.table-danger {
   background-color: var(--white);
-  color: var(--bs-table-color);
   --bs-table-color-state: #000;
   --bs-table-color: var(--black);
   --bs-table-bg: rgba(var(--danger-rgb), 0.1);
@@ -9906,7 +9894,6 @@ caption {
 }
 .table thead.table-info {
   background-color: var(--white);
-  color: var(--bs-table-color);
   --bs-table-color-state: #000;
   --bs-table-color: var(--black);
   --bs-table-bg: rgba(var(--info-rgb), 0.1);
@@ -9920,7 +9907,6 @@ caption {
 }
 .table thead.table-light {
   background-color: var(--white);
-  color: var(--bs-table-color);
   --bs-table-color-state: #000;
   --bs-table-color: var(--black);
   --bs-table-bg: rgba(var(--light-rgb), 0.1);
@@ -9934,7 +9920,6 @@ caption {
 }
 .table thead.table-dark {
   background-color: var(--white);
-  color: var(--bs-table-color);
   --bs-table-color-state: #000;
   --bs-table-color: var(--black);
   --bs-table-bg: rgba(var(--dark-rgb), 0.1);
@@ -11204,7 +11189,6 @@ table.table.dataTable > tbody > tr td {
   position: fixed;
   top: 0;
   inset-inline-start: 0;
-  inset-inline-start: 0;
   bottom: 0;
   z-index: 9999;
   margin: 0;
@@ -11967,7 +11951,6 @@ table.table.dataTable > tbody > tr td {
   -ms-flex-align: center;
 }
 .tab-style-6 .nav-item .nav-link.active {
-  border: 0;
   background-color: #FFA633;
   color: var(--white);
   border: 0;
@@ -12235,8 +12218,6 @@ table.table.dataTable > tbody > tr td {
 }
 
 .ribbone {
-  width: 100%;
-  position: relative;
   background-size: cover;
   text-transform: uppercase;
   color: var(--white);
@@ -12330,7 +12311,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-left.bg-purple:before {
   position: absolute;
-  inset-inline-end: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12343,7 +12323,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-left.bg-danger:before {
   position: absolute;
-  inset-inline-end: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12356,7 +12335,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-left.bg-primary:before {
   position: absolute;
-  inset-inline-end: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12368,7 +12346,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-left.bg-secondary:before {
   position: absolute;
-  inset-inline-end: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12381,7 +12358,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-left.bg-success:before {
   position: absolute;
-  inset-inline-end: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12394,7 +12370,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-left.bg-info:before {
   position: absolute;
-  inset-inline-end: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12407,7 +12382,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-left.bg-warning:before {
   position: absolute;
-  inset-inline-end: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12420,7 +12394,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-left.bg-pink:before {
   position: absolute;
-  inset-inline-end: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12433,7 +12406,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-left.bg-teal:before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12456,7 +12428,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-right.bg-purple:before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12469,7 +12440,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-right.bg-danger:before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12482,7 +12452,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-right.bg-primary:before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12494,7 +12463,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-right.bg-secondary:before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12507,7 +12475,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-right.bg-success:before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12520,7 +12487,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-right.bg-info:before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12533,7 +12499,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-right.bg-warning:before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12546,7 +12511,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-right.bg-pink:before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12559,7 +12523,6 @@ table.table.dataTable > tbody > tr td {
 
 .arrow-ribbone-right.bg-teal:before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12581,7 +12544,6 @@ table.table.dataTable > tbody > tr td {
 }
 .arrow-ribbone2:before {
   position: absolute;
-  inset-inline-end: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -12858,7 +12820,6 @@ table.table.dataTable > tbody > tr td {
 .ribbone-success-left span:after {
   position: absolute;
   content: "";
-  inset-inline-end: -6px;
   background: #01B664;
   height: 6px;
   width: 10px;
@@ -12915,7 +12876,6 @@ table.table.dataTable > tbody > tr td {
 .ribbone-info-left span:after {
   position: absolute;
   content: "";
-  inset-inline-end: -6px;
   background: #0080FF;
   height: 6px;
   width: 10px;
@@ -13126,7 +13086,6 @@ table.table.dataTable > tbody > tr td {
 }
 .arrow-ribbone-2:before {
   position: absolute;
-  inset-inline-end: 0;
   inset-block-start: 0;
   inset-block-end: 0;
   content: "";
@@ -13801,8 +13760,6 @@ svg.collapse-open, svg.collapse-close {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px 0 20px;
-  margin: 0 auto;
-  padding: 20px 0 20px;
 }
 .timeline:before {
   content: " ";
@@ -13810,7 +13767,6 @@ svg.collapse-open, svg.collapse-close {
   width: 3px;
   margin-left: -1.5px;
   background-color: var(--gray-200);
-  position: absolute;
   top: 0;
   bottom: 0;
   left: 50%;
@@ -13842,7 +13798,6 @@ svg.collapse-open, svg.collapse-close {
   border-right: 0 solid var(--gray-200);
   border-bottom: 8px solid transparent;
   border-left: 8px solid var(--gray-200);
-  position: absolute;
   top: 26px;
   right: -8px;
 }
@@ -14065,7 +14020,6 @@ button.swal2-cancel {
   right: 0;
 }
 .checkboxs .checkmarks::after {
-  content: "";
   position: absolute;
   display: none;
   right: 50%;
@@ -15032,7 +14986,6 @@ button.swal2-cancel {
     position: absolute;
     opacity: 1;
     right: -13px;
-    top: 15px;
     border-radius: 50%;
     width: 22px;
     height: 22px;
@@ -15761,7 +15714,6 @@ button.swal2-cancel {
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   text-rendering: auto;
-  line-height: 40px;
   font-size: 18px;
   line-height: 16px;
   width: 16px;
@@ -16341,7 +16293,6 @@ button.swal2-cancel {
   display: inline-block;
   font-family: "Font Awesome 5 Free";
   text-rendering: auto;
-  line-height: 40px;
   font-size: 12px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -16398,7 +16349,6 @@ button.swal2-cancel {
   display: none;
 }
 .menu-horizontal .page-wrapper {
-  margin: 0;
   padding-top: 96px;
   max-width: 1320px;
   margin: 0 auto;
@@ -16797,7 +16747,6 @@ button.swal2-cancel {
   display: inline-block;
   font-family: "Font Awesome 5 Free";
   text-rendering: auto;
-  line-height: 40px;
   font-size: 12px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
