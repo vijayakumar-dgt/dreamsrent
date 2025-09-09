@@ -335,7 +335,7 @@ ul .btn-primary:not(:disabled):not(.disabled):active:focus, ul .btn-primary:not(
 
 .bg-white {
   background-color: var(--white) !important;
-}
+} 
 
 .bg-pink {
   background-color: #F301CA !important;
@@ -702,10 +702,6 @@ ul .btn-primary:not(:disabled):not(.disabled):active:focus, ul .btn-primary:not(
   color: #F9B801 !important;
 }
 
-.bg-danger-transparent {
-  background-color: #FFEDE9 !important;
-  color: #FF0000 !important;
-}
 .bg-danger-transparent:hover {
   background-color: #FFEDE9 !important;
   color: #FF0000 !important;
@@ -982,6 +978,7 @@ ul .btn-primary:not(:disabled):not(.disabled):active:focus, ul .btn-primary:not(
 
 .bg-danger-transparent {
   background: #FFF6F4;
+  color: #FF0000 !important;
   border-color: #FFF6F4 !important;
 }
 
