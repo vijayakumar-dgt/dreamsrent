@@ -11167,8 +11167,6 @@ table .badge {
 }
 
 .price-wrap .feature-text {
-	width: 100%;
-	position: relative;
 	background-size: cover;
 	text-transform: uppercase;
 	color: #FFF;
@@ -22370,7 +22368,6 @@ iframe {
 .table-footer .page-link {
 	width: 47px;
 	height: 37px;
-	border: 0;
 	background: transparent;
 	display: -webkit-box;
 	display: -ms-flexbox;
