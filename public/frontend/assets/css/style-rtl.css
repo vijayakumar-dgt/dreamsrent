@@ -723,23 +723,6 @@ body {
 	}
 }
 
-a {
-	cursor: pointer;
-	-webkit-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	transition: all 0.2s ease;
-}
-
-a:hover {
-	-webkit-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	transition: all 0.2s ease;
-}
-
-a:focus {
-	outline: 0;
-}
-
 p:last-child {
 	margin-bottom: 0;
 }
@@ -757,338 +740,6 @@ strong {
 /*-----------------
     4. Grid
 -----------------------*/
-.popular-services .listing-tabs-group,
-.search-box-banner ul,
-.css-equal-heights,
-.css-equal-content {
-	display: flex;
-	display: -webkit-flex;
-	flex-wrap: wrap;
-	-webkit-flex-wrap: wrap;
-}
-
-.css-equal-content {
-	color: red;
-	float: left;
-}
-
-.product-detail-head .search-btn .search-button:hover,
-.product-detail-head .search-btn .search-button,
-.review-sec .search-btn .search-button:hover,
-.review-sec .search-btn .search-button,
-.faq-title>a:not(.collapsed):after,
-.faq-title>a:after,
-.faq-section .faq-title>a:not(.collapsed):after,
-.faq-section .faq-title>a:after,
-.listing-item .listing-img .fav-item,
-.popular-services .listing-tabs-group ul li a img,
-.popular-services .listing-tabs-group ul li a span,
-.popular-services .listing-tabs-group ul li a:hover img,
-.popular-services .listing-tabs-group ul li a:hover,
-.popular-services .listing-tabs-group ul li a.active img,
-.popular-services .listing-tabs-group ul li a,
-.search-box-banner .search-btn .search-button:hover,
-.search-box-banner .search-btn .search-button,
-.header .header-navbar-rht .nav-item .header-reg:hover,
-.header .header-navbar-rht .nav-item .header-reg,
-.header .header-navbar-rht .nav-item .header-login:hover,
-.header .header-navbar-rht .nav-item .header-login,
-.header.fixed,
-.header,
-.contact-btn:hover,
-.contact-btn {
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	transition: all 0.5s;
-}
-
-.btn-file,
-.chat-attachment-item,
-.chat-window .chat-cont-right .chat-header .chat-options>a,
-.avatar .avatar-title,
-.listview-car .blog-img .fav-icon,
-.listview-car .card .card-body .listing-details-group ul li span img,
-.product-detail-head .details-btn a,
-.review-sec .reviewbox-list-rating p,
-.contact-section .contact-info-area .single-contact-info i,
-.serve-form .input-block .button-notific,
-.pagination,
-.login-wrapper .loginbox .login-auth,
-.login-wrapper .loginbox .login-left,
-.popular-slider-group .owl-carousel .owl-next,
-.popular-slider-group .owl-carousel .owl-prev,
-.listing-item .listing-content .listing-button .btn-order,
-.listing-item .listing-img .fav-item .fav-icon,
-.listing-item .listing-img .fav-item .featured-text,
-.listing-item .listing-img .featured-text,
-.popular-services .owl-carousel .owl-next,
-.popular-services .owl-carousel .owl-prev,
-.popular-services .listing-tabs-group ul li a,
-.popular-services .listing-tabs-group {
-	justify-content: center;
-	-webkit-justify-content: center;
-	-ms-flex-pack: center;
-}
-
-.btn-file,
-.chat-window .chat-msg-info,
-.chat-window .chat-cont-right .chat-header .chat-options>a,
-.chat-window .chat-cont-right .chat-header .notify-block,
-.chat-window .chat-cont-left .chat-search .input-group .input-group-prepend,
-.chat-window .chat-cont-left .chat-header,
-.avatar .avatar-title,
-.table tbody td a,
-.header .header-navbar-rht .has-arrow.logged-item .nav-link,
-.header .header-navbar-rht .has-arrow .logged-item .nav-link {
-	align-items: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-}
-
-.chat-window .chat-cont-right .chat-header,
-.chat-window .chat-cont-left .chat-users-list a.notify-block .media-body,
-.chat-window .chat-cont-left .chat-header,
-.listview-car .card .card-body .blog-list-head,
-.product-detail-head .detail-page-head,
-.blog-section .blog-content .meta-item {
-	justify-content: space-between;
-	-webkit-justify-content: space-between;
-	-ms-flex-pack: space-between;
-}
-
-.call-box .call-wrapper .call-items,
-.chat-attachment-item,
-.chat-window .chat-cont-right .chat-header .notify-block .media-img-wrap,
-.chat-window .chat-cont-right .chat-header,
-.chat-window,
-.widget-box .widget-header .widget-icon span,
-.grid-listview ul li a,
-.car-listing .pagination .previtem a,
-.car-listing .pagination .nextlink a,
-.list-btn .btn-filters,
-.modal .payment-success .check,
-.payment-method ul li a,
-.modal .available-for-ride,
-.car-details-slider.owl-carousel .owl-nav .owl-prev,
-.car-details-slider.owl-carousel .owl-nav .owl-next,
-.details-car.owl-carousel .owl-nav .owl-prev,
-.details-car.owl-carousel .owl-nav .owl-next,
-.specification-card .feature-img,
-.share-postsection .sharelink .share-img,
-.plan-selected,
-.pagination .pagination .previtem a,
-.pagination .pagination .nextlink a,
-.why-choose .card .card-body .choose-img,
-.listing-item .listing-content .listing-details-group ul,
-.table .dropdown-item,
-.table tbody td a.btn-action-icon,
-.fi-icon,
-.hi-icon,
-.footer-social-links .nav,
-.footer .footer-contact .footer-contact-info .footer-address span,
-.header .header-navbar-rht .noti-wrapper .bell-icon,
-.header .header-navbar-rht .noti-wrapper .nav-link,
-.align-center {
-	display: flex;
-	display: -webkit-flex;
-	align-items: center;
-	-webkit-align-items: center;
-	justify-content: center;
-	-webkit-justify-content: center;
-}
-
-.booking-list li {
-	justify-content: space-between;
-	-webkit-justify-content: space-between;
-	-ms-flex-pack: space-between;
-}
-
-.btn-file,
-.chat-window .chat-cont-right .chat-header .chat-options>a,
-.chat-window .chat-cont-left .chat-header .chat-compose,
-.book-card .card-header h4 span,
-.order-confirmation .place-order-btn a,
-.listing-item .listing-content .listing-features .listing-title a,
-.listing-item .listing-content .listing-features .author-img img,
-.services .services-group .services-icon .icon-img,
-.services .services-group .services-icon,
-.header .header-navbar-rht .has-arrow.logged-item .nav-link,
-.header .header-navbar-rht .has-arrow .logged-item .nav-link {
-	display: -webkit-inline-box;
-	display: -ms-inline-flexbox;
-	display: inline-flex;
-}
-
-.chat-attachment-list,
-.chat-msg-attachments,
-.chat-window .chat-msg-info,
-.chat-window .chat-cont-right .chat-body .notify-block.sent .media-body,
-.chat-window .chat-cont-right .chat-header .chat-options,
-.chat-window .chat-cont-left .chat-users-list a.notify-block .media-body,
-.chat-window .chat-cont-left .chat-search .input-group .input-group-prepend,
-.chat-window .chat-cont-left .chat-header,
-.avatar .avatar-title,
-.booking-lists ul li,
-.status-lists li .status-info,
-.status-lists li,
-.pricing-section .price-card .price-details ul .price-uncheck,
-.pricing-section .price-card .price-details ul .price-check,
-.table tbody td a,
-.footer-social-widget .nav-social,
-.footer .footer-contact .footer-contact-info .update-form .btn .feather-send,
-.footer .footer-contact .footer-contact-info .footer-address,
-.header .header-navbar-rht .has-arrow .user-header {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-}
-
-.payment-method ul,
-.review-sec .review-card .review-header-group,
-.review-sec .review-header,
-.blog-section .blog-content .blog-list-date .meta-item-list,
-.blog-section .blog-content .blog-list-date,
-.serve-form .input-block,
-.error-page,
-.content-page-header {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	justify-content: space-between;
-	-webkit-justify-content: space-between;
-	-ms-flex-pack: space-between;
-}
-
-.order-confirmation .order-confirm-box .confirmation-title,
-.order-confirmation .section-title,
-.modal .grand-total,
-.modal .booking-info.service-tax ul li,
-.listing-item .listing-content .listing-location-details,
-.listing-item .listing-img .fav-item {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	justify-content: space-between;
-	-webkit-justify-content: space-between;
-	-ms-flex-pack: space-between;
-	align-items: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-}
-
-.listview-car .blog-img .fav-icon,
-.table-search,
-.listview-car .card .card-body .listing-details-group ul li span img,
-.listview-car .card .card-body .listing-details-group ul li,
-.listview-car .card .card-body .blog-list-head .blog-list-rate h6,
-.listview-car .card .card-body .blog-list-head .blog-list-title .title-bottom h6,
-.sorting-div .product-filter-group .grid-listview ul,
-.sorting-div .product-filter-group .sortbyset,
-.sorting-div .product-filter-group,
-.list-btn .filter-list li ul li,
-.list-btn .filter-list .short-filter,
-.list-btn .filter-list,
-.order-confirmation .order-confirm-box .order-car,
-.payment-method .payment-checkbox label,
-.booking-details .booking-form .payment-btn,
-.modal .modal-footer a,
-.modal .booking-info.pay-amount label,
-.modal .booking-info.seat-select label,
-.review-list-rating li,
-.review-list-rating,
-.listing-feature ul li,
-.product-detail-head .details-btn,
-.product-detail-head .detail-page-head .camaro-location .camaro-location-inner,
-.product-detail-head .detail-page-head .camaro-location,
-.product-detail-head .detail-page-head .list-rating,
-.product-detail-head .detail-page-head,
-.testimonials-section .list-rating .list-rating-star,
-.testimonials-section .review-box,
-.review-sec .sidebar-form,
-.review-sec .review-card .review-header-group .review-widget-header,
-.review-sec .review-card .review-header-group,
-.review-sec .reviewbox-list-rating p,
-.blogdetails-pagination ul,
-.tag-list .tags,
-.tag-list,
-.blogdetail-content .card-header,
-.bloglistleft-widget .post-author,
-.bloggrid-sidebar .post-author,
-.blogbanner-content .post-author,
-.blogbanner-content ul,
-.blog-section .rightsidebar .card h4,
-.blog-section .blog-content .blog-list-date .meta-item-list li .post-author,
-.blog-section .blog-content .meta-item li .post-author,
-.blog-section .blog-content .meta-item,
-.contact-section .contact-info-area .single-contact-info i,
-.serve-form .input-block .button-notific,
-.privacy-section .terms-policy ul li,
-.pagination,
-.login-wrapper .loginbox .login-auth .login-auth-wrap .sign-group,
-.login-wrapper .loginbox .login-auth,
-.user-app-group .userapp-heading .download-btn,
-.popular-slider-group .owl-carousel .owl-next,
-.popular-slider-group .owl-carousel .owl-prev,
-.listing-item .listing-content .listing-button .btn-order,
-.listing-item .listing-content .listing-location-details .listing-price h6,
-.listing-item .listing-content .listing-details-group ul li,
-.listing-item .listing-img .fav-item .fav-icon,
-.listing-item .listing-img .fav-item .featured-text,
-.listing-item .listing-img .featured-text,
-.popular-services .owl-carousel .owl-next,
-.popular-services .owl-carousel .owl-prev,
-.popular-services .listing-tabs-group ul li a,
-.search-box-banner .input-block-wrapp,
-.footer .footer-contact .footer-contact-info .footer-address .addr-info {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	align-items: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-}
-
-.sorting-div .product-filter-group {
-	justify-content: flex-end;
-	-webkit-justify-content: flex-end;
-	-ms-flex-pack: flex-end;
-}
-
-.invoice-section .invoice-item-bill ul li:first-child,
-.table .dropdown-item,
-.footer-social-widget .nav-social {
-	justify-content: start;
-	-webkit-justify-content: start;
-	-ms-flex-pack: start;
-}
-
-.chat-window .chat-cont-right .chat-header,
-.chat-window .chat-cont-left .chat-users-list a.notify-block .media-body,
-.chat-window .chat-cont-left .chat-header,
-.listview-car .card .card-body .blog-list-head,
-.product-detail-head .detail-page-head,
-.blog-section .blog-content .meta-item {
-	justify-content: space-between;
-	-webkit-justify-content: space-between;
-	-ms-flex-pack: space-between;
-}
-
-.chat-window .chat-msg-info {
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-}
-
-.chat-window .chat-cont-right .chat-body .notify-block.sent .media-body {
-	-webkit-box-align: flex-end;
-	-ms-flex-align: flex-end;
-	align-items: flex-end;
-}
-
-.chat-window .chat-cont-right .chat-body .notify-block.sent .media-body {
-	-ms-flex-direction: column;
-	flex-direction: column;
-}
 
 .col {
 	width: auto;
@@ -1794,7 +1445,6 @@ strong {
 	display: block;
 	float: left;
 	height: 3px;
-	margin-bottom: 7px;
 	width: 31px;
 	border-radius: 2px;
 	margin-bottom: 5px;
@@ -2522,13 +2172,9 @@ strong {
 
 .header .noti-dropdown .dropdown-toggle i {
 	float: right;
-	line-height: 50px;
-	margin-right: 15px;
 	font-size: 20px;
-	float: right;
 	line-height: 50px;
 	color: #fff;
-	margin: 0px;
 	margin-right: 0px;
 	cursor: pointer;
 }
@@ -2734,7 +2380,6 @@ strong {
 }
 
 .header .topnav-dropdown-footer a {
-	display: block;
 	text-align: center;
 	font-size: 13px;
 	font-weight: 500;
@@ -2946,7 +2591,7 @@ strong {
 .header-top-drpodowns .header-dropdown.country-flag a.dropdown-toggle {
 	background: transparent;
 	border: 1px solid #dbdbdb;
-	border-radius: 10pxpx;
+	border-radius: 10px;
 	display: inline-flex;
 	align-items: center;
 }
@@ -4118,7 +3763,6 @@ span.select2-container.select2-container--default.select2-container--open {
 .table .table-avatar {
 	align-items: center;
 	display: inline-flex;
-	font-size: inherit;
 	font-weight: 500;
 	margin: 0;
 	padding: 0;
@@ -4949,7 +4593,6 @@ table .badge {
 	background-repeat: no-repeat;
 	left: 0;
 	height: 11px;
-	left: 0;
 	bottom: -22px;
 	z-index: 99;
 }
@@ -5138,7 +4781,6 @@ table .badge {
 	border: 1px solid #F4F4F4;
 	padding: 10px 15px;
 	text-transform: capitalize;
-	font-weight: 400;
 	font-size: 15px;
 	font-weight: 600;
 	color: #676767;
@@ -5286,8 +4928,6 @@ table .badge {
 }
 
 .listing-item .feature-text {
-	width: 100%;
-	position: relative;
 	background-size: cover;
 	text-transform: uppercase;
 	color: #FFF;
@@ -6816,7 +6456,6 @@ table .badge {
 	background: #0A152F;
 	border-radius: 10px;
 	padding: 24px 10px;
-	position: relative;
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
@@ -8480,7 +8119,6 @@ table .badge {
 
 .yacht-owner-card.party-rental-yacht .yacht-owner-img {
 	position: absolute;
-	right: 0;
 	top: 0;
 	right: unset;
 	z-index: -1;
@@ -9670,7 +9308,6 @@ table .badge {
 	background: #fff;
 	box-shadow: 0px 4px 24px 0px rgba(225, 225, 225, 0.25);
 	text-shadow: none;
-	top: 0;
 	cursor: pointer;
 	border: 1px solid #F4F4F4;
 	margin-top: 0;
@@ -10447,7 +10084,6 @@ table .badge {
 	-ms-transition: ease-in-out 1s;
 	transition: ease-in-out 1s;
 	height: 100%;
-	position: absolute;
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -11394,7 +11030,6 @@ table .badge {
 	margin: 0;
 	padding: 40px;
 	z-index: 1;
-	position: relative;
 	overflow: hidden;
 	-webkit-transition: 500ms all ease;
 	-o-transition: 500ms all ease;
@@ -12472,7 +12107,6 @@ table .badge {
 	width: 48px;
 	height: 48px;
 	border-radius: 10px;
-	background: #111111;
 	box-shadow: 0px 4px 24px 0px rgba(225, 225, 225, 0.25);
 	flex-shrink: 0;
 	margin-left: 12px;
@@ -13013,7 +12647,6 @@ table .badge {
 .faq-accordion.accordion .accordion-item .accordion-button::after {
 	content: "\eb8b";
 	font-family: boxicons;
-	background-image: none;
 	width: 24px;
 	height: 24px;
 	border-radius: 50%;
@@ -13117,7 +12750,6 @@ table .badge {
 .custom-accordion.accordion .accordion-item .accordion-button::after {
 	content: "\ea57";
 	font-family: boxicons;
-	background-image: none;
 	width: 32px;
 	height: 32px;
 	background: #111111;
@@ -15666,7 +15298,6 @@ iframe {
 	-ms-transform: translate(5px, -50%);
 	position: absolute;
 	border-radius: 50%;
-	position: absolute;
 	top: 50%;
 	right: 12px;
 	-webkit-transition: all 0.2s ease;
@@ -16801,7 +16432,6 @@ iframe {
 }
 
 .blogdetail-content .card-header h4 {
-	font-size: 22px;
 	margin: 0 0 0 12px;
 	font-weight: 500;
 	color: #fff;
@@ -17655,7 +17285,6 @@ iframe {
 }
 
 .product-detail-head .detail-page-head .camaro-location .camaro-location-inner {
-	position: relative;
 	margin: 0 15px 0 0;
 	padding: 0 15px 0 0;
 	font-size: 14px;
@@ -19858,7 +19487,6 @@ iframe {
 	border: 1px solid #F4F4F4;
 	box-shadow: 0px 4px 24px 0px rgba(225, 225, 225, 0.25);
 	background: #fff;
-	padding: 10px 15px;
 	width: 100%;
 	height: 100%;
 	position: relative;
@@ -20012,7 +19640,6 @@ iframe {
 
 .book-card .book-body .pricing-lists li p {
 	font-size: 14px;
-	margin-bottom: 15px;
 	color: #111;
 	margin-bottom: 0;
 }
@@ -21082,7 +20709,6 @@ iframe {
 }
 
 .listview-car .card .blog-widget .feature-text {
-	width: 100%;
 	position: relative;
 	background-size: cover;
 	text-transform: uppercase;
@@ -21864,9 +21490,7 @@ iframe {
 	-webkit-transform: translate(10px, 50%);
 	-ms-transform: translate(10px, 50%);
 	position: absolute;
-	left: 0;
 	border-radius: 50%;
-	position: absolute;
 	top: 50%;
 	left: 0;
 	-webkit-transition: all 0.2s ease;
@@ -22746,7 +22370,6 @@ iframe {
 .table-footer .page-link {
 	width: 47px;
 	height: 37px;
-	padding: 0;
 	border: 0;
 	background: transparent;
 	display: -webkit-box;
@@ -22767,7 +22390,6 @@ iframe {
 
 .table-footer .page-item.active .page-link {
 	border-radius: 10px;
-	background-color: #127384;
 	color: #fff;
 	border-color: #127384;
 }
@@ -26449,9 +26071,7 @@ input.form-control.rounded-pill:focus {
 	-webkit-transform: translate(3px, -50%);
 	-ms-transform: translate(3px, -50%);
 	position: absolute;
-	left: 0;
 	border-radius: 50%;
-	position: absolute;
 	top: 50%;
 	left: 0;
 	-webkit-transition: all 0.2s ease;
@@ -26642,9 +26262,7 @@ input.form-control.rounded-pill:focus {
 	-webkit-transform: translate(3px, -50%);
 	-ms-transform: translate(3px, -50%);
 	position: absolute;
-	left: 0;
 	border-radius: 50%;
-	position: absolute;
 	top: 50%;
 	left: 0;
 	-webkit-transition: all 0.2s ease;
@@ -26818,9 +26436,7 @@ input.form-control.rounded-pill:focus {
 	-webkit-transform: translate(3px, -50%);
 	-ms-transform: translate(3px, -50%);
 	position: absolute;
-	left: 0;
 	border-radius: 50%;
-	position: absolute;
 	top: 50%;
 	left: 0;
 	-webkit-transition: all 0.2s ease;
@@ -26921,9 +26537,7 @@ input.form-control.rounded-pill:focus {
 	-webkit-transform: translate(3px, -50%);
 	-ms-transform: translate(3px, -50%);
 	position: absolute;
-	left: 0;
 	border-radius: 50%;
-	position: absolute;
 	top: 50%;
 	left: 0;
 	-webkit-transition: all 0.2s ease;
@@ -27449,7 +27063,6 @@ input.form-control.rounded-pill:focus {
 	border: 1px solid #F4F4F4;
 	box-shadow: 0px 4px 24px 0px rgba(225, 225, 225, 0.25);
 	background: #fff;
-	padding: 10px 15px;
 	width: 100%;
 	height: 100%;
 	position: relative;
@@ -27970,7 +27583,6 @@ input.form-control.rounded-pill:focus {
 .payment-method-types ul li .payment_custom_check .payment_checkmark {
 	border: 2px solid #F2F7F6;
 	background: #F2F7F6;
-	padding: 10px 15px;
 	width: 100%;
 	height: 100%;
 	min-height: 100px;
@@ -28837,7 +28449,6 @@ a#category-filter.active {
 }
 
 .custom-pagination .page-item.disabled .page-link {
-	color: #ccc;
 	pointer-events: none;
 	background-color: #FFA633;
 	/* your custom color */
