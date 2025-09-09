@@ -17,6 +17,7 @@ use Modules\MenuManagement\Models\Menu;
 
 class AppServiceProvider extends ServiceProvider
 {
+    private const DEFAULT_SITE_TITLE = 'Dreams Rent';
     /**
      * Register any application services.
      */
@@ -112,7 +113,7 @@ class AppServiceProvider extends ServiceProvider
             $company_address_line = GeneralSetting::where('key', 'company_address_line')->first();
             $companyPhoneNumber = $companyPhoneNumber ? $companyPhoneNumber->value : '';
             $companyEmail = $companyEmail ? $companyEmail->value : '';
-            $companyName = $companyName ? $companyName->value : 'Dreams Rent';
+            $companyName = $companyName ? $companyName->value : self::DEFAULT_SITE_TITLE;
             $company_address_line = $company_address_line ? $company_address_line->value : '';
             $theme = $defaultTheme ? $defaultTheme->value : 1;
             $language_switcher = GeneralSetting::where('group_id', 5)->where('key', 'language_switcher')->first();
@@ -138,17 +139,17 @@ class AppServiceProvider extends ServiceProvider
 
     public function shareSeo(): void
     {
-        view()->composer('*', function ($view) {
+        view()->composer('*', function () {
             $seoSettings = Cache::remember('seo_settings', 86400, function () {
                 return GeneralSetting::where('group_id', 6)
                     ->pluck('value', 'key')->toArray();
             });
 
-            $seoSettings['metaTitle'] = $seoSettings['metaTitle'] ?? 'Dreams Rent';
+            $seoSettings['metaTitle']       = $seoSettings['metaTitle'] ?? self::DEFAULT_SITE_TITLE;
             $seoSettings['siteDescription'] = $seoSettings['siteDescription'] ?? '';
-            $seoSettings['keywords'] = $seoSettings['keywords'] ?? '';
-            $seoSettings['ogmetaTitle'] = $seoSettings['ogmetaTitle'] ?? 'Dreams Rent';
-            $seoSettings['metaImage'] = uploadedAsset($seoSettings['metaImage'] ?? null, 'default_seo_image');
+            $seoSettings['keywords']        = $seoSettings['keywords'] ?? '';
+            $seoSettings['ogmetaTitle']     = $seoSettings['ogmetaTitle'] ?? self::DEFAULT_SITE_TITLE;
+            $seoSettings['metaImage']       = uploadedAsset($seoSettings['metaImage'] ?? null, 'default_seo_image');
             $seoSettings['ogsiteDescription'] = $seoSettings['ogsiteDescription'] ?? '';
 
             // SEO Meta

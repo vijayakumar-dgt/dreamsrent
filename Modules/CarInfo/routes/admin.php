@@ -25,7 +25,6 @@ use Modules\CarInfo\Http\Controllers\SeasonController;
 use Modules\CarInfo\Http\Controllers\TagController;
 
 Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHeader']], function () {
-
     Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
         Route::get('vehicle-types', [CarTypeController::class, 'carTypes'])->name('cartypes')->middleware('permission');
         Route::post('storetype', [CarTypeController::class, 'storeType'])->name('storetype');
@@ -163,13 +162,11 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::post('enquiry/update', [EnquireController::class, 'update'])->name('enquire.update');
         Route::get('enquiry/list', [EnquireController::class, 'list'])->name('enquiry.list');
         Route::post('enquiry/delete', [EnquireController::class, 'delete'])->name('enquiry.delete');
-
         // Vehicle
         Route::get('vehiclelist', [CarInfoController::class, 'vehiclelist'])->name('vehicle.list')->middleware('permission');
         Route::get('getvehiclelist', [CarInfoController::class, 'getvehiclelist'])->name('getvehiclelist');
         Route::get('vehicleadd', [CarInfoController::class, 'vehicleadd'])->name('vehicle.vehicleadd')->middleware('permission');
         Route::post('vehiclesave', [CarInfoController::class, 'vehiclesave'])->name('vehicle.vehiclesave');
-
         //cars Information
         Route::post('create/vehicle', [CarInfoController::class, 'saveCarInfo'])->name('craete.car');
         Route::post('update/vehicle', [CarInfoController::class, 'updateCarInfo'])->name('update.car');
@@ -193,7 +190,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('/set-recommended', [CarInfoController::class, 'setRecommended'])->name('admin.setRecommended');
         Route::get('/set-status', [CarInfoController::class, 'setStatus'])->name('admin.setStatus');
     });
-
     Route::post('/get-brands', [BrandController::class, 'getBrands']);
     Route::post('/get-vehicle-types', [CarTypeController::class, 'getVehicleTypes']);
     Route::post('/get-vehicle-models', [CarModelController::class, 'getVehicleModels']);
