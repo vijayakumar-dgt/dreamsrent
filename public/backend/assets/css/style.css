@@ -5006,7 +5006,6 @@ button:focus {
 }
 
 .custom-input {
-  height: 4px;
   width: 3px;
   height: 100%;
   background: var(--white);
@@ -11786,7 +11785,6 @@ table.table.dataTable > tbody > tr td {
   position: absolute;
   content: "";
   inset-block-end: -2rem;
-  inset-inline-start: 1.75rem;
   inset-inline-end: 0;
   inset-inline-start: 30%;
   width: 2rem;
@@ -12185,7 +12183,6 @@ table.table.dataTable > tbody > tr td {
 }
 
 .ribbone {
-  position: relative;
   background-size: cover;
   text-transform: uppercase;
   color: var(--white);
@@ -12788,7 +12785,6 @@ table.table.dataTable > tbody > tr td {
 .ribbone-success-left span:after {
   position: absolute;
   content: "";
-  inset-inline-end: -6px;
   background: #01B664;
   height: 6px;
   width: 10px;
@@ -12845,7 +12841,6 @@ table.table.dataTable > tbody > tr td {
 .ribbone-info-left span:after {
   position: absolute;
   content: "";
-  inset-inline-end: -6px;
   background: #0080FF;
   height: 6px;
   width: 10px;
@@ -13213,7 +13208,6 @@ table.table.dataTable > tbody > tr td {
   inset-inline-start: -30px;
 }
 .fullwidth-arrow-warning-ribbons .bar span:nth-child(4) {
-  inset-block-start: 18px;
   border-style: solid;
   border-width: 18px;
   z-index: -2;
@@ -17591,7 +17585,6 @@ table.table.dataTable > thead > tr th {
   padding-left: 30px;
   font-size: 14px;
   color: var(--gray-700);
-  border: 0;
   min-height: auto;
   height: 36px;
   border: 0;
@@ -17911,7 +17904,6 @@ input[type=password]::-ms-clear {
   width: 14px;
   height: 14px;
   background: #01B664;
-  display: flex;
   align-items: center;
   justify-content: center;
   color: var(--white);
@@ -19755,7 +19747,6 @@ span.flatpickr-weekday {
   transition: all 0.5s ease;
 }
 .chat-wrapper .search-wrap .form-control {
-  border-color: var(--white);
   min-height: 48px;
   border-color: var(--gray-200);
   border-right: 0;
@@ -20672,7 +20663,6 @@ span.flatpickr-weekday {
   bottom: 0px;
   left: 0;
   right: 0;
-  padding: 24px;
   background-color: var(--white);
   border-top: 1px solid var(--gray-200);
   padding: 10px 16px;

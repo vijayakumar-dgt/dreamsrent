@@ -2180,7 +2180,6 @@ strong {
 
 .header .noti-dropdown .dropdown-toggle i {
 	line-height: 50px;
-	margin-left: 15px;
 	font-size: 20px;
 	float: left;
 	color: #fff;
@@ -22396,7 +22395,6 @@ iframe {
 .table-footer .page-link {
 	width: 47px;
 	height: 37px;
-	border: 0;
 	background: transparent;
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -26287,8 +26285,6 @@ input.form-control.rounded-pill:focus {
 	transform: translate(3px, -50%);
 	-webkit-transform: translate(3px, -50%);
 	-ms-transform: translate(3px, -50%);
-	position: absolute;
-	left: 0;
 	border-radius: 50%;
 	position: absolute;
 	top: 50%;

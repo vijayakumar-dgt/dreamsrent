@@ -5057,7 +5057,6 @@ button:focus {
 }
 
 .custom-input {
-  height: 4px;
   width: 3px;
   height: 100%;
   background: var(--white);
@@ -13243,7 +13242,6 @@ table.table.dataTable > tbody > tr td {
   inset-inline-start: -30px;
 }
 .fullwidth-arrow-warning-ribbons .bar span:nth-child(4) {
-  inset-block-start: 18px;
   border-style: solid;
   border-width: 18px;
   z-index: -2;
@@ -13295,7 +13293,6 @@ table.table.dataTable > tbody > tr td {
   inset-inline-end: -30px;
 }
 .fullwidth-arrow-danger-ribbons-right .bar span:nth-child(4) {
-  inset-block-start: 18px;
   border-style: solid;
   border-width: 18px;
   z-index: -2;
@@ -17625,7 +17622,6 @@ table.table.dataTable > thead > tr th {
   padding-left: 30px;
   font-size: 14px;
   color: var(--gray-700);
-  border: 0;
   min-height: auto;
   height: 36px;
   border: 0;
@@ -18174,7 +18170,6 @@ input[type=password]::-ms-clear {
 .service-icon {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
   font-size: 24px;
   color: var(--white);
   border-radius: 5px;
@@ -19835,7 +19830,6 @@ span.flatpickr-weekday {
   transition: all 0.5s ease;
 }
 .chat-wrapper .search-wrap .form-control {
-  border-color: var(--white);
   min-height: 48px;
   border-color: var(--gray-200);
   border-right: 0;
@@ -20750,7 +20744,6 @@ span.flatpickr-weekday {
   bottom: 0px;
   left: 0;
   right: 0;
-  padding: 24px;
   background-color: var(--white);
   border-top: 1px solid var(--gray-200);
   padding: 10px 16px;
