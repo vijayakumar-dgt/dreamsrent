@@ -18,14 +18,6 @@ interface UserBookingRepositoryInterface
 
     public function getBooking(string $transaction_id);
 
-    public function userPayments(Request $request);
-
-    public function paypalPaymentSuccess(Request $request);
-
-    public function paypalPaymentFailed(Request $request);
-
-    public function stripPaymentSuccess(Request $request);
-
     public function getTransaction(Request $request);
 
     public function getBenefits(Request $request);

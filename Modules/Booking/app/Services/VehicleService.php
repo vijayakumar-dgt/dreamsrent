@@ -26,11 +26,20 @@ class VehicleService
 
     public function getFilteredPrices($vehicle): array
     {
-        $prices = $vehicle && is_string($vehicle->vehicle_price)
-            ? (is_array($decodedPrice = json_decode($vehicle->vehicle_price, true)) ? ($decodedPrice[0] ?? []) : [])
-            : [];
+        $prices = [];
 
-        return array_filter(is_array($prices) ? $prices : [], fn($price) => $price > 0);
+        if ($vehicle && is_string($vehicle->vehicle_price)) {
+            $decodedPrice = json_decode($vehicle->vehicle_price, true);
+
+            if (is_array($decodedPrice)) {
+                $prices = $decodedPrice[0] ?? [];
+            }
+        }
+
+        return array_filter(
+            is_array($prices) ? $prices : [],
+            fn($price) => $price > 0
+        );
     }
 
     public function getMainLocation($vehicle)

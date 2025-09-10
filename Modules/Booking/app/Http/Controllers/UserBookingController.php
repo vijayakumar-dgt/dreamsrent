@@ -8,22 +8,17 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\Booking\Repositories\Contracts\UserBookingRepositoryInterface;
-use Srmklive\PayPal\Services\PayPal as PayPalClient;
+use Modules\Booking\Services\PaymentService;
 
 class UserBookingController extends Controller
 {
-    private $provider;
     protected UserBookingRepositoryInterface $userBookingRepository;
+    protected PaymentService $paymentService;
 
-    public function __construct(UserBookingRepositoryInterface $userBookingRepository)
+    public function __construct(UserBookingRepositoryInterface $userBookingRepository, PaymentService $paymentService)
     {
-        if (empty(env('PAYPAL_SANDBOX_CLIENT_ID')) || empty(env('PAYPAL_SANDBOX_CLIENT_SECRET'))) {
-            $this->provider = null;
-        } else {
-            $this->provider = new PayPalClient();
-            $this->provider->getAccessToken();
-        }
         $this->userBookingRepository = $userBookingRepository;
+        $this->paymentService = $paymentService;
     }
 
     public function redirectToBooking(): View|RedirectResponse
@@ -80,7 +75,7 @@ class UserBookingController extends Controller
 
     public function userPayments(Request $request): JsonResponse
     {
-        $response = $this->userBookingRepository->userPayments($request);
+        $response = $this->paymentService->userPayments($request);
         if ($response) {
             return response()->json($response, $response['code'] ?? 200);
         }
@@ -89,7 +84,7 @@ class UserBookingController extends Controller
 
     public function paypalPaymentSuccess(Request $request): JsonResponse|RedirectResponse
     {
-        $response = $this->userBookingRepository->paypalPaymentSuccess($request);
+        $response = $this->paymentService->paypalPaymentSuccess($request);
         if ($response && isset($response['redirect_url'])) {
             return redirect($response['redirect_url']);
         }
@@ -98,7 +93,7 @@ class UserBookingController extends Controller
 
     public function paypalPaymentFailed(Request $request): JsonResponse|RedirectResponse
     {
-        $response = $this->userBookingRepository->paypalPaymentFailed($request);
+        $response = $this->paymentService->paypalPaymentFailed($request);
         if ($response && isset($response['redirect_url'])) {
             return redirect($response['redirect_url']);
         }
@@ -107,7 +102,7 @@ class UserBookingController extends Controller
 
     public function stripPaymentSuccess(Request $request): JsonResponse|RedirectResponse
     {
-        $response = $this->userBookingRepository->stripPaymentSuccess($request);
+        $response = $this->paymentService->stripPaymentSuccess($request);
         if ($response && isset($response['redirect_url'])) {
             return redirect($response['redirect_url']);
         }
