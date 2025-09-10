@@ -248,7 +248,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             ->get();
 
         $driverInfo = Driver::select("id", "driver_name")->where("assigned_cars", $vehicleId)->first();
-        $driverInfo_ride = $driverInfo ? Booking::where("driver_id", $driverInfo->id)->count() : 0;;
+        $driverInfo_ride = $driverInfo ? Booking::where("driver_id", $driverInfo->id)->count() : 0;
         $driverInfo_price = 100;
 
         $bookingInfo = BookingUserInfo::where("booking_id", $booking->id)->first();

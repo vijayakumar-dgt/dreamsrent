@@ -108,69 +108,80 @@ class BookingRepository implements BookingRepositoryInterface
     public function getFilterVehicles(Request $request): array
     {
         try {
-            $orderBy = $request->order_by ?? 'desc';
-            $search = $request->search ?? null;
-            $perPage = $request->per_page ?? 10;
-            $page = $request->page ?? 1;
+            $filters = $this->extractFilters($request);
 
-            $startDateTime = '';
-            $endDateTime = '';
-            $startDateFormat = '';
-            $endDateFormat = '';
-            $startDate = $request->start_date ?? null;
-            $endDate = $request->end_date ?? null;
-            $startTime = $request->start_time ?? null;
-            $endTime = $request->end_time ?? null;
-            $tariff = $request->tariff ?? null;
-            $brandIds = $request->brand_ids ?? null;
-            $modelIds = $request->model_ids ?? null;
-            $typeIds = $request->type_ids ?? null;
-            $colorIds = $request->color_ids ?? null;
-            $pickupLocation = $request->pickup_location ?? null;
-            $returnLocation = $request->return_location ?? null;
-            $bookingId = $request->booking_id ?? null;
+            $vehicles = $this->buildVehicleQuery($filters)
+                ->orderBy('vehicle_info.id', $filters['orderBy'])
+                ->paginate($filters['perPage'], ['*'], 'page', $filters['page']);
 
-            if (!empty($startDate) && is_string($startDate)) {
-                $dateTimeString = $startDate;
+            $vehicles->getCollection()->transform(fn($vehicle) => $this->formatVehicle($vehicle));
 
-                if (!empty($startTime) && is_string($startTime)) {
-                    $dateTimeString .= ' ' . $startTime;
-                    $startDateCarbon = Carbon::createFromFormat(self::DISPLAY_DATE_FORMAT, $dateTimeString);
-                } else {
-                    $startDateCarbon = Carbon::createFromFormat('d-m-Y', $dateTimeString);
-                }
+            return [
+                'code'    => 200,
+                'message' => __('Vehicles retrieved successfully.'),
+                'data'    => $vehicles,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'code'    => 500,
+                'message' => __('admin.common.default_retrieve_error'),
+                'error'   => $e->getMessage(),
+            ];
+        }
+    }
 
-                if ($startDateCarbon instanceof Carbon) {
-                    $startDateTime = $startDateCarbon->format(self::DB_DATE_FORMAT);
-                }
+    private function extractFilters(Request $request): array
+    {
+        $filters = [
+            'orderBy'       => $request->order_by ?? 'desc',
+            'search'        => $request->search ?? null,
+            'perPage'       => $request->per_page ?? 10,
+            'page'          => $request->page ?? 1,
+            'tariff'        => $request->tariff ?? null,
+            'brandIds'      => $request->brand_ids ?? null,
+            'modelIds'      => $request->model_ids ?? null,
+            'typeIds'       => $request->type_ids ?? null,
+            'colorIds'      => $request->color_ids ?? null,
+            'pickupLocation'=> $request->pickup_location ?? null,
+            'returnLocation'=> $request->return_location ?? null,
+            'bookingId'     => $request->booking_id ?? null,
+        ];
 
-                $startDateCarbonOnly = Carbon::createFromFormat('d-m-Y', $startDate);
-                if ($startDateCarbonOnly instanceof Carbon) {
-                    $startDateFormat = $startDateCarbonOnly->format('Y-m-d');
-                }
-            }
+        // Handle dates & times
+        [$filters['startDateTime'], $filters['startDateFormat']] = $this->parseDateTime(
+            $request->start_date ?? null,
+            $request->start_time ?? null
+        );
 
-            if (!empty($endDate) && is_string($endDate)) {
-                $dateTimeString = $endDate;
+        [$filters['endDateTime'], $filters['endDateFormat']] = $this->parseDateTime(
+            $request->end_date ?? null,
+            $request->end_time ?? null
+        );
 
-                if (!empty($endTime) && is_string($endTime)) {
-                    $dateTimeString .= ' ' . $endTime;
-                    $endDateCarbon = Carbon::createFromFormat(self::DISPLAY_DATE_FORMAT, $dateTimeString);
-                } else {
-                    $endDateCarbon = Carbon::createFromFormat('d-m-Y', $dateTimeString);
-                }
+        return $filters;
+    }
 
-                if ($endDateCarbon instanceof Carbon) {
-                    $endDateTime = $endDateCarbon->format(self::DB_DATE_FORMAT);
-                }
+    private function parseDateTime(?string $date, ?string $time): array
+    {
+        if (empty($date) || !is_string($date)) {
+            return ['', ''];
+        }
 
-                $endDateCarbonOnly = Carbon::createFromFormat('d-m-Y', $endDate);
-                if ($endDateCarbonOnly instanceof Carbon) {
-                    $endDateFormat = $endDateCarbonOnly->format('Y-m-d');
-                }
-            }
+        $dateTimeString = $date . ($time ? " {$time}" : '');
+        $dateFormat = $time ? self::DISPLAY_DATE_FORMAT : 'd-m-Y';
 
-            $vehicles = VehicleInfo::select(
+        $carbon = Carbon::createFromFormat($dateFormat, $dateTimeString);
+        $carbonOnly = Carbon::createFromFormat('d-m-Y', $date);
+
+        return [
+            $carbon ? $carbon->format(self::DB_DATE_FORMAT) : '',
+            $carbonOnly ? $carbonOnly->format('Y-m-d') : ''
+        ];
+    }
+
+    private function buildVehicleQuery(array $filters)
+    {
+        $query = VehicleInfo::select(
                 'vehicle_info.id',
                 'vehicle_info.vehicle_image as image',
                 self::VEHICLE_NAME_SELECT,
@@ -188,37 +199,37 @@ class BookingRepository implements BookingRepositoryInterface
                 ->leftJoin('bookings', 'vehicle_info.id', '=', 'bookings.vehicle_id')
                 ->distinct()
 
-                ->whereDoesntHave('maintenances', function ($query) use ($startDateFormat, $endDateFormat) {
-                    $query->where(function ($q) use ($startDateFormat, $endDateFormat) {
-                        $q->where('maintenances.start_date', '<=', $endDateFormat)
-                            ->where('maintenances.end_date', '>=', $startDateFormat)
+                ->whereDoesntHave('maintenances', function ($query) use ($filters) {
+                    $query->where(function ($q) use ($filters) {
+                        $q->where('maintenances.start_date', '<=', $filters['endDateFormat'])
+                            ->where('maintenances.end_date', '>=', $filters['startDateFormat'])
                             ->where('maintenances.status', '!=', 3);
                     });
                 })
 
-                ->when(!empty($brandIds), fn($query) => $query->whereIn('vehicle_info.brand_id', $brandIds))
-                ->when(!empty($typeIds), fn($query) => $query->whereIn('vehicle_info.type_id', $typeIds))
-                ->when(!empty($modelIds), fn($query) => $query->whereIn('vehicle_info.model_id', $modelIds))
-                ->when(!empty($colorIds), fn($query) => $query->whereIn('vehicle_info.color_id', $colorIds))
+                ->when(!empty($brandIds), fn($query) => $query->whereIn('vehicle_info.brand_id', $filters['brandIds']))
+                ->when(!empty($typeIds), fn($query) => $query->whereIn('vehicle_info.type_id', $filters['typeIds']))
+                ->when(!empty($modelIds), fn($query) => $query->whereIn('vehicle_info.model_id', $filters['modelIds']))
+                ->when(!empty($colorIds), fn($query) => $query->whereIn('vehicle_info.color_id', $filters['colorIds']))
 
-                ->when(!empty($pickupLocation), function ($query) use ($pickupLocation) {
-                    return $query->where(function ($q) use ($pickupLocation) {
-                        $q->where('vehicle_info.main_location_id', '=', $pickupLocation)
-                            ->orWhereJsonContains('vehicle_info.other_location_id', (string) $pickupLocation);
+                ->when(!empty($filters['pickupLocation']), function ($query) use ($filters) {
+                    return $query->where(function ($q) use ($filters) {
+                        $q->where('vehicle_info.main_location_id', '=', $filters['pickupLocation'])
+                            ->orWhereJsonContains('vehicle_info.other_location_id', (string) $filters['pickupLocation']);
                     });
                 })
-                ->when(!empty($returnLocation), function ($query) use ($returnLocation) {
-                    return $query->where(function ($q) use ($returnLocation) {
-                        $q->where('vehicle_info.main_location_id', '=', $returnLocation)
-                            ->orWhereJsonContains('vehicle_info.other_location_id', (string) $returnLocation);
+                ->when(!empty($filters['returnLocation']), function ($query) use ($filters) {
+                    return $query->where(function ($q) use ($filters) {
+                        $q->where('vehicle_info.main_location_id', '=', $filters['returnLocation'])
+                            ->orWhereJsonContains('vehicle_info.other_location_id', (string) $filters['returnLocation']);
                     });
                 })
 
-                ->when($search, function ($query) use ($search, $tariff) {
+                ->when($filters['search'], function ($query) use ($filters) {
 
-                    $search = (string) $search;
-                    $tariff = (string) $tariff;
-                    $path = '$[0].' . $tariff;
+                    $search = (string) $filters['search'];
+                    $tariff = (string) $filters['tariff'];
+                    $path = '$[0].' . $filters['tariff'];
 
                     $query->where(function ($q) use ($search) {
                         $q->where('vehicle_info.year', 'LIKE', "%{$search}%")
@@ -237,12 +248,12 @@ class BookingRepository implements BookingRepositoryInterface
                     }
                 })
 
-                ->when($tariff, function ($query) use ($tariff, $startDateTime, $endDateTime) {
+                ->when($filters['tariff'], function ($query) use ($filters) {
                     $noOfDays = 1;
 
-                    if (!empty($startDateTime) && !empty($endDateTime)) {
-                        $start = Carbon::parse($startDateTime);
-                        $end = Carbon::parse($endDateTime);
+                    if (!empty($filters['startDateTime']) && !empty($filters['endDateTime'])) {
+                        $start = Carbon::parse($filters['startDateTime']);
+                        $end = Carbon::parse($filters['endDateTime']);
                         $diffMinutes = $start->diffInMinutes($end);
                         $noOfDays = ceil($diffMinutes / 1440);
                     }
@@ -252,30 +263,30 @@ class BookingRepository implements BookingRepositoryInterface
                             ->whereRaw('CAST(vehicle_tarrifs.tariff_from_days AS UNSIGNED) <= ?', [$noOfDays])
                             ->whereRaw('CAST(vehicle_tarrifs.tariff_to_days AS UNSIGNED) >= ?', [$noOfDays]);
                     })
-                        ->where(function ($q) use ($tariff) {
+                        ->where(function ($q) use ($filters) {
                             $q->whereNotNull("vehicle_tarrifs.tariff_daily_price")
-                                ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$tariff}')) IS NOT NULL");
+                                ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$filters["tariff"]}')) IS NOT NULL");
                         })
                         ->selectRaw("
                         vehicle_tarrifs.id as vehicle_tariff_id,
                         COALESCE(
                             vehicle_tarrifs.tariff_daily_price,
-                            JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$tariff}'))
+                            JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$filters["tariff"]}'))
                         ) as vehicle_price,
                         ? as vehicle_price_type
-                    ", [$tariff]);
+                    ", [$filters['tariff']]);
                 })
 
-                ->when(empty($tariff), function ($query) use ($startDateTime, $endDateTime) {
+                ->when(empty($tariff), function ($query) use ($filters) {
                     $noOfDays = 1;
 
-                    if (!empty($startDateTime) && !empty($endDateTime)) {
-                        $start = Carbon::parse($startDateTime);
-                        $end = Carbon::parse($endDateTime);
+                    if (!empty($filters['startDateTime']) && !empty($filters['endDateTime'])) {
+                        $start = Carbon::parse($filters['startDateTime']);
+                        $end = Carbon::parse($filters['endDateTime']);
                         $diffMinutes = $start->diffInMinutes($end);
                         $noOfDays = ceil($diffMinutes / 1440);
                     }
-                    $start = $startDateTime ? Carbon::parse($startDateTime) : Carbon::now();
+                    $start = $filters['startDateTime'] ? Carbon::parse($filters['startDateTime']) : Carbon::now();
                     $daysInMonth = $start->daysInMonth;
 
                     $tariffType = 'daily';
@@ -293,7 +304,7 @@ class BookingRepository implements BookingRepositoryInterface
 
                     $jsonPath = "$[0].$tariffType";
 
-                    $end = $endDateTime ? Carbon::parse($endDateTime) : Carbon::now();
+                    $end = $filters['endDateTime'] ? Carbon::parse($filters['endDateTime']) : Carbon::now();
                     return $query->leftJoin('vehicle_seasons', function ($join) use ($start, $end) {
                         $join->on('vehicle_seasons.vehicle_id', '=', 'vehicle_info.id')
                             ->where(function ($q) use ($start, $end) {
@@ -325,18 +336,18 @@ class BookingRepository implements BookingRepositoryInterface
                         ]);
                 })
 
-                ->when(!empty($startDateTime) || !empty($endDateTime), function ($query) use ($startDateTime, $endDateTime, $bookingId) {
-                    $query->whereNotExists(function ($q) use ($startDateTime, $endDateTime, $bookingId) {
+                ->when(!empty($filters['startDateTime']) || !empty($filters['endDateTime']), function ($query) use ($filters) {
+                    $query->whereNotExists(function ($q) use ($filters) {
                         $q->select(DB::raw(1))
                             ->from('bookings')
                             ->whereRaw('bookings.vehicle_id = vehicle_info.id')
-                            ->where(function ($q) use ($startDateTime, $endDateTime) {
-                                $q->where(function ($q) use ($startDateTime, $endDateTime) {
-                                    $q->whereBetween('bookings.start_datetime', [$startDateTime, $endDateTime])
-                                        ->orWhereBetween('bookings.end_datetime', [$startDateTime, $endDateTime])
-                                        ->orWhere(function ($q) use ($startDateTime, $endDateTime) {
-                                            $q->where('bookings.start_datetime', '<=', $startDateTime)
-                                                ->where('bookings.end_datetime', '>=', $endDateTime);
+                            ->where(function ($q) use ($filters) {
+                                $q->where(function ($q) use ($filters) {
+                                    $q->whereBetween('bookings.start_datetime', [$filters['startDateTime'], $filters['endDateTime']])
+                                        ->orWhereBetween('bookings.end_datetime', [$filters['startDateTime'], $filters['endDateTime']])
+                                        ->orWhere(function ($q) use ($filters) {
+                                            $q->where('bookings.start_datetime', '<=', $filters['startDateTime'])
+                                                ->where('bookings.end_datetime', '>=', $filters['endDateTime']);
                                         });
                                 })
                                     ->whereNotIn('bookings.booking_status', [6, 3]);
@@ -346,38 +357,27 @@ class BookingRepository implements BookingRepositoryInterface
                             $q->where('bookings.id', '!=', $bookingId);
                         }
                     });
-                })
+                });
 
-                ->orderBy('vehicle_info.id', $orderBy)
-                ->paginate($perPage, ['*'], 'page', $page);
+        return $query;
+    }
 
-            $vehicles->getCollection()->map(function ($vehicle) {
-                $vehicleImagePath = $vehicle->image ?? '';
-                $filename = basename($vehicleImagePath);
-                $newpath = self::VEHICLE_IMAGE_PATH . $filename;
-                $file = public_path(self::STORAGE_PATH . $newpath);
-                if (file_exists($file)) {
-                    $vehicleImagePath = $newpath;
-                }
-                $vehicle->image = uploadedAsset($vehicleImagePath);
-                $vehicle->vehicle_price = number_format((float) $vehicle->vehicle_price, 2, '.', '');
-                $vehicle->encrypted_id = customEncrypt($vehicle->id, Booking::$reservationSecretKey);
-                return $vehicle;
-            });
+    private function formatVehicle($vehicle)
+    {
+        $vehicleImagePath = $vehicle->image ?? '';
+        $filename = basename($vehicleImagePath);
+        $newpath = self::VEHICLE_IMAGE_PATH . $filename;
+        $file = public_path(self::STORAGE_PATH . $newpath);
 
-            return [
-                'code'    => 200,
-                'message' => __('Vehicles retrieved successfully.'),
-                'data'    => $vehicles,
-            ];
-        } catch (\Exception $e) {
-            return [
-                'code'    => 500,
-                'message' => __('admin.common.default_retrieve_error'),
-                'error'   => $e->getMessage(),
-            ];
-
+        if (file_exists($file)) {
+            $vehicleImagePath = $newpath;
         }
+
+        $vehicle->image = uploadedAsset($vehicleImagePath);
+        $vehicle->vehicle_price = number_format((float) $vehicle->vehicle_price, 2, '.', '');
+        $vehicle->encrypted_id = customEncrypt($vehicle->id, Booking::$reservationSecretKey);
+
+        return $vehicle;
     }
 
     public function store(Request $request): array
