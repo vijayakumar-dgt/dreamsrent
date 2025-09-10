@@ -304,4 +304,3 @@
 @push('scripts')
 <script src="{{ asset('backend/assets/js/report/income.js') }}"></script>
 @endpush
- 
