@@ -422,7 +422,7 @@
                                             <li>
                                                 <div class="driver-profile-info">
                                                     <span class="driver-profile" id="driver_profile">
-                                                        <img src="{{ $driverInfo_image }}" alt="Img">
+                                                        <img src="{{ $driverInfo_image }}" alt="Profile">
                                                     </span>
                                                     <div class="driver-name">
                                                         <h5>{{ $driverInfo->driver_name }}</h5>
@@ -505,9 +505,7 @@
                                         <h5>{{__('web.home.billing_information')}}</h5>
                                     </div>
                                     <div class="d-flex align-items-center">
-
                                     </div>
-
                                 </div>
                                 <div class="booking-info-body">
                                     @php

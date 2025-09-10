@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingDetail;
 use Modules\Booking\Models\BookingHistory;
@@ -518,6 +519,8 @@ class BookingRepository implements BookingRepositoryInterface
                     if (userNotificationsEnabled() && $customer && $customer->email) {
                         sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
                     }
+                } catch (\Exception $e) {
+                    Log::error($e->getMessage());
                 }
             } else {
                 $data['updated_by'] = Auth::guard('admin')->id();
@@ -1205,6 +1208,8 @@ class BookingRepository implements BookingRepositoryInterface
                 if (isset($customer) && isset($notifyData) && !empty($customer->email)) {
                     sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
                 }
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
             }
 
             return [

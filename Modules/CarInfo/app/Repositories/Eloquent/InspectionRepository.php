@@ -24,12 +24,11 @@ class InspectionRepository implements InspectionRepositoryInterface
                 return $user;
             });
         $checklists = Checklist::where('status', true)->orderBy('name', 'asc')->get();
-        $data = [
+
+        return [
             'users'      => $users,
             'checklists' => $checklists
         ];
-
-        return $data;
     }
 
     public function store(Request $request): array
@@ -118,7 +117,6 @@ class InspectionRepository implements InspectionRepositoryInterface
             $inspections = $inspections->orderBy('id', 'desc')->get()->map(function ($inspection) {
                 $inspection->inspectiondate = formatDateTime($inspection->inspection_date, false);
                 if ($inspection->inspector) {
-                    $inspection->inspector->name = $inspection->inspector->name;
                     if ($inspection->inspector->userDetails) {
                         $inspection->inspector->name = $inspection->inspector->userDetails->first_name
                             ? ucwords($inspection->inspector->userDetails->first_name . ' ' . $inspection->inspector->userDetails->last_name)

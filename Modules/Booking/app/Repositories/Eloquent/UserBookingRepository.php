@@ -12,10 +12,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingHistory;
 use Modules\Booking\Models\BookingUserInfo;
 use Modules\Booking\Repositories\Contracts\UserBookingRepositoryInterface;
+use Modules\Booking\Services\VehicleService;
 use Modules\CarInfo\Models\Driver;
 use Modules\CarInfo\Models\ExtraService;
 use Modules\CarInfo\Models\Location;
@@ -25,7 +27,6 @@ use Modules\CarInfo\Models\VehicleInsurance;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
-use Modules\GeneralSetting\Models\TaxGroup;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
@@ -46,180 +47,40 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
     public function getVehicleInfo(Request $request, string $slug): array|RedirectResponse
     {
+        $vehicleService = app(VehicleService::class);
         if (!Auth::guard('web')->check()) {
-            session(['intended_url' => url()->current()]);
-            session([
-                'intended_booking' => [
-                    'slug' => $request->slug,
-                    'data' => $request->except('_token')
-                ]
-            ]);
-            $response = [
-                'redirect_url' => route('user-login')
-            ];
-            return $response;
+            return $this->handleUnauthenticated($request);
         }
-        $vehicle = VehicleInfo::select('id', 'name', 'slug', 'vehicle_image', 'main_location_id', 'other_location_id', 'vehicle_price', 'passenger_capacity')
-            ->where('slug', $slug)
-            ->first();
 
-        $vehicleImageUrl = $vehicle?->vehicle_image ? asset('/storage/' . $vehicle->vehicle_image) : null;
-
+        $vehicle = $vehicleService->getVehicleBySlug($slug);
         $vehicleId = $vehicle?->id;
 
-        $prices = $vehicle && is_string($vehicle->vehicle_price)
-            ? (is_array($decodedPrice = json_decode($vehicle->vehicle_price, true)) ? ($decodedPrice[0] ?? []) : [])
-            : [];
+        $vehicleImageUrl   = uploadedAsset($vehicle->vehicle_image ?? '');
+        $filteredPrices    = $vehicleService->getFilteredPrices($vehicle);
+        $mainLocation      = $vehicleService->getMainLocation($vehicle);
+        $allLocation       = $vehicleService->getAllLocations($vehicle);
+        $locations         = $vehicleService->getPickupAndDeliveryLocations($request);
 
-
-        $filteredPrices = array_filter(is_array($prices) ? $prices : [], function ($price) {
-            return $price > 0;
-        });
-
-        $mainLocation = null;
-
-        if ($vehicle?->main_location_id) {
-            $mainLocation = Location::select('name', 'address')
-                ->where('id', $vehicle->main_location_id)
-                ->first();
-        }
-
-        $allLocation = collect();
-
-        if ($vehicle?->main_location_id) {
-            $mainLocation = Location::select('name', 'address')
-                ->where('id', $vehicle->main_location_id)
-                ->first();
-
-            $mainLocations = Location::select('id', 'name', 'address')
-                ->where('id', $vehicle->main_location_id)
-                ->first();
-
-            if ($mainLocations) {
-                $allLocation->push($mainLocations);
-            }
-        }
-
-        if (!empty($vehicle->other_location_id)) {
-            $otherIds = json_decode($vehicle->other_location_id, true);
-
-            if (is_array($otherIds)) {
-                $filteredOtherIds = array_filter($otherIds, function ($id) use ($vehicle) {
-                    return $id != $vehicle->main_location_id;
-                });
-
-                if (!empty($filteredOtherIds)) {
-                    $otherLocations = Location::select('id', 'name', 'address')
-                        ->whereIn('id', $filteredOtherIds)
-                        ->get();
-
-                    $allLocation = $allLocation->merge($otherLocations);
-                }
-            }
-        }
-        $dlocation = Location::select('id', 'name', 'address')->where('id', $request->delivery_location)->first();
-        $plocation = Location::select('id', 'name', 'address')->where('id', $request->pickup_location)->first();
-        $rlocation = Location::select('id', 'name', 'address')->where('id', $request->delivery_return_location)->first();
-        $prlocation = Location::select('id', 'name', 'address')->where('id', $request->pickup_return_location)->first();
-
-        $extraServices = VehicleExtraService::with(['extraService:id,name,icon,description'])
-            ->select("extra_service_id", "value", "price")
-            ->where('vehicle_id', $vehicleId)
-            ->get()
-            ->map(function ($service) {
-                if (!empty($service->extraService->icon) && is_string($service->extraService->icon)) {
-                    $service->extraService->icon = asset('storage/' . $service->extraService->icon);
-                }
-                return $service;
-            });
-
+        $extraServices     = $vehicleService->getExtraServices($vehicleId);
         $extraServiceCount = $extraServices->count();
 
-        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-        $currency = null;
+        $currencySymbol    = getDefaultCurrencySymbol();
+        $vehicleInsurance  = $vehicleService->getVehicleInsurances($vehicleId);
+        $countries         = Country::all();
 
-        if ($currencySetting && $currencySetting->value) {
-            $currency = Currency::find($currencySetting->value);
-        }
+        $driverInfo        = $vehicleService->getDriverInfo($vehicleId);
+        $driverInfo_image  = $driverInfo?->image ? uploadedAsset($driverInfo->image, 'profile') : uploadedAsset('', 'profile');
+        $driverInfo_ride   = $driverInfo ? Booking::where("driver_id", $driverInfo->id)->count() : 0;
+        $driverInfo_price  = 100;
 
-        $currencySymbol = $currency->symbol ?? "$";
+        $finalRate         = is_numeric($request->final_price_rate) ? (float) $request->final_price_rate : 0.0;
+        $calculatedTaxes   = $vehicleService->calculateTaxes($finalRate);
+        $totalTax          = array_sum(array_column($calculatedTaxes, 'amount'));
+        $grandTotal        = $finalRate;
 
+        $user              = Auth::guard('web')->user();
+        $seo_title         = "User Booking";
 
-        $vehicleInsurance = VehicleInsurance::select(
-            'vehicle_insurances.insurances_id',
-            'vehicle_insurances.value',
-            'vehicle_insurances.price',
-            'insurances.insurance_name',
-            'insurances.price as insurance_price',
-            'insurances.price_type_id',
-            'insurances.status'
-        )
-            ->join('insurances', 'vehicle_insurances.insurances_id', '=', 'insurances.id')
-            ->with(['insuranceBenefits' => function ($query) {
-                $query->select('insurance_id', 'benefit');
-            }])
-            ->where('vehicle_insurances.vehicle_id', $vehicleId)
-            ->get();
-
-        $vehicleInsurance->transform(function ($insurance) {
-            $insurance->benefits_count = $insurance->insuranceBenefits->count();
-            $insurance->first_benefit = $insurance->insuranceBenefits->first()->benefit ?? 'No benefits available';
-            return $insurance;
-        });
-
-        $countries = Country::get();
-
-        $driverInfo = Driver::select("id", "driver_name", "image")
-            ->where("assigned_cars", $vehicleId)
-            ->first();
-
-        $driverInfo_image = $driverInfo?->image
-            ? asset('storage/' . $driverInfo->image)
-            : asset('storage/backend/assets/img/default-profile.png');
-
-        $driverInfo_ride = $driverInfo
-            ? Booking::where("driver_id", $driverInfo->id)->count()
-            : 0;
-
-        $driverInfo_price = 0;
-
-        $finalRate = is_numeric($request->final_price_rate) ? (float) $request->final_price_rate : 0.0;
-
-        $taxGroups = TaxGroup::with(['taxRates'])->get();
-
-        $calculatedTaxes = [];
-
-        foreach ($taxGroups as $group) {
-            $groupTaxAmount = 0;
-
-            foreach ($group->taxRates as $rate) {
-                $taxAmount = ($rate->tax_rate / 100) * $finalRate;
-                $groupTaxAmount += $taxAmount;
-
-                $calculatedTaxes[] = [
-                    'group_name'   => $group->tax_name,
-                    'rate_name'    => $rate->tax_name,
-                    'rate_percent' => $rate->tax_rate,
-                    'amount'       => $taxAmount,
-                ];
-            }
-        }
-        $totalTax = array_sum(array_column($calculatedTaxes, 'amount'));
-        $grandTotal = $finalRate;
-        $user = Auth::guard('web')->user();
-        $seo_title = "User Booking";
-
-        $paypalSetting = GeneralSetting::where("key", "paypal_status")->first();
-        $paypalStatus = ($paypalSetting && $paypalSetting->value == 1) ? 1 : 0;
-
-        $stripeSetting = GeneralSetting::where("key", "stripe_status")->first();
-        $stripeStatus = ($stripeSetting && $stripeSetting->value == 1) ? 1 : 0;
-
-        $codSetting = GeneralSetting::where("key", "cod_status")->first();
-        $codStatus = ($codSetting && $codSetting->value == 1) ? 1 : 0;
-
-        $walletSetting = GeneralSetting::where("key", "wallet_status")->first();
-        $walletStatus = ($walletSetting && $walletSetting->value == 1) ? 1 : 0;
         return [
             'slug'              => $slug,
             'user'              => $user,
@@ -237,32 +98,49 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             'driverInfo_price'  => $driverInfo_price,
             'driverInfo_image'  => $driverInfo_image,
             'allLocation'       => $allLocation,
-            'dlocation'         => $dlocation,
-            'rlocation'         => $rlocation,
+            'dlocation'         => $locations['dlocation'],
+            'rlocation'         => $locations['rlocation'],
             'finalRate'         => $finalRate,
             'calculatedTaxes'   => $calculatedTaxes,
             'totalTax'          => $totalTax,
             'grandTotal'        => $grandTotal,
             'seo_title'         => $seo_title,
-            'plocation'         => $plocation,
-            'prlocation'        => $prlocation,
+            'plocation'         => $locations['plocation'],
+            'prlocation'        => $locations['prlocation'],
             'currencySymbol'    => $currencySymbol,
-            'paypalStatus'      => $paypalStatus,
-            'stripeStatus'      => $stripeStatus,
-            'codStatus'         => $codStatus,
-            'walletStatus'      => $walletStatus
+            'paypalStatus'      => $vehicleService->getPaymentStatus("paypal_status"),
+            'stripeStatus'      => $vehicleService->getPaymentStatus("stripe_status"),
+            'codStatus'         => $vehicleService->getPaymentStatus("cod_status"),
+            'walletStatus'      => $vehicleService->getPaymentStatus("wallet_status"),
         ];
+    }
 
+    private function handleUnauthenticated(Request $request): array
+    {
+        session(['intended_url' => url()->current()]);
+        session([
+            'intended_booking' => [
+                'slug' => $request->slug,
+                'data' => $request->except('_token')
+            ]
+        ]);
+        return [
+            'redirect_url' => route('user-login')
+        ];
     }
 
     public function getStates(int $country_id): Collection
     {
-        return State::where('country_id', $country_id)->get(['id', 'name']);
+        return State::where('country_id', $country_id)
+            ->where('status', 1)
+            ->get(['id', 'name']);
     }
 
     public function getCities(int $state_id): Collection
     {
-        return City::where('state_id', $state_id)->get(['id', 'name']);
+        return City::where('state_id', $state_id)
+            ->where('status', 1)
+            ->get(['id', 'name']);
     }
 
     public function checkBooking(Request $request): array
@@ -598,7 +476,9 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 if (userNotificationsEnabled() && $authUser?->email) {
                     sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                 }
-            } 
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+            }
             return [
                 'code'         => 200,
                 'message'      => __('web.home.booking_successfully_created'),
@@ -1062,7 +942,9 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 if (userNotificationsEnabled() && $authUser && $authUser->email) {
                     sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                 }
-            } 
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+            }
             return [
                 'code'         => 200,
                 'message'      => __('web.home.booking_successfully_created'),
