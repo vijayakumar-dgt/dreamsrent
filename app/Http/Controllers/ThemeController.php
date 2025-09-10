@@ -113,7 +113,6 @@ class ThemeController extends Controller
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
 
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $banners = DB::table('sections')
@@ -161,8 +160,6 @@ class ThemeController extends Controller
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
                     // Ensure $limit is cast to an integer
                     $limit = (int)($matches[1] ?? 10);
-                    // Explicitly cast to integer
-                    $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
                     // Fetch from sections + section_datas with language-specific data
                     $banners = DB::table('sections')
@@ -212,8 +209,6 @@ class ThemeController extends Controller
                 if ($section['status'] == 1 && (isset($section['section_content']) && strpos($section['section_content'], '[banner_three') !== false)) {
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
                     $limit = (int)($matches[1] ?? 10);
-                    // Explicitly cast to integer
-                    $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
                     $banners = DB::table('sections')
                         ->join('section_datas', function ($join) use ($lang_id) {
@@ -262,7 +257,6 @@ class ThemeController extends Controller
                 if ($section['status'] == 1 && (isset($section['section_content']) && strpos($section['section_content'], '[banner_four') !== false)) {
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
                     $limit = (int)($matches[1] ?? 10);
-                    $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
                     $banners = DB::table('sections')
                         ->join('section_datas', function ($join) use ($lang_id) {
@@ -317,7 +311,6 @@ class ThemeController extends Controller
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
 
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $best_vehicles = DB::table('sections')
@@ -385,7 +378,6 @@ class ThemeController extends Controller
                     if (is_string($content) && strpos($content, '[brand') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $getCategoryId = getCustomThemeCategoryId($themeId);
@@ -417,7 +409,6 @@ class ThemeController extends Controller
                     if (is_string($content) && strpos($content, '[location') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $defaultImage = asset(self::PLACEHOLDER_APP_CAR);
@@ -458,7 +449,6 @@ class ThemeController extends Controller
                 if (is_array($section) && ($section['status'] ?? 0) == 1 && (isset($section['section_content']) && is_string($section['section_content']) && strpos($section['section_content'], '[category ') !== false)) {
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
                     $limit = $matches[1] ?? 6;
-                    $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
                     $categoryId = getCustomThemeCategoryId($themeId);
                     $category = Cartype::select('name', 'icon', 'id')
@@ -468,6 +458,7 @@ class ThemeController extends Controller
                         ->where('category_id', $categoryId)
                         ->where('status', 1)
                         ->whereNull('deleted_at')
+                        ->orderBy('created_at', $order)
                         ->get()
                         ->map(function ($cartype) use ($lang_id) {
                             $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
@@ -489,7 +480,6 @@ class ThemeController extends Controller
                 if (is_array($section) && ($section['status'] ?? 0) == 1 && (isset($section['section_content']) && is_string($section['section_content']) && strpos($section['section_content'], '[bike_category ') !== false)) {
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
                     $limit = $matches[1] ?? 6;
-                    $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
                     $categoryId = getCustomThemeCategoryId($themeId);
                     $category = Cartype::select('name', 'icon', 'id', 'type')
@@ -499,6 +489,7 @@ class ThemeController extends Controller
                         ->where('category_id', $categoryId)
                         ->where('status', 1)
                         ->whereNull('deleted_at')
+                        ->orderBy('created_at', $order)
                         ->get()
                         ->map(function ($cartype) use ($lang_id) {
                             $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
@@ -520,7 +511,6 @@ class ThemeController extends Controller
                 if (is_array($section) && ($section['status'] ?? 0) == 1 && (isset($section['section_content']) && is_string($section['section_content']) && strpos($section['section_content'], '[boat_category ') !== false)) {
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
                     $limit = $matches[1] ?? 6;
-                    $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
                     $category = Cartype::select('name', 'icon', 'id', 'type')
                         ->limit((int) $limit)
@@ -553,7 +543,6 @@ class ThemeController extends Controller
                         // Parse shortcode parameters
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         // Fetch FAQ data
@@ -596,7 +585,6 @@ class ThemeController extends Controller
                         // Parse shortcode parameters
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         // Fetch FAQ data
@@ -637,7 +625,6 @@ class ThemeController extends Controller
                     if (is_string($content) && strpos($content, '[faq') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $faqs = DB::table('faqs')
@@ -662,7 +649,6 @@ class ThemeController extends Controller
                     if (is_string($content) && strpos($content, '[how_it_work') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         if ($themeId == 3) {
@@ -791,11 +777,6 @@ class ThemeController extends Controller
 
                         $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
-                        $user = User::where('id', $vehicle->created_by)
-                            ->first();
-
-                        $user = User::where('id', $vehicle->created_by)->first();
-                        $userDetail = null;
                         $defaultAvatar = asset(self::DEFAULT_PROFILE_BACKEND);
                         $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
@@ -935,11 +916,6 @@ class ThemeController extends Controller
 
                         $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
-                        $user = User::where('id', $vehicle->created_by)
-                            ->first();
-
-                        $user = User::where('id', $vehicle->created_by)->first();
-                        $userDetail = null;
                         $defaultAvatar = asset(self::DEFAULT_PROFILE_BACKEND);
                         $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
@@ -1094,11 +1070,6 @@ class ThemeController extends Controller
 
                         $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
-                        $user = User::where('id', $vehicle->created_by)
-                            ->first();
-
-                        $user = User::where('id', $vehicle->created_by)->first();
-                        $userDetail = null;
                         $defaultAvatar = asset(self::DEFAULT_PROFILE_BACKEND);
                         $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
@@ -1163,7 +1134,6 @@ class ThemeController extends Controller
                     if (is_string($content) && strpos($content, '[car_type ') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
 
                         $cartypes = Cartype::select('name', 'icon', 'id')
                             ->where('language_id', $lang_id)
@@ -1197,7 +1167,6 @@ class ThemeController extends Controller
                     if (is_string($content) && strpos($content, '[testimonial') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
 
                         $testimonials = DB::table('testimonials')->select('customer_name', 'image', 'ratings', 'review', 'location')
                             ->limit($limit)
@@ -1295,7 +1264,6 @@ class ThemeController extends Controller
                     if (is_string($content) && strpos($content, '[why_us') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $whyus = DB::table('sections')
@@ -1360,7 +1328,6 @@ class ThemeController extends Controller
                     if (is_string($content) && strpos($content, '[exclusive_bike') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $whyus = DB::table('sections')
@@ -1665,7 +1632,6 @@ class ThemeController extends Controller
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
-                        $viewAll = $matches[3] ?? 'no';
 
                         $blogss = DB::table('blog_posts')
                             ->select('id', 'title', 'image', 'slug', 'category', 'description', 'updated_at')
@@ -1708,10 +1674,6 @@ class ThemeController extends Controller
 
                     if (is_string($content) && strpos($content, '[search') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
-                        $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
-
                         // Provide static content
                         $section['section_type'] = 'search_section';
                         $section['type'] = 'search_section';
@@ -1729,9 +1691,6 @@ class ThemeController extends Controller
 
                     if (is_string($content) && strpos($content, '[marquee') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
-                        $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
 
                         $page = Page::select("keywords")->where("slug", $slug)->where("language_id", $lang_id)->first();
 
@@ -1984,7 +1943,6 @@ class ThemeController extends Controller
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
 
                     $limit = $matches[1] ?? 12;
-                    $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
 
                     $allCategory = Cartype::select('name', 'id')
@@ -2006,9 +1964,6 @@ class ThemeController extends Controller
 
                     if (is_string($content) && strpos($content, '[facts') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
-                        $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
 
                         $userCount = User::count(); // Get total users
                         $vehicleCount = VehicleInfo::count(); // Get total vehicles
@@ -2173,10 +2128,8 @@ class ThemeController extends Controller
             } else {
                 $viewPath = 'frontend.home.home_' . $themeId;
                 if (!view()->exists($viewPath)) {
-                    dd('view not found');
                     $viewPath = 'frontend.home.home_1';
                 }
-                // dd($viewPath);
                 return view($viewPath, ['data' => $data, 'content_sections' => $content_sections, 'vehicleBrand' => $vehicleBrand, 'seo_title' => $seo_title, 'seo_description' => $seo_description, 'og_title' => $og_title, 'og_description' => $og_description, 'meta_keywords' => $meta_keywords]);
             }
         } else {
