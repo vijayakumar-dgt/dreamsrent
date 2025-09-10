@@ -34,6 +34,9 @@ class PageController extends Controller
 {
     protected $pageRepository;
 
+    private const PAGES = 'pages/';
+
+
     public function __construct(PageInterface $pageRepository)
     {
         $this->pageRepository = $pageRepository;
@@ -57,7 +60,7 @@ class PageController extends Controller
         $languageId = $request->query('language_id');
         $language = TranslationLanguage::find($languageId);
 
-        $slugsToTry = [$slug, Str::start($slug, 'pages/')];
+        $slugsToTry = [$slug, Str::start($slug, self::PAGES)];
 
         $query = Page::whereIn('slug', $slugsToTry)
             ->when($languageId, fn ($q) => $q->where('language_id', $languageId))
@@ -113,7 +116,7 @@ class PageController extends Controller
             $page = $this->pageRepository->findBySlug($pageSlug);
 
             if (!$page) {
-                $fallbackSlug = 'pages/' . ltrim($pageSlug, '/');
+                $fallbackSlug = self::PAGES . ltrim($pageSlug, '/');
                 $page = $this->pageRepository->findBySlug($fallbackSlug);
             }
 
@@ -161,52 +164,66 @@ class PageController extends Controller
     {
         $authUser = current_user();
 
+        // Default error response
+        $statusCode = 500;
+        $response = [
+            'code'    => 500,
+            'message' => __('Something went wrong while saving!')
+        ];
+
+        // Auth check
         if (!$authUser) {
-            return response()->json([
+            $statusCode = 401;
+            $response = [
                 'code'    => 401,
                 'message' => __('User is not authenticated')
-            ], 401);
-        }
-
-        if (empty($request->page_content) || count($request->page_content) === 0) {
-            return response()->json([
+            ];
+        } 
+        // Content check
+        elseif (empty($request->page_content) || count($request->page_content) === 0) {
+            $statusCode = 422;
+            $response = [
                 'code'    => 422,
                 'message' => __('Please add at least one section!'),
                 'errors'  => ['page_content' => [__('Please add at least one section!')]]
-            ], 422);
+            ];
+        } 
+        // Proceed with storing
+        else {
+            $sections = $this->prepareSections($request);
+            $slug = Str::slug($request->slug);
+
+            $data = [
+                'page_title'      => $request->title,
+                'slug'            => $slug,
+                'page_content'    => json_encode($sections),
+                'seo_tag'         => $request->meta_key,
+                'seo_title'       => $request->mete_title,
+                'seo_description' => $request->meta_description,
+                'keywords'        => $request->meta_key,
+                'canonical_url'   => $request->canonical_url,
+                'og_title'        => $request->og_title,
+                'og_description'  => $request->og_description,
+                'language_id'     => $authUser->language_id ?? null,
+                'status'          => 1,
+            ];
+
+            try {
+                $this->pageRepository->create($data);
+
+                $statusCode = 200;
+                $response = [
+                    'code'    => 200,
+                    'message' => __('page_create_success'),
+                    'data'    => []
+                ];
+            } catch (\Exception $e) {
+                \Log::error('Page create failed: ' . $e->getMessage());
+                // $response already set to 500 default
+            }
         }
 
-        $sections = $this->prepareSections($request);
-        $slug = Str::slug($request->slug);
-
-        $data = [
-            'page_title'      => $request->title,
-            'slug'            => $slug,
-            'page_content'    => json_encode($sections),
-            'seo_tag'         => $request->meta_key,
-            'seo_title'       => $request->mete_title,
-            'seo_description' => $request->meta_description,
-            'keywords'        => $request->meta_key,
-            'canonical_url'   => $request->canonical_url,
-            'og_title'        => $request->og_title,
-            'og_description'  => $request->og_description,
-            'language_id'     => $authUser->language_id ?? null,
-            'status'          => 1,
-        ];
-
-        try {
-            $this->pageRepository->create($data);
-            return response()->json([
-                'code'    => 200,
-                'message' => __('page_create_success'),
-                'data'    => []
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'code'    => 500,
-                'message' => __('Something went wrong while saving!')
-            ], 500);
-        }
+        return response()->json($response, $statusCode);
     }
 
     public function pageUpdate(PageRequest $request): JsonResponse
@@ -326,15 +343,13 @@ class PageController extends Controller
             $defaultLang = Language::select("language_id")->where("default", 1)->first();
             $lang_id = $defaultLang->language_id ?? 1;
         }
-        if (in_array($themeId, [1, 2, 3, 4], true)) {
-            if ($slug === null || $slug === '/') {
-                $slug = match ((int)$themeId) {
-                    1 => 'home-screen-one',
-                    2 => 'home-screen-two',
-                    3 => 'home-screen-three',
-                    4 => 'home-screen-four',
-                };
-            }
+        if (in_array($themeId, [1, 2, 3, 4], true) && ($slug === null || $slug === '/')) {
+            $slug = match ((int)$themeId) {
+                1 => 'home-screen-one',
+                2 => 'home-screen-two',
+                3 => 'home-screen-three',
+                4 => 'home-screen-four',
+            };
         }
 
         if (!$slug) {
@@ -2438,13 +2453,13 @@ class PageController extends Controller
             $lang_id = $defaultLang->language_id ?? 1;
         }
 
-        $fallbackSlug = 'pages/' . ltrim($slug, '/');
+        $fallbackSlug = self::PAGES . ltrim($slug, '/');
         $page = Page::where('slug', $fallbackSlug)
             ->where('language_id', $lang_id)
             ->first();
 
         if (!$page) {
-            $fallbackSlug = 'pages/' . ltrim($slug, '/');
+            $fallbackSlug = self::PAGES . ltrim($slug, '/');
             $basePage = Page::where('slug', $fallbackSlug)->whereNull('parent_id')->first();
 
             if ($basePage) {

@@ -46,6 +46,12 @@ use Modules\GeneralSetting\Models\TranslationLanguage;
 class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 {
     protected ImageResizer $imageResizer;
+    private const VEHICLE_IMAGE_PATH = 'vehicles/images';
+    private const VEHICLE_IMAGE = 'vehicles/images/';
+    private const DATE_FORMAT = 'm/d/Y';
+    private const STORAGE = 'storage/';
+    private const STORAGES = '/storage/';
+    private const VEHICLE_IMAGE_SMALL = 'vehicles/images/small/';
 
     public function __construct(ImageResizer $imageResizer)
     {
@@ -234,13 +240,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         $carTypes = Cartype::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $brands = Brand::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $models = collect();
-        if ($query && $query->brand_id) {
-            $Models = CarModel::where('status', 1)
-                ->where('brand_id', $query->brand_id)
-                ->orderBy('id', 'desc')
-                ->get();
-        }
-
+      
         $category = Category::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $location = Location::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $carFuel = CarFuel::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
@@ -327,7 +327,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             if ($request->hasFile('vehicle_image')) {
                 $file = $request->file('vehicle_image');
                 if ($file && $file->isValid()) {
-                    $vehicleImagePath = $this->imageResizer->uploadFile($file, 'vehicles/images');
+                    $vehicleImagePath = $this->imageResizer->uploadFile($file, self::VEHICLE_IMAGE_PATH);
                 }
             }
 
@@ -385,7 +385,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $imagePaths = [];
                 if (is_array($images)) {
                     foreach ($images as $image) {
-                        $fileName = $this->imageResizer->uploadFile($image, 'vehicles/images');
+                        $fileName = $this->imageResizer->uploadFile($image, self::VEHICLE_IMAGE_PATH);
                         $imagePaths[] = $fileName;
                     }
                 }
@@ -674,7 +674,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $file = $request->file('vehicle_image');
                 $existingImage = $vehicle->vehicle_image ?? null;
                 if ($file && $file->isValid()) {
-                    $vehicleImagePath = $this->imageResizer->uploadFile($file, 'vehicles/images', $existingImage);
+                    $vehicleImagePath = $this->imageResizer->uploadFile($file, self::VEHICLE_IMAGE_PATH, $existingImage);
                 }
             } else {
                 $vehicleImagePath = $vehicle->vehicle_image;
@@ -744,7 +744,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $imagePaths = [];
                 if (is_array($images)) {
                     foreach ($images as $image) {
-                        $fileName = $this->imageResizer->uploadFile($image, 'vehicles/images');
+                        $fileName = $this->imageResizer->uploadFile($image, self::VEHICLE_IMAGE_PATH);
                         $imagePaths[] = $fileName;
                     }
                 }
@@ -1140,8 +1140,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                         $enDate = $dates[1];
 
                         if ($stDate && $enDate) {
-                            $startDate = Carbon::createFromFormat('m/d/Y', trim($stDate));
-                            $endDate = Carbon::createFromFormat('m/d/Y', trim($enDate));
+                            $startDate = Carbon::createFromFormat(self::DATE_FORMAT, trim($stDate));
+                            $endDate = Carbon::createFromFormat(self::DATE_FORMAT, trim($enDate));
 
                             if ($startDate && $endDate) {
                                 $query->whereBetween('created_at', [
@@ -1151,11 +1151,10 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                             }
                         }
                     } catch (\Exception $e) {
-                        $response = [
+                        return [
                             'code'    => 400,
                             'message' => __('Invalid date format.'),
                         ];
-                        return $response;
                     }
                 }
             }
@@ -1163,8 +1162,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $vehicles = $query->where("language_id", $languageId)->get()->map(function ($vehicle) {
                 $vehicleImagePath = $vehicle->vehicle_image ?? '';
                 $filename = basename($vehicleImagePath);
-                $newpath = 'vehicles/images/small/' . $filename;
-                $file = public_path('storage/' . $newpath);
+                $newpath = self::VEHICLE_IMAGE_SMALL . $filename;
+                $file = public_path(self::STORAGE . $newpath);
                 if (file_exists($file)) {
                     $vehicleImagePath = $newpath;
                 }
@@ -1408,8 +1407,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                     $stDate = $dates[0];
                     $eDate = $dates[1];
                     if ($stDate && $eDate) {
-                        $startDate = Carbon::createFromFormat('m/d/Y', trim($stDate));
-                        $endDate = Carbon::createFromFormat('m/d/Y', trim($eDate));
+                        $startDate = Carbon::createFromFormat(self::DATE_FORMAT, trim($stDate));
+                        $endDate = Carbon::createFromFormat(self::DATE_FORMAT, trim($eDate));
                         if ($startDate && $endDate) {
                             $query->whereBetween('created_at', [
                                 $startDate->startOfDay(),
@@ -1456,7 +1455,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $multipleImages = array_map(function ($img) {
                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
 
-                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+                $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
 
                 return url('storage' . $img);
             }, $multipleImages);
@@ -1485,12 +1484,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $user = User::where('id', $vehicle->created_by)->first();
 
             $userDetail = null;
-            $userProfileImg = null;
 
             if ($user) {
                 $userDetail = UserDetail::where("user_id", $user->id)->first();
                 $userProfileImg = $userDetail && $userDetail->profile_image
-                    ? url('/storage/' . $userDetail->profile_image)
+                    ? url(self::STORAGES . $userDetail->profile_image)
                     : null;
             }
 
@@ -1505,14 +1503,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             if ($profileImagePath) {
                 $fullImagePath = storage_path('app/public/' . $profileImagePath);
                 if (file_exists($fullImagePath)) {
-                    $avatarImage = url('/storage/' . $profileImagePath);
+                    $avatarImage = url(self::STORAGES . $profileImagePath);
                 }
             }
             return [
                 'id'                      => $vehicle->id,
                 'name'                    => $vehicle->name,
                 'slug'                    => $vehicle->slug,
-                'vehicle_image'           => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
+                'vehicle_image'           => url(self::STORAGES . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
                 'multiple_vehicle_images' => $multipleImages,
                 'has_multiple_image'      => count($multipleImages) > 1,
                 'avatar_image'            => $avatarImage,
@@ -1657,7 +1655,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 switch ($document->key) {
                     case 'vehicle_image':
                         $formattedImages = array_map(function ($image) {
-                            return asset('storage/' . $image); // Convert to URL format
+                            return asset(self::STORAGE . $image); // Convert to URL format
                         }, $values);
 
                         $response['vehicle_images'] = array_merge($response['vehicle_images'], $formattedImages);
@@ -1669,6 +1667,10 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
                     case 'vehicle_policy':
                         $response['vehicle_policies'] = array_merge($response['vehicle_policies'], $values);
+                        break;
+
+                    default:
+                        \Log::warning("Unhandled document key: {$document->key}");
                         break;
                 }
             }
@@ -1888,13 +1890,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $multipleImages = array_map(function ($img) {
                     $img = '/' . ltrim($img, '/'); // Ensure single leading slash
 
-                    $img = str_replace('vehicles/images/', 'vehicles/images/medium/', $img);
+                    $img = str_replace(self::VEHICLE_IMAGE, 'vehicles/images/medium/', $img);
 
                     return url('storage' . $img);
                 }, $multipleImages);
 
-                $user = null;
-                $wishlist = null;
                 if (Auth::guard('web')->check()) {
                     $user = Auth::guard('web')->user();
                     $wishlist = Wishlist::where('user_id', Auth::id())->where('vehicle_id', $vehicle->id)->first();
@@ -1907,7 +1907,6 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $wishlistExists = false;
 
                 $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-                $currency = null;
 
                 if ($currencySetting && $currencySetting->value) {
                     $currency = Currency::find($currencySetting->value);
@@ -1923,9 +1922,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                     'id'                      => $vehicle->id,
                     'name'                    => $vehicle->name,
                     'slug'                    => $vehicle->slug,
-                    'vehicle_image'           => url('/storage/' . $vehicle->vehicle_image),
-                    'multiple_vehicle_doc'    => array_map(fn ($doc) => url('storage/' . ($doc)), $multipleDoc),
-                    'multiple_vehicle_policy' => array_map(fn ($policy) => url('storage/' . ($policy)), $multiplePolicy),
+                    'vehicle_image'           => url(self::STORAGES . $vehicle->vehicle_image),
+                    'multiple_vehicle_doc'    => array_map(fn ($doc) => url(self::STORAGE . ($doc)), $multipleDoc),
+                    'multiple_vehicle_policy' => array_map(fn ($policy) => url(self::STORAGE . ($policy)), $multiplePolicy),
                     'multiple_vehicle_images' => $multipleImages,
                     'has_multiple_image'      => count($multipleImages) > 1,
                     'brand'                   => $vehicle->brand->brand_name ?? null,
@@ -1965,7 +1964,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                             'name'             => optional($extraservice->extraService)->name,
                             'icon'             => uploadedAsset(optional($extraservice->extraService)->icon), // Convert icon to full URL
                             'description'      => optional($extraservice->extraService)->description,
-                            'image'            => url('/storage/' . optional($extraservice->extraService)->image), // Convert image to full URL
+                            'image'            => url(self::STORAGES . optional($extraservice->extraService)->image), // Convert image to full URL
                         ];
                     }) : null,
                     'tariff' => $vehicle->tariffs->map(function (VehicleTarrif $tariff) {
@@ -2007,7 +2006,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                         'name'         => $vehicle->owner->name,
                         'phone_number' => $vehicle->owner->mobile_number,
                         'email'        => $vehicle->owner->email,
-                        'image'        => $vehicle->owner->userDetails ? url('/storage/' . $vehicle->owner->userDetails->profile_image) : null
+                        'image'        => $vehicle->owner->userDetails ? url(self::STORAGES . $vehicle->owner->userDetails->profile_image) : null
                     ] : null
                 ];
             }
@@ -2063,7 +2062,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $relativePath = null;
             $imageToDelete = parse_url($request->image_path, PHP_URL_PATH);
             if (is_string($imageToDelete)) {
-                $relativePath = ltrim(str_replace('/storage/', '', $imageToDelete), '/');
+                $relativePath = ltrim(str_replace(self::STORAGES, '', $imageToDelete), '/');
             }
 
             // Find and remove image
@@ -2103,6 +2102,12 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             'file_path'  => 'required|string',
         ]);
 
+        $response = [
+            'code'    => 500,
+            'success' => false,
+            'message' => __('admin.common.default_delete_error')
+        ];
+
         try {
             // Ensure the correct path format
             $filePath = 'vehicles/policy/' . $request->file_path;
@@ -2112,41 +2117,39 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 ->first();
 
             if (!$vehicleMeta) {
-                return [
+                $response = [
                     'code'    => 404,
                     'success' => false,
                     'message' => 'Policy files not found.'
                 ];
+            } else {
+                $policyFiles = json_decode($vehicleMeta->value, true);
+
+                // Find and remove the file from the array
+                if (($key = array_search($filePath, $policyFiles)) !== false) {
+                    unset($policyFiles[$key]);
+                    Storage::delete($filePath); // Delete from storage
+                    $vehicleMeta->value = json_encode(array_values($policyFiles)) ?: '';
+                    $vehicleMeta->save();
+
+                    $response = [
+                        'code'    => 200,
+                        'success' => true,
+                        'message' => 'Policy file deleted successfully.'
+                    ];
+                } else {
+                    $response = [
+                        'code'    => 404,
+                        'success' => false,
+                        'message' => 'Policy file not found.'
+                    ];
+                }
             }
-
-            $policyFiles = json_decode($vehicleMeta->value, true);
-
-            // Find and remove the file from the array
-            if (($key = array_search($filePath, $policyFiles)) !== false) {
-                unset($policyFiles[$key]);
-                Storage::delete($filePath); // Delete from storage
-                $vehicleMeta->value = json_encode(array_values($policyFiles)) ?: '';
-                $vehicleMeta->save();
-
-                return [
-                    'code'    => 200,
-                    'success' => true,
-                    'message' => 'Policy file deleted successfully.'
-                ];
-            }
-
-            return [
-                'code'    => 404,
-                'success' => false,
-                'message' => 'Policy file not found.'
-            ];
         } catch (\Exception $e) {
-            return [
-                'code'    => 500,
-                'success' => false,
-                'message' => __('admin.common.default_delete_error')
-            ];
+            // $response is already initialized with a default error message
         }
+
+        return $response;
     }
 
     public function vehicleInterestLists(Request $request): array
@@ -2165,7 +2168,6 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $lang_id = $defaultLang->language_id ?? 1;
         }
 
-        $getCategoryId = getCategoryId();
         $vehicles = VehicleInfo::with([
             'carType:id,name',
             'brand:id,brand_name',
@@ -2204,7 +2206,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $multipleImages = array_map(function ($img) {
                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
 
-                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+                $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
 
                 return url('storage' . $img);
             }, $multipleImages);
@@ -2245,7 +2247,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 'id'                 => $vehicle->id,
                 'name'               => $vehicle->name,
                 'slug'               => $vehicle->slug,
-                'vehicle_image'      => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
+                'vehicle_image'      => url(self::STORAGES . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
                 'avatar_image'       => $avatarImage,
                 'brand'              => $vehicle->brand->brand_name ?? null,
                 'car_type'           => $vehicle->carType->name ?? null,
