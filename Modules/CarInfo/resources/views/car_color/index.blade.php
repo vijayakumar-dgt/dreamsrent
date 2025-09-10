@@ -7,8 +7,8 @@
 <div class="page-wrapper">
     <div class="content me-4">
         <x-admin.breadcrumb :title="__('admin.rentals.vehicle_colors')" :breadcrumbs="[
-					__('admin.rentals.vehicle_colors') => ''
-				]" :buttonText="__('admin.rentals.add_new_vehicle_color')" :modalId="'car_color_modal'" :buttonId="'add_car_color'"
+                    __('admin.rentals.vehicle_colors') => ''
+                ]" :buttonText="__('admin.rentals.add_new_vehicle_color')" :modalId="'car_color_modal'" :buttonId="'add_car_color'"
             :permissionModule="'vehicle_attributes'" />
         <!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

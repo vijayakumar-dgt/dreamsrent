@@ -7,8 +7,8 @@
 <div class="page-wrapper">
     <div class="content me-4">
         <x-admin.breadcrumb :title="__('admin.blog.blog_tags')" :breadcrumbs="[
-					__('admin.blog.blog_tags') => ''
-				]" :buttonText="__('admin.blog.add_tag')" :modalId="'add_Tag'" :buttonId="'addTagButton'"
+                    __('admin.blog.blog_tags') => ''
+                ]" :buttonText="__('admin.blog.add_tag')" :modalId="'add_Tag'" :buttonId="'addTagButton'"
             :permissionModule="'blogs'" />
         <!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

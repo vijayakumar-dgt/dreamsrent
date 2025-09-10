@@ -150,8 +150,6 @@ trait InstallerMethods
                 throw new RuntimeException('Invalid database connection configuration');
             }
 
-            $originalDatabase = $connection['database'] ?? null;
-
             // Update connection details with provided credentials
             $connection['host'] = $details['host'];
             $connection['port'] = is_int($details['port']) ? $details['port'] : (int)$details['port'];

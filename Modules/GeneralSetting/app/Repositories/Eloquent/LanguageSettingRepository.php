@@ -13,6 +13,8 @@ use RecursiveIteratorIterator;
 
 class LanguageSettingRepository implements LanguageSettingInterface
 {
+    public const FLAGS = 'backend/assets/img/flags/';
+
     public function index()
     {
         return [
@@ -96,7 +98,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
             $responseArray[$language->transLang->code] = [
                 'id'              => $language->id,
                 'language_name'   => $language->transLang->name,
-                'lang_img'        => url('backend/assets/img/flags/' . $language->transLang->code . '.svg'),
+                'lang_img'        => url(self::FLAGS . $language->transLang->code . '.svg'),
                 'lang_code'       => $language->transLang->code,
                 'lang_rtl'        => $language->rtl,
                 'default'         => $language->default,
@@ -332,7 +334,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
             'message'       => 'Module keys fetched successfully',
             'data'          => $responseArray,
             'language'      => $language,
-            'icon'          => url('backend/assets/img/flags/' . $langCode . '.svg'),
+            'icon'          => url(self::FLAGS . $langCode . '.svg'),
             'progress'      => $progress,
             'color'         => $color,
             'uppercaseName' => strtoupper($language->transLang->name ?? '')
@@ -376,7 +378,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
             'code'          => 200,
             'message'       => 'Module key updated successfully',
             'language'      => $language,
-            'icon'          => url('backend/assets/img/flags/' . $langCode . '.svg'),
+            'icon'          => url(self::FLAGS . $langCode . '.svg'),
             'uppercaseName' => strtoupper($language->transLang->name ?? ''),
             'progress'      => $progress,
             'color'         => $color

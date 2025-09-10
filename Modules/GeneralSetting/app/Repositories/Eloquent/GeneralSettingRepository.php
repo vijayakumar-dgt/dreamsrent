@@ -16,6 +16,8 @@ use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 
 class GeneralSettingRepository implements GeneralSettingInterface
 {
+    public const APP_PUBLIC = 'app/public/';
+
     protected ImageResizer $imageResizer;
 
     public function __construct(ImageResizer $imageResizer)
@@ -54,8 +56,8 @@ class GeneralSettingRepository implements GeneralSettingInterface
 
             $existing = GeneralSetting::where('key', 'company_profile_photo')->first();
             if ($existing && $existing->value) {
-                File::delete(storage_path('app/public/' . $existing->value));
-                File::delete(storage_path('app/public/' . str_replace('company/', 'company/thumbnail/', $existing->value)));
+                File::delete(storage_path(self::APP_PUBLIC . $existing->value));
+                File::delete(storage_path(self::APP_PUBLIC . str_replace('company/', 'company/thumbnail/', $existing->value)));
             }
 
             GeneralSetting::updateOrCreate(
@@ -255,8 +257,8 @@ class GeneralSettingRepository implements GeneralSettingInterface
                 $existing = GeneralSetting::where('key', 'maintenance_image')->first();
                 if ($existing && $existing->value) {
                     $paths = [
-                        storage_path('app/public/' . $existing->value),
-                        storage_path('app/public/' . str_replace('maintenance/', 'maintenance/thumbnail/', $existing->value)),
+                        storage_path(self::APP_PUBLIC . $existing->value),
+                        storage_path(self::APP_PUBLIC . str_replace('maintenance/', 'maintenance/thumbnail/', $existing->value)),
                     ];
                     foreach ($paths as $path) {
                         if (File::exists($path)) {
@@ -418,8 +420,8 @@ class GeneralSettingRepository implements GeneralSettingInterface
                 $existing = GeneralSetting::where('key', 'invoice_logo')->first();
                 if ($existing && $existing->value) {
                     $paths = [
-                        storage_path('app/public/' . $existing->value),
-                        storage_path('app/public/' . str_replace('invoices/', 'invoices/thumbnail/', $existing->value)),
+                        storage_path(self::APP_PUBLIC . $existing->value),
+                        storage_path(self::APP_PUBLIC . str_replace('invoices/', 'invoices/thumbnail/', $existing->value)),
                     ];
                     foreach ($paths as $path) {
                         if (File::exists($path)) {

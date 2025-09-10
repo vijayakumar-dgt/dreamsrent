@@ -444,7 +444,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function security(): View  
+    public function security(): View
     {
         return view('generalsetting::security.index');
     }
