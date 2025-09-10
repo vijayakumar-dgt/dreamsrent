@@ -1405,7 +1405,7 @@
 <x-admin.modal className="addmodal" id="edit_insurance" :title="__('admin.rentals.edit_insurance')">
     <x-slot name="body">
         <div class="mb-3">
-            <label class="form-label">{{ __('admin.rentals.price_type') }} <span class="text-danger"> *</span></label>
+            <div class="form-label">{{ __('admin.rentals.price_type') }} <span class="text-danger"> *</span></div>
             <div class="d-flex align-items-center">
                 <div class="form-check me-3">
                     <input class="form-check-input" type="radio" name="Radio" id="Radio-sm" value="daily">

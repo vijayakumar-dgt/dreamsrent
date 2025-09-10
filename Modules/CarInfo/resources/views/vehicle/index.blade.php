@@ -64,10 +64,11 @@
                     </div>
                 </div>
                 <div class="dropdown">
-                    <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center"
-                        data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-                        <i class="ti ti-filter me-1"></i> {{ __('admin.rentals.filter') }}
-                    </a>
+                    <button type="button" class="filtercollapse coloumn d-inline-flex align-items-center"
+                        data-bs-toggle="collapse" data-bs-target="#filtercollapse" aria-expanded="false"
+                        aria-controls="filtercollapse">
+                        <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
+                    </button>
                 </div>
             </div>
             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
