@@ -14,6 +14,8 @@ use Modules\Page\Repositories\Contracts\SectionInterface;
 
 class SectionController extends Controller
 {
+    public const UNAUTHORIZED_USER_NOT_FOUND = 'Unauthorized. User not found.';
+
     protected $sectionRepository;
 
     public function __construct(SectionInterface $sectionRepository)
@@ -74,7 +76,7 @@ class SectionController extends Controller
         if (!$authuser) {
             return response()->json([
                 'code'    => 401,
-                'message' => __('Unauthorized. User not found.'),
+                'message' => __(self::UNAUTHORIZED_USER_NOT_FOUND),
             ], 401);
         }
 
@@ -152,7 +154,7 @@ class SectionController extends Controller
         if (!$authuser) {
             return response()->json([
                 'code'    => 401,
-                'message' => __('Unauthorized. User not found.'),
+                'message' => __(self::UNAUTHORIZED_USER_NOT_FOUND),
             ], 401);
         }
 
@@ -180,7 +182,7 @@ class SectionController extends Controller
         if (!$authuser) {
             return response()->json([
                 'code'    => 401,
-                'message' => __('Unauthorized. User not found.'),
+                'message' => __(self::UNAUTHORIZED_USER_NOT_FOUND),
             ], 401);
         }
 

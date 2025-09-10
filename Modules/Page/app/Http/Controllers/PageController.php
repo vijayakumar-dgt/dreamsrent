@@ -34,8 +34,29 @@ class PageController extends Controller
 {
     protected $pageRepository;
 
-    private const PAGES = 'pages/';
-
+    public const PAGES = 'pages/';
+    public const PLACEHOLDER_BANNER = 'frontend/assets/img/banner/placeholder-banner.jpg';
+    public const LIMIT_VIEWALL_ORDER_REGEX = '/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/';
+    public const TYPE_LIMIT_VIEWALL_REGEX = '/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/';
+    public const STORAGE_PATH = 'storage/';
+    public const DEFAULT_AVATAR_01 = 'backend/assets/img/profiles/avatar-01.jpg';
+    public const DEFAULT_AVATAR_02 = 'backend/assets/img/profiles/avatar-02.jpg';
+    public const DEFAULT_AVATAR_03 = 'backend/assets/img/profiles/avatar-03.jpg';
+    public const PLACEHOLDER_APP_CAR = 'frontend/assets/img/placeholder-app-car.jpg';
+    public const DEFAULT_IMAGE = 'images/default.png';
+    public const CAR_TYPE_SELECT       = 'carType:id,name';
+    public const BRAND_SELECT          = 'brand:id,brand_name';
+    public const CATEGORY_SELECT       = 'category:id,name';
+    public const MAIN_LOCATION_SELECT  = 'mainLocation:id,name';
+    public const COLOR_SELECT         = 'color:id,name,value';
+    public const FUEL_TYPE_SELECT     = 'fuel_type:id,fuel_type';
+    public const TRANSMISSION_SELECT  = 'transmission:id,name';
+    public const VEHICLE_IMAGE_SMALL  = 'vehicles/images/small/';
+    public const VEHICLE_IMAGE        = 'vehicles/images/';
+    public const DEFAULT_PROFILE      = '/backend/assets/img/default-profile.png';
+     public const APP_PUBLIC_PATH      = 'app/public/';
+    public const STORAGE_PATHS         = '/storage/';
+    public const ICON_SELECTION       = '/frontend/assets/img/icons/bx-selection.svg';
 
     public function __construct(PageInterface $pageRepository)
     {
@@ -178,7 +199,7 @@ class PageController extends Controller
                 'code'    => 401,
                 'message' => __('User is not authenticated')
             ];
-        } 
+        }
         // Content check
         elseif (empty($request->page_content) || count($request->page_content) === 0) {
             $statusCode = 422;
@@ -187,7 +208,7 @@ class PageController extends Controller
                 'message' => __('Please add at least one section!'),
                 'errors'  => ['page_content' => [__('Please add at least one section!')]]
             ];
-        } 
+        }
         // Proceed with storing
         else {
             $sections = $this->prepareSections($request);
@@ -405,8 +426,8 @@ class PageController extends Controller
                             $banner->line_two = $decodedData['line_two'] ?? null;
                             $banner->description = $decodedData['description_one'] ?? null;
 
-                            $relativePath = 'storage/' . ($decodedData['thumbnail_image_one'] ?? '');
-                            $defaultImage = asset('frontend/assets/img/banner/placeholder-banner.jpg');
+                            $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_one'] ?? '');
+                            $defaultImage = asset(self::PLACEHOLDER_BANNER);
                             $thumbnailKey = 'thumbnail_image_one';
 
                             $banner->thumbnail_image = (
@@ -454,8 +475,8 @@ class PageController extends Controller
                             $banner->label = $decodedData['label_two'] ?? null;
                             $banner->description = $decodedData['description_two'] ?? null;
 
-                            $relativePath = 'storage/' . ($decodedData['thumbnail_image_two'] ?? '');
-                            $defaultImage = asset('frontend/assets/img/banner/placeholder-banner.jpg');
+                            $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_two'] ?? '');
+                            $defaultImage = asset(self::PLACEHOLDER_BANNER);
                             $thumbnailKey = 'thumbnail_image_two';
 
                             $banner->thumbnail_image = (
@@ -467,9 +488,9 @@ class PageController extends Controller
                             $banner->customer_count = $userCount;
 
                             $banner->customer_images = [
-                                asset('backend/assets/img/profiles/avatar-01.jpg'),
-                                asset('backend/assets/img/profiles/avatar-02.jpg'),
-                                asset('backend/assets/img/profiles/avatar-03.jpg'),
+                                asset(self::DEFAULT_AVATAR_01),
+                                asset(self::DEFAULT_AVATAR_02),
+                                asset(self::DEFAULT_AVATAR_03),
                             ];
 
                             unset($banner->datas);
@@ -509,8 +530,8 @@ class PageController extends Controller
                             $banner->label = $decodedData['label_three'] ?? null;
                             $banner->description = $decodedData['description_three'] ?? null;
 
-                            $relativePath = 'storage/' . ($decodedData['thumbnail_image_four'] ?? '');
-                            $defaultImage = asset('frontend/assets/img/banner/placeholder-banner.jpg');
+                            $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_four'] ?? '');
+                            $defaultImage = asset(self::PLACEHOLDER_BANNER);
                             $thumbnailKey = 'thumbnail_image_four';
 
                             $banner->thumbnail_image = (
@@ -522,9 +543,9 @@ class PageController extends Controller
                             $banner->customer_count = $userCount;
 
                             $banner->customer_images = [
-                                asset('backend/assets/img/profiles/avatar-01.jpg'),
-                                asset('backend/assets/img/profiles/avatar-02.jpg'),
-                                asset('backend/assets/img/profiles/avatar-03.jpg'),
+                                asset(self::DEFAULT_AVATAR_01),
+                                asset(self::DEFAULT_AVATAR_02),
+                                asset(self::DEFAULT_AVATAR_03),
                             ];
 
                             unset($banner->datas);
@@ -565,13 +586,13 @@ class PageController extends Controller
                             $banner->higlight_label = $decodedData['label_boat_two'] ?? null;
                             $banner->description = $decodedData['description_boat'] ?? null;
 
-                            $defaultImage = asset('frontend/assets/img/banner/placeholder-banner.jpg');
+                            $defaultImage = asset(self::PLACEHOLDER_BANNER);
                             $thumbnailImages = [];
 
                             if (!empty($decodedData['thumbnail_image_boat']) && is_array($decodedData['thumbnail_image_boat'])) {
                                 foreach ($decodedData['thumbnail_image_boat'] as $imagePath) {
-                                    $fullPath = public_path('storage/' . $imagePath);
-                                    $thumbnailImages[] = file_exists($fullPath) ? asset('storage/' . $imagePath) : $defaultImage;
+                                    $fullPath = public_path(self::STORAGE_PATH . $imagePath);
+                                    $thumbnailImages[] = file_exists($fullPath) ? asset(self::STORAGE_PATH . $imagePath) : $defaultImage;
                                 }
                             }
 
@@ -579,9 +600,9 @@ class PageController extends Controller
                             $banner->customer_count = $userCount;
 
                             $banner->customer_images = [
-                                asset('backend/assets/img/profiles/avatar-01.jpg'),
-                                asset('backend/assets/img/profiles/avatar-02.jpg'),
-                                asset('backend/assets/img/profiles/avatar-03.jpg'),
+                                asset(self::DEFAULT_AVATAR_01),
+                                asset(self::DEFAULT_AVATAR_02),
+                                asset(self::DEFAULT_AVATAR_03),
                             ];
 
                             unset($banner->datas);
@@ -628,7 +649,7 @@ class PageController extends Controller
                                 $best_vehicle->vehicle_name = $vehicle->name ?? null;
 
                                 $imagePath = $vehicle->vehicle_image ?? null;
-                                $best_vehicle->vehicle_image_url = $imagePath ? asset('storage/' . $imagePath) : null;
+                                $best_vehicle->vehicle_image_url = $imagePath ? asset(self::STORAGE_PATH . $imagePath) : null;
                             } else {
                                 $best_vehicle->vehicle_name = null;
                                 $best_vehicle->vehicle_image_url = null;
@@ -682,8 +703,8 @@ class PageController extends Controller
                             ->limit($limit)
                             ->get()
                             ->map(function ($brand) {
-                                $brand->brand_image = asset('storage/' . $brand->brand_image);
-                                $brand->brand_icon = asset('storage/' . $brand->brand_icon);
+                                $brand->brand_image = asset(self::STORAGE_PATH . $brand->brand_image);
+                                $brand->brand_icon = asset(self::STORAGE_PATH . $brand->brand_icon);
                                 return $brand;
                             });
 
@@ -702,7 +723,7 @@ class PageController extends Controller
                         $limit = (int)($matches[1] ?? 10);
                         $order = $matches[3] ?? 'asc';
 
-                        asset('frontend/assets/img/placeholder-app-car.jpg');
+                        asset(self::PLACEHOLDER_APP_CAR);
 
                         $locations = DB::table('locations')
                             ->select('id', 'name', 'image')
@@ -714,7 +735,7 @@ class PageController extends Controller
                             ->get()
                             ->map(function ($location) use ($defaultImage) {
                                 if ($location->image && Storage::disk('public')->exists($location->image)) {
-                                    $location->image = asset('storage/' . $location->image);
+                                    $location->image = asset(self::STORAGE_PATH . $location->image);
                                 } else {
                                     $location->image = $defaultImage;
                                 }
@@ -761,8 +782,8 @@ class PageController extends Controller
                                     ->count();
 
                                 $cartype->image_url = $cartype->icon
-                                    ? asset('storage/' . ltrim($cartype->icon, '/'))
-                                    : asset('images/default.png');
+                                    ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
+                                    : asset(self::DEFAULT_IMAGE);
 
                                 return $cartype;
                             });
@@ -798,8 +819,8 @@ class PageController extends Controller
                                     ->count();
 
                                 $cartype->image_url = $cartype->icon
-                                    ? asset('storage/' . ltrim($cartype->icon, '/'))
-                                    : asset('images/default.png');
+                                    ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
+                                    : asset(self::DEFAULT_IMAGE);
 
                                 return $cartype;
                             });
@@ -834,8 +855,8 @@ class PageController extends Controller
                                     ->count();
 
                                 $cartype->image_url = $cartype->icon
-                                    ? asset('storage/' . ltrim($cartype->icon, '/'))
-                                    : asset('images/default.png');
+                                    ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
+                                    : asset(self::DEFAULT_IMAGE);
 
                                 return $cartype;
                             });
@@ -1012,13 +1033,13 @@ class PageController extends Controller
                         $limit = $matches[2] ?? 10;
 
                         $query = VehicleInfo::with([
-                            'carType:id,name',
-                            'brand:id,brand_name',
-                            'category:id,name',
-                            'mainLocation:id,name',
-                            'color:id,name,value',
-                            'fuel_type:id,fuel_type',
-                            'transmission:id,name',
+                            self::CAR_TYPE_SELECT,
+                            self::BRAND_SELECT,
+                            self::CATEGORY_SELECT,
+                            self::MAIN_LOCATION_SELECT,
+                            self::COLOR_SELECT,
+                            self::FUEL_TYPE_SELECT,
+                            self::TRANSMISSION_SELECT,
                         ])->where('language_id', $lang_id);
 
                         if ($type === 'popular') {
@@ -1063,7 +1084,7 @@ class PageController extends Controller
                             $multipleImages = array_map(function ($img) {
                                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
 
-                                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+                                $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
 
                                 return url('storage' . $img);
                             }, $multipleImages);
@@ -1092,22 +1113,22 @@ class PageController extends Controller
                             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
 
-                            $defaultAvatar = asset('/backend/assets/img/default-profile.png');
+                            $defaultAvatar = asset(self::DEFAULT_PROFILE);
                             $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
                             $avatarImage = $defaultAvatar;
 
                             if ($profileImagePath) {
-                                $fullImagePath = storage_path('app/public/' . $profileImagePath);
+                                $fullImagePath = storage_path(self::APP_PUBLIC_PATH . $profileImagePath);
                                 if (file_exists($fullImagePath)) {
-                                    $avatarImage = url('/storage/' . $profileImagePath);
+                                    $avatarImage = url(self::STORAGE_PATHS . $profileImagePath);
                                 }
                             }
                             return [
                                 'id'                      => $vehicle->id,
                                 'name'                    => $vehicle->name,
                                 'slug'                    => $vehicle->slug,
-                                'vehicle_image'           => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
+                                'vehicle_image'           => url(self::STORAGE_PATHS . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image'      => count($multipleImages) > 1,
                                 'avatar_image'            => $avatarImage,
@@ -1150,16 +1171,16 @@ class PageController extends Controller
                     if (isset($section['section_content']) && strpos($section['section_content'], '[bike') !== false) {
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
                         $type = $matches[1] ?? 'all';
-                        
+
 
                         $query = VehicleInfo::with([
-                            'carType:id,name',
-                            'brand:id,brand_name',
-                            'category:id,name',
-                            'mainLocation:id,name',
-                            'color:id,name,value',
-                            'fuel_type:id,fuel_type',
-                            'transmission:id,name',
+                            self::CAR_TYPE_SELECT,
+                            self::BRAND_SELECT,
+                            self::CATEGORY_SELECT,
+                            self::MAIN_LOCATION_SELECT,
+                            self::COLOR_SELECT,
+                            self::FUEL_TYPE_SELECT,
+                            self::TRANSMISSION_SELECT,
                         ])->where('language_id', $lang_id);
 
                         if ($type === 'popular') {
@@ -1208,7 +1229,7 @@ class PageController extends Controller
                             $multipleImages = array_map(function ($img) {
                                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
 
-                                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+                                $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
 
                                 return url('storage' . $img);
                             }, $multipleImages);
@@ -1237,22 +1258,22 @@ class PageController extends Controller
                             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
 
-                            $defaultAvatar = asset('/backend/assets/img/default-profile.png');
+                            $defaultAvatar = asset(self::DEFAULT_PROFILE);
                             $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
                             $avatarImage = $defaultAvatar;
 
                             if ($profileImagePath) {
-                                $fullImagePath = storage_path('app/public/' . $profileImagePath);
+                                $fullImagePath = storage_path(self::APP_PUBLIC_PATH . $profileImagePath);
                                 if (file_exists($fullImagePath)) {
-                                    $avatarImage = url('/storage/' . $profileImagePath);
+                                    $avatarImage = url(self::STORAGE_PATHS . $profileImagePath);
                                 }
                             }
                             return [
                                 'id'                      => $vehicle->id,
                                 'name'                    => $vehicle->name,
                                 'slug'                    => $vehicle->slug,
-                                'vehicle_image'           => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
+                                'vehicle_image'           => url(self::STORAGE_PATHS . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image'      => count($multipleImages) > 1,
                                 'avatar_image'            => $avatarImage,
@@ -1299,16 +1320,16 @@ class PageController extends Controller
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
-                        
+
 
                         $query = VehicleInfo::with([
-                            'carType:id,name',
-                            'brand:id,brand_name',
-                            'category:id,name',
-                            'mainLocation:id,name',
-                            'color:id,name,value',
-                            'fuel_type:id,fuel_type',
-                            'transmission:id,name',
+                            self::CAR_TYPE_SELECT,
+                            self::BRAND_SELECT,
+                            self::CATEGORY_SELECT,
+                            self::MAIN_LOCATION_SELECT,
+                            self::COLOR_SELECT,
+                            self::FUEL_TYPE_SELECT,
+                            self::TRANSMISSION_SELECT,
                         ])->where('language_id', $lang_id);
 
                         if ($type === 'popular') {
@@ -1323,8 +1344,8 @@ class PageController extends Controller
                                 ->limit($limit)
                                 ->get()
                                 ->map(function ($brand) {
-                                    $brand->brand_image = asset('storage/' . $brand->brand_image);
-                                    $brand->brand_icon = asset('storage/' . $brand->brand_icon);
+                                    $brand->brand_image = asset(self::STORAGE_PATH . $brand->brand_image);
+                                    $brand->brand_icon = asset(self::STORAGE_PATH . $brand->brand_icon);
                                     $brand->brand_title = "Select From Professional Charter Companies";
                                     return $brand;
                                 });
@@ -1369,7 +1390,7 @@ class PageController extends Controller
                             $multipleImages = array_map(function ($img) {
                                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
 
-                                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+                                $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
 
                                 return url('storage' . $img);
                             }, $multipleImages);
@@ -1398,22 +1419,22 @@ class PageController extends Controller
                             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
 
-                            $defaultAvatar = asset('/backend/assets/img/default-profile.png');
+                            $defaultAvatar = asset(self::DEFAULT_PROFILE);
                             $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
                             $avatarImage = $defaultAvatar;
 
                             if ($profileImagePath) {
-                                $fullImagePath = storage_path('app/public/' . $profileImagePath);
+                                $fullImagePath = storage_path(self::APP_PUBLIC_PATH . $profileImagePath);
                                 if (file_exists($fullImagePath)) {
-                                    $avatarImage = url('/storage/' . $profileImagePath);
+                                    $avatarImage = url(self::STORAGE_PATHS . $profileImagePath);
                                 }
                             }
                             return [
                                 'id'                      => $vehicle->id,
                                 'name'                    => $vehicle->name,
                                 'slug'                    => $vehicle->slug,
-                                'vehicle_image'           => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
+                                'vehicle_image'           => url(self::STORAGE_PATHS . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image'      => count($multipleImages) > 1,
                                 'avatar_image'            => $avatarImage,
@@ -1478,8 +1499,8 @@ class PageController extends Controller
                                     ->count();
 
                                 $cartype->image_url = $cartype->icon
-                                    ? asset('storage/' . ltrim($cartype->icon, '/'))
-                                    : asset('images/default.png');
+                                    ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
+                                    : asset(self::DEFAULT_IMAGE);
 
                                 return $cartype;
                             });
@@ -1508,7 +1529,7 @@ class PageController extends Controller
                             ->get();
 
                         foreach ($testimonials as &$testimonial) {
-                            $testimonial->image = asset('storage/' . $testimonial->image);
+                            $testimonial->image = asset(self::STORAGE_PATH . $testimonial->image);
                         }
 
                         $section['section_type'] = 'testimonial';
@@ -1541,7 +1562,7 @@ class PageController extends Controller
                                 }
 
                                 // Assign default image initially
-                                $value['image'] = asset('frontend/assets/img/placeholder-app-car.jpg');
+                                $value['image'] = asset(self::PLACEHOLDER_APP_CAR);
 
                                 $item->value = $value;
                                 return $item;
@@ -1568,8 +1589,8 @@ class PageController extends Controller
                                 foreach ($data as $key => $val) {
                                     if (str_starts_with($key, 'thumbnail_image_') && !empty($val)) {
                                         $imageUrl = Storage::disk('public')->exists(ltrim($val, '/'))
-                                            ? asset('storage/' . ltrim($val, '/'))
-                                            : asset('frontend/assets/img/placeholder-app-car.jpg');
+                                            ? asset(self::STORAGE_PATH . ltrim($val, '/'))
+                                            : asset(self::PLACEHOLDER_APP_CAR);
                                         $imageList[] = $imageUrl;
                                     }
                                 }
@@ -1624,14 +1645,14 @@ class PageController extends Controller
                                 // Fallbacks for missing icons using asset image paths
                                 if (empty($icon)) {
                                     if ($i === 1) {
-                                        $icon = asset('/frontend/assets/img/icons/bx-selection.svg');
+                                        $icon = asset(self::ICON_SELECTION);
                                     } elseif ($i === 2) {
                                         $icon = asset('/frontend/assets/img/icons/bx-crown.svg');
                                     } elseif ($i === 3) {
                                         $icon = asset('/frontend/assets/img/icons/bx-user-check.svg');
                                     }
                                 } else {
-                                    $icon = asset('storage/' . $icon);
+                                    $icon = asset(self::STORAGE_PATH . $icon);
                                 }
 
                                 // Only add if any of the fields are filled
@@ -1680,14 +1701,14 @@ class PageController extends Controller
                             $data = json_decode($first->datas, true);
 
                             $items = [];
-                            asset('frontend/assets/img/placeholder-app-car.jpg');
+                            asset(self::PLACEHOLDER_APP_CAR);
 
                             $previewImage = $defaultImage;
                             if (!empty($data['thumbnail_image_bike_exclusive'])) {
                                 $relativePath = ltrim($data['thumbnail_image_bike_exclusive'], '/');
-                                $fullPath = storage_path('app/public/' . $relativePath);
+                                $fullPath = storage_path(self::APP_PUBLIC_PATH . $relativePath);
                                 if (file_exists($fullPath)) {
-                                    $previewImage = asset('storage/' . $relativePath);
+                                    $previewImage = asset(self::STORAGE_PATH . $relativePath);
                                 }
                             }
 
@@ -1741,15 +1762,15 @@ class PageController extends Controller
                                 $data = json_decode($experience->datas, true);
 
                                 if (is_array($data)) {
-                                    asset('frontend/assets/img/placeholder-app-car.jpg');
+                                    asset(self::PLACEHOLDER_APP_CAR);
 
                                     foreach ($data as $key => $value) {
                                         if (str_starts_with($key, 'thumbnail_image_')) {
                                             $imagePath = ltrim($value, '/');
-                                            $fullPath = storage_path('app/public/' . $imagePath);
+                                            $fullPath = storage_path(self::APP_PUBLIC_PATH . $imagePath);
 
                                             if (!empty($value) && file_exists($fullPath)) {
-                                                $data[$key] = asset('storage/' . $imagePath);
+                                                $data[$key] = asset(self::STORAGE_PATH . $imagePath);
                                             } else {
                                                 $data[$key] = $defaultImage;
                                             }
@@ -1797,15 +1818,15 @@ class PageController extends Controller
                                 $data = json_decode($experience->datas, true);
 
                                 if (is_array($data)) {
-                                    asset('frontend/assets/img/placeholder-app-car.jpg');
+                                    asset(self::PLACEHOLDER_APP_CAR);
 
                                     foreach ($data as $key => $value) {
                                         if (str_starts_with($key, 'thumbnail_image_')) {
                                             $imagePath = ltrim($value, '/');
-                                            $fullPath = storage_path('app/public/' . $imagePath);
+                                            $fullPath = storage_path(self::APP_PUBLIC_PATH . $imagePath);
 
                                             if (!empty($value) && file_exists($fullPath)) {
-                                                $data[$key] = asset('storage/' . $imagePath);
+                                                $data[$key] = asset(self::STORAGE_PATH . $imagePath);
                                             } else {
                                                 $data[$key] = $defaultImage;
                                             }
@@ -1853,11 +1874,11 @@ class PageController extends Controller
 
                             $items = [];
                             $fallbacks = [
-                                1 => '/frontend/assets/img/icons/bx-selection.svg',
+                                1 => self::ICON_SELECTION,
                                 2 => '/frontend/assets/img/icons/bx-crown.svg',
                                 3 => '/frontend/assets/img/icons/bx-user-check.svg',
-                                4 => '/frontend/assets/img/icons/bx-selection.svg',
-                                5 => '/frontend/assets/img/icons/bx-selection.svg',
+                                4 => self::ICON_SELECTION,
+                                5 => self::ICON_SELECTION,
                                 6 => '/frontend/assets/img/icons/bx-heart.svg',
                             ];
 
@@ -1871,10 +1892,10 @@ class PageController extends Controller
 
                                 if (!empty($thumbnail)) {
                                     $relativePath = ltrim($thumbnail, '/');
-                                    $fullPath = storage_path('app/public/' . $relativePath);
+                                    $fullPath = storage_path(self::APP_PUBLIC_PATH . $relativePath);
 
                                     if (file_exists($fullPath)) {
-                                        $image = asset('storage/' . $relativePath);
+                                        $image = asset(self::STORAGE_PATH . $relativePath);
                                     }
                                 }
 
@@ -1887,16 +1908,16 @@ class PageController extends Controller
                                 }
                             }
 
-                            asset('frontend/assets/img/placeholder-app-car.jpg');
+                            asset(self::PLACEHOLDER_APP_CAR);
 
                             $mainImage = $defaultImage;
 
                             if (!empty($data['thumbnail_image_boat_benefits_main'])) {
                                 $relativePath = ltrim($data['thumbnail_image_boat_benefits_main'], '/');
-                                $fullPath = storage_path('app/public/' . $relativePath);
+                                $fullPath = storage_path(self::APP_PUBLIC_PATH . $relativePath);
 
                                 if (file_exists($fullPath)) {
-                                    $mainImage = asset('storage/' . $relativePath);
+                                    $mainImage = asset(self::STORAGE_PATH . $relativePath);
                                 }
                             }
 
@@ -1940,15 +1961,15 @@ class PageController extends Controller
 
                                 if (is_array($data)) {
                                     // Normalize image URLs
-                                    asset('frontend/assets/img/placeholder-app-car.jpg');
+                                    asset(self::PLACEHOLDER_APP_CAR);
 
                                     foreach ($data as $key => $value) {
                                         if (str_starts_with($key, 'thumbnail_image_')) {
                                             $imagePath = ltrim($value, '/');
-                                            $fullPath = storage_path('app/public/' . $imagePath);
+                                            $fullPath = storage_path(self::APP_PUBLIC_PATH . $imagePath);
 
                                             if (!empty($value) && file_exists($fullPath)) {
-                                                $data[$key] = asset('storage/' . $imagePath);
+                                                $data[$key] = asset(self::STORAGE_PATH . $imagePath);
                                             } else {
                                                 $data[$key] = $defaultImage;
                                             }
@@ -1978,7 +1999,7 @@ class PageController extends Controller
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
-                        
+
 
                         $blogss = DB::table('blog_posts')
                             ->select('id', 'title', 'image', 'slug', 'category', 'description', 'updated_at')
@@ -2103,10 +2124,10 @@ class PageController extends Controller
                                         if (str_starts_with($key, 'thumbnail_image_') && !empty($value)) {
                                             // Check if file exists in storage
                                             if (Storage::disk('public')->exists(ltrim($value, '/'))) {
-                                                $data[$key] = asset('storage/' . ltrim($value, '/'));
+                                                $data[$key] = asset(self::STORAGE_PATH . ltrim($value, '/'));
                                             } else {
                                                 // Fallback default image path
-                                                $data[$key] = asset('frontend/assets/img/placeholder-app-car.jpg');
+                                                $data[$key] = asset(self::PLACEHOLDER_APP_CAR);
                                             }
                                         }
                                     }
@@ -2149,13 +2170,13 @@ class PageController extends Controller
                             $items = [];
 
                             $query = VehicleInfo::with([
-                                'carType:id,name',
-                                'brand:id,brand_name',
-                                'category:id,name',
-                                'mainLocation:id,name',
-                                'color:id,name,value',
-                                'fuel_type:id,fuel_type',
-                                'transmission:id,name',
+                                self::CAR_TYPE_SELECT,
+                                self::BRAND_SELECT,
+                                self::CATEGORY_SELECT,
+                                self::MAIN_LOCATION_SELECT,
+                                self::COLOR_SELECT,
+                                self::FUEL_TYPE_SELECT,
+                                self::TRANSMISSION_SELECT,
                             ])->where('language_id', $lang_id);
 
                             $vehicles = $query->where('type', 'boat')->take(4)->get();
@@ -2204,14 +2225,14 @@ class PageController extends Controller
 
                                 $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
-                                $defaultAvatar = asset('/backend/assets/img/default-profile.png');
+                                $defaultAvatar = asset(self::DEFAULT_PROFILE);
                                 $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
                                 $avatarImage = $defaultAvatar;
 
                                 if ($profileImagePath) {
-                                    $fullImagePath = storage_path('app/public/' . $profileImagePath);
+                                    $fullImagePath = storage_path(self::APP_PUBLIC_PATH . $profileImagePath);
                                     if (file_exists($fullImagePath)) {
-                                        $avatarImage = url('/storage/' . $profileImagePath);
+                                        $avatarImage = url(self::STORAGE_PATHS . $profileImagePath);
                                     }
                                 }
 
@@ -2219,7 +2240,7 @@ class PageController extends Controller
                                     'id'                      => $vehicle->id,
                                     'name'                    => $vehicle->name,
                                     'slug'                    => $vehicle->slug,
-                                    'vehicle_image'           => url('/storage/' . $vehicle->vehicle_image),
+                                    'vehicle_image'           => url(self::STORAGE_PATHS . $vehicle->vehicle_image),
                                     'multiple_vehicle_images' => $multipleImages,
                                     'has_multiple_image'      => count($multipleImages) > 1,
                                     'avatar_image'            => $avatarImage,
@@ -2260,15 +2281,15 @@ class PageController extends Controller
                                 $experienceData = json_decode($experience->datas, true);
 
                                 if (is_array($experienceData)) {
-                                    asset('frontend/assets/img/placeholder-app-car.jpg');
+                                    asset(self::PLACEHOLDER_APP_CAR);
 
                                     foreach ($data as $key => $value) {
                                         if (str_starts_with($key, 'thumbnail_image_')) {
                                             $imagePath = ltrim($value, '/');
-                                            $fullPath = storage_path('app/public/' . $imagePath);
+                                            $fullPath = storage_path(self::APP_PUBLIC_PATH . $imagePath);
 
                                             if (!empty($value) && file_exists($fullPath)) {
-                                                $data[$key] = asset('storage/' . $imagePath);
+                                                $data[$key] = asset(self::STORAGE_PATH . $imagePath);
                                             } else {
                                                 $data[$key] = $defaultImage;
                                             }
@@ -2504,7 +2525,7 @@ class PageController extends Controller
                             $banner->line_two = $decodedData['line_two'] ?? null;
                             $banner->description = $decodedData['description_one'] ?? null;
 
-                            $relativePath = 'storage/' . ($decodedData['thumbnail_image_one'] ?? '');
+                            $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_one'] ?? '');
                             $defaultImage = asset('backend/assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_one';
 
@@ -2554,7 +2575,7 @@ class PageController extends Controller
                             $banner->label = $decodedData['label_two'] ?? null;
                             $banner->description = $decodedData['description_two'] ?? null;
 
-                            $relativePath = 'storage/' . ($decodedData['thumbnail_image_two'] ?? '');
+                            $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_two'] ?? '');
                             $defaultImage = asset('backend/assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_two';
 
@@ -2567,9 +2588,9 @@ class PageController extends Controller
                             $banner->customer_count = $userCount;
 
                             $banner->customer_images = [
-                                asset('backend/assets/img/profiles/avatar-01.jpg'),
-                                asset('backend/assets/img/profiles/avatar-02.jpg'),
-                                asset('backend/assets/img/profiles/avatar-03.jpg'),
+                                asset(self::DEFAULT_AVATAR_01),
+                                asset(self::DEFAULT_AVATAR_02),
+                                asset(self::DEFAULT_AVATAR_03),
                             ];
 
                             unset($banner->datas);
@@ -2617,7 +2638,7 @@ class PageController extends Controller
                                 $best_vehicle->vehicle_name = $vehicle->name ?? null;
 
                                 $imagePath = $vehicle->vehicle_image ?? null;
-                                $best_vehicle->vehicle_image_url = $imagePath ? asset('storage/' . $imagePath) : null;
+                                $best_vehicle->vehicle_image_url = $imagePath ? asset(self::STORAGE_PATH . $imagePath) : null;
                             } else {
                                 $best_vehicle->vehicle_name = null;
                                 $best_vehicle->vehicle_image_url = null;
@@ -2670,8 +2691,8 @@ class PageController extends Controller
                             ->limit($limit)
                             ->get()
                             ->map(function ($brand) {
-                                $brand->brand_image = asset('storage/' . $brand->brand_image);
-                                $brand->brand_icon = asset('storage/' . $brand->brand_icon);
+                                $brand->brand_image = asset(self::STORAGE_PATH . $brand->brand_image);
+                                $brand->brand_icon = asset(self::STORAGE_PATH . $brand->brand_icon);
                                 return $brand;
                             });
 
@@ -2706,8 +2727,8 @@ class PageController extends Controller
                                     ->count();
 
                                 $cartype->image_url = $cartype->icon
-                                    ? asset('storage/' . ltrim($cartype->icon, '/'))
-                                    : asset('images/default.png');
+                                    ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
+                                    : asset(self::DEFAULT_IMAGE);
 
                                 return $cartype;
                             });
@@ -2771,16 +2792,16 @@ class PageController extends Controller
                     if (isset($section['section_content']) && strpos($section['section_content'], '[vehicle') !== false) {
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
                         $type = $matches[1] ?? 'all';
-                        
+
 
                         $query = VehicleInfo::with([
-                            'carType:id,name',
-                            'brand:id,brand_name',
-                            'category:id,name',
-                            'mainLocation:id,name',
-                            'color:id,name,value',
-                            'fuel_type:id,fuel_type',
-                            'transmission:id,name',
+                            self::CAR_TYPE_SELECT,
+                            self::BRAND_SELECT,
+                            self::CATEGORY_SELECT,
+                            self::MAIN_LOCATION_SELECT,
+                            self::COLOR_SELECT,
+                            self::FUEL_TYPE_SELECT,
+                            self::TRANSMISSION_SELECT,
                         ])->where('language_id', $lang_id);
 
                         if ($type === 'popular') {
@@ -2856,7 +2877,7 @@ class PageController extends Controller
                                 $userDetail = UserDetail::where("user_id", $user->id)->first();
 
                                 $userProfileImg = $userDetail && $userDetail->profile_image
-                                    ? url('/storage/' . $userDetail->profile_image)
+                                    ? url(self::STORAGE_PATHS . $userDetail->profile_image)
                                     : null;
                             }
 
@@ -2864,7 +2885,7 @@ class PageController extends Controller
                                 'id'                      => $vehicle->id,
                                 'name'                    => $vehicle->name,
                                 'slug'                    => $vehicle->slug,
-                                'vehicle_image'           => url('/storage/' . $vehicle->vehicle_image),
+                                'vehicle_image'           => url(self::STORAGE_PATHS . $vehicle->vehicle_image),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image'      => count($multipleImages) > 1,
                                 'avatar_image'            => $userProfileImg ?? null,
@@ -2924,8 +2945,8 @@ class PageController extends Controller
                                     ->count();
 
                                 $cartype->image_url = $cartype->icon
-                                    ? asset('storage/' . ltrim($cartype->icon, '/'))
-                                    : asset('images/default.png');
+                                    ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
+                                    : asset(self::DEFAULT_IMAGE);
 
                                 return $cartype;
                             });
@@ -2954,7 +2975,7 @@ class PageController extends Controller
                             ->get();
 
                         foreach ($testimonials as &$testimonial) {
-                            $testimonial->image = asset('storage/' . $testimonial->image);
+                            $testimonial->image = asset(self::STORAGE_PATH . $testimonial->image);
                         }
 
                         $section['section_type'] = 'testimonial';
@@ -2987,7 +3008,7 @@ class PageController extends Controller
                                 }
 
                                 // Assign default image initially
-                                $value['image'] = asset('frontend/assets/img/placeholder-app-car.jpg');
+                                $value['image'] = asset(self::PLACEHOLDER_APP_CAR);
 
                                 $item->value = $value;
                                 return $item;
@@ -3014,8 +3035,8 @@ class PageController extends Controller
                                 foreach ($data as $key => $val) {
                                     if (str_starts_with($key, 'thumbnail_image_') && !empty($val)) {
                                         $imageUrl = Storage::disk('public')->exists(ltrim($val, '/'))
-                                            ? asset('storage/' . ltrim($val, '/'))
-                                            : asset('frontend/assets/img/placeholder-app-car.jpg');
+                                            ? asset(self::STORAGE_PATH . ltrim($val, '/'))
+                                            : asset(self::PLACEHOLDER_APP_CAR);
                                         $imageList[] = $imageUrl;
                                     }
                                 }
@@ -3062,7 +3083,7 @@ class PageController extends Controller
                         preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
-                        
+
 
                         $blogss = DB::table('blog_posts')
                             ->select('id', 'title', 'image', 'slug', 'category', 'description', 'updated_at')
@@ -3088,7 +3109,7 @@ class PageController extends Controller
                                 'updated_at'  => \Carbon\Carbon::parse($blog->updated_at)->format('F j, Y'),
                                 'author'      => [
                                     'name'   => 'Admin',
-                                    'avatar' => asset('/backend/assets/img/default-profile.png'),
+                                    'avatar' => asset(self::DEFAULT_PROFILE),
                                 ],
                             ];
                         }
