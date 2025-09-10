@@ -24,6 +24,14 @@ use Modules\GeneralSetting\Models\InsuranceBenefit;
 
 class QuotationRepository implements QuotationRepositoryInterface
 {
+    public const VEHICLE_NAME_SELECT        = 'vehicle_info.name as vehicle_name';
+    public const CUSTOMER_FULLNAME_SELECT   = "CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name";
+    public const CUSTOMER_IMAGE_SELECT      = 'user_details.profile_image as customer_image';
+    public const PICKUP_LOCATION_SELECT     = 'locations as pickup_location';
+    public const DROP_LOCATION_SELECT       = 'locations as drop_location';
+    public const VEHICLE_IMAGE_PATH         = 'vehicles/images/small/';
+    public const STORAGE_PATH               = 'storage/';
+
     public function create(): array
     {
         $auth = current_user();
@@ -289,10 +297,10 @@ class QuotationRepository implements QuotationRepositoryInterface
                 'bookings.id',
                 'bookings.reservation_id',
                 'bookings.booking_date',
-                'vehicle_info.name as vehicle_name',
+                self::VEHICLE_NAME_SELECT,
                 'vehicle_info.vehicle_image',
-                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
-                'user_details.profile_image as customer_image',
+                DB::raw(self::CUSTOMER_FULLNAME_SELECT),
+                self::CUSTOMER_IMAGE_SELECT,
                 'users.name as user_name',
                 'bookings.start_datetime',
                 'bookings.end_datetime',
@@ -303,8 +311,8 @@ class QuotationRepository implements QuotationRepositoryInterface
             )
                 ->join('users', 'users.id', '=', 'bookings.customer_id')
                 ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-                ->join('locations as pickup_location', 'pickup_location.id', '=', 'bookings.pickup_location')
-                ->join('locations as drop_location', 'drop_location.id', '=', 'bookings.return_location')
+                ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
+                ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
                 ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
                 ->where('bookings.booking_by', '=', 'quotation');
 
@@ -396,8 +404,8 @@ class QuotationRepository implements QuotationRepositoryInterface
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
                 $vehicleImagePath = $booking->vehicle_image ?? '';
                 $filename = basename($vehicleImagePath);
-                $newpath = 'vehicles/images/small/' . $filename;
-                $file = public_path('storage/' . $newpath);
+                $newpath = self::VEHICLE_IMAGE_PATH . $filename;
+                $file = public_path(self::STORAGE_PATH . $newpath);
                 if (file_exists($file)) {
                     $vehicleImagePath = $newpath;
                 }
@@ -437,18 +445,18 @@ class QuotationRepository implements QuotationRepositoryInterface
 
             $booking = Booking::select(
                 'bookings.*',
-                'vehicle_info.name as vehicle_name',
+                self::VEHICLE_NAME_SELECT,
                 'vehicle_info.vehicle_image',
-                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
-                'user_details.profile_image as customer_image',
+                DB::raw(self::CUSTOMER_FULLNAME_SELECT),
+                self::CUSTOMER_IMAGE_SELECT,
                 'users.name as user_name',
                 'pickup_location.name as pickup_location_name',
                 'drop_location.name as drop_location_name',
             )
                 ->join('users', 'users.id', '=', 'bookings.customer_id')
                 ->join('user_details', 'user_details.user_id', '=', 'users.id')
-                ->join('locations as pickup_location', 'pickup_location.id', '=', 'bookings.pickup_location')
-                ->join('locations as drop_location', 'drop_location.id', '=', 'bookings.return_location')
+                ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
+                ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
                 ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
                 ->where('bookings.id', $id)
                 ->first();
@@ -457,8 +465,8 @@ class QuotationRepository implements QuotationRepositoryInterface
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
                 $vehicleImagePath = $booking->vehicle_image ?? '';
                 $filename = basename($vehicleImagePath);
-                $newpath = 'vehicles/images/small/' . $filename;
-                $file = public_path('storage/' . $newpath);
+                $newpath = self::VEHICLE_IMAGE_PATH . $filename;
+                $file = public_path(self::STORAGE_PATH . $newpath);
                 if (file_exists($file)) {
                     $vehicleImagePath = $newpath;
                 }
@@ -514,13 +522,13 @@ class QuotationRepository implements QuotationRepositoryInterface
             'bookings.total_insurance_price',
             'bookings.total_extra_service_price',
             'bookings.final_price',
-            'vehicle_info.name as vehicle_name',
+            self::VEHICLE_NAME_SELECT,
             'vehicle_info.vehicle_image',
             'cartypes.name as vehicle_type',
             'pickup_location.name as pickup_location_name',
             'drop_location.name as drop_location_name',
-            DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
-            'user_details.profile_image as customer_image',
+            DB::raw(self::CUSTOMER_FULLNAME_SELECT),
+            self::CUSTOMER_IMAGE_SELECT,
             'users.name as customer_user_name',
             'users.phone_number as customer_phone_number',
             'drivers.driver_name',
@@ -535,8 +543,8 @@ class QuotationRepository implements QuotationRepositoryInterface
             ->leftjoin('booking_details', 'booking_details.booking_id', '=', 'bookings.id')
             ->join('users', 'users.id', '=', 'bookings.customer_id')
             ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-            ->join('locations as pickup_location', 'pickup_location.id', '=', 'bookings.pickup_location')
-            ->join('locations as drop_location', 'drop_location.id', '=', 'bookings.return_location')
+            ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
+            ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
             ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
             ->leftJoin('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
             ->leftjoin('drivers', 'drivers.id', '=', 'bookings.driver_id')
@@ -549,8 +557,8 @@ class QuotationRepository implements QuotationRepositoryInterface
             $booking->driver_image = uploadedAsset($booking->driver_image, 'profile');
             $vehicleImagePath = $booking->vehicle_image ?? '';
             $filename = basename($vehicleImagePath);
-            $newpath = 'vehicles/images/small/' . $filename;
-            $file = public_path('storage/' . $newpath);
+            $newpath = self::VEHICLE_IMAGE_PATH . $filename;
+            $file = public_path(self::STORAGE_PATH . $newpath);
             if (file_exists($file)) {
                 $vehicleImagePath = $newpath;
             }

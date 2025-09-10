@@ -25,6 +25,18 @@ use Modules\GeneralSetting\Models\InsuranceBenefit;
 class BookingRepository implements BookingRepositoryInterface
 {
     private const USERNAME_SELECT = 'users.name as username';
+    private const FULLNAME_SELECT = "CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name";
+    private const DISPLAY_DATE_FORMAT = 'd-m-Y H:i';
+    private const DB_DATE_FORMAT = 'Y-m-d H:i:s';
+    private const VEHICLE_NAME_SELECT = 'vehicle_info.name as vehicle_name';
+    private const VEHICLE_IMAGE_PATH   = 'vehicles/images/small/';
+    private const STORAGE_PATH         = 'storage/';
+    private const DEFAULT_COMPANY_NAME = 'Default Company Name';
+
+    private const CUSTOMER_IMAGE_SELECT     = 'user_details.profile_image as customer_image';
+    private const CUSTOMER_FULLNAME_SELECT  = "CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name";
+    private const PICKUP_LOCATION_SELECT    = 'locations as pickup_location';
+    private const DROP_LOCATION_SELECT      = 'locations as drop_location';
 
     public function create(): array
     {
@@ -36,7 +48,7 @@ class BookingRepository implements BookingRepositoryInterface
         $customers = User::select(
             'users.id',
             self::USERNAME_SELECT,
-            DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
+            DB::raw(self::FULLNAME_SELECT),
         )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
@@ -60,7 +72,7 @@ class BookingRepository implements BookingRepositoryInterface
             $customer = User::select(
                 'users.id',
                 self::USERNAME_SELECT,
-                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
+                DB::raw(self::FULLNAME_SELECT),
                 DB::raw("(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = users.id) as bookings_count"),
                 'users.email',
                 'users.phone_number',
@@ -122,13 +134,13 @@ class BookingRepository implements BookingRepositoryInterface
 
                 if (!empty($startTime) && is_string($startTime)) {
                     $dateTimeString .= ' ' . $startTime;
-                    $startDateCarbon = Carbon::createFromFormat('d-m-Y H:i', $dateTimeString);
+                    $startDateCarbon = Carbon::createFromFormat(self::DISPLAY_DATE_FORMAT, $dateTimeString);
                 } else {
                     $startDateCarbon = Carbon::createFromFormat('d-m-Y', $dateTimeString);
                 }
 
                 if ($startDateCarbon instanceof Carbon) {
-                    $startDateTime = $startDateCarbon->format('Y-m-d H:i:s');
+                    $startDateTime = $startDateCarbon->format(self::DB_DATE_FORMAT);
                 }
 
                 $startDateCarbonOnly = Carbon::createFromFormat('d-m-Y', $startDate);
@@ -142,13 +154,13 @@ class BookingRepository implements BookingRepositoryInterface
 
                 if (!empty($endTime) && is_string($endTime)) {
                     $dateTimeString .= ' ' . $endTime;
-                    $endDateCarbon = Carbon::createFromFormat('d-m-Y H:i', $dateTimeString);
+                    $endDateCarbon = Carbon::createFromFormat(self::DISPLAY_DATE_FORMAT, $dateTimeString);
                 } else {
                     $endDateCarbon = Carbon::createFromFormat('d-m-Y', $dateTimeString);
                 }
 
                 if ($endDateCarbon instanceof Carbon) {
-                    $endDateTime = $endDateCarbon->format('Y-m-d H:i:s');
+                    $endDateTime = $endDateCarbon->format(self::DB_DATE_FORMAT);
                 }
 
                 $endDateCarbonOnly = Carbon::createFromFormat('d-m-Y', $endDate);
@@ -160,7 +172,7 @@ class BookingRepository implements BookingRepositoryInterface
             $vehicles = VehicleInfo::select(
                 'vehicle_info.id',
                 'vehicle_info.vehicle_image as image',
-                'vehicle_info.name as vehicle_name',
+                self::VEHICLE_NAME_SELECT,
                 'vehicle_info.year',
                 'cartypes.name as vehicle_type',
                 'brands.brand_name',
@@ -341,8 +353,8 @@ class BookingRepository implements BookingRepositoryInterface
             $vehicles->getCollection()->map(function ($vehicle) {
                 $vehicleImagePath = $vehicle->image ?? '';
                 $filename = basename($vehicleImagePath);
-                $newpath = 'vehicles/images/small/' . $filename;
-                $file = public_path('storage/' . $newpath);
+                $newpath = self::VEHICLE_IMAGE_PATH . $filename;
+                $file = public_path(self::STORAGE_PATH . $newpath);
                 if (file_exists($file)) {
                     $vehicleImagePath = $newpath;
                 }
@@ -383,11 +395,11 @@ class BookingRepository implements BookingRepositoryInterface
 
             $startDateTime = $startDate . ' ' . $startTime;
             $endDateTime = $endDate   . ' ' . $endTime;
-            $startDateTimeCarbon = Carbon::createFromFormat('d-m-Y H:i', $startDateTime);
-            $endDateTimeCarbon = Carbon::createFromFormat('d-m-Y H:i', $endDateTime);
+            $startDateTimeCarbon = Carbon::createFromFormat(self::DISPLAY_DATE_FORMAT, $startDateTime);
+            $endDateTimeCarbon = Carbon::createFromFormat(self::DISPLAY_DATE_FORMAT, $endDateTime);
 
-            $startDateTime = $startDateTimeCarbon ? $startDateTimeCarbon->format('Y-m-d H:i:s') : null;
-            $endDateTime = $endDateTimeCarbon ? $endDateTimeCarbon->format('Y-m-d H:i:s') : null;
+            $startDateTime = $startDateTimeCarbon ? $startDateTimeCarbon->format(self::DB_DATE_FORMAT) : null;
+            $endDateTime = $endDateTimeCarbon ? $endDateTimeCarbon->format(self::DB_DATE_FORMAT) : null;
             $bookingId = $request->booking_id ?? null;
 
             $data = [
@@ -477,7 +489,7 @@ class BookingRepository implements BookingRepositoryInterface
                 $customer = User::where('id', $booking->customer_id)->first();
                 $vehicle = VehicleInfo::where('id', $booking->vehicle_id)->first();
                 $driver = Driver::find($booking->driver_id);
-                $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
+                $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? self::DEFAULT_COMPANY_NAME;
                 $notifyData = [
                     'user_name'       => $customer->name ?? '',
                     'company_name'    => $companyName,
@@ -559,7 +571,7 @@ class BookingRepository implements BookingRepositoryInterface
         $customers = User::select(
             'users.id',
             self::USERNAME_SELECT,
-            DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
+            DB::raw(self::FULLNAME_SELECT),
         )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
@@ -627,10 +639,10 @@ class BookingRepository implements BookingRepositoryInterface
             $query = Booking::select(
                 'bookings.id',
                 'bookings.reservation_id',
-                'vehicle_info.name as vehicle_name',
+                self::VEHICLE_NAME_SELECT,
                 'vehicle_info.vehicle_image',
-                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
-                'user_details.profile_image as customer_image',
+                DB::raw(self::CUSTOMER_FULLNAME_SELECT),
+                self::CUSTOMER_IMAGE_SELECT,
                 'users.id as customer_id',
                 'users.name as user_name',
                 'bookings.start_datetime',
@@ -642,8 +654,8 @@ class BookingRepository implements BookingRepositoryInterface
             )
                 ->join('users', 'users.id', '=', 'bookings.customer_id')
                 ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-                ->join('locations as pickup_location', 'pickup_location.id', '=', 'bookings.pickup_location')
-                ->join('locations as drop_location', 'drop_location.id', '=', 'bookings.return_location')
+                ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
+                ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
                 ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
                 ->where('bookings.booking_by', '!=', 'quotation');
 
@@ -733,8 +745,8 @@ class BookingRepository implements BookingRepositoryInterface
             $bookings->map(function ($booking) {
                 $imagePath = $booking->vehicle_image;
                 $filename = basename($imagePath);
-                $newpath = 'vehicles/images/small/' . $filename;
-                $file = public_path('storage/' . $newpath);
+                $newpath = self::VEHICLE_IMAGE_PATH . $filename;
+                $file = public_path(self::STORAGE_PATH . $newpath);
                 if (file_exists($file)) {
                     $imagePath = $newpath;
                 }
@@ -778,18 +790,18 @@ class BookingRepository implements BookingRepositoryInterface
 
             $booking = Booking::select(
                 'bookings.*',
-                'vehicle_info.name as vehicle_name',
+                self::VEHICLE_NAME_SELECT,
                 'vehicle_info.vehicle_image',
-                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
-                'user_details.profile_image as customer_image',
+                DB::raw(self::CUSTOMER_FULLNAME_SELECT),
+                self::CUSTOMER_IMAGE_SELECT,
                 'users.name as user_name',
                 'pickup_location.name as pickup_location_name',
                 'drop_location.name as drop_location_name',
             )
                 ->join('users', 'users.id', '=', 'bookings.customer_id')
                 ->join('user_details', 'user_details.user_id', '=', 'users.id')
-                ->join('locations as pickup_location', 'pickup_location.id', '=', 'bookings.pickup_location')
-                ->join('locations as drop_location', 'drop_location.id', '=', 'bookings.return_location')
+                ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
+                ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
                 ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
                 ->where('bookings.id', $id)
                 ->first();
@@ -798,8 +810,8 @@ class BookingRepository implements BookingRepositoryInterface
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
                 $vehicleImagePath = $booking->vehicle_image ?? '';
                 $filename = basename($vehicleImagePath);
-                $newpath = 'vehicles/images/small/' . $filename;
-                $file = public_path('storage/' . $newpath);
+                $newpath = self::VEHICLE_IMAGE_PATH . $filename;
+                $file = public_path(self::STORAGE_PATH . $newpath);
                 if (file_exists($file)) {
                     $vehicleImagePath = $newpath;
                 }
@@ -857,13 +869,13 @@ class BookingRepository implements BookingRepositoryInterface
             'bookings.total_extra_service_price',
             'bookings.final_price',
             'bookings.tax_val',
-            'vehicle_info.name as vehicle_name',
+            self::VEHICLE_NAME_SELECT,
             'vehicle_info.vehicle_image',
             'cartypes.name as vehicle_type',
             'pickup_location.name as pickup_location_name',
             'drop_location.name as drop_location_name',
-            DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
-            'user_details.profile_image as customer_image',
+            DB::raw(self::CUSTOMER_FULLNAME_SELECT),
+            self::CUSTOMER_IMAGE_SELECT,
             'users.name as customer_user_name',
             'users.phone_number as customer_phone_number',
             'drivers.driver_name',
@@ -878,8 +890,8 @@ class BookingRepository implements BookingRepositoryInterface
             ->leftjoin('booking_details', 'booking_details.booking_id', '=', 'bookings.id')
             ->join('users', 'users.id', '=', 'bookings.customer_id')
             ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-            ->join('locations as pickup_location', 'pickup_location.id', '=', 'bookings.pickup_location')
-            ->join('locations as drop_location', 'drop_location.id', '=', 'bookings.return_location')
+            ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
+            ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
             ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
             ->leftJoin('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
             ->leftjoin('drivers', 'drivers.id', '=', 'bookings.driver_id')
@@ -894,7 +906,7 @@ class BookingRepository implements BookingRepositoryInterface
             $vehicleImagePath = $booking->vehicle_image ?? '';
             $filename = basename($vehicleImagePath);
             $newpath = 'vehicles/images/small/' . $filename;
-            $file = public_path('storage/' . $newpath);
+            $file = public_path(self::STORAGE_PATH . $newpath);
 
             if (file_exists($file)) {
                 $vehicleImagePath = $newpath;
@@ -1127,7 +1139,7 @@ class BookingRepository implements BookingRepositoryInterface
                     ]);
 
                     $customer = User::find($singleBooking->customer_id);
-                    $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
+                    $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? self::DEFAULT_COMPANY_NAME;
                     $vehicle = VehicleInfo::where('id', $singleBooking->vehicle_id)->first();
                     $driver = Driver::find($singleBooking->driver_id);
 
@@ -1158,7 +1170,7 @@ class BookingRepository implements BookingRepositoryInterface
                 ]);
 
                 $customer = User::find($booking->customer_id);
-                $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
+                $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? self::DEFAULT_COMPANY_NAME;
                 $vehicle = VehicleInfo::where('id', $booking->vehicle_id)->first();
                 $driver = Driver::find($booking->driver_id);
 
