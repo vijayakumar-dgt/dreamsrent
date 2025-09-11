@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingDetail;
 use Modules\Booking\Models\BookingHistory;
@@ -27,14 +28,17 @@ use Modules\GeneralSetting\Models\UserDevice;
 
 class UserRepository implements UserRepositoryInterface
 {
-    public const VEHICLE_NAME_SUBQUERY = '(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)';
+    private const VEHICLE_NAME_SUBQUERY = '(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)';
+    private const UNAUTHORISED_ACCESS_MESSAGE = 'Unauthorized accessss';
+    private const DATE_START_FORMAT = 'Y-m-d 00:00:00';
+    private const DATE_END_FORMAT   = 'Y-m-d 23:59:59';
 
     public function getDashboardData(): array
     {
         $user = Auth::guard('web')->user();
 
         if (!$user) {
-            abort(403, 'Unauthorized access');
+            abort(403, self::UNAUTHORISED_ACCESS_MESSAGE);
         }
         $totalBookingCount = Booking::where('customer_id', $user->id)
             ->where('deleted_at', null)->count();
@@ -69,7 +73,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = Auth::guard('web')->user();
         if (!$user) {
-            abort(403, 'Unauthorized access');
+            abort(403, self::UNAUTHORISED_ACCESS_MESSAGE);
         }
         $totalBookingCount = Booking::where('customer_id', $user->id)
             ->where('deleted_at', null)->count();
@@ -84,7 +88,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = Auth::guard('web')->user();
         if (!$user) {
-            abort(403, 'Unauthorized access');
+            abort(403, self::UNAUTHORISED_ACCESS_MESSAGE);
         }
         $bookings = Booking::where('customer_id', $user->id)
             ->where('booking_by', '!=', 'quotation');
@@ -124,6 +128,9 @@ class UserRepository implements UserRepositoryInterface
                         'asc'
                     );
                     break;
+                default:
+                    $bookings->orderBy('id', 'desc');
+                    break;
             }
         }
         return $bookings->orderBy('id', 'desc')->take(5)->get();
@@ -134,7 +141,7 @@ class UserRepository implements UserRepositoryInterface
         $user = Auth::guard('web')->user();
 
         if (!$user) {
-            abort(403, 'Unauthorized access');
+            abort(403, self::UNAUTHORISED_ACCESS_MESSAGE);
         }
         $bookings = Booking::where('customer_id', $user->id)
             ->where('booking_by', '!=', 'quotation');
@@ -178,6 +185,9 @@ class UserRepository implements UserRepositoryInterface
                         'asc'
                     );
                     break;
+                default:
+                    $bookings->orderBy('id', 'desc');
+                    break;
             }
         }
         return $bookings->get();
@@ -193,13 +203,6 @@ class UserRepository implements UserRepositoryInterface
         DB::beginTransaction();
         try {
             $booking = Booking::find($request->id);
-            if (!$booking) {
-                $response = [
-                    'status'  => 'error',
-                    'code'    => 404,
-                    'message' => __('web.user.booking_not_found')
-                ];
-            }
 
             if (!$booking instanceof \Modules\Booking\Models\Booking) {
                 $response = [
@@ -207,73 +210,77 @@ class UserRepository implements UserRepositoryInterface
                     'code'    => 404,
                     'message' => __('web.user.booking_not_found')
                 ];
-            }
-
-            $bookingDetail = BookingDetail::where('booking_id', $booking->id)->first();
-            $historyData = [
-                'booking'        => $booking->toArray(),
-                'booking_detail' => $bookingDetail?->toArray() ?? []
-            ];
-
-            BookingHistory::create([
-                'booking_id' => $booking->id,
-                'action'     => 'cancel',
-                'data'       => json_encode($historyData),
-                'message'    => 'Reservation Cancelled'
-            ]);
-
-            $booking->update([
-                'booking_status' => 6,
-                'cancel_date'    => now(),
-                'cancel_by'      => Auth::id(),
-                'cancel_reason'  => $request->reason
-            ]);
-
-            DB::commit();
-
-            if (rentalNotificationEnabled() !== 0) {
-                try {
-                    $authUser = Auth::user();
-                    $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
-                    $vehicle = VehicleInfo::find($booking->vehicle_id ?? '');
-                    $driver = Driver::find($booking->driver_id ?? '');
-                    $appAdmin = User::where('user_type', 1)->first();
-
-                    $notifyData = [
-                        'user_name'       => $authUser->name ?? '',
-                        'company_name'    => $companyName,
-                        'email'           => $authUser->email ?? '',
-                        'phonenumber'     => $authUser->phone_number ?? '',
-                        'vehicle_name'    => $vehicle->name ?? "",
-                        'driver_name'     => $driver->driver_name ?? "",
-                        'reservation_id'  => $booking->reservation_id ?? "",
-                        'start_date'      => formatDateTime($booking->start_datetime),
-                        'end_date'        => formatDateTime($booking->end_datetime),
-                        'pickup_location' => $booking->pickupLocation->name ?? "",
-                        'delivery_type'   => $booking->delivery_type ?? "",
-                        'rental_type'     => $booking->rental_type ?? "",
-                        'payment_type'    => $booking->payment_type ?? "",
-                        'payment_status'  => $booking->payment_status ?? "",
-                        'tototal_amount'  => $booking->final_price ?? ""
-                    ];
-
-
-                    if ($appAdmin?->email) {
-                        sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData);
+            } else {
+                $bookingDetail = BookingDetail::where('booking_id', $booking->id)->first();
+                $historyData = [
+                    'booking'        => $booking->toArray(),
+                    'booking_detail' => $bookingDetail?->toArray() ?? []
+                ];
+    
+                BookingHistory::create([
+                    'booking_id' => $booking->id,
+                    'action'     => 'cancel',
+                    'data'       => json_encode($historyData),
+                    'message'    => 'Reservation Cancelled'
+                ]);
+    
+                $booking->update([
+                    'booking_status' => 6,
+                    'cancel_date'    => now(),
+                    'cancel_by'      => Auth::id(),
+                    'cancel_reason'  => $request->reason
+                ]);
+    
+                DB::commit();
+    
+                if (rentalNotificationEnabled() !== 0) {
+                    try {
+                        $authUser = Auth::user();
+                        $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
+                        $vehicle = VehicleInfo::find($booking->vehicle_id ?? '');
+                        $driver = Driver::find($booking->driver_id ?? '');
+                        $appAdmin = User::where('user_type', 1)->first();
+    
+                        $notifyData = [
+                            'user_name'       => $authUser->name ?? '',
+                            'company_name'    => $companyName,
+                            'email'           => $authUser->email ?? '',
+                            'phonenumber'     => $authUser->phone_number ?? '',
+                            'vehicle_name'    => $vehicle->name ?? "",
+                            'driver_name'     => $driver->driver_name ?? "",
+                            'reservation_id'  => $booking->reservation_id ?? "",
+                            'start_date'      => formatDateTime($booking->start_datetime),
+                            'end_date'        => formatDateTime($booking->end_datetime),
+                            'pickup_location' => $booking->pickupLocation->name ?? "",
+                            'delivery_type'   => $booking->delivery_type ?? "",
+                            'rental_type'     => $booking->rental_type ?? "",
+                            'payment_type'    => $booking->payment_type ?? "",
+                            'payment_status'  => $booking->payment_status ?? "",
+                            'tototal_amount'  => $booking->final_price ?? ""
+                        ];
+    
+    
+                        if ($appAdmin?->email) {
+                            sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData);
+                        }
+    
+                        if (!empty($authUser->email)) {
+                            sendNotification($authUser->email, 'booking-cancelled-to-user', $notifyData);
+                        }
+                    } catch (\Throwable $ex) {
+                        Log::error($ex->getMessage());
                     }
-
-                    if (!empty($authUser->email)) {
-                        sendNotification($authUser->email, 'booking-cancelled-to-user', $notifyData);
-                    }
-                } catch (\Throwable $ex) {
                 }
+    
+                $response = [
+                    'status'  => 'success',
+                    'code'    => 200,
+                    'message' => __('web.user.reservation_cancelled')
+                ];
             }
 
-            return [
-                'status'  => 'success',
-                'code'    => 200,
-                'message' => __('web.user.reservation_cancelled')
-            ];
+            return $response;
+
         } catch (\Throwable $th) {
             DB::rollBack();
             return [
@@ -286,67 +293,72 @@ class UserRepository implements UserRepositoryInterface
 
     public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
     {
+        $result = ['from' => '', 'to' => ''];
+        
         switch ($duration) {
             case 'this_week':
-                $duration = [
-                    'from' => date('Y-m-d 00:00:00', strtotime('monday this week')),
-                    'to'   => date('Y-m-d 23:59:59', strtotime('sunday this week'))
+                $result = [
+                    'from' => date(self::DATE_START_FORMAT, strtotime('monday this week')),
+                    'to'   => date(self::DATE_END_FORMAT, strtotime('sunday this week'))
                 ];
                 break;
+
             case 'this_month':
-                $duration = [
+                $result = [
                     'from' => date('Y-m-01 00:00:00'),
                     'to'   => date('Y-m-t 23:59:59')
                 ];
                 break;
-            case 'last30':
-                $duration = [
-                    'from' => date('Y-m-d 00:00:00', strtotime('-30 days')),
-                    'to'   => date('Y-m-d 23:59:59')
-                ];
-                break;
-            case 'last60':
-                $duration = [
-                    'from' => date('Y-m-d 00:00:00', strtotime('-60 days')),
-                    'to'   => date('Y-m-d 23:59:59')
-                ];
-                break;
-            case 'last7':
-                $duration = [
-                    'from' => date('Y-m-d 00:00:00', strtotime('-7 days')),
-                    'to'   => date('Y-m-d 23:59:59')
-                ];
-                break;
-            case 'custom':
-                if ($customFromDate !== null && $customFromDate !== '' && $customFromDate !== '0' && ($customToDate !== null && $customToDate !== '' && $customToDate !== '0')) {
-                    if (strtotime($customFromDate) > strtotime($customToDate)) {
-                        return ['error' => 'Custom from date cannot be greater than to date'];
-                    }
 
+            case 'last30':
+                $result = [
+                    'from' => date(self::DATE_START_FORMAT, strtotime('-30 days')),
+                    'to'   => date(self::DATE_END_FORMAT)
+                ];
+                break;
+
+            case 'last60':
+                $result = [
+                    'from' => date(self::DATE_START_FORMAT, strtotime('-60 days')),
+                    'to'   => date(self::DATE_END_FORMAT)
+                ];
+                break;
+
+            case 'last7':
+                $result = [
+                    'from' => date(self::DATE_START_FORMAT, strtotime('-7 days')),
+                    'to'   => date(self::DATE_END_FORMAT)
+                ];
+                break;
+
+            case 'custom':
+                if (
+                    $customFromDate && $customFromDate !== '0' &&
+                    $customToDate   && $customToDate !== '0'
+                ) {
                     $fromTimestamp = strtotime($customFromDate);
-                    $toTimestamp = strtotime($customToDate);
+                    $toTimestamp   = strtotime($customToDate);
 
                     if ($fromTimestamp === false || $toTimestamp === false) {
-                        return ['error' => 'Invalid custom date format'];
+                        $result['error'] = 'Invalid custom date format';
+                    } elseif ($fromTimestamp > $toTimestamp) {
+                        $result['error'] = 'Custom from date cannot be greater than to date';
+                    } else {
+                        $result = [
+                            'from' => date('Y-m-d', $fromTimestamp) . ' 00:00:00',
+                            'to'   => date('Y-m-d', $toTimestamp) . ' 23:59:59'
+                        ];
                     }
-
-                    if ($fromTimestamp > $toTimestamp) {
-                        return ['error' => 'Custom from date cannot be greater than to date'];
-                    }
-
-                    $duration = [
-                        'from' => date('Y-m-d', $fromTimestamp) . ' 00:00:00',
-                        'to'   => date('Y-m-d', $toTimestamp) . ' 23:59:59'
-                    ];
                 } else {
-                    return ['from' => '', 'to' => '', 'error' => 'Custom dates are required'];
+                    $result['error'] = 'Custom dates are required';
                 }
                 break;
+
             default:
-                $duration = ['from' => '', 'to' => '', 'error' => 'Invalid duration specified'];
+                $result['error'] = 'Invalid duration specified';
         }
 
-        return $duration;
+        return $result;
     }
 
     public function completeBooking(Request $request): array
@@ -716,14 +728,16 @@ class UserRepository implements UserRepositoryInterface
                     'code'    => 200,
                     'message' => __('web.user.device_removed_successfully')
                 ];
+            } else {
+                $response = [
+                    'status'  => 'error',
+                    'code'    => 404,
+                    'message' => __('web.user.device_not_found')
+                ];
             }
         }
 
-        return [
-            'status'  => 'error',
-            'code'    => 404,
-            'message' => __('web.user.device_not_found')
-        ];
+        return $response;
     }
 
     public function updatePreference(Request $request): array
@@ -887,6 +901,9 @@ class UserRepository implements UserRepositoryInterface
                         DB::raw(self::VEHICLE_NAME_SUBQUERY),
                         'asc'
                     );
+                    break;
+                default:
+                    $bookings->orderBy('id', 'asc');
                     break;
             }
         }

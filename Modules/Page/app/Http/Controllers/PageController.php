@@ -55,7 +55,7 @@ class PageController extends Controller
     public const VEHICLE_IMAGE_SMALL  = 'vehicles/images/small/';
     public const VEHICLE_IMAGE        = 'vehicles/images/';
     public const DEFAULT_PROFILE      = '/backend/assets/img/default-profile.png';
-     public const APP_PUBLIC_PATH      = 'app/public/';
+    public const APP_PUBLIC_PATH      = 'app/public/';
     public const STORAGE_PATHS         = '/storage/';
     public const ICON_SELECTION       = '/frontend/assets/img/icons/bx-selection.svg';
 
@@ -345,6 +345,7 @@ class PageController extends Controller
     public function pageBuilderApi(Request $request, ?string $slug = null): View|JsonResponse
     {
         $themeId = null;
+        $returnResponse = [];
 
         // If slug is provided from route
         if ($slug !== null && $slug !== '' && $slug !== '0') {
@@ -366,7 +367,6 @@ class PageController extends Controller
         // Get slug from request if not set
         $slug = $slug ?? $request->slug ?? '/';
 
-        $authUser = current_user();
         $lang_id = getLanguageId(app()->getLocale());
 
         if (in_array($themeId, [1, 2, 3, 4], true) && ($slug === null || $slug === '/')) {
@@ -379,7 +379,11 @@ class PageController extends Controller
         }
 
         if (!$slug) {
-            return response()->json(["status" => "error", "message" =>  __('Slug must be specified')]);
+            return response()->json([
+                "code" => 404,
+                "status" => "error",
+                "message" =>  __('Slug must be specified')
+            ]);
         }
         $page = Page::where('slug', $slug)->where('theme_id', $themeId)->where('language_id', $lang_id)->first();
 
@@ -406,7 +410,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[banner_one') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $limit = (int)($matches[1] ?? 10);
                         $order = $matches[3] ?? 'asc';
@@ -452,172 +456,166 @@ class PageController extends Controller
                 }
 
                 // Banner Two
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[banner_two') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                if (($section['status'] == 1) && (isset($section['section_content']) && strpos($section['section_content'], '[banner_two') !== false)) {
+                    preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
 
-                        // Ensure $limit is cast to an integer
-                        $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
-                        $order = $matches[3] ?? 'asc';
+                    // Ensure $limit is cast to an integer
+                    $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
+                    $order = $matches[3] ?? 'asc';
 
-                        // Fetch from sections + section_datas with language-specific data
-                        $banners = DB::table('sections')
-                            ->join('section_datas', function ($join) use ($lang_id) {
-                                $join->on('sections.id', '=', 'section_datas.section_id')
-                                    ->where('section_datas.language_id', '=', $lang_id);
-                            })
-                            ->select('sections.id', 'section_datas.datas')
-                            ->where('sections.name', 'Banner Two')
-                            ->orderBy('sections.id', $order)
-                            ->limit($limit)  // Ensure $limit is an integer
-                            ->get();
+                    // Fetch from sections + section_datas with language-specific data
+                    $banners = DB::table('sections')
+                        ->join('section_datas', function ($join) use ($lang_id) {
+                            $join->on('sections.id', '=', 'section_datas.section_id')
+                                ->where('section_datas.language_id', '=', $lang_id);
+                        })
+                        ->select('sections.id', 'section_datas.datas')
+                        ->where('sections.name', 'Banner Two')
+                        ->orderBy('sections.id', $order)
+                        ->limit($limit)  // Ensure $limit is an integer
+                        ->get();
 
-                        $userCount = User::count();
+                    $userCount = User::count();
 
-                        foreach ($banners as &$banner) {
-                            $decodedData = json_decode($banner->datas, true);
+                    foreach ($banners as &$banner) {
+                        $decodedData = json_decode($banner->datas, true);
 
-                            $banner->label = $decodedData['label_two'] ?? null;
-                            $banner->description = $decodedData['description_two'] ?? null;
+                        $banner->label = $decodedData['label_two'] ?? null;
+                        $banner->description = $decodedData['description_two'] ?? null;
 
-                            $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_two'] ?? '');
-                            $defaultImage = asset(self::PLACEHOLDER_BANNER);
-                            $thumbnailKey = 'thumbnail_image_two';
+                        $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_two'] ?? '');
+                        $defaultImage = asset(self::PLACEHOLDER_BANNER);
+                        $thumbnailKey = 'thumbnail_image_two';
 
-                            $banner->thumbnail_image = (
-                                isset($decodedData[$thumbnailKey]) &&
-                                !empty($decodedData[$thumbnailKey]) &&
-                                file_exists(public_path($relativePath))
-                            ) ? asset($relativePath) : $defaultImage;
+                        $banner->thumbnail_image = (
+                            isset($decodedData[$thumbnailKey]) &&
+                            !empty($decodedData[$thumbnailKey]) &&
+                            file_exists(public_path($relativePath))
+                        ) ? asset($relativePath) : $defaultImage;
 
-                            $banner->customer_count = $userCount;
+                        $banner->customer_count = $userCount;
 
-                            $banner->customer_images = [
-                                asset(self::DEFAULT_AVATAR_01),
-                                asset(self::DEFAULT_AVATAR_02),
-                                asset(self::DEFAULT_AVATAR_03),
-                            ];
+                        $banner->customer_images = [
+                            asset(self::DEFAULT_AVATAR_01),
+                            asset(self::DEFAULT_AVATAR_02),
+                            asset(self::DEFAULT_AVATAR_03),
+                        ];
 
-                            unset($banner->datas);
-                        }
-
-                        $section['section_type'] = 'banner_two';
-                        $section['type'] = 'banner_two';
-                        $section['design'] = 'banner_two';
-                        $section['section_content'] = $banners;
+                        unset($banner->datas);
                     }
+
+                    $section['section_type'] = 'banner_two';
+                    $section['type'] = 'banner_two';
+                    $section['design'] = 'banner_two';
+                    $section['section_content'] = $banners;
                 }
 
                 // Banner Three
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[banner_three') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                if (($section['status'] == 1) && (isset($section['section_content']) && strpos($section['section_content'], '[banner_three') !== false)) {
+                    preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
 
-                        $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
-                        $order = $matches[3] ?? 'asc';
+                    $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
+                    $order = $matches[3] ?? 'asc';
 
-                        $banners = DB::table('sections')
-                            ->join('section_datas', function ($join) use ($lang_id) {
-                                $join->on('sections.id', '=', 'section_datas.section_id')
-                                    ->where('section_datas.language_id', '=', $lang_id);
-                            })
-                            ->select('sections.id', 'section_datas.datas')
-                            ->where('sections.name', 'Banner Three')
-                            ->orderBy('sections.id', $order)
-                            ->limit($limit)  // Ensure $limit is an integer
-                            ->get();
+                    $banners = DB::table('sections')
+                        ->join('section_datas', function ($join) use ($lang_id) {
+                            $join->on('sections.id', '=', 'section_datas.section_id')
+                                ->where('section_datas.language_id', '=', $lang_id);
+                        })
+                        ->select('sections.id', 'section_datas.datas')
+                        ->where('sections.name', 'Banner Three')
+                        ->orderBy('sections.id', $order)
+                        ->limit($limit)  // Ensure $limit is an integer
+                        ->get();
 
-                        $userCount = User::count();
+                    $userCount = User::count();
 
-                        foreach ($banners as &$banner) {
-                            $decodedData = json_decode($banner->datas, true);
+                    foreach ($banners as &$banner) {
+                        $decodedData = json_decode($banner->datas, true);
 
-                            $banner->label = $decodedData['label_three'] ?? null;
-                            $banner->description = $decodedData['description_three'] ?? null;
+                        $banner->label = $decodedData['label_three'] ?? null;
+                        $banner->description = $decodedData['description_three'] ?? null;
 
-                            $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_four'] ?? '');
-                            $defaultImage = asset(self::PLACEHOLDER_BANNER);
-                            $thumbnailKey = 'thumbnail_image_four';
+                        $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_four'] ?? '');
+                        $defaultImage = asset(self::PLACEHOLDER_BANNER);
+                        $thumbnailKey = 'thumbnail_image_four';
 
-                            $banner->thumbnail_image = (
-                                isset($decodedData[$thumbnailKey]) &&
-                                !empty($decodedData[$thumbnailKey]) &&
-                                file_exists(public_path($relativePath))
-                            ) ? asset($relativePath) : $defaultImage;
+                        $banner->thumbnail_image = (
+                            isset($decodedData[$thumbnailKey]) &&
+                            !empty($decodedData[$thumbnailKey]) &&
+                            file_exists(public_path($relativePath))
+                        ) ? asset($relativePath) : $defaultImage;
 
-                            $banner->customer_count = $userCount;
+                        $banner->customer_count = $userCount;
 
-                            $banner->customer_images = [
-                                asset(self::DEFAULT_AVATAR_01),
-                                asset(self::DEFAULT_AVATAR_02),
-                                asset(self::DEFAULT_AVATAR_03),
-                            ];
+                        $banner->customer_images = [
+                            asset(self::DEFAULT_AVATAR_01),
+                            asset(self::DEFAULT_AVATAR_02),
+                            asset(self::DEFAULT_AVATAR_03),
+                        ];
 
-                            unset($banner->datas);
-                        }
-
-                        $section['section_type'] = 'banner_three';
-                        $section['type'] = 'banner_three';
-                        $section['design'] = 'banner_three';
-                        $section['section_content'] = $banners;
+                        unset($banner->datas);
                     }
+
+                    $section['section_type'] = 'banner_three';
+                    $section['type'] = 'banner_three';
+                    $section['design'] = 'banner_three';
+                    $section['section_content'] = $banners;
                 }
-
+                
                 // Banner Four
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[banner_four') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                if (($section['status'] == 1) && (isset($section['section_content']) && strpos($section['section_content'], '[banner_four') !== false)) {
+                    preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
 
-                        $limit = (int)($matches[1] ?? 10);
-                        $order = $matches[3] ?? 'asc';
+                    $limit = (int)($matches[1] ?? 10);
+                    $order = $matches[3] ?? 'asc';
 
-                        $banners = DB::table('sections')
-                            ->join('section_datas', function ($join) use ($lang_id) {
-                                $join->on('sections.id', '=', 'section_datas.section_id')
-                                    ->where('section_datas.language_id', '=', $lang_id);
-                            })
-                            ->select('sections.id', 'section_datas.datas')
-                            ->where('sections.name', 'Banner Four')
-                            ->orderBy('sections.id', $order)
-                            ->limit($limit)
-                            ->get();
+                    $banners = DB::table('sections')
+                        ->join('section_datas', function ($join) use ($lang_id) {
+                            $join->on('sections.id', '=', 'section_datas.section_id')
+                                ->where('section_datas.language_id', '=', $lang_id);
+                        })
+                        ->select('sections.id', 'section_datas.datas')
+                        ->where('sections.name', 'Banner Four')
+                        ->orderBy('sections.id', $order)
+                        ->limit($limit)
+                        ->get();
 
-                        $userCount = User::count();
+                    $userCount = User::count();
 
-                        foreach ($banners as &$banner) {
-                            $decodedData = json_decode($banner->datas, true);
+                    foreach ($banners as &$banner) {
+                        $decodedData = json_decode($banner->datas, true);
 
-                            $banner->label = $decodedData['label_boat_one'] ?? null;
-                            $banner->higlight_label = $decodedData['label_boat_two'] ?? null;
-                            $banner->description = $decodedData['description_boat'] ?? null;
+                        $banner->label = $decodedData['label_boat_one'] ?? null;
+                        $banner->higlight_label = $decodedData['label_boat_two'] ?? null;
+                        $banner->description = $decodedData['description_boat'] ?? null;
 
-                            $defaultImage = asset(self::PLACEHOLDER_BANNER);
-                            $thumbnailImages = [];
+                        $defaultImage = asset(self::PLACEHOLDER_BANNER);
+                        $thumbnailImages = [];
 
-                            if (!empty($decodedData['thumbnail_image_boat']) && is_array($decodedData['thumbnail_image_boat'])) {
-                                foreach ($decodedData['thumbnail_image_boat'] as $imagePath) {
-                                    $fullPath = public_path(self::STORAGE_PATH . $imagePath);
-                                    $thumbnailImages[] = file_exists($fullPath) ? asset(self::STORAGE_PATH . $imagePath) : $defaultImage;
-                                }
+                        if (!empty($decodedData['thumbnail_image_boat']) && is_array($decodedData['thumbnail_image_boat'])) {
+                            foreach ($decodedData['thumbnail_image_boat'] as $imagePath) {
+                                $fullPath = public_path(self::STORAGE_PATH . $imagePath);
+                                $thumbnailImages[] = file_exists($fullPath) ? asset(self::STORAGE_PATH . $imagePath) : $defaultImage;
                             }
-
-                            $banner->thumbnail_images = $thumbnailImages;
-                            $banner->customer_count = $userCount;
-
-                            $banner->customer_images = [
-                                asset(self::DEFAULT_AVATAR_01),
-                                asset(self::DEFAULT_AVATAR_02),
-                                asset(self::DEFAULT_AVATAR_03),
-                            ];
-
-                            unset($banner->datas);
                         }
 
-                        $section['section_type'] = 'banner_four';
-                        $section['type'] = 'banner_four';
-                        $section['design'] = 'banner_four';
-                        $section['section_content'] = $banners;
+                        $banner->thumbnail_images = $thumbnailImages;
+                        $banner->customer_count = $userCount;
+
+                        $banner->customer_images = [
+                            asset(self::DEFAULT_AVATAR_01),
+                            asset(self::DEFAULT_AVATAR_02),
+                            asset(self::DEFAULT_AVATAR_03),
+                        ];
+
+                        unset($banner->datas);
                     }
+
+                    $section['section_type'] = 'banner_four';
+                    $section['type'] = 'banner_four';
+                    $section['design'] = 'banner_four';
+                    $section['section_content'] = $banners;
                 }
 
                 // BestVehicle
@@ -625,7 +623,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[bestVehicle') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $limit = (int)($matches[1] ?? 10);
                         $order = $matches[3] ?? 'asc';
@@ -693,7 +691,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[brand') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = (int)($matches[1] ?? 10);
                         $order = $matches[3] ?? 'asc';
 
@@ -724,7 +722,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[location') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = (int)($matches[1] ?? 10);
                         $order = $matches[3] ?? 'asc';
 
@@ -763,113 +761,110 @@ class PageController extends Controller
                 }
 
                 // Category section
-                if (is_array($section) && ($section['status'] ?? 0) == 1) {
-                    if (
+                if ((is_array($section) && ($section['status'] ?? 0) == 1) && (
                         isset($section['section_content']) &&
                         is_string($section['section_content']) &&
                         strpos($section['section_content'], '[category ') !== false
-                    ) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 6;
-                        $order = $matches[3] ?? 'asc';
-                        $categoryId = getCategoryId();
-                        $category = Cartype::select('name', 'icon', 'id')
-                            ->limit((int) $limit)
-                            ->where('type', 'car')
-                            ->where('language_id', $lang_id)
-                            ->where('category_id', $categoryId)
-                            ->where('status', 1)
-                            ->whereNull('deleted_at')
-                            ->get()
-                            ->map(function ($cartype) use ($lang_id) {
-                                $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
-                                    ->where('language_id', $lang_id)
-                                    ->count();
+                )) {
+                    preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
+                    $limit = $matches[1] ?? 6;
+                    $order = $matches[3] ?? 'asc';
+                    $categoryId = getCategoryId();
+                    $category = Cartype::select('name', 'icon', 'id')
+                        ->limit((int) $limit)
+                        ->where('type', 'car')
+                        ->where('language_id', $lang_id)
+                        ->where('category_id', $categoryId)
+                        ->where('status', 1)
+                        ->whereNull('deleted_at')
+                        ->orderBy('created_at', $order)
+                        ->get()
+                        ->map(function ($cartype) use ($lang_id) {
+                            $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
+                                ->where('language_id', $lang_id)
+                                ->count();
 
-                                $cartype->image_url = $cartype->icon
-                                    ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
-                                    : asset(self::DEFAULT_IMAGE);
+                            $cartype->image_url = $cartype->icon
+                                ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
+                                : asset(self::DEFAULT_IMAGE);
 
-                                return $cartype;
-                            });
+                            return $cartype;
+                        });
 
-                        $section['section_type'] = 'featured_category';
-                        $section['design'] = 'category_one';
-                        $section['section_content'] = $category;
-                    }
+                    $section['section_type'] = 'featured_category';
+                    $section['design'] = 'category_one';
+                    $section['section_content'] = $category;
                 }
 
                 // Category section Bike
-                if (is_array($section) && ($section['status'] ?? 0) == 1) {
-                    if (
-                        isset($section['section_content']) &&
-                        is_string($section['section_content']) &&
-                        strpos($section['section_content'], '[bike_category ') !== false
-                    ) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 6;
-                        $order = $matches[3] ?? 'asc';
-                        $categoryId = getCategoryId();
-                        $category = Cartype::select('name', 'icon', 'id', 'type')
-                            ->limit((int) $limit)
-                            ->where('type', 'bike')
-                            ->where('language_id', $lang_id)
-                            ->where('category_id', $categoryId)
-                            ->where('status', 1)
-                            ->whereNull('deleted_at')
-                            ->get()
-                            ->map(function ($cartype) use ($lang_id) {
-                                $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
-                                    ->where('language_id', $lang_id)
-                                    ->count();
+                if ((is_array($section) && ($section['status'] ?? 0) == 1) && (
+                    isset($section['section_content']) &&
+                    is_string($section['section_content']) &&
+                    strpos($section['section_content'], '[bike_category ') !== false
+                )) {
+                    preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
+                    $limit = $matches[1] ?? 6;
+                    $order = $matches[3] ?? 'asc';
+                    $categoryId = getCategoryId();
+                    $category = Cartype::select('name', 'icon', 'id', 'type')
+                        ->limit((int) $limit)
+                        ->where('type', 'bike')
+                        ->where('language_id', $lang_id)
+                        ->where('category_id', $categoryId)
+                        ->where('status', 1)
+                        ->whereNull('deleted_at')
+                        ->orderBy('created_at', $order)
+                        ->get()
+                        ->map(function ($cartype) use ($lang_id) {
+                            $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
+                                ->where('language_id', $lang_id)
+                                ->count();
 
-                                $cartype->image_url = $cartype->icon
-                                    ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
-                                    : asset(self::DEFAULT_IMAGE);
+                            $cartype->image_url = $cartype->icon
+                                ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
+                                : asset(self::DEFAULT_IMAGE);
 
-                                return $cartype;
-                            });
+                            return $cartype;
+                        });
 
-                        $section['section_type'] = 'featured_category';
-                        $section['design'] = 'category_one';
-                        $section['section_content'] = $category;
-                    }
+                    $section['section_type'] = 'featured_category';
+                    $section['design'] = 'category_one';
+                    $section['section_content'] = $category;
                 }
 
                 // Category section Boat
-                if (is_array($section) && ($section['status'] ?? 0) == 1) {
-                    if (
-                        isset($section['section_content']) &&
-                        is_string($section['section_content']) &&
-                        strpos($section['section_content'], '[boat_category ') !== false
-                    ) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 6;
-                        $order = $matches[3] ?? 'asc';
+                if ((is_array($section) && ($section['status'] ?? 0) == 1) && (
+                    isset($section['section_content']) &&
+                    is_string($section['section_content']) &&
+                    strpos($section['section_content'], '[boat_category ') !== false
+                )) {
+                    preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
+                    $limit = $matches[1] ?? 6;
+                    $order = $matches[3] ?? 'asc';
 
-                        $category = Cartype::select('name', 'icon', 'id', 'type')
-                            ->limit((int) $limit)
-                            ->where('type', 'boat')
-                            ->where('language_id', $lang_id)
-                            ->where('status', 1)
-                            ->whereNull('deleted_at')
-                            ->get()
-                            ->map(function ($cartype) use ($lang_id) {
-                                $cartype->boat_count = VehicleInfo::where('type_id', $cartype->id)
-                                    ->where('language_id', $lang_id)->where('type', 'boat')
-                                    ->count();
+                    $category = Cartype::select('name', 'icon', 'id', 'type')
+                        ->limit((int) $limit)
+                        ->where('type', 'boat')
+                        ->where('language_id', $lang_id)
+                        ->where('status', 1)
+                        ->whereNull('deleted_at')
+                        ->orderBy('created_at', $order)
+                        ->get()
+                        ->map(function ($cartype) use ($lang_id) {
+                            $cartype->boat_count = VehicleInfo::where('type_id', $cartype->id)
+                                ->where('language_id', $lang_id)->where('type', 'boat')
+                                ->count();
 
-                                $cartype->image_url = $cartype->icon
-                                    ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
-                                    : asset(self::DEFAULT_IMAGE);
+                            $cartype->image_url = $cartype->icon
+                                ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
+                                : asset(self::DEFAULT_IMAGE);
 
-                                return $cartype;
-                            });
+                            return $cartype;
+                        });
 
-                        $section['section_type'] = 'featured_category';
-                        $section['design'] = 'category_one';
-                        $section['section_content'] = $category;
-                    }
+                    $section['section_type'] = 'featured_category';
+                    $section['design'] = 'category_one';
+                    $section['section_content'] = $category;
                 }
 
                 // FAQ Section (with Facts)
@@ -878,7 +873,7 @@ class PageController extends Controller
 
                     if (is_string($content) && strpos($content, '[facts_with_faq') !== false) {
                         // Parse shortcode parameters
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = $matches[1] ?? 10;
                         $order = $matches[3] ?? 'asc';
 
@@ -914,13 +909,13 @@ class PageController extends Controller
                     }
                 }
 
-                // FAQ Section (with Facts)
+                // FAQ Section (with Facts and Blogs)
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[fact_blogs') !== false) {
                         // Parse shortcode parameters
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = $matches[1] ?? 10;
                         $order = $matches[3] ?? 'asc';
 
@@ -960,7 +955,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[faq') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = $matches[1] ?? 10;
                         $order = $matches[3] ?? 'asc';
 
@@ -984,7 +979,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[how_it_work') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = $matches[1] ?? 10;
                         $order = $matches[3] ?? 'asc';
 
@@ -1031,456 +1026,448 @@ class PageController extends Controller
                 }
 
                 // Vechile
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[vehicle') !== false) {
-                        preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
-                        $type = $matches[1] ?? 'all';
-                        $limit = $matches[2] ?? 10;
+                if (($section['status'] == 1) && (isset($section['section_content']) && strpos($section['section_content'], '[vehicle') !== false)) {
+                    preg_match(self::TYPE_LIMIT_VIEWALL_REGEX, $section['section_content'], $matches);
+                    $type = $matches[1] ?? 'all';
+                    $limit = $matches[2] ?? 10;
 
-                        $query = VehicleInfo::with([
-                            self::CAR_TYPE_SELECT,
-                            self::BRAND_SELECT,
-                            self::CATEGORY_SELECT,
-                            self::MAIN_LOCATION_SELECT,
-                            self::COLOR_SELECT,
-                            self::FUEL_TYPE_SELECT,
-                            self::TRANSMISSION_SELECT,
-                        ])->where('language_id', $lang_id);
+                    $query = VehicleInfo::with([
+                        self::CAR_TYPE_SELECT,
+                        self::BRAND_SELECT,
+                        self::CATEGORY_SELECT,
+                        self::MAIN_LOCATION_SELECT,
+                        self::COLOR_SELECT,
+                        self::FUEL_TYPE_SELECT,
+                        self::TRANSMISSION_SELECT,
+                    ])->where('language_id', $lang_id);
 
-                        if ($type === 'popular') {
-                            $vehicles = $query->where('popular', 1)->where('type', 'car')->get();
-                            $section['section_type'] = 'popular_vehicle';
-                            $section['design'] = 'vehicle_one';
-                        } elseif ($type === 'featured') {
-                            $vehicles = $query->where('recommended', 1)->where('type', 'car')->get();
-                            $section['section_type'] = 'feature_vehicle';
-                            $section['design'] = 'vehicle_two';
-                        } else {
-                            $vehicles = $query->where('type', 'car')->get();
-                            $section['section_type'] = 'al_vehicle';
-                            $section['design'] = 'vehicle_three';
+                    if ($type === 'popular') {
+                        $vehicles = $query->where('popular', 1)->where('type', 'car')->get();
+                        $section['section_type'] = 'popular_vehicle';
+                        $section['design'] = 'vehicle_one';
+                    } elseif ($type === 'featured') {
+                        $vehicles = $query->where('recommended', 1)->where('type', 'car')->get();
+                        $section['section_type'] = 'feature_vehicle';
+                        $section['design'] = 'vehicle_two';
+                    } else {
+                        $vehicles = $query->where('type', 'car')->get();
+                        $section['section_type'] = 'al_vehicle';
+                        $section['design'] = 'vehicle_three';
+                    }
+
+                    $data = $vehicles->map(function ($vehicle) {
+                        $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
+                            ->where('key', 'vehicle_image')
+                            ->first();
+
+                        $vehiclePrices = $vehicle->vehicle_price ? json_decode($vehicle->vehicle_price, true) : [];
+                        $filteredPrices = [];
+
+                        if (!empty($vehiclePrices)) {
+                            foreach ($vehiclePrices as $price) {
+                                $filteredPrice = array_filter($price, function ($value) {
+                                    return $value > 0; // Only keep values greater than 0
+                                });
+
+                                if (!empty($filteredPrice)) {
+                                    $filteredPrices[] = $filteredPrice;
+                                }
+                            }
+                        }
+                        $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+
+                        if (!empty($vehicle->vehicle_image)) {
+                            array_unshift($multipleImages, $vehicle->vehicle_image);
                         }
 
-                        $data = $vehicles->map(function ($vehicle) {
-                            $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
-                                ->where('key', 'vehicle_image')
-                                ->first();
+                        $multipleImages = array_map(function ($img) {
+                            $img = '/' . ltrim($img, '/'); // Ensure single leading slash
 
-                            $vehiclePrices = $vehicle->vehicle_price ? json_decode($vehicle->vehicle_price, true) : [];
-                            $filteredPrices = [];
+                            $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
 
-                            if (!empty($vehiclePrices)) {
-                                foreach ($vehiclePrices as $price) {
-                                    $filteredPrice = array_filter($price, function ($value) {
-                                        return $value > 0; // Only keep values greater than 0
-                                    });
+                            return url('storage' . $img);
+                        }, $multipleImages);
 
-                                    if (!empty($filteredPrice)) {
-                                        $filteredPrices[] = $filteredPrice;
-                                    }
-                                }
+                        /** @var \App\Models\User|null $auth */
+                        $auth = current_user();
+                        $authId = $auth?->id;
+
+                        $wishlistExists = false;
+
+                        if ($authId) {
+                            $wishlistExists = Wishlist::where("user_id", $authId)
+                                ->where("vehicle_id", $vehicle->id)
+                                ->exists();
+                        }
+
+                        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+                        $currency = null;
+
+                        if ($currencySetting && $currencySetting->value) {
+                            $currency = Currency::find($currencySetting->value);
+                        }
+
+                        $currencySymbol = $currency->symbol ?? "$";
+
+                        $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
+
+                        $defaultAvatar = asset(self::DEFAULT_PROFILE);
+                        $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
+
+                        $avatarImage = $defaultAvatar;
+
+                        if ($profileImagePath) {
+                            $fullImagePath = storage_path(self::APP_PUBLIC_PATH . $profileImagePath);
+                            if (file_exists($fullImagePath)) {
+                                $avatarImage = url(self::STORAGE_PATHS . $profileImagePath);
                             }
-                            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+                        }
+                        return [
+                            'id'                      => $vehicle->id,
+                            'name'                    => $vehicle->name,
+                            'slug'                    => $vehicle->slug,
+                            'vehicle_image'           => url(self::STORAGE_PATHS . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
+                            'multiple_vehicle_images' => $multipleImages,
+                            'has_multiple_image'      => count($multipleImages) > 1,
+                            'avatar_image'            => $avatarImage,
+                            'brand_id'                => $vehicle->brand_id ?? null,
+                            'brand'                   => $vehicle->brand->brand_name ?? null,
+                            'car_type'                => $vehicle->carType->name ?? null,
+                            'category'                => $vehicle->category->name ?? null,
+                            'location'                => $vehicle->mainLocation->name ?? null,
+                            'color'                   => $vehicle->color->name ?? null,
+                            'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
+                            'transmission'            => $vehicle->transmission->name ?? null,
+                            'year'                    => $vehicle->year,
+                            'mileage'                 => $vehicle->mileage,
+                            'odometer'                => $vehicle->odometer,
+                            'rating'                  => $rating,
+                            'currency'                => $currencySymbol,
+                            'wishlist'                => $wishlistExists,
+                            'passenger_capacity'      => $vehicle->passenger_capacity,
+                            'num_seats'               => $vehicle->num_seats,
+                            'num_doors'               => $vehicle->num_doors,
+                            'num_airbags'             => $vehicle->num_airbags,
+                            'vehicle_video'           => $vehicle->vehicle_video,
+                            'features'                => $vehicle->features,
+                            'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
+                            'is_featured'             => $vehicle->popular,
+                            'is_top_rated'            => $vehicle->recommended,
+                            'seo_title'               => $vehicle->vehicle_metatitle,
+                            'seo_key'                 => $vehicle->vehicle_metakeywords,
+                            'seo_description'         => $vehicle->vehicle_metadesc,
+                            'created_at'              => $vehicle->created_at,
+                        ];
+                    });
 
-                            if (!empty($vehicle->vehicle_image)) {
-                                array_unshift($multipleImages, $vehicle->vehicle_image);
-                            }
-
-                            $multipleImages = array_map(function ($img) {
-                                $img = '/' . ltrim($img, '/'); // Ensure single leading slash
-
-                                $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
-
-                                return url('storage' . $img);
-                            }, $multipleImages);
-
-                            /** @var \App\Models\User|null $auth */
-                            $auth = current_user();
-                            $authId = $auth?->id;
-
-                            $wishlistExists = false;
-
-                            if ($authId) {
-                                $wishlistExists = Wishlist::where("user_id", $authId)
-                                    ->where("vehicle_id", $vehicle->id)
-                                    ->exists();
-                            }
-
-                            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-                            $currency = null;
-
-                            if ($currencySetting && $currencySetting->value) {
-                                $currency = Currency::find($currencySetting->value);
-                            }
-
-                            $currencySymbol = $currency->symbol ?? "$";
-
-                            $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
-
-
-                            $defaultAvatar = asset(self::DEFAULT_PROFILE);
-                            $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
-
-                            $avatarImage = $defaultAvatar;
-
-                            if ($profileImagePath) {
-                                $fullImagePath = storage_path(self::APP_PUBLIC_PATH . $profileImagePath);
-                                if (file_exists($fullImagePath)) {
-                                    $avatarImage = url(self::STORAGE_PATHS . $profileImagePath);
-                                }
-                            }
-                            return [
-                                'id'                      => $vehicle->id,
-                                'name'                    => $vehicle->name,
-                                'slug'                    => $vehicle->slug,
-                                'vehicle_image'           => url(self::STORAGE_PATHS . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
-                                'multiple_vehicle_images' => $multipleImages,
-                                'has_multiple_image'      => count($multipleImages) > 1,
-                                'avatar_image'            => $avatarImage,
-                                'brand_id'                => $vehicle->brand_id ?? null,
-                                'brand'                   => $vehicle->brand->brand_name ?? null,
-                                'car_type'                => $vehicle->carType->name ?? null,
-                                'category'                => $vehicle->category->name ?? null,
-                                'location'                => $vehicle->mainLocation->name ?? null,
-                                'color'                   => $vehicle->color->name ?? null,
-                                'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
-                                'transmission'            => $vehicle->transmission->name ?? null,
-                                'year'                    => $vehicle->year,
-                                'mileage'                 => $vehicle->mileage,
-                                'odometer'                => $vehicle->odometer,
-                                'rating'                  => $rating,
-                                'currency'                => $currencySymbol,
-                                'wishlist'                => $wishlistExists,
-                                'passenger_capacity'      => $vehicle->passenger_capacity,
-                                'num_seats'               => $vehicle->num_seats,
-                                'num_doors'               => $vehicle->num_doors,
-                                'num_airbags'             => $vehicle->num_airbags,
-                                'vehicle_video'           => $vehicle->vehicle_video,
-                                'features'                => $vehicle->features,
-                                'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
-                                'is_featured'             => $vehicle->popular,
-                                'is_top_rated'            => $vehicle->recommended,
-                                'seo_title'               => $vehicle->vehicle_metatitle,
-                                'seo_key'                 => $vehicle->vehicle_metakeywords,
-                                'seo_description'         => $vehicle->vehicle_metadesc,
-                                'created_at'              => $vehicle->created_at,
-                            ];
-                        });
-
-                        $section['section_content'] = $data;
-                    }
+                    $section['section_content'] = $data;
                 }
 
                 // Bike
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[bike') !== false) {
-                        preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
-                        $type = $matches[1] ?? 'all';
+                if (($section['status'] == 1) && (isset($section['section_content']) && strpos($section['section_content'], '[bike') !== false)) {
+                    preg_match(self::TYPE_LIMIT_VIEWALL_REGEX, $section['section_content'], $matches);
+                    $type = $matches[1] ?? 'all';
 
 
-                        $query = VehicleInfo::with([
-                            self::CAR_TYPE_SELECT,
-                            self::BRAND_SELECT,
-                            self::CATEGORY_SELECT,
-                            self::MAIN_LOCATION_SELECT,
-                            self::COLOR_SELECT,
-                            self::FUEL_TYPE_SELECT,
-                            self::TRANSMISSION_SELECT,
-                        ])->where('language_id', $lang_id);
+                    $query = VehicleInfo::with([
+                        self::CAR_TYPE_SELECT,
+                        self::BRAND_SELECT,
+                        self::CATEGORY_SELECT,
+                        self::MAIN_LOCATION_SELECT,
+                        self::COLOR_SELECT,
+                        self::FUEL_TYPE_SELECT,
+                        self::TRANSMISSION_SELECT,
+                    ])->where('language_id', $lang_id);
 
-                        if ($type === 'popular') {
-                            $vehicles = $query->where('popular', 1)->where('type', 'bike')->get();
-                            $section['section_type'] = 'popular_vehicle';
-                            $section['design'] = 'vehicle_one';
-                        } elseif ($type === 'featured') {
-                            $vehicles = $query->where('recommended', 1)->where('type', 'bike')->get();
-                            $section['section_type'] = 'feature_vehicle';
-                            $section['design'] = 'vehicle_two';
-                        } elseif ($type === 'top_rated') {
-                            $vehicles = $query->where('recommended', 1)->where('type', 'bike')->get();
-                            $section['section_type'] = 'top_recommended';
-                            $section['design'] = 'vehicle_three';
-                        } else {
-                            $vehicles = $query->where('recommended', 1)->where('type', 'bike')->get();
-                            $section['section_type'] = 'top_recommended';
-                            $section['design'] = 'vehicle_four';
+                    if ($type === 'popular') {
+                        $vehicles = $query->where('popular', 1)->where('type', 'bike')->get();
+                        $section['section_type'] = 'popular_vehicle';
+                        $section['design'] = 'vehicle_one';
+                    } elseif ($type === 'featured') {
+                        $vehicles = $query->where('recommended', 1)->where('type', 'bike')->get();
+                        $section['section_type'] = 'feature_vehicle';
+                        $section['design'] = 'vehicle_two';
+                    } elseif ($type === 'top_rated') {
+                        $vehicles = $query->where('recommended', 1)->where('type', 'bike')->get();
+                        $section['section_type'] = 'top_recommended';
+                        $section['design'] = 'vehicle_three';
+                    } else {
+                        $vehicles = $query->where('recommended', 1)->where('type', 'bike')->get();
+                        $section['section_type'] = 'top_recommended';
+                        $section['design'] = 'vehicle_four';
+                    }
+
+                    $data = $vehicles->map(function ($vehicle) {
+                        $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
+                            ->where('key', 'vehicle_image')
+                            ->first();
+
+                        $vehiclePrices = $vehicle->vehicle_price ? json_decode($vehicle->vehicle_price, true) : [];
+                        $filteredPrices = [];
+
+                        if (!empty($vehiclePrices)) {
+                            foreach ($vehiclePrices as $price) {
+                                $filteredPrice = array_filter($price, function ($value) {
+                                    return $value > 0; // Only keep values greater than 0
+                                });
+
+                                if (!empty($filteredPrice)) {
+                                    $filteredPrices[] = $filteredPrice;
+                                }
+                            }
+                        }
+                        $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+
+                        if (!empty($vehicle->vehicle_image)) {
+                            array_unshift($multipleImages, $vehicle->vehicle_image);
                         }
 
-                        $data = $vehicles->map(function ($vehicle) {
-                            $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
-                                ->where('key', 'vehicle_image')
-                                ->first();
+                        $multipleImages = array_map(function ($img) {
+                            $img = '/' . ltrim($img, '/'); // Ensure single leading slash
 
-                            $vehiclePrices = $vehicle->vehicle_price ? json_decode($vehicle->vehicle_price, true) : [];
-                            $filteredPrices = [];
+                            $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
 
-                            if (!empty($vehiclePrices)) {
-                                foreach ($vehiclePrices as $price) {
-                                    $filteredPrice = array_filter($price, function ($value) {
-                                        return $value > 0; // Only keep values greater than 0
-                                    });
+                            return url('storage' . $img);
+                        }, $multipleImages);
 
-                                    if (!empty($filteredPrice)) {
-                                        $filteredPrices[] = $filteredPrice;
-                                    }
-                                }
+                        /** @var \App\Models\User|null $auth */
+                        $auth = current_user();
+                        $authId = $auth?->id;
+
+                        $wishlistExists = false;
+
+                        if ($authId) {
+                            $wishlistExists = Wishlist::where("user_id", $authId)
+                                ->where("vehicle_id", $vehicle->id)
+                                ->exists();
+                        }
+
+                        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+                        $currency = null;
+
+                        if ($currencySetting && $currencySetting->value) {
+                            $currency = Currency::find($currencySetting->value);
+                        }
+
+                        $currencySymbol = $currency->symbol ?? "$";
+
+                        $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
+
+
+                        $defaultAvatar = asset(self::DEFAULT_PROFILE);
+                        $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
+
+                        $avatarImage = $defaultAvatar;
+
+                        if ($profileImagePath) {
+                            $fullImagePath = storage_path(self::APP_PUBLIC_PATH . $profileImagePath);
+                            if (file_exists($fullImagePath)) {
+                                $avatarImage = url(self::STORAGE_PATHS . $profileImagePath);
                             }
-                            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+                        }
+                        return [
+                            'id'                      => $vehicle->id,
+                            'name'                    => $vehicle->name,
+                            'slug'                    => $vehicle->slug,
+                            'vehicle_image'           => url(self::STORAGE_PATHS . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
+                            'multiple_vehicle_images' => $multipleImages,
+                            'has_multiple_image'      => count($multipleImages) > 1,
+                            'avatar_image'            => $avatarImage,
+                            'brand_id'                => $vehicle->brand_id ?? null,
+                            'brand'                   => $vehicle->brand->brand_name ?? null,
+                            'car_type'                => $vehicle->carType->name ?? null,
+                            'category'                => $vehicle->category->name ?? null,
+                            'tube_type'               => Arr::random(['Tube', 'Tubeless']),
+                            'break_type'              => Arr::random(['Drum', 'Disc']),
+                            'location'                => $vehicle->mainLocation->name ?? null,
+                            'color'                   => $vehicle->color->name ?? null,
+                            'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
+                            'transmission'            => $vehicle->transmission->name ?? null,
+                            'year'                    => $vehicle->year,
+                            'mileage'                 => $vehicle->mileage,
+                            'odometer'                => $vehicle->odometer,
+                            'rating'                  => $rating,
+                            'total_review'            => Review::where("vehicle_id", $vehicle->id)->count(),
+                            'currency'                => $currencySymbol,
+                            'wishlist'                => $wishlistExists,
+                            'passenger_capacity'      => $vehicle->passenger_capacity,
+                            'num_seats'               => $vehicle->num_seats,
+                            'num_doors'               => $vehicle->num_doors,
+                            'num_airbags'             => $vehicle->num_airbags,
+                            'vehicle_video'           => $vehicle->vehicle_video,
+                            'features'                => $vehicle->features,
+                            'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
+                            'is_featured'             => $vehicle->popular,
+                            'is_top_rated'            => $vehicle->recommended,
+                            'seo_title'               => $vehicle->vehicle_metatitle,
+                            'seo_key'                 => $vehicle->vehicle_metakeywords,
+                            'seo_description'         => $vehicle->vehicle_metadesc,
+                            'created_at'              => $vehicle->created_at,
+                        ];
+                    });
 
-                            if (!empty($vehicle->vehicle_image)) {
-                                array_unshift($multipleImages, $vehicle->vehicle_image);
-                            }
-
-                            $multipleImages = array_map(function ($img) {
-                                $img = '/' . ltrim($img, '/'); // Ensure single leading slash
-
-                                $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
-
-                                return url('storage' . $img);
-                            }, $multipleImages);
-
-                            /** @var \App\Models\User|null $auth */
-                            $auth = current_user();
-                            $authId = $auth?->id;
-
-                            $wishlistExists = false;
-
-                            if ($authId) {
-                                $wishlistExists = Wishlist::where("user_id", $authId)
-                                    ->where("vehicle_id", $vehicle->id)
-                                    ->exists();
-                            }
-
-                            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-                            $currency = null;
-
-                            if ($currencySetting && $currencySetting->value) {
-                                $currency = Currency::find($currencySetting->value);
-                            }
-
-                            $currencySymbol = $currency->symbol ?? "$";
-
-                            $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
-
-
-                            $defaultAvatar = asset(self::DEFAULT_PROFILE);
-                            $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
-
-                            $avatarImage = $defaultAvatar;
-
-                            if ($profileImagePath) {
-                                $fullImagePath = storage_path(self::APP_PUBLIC_PATH . $profileImagePath);
-                                if (file_exists($fullImagePath)) {
-                                    $avatarImage = url(self::STORAGE_PATHS . $profileImagePath);
-                                }
-                            }
-                            return [
-                                'id'                      => $vehicle->id,
-                                'name'                    => $vehicle->name,
-                                'slug'                    => $vehicle->slug,
-                                'vehicle_image'           => url(self::STORAGE_PATHS . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
-                                'multiple_vehicle_images' => $multipleImages,
-                                'has_multiple_image'      => count($multipleImages) > 1,
-                                'avatar_image'            => $avatarImage,
-                                'brand_id'                => $vehicle->brand_id ?? null,
-                                'brand'                   => $vehicle->brand->brand_name ?? null,
-                                'car_type'                => $vehicle->carType->name ?? null,
-                                'category'                => $vehicle->category->name ?? null,
-                                'tube_type'               => Arr::random(['Tube', 'Tubeless']),
-                                'break_type'              => Arr::random(['Drum', 'Disc']),
-                                'location'                => $vehicle->mainLocation->name ?? null,
-                                'color'                   => $vehicle->color->name ?? null,
-                                'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
-                                'transmission'            => $vehicle->transmission->name ?? null,
-                                'year'                    => $vehicle->year,
-                                'mileage'                 => $vehicle->mileage,
-                                'odometer'                => $vehicle->odometer,
-                                'rating'                  => $rating,
-                                'total_review'            => Review::where("vehicle_id", $vehicle->id)->count(),
-                                'currency'                => $currencySymbol,
-                                'wishlist'                => $wishlistExists,
-                                'passenger_capacity'      => $vehicle->passenger_capacity,
-                                'num_seats'               => $vehicle->num_seats,
-                                'num_doors'               => $vehicle->num_doors,
-                                'num_airbags'             => $vehicle->num_airbags,
-                                'vehicle_video'           => $vehicle->vehicle_video,
-                                'features'                => $vehicle->features,
-                                'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
-                                'is_featured'             => $vehicle->popular,
-                                'is_top_rated'            => $vehicle->recommended,
-                                'seo_title'               => $vehicle->vehicle_metatitle,
-                                'seo_key'                 => $vehicle->vehicle_metakeywords,
-                                'seo_description'         => $vehicle->vehicle_metadesc,
-                                'created_at'              => $vehicle->created_at,
-                            ];
-                        });
-
-                        $section['section_content'] = $data;
-                    }
+                    $section['section_content'] = $data;
                 }
 
                 // Yachts
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[yachts') !== false) {
-                        preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
-                        $type = $matches[1] ?? 'all';
-                        $limit = $matches[2] ?? 10;
+                if (($section['status'] == 1) && (isset($section['section_content']) && strpos($section['section_content'], '[yachts') !== false)) {
+                    preg_match(self::TYPE_LIMIT_VIEWALL_REGEX, $section['section_content'], $matches);
+                    $type = $matches[1] ?? 'all';
+                    $limit = $matches[2] ?? 10;
 
+                    $query = VehicleInfo::with([
+                        self::CAR_TYPE_SELECT,
+                        self::BRAND_SELECT,
+                        self::CATEGORY_SELECT,
+                        self::MAIN_LOCATION_SELECT,
+                        self::COLOR_SELECT,
+                        self::FUEL_TYPE_SELECT,
+                        self::TRANSMISSION_SELECT,
+                    ])->where('language_id', $lang_id);
 
-                        $query = VehicleInfo::with([
-                            self::CAR_TYPE_SELECT,
-                            self::BRAND_SELECT,
-                            self::CATEGORY_SELECT,
-                            self::MAIN_LOCATION_SELECT,
-                            self::COLOR_SELECT,
-                            self::FUEL_TYPE_SELECT,
-                            self::TRANSMISSION_SELECT,
-                        ])->where('language_id', $lang_id);
+                    if ($type === 'popular') {
+                        $getCategoryId = getCategoryId();
+                        $brands = DB::table('brands')
+                            ->select('id', 'brand_image', 'brand_icon', 'brand_name', 'status')
+                            ->where('category_id', $getCategoryId)
+                            ->where('language_id', $lang_id)
+                            ->where('status', 1)
+                            ->whereNull('deleted_at')
+                            ->orderBy('created_at', $order)
+                            ->limit($limit)
+                            ->get()
+                            ->map(function ($brand) {
+                                $brand->brand_image = asset(self::STORAGE_PATH . $brand->brand_image);
+                                $brand->brand_icon = asset(self::STORAGE_PATH . $brand->brand_icon);
+                                $brand->brand_title = "Select From Professional Charter Companies";
+                                return $brand;
+                            });
+                        $vehicles = $query->where('popular', 1)->where('type', 'boat')->get();
+                        $section['section_type'] = 'popular_vehicle';
+                        $section['design'] = 'vehicle_one';
+                    } elseif ($type === 'featured') {
+                        $vehicles = $query->where('recommended', 1)->where('type', 'boat')->get();
+                        $section['section_type'] = 'feature_vehicle';
+                        $section['design'] = 'vehicle_two';
+                    } else {
+                        $vehicles = $query->where('type', 'boat')->get();
+                        $section['section_type'] = 'al_vehicle';
+                        $section['design'] = 'vehicle_three';
+                    }
 
-                        if ($type === 'popular') {
-                            $getCategoryId = getCategoryId();
-                            $brands = DB::table('brands')
-                                ->select('id', 'brand_image', 'brand_icon', 'brand_name', 'status')
-                                ->where('category_id', $getCategoryId)
-                                ->where('language_id', $lang_id)
-                                ->where('status', 1)
-                                ->whereNull('deleted_at')
-                                ->orderBy('created_at', $order)
-                                ->limit($limit)
-                                ->get()
-                                ->map(function ($brand) {
-                                    $brand->brand_image = asset(self::STORAGE_PATH . $brand->brand_image);
-                                    $brand->brand_icon = asset(self::STORAGE_PATH . $brand->brand_icon);
-                                    $brand->brand_title = "Select From Professional Charter Companies";
-                                    return $brand;
+                    $data = $vehicles->map(function ($vehicle) {
+                        $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
+                            ->where('key', 'vehicle_image')
+                            ->first();
+
+                        $vehiclePrices = $vehicle->vehicle_price ? json_decode($vehicle->vehicle_price, true) : [];
+                        $filteredPrices = [];
+
+                        if (!empty($vehiclePrices)) {
+                            foreach ($vehiclePrices as $price) {
+                                $filteredPrice = array_filter($price, function ($value) {
+                                    return $value > 0; // Only keep values greater than 0
                                 });
-                            $vehicles = $query->where('popular', 1)->where('type', 'boat')->get();
-                            $section['section_type'] = 'popular_vehicle';
-                            $section['design'] = 'vehicle_one';
-                        } elseif ($type === 'featured') {
-                            $vehicles = $query->where('recommended', 1)->where('type', 'boat')->get();
-                            $section['section_type'] = 'feature_vehicle';
-                            $section['design'] = 'vehicle_two';
-                        } else {
-                            $vehicles = $query->where('type', 'boat')->get();
-                            $section['section_type'] = 'al_vehicle';
-                            $section['design'] = 'vehicle_three';
+
+                                if (!empty($filteredPrice)) {
+                                    $filteredPrices[] = $filteredPrice;
+                                }
+                            }
+                        }
+                        $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+
+                        if (!empty($vehicle->vehicle_image)) {
+                            array_unshift($multipleImages, $vehicle->vehicle_image);
                         }
 
-                        $data = $vehicles->map(function ($vehicle) {
-                            $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
-                                ->where('key', 'vehicle_image')
-                                ->first();
+                        $multipleImages = array_map(function ($img) {
+                            $img = '/' . ltrim($img, '/'); // Ensure single leading slash
 
-                            $vehiclePrices = $vehicle->vehicle_price ? json_decode($vehicle->vehicle_price, true) : [];
-                            $filteredPrices = [];
+                            $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
 
-                            if (!empty($vehiclePrices)) {
-                                foreach ($vehiclePrices as $price) {
-                                    $filteredPrice = array_filter($price, function ($value) {
-                                        return $value > 0; // Only keep values greater than 0
-                                    });
+                            return url('storage' . $img);
+                        }, $multipleImages);
 
-                                    if (!empty($filteredPrice)) {
-                                        $filteredPrices[] = $filteredPrice;
-                                    }
-                                }
+                        /** @var \App\Models\User|null $auth */
+                        $auth = current_user();
+                        $authId = $auth?->id;
+
+                        $wishlistExists = false;
+
+                        if ($authId) {
+                            $wishlistExists = Wishlist::where("user_id", $authId)
+                                ->where("vehicle_id", $vehicle->id)
+                                ->exists();
+                        }
+
+                        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+                        $currency = null;
+
+                        if ($currencySetting && $currencySetting->value) {
+                            $currency = Currency::find($currencySetting->value);
+                        }
+
+                        $currencySymbol = $currency->symbol ?? "$";
+
+                        $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
+
+
+                        $defaultAvatar = asset(self::DEFAULT_PROFILE);
+                        $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
+
+                        $avatarImage = $defaultAvatar;
+
+                        if ($profileImagePath) {
+                            $fullImagePath = storage_path(self::APP_PUBLIC_PATH . $profileImagePath);
+                            if (file_exists($fullImagePath)) {
+                                $avatarImage = url(self::STORAGE_PATHS . $profileImagePath);
                             }
-                            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
-
-                            if (!empty($vehicle->vehicle_image)) {
-                                array_unshift($multipleImages, $vehicle->vehicle_image);
-                            }
-
-                            $multipleImages = array_map(function ($img) {
-                                $img = '/' . ltrim($img, '/'); // Ensure single leading slash
-
-                                $img = str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $img);
-
-                                return url('storage' . $img);
-                            }, $multipleImages);
-
-                            /** @var \App\Models\User|null $auth */
-                            $auth = current_user();
-                            $authId = $auth?->id;
-
-                            $wishlistExists = false;
-
-                            if ($authId) {
-                                $wishlistExists = Wishlist::where("user_id", $authId)
-                                    ->where("vehicle_id", $vehicle->id)
-                                    ->exists();
-                            }
-
-                            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-                            $currency = null;
-
-                            if ($currencySetting && $currencySetting->value) {
-                                $currency = Currency::find($currencySetting->value);
-                            }
-
-                            $currencySymbol = $currency->symbol ?? "$";
-
-                            $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
-
-
-                            $defaultAvatar = asset(self::DEFAULT_PROFILE);
-                            $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
-
-                            $avatarImage = $defaultAvatar;
-
-                            if ($profileImagePath) {
-                                $fullImagePath = storage_path(self::APP_PUBLIC_PATH . $profileImagePath);
-                                if (file_exists($fullImagePath)) {
-                                    $avatarImage = url(self::STORAGE_PATHS . $profileImagePath);
-                                }
-                            }
-                            return [
-                                'id'                      => $vehicle->id,
-                                'name'                    => $vehicle->name,
-                                'slug'                    => $vehicle->slug,
-                                'vehicle_image'           => url(self::STORAGE_PATHS . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
-                                'multiple_vehicle_images' => $multipleImages,
-                                'has_multiple_image'      => count($multipleImages) > 1,
-                                'avatar_image'            => $avatarImage,
-                                'brand_id'                => $vehicle->brand_id ?? null,
-                                'brand'                   => $vehicle->brand->brand_name ?? null,
-                                'car_type'                => $vehicle->carType->name ?? null,
-                                'category'                => $vehicle->category->name ?? null,
-                                'tube_type'               => Arr::random(['Tube', 'Tubeless']),
-                                'break_type'              => Arr::random(['Drum', 'Disc']),
-                                'location'                => $vehicle->mainLocation->name ?? null,
-                                'color'                   => $vehicle->color->name ?? null,
-                                'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
-                                'transmission'            => $vehicle->transmission->name ?? null,
-                                'year'                    => $vehicle->year,
-                                'mileage'                 => $vehicle->mileage,
-                                'odometer'                => $vehicle->odometer,
-                                'rating'                  => $rating,
-                                'total_review'            => Review::where("vehicle_id", $vehicle->id)->count(),
-                                'currency'                => $currencySymbol,
-                                'wishlist'                => $wishlistExists,
-                                'passenger_capacity'      => $vehicle->passenger_capacity,
-                                'num_seats'               => $vehicle->num_seats,
-                                'num_doors'               => $vehicle->num_doors,
-                                'num_airbags'             => $vehicle->num_airbags,
-                                'vehicle_video'           => $vehicle->vehicle_video,
-                                'features'                => $vehicle->features,
-                                'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
-                                'is_featured'             => $vehicle->popular,
-                                'is_top_rated'            => $vehicle->recommended,
-                                'seo_title'               => $vehicle->vehicle_metatitle,
-                                'seo_key'                 => $vehicle->vehicle_metakeywords,
-                                'seo_description'         => $vehicle->vehicle_metadesc,
-                                'created_at'              => $vehicle->created_at,
-                            ];
-                        });
-
-                        $section['section_content'] = [
-                            'brands'   => $brands,
-                            'vehicles' => $data,
+                        }
+                        return [
+                            'id'                      => $vehicle->id,
+                            'name'                    => $vehicle->name,
+                            'slug'                    => $vehicle->slug,
+                            'vehicle_image'           => url(self::STORAGE_PATHS . str_replace(self::VEHICLE_IMAGE, self::VEHICLE_IMAGE_SMALL, $vehicle->vehicle_image)),
+                            'multiple_vehicle_images' => $multipleImages,
+                            'has_multiple_image'      => count($multipleImages) > 1,
+                            'avatar_image'            => $avatarImage,
+                            'brand_id'                => $vehicle->brand_id ?? null,
+                            'brand'                   => $vehicle->brand->brand_name ?? null,
+                            'car_type'                => $vehicle->carType->name ?? null,
+                            'category'                => $vehicle->category->name ?? null,
+                            'tube_type'               => Arr::random(['Tube', 'Tubeless']),
+                            'break_type'              => Arr::random(['Drum', 'Disc']),
+                            'location'                => $vehicle->mainLocation->name ?? null,
+                            'color'                   => $vehicle->color->name ?? null,
+                            'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
+                            'transmission'            => $vehicle->transmission->name ?? null,
+                            'year'                    => $vehicle->year,
+                            'mileage'                 => $vehicle->mileage,
+                            'odometer'                => $vehicle->odometer,
+                            'rating'                  => $rating,
+                            'total_review'            => Review::where("vehicle_id", $vehicle->id)->count(),
+                            'currency'                => $currencySymbol,
+                            'wishlist'                => $wishlistExists,
+                            'passenger_capacity'      => $vehicle->passenger_capacity,
+                            'num_seats'               => $vehicle->num_seats,
+                            'num_doors'               => $vehicle->num_doors,
+                            'num_airbags'             => $vehicle->num_airbags,
+                            'vehicle_video'           => $vehicle->vehicle_video,
+                            'features'                => $vehicle->features,
+                            'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
+                            'is_featured'             => $vehicle->popular,
+                            'is_top_rated'            => $vehicle->recommended,
+                            'seo_title'               => $vehicle->vehicle_metatitle,
+                            'seo_key'                 => $vehicle->vehicle_metakeywords,
+                            'seo_description'         => $vehicle->vehicle_metadesc,
+                            'created_at'              => $vehicle->created_at,
                         ];
-                    }
+                    });
+
+                    $section['section_content'] = [
+                        'brands'   => $brands,
+                        'vehicles' => $data,
+                    ];
                 }
 
                 // Car Type
@@ -1548,7 +1535,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[ad_card') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
@@ -1620,9 +1607,8 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[why_us') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $whyus = DB::table('sections')
@@ -1685,9 +1671,8 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[exclusive_bike') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $whyus = DB::table('sections')
@@ -1745,7 +1730,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[seasonal_card') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $order = $matches[3] ?? 'asc';
 
@@ -1801,7 +1786,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[offer_card') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $order = $matches[3] ?? 'asc';
 
@@ -1857,7 +1842,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[yart_benefit') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
@@ -1943,7 +1928,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[experience') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $order = $matches[3] ?? 'asc';
 
@@ -2001,7 +1986,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[blog') !== false) {
-                        preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
+                        preg_match(self::TYPE_LIMIT_VIEWALL_REGEX, $content, $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
 
@@ -2046,10 +2031,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[search') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
-                        $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         // Provide static content
                         $section['section_type'] = 'search_section';
@@ -2067,10 +2049,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[marquee') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
-                        $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $page = Page::select("keywords")->where("slug", $slug)->where("language_id", $lang_id)->first();
 
@@ -2103,7 +2082,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[second_card') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $order = $matches[3] ?? 'asc';
 
@@ -2156,7 +2135,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[exclusive_yacht ') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $order = $matches[3] ?? 'asc';
 
@@ -2324,10 +2303,9 @@ class PageController extends Controller
                     is_string($section['section_content']) &&
                     strpos($section['section_content'], '[all_category ') !== false
                 ) {
-                    preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                    preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
 
                     $limit = $matches[1] ?? 12;
-                    $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
 
                     $allCategory = Cartype::select('name', 'id')
@@ -2335,6 +2313,7 @@ class PageController extends Controller
                         ->where('status', 1)
                         ->where('language_id', $lang_id)
                         ->whereNull('deleted_at')
+                        ->orderBy('name', $order)
                         ->get()
                         ->map(fn ($cartype) => ['id' => $cartype->id, 'name' => $cartype->name]);
 
@@ -2348,10 +2327,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[facts') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
-                        $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $userCount = User::count(); // Get total users
                         $vehicleCount = VehicleInfo::count(); // Get total vehicles
@@ -2371,11 +2347,12 @@ class PageController extends Controller
                     }
                 }
 
-                if (isset($section['section_content']) && is_string($section['section_content'])) {
-                    if (preg_match('/\[[^\]]+\]/', $section['section_content']) === 0) {
-                        $section['section_content'] = $section['section_content'];
-                        $section['section_type'] = 'multiple_section';
-                    }
+                if ((isset($section['section_content']) &&
+                    is_string($section['section_content'])) &&
+                    (preg_match('/\[[^\]]+\]/', $section['section_content']) === 0)
+                ) {
+                    $section['section_content'] = $section['section_content'];
+                    $section['section_type'] = 'multiple_section';
                 }
             }
         }
@@ -2439,15 +2416,21 @@ class PageController extends Controller
 
             $content_sections = collect((array) $data['content_sections']);
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
-                return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
+                $returnResponse = response()->json([
+                    'code' => "200",
+                    'message' => __('Page details retrieved successfully.'),
+                    'data' => $data
+                ], 200);
             } else {
                 $viewPath = 'frontend.home.home_' . $themeId;
                 if (!view()->exists($viewPath)) {
                     $viewPath = 'frontend.home.home_1';
                 }
 
-                return view($viewPath, compact('data', 'content_sections', 'vehicleBrand', 'seo_title', 'seo_description', 'og_title', 'og_description', 'meta_keywords'));
+                $returnResponse = view($viewPath, compact('data', 'content_sections', 'vehicleBrand', 'seo_title', 'seo_description', 'og_title', 'og_description', 'meta_keywords'));
             }
+
+            return $returnResponse;
         } else {
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => '404', 'message' => __('Page not found.')], 404);
@@ -2506,10 +2489,9 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[banner_one') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $banners = DB::table('sections')
@@ -2553,61 +2535,58 @@ class PageController extends Controller
                 }
 
                 // Banner Two
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[banner_two') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                if (($section['status'] == 1) && (isset($section['section_content']) && strpos($section['section_content'], '[banner_two') !== false)) {
+                    preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
 
-                        // Ensure $limit is cast to an integer
-                        $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
+                    // Ensure $limit is cast to an integer
+                    $limit = (int)($matches[1] ?? 10);
+                    $order = $matches[3] ?? 'asc';
 
-                        // Fetch from sections + section_datas with language-specific data
-                        $banners = DB::table('sections')
-                            ->join('section_datas', function ($join) use ($lang_id) {
-                                $join->on('sections.id', '=', 'section_datas.section_id')
-                                    ->where('section_datas.language_id', '=', $lang_id);
-                            })
-                            ->select('sections.id', 'section_datas.datas')
-                            ->where('sections.name', 'Banner Two')
-                            ->orderBy('sections.id', $order)
-                            ->limit($limit)  // Ensure $limit is an integer
-                            ->get();
+                    // Fetch from sections + section_datas with language-specific data
+                    $banners = DB::table('sections')
+                        ->join('section_datas', function ($join) use ($lang_id) {
+                            $join->on('sections.id', '=', 'section_datas.section_id')
+                                ->where('section_datas.language_id', '=', $lang_id);
+                        })
+                        ->select('sections.id', 'section_datas.datas')
+                        ->where('sections.name', 'Banner Two')
+                        ->orderBy('sections.id', $order)
+                        ->limit($limit)  // Ensure $limit is an integer
+                        ->get();
 
-                        $userCount = User::count();
+                    $userCount = User::count();
 
-                        foreach ($banners as &$banner) {
-                            $decodedData = json_decode($banner->datas, true);
+                    foreach ($banners as &$banner) {
+                        $decodedData = json_decode($banner->datas, true);
 
-                            $banner->label = $decodedData['label_two'] ?? null;
-                            $banner->description = $decodedData['description_two'] ?? null;
+                        $banner->label = $decodedData['label_two'] ?? null;
+                        $banner->description = $decodedData['description_two'] ?? null;
 
-                            $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_two'] ?? '');
-                            $defaultImage = asset('backend/assets/img/car/car-right.png');
-                            $thumbnailKey = 'thumbnail_image_two';
+                        $relativePath = self::STORAGE_PATH . ($decodedData['thumbnail_image_two'] ?? '');
+                        $defaultImage = asset('backend/assets/img/car/car-right.png');
+                        $thumbnailKey = 'thumbnail_image_two';
 
-                            $banner->thumbnail_image = (
-                                isset($decodedData[$thumbnailKey]) &&
-                                !empty($decodedData[$thumbnailKey]) &&
-                                file_exists(public_path($relativePath))
-                            ) ? asset($relativePath) : $defaultImage;
+                        $banner->thumbnail_image = (
+                            isset($decodedData[$thumbnailKey]) &&
+                            !empty($decodedData[$thumbnailKey]) &&
+                            file_exists(public_path($relativePath))
+                        ) ? asset($relativePath) : $defaultImage;
 
-                            $banner->customer_count = $userCount;
+                        $banner->customer_count = $userCount;
 
-                            $banner->customer_images = [
-                                asset(self::DEFAULT_AVATAR_01),
-                                asset(self::DEFAULT_AVATAR_02),
-                                asset(self::DEFAULT_AVATAR_03),
-                            ];
+                        $banner->customer_images = [
+                            asset(self::DEFAULT_AVATAR_01),
+                            asset(self::DEFAULT_AVATAR_02),
+                            asset(self::DEFAULT_AVATAR_03),
+                        ];
 
-                            unset($banner->datas);
-                        }
-
-                        $section['section_type'] = 'banner_two';
-                        $section['type'] = 'banner_two';
-                        $section['design'] = 'banner_two';
-                        $section['section_content'] = $banners;
+                        unset($banner->datas);
                     }
+
+                    $section['section_type'] = 'banner_two';
+                    $section['type'] = 'banner_two';
+                    $section['design'] = 'banner_two';
+                    $section['section_content'] = $banners;
                 }
 
                 // BestVehicle
@@ -2615,10 +2594,9 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[bestVehicle') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $best_vehicles = DB::table('sections')
@@ -2684,9 +2662,8 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[brand') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = (int)($matches[1] ?? 10);
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $brands = DB::table('brands')
@@ -2710,40 +2687,38 @@ class PageController extends Controller
                 }
 
                 // Category section
-                if (is_array($section) && ($section['status'] ?? 0) == 1) {
-                    if (
-                        isset($section['section_content']) &&
-                        is_string($section['section_content']) &&
-                        strpos($section['section_content'], '[category ') !== false
-                    ) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 6;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
-                        $categoryId = getCategoryId();
-                        $category = Cartype::select('name', 'icon', 'id')
-                            ->limit((int) $limit)
-                            ->where('language_id', $lang_id)
-                            ->where('category_id', $categoryId)
-                            ->where('status', 1)
-                            ->whereNull('deleted_at')
-                            ->get()
-                            ->map(function ($cartype) use ($lang_id) {
-                                $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
-                                    ->where('language_id', $lang_id)
-                                    ->count();
+                if ((is_array($section) && ($section['status'] ?? 0) == 1) &&
+                    (isset($section['section_content']) &&
+                    is_string($section['section_content']) &&
+                    strpos($section['section_content'], '[category ') !== false
+                )) {
+                    preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
+                    $limit = $matches[1] ?? 6;
+                    $order = $matches[3] ?? 'asc';
+                    $categoryId = getCategoryId();
+                    $category = Cartype::select('name', 'icon', 'id')
+                        ->limit((int) $limit)
+                        ->where('language_id', $lang_id)
+                        ->where('category_id', $categoryId)
+                        ->where('status', 1)
+                        ->whereNull('deleted_at')
+                        ->orderBy('created_at', $order)
+                        ->get()
+                        ->map(function ($cartype) use ($lang_id) {
+                            $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
+                                ->where('language_id', $lang_id)
+                                ->count();
 
-                                $cartype->image_url = $cartype->icon
-                                    ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
-                                    : asset(self::DEFAULT_IMAGE);
+                            $cartype->image_url = $cartype->icon
+                                ? asset(self::STORAGE_PATH . ltrim($cartype->icon, '/'))
+                                : asset(self::DEFAULT_IMAGE);
 
-                                return $cartype;
-                            });
+                            return $cartype;
+                        });
 
-                        $section['section_type'] = 'featured_category';
-                        $section['design'] = 'category_one';
-                        $section['section_content'] = $category;
-                    }
+                    $section['section_type'] = 'featured_category';
+                    $section['design'] = 'category_one';
+                    $section['section_content'] = $category;
                 }
 
                 // FAQ Section
@@ -2751,9 +2726,8 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[faq') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $faqs = DB::table('faqs')
@@ -2776,9 +2750,8 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[how_it_work') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $how_it_works = DB::table('general_settings')->select('id', 'key', 'value', 'group_id')
@@ -2795,139 +2768,137 @@ class PageController extends Controller
                 }
 
                 // Vechile
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[vehicle') !== false) {
-                        preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
-                        $type = $matches[1] ?? 'all';
+                if (($section['status'] == 1) && (isset($section['section_content']) && strpos($section['section_content'], '[vehicle') !== false)) {
+                    preg_match(self::TYPE_LIMIT_VIEWALL_REGEX, $section['section_content'], $matches);
+                    $type = $matches[1] ?? 'all';
 
 
-                        $query = VehicleInfo::with([
-                            self::CAR_TYPE_SELECT,
-                            self::BRAND_SELECT,
-                            self::CATEGORY_SELECT,
-                            self::MAIN_LOCATION_SELECT,
-                            self::COLOR_SELECT,
-                            self::FUEL_TYPE_SELECT,
-                            self::TRANSMISSION_SELECT,
-                        ])->where('language_id', $lang_id);
+                    $query = VehicleInfo::with([
+                        self::CAR_TYPE_SELECT,
+                        self::BRAND_SELECT,
+                        self::CATEGORY_SELECT,
+                        self::MAIN_LOCATION_SELECT,
+                        self::COLOR_SELECT,
+                        self::FUEL_TYPE_SELECT,
+                        self::TRANSMISSION_SELECT,
+                    ])->where('language_id', $lang_id);
 
-                        if ($type === 'popular') {
-                            $vehicles = $query->where('popular', 1)->get();
-                            $section['section_type'] = 'popular_vehicle';
-                            $section['design'] = 'vehicle_one';
-                        } elseif ($type === 'featured') {
-                            $vehicles = $query->where('recommended', 1)->get();
-                            $section['section_type'] = 'feature_vehicle';
-                            $section['design'] = 'vehicle_two';
-                        } else {
-                            $vehicles = $query->get();
-                            $section['section_type'] = 'al_vehicle';
-                            $section['design'] = 'vehicle_three';
-                        }
+                    if ($type === 'popular') {
+                        $vehicles = $query->where('popular', 1)->get();
+                        $section['section_type'] = 'popular_vehicle';
+                        $section['design'] = 'vehicle_one';
+                    } elseif ($type === 'featured') {
+                        $vehicles = $query->where('recommended', 1)->get();
+                        $section['section_type'] = 'feature_vehicle';
+                        $section['design'] = 'vehicle_two';
+                    } else {
+                        $vehicles = $query->get();
+                        $section['section_type'] = 'al_vehicle';
+                        $section['design'] = 'vehicle_three';
+                    }
 
-                        $data = $vehicles->map(function ($vehicle) {
-                            $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
-                                ->where('key', 'vehicle_image')
-                                ->first();
+                    $data = $vehicles->map(function ($vehicle) {
+                        $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
+                            ->where('key', 'vehicle_image')
+                            ->first();
 
-                            $vehiclePrices = $vehicle->vehicle_price ? json_decode($vehicle->vehicle_price, true) : [];
-                            $filteredPrices = [];
+                        $vehiclePrices = $vehicle->vehicle_price ? json_decode($vehicle->vehicle_price, true) : [];
+                        $filteredPrices = [];
 
-                            if (!empty($vehiclePrices)) {
-                                foreach ($vehiclePrices as $price) {
-                                    $filteredPrice = array_filter($price, function ($value) {
-                                        return $value > 0; // Only keep values greater than 0
-                                    });
+                        if (!empty($vehiclePrices)) {
+                            foreach ($vehiclePrices as $price) {
+                                $filteredPrice = array_filter($price, function ($value) {
+                                    return $value > 0; // Only keep values greater than 0
+                                });
 
-                                    if (!empty($filteredPrice)) {
-                                        $filteredPrices[] = $filteredPrice;
-                                    }
+                                if (!empty($filteredPrice)) {
+                                    $filteredPrices[] = $filteredPrice;
                                 }
                             }
-                            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
-                            if (!empty($vehicle->vehicle_image)) {
-                                array_unshift($multipleImages, $vehicle->vehicle_image);
-                            }
-                            $multipleImages = array_map(fn ($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
+                        }
+                        $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+                        if (!empty($vehicle->vehicle_image)) {
+                            array_unshift($multipleImages, $vehicle->vehicle_image);
+                        }
+                        $multipleImages = array_map(fn ($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
 
-                            /** @var \App\Models\User|null $auth */
-                            $auth = current_user();
-                            $authId = $auth?->id;
+                        /** @var \App\Models\User|null $auth */
+                        $auth = current_user();
+                        $authId = $auth?->id;
 
-                            $wishlistExists = false;
+                        $wishlistExists = false;
 
-                            if ($authId) {
-                                $wishlistExists = Wishlist::where("user_id", $authId)
-                                    ->where("vehicle_id", $vehicle->id)
-                                    ->exists();
-                            }
+                        if ($authId) {
+                            $wishlistExists = Wishlist::where("user_id", $authId)
+                                ->where("vehicle_id", $vehicle->id)
+                                ->exists();
+                        }
 
-                            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-                            $currency = null;
+                        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+                        $currency = null;
 
-                            if ($currencySetting && $currencySetting->value) {
-                                $currency = Currency::find($currencySetting->value);
-                            }
+                        if ($currencySetting && $currencySetting->value) {
+                            $currency = Currency::find($currencySetting->value);
+                        }
 
-                            $currencySymbol = $currency->symbol ?? "$";
+                        $currencySymbol = $currency->symbol ?? "$";
 
-                            $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
+                        $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
-                            $user = User::where('id', $vehicle->created_by)
-                                ->first();
+                        $user = User::where('id', $vehicle->created_by)
+                            ->first();
 
-                            $user = User::where('id', $vehicle->created_by)->first();
-                            $userDetail = null;
-                            $userProfileImg = null;
+                        $user = User::where('id', $vehicle->created_by)->first();
+                        $userDetail = null;
+                        $userProfileImg = null;
 
-                            if ($user) {
-                                $userDetail = UserDetail::where("user_id", $user->id)->first();
+                        if ($user) {
+                            $userDetail = UserDetail::where("user_id", $user->id)->first();
 
-                                $userProfileImg = $userDetail && $userDetail->profile_image
-                                    ? url(self::STORAGE_PATHS . $userDetail->profile_image)
-                                    : null;
-                            }
+                            $userProfileImg = $userDetail && $userDetail->profile_image
+                                ? url(self::STORAGE_PATHS . $userDetail->profile_image)
+                                : null;
+                        }
 
-                            return [
-                                'id'                      => $vehicle->id,
-                                'name'                    => $vehicle->name,
-                                'slug'                    => $vehicle->slug,
-                                'vehicle_image'           => url(self::STORAGE_PATHS . $vehicle->vehicle_image),
-                                'multiple_vehicle_images' => $multipleImages,
-                                'has_multiple_image'      => count($multipleImages) > 1,
-                                'avatar_image'            => $userProfileImg ?? null,
-                                'brand_id'                => $vehicle->brand_id ?? null,
-                                'brand'                   => $vehicle->brand->brand_name ?? null,
-                                'car_type'                => $vehicle->carType->name ?? null,
-                                'category'                => $vehicle->category->name ?? null,
-                                'location'                => $vehicle->mainLocation->name ?? null,
-                                'color'                   => $vehicle->color->name ?? null,
-                                'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
-                                'transmission'            => $vehicle->transmission->name ?? null,
-                                'year'                    => $vehicle->year,
-                                'mileage'                 => $vehicle->mileage,
-                                'odometer'                => $vehicle->odometer,
-                                'rating'                  => $rating,
-                                'currency'                => $currencySymbol,
-                                'wishlist'                => $wishlistExists,
-                                'passenger_capacity'      => $vehicle->passenger_capacity,
-                                'num_seats'               => $vehicle->num_seats,
-                                'num_doors'               => $vehicle->num_doors,
-                                'num_airbags'             => $vehicle->num_airbags,
-                                'vehicle_video'           => $vehicle->vehicle_video,
-                                'features'                => $vehicle->features,
-                                'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
-                                'is_featured'             => $vehicle->popular,
-                                'is_top_rated'            => $vehicle->recommended,
-                                'seo_title'               => $vehicle->vehicle_metatitle,
-                                'seo_key'                 => $vehicle->vehicle_metakeywords,
-                                'seo_description'         => $vehicle->vehicle_metadesc,
-                                'created_at'              => $vehicle->created_at,
-                            ];
-                        });
+                        return [
+                            'id'                      => $vehicle->id,
+                            'name'                    => $vehicle->name,
+                            'slug'                    => $vehicle->slug,
+                            'vehicle_image'           => url(self::STORAGE_PATHS . $vehicle->vehicle_image),
+                            'multiple_vehicle_images' => $multipleImages,
+                            'has_multiple_image'      => count($multipleImages) > 1,
+                            'avatar_image'            => $userProfileImg ?? null,
+                            'brand_id'                => $vehicle->brand_id ?? null,
+                            'brand'                   => $vehicle->brand->brand_name ?? null,
+                            'car_type'                => $vehicle->carType->name ?? null,
+                            'category'                => $vehicle->category->name ?? null,
+                            'location'                => $vehicle->mainLocation->name ?? null,
+                            'color'                   => $vehicle->color->name ?? null,
+                            'fuel_type'               => $vehicle->fuel_type->fuel_type ?? null,
+                            'transmission'            => $vehicle->transmission->name ?? null,
+                            'year'                    => $vehicle->year,
+                            'mileage'                 => $vehicle->mileage,
+                            'odometer'                => $vehicle->odometer,
+                            'rating'                  => $rating,
+                            'currency'                => $currencySymbol,
+                            'wishlist'                => $wishlistExists,
+                            'passenger_capacity'      => $vehicle->passenger_capacity,
+                            'num_seats'               => $vehicle->num_seats,
+                            'num_doors'               => $vehicle->num_doors,
+                            'num_airbags'             => $vehicle->num_airbags,
+                            'vehicle_video'           => $vehicle->vehicle_video,
+                            'features'                => $vehicle->features,
+                            'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
+                            'is_featured'             => $vehicle->popular,
+                            'is_top_rated'            => $vehicle->recommended,
+                            'seo_title'               => $vehicle->vehicle_metatitle,
+                            'seo_key'                 => $vehicle->vehicle_metakeywords,
+                            'seo_description'         => $vehicle->vehicle_metadesc,
+                            'created_at'              => $vehicle->created_at,
+                        ];
+                    });
 
-                        $section['section_content'] = $data;
-                    }
+                    $section['section_content'] = $data;
                 }
 
                 // Car Type
@@ -2996,10 +2967,9 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[ad_card') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
                         $how_it_works = DB::table('general_settings')
                             ->select('key', 'value')
@@ -3062,14 +3032,14 @@ class PageController extends Controller
                         $section['section_content'] = $how_it_works;
                     }
                 }
+
                 // Why Choose us Section
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[why_us') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $section['section_type'] = 'why_us_section';
@@ -3087,7 +3057,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[blog') !== false) {
-                        preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
+                        preg_match(self::TYPE_LIMIT_VIEWALL_REGEX, $content, $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
 
@@ -3132,10 +3102,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[search') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
-                        $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         // Provide static content
                         $section['section_type'] = 'search_section';
@@ -3153,10 +3120,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[marquee') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
-                        $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $page = Page::select("keywords")->where("slug", $slug)->where("language_id", $lang_id)->first();
 
@@ -3192,10 +3156,9 @@ class PageController extends Controller
                     is_string($section['section_content']) &&
                     strpos($section['section_content'], '[all_category ') !== false
                 ) {
-                    preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                    preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
 
                     $limit = $matches[1] ?? 12;
-                    $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
 
                     $allCategory = Cartype::select('name', 'id')
@@ -3203,6 +3166,7 @@ class PageController extends Controller
                         ->where('status', 1)
                         ->where('language_id', $lang_id)
                         ->whereNull('deleted_at')
+                        ->orderBy('name', $order)
                         ->get()
                         ->map(fn ($cartype) => ['id' => $cartype->id, 'name' => $cartype->name]);
 
@@ -3216,10 +3180,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[facts') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
-                        $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
+                        preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $userCount = User::count(); // Get total users
                         $vehicleCount = VehicleInfo::count(); // Get total vehicles
@@ -3239,11 +3200,12 @@ class PageController extends Controller
                     }
                 }
 
-                if (isset($section['section_content']) && is_string($section['section_content'])) {
-                    if (preg_match('/\[[^\]]+\]/', $section['section_content']) === 0) {
-                        $section['section_content'] = $section['section_content'];
-                        $section['section_type'] = 'multiple_section';
-                    }
+                if ((isset($section['section_content']) &&
+                    is_string($section['section_content'])) &&
+                    (preg_match('/\[[^\]]+\]/', $section['section_content']) === 0)
+                ) {
+                    $section['section_content'] = $section['section_content'];
+                    $section['section_type'] = 'multiple_section';
                 }
             }
         }
