@@ -6,8 +6,8 @@
 <div class="page-wrapper">
     <div class="content pb-0">
         <x-admin.breadcrumb :title="__('admin.others.chat')" :breadcrumbs="[
-					__('admin.others.chat') => ''
-				]" />
+                    __('admin.others.chat') => ''
+                ]" />
         <div class="chat-wrapper">
             <!-- Chats sidebar -->
             <div class="sidebar-group">

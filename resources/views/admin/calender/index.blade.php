@@ -19,19 +19,19 @@
         <div class="row">
             <div class="col-md-10">
                 <ul class="nav nav-tabs nav-tabs-solid custom-nav-tabs bg-transparent mb-3" id="bookingStatusFilter">
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
                         <a class="nav-link active" role="tab" aria-selected="true">{{ __('admin.bookings.all_bookings') }}</a>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
                         <a class="nav-link" role="tab" aria-selected="false">{{ __('admin.common.in_progress') }}</a>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
                         <a class="nav-link" role="tab" aria-selected="false">{{ __('admin.common.confirmed') }}</a>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
                         <a class="nav-link" role="tab" aria-selected="false">{{ __('admin.common.completed') }}</a>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
                         <a class="nav-link" role="tab" aria-selected="false">{{ __('admin.common.rejected') }}</a>
                     </li>
                 </ul>

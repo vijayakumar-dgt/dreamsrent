@@ -7,8 +7,8 @@
 <div class="page-wrapper">
     <div class="content me-4">
         <x-admin.breadcrumb :title="__('admin.finance_accounts.payments')" :breadcrumbs="[
-					__('admin.finance_accounts.payments') => ''
-				]" />
+                    __('admin.finance_accounts.payments') => ''
+                ]" />
         <!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">
