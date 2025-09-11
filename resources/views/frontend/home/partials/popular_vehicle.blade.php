@@ -12,7 +12,7 @@
                     <div class="listing-tabs-group">
                         <ul class="nav listing-buttons gap-3" aria-label="Vehicle brands">
                             @foreach($vehicleBrand as $brand)
-                                <li class="nav-item" role="presentation">
+                                <li class="nav-item">
                                     <a
                                         class="nav-link {{ $loop->first ? 'active' : '' }}"
                                         {{ $loop->first ? 'aria-selected=true' : 'aria-selected=false' }}

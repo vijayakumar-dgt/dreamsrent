@@ -167,17 +167,17 @@ class ReviewRepository implements ReviewRepositoryInterface
             $finalData = [
                 'reviews_meta' => [
                     'avg_service_ratings'                => number_format((float) $serviceRatings, 1),
-                    'service_ratings_percentage'         => $servicePercentage . '%',
+                    'service_ratings_percentage'         => $servicePercentage,
                     'avg_location_ratings'               => number_format((float) $locationRatings, 1),
-                    'location_ratings_percentage'        => $locationPercentage . '%',
+                    'location_ratings_percentage'        => $locationPercentage,
                     'avg_facility_ratings'               => number_format((float) $facilityRatings, 1),
-                    'facility_ratings_percentage'        => $facilityPercentage . '%',
+                    'facility_ratings_percentage'        => $facilityPercentage,
                     'avg_value_for_money_ratings'        => number_format((float) $valueForMoneyRatings, 1),
-                    'value_for_money_ratings_percentage' => $valueForMoneyPercentage . '%',
+                    'value_for_money_ratings_percentage' => $valueForMoneyPercentage,
                     'avg_cleanliness_ratings'            => number_format((float) $cleanlinessRatings, 1),
-                    'cleanliness_ratings_percentage'     => $cleanlinessPercentage . '%',
+                    'cleanliness_ratings_percentage'     => $cleanlinessPercentage,
                     'overall_avg_ratings'                => number_format((float) $overallRatings, 1),
-                    'overall_ratings_percentage'         => round(((float) $overallRatings / 5) * 100, 1) . '%',
+                    'overall_ratings_percentage'         => round(((float) $overallRatings / 5) * 100, 1),
                     'rating_description'                 => $totalReviews > 0 ? $this->getRatingDescription($overallRatings) : '',
                     'total_reviews'                      => $totalReviews,
                 ],
@@ -301,9 +301,7 @@ class ReviewRepository implements ReviewRepositoryInterface
             $query->offset($request->start)->limit($request->length);
 
             $reviews = $query->get()->map(function ($item) {
-                $item->vehicle_image = is_string($item->vehicle_image) || is_null($item->vehicle_image)
-                    ? uploadedAsset($item->vehicle_image, 'profile')
-                    : uploadedAsset(null, 'profile');
+                $item->vehicle_image = uploadedAsset($item->vehicle_image ?? '');
                 return $item;
             });
 

@@ -330,37 +330,41 @@
                         </div>
                         <div class="rating-progress">
                             <div class="progress-info">
-                                <h6>{{__('web.home.service')}}</h6>
-                                <div class="progress" role="progressbar">
-                                    <div class="progress-bar bg-primary" id="service_progress"></div>
+                                <h6>{{ __('web.home.service') }}</h6>
+                                <div class="progress">
+                                    <progress class="progress-bar bg-primary w-100" id="service_progress" value="0" max="100"></progress>
                                 </div>
                                 <div class="progress-percent" id="avg_service_ratings">0.0</div>
                             </div>
+                            
                             <div class="progress-info">
                                 <h6>{{ __('web.user.location') }}</h6>
-                                <div class="progress" role="progressbar">
-                                    <div class="progress-bar bg-primary" id="location_progress"></div>
+                                <div class="progress">
+                                    <progress class="progress-bar bg-primary w-100" id="location_progress" value="0" max="100"></progress>
                                 </div>
                                 <div class="progress-percent" id="avg_location_ratings">0.0</div>
                             </div>
+                            
                             <div class="progress-info">
-                                <h6>{{__('web.home.value_for_money')}}</h6>
-                                <div class="progress" role="progressbar">
-                                    <div class="progress-bar bg-primary" id="value_for_money_progress"></div>
+                                <h6>{{ __('web.home.value_for_money') }}</h6>
+                                <div class="progress">
+                                    <progress class="progress-bar bg-primary w-100" id="value_for_money_progress" value="0" max="100"></progress>
                                 </div>
                                 <div class="progress-percent" id="avg_value_for_money_ratings">0.0</div>
                             </div>
+                            
                             <div class="progress-info">
                                 <h6>{{ __('web.home.facilities') }}</h6>
-                                <div class="progress" role="progressbar">
-                                    <div class="progress-bar bg-primary" id="facility_progress"></div>
+                                <div class="progress">
+                                    <progress class="progress-bar bg-primary w-100" id="facility_progress" value="0" max="100"></progress>
                                 </div>
                                 <div class="progress-percent" id="avg_facility_ratings">0.0</div>
                             </div>
+
                             <div class="progress-info">
                                 <h6>{{ __('web.home.cleanliness') }}</h6>
-                                <div class="progress" role="progressbar">
-                                    <div class="progress-bar bg-primary" id="cleanliness_progress"></div>
+                                <div class="progress">
+                                    <progress class="progress-bar bg-primary w-100" id="cleanliness_progress" value="0" max="100"></progress>
                                 </div>
                                 <div class="progress-percent" id="avg_cleanliness_ratings">0.0</div>
                             </div>

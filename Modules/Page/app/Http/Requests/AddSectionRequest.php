@@ -2,15 +2,15 @@
 
 namespace Modules\Page\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 
-class AddSectionRequest extends FormRequest
+class AddSectionRequest extends CustomFailedValidation
 {
     /**
      * Validation rule constants to avoid duplication
      * sonarqube(php:S1192) - Define constants instead of duplicating literals
      */
-    private const IMAGE_VALIDATION_RULE = 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048';
+    private const IMAGE_VALIDATION_RULE = 'sometimes|mimes:jpeg,png,jpg,gif,svg|max:2048';
     private const REQUIRED_MAX_50 = 'required|max:50';
     private const REQUIRED_MAX_100 = 'required|max:100';
     private const REQUIRED_MAX_200 = 'required|max:200';

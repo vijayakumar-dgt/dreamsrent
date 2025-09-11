@@ -5,7 +5,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\TranslationController;
 use App\Http\Controllers\user\auth\UserLoginRegisterController;
 use App\Http\Controllers\UserController;
@@ -35,7 +34,7 @@ Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securit
         Route::get('search-locations', 'searchLocations');
         Route::get('/contact-us', 'contactUs')->name('contact-us');
     });
-    Route::get('theme/{slug}', [ThemeController::class, 'theme'])->name('theme')->middleware('maintenance');
+    Route::get('theme/{slug}', [PageController::class, 'pageBuilderApi'])->name('theme')->middleware('maintenance');
 
     Route::middleware('maintenance')->group(function () {
         Route::get('/login', [UserLoginRegisterController::class, 'userLogin'])->name('user-login');

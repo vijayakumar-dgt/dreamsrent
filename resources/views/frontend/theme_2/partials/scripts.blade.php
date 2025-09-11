@@ -35,9 +35,9 @@
 
 @stack('scripts')
 @if($isRTL)
-	<script src="{{ asset('frontend/assets/js/script-rtl.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/script-rtl.js') }}"></script>
 @else
-	<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
 @endif
 
 <script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>

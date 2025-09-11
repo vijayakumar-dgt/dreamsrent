@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -239,8 +240,7 @@ class PageController extends Controller
                     'data'    => []
                 ];
             } catch (\Exception $e) {
-                \Log::error('Page create failed: ' . $e->getMessage());
-                // $response already set to 500 default
+                Log::error('Page create failed: ' . $e->getMessage());
             }
         }
 
@@ -342,28 +342,33 @@ class PageController extends Controller
         return $sections;
     }
 
-    public function pageBuilderApi(Request $request): View|JsonResponse
+    public function pageBuilderApi(Request $request, ?string $slug = null): View|JsonResponse
     {
-        $defaultThemeValue = GeneralSetting::where('key', 'default_theme')->first();
+        $themeId = null;
 
-        $themeId = $defaultThemeValue ? intval($defaultThemeValue->value) : 1;
+        // If slug is provided from route
+        if ($slug !== null && $slug !== '' && $slug !== '0') {
+            $number = preg_match('/(\d+)$/', $slug, $matches) ? $matches[1] : null;
+            if ($number) {
+                $themeId = intval($number);
+                $slug = '/';
+            } else {
+                abort(404);
+            }
+        }
 
-        $slug = $request->slug;
+        // If no theme ID extracted from slug, fall back to default theme
+        if (!$themeId) {
+            $defaultThemeValue = GeneralSetting::where('key', 'default_theme')->first();
+            $themeId = $defaultThemeValue ? intval($defaultThemeValue->value) : 1;
+        }
+
+        // Get slug from request if not set
+        $slug = $slug ?? $request->slug ?? '/';
 
         $authUser = current_user();
+        $lang_id = getLanguageId(app()->getLocale());
 
-        $lang_id = null;
-
-        if ($authUser && !empty($authUser->language_id)) {
-            $lang_id = $authUser->language_id;
-        } elseif (App::getLocale()) {
-            $currentLocale = App::getLocale();
-            $language = TranslationLanguage::where('code', $currentLocale)->first();
-            $lang_id = $language->id ?? null;
-        } else {
-            $defaultLang = Language::select("language_id")->where("default", 1)->first();
-            $lang_id = $defaultLang->language_id ?? 1;
-        }
         if (in_array($themeId, [1, 2, 3, 4], true) && ($slug === null || $slug === '/')) {
             $slug = match ((int)$themeId) {
                 1 => 'home-screen-one',
@@ -387,7 +392,7 @@ class PageController extends Controller
         }
 
         if (!$page) {
-            return response()->json(['code' => 404, 'message' => __('Page not found.'), 'data' => []], 404);
+            abort(404);
         }
 
         $pageContentSections = json_decode($page->page_content ?? '[]', true) ?? [];
@@ -2436,9 +2441,7 @@ class PageController extends Controller
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
             } else {
-                $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
-                $theme = $defaultTheme ? $defaultTheme->value : 1;
-                $viewPath = 'frontend.home.home_' . $theme;
+                $viewPath = 'frontend.home.home_' . $themeId;
                 if (!view()->exists($viewPath)) {
                     $viewPath = 'frontend.home.home_1';
                 }
@@ -2446,7 +2449,11 @@ class PageController extends Controller
                 return view($viewPath, compact('data', 'content_sections', 'vehicleBrand', 'seo_title', 'seo_description', 'og_title', 'og_description', 'meta_keywords'));
             }
         } else {
-            return response()->json(['code' => '404', 'message' => __('Page not found.')], 404);
+            if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
+                return response()->json(['code' => '404', 'message' => __('Page not found.')], 404);
+            } else {
+                abort(404);
+            }
         }
     }
 
@@ -3259,8 +3266,6 @@ class PageController extends Controller
             $pageContent = $page->page_content ? json_decode($page->page_content) : [];
             $sectionContent = $pageContent && isset($pageContent[0]->section_content) ? $pageContent[0]->section_content : [];
             $seo_title = $page->page_title;
-
-
 
             return view('frontend.pages.page', compact('page', 'data', 'sectionContent', 'content_sections', 'seo_title'));
         } else {

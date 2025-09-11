@@ -645,56 +645,32 @@
     }
 
     function renderReviewsMeta(reviews_meta) {
-        let cleanDescription = DOMPurify.sanitize(
-            reviews_meta.overall_avg_ratings
-        );
+        let cleanDescription = DOMPurify.sanitize(reviews_meta.overall_avg_ratings);
         $("#overall_ratings")
             .empty()
             .append(`${cleanDescription}<span>/5</span>`);
+
         $("#rating_description").text(reviews_meta.rating_description);
+
         let totalReview = DOMPurify.sanitize(reviews_meta.total_reviews);
         $("#total_reviews")
             .empty()
-            .append(
-                `${_l("web.home.based_on")} ${totalReview} ${_l(
-                    "web.common.reviews"
-                )}`
-            );
+            .append(`${_l("web.home.based_on")} ${totalReview} ${_l("web.common.reviews")}`);
 
-        $("#service_progress").attr(
-            "style",
-            `width: ${reviews_meta.service_ratings_percentage}`
-        );
-        $("#location_progress").attr(
-            "style",
-            `width: ${reviews_meta.location_ratings_percentage}`
-        );
-        $("#facility_progress").attr(
-            "style",
-            `width: ${reviews_meta.facility_ratings_percentage}`
-        );
-        $("#value_for_money_progress").attr(
-            "style",
-            `width: ${reviews_meta.value_for_money_ratings_percentage}`
-        );
-        $("#cleanliness_progress").attr(
-            "style",
-            `width: ${reviews_meta.cleanliness_ratings_percentage}`
-        );
+        $("#service_progress").val(reviews_meta.service_ratings_percentage);
+        $("#location_progress").val(reviews_meta.location_ratings_percentage);
+        $("#facility_progress").val(reviews_meta.facility_ratings_percentage);
+        $("#value_for_money_progress").val(reviews_meta.value_for_money_ratings_percentage);
+        $("#cleanliness_progress").val(reviews_meta.cleanliness_ratings_percentage);
 
         $("#avg_service_ratings").text(reviews_meta.avg_service_ratings);
         $("#avg_location_ratings").text(reviews_meta.avg_location_ratings);
         $("#avg_facility_ratings").text(reviews_meta.avg_facility_ratings);
-        $("#avg_value_for_money_ratings").text(
-            reviews_meta.avg_value_for_money_ratings
-        );
-        $("#avg_cleanliness_ratings").text(
-            reviews_meta.avg_cleanliness_ratings
-        );
+        $("#avg_value_for_money_ratings").text(reviews_meta.avg_value_for_money_ratings);
+        $("#avg_cleanliness_ratings").text(reviews_meta.avg_cleanliness_ratings);
+
         $("#total_reviews_count").text(
-            `${_l("web.common.showing")} ${reviews_meta.total_reviews} ${_l(
-                "web.common.reviews"
-            )}`
+            `${_l("web.common.showing")} ${reviews_meta.total_reviews} ${_l("web.common.reviews")}`
         );
     }
 

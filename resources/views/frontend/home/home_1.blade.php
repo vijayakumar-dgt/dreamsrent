@@ -17,7 +17,9 @@
         ];
     @endphp
     @foreach($content_sections as $section)
-        @includeIf($partials[$section['section_type']] ?? null)
+        @if(!empty($section['section_type']) && isset($partials[$section['section_type']]))
+            @includeIf($partials[$section['section_type']])
+        @endif
     @endforeach
    
     @endsection
