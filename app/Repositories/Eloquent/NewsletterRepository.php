@@ -82,6 +82,9 @@ class NewsLetterRepository implements NewsLetterRepositoryInterface
                         $endDate = Carbon::now()->endOfDay();
                         $query->whereBetween('newsletter_subscribers.created_at', [$startDate, $endDate]);
                         break;
+                    default:
+                        $query->orderBy('newsletter_subscribers.created_at', 'desc');
+                        break;
                 }
             }
 

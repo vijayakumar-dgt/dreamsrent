@@ -108,21 +108,29 @@ class MaintenanceRepository implements MaintenanceRepositoryInterface
                     case 'latest':
                         $query->orderBy('maintenances.created_at', 'desc');
                         break;
+
                     case 'ascending':
                         $query->orderBy('v.name', 'asc');
                         break;
+
                     case 'descending':
                         $query->orderBy('v.name', 'desc');
                         break;
+
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
                         $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
                         $query->whereBetween('maintenances.created_at', [$startDate, $endDate]);
                         break;
+
                     case 'last 7 days':
                         $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
                         $endDate = \Carbon\Carbon::now()->endOfDay();
                         $query->whereBetween('maintenances.created_at', [$startDate, $endDate]);
+                        break;
+
+                    default:
+                        $query->orderBy('maintenances.created_at', 'desc');
                         break;
                 }
             }
