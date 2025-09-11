@@ -52,6 +52,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private const STORAGE = 'storage/';
     private const STORAGES = '/storage/';
     private const VEHICLE_IMAGE_SMALL = 'vehicles/images/small/';
+    public const CAR_TYPE = 'carType:id,name';
+    public const BRAND = 'brand:id,brand_name';
+    public const CATEGORY = 'category:id,name';
+    public const MAIN_LOCATION = 'mainLocation:id,name';
+    public const COLOR = 'color:id,name,value';
 
     public function __construct(ImageResizer $imageResizer)
     {
@@ -240,7 +245,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         $carTypes = Cartype::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $brands = Brand::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $models = collect();
-      
+
         $category = Category::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $location = Location::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $carFuel = CarFuel::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
@@ -1039,11 +1044,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             $languageId = $authId->language_id;
             $query = VehicleInfo::with([
-                'carType:id,name',
-                'brand:id,brand_name',
-                'category:id,name',
-                'mainLocation:id,name',
-                'color:id,name,value'
+                self:::CAR_TYPE,
+                self:::BRAND,
+                self:::CATEGORY,
+                self:::MAIN_LOCATION,
+                self:::COLOR
             ])->select(
                 "id",
                 "vehicle_image",
@@ -1215,11 +1220,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     public function vehicleLists(Request $request): array
     {
         $query = VehicleInfo::with([
-            'carType:id,name',
-            'brand:id,brand_name',
-            'category:id,name',
-            'mainLocation:id,name',
-            'color:id,name,value',
+            self:::CAR_TYPE,
+            self:::BRAND,
+            self:::CATEGORY,
+            self:::MAIN_LOCATION,
+            self:::COLOR,
             'fuel_type:id,fuel_type',
             'transmission:id,name',
             'reviews:id,vehicle_id,average_ratings'
@@ -1825,11 +1830,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             $query = VehicleInfo::with([
-                'carType:id,name',
-                'brand:id,brand_name',
-                'category:id,name',
-                'mainLocation:id,name',
-                'color:id,name,value',
+                self:::CAR_TYPE,
+                self:::BRAND,
+                self:::CATEGORY,
+                self:::MAIN_LOCATION,
+                self:::COLOR,
                 'fuel_type:id,fuel_type',
                 'transmission:id,name',
                 'extraservices.extraService:id,name,icon,description,image',
@@ -2169,11 +2174,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         }
 
         $vehicles = VehicleInfo::with([
-            'carType:id,name',
-            'brand:id,brand_name',
-            'category:id,name',
-            'mainLocation:id,name',
-            'color:id,name,value',
+            self:::CAR_TYPE,
+            self:::BRAND,
+            self:::CATEGORY,
+            self:::MAIN_LOCATION,
+            self:::COLOR,
             'fuel_type:id,fuel_type',
             'transmission:id,name',
             'reviews:id,vehicle_id,average_ratings'

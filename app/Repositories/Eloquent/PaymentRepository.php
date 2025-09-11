@@ -91,24 +91,33 @@ class PaymentRepository implements PaymentInterface
             case 'latest':
                 $query->orderBy('created_at', 'desc');
                 break;
+
             case 'asc':
                 $query->orderBy('id', 'asc');
                 break;
+
             case 'desc':
                 $query->orderBy('id', 'desc');
                 break;
+
             case 'last_month':
                 $startDate = Carbon::now()->subMonth()->startOfMonth();
-                $endDate = Carbon::now()->subMonth()->endOfMonth();
+                $endDate   = Carbon::now()->subMonth()->endOfMonth();
                 $query->whereBetween('created_at', [$startDate, $endDate]);
                 break;
+
             case 'last_7_days':
                 $startDate = Carbon::now()->subDays(7)->startOfDay();
-                $endDate = Carbon::now()->endOfDay();
+                $endDate   = Carbon::now()->endOfDay();
                 $query->whereBetween('created_at', [$startDate, $endDate]);
+                break;
+
+            default:
+                $query->orderBy('created_at', 'desc');
                 break;
         }
     }
+
 
     protected function formatPaymentType(string $paymentType): string
     {

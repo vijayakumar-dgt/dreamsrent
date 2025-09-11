@@ -17,6 +17,8 @@ use Modules\GeneralSetting\Models\UserDevice;
 
 class UserLoginRegisterRepository implements UserLoginRegisterInterface
 {
+    public const ASIA_KOLKATA = 'Asia/Kolkata';
+
     public function resetPasswordUpdate(Request $request): array
     {
         $user = User::where('email', $request->email)->first();
@@ -68,7 +70,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         $otpExpireMinutes = (int) filter_var($settings['otp_expire_time'], FILTER_SANITIZE_NUMBER_INT);
         $expiresAt = now()
             ->addMinutes($otpExpireMinutes)
-            ->setTimezone('Asia/Kolkata')
+            ->setTimezone(self::ASIA_KOLKATA)
             ->format('Y-m-d H:i:s');
 
         DB::table('otp_settings')->updateOrInsert(
@@ -120,7 +122,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             if (isset($otpSetting)) {
                 $expire = $otpSetting->expires_at ?? "";
                 if ($expire != '') {
-                    $currentDateTime = now()->setTimezone('Asia/Kolkata'); // Adjust timezone if needed
+                    $currentDateTime = now()->setTimezone(self::ASIA_KOLKATA); // Adjust timezone if needed
                     if ($currentDateTime->greaterThanOrEqualTo($expire)) {
                         return [
                             'code'  => 400,
@@ -175,7 +177,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             if (isset($otpSetting)) {
                 $expire = $otpSetting->expires_at ?? "";
                 if ($expire != '') {
-                    $currentDateTime = now()->setTimezone('Asia/Kolkata');
+                    $currentDateTime = now()->setTimezone(self::ASIA_KOLKATA);
                     if ($currentDateTime->greaterThanOrEqualTo($expire)) {
                         return [
                             'code'  => 400,
@@ -215,7 +217,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             if (isset($otpSetting)) {
                 $expire = $otpSetting->expires_at ?? "";
                 if ($expire != '') {
-                    $currentDateTime = now()->setTimezone('Asia/Kolkata'); // Adjust timezone if needed
+                    $currentDateTime = now()->setTimezone(self::ASIA_KOLKATA); // Adjust timezone if needed
                     if ($currentDateTime->greaterThanOrEqualTo($expire)) {
                         return [
                             'code'  => 400,
@@ -324,7 +326,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         $otp = $this->generateOtp($settings['otp_digit_limit']);
         $expiresAt = now()
             ->addMinutes((int) $settings['otp_expire_time'])
-            ->setTimezone('Asia/Kolkata')
+            ->setTimezone(self::ASIA_KOLKATA)
             ->format('Y-m-d H:i:s');
         DB::table('otp_settings')->updateOrInsert(
             ['email' => $email],

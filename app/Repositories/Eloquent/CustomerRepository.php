@@ -17,6 +17,10 @@ use Modules\GeneralSetting\Models\Language;
 
 class CustomerRepository implements CustomerRepositoryInterface
 {
+    public const DOCUMENTS_SELECT = 'documents:id,user_id,document';
+    public const TRANSLATION_LANG_CODE = 'translation_languages.code as language_code';
+    public const TRANSLATION_LANG_NAME = 'translation_languages.name as language_name';
+
     protected ImageResizer $imageResizer;
 
     public function __construct(ImageResizer $imageResizer)
@@ -156,7 +160,7 @@ class CustomerRepository implements CustomerRepositoryInterface
             $columnName = $request->columns[$columnIndex]['data'] ?? 'customer_full_name';
             $orderDir = $request->order[0]['dir'] ?? 'asc';
 
-            $query = User::with(['documents:id,user_id,document'])
+            $query = User::with([self::DOCUMENTS_SELECT])
                 ->select(
                     'users.id',
                     DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
@@ -168,8 +172,8 @@ class CustomerRepository implements CustomerRepositoryInterface
                     'user_details.gender',
                     'user_details.address',
                     'users.language_id',
-                    'translation_languages.name as language_name',
-                    'translation_languages.code as language_code',
+                    self::TRANSLATION_LANG_NAME,
+                    self::TRANSLATION_LANG_CODE,
                 )
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
                 ->leftJoin('translation_languages', 'translation_languages.id', '=', 'users.language_id')
@@ -212,24 +216,33 @@ class CustomerRepository implements CustomerRepositoryInterface
                     case 'latest':
                         $query->orderBy('users.created_at', 'desc');
                         break;
+
                     case 'ascending':
                         $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) asc");
                         break;
+
                     case 'descending':
                         $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) desc");
                         break;
+
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
-                        $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
+                        $endDate   = \Carbon\Carbon::now()->subMonth()->endOfMonth();
                         $query->whereBetween('users.created_at', [$startDate, $endDate]);
                         break;
+
                     case 'last 7 days':
                         $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
-                        $endDate = \Carbon\Carbon::now()->endOfDay();
+                        $endDate   = \Carbon\Carbon::now()->endOfDay();
                         $query->whereBetween('users.created_at', [$startDate, $endDate]);
+                        break;
+
+                    default:
+                        $query->orderBy('users.created_at', 'desc');
                         break;
                 }
             }
+
 
             if ($columnName === 'customer_full_name') {
                 $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) {$orderDir}");
@@ -281,7 +294,7 @@ class CustomerRepository implements CustomerRepositoryInterface
 
     public function edit(int $id): array
     {
-        $data = User::with(['documents:id,user_id,document'])
+        $data = User::with([self::DOCUMENTS_SELECT])
             ->select(
                 'users.id',
                 'users.email',
@@ -294,8 +307,8 @@ class CustomerRepository implements CustomerRepositoryInterface
                 'user_details.gender',
                 'user_details.address',
                 'users.language_id',
-                'translation_languages.name as language_name',
-                'translation_languages.code as language_code',
+                self::TRANSLATION_LANG_NAME,
+                self::TRANSLATION_LANG_CODE,
                 'user_details.valid_date',
                 'user_details.date_of_issue',
                 'user_details.card_number',
@@ -329,7 +342,7 @@ class CustomerRepository implements CustomerRepositoryInterface
 
     public function getCustomerDetails(?int $id): array
     {
-        $customer = User::with(['documents:id,user_id,document'])
+        $customer = User::with([self::DOCUMENTS_SELECT])
             ->select(
                 'users.id',
                 'users.email',
@@ -342,8 +355,8 @@ class CustomerRepository implements CustomerRepositoryInterface
                 'user_details.gender',
                 'user_details.address',
                 'users.language_id',
-                'translation_languages.name as language_name',
-                'translation_languages.code as language_code',
+                self::TRANSLATION_LANG_NAME,
+                self::TRANSLATION_LANG_CODE,
                 'user_details.valid_date',
                 'user_details.date_of_issue',
                 'user_details.card_number',

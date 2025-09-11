@@ -27,6 +27,8 @@ use Modules\GeneralSetting\Models\UserDevice;
 
 class UserRepository implements UserRepositoryInterface
 {
+    public const VEHICLE_NAME_SUBQUERY = '(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)';
+
     public function getDashboardData(): array
     {
         $user = Auth::guard('web')->user();
@@ -118,7 +120,7 @@ class UserRepository implements UserRepositoryInterface
                             $query->orderBy('name', 'asc');
                         }
                     ])->orderBy(
-                        DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
+                        DB::raw(self::VEHICLE_NAME_SUBQUERY),
                         'asc'
                     );
                     break;
@@ -172,7 +174,7 @@ class UserRepository implements UserRepositoryInterface
                             $query->orderBy('name', 'asc');
                         }
                     ])->orderBy(
-                        DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
+                        DB::raw(self::VEHICLE_NAME_SUBQUERY),
                         'asc'
                     );
                     break;
@@ -882,7 +884,7 @@ class UserRepository implements UserRepositoryInterface
                             $query->orderBy('name', 'asc');
                         }
                     ])->orderBy(
-                        DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
+                        DB::raw(self::VEHICLE_NAME_SUBQUERY),
                         'asc'
                     );
                     break;
