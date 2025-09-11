@@ -187,21 +187,29 @@ class DriverRepository implements DriverRepositoryInterface
                     case 'latest':
                         $query->orderBy('drivers.created_at', 'desc');
                         break;
+
                     case 'ascending':
                         $query->orderBy('drivers.driver_name', 'asc');
                         break;
+
                     case 'descending':
                         $query->orderBy('drivers.driver_name', 'desc');
                         break;
+
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
                         $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
                         $query->whereBetween('drivers.created_at', [$startDate, $endDate]);
                         break;
+
                     case 'last 7 days':
                         $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
                         $endDate = \Carbon\Carbon::now()->endOfDay();
                         $query->whereBetween('drivers.created_at', [$startDate, $endDate]);
+                        break;
+
+                    default:
+                        $query->orderBy('drivers.created_at', 'desc');
                         break;
                 }
             }

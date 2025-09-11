@@ -13,6 +13,9 @@ use Modules\Booking\Models\Booking;
 
 class ReviewRepository implements ReviewRepositoryInterface
 {
+    public const START_OF_DAY = 'Y-m-d 00:00:00';
+    public const END_OF_DAY   = 'Y-m-d 23:59:59';
+
     protected ?Authenticatable $authUser;
 
     public function __construct()
@@ -286,6 +289,10 @@ class ReviewRepository implements ReviewRepositoryInterface
                     case 'alphabet':
                         $query->orderByRaw("LOWER(CONCAT_WS(' ', vehicle_info.name)) asc");
                         break;
+
+                    default:
+                        $query->orderBy('reviews.created_at', 'desc');
+                        break;
                 }
             }
 
@@ -329,8 +336,8 @@ class ReviewRepository implements ReviewRepositoryInterface
         switch ($duration) {
             case 'this_week':
                 $duration = [
-                    'from' => date('Y-m-d 00:00:00', strtotime('monday this week')),
-                    'to'   => date('Y-m-d 23:59:59', strtotime('sunday this week'))
+                    'from' => date(self::START_OF_DAY, strtotime('monday this week')),
+                    'to'   => date(self::END_OF_DAY, strtotime('sunday this week'))
                 ];
                 break;
             case 'this_month':
@@ -341,20 +348,20 @@ class ReviewRepository implements ReviewRepositoryInterface
                 break;
             case 'last30':
                 $duration = [
-                    'from' => date('Y-m-d 00:00:00', strtotime('-30 days')),
-                    'to'   => date('Y-m-d 23:59:59')
+                    'from' => date(self::START_OF_DAY, strtotime('-30 days')),
+                    'to'   => date(self::END_OF_DAY)
                 ];
                 break;
             case 'last60':
                 $duration = [
-                    'from' => date('Y-m-d 00:00:00', strtotime('-60 days')),
-                    'to'   => date('Y-m-d 23:59:59')
+                    'from' => date(self::START_OF_DAY, strtotime('-60 days')),
+                    'to'   => date(self::END_OF_DAY)
                 ];
                 break;
             case 'last7':
                 $duration = [
-                    'from' => date('Y-m-d 00:00:00', strtotime('-7 days')),
-                    'to'   => date('Y-m-d 23:59:59')
+                    'from' => date(self::START_OF_DAY, strtotime('-7 days')),
+                    'to'   => date(self::END_OF_DAY)
                 ];
                 break;
             case 'custom':
@@ -476,6 +483,9 @@ class ReviewRepository implements ReviewRepositoryInterface
                         $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
                         $endDate = \Carbon\Carbon::now()->endOfDay();
                         $query->whereBetween('reviews.created_at', [$startDate, $endDate]);
+                        break;
+                    default:
+                        $query->orderBy('reviews.created_at', 'desc');
                         break;
                 }
             }
