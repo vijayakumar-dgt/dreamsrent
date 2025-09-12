@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\GeneralSetting\Http\Requests\StoreTaxGroupRequest;
 use Modules\GeneralSetting\Http\Requests\StoreTaxRateRequest;
+use Modules\GeneralSetting\Exceptions\TaxGroupSaveException;
+use Modules\GeneralSetting\Exceptions\TaxRateSaveException;
 use Modules\GeneralSetting\Repositories\Contracts\TaxRateSettingInterface;
 
 class TaxRateController extends Controller
@@ -51,7 +53,7 @@ class TaxRateController extends Controller
                 ]);
             }
 
-            throw new \Exception('Failed to save tax rate');
+            throw new TaxRateSaveException();
         } catch (\Exception $e) {
             $message = isset($request->id)
                 ? __('admin.common.default_update_error')
@@ -149,7 +151,7 @@ class TaxRateController extends Controller
                 ]);
             }
 
-            throw new \Exception('Failed to save tax group');
+            throw new TaxGroupSaveException();
         } catch (\Exception $e) {
             $message = isset($request->id)
                 ? __('admin.common.default_update_error')
