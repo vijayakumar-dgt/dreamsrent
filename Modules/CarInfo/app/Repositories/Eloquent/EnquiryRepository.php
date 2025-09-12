@@ -144,6 +144,7 @@ class EnquiryRepository implements EnquiryRepositoryInterface
 
         ($options[$sortBy] ?? fn($q) => $q->orderBy('enquiries.enquiry_date', 'desc'))($query);
     }
+
     public function update(Request $request): array
     {
         try {
@@ -151,40 +152,40 @@ class EnquiryRepository implements EnquiryRepositoryInterface
             /** @var \Modules\CarInfo\Models\Enquiry */
             $enquiry = Enquiry::findOrFail($id);
 
+            $response = [
+                'success' => true,
+                'code'    => 200,
+                'message' => __('admin.bookings.enquiry_update_success'),
+                'data'    => null
+            ];
+
             if ($enquiry->status == 3) {
-                return [
+                $response = [
                     'success' => false,
                     'code'    => 400,
                     'message' => __('admin.bookings.enquiry_already_closed'),
                 ];
-            }
-
-            if ($enquiry->status == 1 && $request->status == 3) {
-                return [
+            } elseif ($enquiry->status == 1 && $request->status == 3) {
+                $response = [
                     'success' => false,
                     'code'    => 400,
                     'message' => __('admin.bookings.enquiry_opened_before_cannot_be_closed'),
                 ];
-            }
-
-            if ($enquiry->status == 2 && $request->status == 1) {
-                return [
+            } elseif ($enquiry->status == 2 && $request->status == 1) {
+                $response = [
                     'success' => false,
                     'code'    => 400,
                     'message' => __('admin.bookings.enquiry_closed_before_cannot_be_opened'),
                 ];
+            } else {
+                $enquiry->comment = $request->comment;
+                $enquiry->status = $request->status;
+                $enquiry->save();
+
+                $response['data'] = $enquiry;
             }
 
-            $enquiry->comment = $request->comment;
-            $enquiry->status = $request->status;
-            $enquiry->save();
-
-            return [
-                'code'    => 200,
-                'success' => true,
-                'message' => __('admin.bookings.enquiry_update_success'),
-                'data'    => $enquiry
-            ];
+        return $response;
         } catch (\Exception $e) {
             return [
               'code'    => 500,
@@ -201,19 +202,21 @@ class EnquiryRepository implements EnquiryRepositoryInterface
             $enquiry = Enquiry::find($id);
 
             if (!$enquiry instanceof Enquiry) {
-                return [
+                $response = [
                     'code'    => 404,
                     'success' => false,
                     'message' => __('admin.common.no_data_found')
                 ];
+            } else {
+                $enquiry->delete();
+                $response = [
+                    'code'    => 200,
+                    'success' => true,
+                    'message' => __('admin.bookings.enquiry_delete_success')
+                ];
             }
-            $enquiry->delete();
 
-            return [
-                'code'    => 200,
-                'success' => true,
-                'message' => __('admin.bookings.enquiry_delete_success')
-            ];
+            return $response;
         } catch (ModelNotFoundException $e) {
             return [
                 'status'  => 'error',

@@ -12,7 +12,7 @@ class SafetyFeatureRepository implements SafetyFeatureRepositoryInterface
     public function store(SafetyFeatureRequest $request): array
     {
         $id = $request->id ?? '';
-        $authUser = current_user();
+        $authUser = currentUser();
         $languageId = $authUser->language_id ?? 1;
 
         $data = [
@@ -54,7 +54,7 @@ class SafetyFeatureRepository implements SafetyFeatureRepositoryInterface
     public function list(Request $request): array
     {
         try {
-            $authUser = current_user();
+            $authUser = currentUser();
             $languageId = $authUser->language_id ?? 1;
             $query = SafetyFeature::query()->where("language_id", $languageId);
 

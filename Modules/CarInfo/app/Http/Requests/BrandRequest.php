@@ -15,7 +15,7 @@ class BrandRequest extends CustomFailedValidation
     public function rules(): array
     {
         $id = $this->id ?? '';
-        $language_id = current_user()?->language_id;
+        $language_id = currentUser()?->language_id;
 
         return [
             'brand_name' => [

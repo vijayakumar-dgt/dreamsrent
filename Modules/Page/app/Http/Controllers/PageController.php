@@ -35,29 +35,30 @@ class PageController extends Controller
 {
     protected $pageRepository;
 
-    public const PAGES = 'pages/';
-    public const PLACEHOLDER_BANNER = 'frontend/assets/img/banner/placeholder-banner.jpg';
-    public const LIMIT_VIEWALL_ORDER_REGEX = '/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/';
-    public const TYPE_LIMIT_VIEWALL_REGEX = '/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/';
-    public const STORAGE_PATH = 'storage/';
-    public const DEFAULT_AVATAR_01 = 'backend/assets/img/profiles/avatar-01.jpg';
-    public const DEFAULT_AVATAR_02 = 'backend/assets/img/profiles/avatar-02.jpg';
-    public const DEFAULT_AVATAR_03 = 'backend/assets/img/profiles/avatar-03.jpg';
-    public const PLACEHOLDER_APP_CAR = 'frontend/assets/img/placeholder-app-car.jpg';
-    public const DEFAULT_IMAGE = 'images/default.png';
-    public const CAR_TYPE_SELECT       = 'carType:id,name';
-    public const BRAND_SELECT          = 'brand:id,brand_name';
-    public const CATEGORY_SELECT       = 'category:id,name';
-    public const MAIN_LOCATION_SELECT  = 'mainLocation:id,name';
-    public const COLOR_SELECT         = 'color:id,name,value';
-    public const FUEL_TYPE_SELECT     = 'fuel_type:id,fuel_type';
-    public const TRANSMISSION_SELECT  = 'transmission:id,name';
-    public const VEHICLE_IMAGE_SMALL  = 'vehicles/images/small/';
-    public const VEHICLE_IMAGE        = 'vehicles/images/';
-    public const DEFAULT_PROFILE      = '/backend/assets/img/default-profile.png';
-    public const APP_PUBLIC_PATH      = 'app/public/';
-    public const STORAGE_PATHS         = '/storage/';
-    public const ICON_SELECTION       = '/frontend/assets/img/icons/bx-selection.svg';
+    private const PAGES = 'pages/';
+    private const PLACEHOLDER_BANNER = 'frontend/assets/img/banner/placeholder-banner.jpg';
+    private const LIMIT_VIEWALL_ORDER_REGEX = '/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/';
+    private const TYPE_LIMIT_VIEWALL_REGEX = '/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/';
+    private const LIMIT_VIEWALL_REGEX = '/limit=(\d+)\s+viewall=(yes|no)/';
+    private const STORAGE_PATH = 'storage/';
+    private const DEFAULT_AVATAR_01 = 'backend/assets/img/profiles/avatar-01.jpg';
+    private const DEFAULT_AVATAR_02 = 'backend/assets/img/profiles/avatar-02.jpg';
+    private const DEFAULT_AVATAR_03 = 'backend/assets/img/profiles/avatar-03.jpg';
+    private const PLACEHOLDER_APP_CAR = 'frontend/assets/img/placeholder-app-car.jpg';
+    private const DEFAULT_IMAGE = 'images/default.png';
+    private const CAR_TYPE_SELECT       = 'carType:id,name';
+    private const BRAND_SELECT          = 'brand:id,brand_name';
+    private const CATEGORY_SELECT       = 'category:id,name';
+    private const MAIN_LOCATION_SELECT  = 'mainLocation:id,name';
+    private const COLOR_SELECT         = 'color:id,name,value';
+    private const FUEL_TYPE_SELECT     = 'fuel_type:id,fuel_type';
+    private const TRANSMISSION_SELECT  = 'transmission:id,name';
+    private const VEHICLE_IMAGE_SMALL  = 'vehicles/images/small/';
+    private const VEHICLE_IMAGE        = 'vehicles/images/';
+    private const DEFAULT_PROFILE      = '/backend/assets/img/default-profile.png';
+    private const APP_PUBLIC_PATH      = 'app/public/';
+    private const STORAGE_PATHS         = '/storage/';
+    private const ICON_SELECTION       = '/frontend/assets/img/icons/bx-selection.svg';
 
     public function __construct(PageInterface $pageRepository)
     {
@@ -66,14 +67,14 @@ class PageController extends Controller
 
     public function index(): View
     {
-        $authUser = current_user();
+        $authUser = currentUser();
         $languages = Language::with('transLang')->get();
         return view('page::page.index', compact("authUser", "languages"));
     }
 
     public function addPage(): View
     {
-        $authUser = current_user();
+        $authUser = currentUser();
         return view('page::page.add.index', compact("authUser"));
     }
 
@@ -184,7 +185,7 @@ class PageController extends Controller
 
     public function pageStore(PageRequest $request): JsonResponse
     {
-        $authUser = current_user();
+        $authUser = currentUser();
 
         // Default error response
         $statusCode = 500;
@@ -562,7 +563,7 @@ class PageController extends Controller
                     $section['design'] = 'banner_three';
                     $section['section_content'] = $banners;
                 }
-                
+
                 // Banner Four
                 if (($section['status'] == 1) && (isset($section['section_content']) && strpos($section['section_content'], '[banner_four') !== false)) {
                     preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $section['section_content'], $matches);
@@ -1089,7 +1090,7 @@ class PageController extends Controller
                         }, $multipleImages);
 
                         /** @var \App\Models\User|null $auth */
-                        $auth = current_user();
+                        $auth = currentUser();
                         $authId = $auth?->id;
 
                         $wishlistExists = false;
@@ -1231,7 +1232,7 @@ class PageController extends Controller
                         }, $multipleImages);
 
                         /** @var \App\Models\User|null $auth */
-                        $auth = current_user();
+                        $auth = currentUser();
                         $authId = $auth?->id;
 
                         $wishlistExists = false;
@@ -1389,7 +1390,7 @@ class PageController extends Controller
                         }, $multipleImages);
 
                         /** @var \App\Models\User|null $auth */
-                        $auth = current_user();
+                        $auth = currentUser();
                         $authId = $auth?->id;
 
                         $wishlistExists = false;
@@ -1475,7 +1476,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[car_type ') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
 
@@ -1509,7 +1510,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[testimonial') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
 
@@ -2193,7 +2194,7 @@ class PageController extends Controller
                                     return url('storage' . $img);
                                 }, $multipleImages);
 
-                                $auth = current_user();
+                                $auth = currentUser();
                                 $authId = $auth?->id;
 
                                 $wishlistExists = $authId
@@ -2449,7 +2450,7 @@ class PageController extends Controller
             abort(404, 'Default language not found');
         }
 
-        $authUser = current_user();
+        $authUser = currentUser();
 
         $lang_id = null;
 
@@ -2823,7 +2824,7 @@ class PageController extends Controller
                         $multipleImages = array_map(fn ($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
 
                         /** @var \App\Models\User|null $auth */
-                        $auth = current_user();
+                        $auth = currentUser();
                         $authId = $auth?->id;
 
                         $wishlistExists = false;
@@ -2906,9 +2907,8 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[car_type ') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $categoryId = getCategoryId();
                         $cartypes = Cartype::select('name', 'icon', 'id')
                             ->where('language_id', $lang_id)
@@ -2941,7 +2941,7 @@ class PageController extends Controller
                     $content = $section['section_content'] ?? '';
 
                     if (is_string($content) && strpos($content, '[testimonial') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
+                        preg_match(self::LIMIT_VIEWALL_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
 
@@ -3039,8 +3039,6 @@ class PageController extends Controller
 
                     if (is_string($content) && strpos($content, '[why_us') !== false) {
                         preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
-                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $order = $matches[3] ?? 'asc';
 
                         $section['section_type'] = 'why_us_section';
                         $section['type'] = 'why_us_section';

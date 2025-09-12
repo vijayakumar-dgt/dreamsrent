@@ -78,7 +78,7 @@ class ExtraServiceRepository implements ExtraServiceRepositoryInterface
     public function getAll(Request $request): array
     {
         try {
-            $authId = current_user();
+            $authId = currentUser();
             $language_id = $authId->language_id ?? null;
             $extraServices = ExtraService::query()->where("language_id", $language_id);
             if ($request->has('keyword') && $request->keyword != "") {

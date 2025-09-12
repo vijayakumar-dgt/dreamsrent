@@ -22,7 +22,7 @@ class BlogRepository implements BlogRepositoryInterface
 {
     public function blogList(Request $request): View| JsonResponse
     {
-        $authUser = current_user();
+        $authUser = currentUser();
 
         $lang_id = null;
 
@@ -93,7 +93,7 @@ class BlogRepository implements BlogRepositoryInterface
 
     public function blogDetail(int|string $id): array
     {
-        $authUser = current_user();
+        $authUser = currentUser();
 
         $lang_id = null;
 

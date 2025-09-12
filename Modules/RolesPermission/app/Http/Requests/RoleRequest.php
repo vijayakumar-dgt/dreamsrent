@@ -15,7 +15,7 @@ class RoleRequest extends CustomFailedValidation
     public function rules(): array
     {
         $id = $this->input('id');
-        $authId = current_user()->id;
+        $authId = currentUser()->id;
 
         return [
             'role' => [

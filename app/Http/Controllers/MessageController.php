@@ -32,7 +32,7 @@ class MessageController extends Controller
     public function adminMessages(): View
     {
         $users = User::where('user_type', 3)->orderBy('id', 'desc')->get();
-        $sender = current_user();
+        $sender = currentUser();
         return view('admin.chat.messages', ['users' => $users, 'sender' => $sender]);
     }
 

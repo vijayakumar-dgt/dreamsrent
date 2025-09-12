@@ -29,7 +29,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     public function blogCategory(): array
     {
         /** @var \App\Models\User|null $authId */
-        $authId = current_user();
+        $authId = currentUser();
         $languageId = $authId ? $authId->language_id : null;
         $languages = Language::with('transLang')->get();
         $categories = BlogCategory::where('deleted_at', null)
@@ -77,7 +77,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     public function blogTags(): array
     {
         /** @var \App\Models\User|null $authId */
-        $authId = current_user();
+        $authId = currentUser();
         $languageId = $authId ? $authId->language_id : null;
         $languages = Language::with('transLang')->get();
         $tags = BlogTag::where('deleted_at', null)
@@ -137,7 +137,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     public function blogs(): array
     {
         /** @var \App\Models\User|null $authId */
-        $authId = current_user();
+        $authId = currentUser();
         $languageId = $authId ? $authId->language_id : null;
         $languages = Language::with('transLang')->get();
         $blogPosts = BlogPost::join('users', 'blog_posts.created_by', '=', 'users.id')
@@ -187,7 +187,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     public function blogAdd(): array
     {
         /** @var \App\Models\User|null $authId */
-        $authId = current_user();
+        $authId = currentUser();
         $languageId = $authId ? $authId->language_id : null;
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
@@ -231,7 +231,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     public function blogEdit(int $id): array
     {
         /** @var \App\Models\User|null $authId */
-        $authId = current_user();
+        $authId = currentUser();
         $languageId = $authId ? $authId->language_id : null;
         $blog = BlogPost::findOrFail($id);
         $languages = Language::with('transLang')->where('deleted_at', null)->get();

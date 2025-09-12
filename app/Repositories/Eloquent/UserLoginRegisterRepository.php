@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Jenssegers\Agent\Agent;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\UserDevice;
@@ -146,12 +147,6 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 'user_type'    => 3,
             ];
             $save = User::create($data);
-            $company_details = [
-                'user_id'    => $save->id,
-                'first_name' => $request->first_name,
-                'last_name'  => $request->last_name,
-            ];
-            $company = UserDetail::create($company_details);
             Auth::login($save);
             session(['user_id' => $save->id]);
             Cache::forget('user_auth_id');
@@ -287,7 +282,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             try {
                 sendNotification($request->email, 'welcome-email', $notifyData);
             } catch (\Throwable $e) {
-                \Log::error("Failed to send welcome email: " . $e->getMessage());
+                Log::error("Failed to send welcome email: " . $e->getMessage());
             }
 
             // Handle redirect

@@ -216,23 +216,23 @@ class UserRepository implements UserRepositoryInterface
                     'booking'        => $booking->toArray(),
                     'booking_detail' => $bookingDetail?->toArray() ?? []
                 ];
-    
+
                 BookingHistory::create([
                     'booking_id' => $booking->id,
                     'action'     => 'cancel',
                     'data'       => json_encode($historyData),
                     'message'    => 'Reservation Cancelled'
                 ]);
-    
+
                 $booking->update([
                     'booking_status' => 6,
                     'cancel_date'    => now(),
                     'cancel_by'      => Auth::id(),
                     'cancel_reason'  => $request->reason
                 ]);
-    
+
                 DB::commit();
-    
+
                 if (rentalNotificationEnabled() !== 0) {
                     try {
                         $authUser = Auth::user();
@@ -240,7 +240,7 @@ class UserRepository implements UserRepositoryInterface
                         $vehicle = VehicleInfo::find($booking->vehicle_id ?? '');
                         $driver = Driver::find($booking->driver_id ?? '');
                         $appAdmin = User::where('user_type', 1)->first();
-    
+
                         $notifyData = [
                             'user_name'       => $authUser->name ?? '',
                             'company_name'    => $companyName,
@@ -258,12 +258,11 @@ class UserRepository implements UserRepositoryInterface
                             'payment_status'  => $booking->payment_status ?? "",
                             'tototal_amount'  => $booking->final_price ?? ""
                         ];
-    
-    
+
                         if ($appAdmin?->email) {
                             sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData);
                         }
-    
+
                         if (!empty($authUser->email)) {
                             sendNotification($authUser->email, 'booking-cancelled-to-user', $notifyData);
                         }
@@ -271,7 +270,7 @@ class UserRepository implements UserRepositoryInterface
                         Log::error($ex->getMessage());
                     }
                 }
-    
+
                 $response = [
                     'status'  => 'success',
                     'code'    => 200,
@@ -294,7 +293,7 @@ class UserRepository implements UserRepositoryInterface
     public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
     {
         $result = ['from' => '', 'to' => ''];
-        
+
         switch ($duration) {
             case 'this_week':
                 $result = [

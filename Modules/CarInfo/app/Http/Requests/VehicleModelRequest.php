@@ -15,7 +15,7 @@ class VehicleModelRequest extends CustomFailedValidation
     public function rules(): array
     {
         $id = $this->id ?? '';
-        $languageId = current_user()?->language_id;
+        $languageId = currentUser()?->language_id;
 
         return [
             'model_name' => [

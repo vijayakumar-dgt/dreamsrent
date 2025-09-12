@@ -26,7 +26,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
 
     public function index(): array
     {
-        $userId = current_user()->id ?? null;
+        $userId = currentUser()->id ?? null;
         $roles = Role::select('id', 'role_name')
             ->where('status', 1)
             ->where('created_by', $userId)
@@ -54,7 +54,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             $userDetailsData = [
                 'first_name' => $request->first_name,
                 'last_name'  => $request->last_name,
-                'parent_id'  => current_user()->id ?? $request->user_id
+                'parent_id'  => currentUser()->id ?? $request->user_id
             ];
 
             if (empty($id)) {
@@ -116,7 +116,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             $columnName = $request->columns[$columnIndex]['data'] ?? 'full_name';
             $orderDir = $request->order[0]['dir'] ?? 'asc';
 
-            $userId = current_user()->id ?? $request->user_id;
+            $userId = currentUser()->id ?? $request->user_id;
 
             $query = User::select(
                 'users.id',
@@ -174,6 +174,9 @@ class AdminUserRepository implements AdminUserRepositoryInterface
                         $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
                         $endDate = \Carbon\Carbon::now()->endOfDay();
                         $query->whereBetween('users.created_at', [$startDate, $endDate]);
+                        break;
+                    default:
+                        $query->orderBy('users.created_at', 'desc');
                         break;
                 }
             }
@@ -266,7 +269,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
     public function getNotifications(): array
     {
         $authUser = Auth::guard('admin')->user();
-        $notifications = collect();
+
         if ($authUser !== null) {
             $notifications = Notification::where('user_id', $authUser->id)->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
             $notificationCount = Notification::where('user_id', $authUser->id)->where('readed', 0)->count();

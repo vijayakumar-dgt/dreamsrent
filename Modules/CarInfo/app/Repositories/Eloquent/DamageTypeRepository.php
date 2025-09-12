@@ -12,7 +12,7 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
     public function store(Request $request): array
     {
         /** @var \App\Models\User|null $authUser */
-        $authUser = current_user();
+        $authUser = currentUser();
 
         if (!$authUser) {
             return [
@@ -60,7 +60,7 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
     {
         try {
             /** @var \App\Models\User $authUser  */
-            $authUser = current_user();
+            $authUser = currentUser();
             $language_id = $authUser->language_id;
             $damageTypes = DamageType::when($request->has('keyword') && $request->keyword != "", function ($query) use ($request) {
                 $query->where('damage_type', 'like', '%' . $request->keyword . '%');

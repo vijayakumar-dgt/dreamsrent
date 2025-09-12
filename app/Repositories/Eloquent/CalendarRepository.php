@@ -23,7 +23,7 @@ class CalendarRepository implements CalendarRepositoryInterface
     {
         $cartypes = Cartype::get();
         $customerss = User::get();
-        $Vehicles = VehicleInfo::get();
+        $vehicles = VehicleInfo::get();
         $drivers = Driver::get();
 
         $locations = Location::where('status', 1)->get();
@@ -48,7 +48,7 @@ class CalendarRepository implements CalendarRepositoryInterface
         return [
             'cartypes'       => $cartypes,
             'customerss'     => $customerss,
-            'Vehicles'       => $Vehicles,
+            'Vehicles'       => $vehicles,
             'drivers'        => $drivers,
             'locations'      => $locations,
             'priceTypes'     => $priceTypes,

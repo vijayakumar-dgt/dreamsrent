@@ -13,7 +13,7 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
     public function index(): array
     {
         /** @var \App\Models\User|null $authUser */
-        $authUser = current_user();
+        $authUser = currentUser();
         $language_id = $authUser->language_id ?? 1;
         $brands = Brand::orderBy('id', 'desc')
             ->where('language_id', $language_id)
@@ -26,7 +26,7 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
     public function store(Request $request): array
     {
         /** @var \App\Models\User|null $authUser */
-        $authUser = current_user();
+        $authUser = currentUser();
         if (!$authUser) {
             return [
                 'status'  => 'error',
@@ -69,7 +69,7 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
     public function list(Request $request): array
     {
         /** @var \App\Models\User|null $authUser */
-        $authUser = current_user();
+        $authUser = currentUser();
         if (!$authUser) {
             return [
                 'status'  => 'error',

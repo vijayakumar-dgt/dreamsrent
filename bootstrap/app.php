@@ -36,6 +36,4 @@ return Application::configure(basePath: dirname(__DIR__))
             'securityHeader' => SecurityHeader::class
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+    ->create();

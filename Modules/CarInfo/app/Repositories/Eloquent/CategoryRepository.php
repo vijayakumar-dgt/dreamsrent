@@ -13,7 +13,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         try {
             $id = $request->id ?? null;
-            $authUser = current_user();
+            $authUser = currentUser();
             $languageId = $authUser->language_id ?? 1;
 
             $data = [
@@ -55,7 +55,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             $search = $request->input('search');
             $status = $request->input('status');
 
-            $authUser = current_user();
+            $authUser = currentUser();
             $languageId = $authUser->language_id ?? 1;
 
             $query = Category::orderBy('id', $orderBy)

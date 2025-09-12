@@ -312,7 +312,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
     public function getTransaction(Request $request): array
     {
         /** @var \App\Models\User|null $user */
-        $user = current_user();
+        $user = currentUser();
 
         if (!$user) {
             return [

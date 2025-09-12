@@ -12,7 +12,7 @@ class VehicleTransmissionRepository implements VehicleTransmissionRepositoryInte
     public function store(Request $request): array
     {
         $id = $request->id ?? '';
-        $authUser = current_user();
+        $authUser = currentUser();
         $languageId = $authUser->language_id ?? 1;
 
         $successMsg = empty($id) ? __('admin.rentals.vehicle_transmission_create_success') : __('admin.rentals.vehicle_transmission_update_success');
@@ -47,7 +47,7 @@ class VehicleTransmissionRepository implements VehicleTransmissionRepositoryInte
             $orderBy = $request->order_by ?? 'desc';
             $search = $request->input('search');
             $status = $request->input('status');
-            $authUser = current_user();
+            $authUser = currentUser();
             $languageId = $authUser->language_id ?? 1;
 
             $query = Transmission::orderBy('id', $orderBy)

@@ -375,6 +375,7 @@ return [
         'order_created_successfully'               => 'Order created successfully',
         'insufficient_balance_in_wallet'           => 'Insufficient balance in wallet',
         'payment_capture_failed'                   => 'Payment capture failed',
+        'payment_id_missing'                       => 'Payment ID missing',
         'no_transaction_found'                     => 'No transaction found',
         'enter_pickup_and_return_locations'        => 'Please enter both pickup and return locations.',
         'checking_availability'                    => 'Checking Availability...',

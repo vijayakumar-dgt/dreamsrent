@@ -21,7 +21,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     public function index(): array
     {
         /** @var \App\Models\User|null $authId */
-        $authId = current_user();
+        $authId = currentUser();
         $languageId = $authId ? $authId->language_id : null;
         $invoices = Invoice::with('items')
            ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
@@ -39,7 +39,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     public function addInvoice(): array
     {
         /** @var \App\Models\User|null $authId */
-        $authId = current_user();
+        $authId = currentUser();
         $languageId = $authId->language_id ?? null;
         $cars = VehicleInfo::where('status', 1)->where('deleted_at', null)->where('language_id', $languageId)->get();
         $currencies = Currency::where('status', 1)->where('deleted_at', null)->get();

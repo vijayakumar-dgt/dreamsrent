@@ -35,7 +35,7 @@ class UpdatePasswordRequest extends CustomFailedValidation
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $user = current_user();
+            $user = currentUser();
 
             if ($user && $user->password !== null && !Hash::check($this->current_password, $user->password)) {
                 $validator->errors()->add('current_password', __('admin.general_settings.current_password_incorrect'));

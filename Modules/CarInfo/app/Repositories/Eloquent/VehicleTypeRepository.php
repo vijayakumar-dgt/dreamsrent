@@ -21,7 +21,7 @@ class VehicleTypeRepository implements VehicleTypeRepositoryInterface
     public function store(Request $request): array
     {
         /** @var \App\Models\User|null $authUser */
-        $authUser = current_user();
+        $authUser = currentUser();
         if (!$authUser) {
             return [
                 'status'  => 'error',
@@ -89,7 +89,7 @@ class VehicleTypeRepository implements VehicleTypeRepositoryInterface
             $pageLength = $request->length;
             $offset = $request->start;
             /** @var \App\Models\User|null $authUser */
-            $authUser = current_user();
+            $authUser = currentUser();
             if (!$authUser) {
                 return [
                     'status'  => 'error',

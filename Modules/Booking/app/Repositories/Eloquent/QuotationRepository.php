@@ -35,7 +35,7 @@ class QuotationRepository implements QuotationRepositoryInterface
 
     public function create(): array
     {
-        $auth = current_user();
+        $auth = currentUser();
         $locations = Location::where('status', 1)
             ->where('language_id', $auth->language_id)
             ->get();

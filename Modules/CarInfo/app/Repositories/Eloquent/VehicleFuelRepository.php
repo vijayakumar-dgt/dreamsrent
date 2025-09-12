@@ -13,7 +13,7 @@ class VehicleFuelRepository implements VehicleFuelRepositoryInterface
     {
         try {
             $id = $request->id ?? null;
-            $authUser = current_user();
+            $authUser = currentUser();
             $languageId = $authUser->language_id ?? 1;
 
             $data = [
@@ -48,7 +48,7 @@ class VehicleFuelRepository implements VehicleFuelRepositoryInterface
             $orderBy = $request->order_by ?? 'desc';
             $search = $request->input('search');
             $status = $request->input('status');
-            $authUser = current_user();
+            $authUser = currentUser();
             $languageId = $authUser->language_id ?? 1;
 
             $query = CarFuel::orderBy('id', $orderBy)

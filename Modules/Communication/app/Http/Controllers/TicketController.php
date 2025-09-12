@@ -112,7 +112,7 @@ class TicketController extends Controller
     public function listTickets(Request $request): JsonResponse
     {
         try {
-            $user = current_user();
+            $user = currentUser();
 
             if (!$user instanceof \App\Models\User) {
                 return response()->json([

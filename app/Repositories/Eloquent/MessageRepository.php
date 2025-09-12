@@ -13,7 +13,7 @@ class MessageRepository implements MessageRepositoryInterface
 {
     public function getUserData(): array
     {
-        $sender = current_user();
+        $sender = currentUser();
         $receiver = User::where('user_type', 1)->first();
         $lastMessage = null;
         if ($sender instanceof \Illuminate\Contracts\Auth\Authenticatable) {
@@ -89,7 +89,7 @@ class MessageRepository implements MessageRepositoryInterface
             $perPage = 10;
         }
         /** @var \Illuminate\Contracts\Auth\Authenticatable|null $authUser */
-        $authUser = current_user();
+        $authUser = currentUser();
         $authUserId = $authUser ? $authUser->getAuthIdentifier() : 0;
         $messagePartnerId = $request->user_id;
         $totalMessages = Message::where(function ($query) use ($authUserId, $messagePartnerId) {

@@ -33,7 +33,7 @@
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="featured-text">{{ ucfirst($content['brand'] ?? "") }}</span>
                                 </div>
-                                @if(current_user() != null)
+                                @if(currentUser() != null)
                                 <a href="javascript:void(0)"
                                     class="fav-icon wishlist-icon {{ $content['wishlist'] ? 'selected' : '' }}"
                                     data-id="{{ $content['id'] }}">

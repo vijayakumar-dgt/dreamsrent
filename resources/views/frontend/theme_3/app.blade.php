@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>{{ isset($seo_title) ? $seo_title : config('app.name') }}</title>
+    <title>{{ isset($seo_title) ? $seo_title : $companyName }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="{{ isset($seo_description) ? $seo_description : config('app.name') }}">
+    <meta name="description" content="{{ isset($seo_description) ? $seo_description : $companyName }}">
     <meta name="keywords" content="{{ isset($meta_keywords) ? $meta_keywords : '' }}">
 
     <!-- Open Graph Tags (for social sharing) -->
-    <meta property="og:title" content="{{ isset($og_title) ? $og_title : config('app.name') }}">
+    <meta property="og:title" content="{{ isset($og_title) ? $og_title : $companyName }}">
     <meta property="og:description" content="{{ isset($og_description) ? $og_description : '' }}">
     <meta property="og:image"
         content="{{ isset($og_image) ? asset($og_image) : asset('frontend/assets/img/logo.svg') }}">

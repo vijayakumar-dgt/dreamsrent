@@ -36,7 +36,7 @@ class PaymentService
     public function userPayments(Request $request)
     {
         /** @var \App\Models\User|null $authUser */
-        $authUser = current_user();
+        $authUser = currentUser();
         if (!$authUser) {
             return [
                 'code'    => 401,
@@ -439,7 +439,7 @@ class PaymentService
         $driver = $booking ? Driver::find($booking->driver_id) : null;
         $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
         $notifyData = [
-            'user_name'       => $authUser->name ?? '',
+            'user_name'       => getCurrentUserFullname($authUser->id ?? null) ?? '',
             'company_name'    => $companyName,
             'email'           => $authUser->email ?? '',
             'phonenumber'     => $authUser->phone_number ?? '',

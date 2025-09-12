@@ -15,7 +15,7 @@ class VehicleTransmissionRequest extends CustomFailedValidation
     public function rules(): array
     {
         $id = $this->id ?? null;
-        $authUser = current_user();
+        $authUser = currentUser();
         $languageId = $authUser->language_id ?? 1;
 
         return [

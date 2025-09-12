@@ -15,7 +15,7 @@ class MessageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $authUser = current_user();
+        $authUser = currentUser();
         $authUserId = $authUser instanceof \Illuminate\Contracts\Auth\Authenticatable ? $authUser->getAuthIdentifier() : 0;
         $resource = $this->resource;
 

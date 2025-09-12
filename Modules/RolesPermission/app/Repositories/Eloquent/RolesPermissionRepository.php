@@ -16,7 +16,7 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
     public function store(Request $request): array
     {
         $id = $request->id ?? '';
-        $authId = current_user()->id ?? $request->user_id;
+        $authId = currentUser()->id ?? $request->user_id;
 
         $successMsg = empty($id) ? __('admin.user_management.role_create_success') : __('admin.user_management.role_update_success');
         $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
@@ -51,7 +51,7 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
     public function list(Request $request): array
     {
         try {
-            $userId = current_user()->id ?? $request->user_id;
+            $userId = currentUser()->id ?? $request->user_id;
             $query = Role::query();
 
             $query->where('created_by', $userId);

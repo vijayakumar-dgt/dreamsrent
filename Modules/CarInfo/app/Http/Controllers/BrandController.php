@@ -21,7 +21,7 @@ class BrandController extends Controller
 
     public function index(): View
     {
-        $langID = current_user()->language_id ?? 1;
+        $langID = currentUser()->language_id ?? 1;
         $category = Category::orderBy('id', 'desc')->where("language_id", $langID)->get();
         return view('carinfo::brand.index', compact('category'));
     }

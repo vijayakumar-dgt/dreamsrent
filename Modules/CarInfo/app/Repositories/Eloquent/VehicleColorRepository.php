@@ -11,7 +11,7 @@ class VehicleColorRepository implements VehicleColorRepositoryInterface
 {
     public function store(Request $request): array
     {
-        $authUser = current_user();
+        $authUser = currentUser();
         $languageId = $authUser->language_id ?? 1;
         $id = $request->id ?? '';
 
@@ -52,7 +52,7 @@ class VehicleColorRepository implements VehicleColorRepositoryInterface
             $orderBy = $request->order_by ?? 'desc';
             $search = $request->input('search');
             $status = $request->input('status');
-            $authUser = current_user();
+            $authUser = currentUser();
             $language_id = $authUser->language_id ?? 1;
 
             $query = CarColor::orderBy('id', $orderBy)

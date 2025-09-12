@@ -16,7 +16,7 @@ class UserPermission
     public function handle(Request $request, Closure $next): Response
     {
         $routeName = $request->route()?->getName();
-        $user = current_user();
+        $user = currentUser();
         $userType = $user->user_type ?? '';
 
         $allowed = true;

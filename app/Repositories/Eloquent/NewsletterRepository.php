@@ -8,6 +8,7 @@ use App\Repositories\Contracts\NewsLetterRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Modules\GeneralSetting\Models\GeneralSetting;
 
 class NewsLetterRepository implements NewsLetterRepositoryInterface
@@ -26,6 +27,7 @@ class NewsLetterRepository implements NewsLetterRepositoryInterface
                 ];
                 sendNewsletterEmail($request->subscriber_email, 'newsletter', $notifyData);
             } catch (\Exception $e) {
+                Log::error('Newsletter email sending failed: ' . $e->getMessage());
             }
 
             return [

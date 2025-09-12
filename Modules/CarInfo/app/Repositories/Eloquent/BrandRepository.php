@@ -20,7 +20,7 @@ class BrandRepository implements BrandRepositoryInterface
 
     public function store(Request $request): array
     {
-        $authUser = current_user();
+        $authUser = currentUser();
         $language_id = $authUser->language_id;
         $id = $request->id ?? null;
 
@@ -83,7 +83,7 @@ class BrandRepository implements BrandRepositoryInterface
     {
         try {
             /** @var \App\Models\User|null $authUser */
-            $authUser = current_user();
+            $authUser = currentUser();
             if (!$authUser) {
                 return [
                     'status'  => 'error',

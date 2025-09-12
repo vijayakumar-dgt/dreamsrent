@@ -294,7 +294,7 @@ if (!function_exists('getUserPermissions')) {
      */
     function getUserPermissions(int|string|null $userId = null): Collection
     {
-        $user = $userId ? User::find($userId) : current_user();
+        $user = $userId ? User::find($userId) : currentUser();
 
         if (!$user || empty($user->role_id)) {
             return collect();
@@ -327,7 +327,7 @@ if (!function_exists('getUserPermissions')) {
  */
 function hasPermission(Collection $permissions, string|array $moduleSlug, string $action): bool
 {
-    $user = current_user();
+    $user = currentUser();
 
     $userType = $user->user_type ?? '';
     if ($userType == 1) {
@@ -348,7 +348,7 @@ function hasPermission(Collection $permissions, string|array $moduleSlug, string
     return false;
 }
 
-function current_user(?string $guard = null): ?Authenticatable
+function currentUser(?string $guard = null): ?Authenticatable
 {
     $guard = $guard ?? Auth::getDefaultDriver();
 
@@ -453,7 +453,7 @@ function getLanguageName(?string $langCode = 'en'): string
 function getProfileImage(): ?string
 {
     /** @var \App\Models\User|null $user */
-    $user = current_user();
+    $user = currentUser();
 
     if ($user && $user->userDetail) {
         return uploadedAsset($user->userDetail->profile_image ?? '', 'profile');
@@ -499,9 +499,9 @@ function getCurrentUserFullname($userId = null)
         return ucwords($fullName);
     }
 
-    $fullName = (current_user()->userDetail->first_name ?? null)
-        ? current_user()->userDetail->first_name . ' ' . current_user()->userDetail->last_name
-        : current_user()->name;
+    $fullName = (currentUser()->userDetail->first_name ?? null)
+        ? currentUser()->userDetail->first_name . ' ' . currentUser()->userDetail->last_name
+        : currentUser()->name;
 
     return ucwords($fullName);
 }

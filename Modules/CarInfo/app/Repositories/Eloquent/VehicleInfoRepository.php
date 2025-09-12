@@ -13,6 +13,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Modules\Booking\Models\Booking;
@@ -65,7 +66,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     public function index(): array
     {
-        $langID = current_user()->language_id ?? 1;
+        $langID = currentUser()->language_id ?? 1;
 
         $vechileName = VehicleInfo::orderBy('id', 'desc')->where("language_id", $langID)->get();
         $vechileType = Cartype::orderBy('id', 'desc')->where("language_id", $langID)->get();
@@ -82,7 +83,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     public function createVehicle(): array
     {
         /** @var \App\Models\User|null $authUser  */
-        $authUser = current_user();
+        $authUser = currentUser();
         $language_id = $authUser->language_id ?? 1;
         $carTypes = Cartype::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
         $brands = Brand::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
@@ -109,7 +110,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
         $priceType = PricingType::where('status', 1)->get();
 
-        $authUser = current_user();
+        $authUser = currentUser();
 
         $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
         $currency = null;
@@ -149,7 +150,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $language = Language::find($language_id);
             $languageId = $language->language_id;
         } else {
-            $authId = current_user();
+            $authId = currentUser();
             $language_id = $authId->language_id ?? null;
             $language = $language_id;
             $languageId = $language;
@@ -260,7 +261,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             ->whereIn('extra_service_id', $extraServices->pluck('id'))
             ->get();
 
-        $authId = current_user()->language_id;
+        $authId = currentUser()->language_id;
         $insurances = Insurance::with('insuranceBenefits', 'priceType')
             ->where('language_id', $authId)
             ->where('status', 1)
@@ -1034,7 +1035,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
         try {
             /** @var \App\Models\User|null $authId */
-            $authId = current_user();
+            $authId = currentUser();
             if (!$authId) {
                 return [
                     'code'    => 401,
@@ -1230,7 +1231,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             'reviews:id,vehicle_id,average_ratings'
         ]);
 
-        $authUser = current_user();
+        $authUser = currentUser();
 
         $lang_id = null;
 
@@ -1466,7 +1467,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }, $multipleImages);
 
             /** @var \App\Models\User $auth */
-            $auth = current_user();
+            $auth = currentUser();
             $authId = $auth->id ?? null;
 
             $wishlistExists = false;
@@ -1675,7 +1676,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                         break;
 
                     default:
-                        \Log::warning("Unhandled document key: {$document->key}");
+                        Log::warning("Unhandled document key: {$document->key}");
                         break;
                 }
             }
@@ -1906,7 +1907,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 }
                 $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
                 /** @var \App\Models\User|null $auth */
-                $auth = current_user();
+                $auth = currentUser();
                 $authId = $auth?->id;
 
                 $wishlistExists = false;
@@ -2159,7 +2160,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     public function vehicleInterestLists(Request $request): array
     {
-        $authUser = current_user();
+        $authUser = currentUser();
         $lang_id = null;
 
         if ($authUser && !empty($authUser->language_id)) {
@@ -2217,7 +2218,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }, $multipleImages);
 
             /** @var \App\Models\User $auth|null */
-            $auth = current_user();
+            $auth = currentUser();
             $authId = $auth->id ?? null;
 
             $wishlistExists = false;

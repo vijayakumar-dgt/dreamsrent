@@ -20,7 +20,7 @@ class ReviewRepository implements ReviewRepositoryInterface
 
     public function __construct()
     {
-        $this->authUser = current_user();
+        $this->authUser = currentUser();
     }
 
     public function addReview(Request $request): array
@@ -229,19 +229,22 @@ class ReviewRepository implements ReviewRepositoryInterface
 
     public function getRatingDescription(mixed $rating): string
     {
+        $rating = "";
         if ($rating >= 4.5) {
-            return __('web.home.excellent');
+            $rating = __('web.home.excellent');
         } elseif ($rating >= 4.0) {
-            return __('web.home.very_good');
+            $rating = __('web.home.very_good');
         } elseif ($rating >= 3.5) {
-            return __('web.home.good');
+            $rating = __('web.home.good');
         } elseif ($rating >= 3.0) {
-            return __('web.home.average');
+            $rating = __('web.home.average');
         } elseif ($rating >= 2.0) {
-            return __('web.home.below_average');
+            $rating = __('web.home.below_average');
         } else {
-            return __('web.home.poor');
+            $rating = __('web.home.poor');
         }
+
+        return $rating;
     }
 
     public function getUserReviewsList(Request $request): array

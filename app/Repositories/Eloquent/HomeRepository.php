@@ -114,7 +114,6 @@ class HomeRepository implements HomeRepositoryInterface
         if (!$vehicle) {
             abort(404);
         }
-        $mainLocation = Location::select('id', 'name', 'address')->where('id', $vehicle->main_location_id ?? '')->first();
         $allLocation = collect();
 
         // Get main location
@@ -165,13 +164,11 @@ class HomeRepository implements HomeRepositoryInterface
             ->where('key', 'booking')->value('value') ?? 1;
         $allowEnquiries = GeneralSetting::where('group_id', 20)
             ->where('key', 'enquiries')->value('value') ?? 1;
-        $vehicleDetail = VehicleInfo::find($vehicle->id);
         $seo_title = '';
         $seo_description = '';
         $meta_keywords = '';
         $og_image = '';
         $mainLocation = null;
-
         $vehicleDetail = VehicleInfo::find($vehicle->id);
 
         if ($vehicleDetail) {

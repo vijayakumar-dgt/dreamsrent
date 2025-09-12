@@ -17,9 +17,9 @@ class DashboardRepository implements DashboardRepositoryInterface
 {
     public function index(): array
     {
-        $current_user = current_user();
+        $currentUser = currentUser();
 
-        $languageId = $current_user->language_id ?? 1;
+        $languageId = $currentUser->language_id ?? 1;
         $carTypes = VehicleInfo::LeftJoin('car_fuels', 'vehicle_info.fuel_type_id', '=', 'car_fuels.id')
             ->LeftJoin('driving_types', 'vehicle_info.type_id', '=', 'driving_types.id')
             ->select('vehicle_info.*', 'driving_types.name as driving_name', 'car_fuels.fuel_type')
@@ -149,7 +149,6 @@ class DashboardRepository implements DashboardRepositoryInterface
 
             // +1 if you want to include both start and end date as full days
             $booking->day_count = (int) $start->diffInDays($end) + 1;
-            $days = $booking->day_count;
 
             return $booking;
         });
@@ -252,7 +251,7 @@ class DashboardRepository implements DashboardRepositoryInterface
             return \Carbon\Carbon::parse($date)->format('d M');
         })->values();
         /** @var \App\Models\User|null $authId */
-        $authId = current_user();
+        $authId = currentUser();
         $languageId = $authId ? $authId->language_id : null;
 
         $invoices = Invoice::with('items')
@@ -264,6 +263,6 @@ class DashboardRepository implements DashboardRepositoryInterface
                 return $invoice;
             });
 
-        return ['current_user' => $current_user, 'carTypes' => $carTypes, 'bookingCount' => $bookingCount, 'upcomingCount' => $upcomingCount, 'symbol' => $symbol, 'amount' => $amount, 'booking' => $booking, 'percentageChange' => $percentageChange, 'sign' => $sign, 'amountPercentageChange' => $amountPercentageChange, 'amountSymbol' => $amountSymbol, 'carSymbol' => $carSymbol, 'carPercentageChange' => $carPercentageChange, 'reservations' => $reservations, 'users' => $users, 'chartbooking' => $chartbooking, 'maintenances' => $maintenances, 'drivers' => $drivers, 'dates' => $dates, 'times' => $times, 'series' => $series, 'formattedDates' => $formattedDates, 'invoices' => $invoices];
+        return ['currentUser' => $currentUser, 'carTypes' => $carTypes, 'bookingCount' => $bookingCount, 'upcomingCount' => $upcomingCount, 'symbol' => $symbol, 'amount' => $amount, 'booking' => $booking, 'percentageChange' => $percentageChange, 'sign' => $sign, 'amountPercentageChange' => $amountPercentageChange, 'amountSymbol' => $amountSymbol, 'carSymbol' => $carSymbol, 'carPercentageChange' => $carPercentageChange, 'reservations' => $reservations, 'users' => $users, 'chartbooking' => $chartbooking, 'maintenances' => $maintenances, 'drivers' => $drivers, 'dates' => $dates, 'times' => $times, 'series' => $series, 'formattedDates' => $formattedDates, 'invoices' => $invoices];
     }
 }

@@ -26,7 +26,7 @@ class LocationRepository implements LocationRepositoryInterface
     public function store(Request $request): array
     {
         /** @var User|null $authUser */
-        $authUser = current_user();
+        $authUser = currentUser();
 
         if (!$authUser) {
             return [
@@ -151,7 +151,7 @@ class LocationRepository implements LocationRepositoryInterface
             $search = $request->input('search');
             $status = $request->input('status');
             /** @var \App\Models\User|null $authUser */
-            $authUser = current_user();
+            $authUser = currentUser();
             if (!$authUser) {
                 return [
                     'status'  => 'error',

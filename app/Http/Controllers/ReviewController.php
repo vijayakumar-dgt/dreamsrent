@@ -16,7 +16,7 @@ class ReviewController extends Controller
 
     public function __construct(ReviewRepositoryInterface $reviewRepository)
     {
-        $this->authUser = current_user();
+        $this->authUser = currentUser();
         $this->reviewRepository = $reviewRepository;
     }
 
