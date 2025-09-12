@@ -14,10 +14,10 @@ class MaintenanceRepository implements MaintenanceRepositoryInterface
     public function index(): array
     {
         $vehicles = VehicleInfo::where('status', 1)->get(['id', 'name']);
-        $data = [
-            'vehicles' => $vehicles
+
+        return [
+            'vehicles' => $vehicles,
         ];
-        return $data;
     }
 
     public function store(Request $request): array
