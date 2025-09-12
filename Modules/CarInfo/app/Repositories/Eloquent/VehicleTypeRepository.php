@@ -42,30 +42,22 @@ class VehicleTypeRepository implements VehicleTypeRepositoryInterface
             : __('admin.common.default_update_error');
 
         try {
-            $vehicleType = $id ? Cartype::find($id) : null;
-
-            if ($id && !$vehicleType) {
-                return [
-                    'status'  => 'error',
-                    'code'    => 404,
-                    'message' => __('admin.common.not_found')
-                ];
-            }
+            $vehicleType = $id ? Cartype::findOrFail($id) : null;
 
             $category = Category::find($request->vehicle_category_id);
 
             $data = [
-                'name'          => $request->name,
-                'category_id'   => $request->vehicle_category_id,
-                "type"          => $category?->slug ?? null,
-                'language_id'   => $request->language_id ?? ($vehicleType->language_id ?? $language_id),
-                'status'        => $id ? ($request->input('status') == 'on' ? 1 : 0) : 1,
+                'name'        => $request->name,
+                'category_id' => $request->vehicle_category_id,
+                'type'        => $category?->slug,
+                'language_id' => $request->language_id ?? ($vehicleType?->language_id ?? $language_id),
+                'status'      => $id ? ($request->input('status') == 'on' ? 1 : 0) : 1,
             ];
 
             // Handle image uploads
             if ($request->hasFile('icon')) {
                 $file = $request->file('icon');
-                $data['icon'] = $this->imageResizer->uploadFile($file, $folderPath, $vehicleType->icon ?? null);
+                $data['icon'] = $this->imageResizer->uploadFile($file, $folderPath, $vehicleType?->icon);
             }
 
             // Create or Update
@@ -74,13 +66,18 @@ class VehicleTypeRepository implements VehicleTypeRepositoryInterface
             return [
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => $successMessage
+                'message' => $successMessage,
             ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            $code = $e instanceof ModelNotFoundException ? 404 : 500;
+            $message = $e instanceof ModelNotFoundException
+                ? __('admin.common.not_found')
+                : $errorMessage;
+
             return [
                 'status'  => 'error',
-                'code'    => 500,
-                'message' => $errorMessage,
+                'code'    => $code,
+                'message' => $message,
                 'error'   => $e->getMessage(),
             ];
         }
