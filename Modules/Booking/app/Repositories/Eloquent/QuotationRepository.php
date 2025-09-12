@@ -67,138 +67,23 @@ class QuotationRepository implements QuotationRepositoryInterface
 
     public function store(Request $request): array
     {
-        $bookingId = $request->input('booking_id'); // or wherever the booking ID comes from
+        $bookingId = $request->input('booking_id');
 
         $successMsg = !empty($bookingId) ? __('admin.bookings.reservation_create_success') : __('admin.bookings.reservation_update_success');
         $errorMsg = !empty($bookingId) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
             DB::beginTransaction();
-            $startDate = $request->input('start_date');
-            $startTime = $request->input('start_time');
-            $endDate = $request->input('end_date');
-            $endTime = $request->input('end_time');
 
-            if (!is_string($startDate) || !is_string($startTime) || !is_string($endDate) || !is_string($endTime)) {
-                throw new \InvalidArgumentException('Invalid date or time input.');
-            }
-
-            $startDateTime = Carbon::parse($startDate . ' ' . $startTime)->format('Y-m-d H:i:s');
-            $endDateTime = Carbon::parse($endDate . ' ' . $endTime)->format('Y-m-d H:i:s');
-
-            $bookingId = $request->booking_id ?? null;
-
-            $data = [
-                'vehicle_id'                => $request->vehicle_id,
-                'customer_id'               => $request->customer_id,
-                "booking_by"                => "quotation",
-                'driver_id'                 => $request->driver_id ?? null,
-                'driver_price'              => $request->driver_price ?? 0,
-                'vehicle_price'             => $request->vehicle_price,
-                'total_insurance_price'     => $request->total_insurance_price ?? 0,
-                'total_extra_service_price' => $request->total_extra_service_price ?? 0,
-                'final_price'               => $request->final_price ?? 0,
-                'extra_service'             => $request->extra_service ?? null,
-                'insurance'                 => $request->insurance ?? null,
-                'security_deposit'          => $request->security_deposit ?? null,
-                'start_datetime'            => $startDateTime,
-                'end_datetime'              => $endDateTime,
-                'pickup_location'           => $request->pickup_location,
-                'return_location'           => $request->return_location,
-                'booking_status'            => 1,
-                'booking_tariff'            => $request->tariff ?? null,
-                'driving_type'              => $request->driving_type ?? null,
-                'rental_type'               => $request->vehicle_price_type ?? null,
-                'no_of_passengers'          => $request->no_of_passengers ?? null,
-                'no_of_days'                => $request->no_of_days ?? null,
-                'vehicle_total_price'       => $request->vehicle_total_price ?? null,
-                'base_km'                   => $request->base_km ?? null,
-                'km_extra_price'            => $request->km_extra_price ?? null,
-                'expenses'                  => $request->expenses ?? null,
-                'delivery_price'            => $request->delivery_price ?? null,
-                'tax_val'                   => $request->tax_val ?? null,
-                'tax_type'                  => $request->tax_type ?? null,
-                'booking_date'              => now(),
-            ];
-            $details = [
-                'vehicle_price_type' => $request->vehicle_price_type,
-                'vehicle_season_id'  => $request->vehicle_season_id ?? null,
-                'vehicle_tariff_id'  => $request->vehicle_tariff_id ?? null,
-            ];
-            $vehicleTariff = '';
-            $vehicleSeason = '';
-
-            if ($request->vehicle_tariff_id) {
-                $vehicleTariff = VehicleTarrif::find($request->vehicle_tariff_id);
-
-                if ($vehicleTariff instanceof \Modules\CarInfo\Models\VehicleTarrif) {
-                    $details['tariff_title'] = $vehicleTariff->tariff_title;
-                    $details['tariff_price'] = $vehicleTariff->tariff_daily_price;
-                    $details['tariff_from_days'] = $vehicleTariff->tariff_from_days;
-                    $details['tariff_to_days'] = $vehicleTariff->tariff_to_days;
-                    $details['tariff_base_km'] = $vehicleTariff->tariff_base_km;
-                    $details['tariff_extra_price'] = $vehicleTariff->tariff_extra_price;
-                }
-            }
-            if ($request->vehicle_season_id) {
-                $vehicleSeason = VehicleSeason::find($request->vehicle_season_id);
-
-                if ($vehicleSeason instanceof \Modules\CarInfo\Models\VehicleSeason) {
-                    $details['seasonal_title'] = $vehicleSeason->seasonal_title;
-                    $details['seasonal_start_date'] = $vehicleSeason->seasonal_start_date;
-                    $details['seasonal_end_date'] = $vehicleSeason->seasonal_end_date;
-                    $details['seasonal_daily_rate'] = $vehicleSeason->seasonal_daily_rate;
-                    $details['seasonal_weekly_rate'] = $vehicleSeason->seasonal_weekly_rate;
-                    $details['seasonal_monthly_rate'] = $vehicleSeason->seasonal_monthly_rate;
-                    $details['seasonal_late_fee'] = $vehicleSeason->seasonal_late_fee;
-                }
-            }
+            [$startDateTime, $endDateTime] = $this->parseDateTimes($request);
+            $data = $this->prepareBookingData($request, $startDateTime, $endDateTime);
+            $details = $this->prepareBookingDetails($request);
 
             if (empty($bookingId)) {
-                $data['created_by'] = Auth::guard('admin')->id();
-                $booking = Booking::create($data);
-                $bookingNumber = str_pad((string) $booking->id, 4, '0', STR_PAD_LEFT);
-                $bookingPrefix = GeneralSetting::select('value')->where('key', 'reservation_prefix')->first();
-                $bookingPrefix = $bookingPrefix->value ?? 'RES';
-                $booking->update(['reservation_id' => $bookingPrefix . $bookingNumber]);
-                $details['booking_id'] = $booking->id;
+                $booking = $this->createBooking($data, $details);
                 $bookingId = $booking->id;
-
-                $bookingDetail = BookingDetail::create($details);
-
-                $historyData = [
-                    'bookings'         => $booking->toArray(),
-                    'booking_details'  => $bookingDetail->toArray(),
-                ];
-                BookingHistory::create([
-                    'booking_id' => $booking->id,
-                    'action'     => 'create',
-                    'data'       => json_encode($historyData),
-                    'message'    => 'Quotations created'
-                ]);
-
-                $this->sendNotification($booking);
             } else {
-                $data['updated_by'] = Auth::guard('admin')->id();
-
-                Booking::where('id', $bookingId)->update($data);
-                BookingDetail::where('booking_id', $bookingId)->update($details);
-
-                $booking = Booking::find($bookingId);
-                $bookingDetail = BookingDetail::where('booking_id', $bookingId)->first();
-
-                $historyData = [
-                    'bookings'        => $booking instanceof \Modules\Booking\Models\Booking ? $booking->toArray() : [],
-                    'booking_details' => $bookingDetail instanceof \Modules\Booking\Models\BookingDetail ? $bookingDetail->toArray() : [],
-                ];
-                if ($booking instanceof \Modules\Booking\Models\Booking) {
-                    BookingHistory::create([
-                        'booking_id' => $booking->id,
-                        'action'     => 'update',
-                        'data'       => json_encode($historyData),
-                        'message'    => 'Quotations updated'
-                    ]);
-                }
+                $this->updateBooking($bookingId, $data, $details);
             }
 
             DB::commit();
@@ -210,7 +95,6 @@ class QuotationRepository implements QuotationRepositoryInterface
                 'message'          => $successMsg,
                 'view_details_url' => route('quotations.details', ['id' => $encryptedId]),
             ];
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -219,6 +103,151 @@ class QuotationRepository implements QuotationRepositoryInterface
                 'message' => $errorMsg,
                 'error'   => $e->getMessage(),
             ];
+        }
+    }
+
+    private function parseDateTimes(Request $request): array
+    {
+        $startDate = $request->input('start_date');
+        $startTime = $request->input('start_time');
+        $endDate = $request->input('end_date');
+        $endTime = $request->input('end_time');
+
+        if (!is_string($startDate) || !is_string($startTime) || !is_string($endDate) || !is_string($endTime)) {
+            throw new \InvalidArgumentException('Invalid date or time input.');
+        }
+
+        $startDateTime = Carbon::parse($startDate . ' ' . $startTime)->format('Y-m-d H:i:s');
+        $endDateTime = Carbon::parse($endDate . ' ' . $endTime)->format('Y-m-d H:i:s');
+
+        return [$startDateTime, $endDateTime];
+    }
+
+    private function prepareBookingData(Request $request, string $startDateTime, string $endDateTime): array
+    {
+        return [
+            'vehicle_id'                => $request->vehicle_id,
+            'customer_id'               => $request->customer_id,
+            'booking_by'                => 'quotation',
+            'driver_id'                 => $request->driver_id ?? null,
+            'driver_price'              => $request->driver_price ?? 0,
+            'vehicle_price'             => $request->vehicle_price,
+            'total_insurance_price'     => $request->total_insurance_price ?? 0,
+            'total_extra_service_price' => $request->total_extra_service_price ?? 0,
+            'final_price'               => $request->final_price ?? 0,
+            'extra_service'             => $request->extra_service ?? null,
+            'insurance'                 => $request->insurance ?? null,
+            'security_deposit'          => $request->security_deposit ?? null,
+            'start_datetime'            => $startDateTime,
+            'end_datetime'              => $endDateTime,
+            'pickup_location'           => $request->pickup_location,
+            'return_location'           => $request->return_location,
+            'booking_status'            => 1,
+            'booking_tariff'            => $request->tariff ?? null,
+            'driving_type'              => $request->driving_type ?? null,
+            'rental_type'               => $request->vehicle_price_type ?? null,
+            'no_of_passengers'          => $request->no_of_passengers ?? null,
+            'no_of_days'                => $request->no_of_days ?? null,
+            'vehicle_total_price'       => $request->vehicle_total_price ?? null,
+            'base_km'                   => $request->base_km ?? null,
+            'km_extra_price'            => $request->km_extra_price ?? null,
+            'expenses'                  => $request->expenses ?? null,
+            'delivery_price'            => $request->delivery_price ?? null,
+            'tax_val'                   => $request->tax_val ?? null,
+            'tax_type'                  => $request->tax_type ?? null,
+            'booking_date'              => now(),
+        ];
+    }
+
+    private function prepareBookingDetails(Request $request): array
+    {
+        $details = [
+            'vehicle_price_type' => $request->vehicle_price_type,
+            'vehicle_season_id'  => $request->vehicle_season_id ?? null,
+            'vehicle_tariff_id'  => $request->vehicle_tariff_id ?? null,
+        ];
+
+        if ($request->vehicle_tariff_id) {
+            $vehicleTariff = VehicleTarrif::find($request->vehicle_tariff_id);
+            if ($vehicleTariff instanceof VehicleTarrif) {
+                $details = array_merge($details, [
+                    'tariff_title'      => $vehicleTariff->tariff_title,
+                    'tariff_price'      => $vehicleTariff->tariff_daily_price,
+                    'tariff_from_days'  => $vehicleTariff->tariff_from_days,
+                    'tariff_to_days'    => $vehicleTariff->tariff_to_days,
+                    'tariff_base_km'    => $vehicleTariff->tariff_base_km,
+                    'tariff_extra_price'=> $vehicleTariff->tariff_extra_price,
+                ]);
+            }
+        }
+
+        if ($request->vehicle_season_id) {
+            $vehicleSeason = VehicleSeason::find($request->vehicle_season_id);
+            if ($vehicleSeason instanceof VehicleSeason) {
+                $details = array_merge($details, [
+                    'seasonal_title'       => $vehicleSeason->seasonal_title,
+                    'seasonal_start_date'  => $vehicleSeason->seasonal_start_date,
+                    'seasonal_end_date'    => $vehicleSeason->seasonal_end_date,
+                    'seasonal_daily_rate'  => $vehicleSeason->seasonal_daily_rate,
+                    'seasonal_weekly_rate' => $vehicleSeason->seasonal_weekly_rate,
+                    'seasonal_monthly_rate'=> $vehicleSeason->seasonal_monthly_rate,
+                    'seasonal_late_fee'    => $vehicleSeason->seasonal_late_fee,
+                ]);
+            }
+        }
+
+        return $details;
+    }
+
+    private function createBooking(array $data, array $details): Booking
+    {
+        $data['created_by'] = Auth::guard('admin')->id();
+        $booking = Booking::create($data);
+        $bookingNumber = str_pad((string) $booking->id, 4, '0', STR_PAD_LEFT);
+        $bookingPrefix = GeneralSetting::select('value')->where('key', 'reservation_prefix')->first();
+        $bookingPrefix = $bookingPrefix->value ?? 'RES';
+        $booking->update(['reservation_id' => $bookingPrefix . $bookingNumber]);
+        $details['booking_id'] = $booking->id;
+
+        $bookingDetail = BookingDetail::create($details);
+
+        $historyData = [
+            'bookings'        => $booking->toArray(),
+            'booking_details' => $bookingDetail->toArray(),
+        ];
+        BookingHistory::create([
+            'booking_id' => $booking->id,
+            'action'     => 'create',
+            'data'       => json_encode($historyData),
+            'message'    => 'Quotations created'
+        ]);
+
+        $this->sendNotification($booking);
+
+        return $booking;
+    }
+
+    private function updateBooking(int|string $bookingId, array $data, array $details): void
+    {
+        $data['updated_by'] = Auth::guard('admin')->id();
+
+        Booking::where('id', $bookingId)->update($data);
+        BookingDetail::where('booking_id', $bookingId)->update($details);
+
+        $booking = Booking::find($bookingId);
+        $bookingDetail = BookingDetail::where('booking_id', $bookingId)->first();
+
+        $historyData = [
+            'bookings'        => $booking instanceof Booking ? $booking->toArray() : [],
+            'booking_details' => $bookingDetail instanceof BookingDetail ? $bookingDetail->toArray() : [],
+        ];
+        if ($booking instanceof Booking) {
+            BookingHistory::create([
+                'booking_id' => $booking->id,
+                'action'     => 'update',
+                'data'       => json_encode($historyData),
+                'message'    => 'Quotations updated'
+            ]);
         }
     }
 
