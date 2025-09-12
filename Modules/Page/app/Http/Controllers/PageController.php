@@ -59,6 +59,7 @@ class PageController extends Controller
     private const APP_PUBLIC_PATH      = 'app/public/';
     private const STORAGE_PATHS         = '/storage/';
     private const ICON_SELECTION       = '/frontend/assets/img/icons/bx-selection.svg';
+    private const FIND_VEHICLES_SERVICE = "Find the best vehicles and services easily.";
 
     public function __construct(PageInterface $pageRepository)
     {
@@ -1842,6 +1843,7 @@ class PageController extends Controller
                         preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $order = $matches[3] ?? 'asc';
+                        $viewAll = $matches[2] ?? 'no';
 
                         $benefits = DB::table('sections')
                             ->join('section_datas', function ($join) use ($lang_id) {
@@ -2035,7 +2037,7 @@ class PageController extends Controller
                         $section['design'] = 'search_one';
                         $section['section_content'] = [
                             "title"       => "Search Section",
-                            "description" => "Find the best vehicles and services easily."
+                            "description" => self::FIND_VEHICLES_SERVICE
                         ];
                     }
                 }
@@ -2347,7 +2349,6 @@ class PageController extends Controller
                     is_string($section['section_content'])) &&
                     (preg_match('/\[[^\]]+\]/', $section['section_content']) === 0)
                 ) {
-                    $section['section_content'] = $section['section_content'];
                     $section['section_type'] = 'multiple_section';
                 }
             }
@@ -3039,7 +3040,7 @@ class PageController extends Controller
                         $section['design'] = 'why_us_one';
                         $section['section_content'] = [
                             "title"       => "Why Choose Us Section",
-                            "description" => "Find the best vehicles and services easily."
+                            "description" => self::FIND_VEHICLES_SERVICE
                         ];
                     }
                 }
@@ -3102,7 +3103,7 @@ class PageController extends Controller
                         $section['design'] = 'search_one';
                         $section['section_content'] = [
                             "title"       => "Search Section",
-                            "description" => "Find the best vehicles and services easily."
+                            "description" => self::FIND_VEHICLES_SERVICE
                         ];
                     }
                 }
