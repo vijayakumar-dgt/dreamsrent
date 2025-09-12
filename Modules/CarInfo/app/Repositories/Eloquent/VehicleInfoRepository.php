@@ -58,6 +58,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     public const CATEGORY = 'category:id,name';
     public const MAIN_LOCATION = 'mainLocation:id,name';
     public const COLOR = 'color:id,name,value';
+    private const FUEL_TYPE = 'fuel_type:id,fuel_type';
+    private const TRANSMISSION = 'transmission:id,name';
 
     public function __construct(ImageResizer $imageResizer)
     {
@@ -1198,7 +1200,6 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
                 $damageCount = VehicleDamage::where('vehicle_id', $vehicle->id)->count();
                 $vehicle->damage_count = $damageCount;
-                $vehicle->status = $vehicle->status;
                 $vehicle->currency = $currencySymbol;
                 $vehicle->created_date = formatDateTime($vehicle->created_at, false);
 
@@ -1208,7 +1209,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $response = [
                 'code'    => 200,
                 'status'  => 'success',
-                'message' => __('Vehicles list retrieved successfully.'),
+                'message' => __('web.common.default_retrieve_success'),
                 'data'    => $vehicles,
             ];
         } catch (\Exception $e) {
@@ -1226,8 +1227,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             self::CATEGORY,
             self::MAIN_LOCATION,
             self::COLOR,
-            'fuel_type:id,fuel_type',
-            'transmission:id,name',
+            self::FUEL_TYPE,
+            self::TRANSMISSION,
             'reviews:id,vehicle_id,average_ratings'
         ]);
 
@@ -1257,7 +1258,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             if (!$location) {
                 return [
                     'code'    => 200,
-                    'message' => __('Vehicles list retrieved successfully.'),
+                    'message' => __('web.common.default_retrieve_success'),
                     'data'    => []
                 ];
             }
@@ -1478,26 +1479,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                     ->exists();
             }
 
-            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-            $currency = null;
-
-            if ($currencySetting && $currencySetting->value) {
-                $currency = Currency::find($currencySetting->value);
-            }
-
-            $currencySymbol = $currency->symbol ?? "$";
-
-            $user = User::where('id', $vehicle->created_by)->first();
-
-            $userDetail = null;
-
-            if ($user) {
-                $userDetail = UserDetail::where("user_id", $user->id)->first();
-                $userProfileImg = $userDetail && $userDetail->profile_image
-                    ? url(self::STORAGES . $userDetail->profile_image)
-                    : null;
-            }
-
+            $currencySymbol = getDefaultCurrencySymbol();
 
             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
             $review_count = Review::where("vehicle_id", $vehicle->id)->count();
@@ -1555,7 +1537,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
         return [
             'code'       => 200,
-            'message'    => __('Vehicles list retrieved successfully.'),
+            'message'    => __('web.common.default_retrieve_success'),
             'data'       => $data,
             'pagination' => [
                 'total'         => $vehicles->total(), // Total vehicles count
@@ -1836,8 +1818,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 self::CATEGORY,
                 self::MAIN_LOCATION,
                 self::COLOR,
-                'fuel_type:id,fuel_type',
-                'transmission:id,name',
+                self::FUEL_TYPE,
+                self::TRANSMISSION,
                 'extraservices.extraService:id,name,icon,description,image',
                 'faqs:id,vehicle_id,question,answer',
                 'damages:id,Vehicle_id,damage_type,damage_loaction,image,description',
@@ -1901,10 +1883,6 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                     return url('storage' . $img);
                 }, $multipleImages);
 
-                if (Auth::guard('web')->check()) {
-                    $user = Auth::guard('web')->user();
-                    $wishlist = Wishlist::where('user_id', Auth::id())->where('vehicle_id', $vehicle->id)->first();
-                }
                 $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
                 /** @var \App\Models\User|null $auth */
                 $auth = currentUser();
@@ -1912,11 +1890,6 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
                 $wishlistExists = false;
 
-                $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-
-                if ($currencySetting && $currencySetting->value) {
-                    $currency = Currency::find($currencySetting->value);
-                }
                 if ($authId) {
                     $wishlistExists = Wishlist::where("user_id", $authId)
                         ->where("vehicle_id", $vehicle->id)
@@ -2180,8 +2153,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             self::CATEGORY,
             self::MAIN_LOCATION,
             self::COLOR,
-            'fuel_type:id,fuel_type',
-            'transmission:id,name',
+            self::FUEL_TYPE,
+            self::TRANSMISSION,
             'reviews:id,vehicle_id,average_ratings'
         ])->where("language_id", $lang_id)->where('category_id', $request->category_id)->take(6)->get();
 

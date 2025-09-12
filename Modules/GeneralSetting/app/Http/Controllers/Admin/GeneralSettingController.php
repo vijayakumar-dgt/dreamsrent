@@ -103,14 +103,6 @@ class GeneralSettingController extends Controller
         return view('generalsetting::rental_settings.rental-settings');
     }
 
-    private function updateOrCreateRentalSetting(?string $key, ?string $value): bool
-    {
-        return (bool) GeneralSetting::updateOrCreate(
-            ['key' => $key],
-            ['value' => $value, 'group_id' => 20]
-        );
-    }
-
     public function storeRentalSettings(StoreRentalSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
         try {
@@ -128,14 +120,6 @@ class GeneralSettingController extends Controller
                 'error'   => $e->getMessage()
             ], 500);
         }
-    }
-
-    private function updateOrCreateLogoSetting(?string $key, ?string $path, ?int $groupId): GeneralSetting
-    {
-        return GeneralSetting::updateOrCreate(
-            ['key' => $key],
-            ['value' => $path, 'group_id' => $groupId]
-        );
     }
 
     public function storeLogoSettings(StoreLogoSettingsRequest $request): JsonResponse
@@ -156,14 +140,6 @@ class GeneralSettingController extends Controller
                 'error'   => $e->getMessage()
             ], 500);
         }
-    }
-
-    private function updateOrCreateOtpSetting(?string $key, ?string $value): bool
-    {
-        return (bool) GeneralSetting::updateOrCreate(
-            ['key' => $key],
-            ['value' => $value, 'group_id' => 15]
-        );
     }
 
     public function storeOtpSettings(StoreOtpSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
@@ -240,14 +216,6 @@ class GeneralSettingController extends Controller
                 'message' => __('admin.general_settings.retrive_error'),
             ], 500);
         }
-    }
-
-    private function updateOrCreateInvoiceSetting(?string $key, ?string $value): bool
-    {
-        return (bool) GeneralSetting::updateOrCreate(
-            ['key' => $key],
-            ['value' => $value, 'group_id' => 9]
-        );
     }
 
     public function storeInvoiceSettings(StoreInvoiceSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse

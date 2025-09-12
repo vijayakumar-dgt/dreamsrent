@@ -1030,7 +1030,6 @@ class PageController extends Controller
                 if (($section['status'] == 1) && (isset($section['section_content']) && strpos($section['section_content'], '[vehicle') !== false)) {
                     preg_match(self::TYPE_LIMIT_VIEWALL_REGEX, $section['section_content'], $matches);
                     $type = $matches[1] ?? 'all';
-                    $limit = $matches[2] ?? 10;
 
                     $query = VehicleInfo::with([
                         self::CAR_TYPE_SELECT,
@@ -1478,7 +1477,6 @@ class PageController extends Controller
                     if (is_string($content) && strpos($content, '[car_type ') !== false) {
                         preg_match(self::LIMIT_VIEWALL_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
 
                         $cartypes = Cartype::select('name', 'icon', 'id')
                             ->where('language_id', $lang_id)
@@ -1512,7 +1510,6 @@ class PageController extends Controller
                     if (is_string($content) && strpos($content, '[testimonial') !== false) {
                         preg_match(self::LIMIT_VIEWALL_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
 
                         $testimonials = DB::table('testimonials')->select('customer_name', 'image', 'ratings', 'review', 'location')
                             ->limit($limit)
@@ -1539,7 +1536,6 @@ class PageController extends Controller
                         preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
 
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
                         $how_it_works = DB::table('general_settings')
                             ->select('key', 'value')
@@ -1845,7 +1841,6 @@ class PageController extends Controller
                     if (is_string($content) && strpos($content, '[yart_benefit') !== false) {
                         preg_match(self::LIMIT_VIEWALL_ORDER_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
                         $benefits = DB::table('sections')
@@ -2943,7 +2938,6 @@ class PageController extends Controller
                     if (is_string($content) && strpos($content, '[testimonial') !== false) {
                         preg_match(self::LIMIT_VIEWALL_REGEX, $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
-                        $viewAll = $matches[2] ?? 'no';
 
                         $testimonials = DB::table('testimonials')->select('customer_name', 'image', 'ratings', 'review', 'location')
                             ->limit($limit)

@@ -4,6 +4,7 @@ namespace Modules\CarInfo\Repositories\Eloquent;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Modules\CarInfo\Models\Enquiry;
 use Modules\CarInfo\Repositories\Contracts\EnquiryRepositoryInterface;
 
@@ -124,6 +125,7 @@ class EnquiryRepository implements EnquiryRepositoryInterface
                 $endDate->endOfDay(),
             ]);
         } catch (\Exception $e) {
+            Log::error('Date Range Filter Error: ' . $e->getMessage());
         }
     }
 
