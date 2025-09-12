@@ -42,7 +42,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
             ];
         } else {
             try {
-                $language = Language::create(['language_id' => $languageTranslation->id]);
+                Language::create(['language_id' => $languageTranslation->id]);
                 $langPath = base_path('resources/lang/' . $languageTranslation->code);
 
                 if (!file_exists($langPath)) {
