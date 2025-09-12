@@ -37,16 +37,15 @@
                     </ul>
                 </div>
                 <div class="dropdown">
-                    <a href="#filtercollapse"
+                    <button type="button"
                         class="filtercollapse coloumn d-inline-flex align-items-center"
                         data-bs-toggle="collapse"
-                        role="button"
+                        data-bs-target="#filtercollapse"
                         aria-expanded="false"
-                        aria-controls="filtercollapse"
-                        onkeydown="if(event.key==='Enter' || event.key===' '){ this.click(); }">
+                        aria-controls="filtercollapse">
                         <i class="ti ti-filter me-1"></i> {{ __('admin.common.filters') }}
                         <span class="badge badge-xs rounded-pill bg-danger ms-2">0</span>
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
