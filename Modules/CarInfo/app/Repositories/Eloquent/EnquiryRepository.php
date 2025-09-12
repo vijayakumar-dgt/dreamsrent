@@ -44,78 +44,28 @@ class EnquiryRepository implements EnquiryRepositoryInterface
     public function getAll(Request $request): array
     {
         try {
-            $enquiries = Enquiry::select('enquiries.*', 'vehicle_info.name as car_name', 'vehicle_info.vehicle_image', 'vehicle_info.type_id', 'cartypes.name as type_name')
+            $query = Enquiry::select('enquiries.*', 'vehicle_info.name as car_name', 'vehicle_info.vehicle_image', 'vehicle_info.type_id', 'cartypes.name as type_name')
                 ->join('vehicle_info', 'enquiries.car_id', '=', 'vehicle_info.id')
-                ->join('cartypes', 'vehicle_info.type_id', '=', 'cartypes.id')
-                ->when($request->filled('status'), function ($query) use ($request) {
-                    $status = $request->input('status');
-                    if ($status === '1') {
-                        $query->where('enquiries.status', 1); // Not Opened
-                    } elseif ($status === '2') {
-                        $query->where('enquiries.status', 2); // Opened
-                    } elseif ($status === '3') {
-                        $query->where('enquiries.status', 3); // Closed
-                    }
-                })
-                ->when($request->filled('search'), function ($query) use ($request) {
-                    $search = $request->input('search');
-                    $query->where(function ($q) use ($search) {
-                        $q->where('enquiries.customer_name', 'like', "%{$search}%")
-                            ->orWhere('enquiries.email', 'like', "%{$search}%")
-                            ->orWhere('enquiries.phone', 'like', "%{$search}%")
-                            ->orWhere('vehicle_info.name', 'like', "%{$search}%");
-                    });
-                })
-                ->when($request->filled('date_range'), function ($query) use ($request) {
-                    $range = $request->input('date_range');
-                    $dates = explode(' - ', $range);
-                    if (count($dates) === 2) {
-                        try {
-                            $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
-                            $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
+                ->join('cartypes', 'vehicle_info.type_id', '=', 'cartypes.id');
 
-                            if ($startDate && $endDate) {
-                                $start = $startDate->startOfDay();
-                                $end = $endDate->endOfDay();
-                                $query->whereBetween('enquiries.enquiry_date', [$start, $end]);
-                            }
-                        } catch (\Exception $e) {
-                        }
-                    }
-                })
-                ->when($request->filled('sort_by'), function ($query) use ($request) {
-                    $sortBy = $request->input('sort_by');
-                    switch ($sortBy) {
-                        case 'ascending':
-                            $query->orderBy('vehicle_info.name', 'asc');
-                            break;
-                        case 'descending':
-                            $query->orderBy('vehicle_info.name', 'desc');
-                            break;
-                        case 'last_7_days':
-                            $query->where('enquiries.enquiry_date', '>=', now()->subDays(7));
-                            break;
-                        case 'last_month':
-                            $query->where('enquiries.enquiry_date', '>=', now()->subMonth());
-                            break;
-                        default:
-                            $query->orderBy('enquiries.enquiry_date', 'desc');
-                            break;
-                    }
-                })
-                ->get()->map(function ($enquiry) {
-                    $vehicleImagePath = $enquiry->vehicle_image ?? '';
-                    $filename = basename($vehicleImagePath);
-                    $newpath = 'vehicles/images/small/' . $filename;
-                    $file = public_path('storage/' . $newpath);
-                    if (file_exists($file)) {
-                        $vehicleImagePath = $newpath;
-                    }
-                    $enquiry->vehicle_image = uploadedAsset($vehicleImagePath);
-                    $enquiry->customer_name = ucwords($enquiry->customer_name);
-                    $enquiry->formatted_created_at = formatDateTime($enquiry->created_at, false);
-                    return $enquiry;
-                });
+            $this->applyStatusFilter($query, $request);
+            $this->applySearchFilter($query, $request);
+            $this->applyDateRangeFilter($query, $request);
+            $this->applySortBy($query, $request);
+
+            $enquiries = $query->get()->map(function ($enquiry) {
+                $vehicleImagePath = $enquiry->vehicle_image ?? '';
+                $filename = basename($vehicleImagePath);
+                $newpath = 'vehicles/images/small/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $vehicleImagePath = $newpath;
+                }
+                $enquiry->vehicle_image = uploadedAsset($vehicleImagePath);
+                $enquiry->customer_name = ucwords($enquiry->customer_name);
+                $enquiry->formatted_created_at = formatDateTime($enquiry->created_at, false);
+                return $enquiry;
+            });
 
             return [
                 'code'    => 200,
@@ -131,7 +81,69 @@ class EnquiryRepository implements EnquiryRepositoryInterface
             ];
         }
     }
+    private function applyStatusFilter($query, Request $request): void
+    {
+        if (!$request->filled('status')) {
+            return;
+        }
+        $status = $request->input('status');
+        if (in_array($status, ['1', '2', '3'], true)) {
+            $query->where('enquiries.status', $status);
+        }
+    }
 
+    private function applySearchFilter($query, Request $request): void
+    {
+        if (!$request->filled('search')) {
+            return;
+        }
+        $search = $request->input('search');
+        $query->where(function ($q) use ($search) {
+            $q->where('enquiries.customer_name', 'like', "%{$search}%")
+                ->orWhere('enquiries.email', 'like', "%{$search}%")
+                ->orWhere('enquiries.phone', 'like', "%{$search}%")
+                ->orWhere('vehicle_info.name', 'like', "%{$search}%");
+        });
+    }
+
+    private function applyDateRangeFilter($query, Request $request): void
+    {
+        if (!$request->filled('date_range')) {
+            return;
+        }
+        $dates = explode(' - ', $request->input('date_range'));
+        if (count($dates) !== 2) {
+            return;
+        }
+
+        try {
+            $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
+            $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
+            $query->whereBetween('enquiries.enquiry_date', [
+                $startDate->startOfDay(),
+                $endDate->endOfDay(),
+            ]);
+        } catch (\Exception $e) {
+        }
+    }
+
+    private function applySortBy($query, Request $request): void
+    {
+        if (!$request->filled('sort_by')) {
+            $query->orderBy('enquiries.enquiry_date', 'desc');
+            return;
+        }
+
+        $sortBy = $request->input('sort_by');
+        $options = [
+            'ascending'   => fn($q) => $q->orderBy('vehicle_info.name', 'asc'),
+            'descending'  => fn($q) => $q->orderBy('vehicle_info.name', 'desc'),
+            'last_7_days' => fn($q) => $q->where('enquiries.enquiry_date', '>=', now()->subDays(7)),
+            'last_month'  => fn($q) => $q->where('enquiries.enquiry_date', '>=', now()->subMonth()),
+        ];
+
+        ($options[$sortBy] ?? fn($q) => $q->orderBy('enquiries.enquiry_date', 'desc'))($query);
+    }
     public function update(Request $request): array
     {
         try {
