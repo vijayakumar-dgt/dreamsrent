@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use Modules\GeneralSetting\Http\Requests\StoreCurrencyRequest;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Repositories\Contracts\CurrencySettingInterface;
+use Modules\GeneralSetting\Exceptions\CurrencySaveException;
 
 class CurrencyController extends Controller
 {
@@ -55,7 +56,7 @@ class CurrencyController extends Controller
                 ]);
             }
 
-            throw new \Exception('Failed to save currency');
+            throw new CurrencySaveException();
         } catch (\Throwable $th) {
             return response()->json([
                 'status'  => 'error',
