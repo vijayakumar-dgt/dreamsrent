@@ -5,6 +5,7 @@ namespace Modules\CarInfo\Repositories\Eloquent;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
+use App\Models\User;
 use App\Services\ImageResizer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -24,8 +25,9 @@ class LocationRepository implements LocationRepositoryInterface
 
     public function store(Request $request): array
     {
-        /** @var \App\Models\User|null $authUser */
+        /** @var User|null $authUser */
         $authUser = current_user();
+
         if (!$authUser) {
             return [
                 'status'  => 'error',
@@ -34,82 +36,113 @@ class LocationRepository implements LocationRepositoryInterface
             ];
         }
 
-        $successMessage = empty($request->id) ? __('admin.manage.location_create_success') : __('admin.manage.location_update_success');
-        $errorMessage = empty($request->id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
-        try {
-            $oldImage = '';
-            if (!$request->filled('id')) {
-                /** @var \App\Models\User $authUser  */
-                $location = new Location();
-                $location->language_id = $authUser->language_id;
-            } else {
-                /** @var \Modules\CarInfo\Models\Location|null $location  */
-                $location = Location::find($request->id);
-                $oldImage = $location->image ?? '';
-                if (!$location) {
-                    return [
-                        'status'  => 'error',
-                        'code'    => 404,
-                        'message' => __('admin.common.default_update_error')
-                    ];
-                }
-                $location->status = $request->status == 'on' ? 1 : 0;
-                $location->language_id = $request->language_id ?? $authUser->language_id;
-            }
+        $id = $request->id;
+        $successMessage = empty($id) ? __('admin.manage.location_create_success') : __('admin.manage.location_update_success');
+        $errorMessage = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
-            $folderName = 'vehicles/location';
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                if ($image && $image->isValid()) {
-                    $location->image = $this->imageResizer->uploadFile($image, $folderName, $oldImage ?? null);
-                }
-            }
-            $location->name = $request->name;
-            $location->email = $request->email;
-            $location->phone = $request->international_phone_number;
-            $location->address = $request->address;
-            $location->country = $request->country;
-            $location->state = $request->state;
-            $location->city = $request->city;
-            $location->pincode = $request->pincode;
+        try {
+            [$location, $oldImage] = $this->prepareLocation($request, $authUser);
+
+            $this->handleImageUpload($request, $location, $oldImage);
+            $this->fillLocationData($request, $location);
+
             $location->save();
 
-            if ($request->has('working_days') && count($request->working_days) > 0) {
-                $oldWorkingDays = LocationWorkingDay::where('location_id', '=', $location->id)->pluck('day')->toArray();
-                $newWorkingDays = $request->working_days;
-                $deleteWorkingDays = array_diff($oldWorkingDays, $newWorkingDays);
-                if (count($deleteWorkingDays) > 0) {
-                    LocationWorkingDay::whereIn('day', $deleteWorkingDays)->where('location_id', '=', $location->id)->delete();
-                }
-                foreach ($request->working_days as $k => $day) {
-                    if ($request->has('id') && $request->id == "") {
-                        $workingDay = new LocationWorkingDay();
-                    } else {
-                        $workingDay = LocationWorkingDay::where('location_id', '=', $request->id)->where('day', '=', $day)->first();
-                    }
-                    if (!$workingDay) {
-                        $workingDay = new LocationWorkingDay();
-                    }
-                    $workingDay->location_id = $location->id;
-                    $workingDay->day = $day;
-                    $workingDay->start_time = $request->days[$day]['start'] ? Carbon::parse($request->days[$day]['start'])->format('H:i:s') : null;
-                    $workingDay->end_time = $request->days[$day]['end'] ? Carbon::parse($request->days[$day]['end'])->format('H:i:s') : null;
-                    $workingDay->save();
-                }
-            }
+            $this->syncWorkingDays($request, $location);
 
-            return [
+            $response = [
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => $successMessage
+                'message' => $successMessage,
+            ];
+        } catch (ModelNotFoundException $e) {
+            $response = [
+                'status'  => 'error',
+                'code'    => 404,
+                'message' => __('admin.common.default_update_error'),
             ];
         } catch (\Throwable $th) {
-            return [
+            $response = [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => $errorMessage,
             ];
         }
+
+        return $response;
+    }
+
+    private function prepareLocation(Request $request, User $authUser): array
+    {
+        if (!$request->filled('id')) {
+            $location = new Location();
+            $location->language_id = $authUser->language_id;
+
+            return [$location, ''];
+        }
+
+        $location = Location::find($request->id);
+
+        if (!$location) {
+            throw new ModelNotFoundException();
+        }
+
+        $location->status = $request->status === 'on' ? 1 : 0;
+        $location->language_id = $request->language_id ?? $authUser->language_id;
+
+        return [$location, $location->image ?? ''];
+    }
+
+    private function handleImageUpload(Request $request, Location $location, string $oldImage): void
+    {
+        $image = $request->file('image');
+
+        if ($request->hasFile('image') && $image && $image->isValid()) {
+            $location->image = $this->imageResizer->uploadFile($image, 'vehicles/location', $oldImage ?: null);
+        }
+    }
+
+    private function fillLocationData(Request $request, Location $location): void
+    {
+        $location->name = $request->name;
+        $location->email = $request->email;
+        $location->phone = $request->international_phone_number;
+        $location->address = $request->address;
+        $location->country = $request->country;
+        $location->state = $request->state;
+        $location->city = $request->city;
+        $location->pincode = $request->pincode;
+    }
+
+    private function syncWorkingDays(Request $request, Location $location): void
+    {
+        $days = $request->working_days ?? [];
+        if (empty($days)) {
+            return;
+        }
+
+        $existingDays = LocationWorkingDay::where('location_id', $location->id)->pluck('day')->toArray();
+        $deleteDays = array_diff($existingDays, $days);
+
+        if (!empty($deleteDays)) {
+            LocationWorkingDay::where('location_id', $location->id)->whereIn('day', $deleteDays)->delete();
+        }
+
+        foreach ($days as $day) {
+            $workingDay = LocationWorkingDay::firstOrNew([
+                'location_id' => $location->id,
+                'day'         => $day,
+            ]);
+
+            $workingDay->start_time = $this->parseTime($request->days[$day]['start'] ?? null);
+            $workingDay->end_time = $this->parseTime($request->days[$day]['end'] ?? null);
+            $workingDay->save();
+        }
+    }
+
+    private function parseTime(?string $time): ?string
+    {
+        return $time ? Carbon::parse($time)->format('H:i:s') : null;
     }
 
     public function getAll(Request $request): array
