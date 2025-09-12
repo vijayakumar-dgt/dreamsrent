@@ -182,184 +182,225 @@ class BookingRepository implements BookingRepositoryInterface
     private function buildVehicleQuery(array $filters)
     {
         $query = VehicleInfo::select(
-                'vehicle_info.id',
-                'vehicle_info.vehicle_image as image',
-                self::VEHICLE_NAME_SELECT,
-                'vehicle_info.year',
-                'cartypes.name as vehicle_type',
-                'brands.brand_name',
-                'car_models.model_name',
-                'car_colors.name as color_name',
-                'car_colors.value as color_value',
-            )
-                ->Join('cartypes', 'vehicle_info.type_id', '=', 'cartypes.id')
-                ->Join('brands', 'vehicle_info.brand_id', '=', 'brands.id')
-                ->Join('car_models', 'vehicle_info.model_id', '=', 'car_models.id')
-                ->Join('car_colors', 'vehicle_info.color_id', '=', 'car_colors.id')
-                ->leftJoin('bookings', 'vehicle_info.id', '=', 'bookings.vehicle_id')
-                ->distinct()
+            'vehicle_info.id',
+            'vehicle_info.vehicle_image as image',
+            self::VEHICLE_NAME_SELECT,
+            'vehicle_info.year',
+            'cartypes.name as vehicle_type',
+            'brands.brand_name',
+            'car_models.model_name',
+            'car_colors.name as color_name',
+            'car_colors.value as color_value',
+        )
+            ->join('cartypes', 'vehicle_info.type_id', '=', 'cartypes.id')
+            ->join('brands', 'vehicle_info.brand_id', '=', 'brands.id')
+            ->join('car_models', 'vehicle_info.model_id', '=', 'car_models.id')
+            ->join('car_colors', 'vehicle_info.color_id', '=', 'car_colors.id')
+            ->leftJoin('bookings', 'vehicle_info.id', '=', 'bookings.vehicle_id')
+            ->distinct();
 
-                ->whereDoesntHave('maintenances', function ($query) use ($filters) {
-                    $query->where(function ($q) use ($filters) {
-                        $q->where('maintenances.start_date', '<=', $filters['endDateFormat'])
-                            ->where('maintenances.end_date', '>=', $filters['startDateFormat'])
-                            ->where('maintenances.status', '!=', 3);
-                    });
-                })
-
-                ->when(!empty($brandIds), fn($query) => $query->whereIn('vehicle_info.brand_id', $filters['brandIds']))
-                ->when(!empty($typeIds), fn($query) => $query->whereIn('vehicle_info.type_id', $filters['typeIds']))
-                ->when(!empty($modelIds), fn($query) => $query->whereIn('vehicle_info.model_id', $filters['modelIds']))
-                ->when(!empty($colorIds), fn($query) => $query->whereIn('vehicle_info.color_id', $filters['colorIds']))
-
-                ->when(!empty($filters['pickupLocation']), function ($query) use ($filters) {
-                    return $query->where(function ($q) use ($filters) {
-                        $q->where('vehicle_info.main_location_id', '=', $filters['pickupLocation'])
-                            ->orWhereJsonContains('vehicle_info.other_location_id', (string) $filters['pickupLocation']);
-                    });
-                })
-                ->when(!empty($filters['returnLocation']), function ($query) use ($filters) {
-                    return $query->where(function ($q) use ($filters) {
-                        $q->where('vehicle_info.main_location_id', '=', $filters['returnLocation'])
-                            ->orWhereJsonContains('vehicle_info.other_location_id', (string) $filters['returnLocation']);
-                    });
-                })
-
-                ->when($filters['search'], function ($query) use ($filters) {
-
-                    $search = (string) $filters['search'];
-                    $tariff = (string) $filters['tariff'];
-                    $path = '$[0].' . $filters['tariff'];
-
-                    $query->where(function ($q) use ($search) {
-                        $q->where('vehicle_info.year', 'LIKE', "%{$search}%")
-                            ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
-                            ->orWhere('brands.brand_name', 'LIKE', "%{$search}%")
-                            ->orWhere('car_models.model_name', 'LIKE', "%{$search}%")
-                            ->orWhere('cartypes.name', 'LIKE', "%{$search}%")
-                            ->orWhere('car_colors.name', 'LIKE', "%{$search}%");
-                    });
-
-                    if (filled($tariff)) {
-                        $query->orWhereRaw(
-                            "JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, ?)) LIKE ?",
-                            [$path, "%{$search}%"]
-                        );
-                    }
-                })
-
-                ->when($filters['tariff'], function ($query) use ($filters) {
-                    $noOfDays = 1;
-
-                    if (!empty($filters['startDateTime']) && !empty($filters['endDateTime'])) {
-                        $start = Carbon::parse($filters['startDateTime']);
-                        $end = Carbon::parse($filters['endDateTime']);
-                        $diffMinutes = $start->diffInMinutes($end);
-                        $noOfDays = ceil($diffMinutes / 1440);
-                    }
-
-                    return $query->leftJoin('vehicle_tarrifs', function ($join) use ($noOfDays) {
-                        $join->on('vehicle_tarrifs.vehicle_id', '=', 'vehicle_info.id')
-                            ->whereRaw('CAST(vehicle_tarrifs.tariff_from_days AS UNSIGNED) <= ?', [$noOfDays])
-                            ->whereRaw('CAST(vehicle_tarrifs.tariff_to_days AS UNSIGNED) >= ?', [$noOfDays]);
-                    })
-                        ->where(function ($q) use ($filters) {
-                            $q->whereNotNull("vehicle_tarrifs.tariff_daily_price")
-                                ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$filters["tariff"]}')) IS NOT NULL");
-                        })
-                        ->selectRaw("
-                        vehicle_tarrifs.id as vehicle_tariff_id,
-                        COALESCE(
-                            vehicle_tarrifs.tariff_daily_price,
-                            JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$filters["tariff"]}'))
-                        ) as vehicle_price,
-                        ? as vehicle_price_type
-                    ", [$filters['tariff']]);
-                })
-
-                ->when(empty($tariff), function ($query) use ($filters) {
-                    $noOfDays = 1;
-
-                    if (!empty($filters['startDateTime']) && !empty($filters['endDateTime'])) {
-                        $start = Carbon::parse($filters['startDateTime']);
-                        $end = Carbon::parse($filters['endDateTime']);
-                        $diffMinutes = $start->diffInMinutes($end);
-                        $noOfDays = ceil($diffMinutes / 1440);
-                    }
-                    $start = $filters['startDateTime'] ? Carbon::parse($filters['startDateTime']) : Carbon::now();
-                    $daysInMonth = $start->daysInMonth;
-
-                    $tariffType = 'daily';
-                    $seasonalRateColumn = 'seasonal_daily_rate';
-
-                    if ($noOfDays >= 7 && $noOfDays < $daysInMonth) {
-                        $tariffType = 'weekly';
-                        $seasonalRateColumn = 'seasonal_weekly_rate';
-                    } elseif ($noOfDays >= $daysInMonth && $noOfDays < 365) {
-                        $tariffType = 'monthly';
-                        $seasonalRateColumn = 'seasonal_monthly_rate';
-                    } elseif ($noOfDays >= 365) {
-                        $tariffType = 'yearly';
-                    }
-
-                    $jsonPath = "$[0].$tariffType";
-
-                    $end = $filters['endDateTime'] ? Carbon::parse($filters['endDateTime']) : Carbon::now();
-                    return $query->leftJoin('vehicle_seasons', function ($join) use ($start, $end) {
-                        $join->on('vehicle_seasons.vehicle_id', '=', 'vehicle_info.id')
-                            ->where(function ($q) use ($start, $end) {
-                                $q->whereDate('vehicle_seasons.seasonal_start_date', '<=', $start)
-                                    ->whereDate('vehicle_seasons.seasonal_end_date', '>=', $end);
-                            });
-                    })
-                        ->where(function ($q) use ($seasonalRateColumn, $jsonPath) {
-                            $q->whereNotNull("vehicle_seasons.$seasonalRateColumn")
-                                ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, ?)) IS NOT NULL", [$jsonPath]);
-                        })
-                        ->selectRaw("
-                        vehicle_seasons.id as vehicle_season_id,
-                        COALESCE(
-                            vehicle_seasons.$seasonalRateColumn,
-                            JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, ?))
-                        ) as vehicle_price,
-                        COALESCE(
-                            CASE
-                                WHEN vehicle_seasons.$seasonalRateColumn IS NOT NULL THEN ?
-                                ELSE ?
-                            END, ?
-                        ) as vehicle_price_type
-                        ", [
-                            $jsonPath,
-                            $tariffType,
-                            $tariffType,
-                            $tariffType
-                        ]);
-                })
-
-                ->when(!empty($filters['startDateTime']) || !empty($filters['endDateTime']), function ($query) use ($filters) {
-                    $query->whereNotExists(function ($q) use ($filters) {
-                        $q->select(DB::raw(1))
-                            ->from('bookings')
-                            ->whereRaw('bookings.vehicle_id = vehicle_info.id')
-                            ->where(function ($q) use ($filters) {
-                                $q->where(function ($q) use ($filters) {
-                                    $q->whereBetween('bookings.start_datetime', [$filters['startDateTime'], $filters['endDateTime']])
-                                        ->orWhereBetween('bookings.end_datetime', [$filters['startDateTime'], $filters['endDateTime']])
-                                        ->orWhere(function ($q) use ($filters) {
-                                            $q->where('bookings.start_datetime', '<=', $filters['startDateTime'])
-                                                ->where('bookings.end_datetime', '>=', $filters['endDateTime']);
-                                        });
-                                })
-                                    ->whereNotIn('bookings.booking_status', [6, 3]);
-                            });
-
-                        if (!empty($bookingId)) {
-                            $q->where('bookings.id', '!=', $bookingId);
-                        }
-                    });
-                });
+        $this->filterByMaintenance($query, $filters);
+        $this->filterByVehicleAttributes($query, $filters);
+        $this->filterByLocations($query, $filters);
+        $this->filterBySearchTerm($query, $filters);
+        $this->filterByTariff($query, $filters);
+        $this->filterByAvailability($query, $filters);
 
         return $query;
+    }
+
+    private function filterByMaintenance($query, array $filters): void
+    {
+        $query->whereDoesntHave('maintenances', function ($query) use ($filters) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('maintenances.start_date', '<=', $filters['endDateFormat'])
+                    ->where('maintenances.end_date', '>=', $filters['startDateFormat'])
+                    ->where('maintenances.status', '!=', 3);
+            });
+        });
+    }
+
+    private function filterByVehicleAttributes($query, array $filters): void
+    {
+        $query->when(!empty($filters['brandIds']), fn($q) => $q->whereIn('vehicle_info.brand_id', $filters['brandIds']))
+            ->when(!empty($filters['typeIds']), fn($q) => $q->whereIn('vehicle_info.type_id', $filters['typeIds']))
+            ->when(!empty($filters['modelIds']), fn($q) => $q->whereIn('vehicle_info.model_id', $filters['modelIds']))
+            ->when(!empty($filters['colorIds']), fn($q) => $q->whereIn('vehicle_info.color_id', $filters['colorIds']));
+    }
+
+    private function filterByLocations($query, array $filters): void
+    {
+        $query->when(!empty($filters['pickupLocation']), function ($query) use ($filters) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('vehicle_info.main_location_id', '=', $filters['pickupLocation'])
+                    ->orWhereJsonContains('vehicle_info.other_location_id', (string) $filters['pickupLocation']);
+            });
+        });
+
+        $query->when(!empty($filters['returnLocation']), function ($query) use ($filters) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('vehicle_info.main_location_id', '=', $filters['returnLocation'])
+                    ->orWhereJsonContains('vehicle_info.other_location_id', (string) $filters['returnLocation']);
+            });
+        });
+    }
+
+    private function filterBySearchTerm($query, array $filters): void
+    {
+        $query->when($filters['search'], function ($query) use ($filters) {
+            $search = (string) $filters['search'];
+            $tariff = (string) ($filters['tariff'] ?? '');
+            $path = '$[0].' . $filters['tariff'];
+
+            $query->where(function ($q) use ($search) {
+                $q->where('vehicle_info.year', 'LIKE', "%{$search}%")
+                    ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
+                    ->orWhere('brands.brand_name', 'LIKE', "%{$search}%")
+                    ->orWhere('car_models.model_name', 'LIKE', "%{$search}%")
+                    ->orWhere('cartypes.name', 'LIKE', "%{$search}%")
+                    ->orWhere('car_colors.name', 'LIKE', "%{$search}%");
+            });
+
+            if (filled($tariff)) {
+                $query->orWhereRaw(
+                    "JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, ?)) LIKE ?",
+                    [$path, "%{$search}%"]
+                );
+            }
+        });
+    }
+
+    private function filterByTariff($query, array $filters): void
+    {
+        if ($filters['tariff']) {
+            $this->applySpecificTariff($query, $filters);
+            return;
+        }
+
+        $this->applyDefaultTariff($query, $filters);
+    }
+
+    private function applySpecificTariff($query, array $filters): void
+    {
+        $noOfDays = $this->calculateNoOfDays($filters);
+
+        $query->leftJoin('vehicle_tarrifs', function ($join) use ($noOfDays) {
+            $join->on('vehicle_tarrifs.vehicle_id', '=', 'vehicle_info.id')
+                ->whereRaw('CAST(vehicle_tarrifs.tariff_from_days AS UNSIGNED) <= ?', [$noOfDays])
+                ->whereRaw('CAST(vehicle_tarrifs.tariff_to_days AS UNSIGNED) >= ?', [$noOfDays]);
+        })
+            ->where(function ($q) use ($filters) {
+                $q->whereNotNull('vehicle_tarrifs.tariff_daily_price')
+                    ->orWhereRaw(
+                        "JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$filters['tariff']}')) IS NOT NULL"
+                    );
+            })
+            ->selectRaw(
+                "
+                vehicle_tarrifs.id as vehicle_tariff_id,
+                COALESCE(
+                    vehicle_tarrifs.tariff_daily_price,
+                    JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$filters['tariff']}'))
+                ) as vehicle_price,
+                ? as vehicle_price_type
+                ",
+                [$filters['tariff']]
+            );
+    }
+
+    private function applyDefaultTariff($query, array $filters): void
+    {
+        $noOfDays = $this->calculateNoOfDays($filters);
+        $start = !empty($filters['startDateTime']) ? Carbon::parse($filters['startDateTime']) : Carbon::now();
+        $daysInMonth = $start->daysInMonth;
+
+        $tariffType = 'daily';
+        $seasonalRateColumn = 'seasonal_daily_rate';
+
+        if ($noOfDays >= 7 && $noOfDays < $daysInMonth) {
+            $tariffType = 'weekly';
+            $seasonalRateColumn = 'seasonal_weekly_rate';
+        } elseif ($noOfDays >= $daysInMonth && $noOfDays < 365) {
+            $tariffType = 'monthly';
+            $seasonalRateColumn = 'seasonal_monthly_rate';
+        } elseif ($noOfDays >= 365) {
+            $tariffType = 'yearly';
+        }
+
+        $jsonPath = "$[0].$tariffType";
+        $end = !empty($filters['endDateTime']) ? Carbon::parse($filters['endDateTime']) : Carbon::now();
+
+        $query->leftJoin('vehicle_seasons', function ($join) use ($start, $end) {
+            $join->on('vehicle_seasons.vehicle_id', '=', 'vehicle_info.id')
+                ->where(function ($q) use ($start, $end) {
+                    $q->whereDate('vehicle_seasons.seasonal_start_date', '<=', $start)
+                        ->whereDate('vehicle_seasons.seasonal_end_date', '>=', $end);
+                });
+        })
+            ->where(function ($q) use ($seasonalRateColumn, $jsonPath) {
+                $q->whereNotNull("vehicle_seasons.$seasonalRateColumn")
+                    ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, ?)) IS NOT NULL", [$jsonPath]);
+            })
+            ->selectRaw(
+                "
+                vehicle_seasons.id as vehicle_season_id,
+                COALESCE(
+                    vehicle_seasons.$seasonalRateColumn,
+                    JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, ?))
+                ) as vehicle_price,
+                COALESCE(
+                    CASE
+                        WHEN vehicle_seasons.$seasonalRateColumn IS NOT NULL THEN ?
+                        ELSE ?
+                    END, ?
+                ) as vehicle_price_type
+                ",
+                [
+                    $jsonPath,
+                    $tariffType,
+                    $tariffType,
+                    $tariffType,
+                ]
+            );
+    }
+
+    private function filterByAvailability($query, array $filters): void
+    {
+        $bookingId = $filters['bookingId'] ?? null;
+
+        $query->when(!empty($filters['startDateTime']) || !empty($filters['endDateTime']), function ($query) use ($filters, $bookingId) {
+            $query->whereNotExists(function ($q) use ($filters, $bookingId) {
+                $q->select(DB::raw(1))
+                    ->from('bookings')
+                    ->whereRaw('bookings.vehicle_id = vehicle_info.id')
+                    ->where(function ($q) use ($filters) {
+                        $q->where(function ($q) use ($filters) {
+                            $q->whereBetween('bookings.start_datetime', [$filters['startDateTime'], $filters['endDateTime']])
+                                ->orWhereBetween('bookings.end_datetime', [$filters['startDateTime'], $filters['endDateTime']])
+                                ->orWhere(function ($q) use ($filters) {
+                                    $q->where('bookings.start_datetime', '<=', $filters['startDateTime'])
+                                        ->where('bookings.end_datetime', '>=', $filters['endDateTime']);
+                                });
+                        })
+                            ->whereNotIn('bookings.booking_status', [6, 3]);
+                    });
+
+                if (!empty($bookingId)) {
+                    $q->where('bookings.id', '!=', $bookingId);
+                }
+            });
+        });
+    }
+
+    private function calculateNoOfDays(array $filters): int
+    {
+        if (!empty($filters['startDateTime']) && !empty($filters['endDateTime'])) {
+            $start = Carbon::parse($filters['startDateTime']);
+            $end = Carbon::parse($filters['endDateTime']);
+            return (int) ceil($start->diffInMinutes($end) / 1440);
+        }
+
+        return 1;
     }
 
     private function formatVehicle($vehicle)
