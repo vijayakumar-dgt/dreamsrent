@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Modules\Booking\Http\Controllers\UserBookingController;
 use Modules\CarInfo\Http\Controllers\CarInfoController;
+use Modules\CarInfo\Http\Controllers\VehicleInfoController;
 use Modules\GeneralSetting\Http\Controllers\Admin\LanguageController;
 use Modules\Page\Http\Controllers\PageController;
 
@@ -148,9 +149,9 @@ Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securit
     Route::post('user/delete-all-notifications', [UserController::class, 'deleteAllNotification']);
 
     Route::get('vehicle-list-api', [CarInfoController::class,'vehicleLists'])->middleware('web');
-    Route::post('vehicle-list-detail-api', [CarInfoController::class,'vehicleDetailsList'])->middleware('web');
+      Route::post('vehicle-list-detail-api', [VehicleInfoController::class,'vehicleDetailsList'])->middleware('web');
     Route::get('recent-transation', [UserBookingController::class,'transaction'])->middleware('web');
-    Route::post('vehicle-intrset-list', [CarInfoController::class,'vehicleIntrestLists'])->middleware('web');
+      Route::post('vehicle-intrset-list', [VehicleInfoController::class,'vehicleIntrestLists'])->middleware('web');
 
     Route::post('user/flag-change-language', [LanguageController::class,'userFlagChangeLanguage'])
     ->name('user.flag-change-language');
