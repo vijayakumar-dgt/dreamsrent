@@ -32,10 +32,12 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
             : __('admin.common.default_create_error');
 
         try {
+            $status = $request->input('status') === 'on' ? 1 : 0;
+
             $data = [
                 'language_id'  => $id ? $request->input('language_id') : $authUser->language_id,
                 'damage_type'  => $request->input('damage_type'),
-                'status'       => $id ? ($request->input('status') === 'on' ? 1 : 0) : 1,
+                'status'       => $id ? $status : 1,
             ];
 
             DamageType::updateOrCreate(['id' => $id], $data);
