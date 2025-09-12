@@ -124,12 +124,6 @@ class PaymentService
 
     private function handlePaypalPayment(Request $request, User $authUser, array $formattedData): array
     {
-        $result = [
-            'success' => false,
-            'code'    => 500,
-            'message' => 'Unexpected error occurred.',
-        ];
-
         if (!$this->provider) {
             return [
                 'success' => false,
@@ -153,74 +147,72 @@ class PaymentService
 
         $currency = strtolower(trim($currency_details));
         if (!in_array($currency, $allowedCurrencies)) {
-            $result = [
+            return [
                 'code'    => 422,
                 'success' => false,
                 'message' => 'Invalid currency selected. Please use a supported currency like USD, INR, EUR, etc.',
             ];
-        } else {
-            $purchase_units = [];
-    
-            $unit = [
-                'items' => [
-                    [
-                        'name'        => 'Rental System',
-                        'quantity'    => 1,
-                        'unit_amount' => [
-                            'currency_code' => $currency_details,
-                            'value'         => $request->total_price,
-                        ]
-                    ],
-                ],
-                'amount' => [
-                    'currency_code' => $currency_details,
-                    'value'         => $request->total_price,
-                    'breakdown'     => [
-                        'item_total' => [
-                            'currency_code' => $currency_details,
-                            'value'         => $request->total_price,
-                        ],
-                    ]
-                ]
-            ];
-    
-            $purchase_units[] = $unit;
-    
-            $order['purchase_units'] = $purchase_units;
-    
-            $order['application_context'] = [
-                'return_url' => url('paypal-payment-success'),
-                'cancel_url' => url('paypal-payment-failed')
-            ];
-    
-            $response = $this->provider->createOrder($order);
-    
-            if (!is_array($response) || !array_key_exists('id', $response)) {
-                $result =  [
-                    'success' => false,
-                    'code'    => 503,
-                    'message' => 'PayPal is currently unavailable. Please choose another payment method.',
-                ];
-            } else {
-                $bookingData = $this->builder->buildBookingData($request, $authUser, $formattedData);
-                $bookingData['booking_status'] = 1;
-                $bookingData['transaction_id'] = $response['id'];
-                $bookingData['payment_status'] = 1;
-                $bookingData['payment_type'] = "paypal";
-        
-                $this->builder->createBookingWithInfo($bookingData, $this->builder->buildUserInfoData($request, new Booking()));
-        
-                $approve_paypal_url = $response['links'][1]['href'];
-        
-                $result = [
-                    'code'       => 200,
-                    'message'    => __('web.home.order_created_successfully'),
-                    'paypal_url' => $approve_paypal_url
-                ];
-            }
         }
 
-        return $result;
+        $purchase_units = [];
+
+        $unit = [
+            'items' => [
+                [
+                    'name'        => 'Rental System',
+                    'quantity'    => 1,
+                    'unit_amount' => [
+                        'currency_code' => $currency_details,
+                        'value'         => $request->total_price,
+                    ]
+                ],
+            ],
+            'amount' => [
+                'currency_code' => $currency_details,
+                'value'         => $request->total_price,
+                'breakdown'     => [
+                    'item_total' => [
+                        'currency_code' => $currency_details,
+                        'value'         => $request->total_price,
+                    ],
+                ]
+            ]
+        ];
+
+        $purchase_units[] = $unit;
+
+        $order['purchase_units'] = $purchase_units;
+
+        $order['application_context'] = [
+            'return_url' => url('paypal-payment-success'),
+            'cancel_url' => url('paypal-payment-failed')
+        ];
+
+        $response = $this->provider->createOrder($order);
+
+        if (!is_array($response) || !array_key_exists('id', $response)) {
+            return [
+                'success' => false,
+                'code'    => 503,
+                'message' => 'PayPal is currently unavailable. Please choose another payment method.',
+            ];
+        }
+
+        $bookingData = $this->builder->buildBookingData($request, $authUser, $formattedData);
+        $bookingData['booking_status'] = 1;
+        $bookingData['transaction_id'] = $response['id'];
+        $bookingData['payment_status'] = 1;
+        $bookingData['payment_type'] = "paypal";
+
+        $this->builder->createBookingWithInfo($bookingData, $this->builder->buildUserInfoData($request, new Booking()));
+
+        $approve_paypal_url = $response['links'][1]['href'];
+
+        return [
+            'code'       => 200,
+            'message'    => __('web.home.order_created_successfully'),
+            'paypal_url' => $approve_paypal_url
+        ];
     }
 
     private function handleStripePayment(Request $request, User $authUser, array $formattedData): array
