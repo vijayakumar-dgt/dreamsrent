@@ -112,7 +112,7 @@ class BlogsController extends Controller
         return view('generalsetting::cms.blogs.edit-blog', [...$data]);
     }
 
-    public function BlogUpdate(Request $request, int $id): JsonResponse
+    public function blogUpdate(Request $request, int $id): JsonResponse
     {
         return $this->blogRepository->blogUpdate($request, $id);
     }
