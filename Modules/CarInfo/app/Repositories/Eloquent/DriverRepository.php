@@ -22,8 +22,8 @@ class DriverRepository implements DriverRepositoryInterface
     public function index(): array
     {
         $cars = VehicleInfo::where('status', 1)->get(['id', 'name']);
-        $data = ['cars' => $cars];
-        return $data;
+
+        return ['cars' => $cars];
     }
 
     public function store(Request $request): array
