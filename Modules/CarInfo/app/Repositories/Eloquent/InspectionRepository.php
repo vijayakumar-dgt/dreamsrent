@@ -97,51 +97,17 @@ class InspectionRepository implements InspectionRepositoryInterface
                 'inspector.userDetails:id,user_id,first_name,last_name,profile_image',
             ]);
 
-            if ($request->has('search') && $request->search != null) {
-                $search = $request->search;
+            $inspections = $this->applySearchFilter($inspections, $request);
+            $inspections = $this->applyStatusFilter($inspections, $request);
 
-                $inspections = $inspections->where(function ($query) use ($search) {
-                    $query->whereHas('car', function ($q) use ($search) {
-                        $q->where('name', 'like', '%' . $search . '%');
-                    })->orWhereHas('inspector', function ($q) use ($search) {
-                        $q->where('name', 'like', '%' . $search . '%');
-                    });
-                });
-            }
-
-            if ($request->has('status') && $request->status != null) {
-                $status = $request->status;
-                $inspections = $inspections->where('inspection_status', $status);
-            }
-
-            $inspections = $inspections->orderBy('id', 'desc')->get()->map(function ($inspection) {
-                $inspection->inspectiondate = formatDateTime($inspection->inspection_date, false);
-                if ($inspection->inspector) {
-                    if ($inspection->inspector->userDetails) {
-                        $inspection->inspector->name = $inspection->inspector->userDetails->first_name
-                            ? ucwords($inspection->inspector->userDetails->first_name . ' ' . $inspection->inspector->userDetails->last_name)
-                            : $inspection->inspector->name;
-                        $inspection->inspector->profile_image = uploadedAsset($inspection->inspector->userDetails->profile_image ?? null, 'profile');
-                    }
-                }
-                if ($inspection->car) {
-                    $vehicleImagePath = $inspection->car->vehicle_image ?? '';
-                    $filename = basename($vehicleImagePath);
-                    $newpath = 'vehicles/images/small/' . $filename;
-                    $file = public_path('storage/' . $newpath);
-                    if (file_exists($file)) {
-                        $vehicleImagePath = $newpath;
-                    }
-                    $inspection->car->vehicle_image = uploadedAsset($vehicleImagePath);
-                }
-                unset($inspection->inspector->userDetails);
-                return $inspection;
-            });
+            $inspections = $inspections->orderBy('id', 'desc')
+                ->get()
+                ->map(fn ($inspection) => $this->formatInspection($inspection));
 
             return [
                 'status' => 'success',
                 'code'   => 200,
-                'data'   => $inspections
+                'data'   => $inspections,
             ];
         } catch (\Exception $e) {
             return [
@@ -150,6 +116,61 @@ class InspectionRepository implements InspectionRepositoryInterface
                 'error'   => $e->getMessage(),
             ];
         }
+    }
+
+    private function applySearchFilter($inspections, Request $request)
+    {
+        if (!$request->filled('search')) {
+            return $inspections;
+        }
+
+        $search = $request->search;
+
+        return $inspections->where(function ($query) use ($search) {
+            $query->whereHas('car', fn ($q) => $q->where('name', 'like', '%' . $search . '%'))
+                ->orWhereHas('inspector', fn ($q) => $q->where('name', 'like', '%' . $search . '%'));
+        });
+    }
+
+    private function applyStatusFilter($inspections, Request $request)
+    {
+        if (!$request->filled('status')) {
+            return $inspections;
+        }
+
+        return $inspections->where('inspection_status', $request->status);
+    }
+
+    private function formatInspection($inspection)
+    {
+        $inspection->inspectiondate = formatDateTime($inspection->inspection_date, false);
+
+        if ($inspection->inspector && $inspection->inspector->userDetails) {
+            $firstName = $inspection->inspector->userDetails->first_name;
+            $lastName = $inspection->inspector->userDetails->last_name;
+            $inspection->inspector->name = $firstName
+                ? ucwords($firstName . ' ' . $lastName)
+                : $inspection->inspector->name;
+            $inspection->inspector->profile_image = uploadedAsset(
+                $inspection->inspector->userDetails->profile_image ?? null,
+                'profile'
+            );
+        }
+
+        if ($inspection->car) {
+            $vehicleImagePath = $inspection->car->vehicle_image ?? '';
+            $filename = basename($vehicleImagePath);
+            $newPath = 'vehicles/images/small/' . $filename;
+            $file = public_path('storage/' . $newPath);
+            if (file_exists($file)) {
+                $vehicleImagePath = $newPath;
+            }
+            $inspection->car->vehicle_image = uploadedAsset($vehicleImagePath);
+        }
+
+        unset($inspection->inspector->userDetails);
+
+        return $inspection;
     }
 
     public function getById(int $id): array
