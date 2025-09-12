@@ -352,11 +352,13 @@ class PaymentService
                     $data = [
                         'redirect_url' => route('payment.success.page', ['transaction_id' => $response['id']])
                     ];
+                } else {
+                    $data = [
+                        'code'    => 400,
+                        'message' => __('web.home.payment_id_missing'),
+                    ];
                 }
-                $data = [
-                    'code'    => 400,
-                    'message' => __('web.home.payment_id_missing'),
-                ];
+
             } else {
                 $data = [
                     'code'    => 400,

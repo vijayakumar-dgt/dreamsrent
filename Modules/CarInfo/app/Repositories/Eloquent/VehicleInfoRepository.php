@@ -1044,11 +1044,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             $languageId = $authId->language_id;
             $query = VehicleInfo::with([
-                self:::CAR_TYPE,
-                self:::BRAND,
-                self:::CATEGORY,
-                self:::MAIN_LOCATION,
-                self:::COLOR
+                self::CAR_TYPE,
+                self::BRAND,
+                self::CATEGORY,
+                self::MAIN_LOCATION,
+                self::COLOR
             ])->select(
                 "id",
                 "vehicle_image",
@@ -1220,11 +1220,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     public function vehicleLists(Request $request): array
     {
         $query = VehicleInfo::with([
-            self:::CAR_TYPE,
-            self:::BRAND,
-            self:::CATEGORY,
-            self:::MAIN_LOCATION,
-            self:::COLOR,
+            self::CAR_TYPE,
+            self::BRAND,
+            self::CATEGORY,
+            self::MAIN_LOCATION,
+            self::COLOR,
             'fuel_type:id,fuel_type',
             'transmission:id,name',
             'reviews:id,vehicle_id,average_ratings'
@@ -1830,11 +1830,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             $query = VehicleInfo::with([
-                self:::CAR_TYPE,
-                self:::BRAND,
-                self:::CATEGORY,
-                self:::MAIN_LOCATION,
-                self:::COLOR,
+                self::CAR_TYPE,
+                self::BRAND,
+                self::CATEGORY,
+                self::MAIN_LOCATION,
+                self::COLOR,
                 'fuel_type:id,fuel_type',
                 'transmission:id,name',
                 'extraservices.extraService:id,name,icon,description,image',
@@ -2174,11 +2174,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         }
 
         $vehicles = VehicleInfo::with([
-            self:::CAR_TYPE,
-            self:::BRAND,
-            self:::CATEGORY,
-            self:::MAIN_LOCATION,
-            self:::COLOR,
+            self::CAR_TYPE,
+            self::BRAND,
+            self::CATEGORY,
+            self::MAIN_LOCATION,
+            self::COLOR,
             'fuel_type:id,fuel_type',
             'transmission:id,name',
             'reviews:id,vehicle_id,average_ratings'
