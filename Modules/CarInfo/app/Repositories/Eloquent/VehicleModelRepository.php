@@ -15,11 +15,12 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
         /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
         $language_id = $authUser->language_id ?? 1;
-        $brands = Brand::orderBy('id', 'desc')->where("language_id", $language_id)->where('status', 1)->get();
+        $brands = Brand::orderBy('id', 'desc')
+            ->where('language_id', $language_id)
+            ->where('status', 1)
+            ->get();
 
-        $data = ['brands' => $brands];
-
-        return $data;
+        return ['brands' => $brands];
     }
 
     public function store(Request $request): array
