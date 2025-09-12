@@ -24,21 +24,22 @@ class ExtraServiceRepository implements ExtraServiceRepositoryInterface
         $errorMessage = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
-            if (!$request->filled('id')) {
-                /** @var \Modules\CarInfo\Models\ExtraService */
-                $extraService = new ExtraService();
-            } else {
-                /** @var \Modules\CarInfo\Models\ExtraService */
-                $extraService = ExtraService::find($id);
-                if ($extraService == null) {
-                    return [
-                        'status'  => 'error',
-                        'code'    => 422,
-                        'message' => __('admin.common.default_update_error')
-                    ];
-                }
+            $extraService = $request->filled('id')
+                ? ExtraService::find($id)
+                : new ExtraService();
+
+            if ($request->filled('id') && !$extraService) {
+                return [
+                    'status'  => 'error',
+                    'code'    => 422,
+                    'message' => __('admin.common.default_update_error'),
+                ];
+            }
+
+            if ($request->filled('id')) {
                 $extraService->status = $request->status == 'on' ? 1 : 0;
             }
+
             $extraService->name = $request->name;
             $folderName = 'vehicles/extra-service';
             /** @var string $oldIcon */
@@ -47,32 +48,29 @@ class ExtraServiceRepository implements ExtraServiceRepositoryInterface
             /** @var string $oldImage */
             $oldImage = $extraService->image ?? '';
 
-            //check if the file is valid
-            if ($request->hasFile('icon')) {
-                $icon = $request->file('icon');
-                if ($icon && $icon->isValid()) {
-                    $extraService->icon = $this->imageResizer->uploadFile($icon, $folderName, $oldIcon);
-                }
+            $icon = $request->file('icon');
+            if ($icon && $icon->isValid()) {
+                $extraService->icon = $this->imageResizer->uploadFile($icon, $folderName, $oldIcon);
             }
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                if ($image && $image->isValid()) {
-                    $extraService->image = $this->imageResizer->uploadFile($image, $folderName, $oldImage);
-                }
+
+            $image = $request->file('image');
+            if ($image && $image->isValid()) {
+                $extraService->image = $this->imageResizer->uploadFile($image, $folderName, $oldImage);
             }
+
             $extraService->description = $request->description;
             $extraService->save();
 
             return [
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => $successMessage
+                'message' => $successMessage,
             ];
         } catch (\Throwable $th) {
             return [
                 'status'  => 'error',
                 'code'    => 500,
-                'message' => $errorMessage
+                'message' => $errorMessage,
             ];
         }
     }
