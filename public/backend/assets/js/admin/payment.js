@@ -64,9 +64,9 @@
                                 </div>
                                 <h6 class="fs-14 fw-semibold text-black">${row.name}</h6>
                             </div>`;
-                    }                
+                    }
                 },
-                { 
+                {
                     data: "final_price",
                     render: function (data, type, row) {
                         return (row.currency_symbol ?? "$") + row.amount;
@@ -74,7 +74,7 @@
                 },
                 { data: "payment_type" },
                 { data: "created_at" },
-                { 
+                {
                     data: "payment_status",
                     render: function (data) {
                         let badgeClass, label;
@@ -127,9 +127,9 @@
                 $(".dataTables_info").addClass("d-none");
                 $(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
 
-                var tableWrapper = $(this).closest(".dataTables_wrapper");
-                var info = tableWrapper.find(".dataTables_info");
-                var pagination = tableWrapper.find(".dataTables_paginate");
+                const tableWrapper = $(this).closest(".dataTables_wrapper");
+                const info = tableWrapper.find(".dataTables_info");
+                const pagination = tableWrapper.find(".dataTables_paginate");
 
                 $(".table-footer")
                     .empty()

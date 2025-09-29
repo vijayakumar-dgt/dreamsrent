@@ -29,7 +29,7 @@
 
                 document.querySelector("#userForm").addEventListener("submit", function (event) {
                     event.preventDefault();
-                    
+
                     const intlNumber = iti.getNumber();
                     if (intlNumber) {
                         intlPhoneInput.value = intlNumber;
@@ -130,7 +130,7 @@
                     }
                 },
                 errorPlacement: function (error, element) {
-                    var errorId = element.attr("id") + "_error";
+                    const errorId = element.attr("id") + "_error";
                     if (element.hasClass("select2-hidden-accessible")) {
                         $("#" + errorId).text(error.text());
                     } else {
@@ -150,7 +150,7 @@
                     }
                     $(element).removeClass("is-invalid").addClass("is-valid");
                     $("#" + element.id).siblings("span").addClass("me-3");
-                    var errorId = element.id + "_error";
+                    const errorId = element.id + "_error";
                     $("#" + errorId).text("");
                 },
                 onkeyup: function(element) {
@@ -164,10 +164,10 @@
                 submitHandler: function(form) {
                     let formData = new FormData(form);
                     formData.set("phone_number", international_phone_number);
-        
+
                     $.ajax({
-                        type:"POST",
-                        url:"/admin/user/save",
+                        type: "POST",
+                        url: "/admin/user/save",
                         data: formData,
                         enctype: "multipart/form-data",
                         processData: false,
@@ -176,37 +176,47 @@
                             "Accept": "application/json",
                             "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
                         },
-                        beforeSend: function () {
-                            $(".submitbtn").attr("disabled", true).html(`
-                                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l("admin.common.saving")}..
-                            `);
-                        },
-                        success:function(resp){
-                            $(".error-text").text("");
-                            $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                            $(".submitbtn").removeAttr("disabled").html(_l("admin.common.create_new"));
-                            if (resp.code === 200) {
-                                showToast("success", resp.message);
-                                $("#add_user_modal").modal("hide");
-                                $("#userTable").DataTable().ajax.reload();
-                            }
-                        },
-                        error:function(error){
-                            $(".error-text").text("");
-                            $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                            $(".submitbtn").removeAttr("disabled").html(_l("admin.common.create_new"));
-                            if (error.responseJSON.code === 422) {
-                                $.each(error.responseJSON.errors, function(key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                });
-                            } else {
-                                showToast("error", error.responseJSON.message);
-                            }
-                        }
+                        beforeSend: handleBeforeSend,
+                        success: handleSuccess,
+                        error: handleError
                     });
                 }
             });
+
+            function handleBeforeSend() {
+                $(".submitbtn").attr("disabled", true).html(`
+                    <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l("admin.common.saving")}..
+                `);
+            }
+
+            function handleSuccess(resp) {
+                resetFormState();
+
+                if (resp.code === 200) {
+                    showToast("success", resp.message);
+                    $("#add_user_modal").modal("hide");
+                    $("#userTable").DataTable().ajax.reload();
+                }
+            }
+
+            function handleError(error) {
+                resetFormState();
+
+                if (error.responseJSON.code === 422) {
+                    $.each(error.responseJSON.errors, function (key, val) {
+                        $("#" + key).addClass("is-invalid");
+                        $("#" + key + "_error").text(val[0]);
+                    });
+                } else {
+                    showToast("error", error.responseJSON.message);
+                }
+            }
+
+            function resetFormState() {
+                $(".error-text").text("");
+                $(".form-control, .select2-container").removeClass("is-invalid is-valid");
+                $(".submitbtn").removeAttr("disabled").html(_l("admin.common.create_new"));
+            }
 
             $("#editUserForm").validate({
                 rules: {
@@ -269,10 +279,8 @@
                     },
                 },
                 errorPlacement: function (error, element) {
-                    var errorId = element.attr("id") + "_error";
+                    const errorId = element.attr("id") + "_error";
                     if (element.hasClass("select2-hidden-accessible")) {
-                        $("#" + errorId).text(error.text());
-                    } else {
                         $("#" + errorId).text(error.text());
                     }
                 },
@@ -289,7 +297,7 @@
                     }
                     $(element).removeClass("is-invalid").addClass("is-valid");
                     $("#" + element.id).siblings("span").addClass("me-3");
-                    var errorId = element.id + "_error";
+                    const errorId = element.id + "_error";
                     $("#" + errorId).text("");
                 },
                 onkeyup: function(element) {
@@ -304,10 +312,10 @@
                     let formData = new FormData(form);
                     formData.set("phone_number", $("#edit_international_phone_number").val());
                     formData.set("status", $("#status").is(":checked") ? 1 : 0);
-        
+
                     $.ajax({
-                        type:"POST",
-                        url:"/admin/user/save",
+                        type: "POST",
+                        url: "/admin/user/save",
                         data: formData,
                         enctype: "multipart/form-data",
                         processData: false,
@@ -316,34 +324,9 @@
                             "Accept": "application/json",
                             "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
                         },
-                        beforeSend: function () {
-                            $(".submitbtn").attr("disabled", true).html(`
-                                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l("admin.common.saving")}..
-                            `);
-                        },
-                        success:function(resp){
-                            $(".error-text").text("");
-                            $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                            $(".submitbtn").removeAttr("disabled").html(_l("admin.common.save_changes"));
-                            if (resp.code === 200) {
-                                showToast("success", resp.message);
-                                $("#edit_user_modal").modal("hide");
-                                $("#userTable").DataTable().ajax.reload();
-                            }
-                        },
-                        error:function(error){
-                            $(".error-text").text("");
-                            $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                            $(".submitbtn").removeAttr("disabled").html(_l("admin.common.save_changes"));
-                            if (error.responseJSON.code === 422) {
-                                $.each(error.responseJSON.errors, function(key, val) {
-                                    $("#edit_" + key).addClass("is-invalid");
-                                    $("#edit_" + key + "_error").text(val[0]);
-                                });
-                            } else {
-                                showToast("error", error.responseJSON.message);
-                            }
-                        }
+                        beforeSend: handleBeforeSend,
+                        success: handleSuccess,
+                        error: handleError
                     });
                 }
             });
@@ -353,7 +336,7 @@
                 return element.files[0].size <= param * 1024;
             }, "File size must be less than {0} KB.");
         }
-        
+
         function initEvents() {
             $("#add_user").on("click", function() {
                 $("#userForm")[0].reset();
@@ -366,70 +349,22 @@
                 $(".submitbtn").text(_l("admin.common.create_new"));
             });
 
-            $("#image").on("change", function (event) {
-                if ($(this).val() !== "") {
-                    $(this).valid();
-                }
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    $("#imagePreview").attr("src", e.target.result).removeClass("d-none");
-                    $(".upload_icon").addClass("d-none");
-                };
-                reader.readAsDataURL(event.target.files[0]);
-                var file = this.files[0];
-                if (file) {
-                    var img = new Image();
-                    var objectURL = URL.createObjectURL(file);
-                    
-                    img.onload = function () {
-                        if (this.width < 180 || this.height < 180) {
-                            $("#image_error").text(_l("admin.common.image_pixel", {width: 180, height: 180}));
-                            $("#image").addClass("is-invalid").removeClass("is-valid");
-                        }
-                        URL.revokeObjectURL(objectURL);
-                    };
-                    img.src = objectURL;
-                }
-            });
+            $("#image").on("change", handleImageChange);
 
-            $("#edit_image").on("change", function (event) {
-                if ($(this).val() !== "") {
-                    $(this).valid();
-                }
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    $("#editImagePreview").attr("src", e.target.result).removeClass("d-none");
-                    $(".upload_icon").addClass("d-none");
-                };
-                reader.readAsDataURL(event.target.files[0]);
-                var file = this.files[0];
-                if (file) {
-                    var img = new Image();
-                    var objectURL = URL.createObjectURL(file);
-                    
-                    img.onload = function () {
-                        if (this.width < 180 || this.height < 180) {
-                            $("#edit_image_error").text(_l("admin.common.image_pixel", {width: 180, height: 180}));
-                            $("#edit_image").addClass("is-invalid").removeClass("is-valid");
-                        }
-                        URL.revokeObjectURL(objectURL);
-                    };
-                    img.src = objectURL;
-                }
-            });
+            $("#edit_image").on("change", handleEditImageChange);
 
             $("#phone_number, #edit_phone_number").on("input", function () {
-                $(this).val($(this).val().replace(/[^0-9]/g, ""));
+                $(this).val($(this).val().replace(/\D/g, ""));
             });
 
             $(document).on("click", ".dataTables_paginate a", function() {
                 $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
             });
-            
+
             $(document).on("keyup", "#search", function() {
                 $("#userTable").DataTable().ajax.reload();
             });
-            
+
             $(document).on("click", ".sort_by_list .dropdown-item", function () {
                 let sortBy = $(this).data("sort");
                 $("#sort_by_input").val(sortBy);
@@ -442,7 +377,7 @@
             $(document).on("click", "#apply_filter", function () {
                 $("#userTable").DataTable().ajax.reload();
             });
-            
+
             $(document).on("click", "#reset_filter", function () {
                 $("#role_list input:checkbox").prop("checked", false);
                 $("#sort_by_input").val("");
@@ -461,20 +396,8 @@
                         "Accept": "application/json",
                         "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
                     },
-                    success: function(response) {
-                        if(response.code === 200){
-                            showToast("success", response.message);
-                            $("#delete_modal").modal("hide");
-                            $("#userTable").DataTable().ajax.reload();
-                        }
-                    },
-                    error: function(res) {
-                        if(res.responseJSON.code === 500){
-                            showToast("error", res.responseJSON.message);
-                        } else {
-                            showToast("error", _l("admin.common.default_delete_error"));
-                        }
-                    }
+                    success: handleDeleteSuccess,
+                    error: handleDeleteError
                 });
             });
 
@@ -497,7 +420,8 @@
                             $("#edit_last_name").val(data.last_name);
                             $("#edit_email").val(data.email);
                             $("#edit_role_id").val(data.role_id).trigger("change");
-                            $("#status").prop("checked", data.status == 1 ? true : false);
+                            $("#status").prop("checked", data.status == 1);
+
 
                             if (data.profile_image) {
                                 $("#editImagePreview").attr("src", data.profile_image).removeClass("d-none");
@@ -510,7 +434,7 @@
                             const phoneNumber = data.phone_number ? data.phone_number.trim() : data.phone_number;
                             const phoneInput = document.querySelector(".edit_user_phone_number");
                             const hiddenInput = document.querySelector("#edit_international_phone_number");
-                            
+
                             if ($(phoneInput).data("itiInstance")) {
                                 $(phoneInput).data("itiInstance").destroy();
                             }
@@ -522,7 +446,7 @@
                                 formatOnDisplay: false,
                             });
                             $(phoneInput).data("itiInstance", iti);
-                    
+
                             if (phoneNumber) {
                                 iti.setNumber(phoneNumber);
                                 hiddenInput.value = iti.getNumber();
@@ -537,7 +461,7 @@
 
                             phoneInput.addEventListener("input", updateHiddenPhoneNumber);
                             phoneInput.addEventListener("countrychange", updateHiddenPhoneNumber);
-                    
+
                             if (!hiddenInput.value) {
                                 hiddenInput.value = initialPhoneNumber;
                             }
@@ -553,6 +477,158 @@
             });
         }
 
+        function handleImageChange(event) {
+            const input = event.target;
+
+            if ($(input).val() !== "") {
+                $(input).valid();
+            }
+
+            readAndPreviewImage(input);
+            validateImageDimensions(input);
+        }
+
+        // --- Read file and preview ---
+        function readAndPreviewImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                $("#imagePreview")
+                    .attr("src", e.target.result)
+                    .removeClass("d-none");
+                $(".upload_icon").addClass("d-none");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // --- Validate image dimensions ---
+        function validateImageDimensions(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const img = new Image();
+            const objectURL = URL.createObjectURL(file);
+
+            img.onload = function () {
+                if (this.width < 180 || this.height < 180) {
+                    $("#image_error").text(
+                        _l("admin.common.image_pixel", { width: 180, height: 180 })
+                    );
+                    $("#image").addClass("is-invalid").removeClass("is-valid");
+                }
+                URL.revokeObjectURL(objectURL);
+            };
+            img.src = objectURL;
+        }
+
+        function handleEditImageChange(event) {
+            const input = event.target;
+
+            if ($(input).val() !== "") {
+                $(input).valid();
+            }
+
+            previewEditImage(input);
+            validateEditImageDimensions(input);
+        }
+
+        // --- Preview the selected image ---
+        function previewEditImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                $("#editImagePreview")
+                    .attr("src", e.target.result)
+                    .removeClass("d-none");
+                $(".upload_icon").addClass("d-none");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // --- Validate image dimensions ---
+        function validateEditImageDimensions(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const img = new Image();
+            const objectURL = URL.createObjectURL(file);
+
+            img.onload = function () {
+                if (this.width < 180 || this.height < 180) {
+                    $("#edit_image_error").text(
+                        _l("admin.common.image_pixel", { width: 180, height: 180 })
+                    );
+                    $("#edit_image").addClass("is-invalid").removeClass("is-valid");
+                }
+                URL.revokeObjectURL(objectURL);
+            };
+
+            img.src = objectURL;
+        }
+
+        function handleDeleteSuccess(response) {
+            if (response.code === 200) {
+                showToast("success", response.message);
+                $("#delete_modal").modal("hide");
+                $("#userTable").DataTable().ajax.reload();
+            }
+        }
+
+        // --- Error callback ---
+        function handleDeleteError(res) {
+            if (res.responseJSON?.code === 500) {
+                showToast("error", res.responseJSON.message);
+            } else {
+                showToast("error", _l("admin.common.default_delete_error"));
+            }
+        }
+
+        function getUserTableData(d) {
+            d.search = $("#search").val();
+            d.sort_by = $("#sort_by_input").val();
+            d.role_ids = $(".role_checkbox:checked").map(function () {
+                return $(this).val();
+            }).get();
+        }
+
+        // --- AJAX headers ---
+        function getAjaxHeaders() {
+            return {
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content"),
+            };
+        }
+
+        // --- Error handler ---
+        function handleUserTableError(error) {
+            if (error.responseJSON?.code === 500) {
+                showToast("error", error.responseJSON.message);
+            } else {
+                showToast("error", _l("admin.common.default_retrieve_error"));
+            }
+        }
+
+        // --- Before sending AJAX ---
+        function showTableLoader() {
+            $(".table-loader").show();
+            $(".real-table, .table-footer").addClass("d-none");
+        }
+
+        // --- After AJAX completes ---
+        function hideTableLoader() {
+            $(".table-loader, .input-loader, .label-loader").hide();
+            $(".real-table, .real-label, .real-input").removeClass("d-none");
+
+            if ($("#userTable").DataTable().rows().count() === 0) {
+                $(".table-footer").addClass("d-none");
+            } else {
+                $(".table-footer").removeClass("d-none");
+            }
+        }
         function initTable() {
             $("#userTable").DataTable({
                 serverSide: true,
@@ -561,36 +637,11 @@
                 ajax: {
                     url: "/admin/user/list",
                     type: "POST",
-                    data: function (d) {
-                        d.search = $("#search").val();
-                        d.sort_by = $("#sort_by_input").val();
-                        d.role_ids = $(".role_checkbox:checked").map(function() { return $(this).val(); }).get();
-                    },
-                    headers: {
-                        "Accept": "application/json",
-                        "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content"),
-                    },
-                    error: function (error) {
-                        if (error.responseJSON && error.responseJSON.code === 500) {
-                            showToast("error", error.responseJSON.message);
-                        } else {
-                            showToast("error", _l("admin.common.default_retrieve_error"));
-                        }
-                    },
-                    beforeSend: function () {
-                        $(".table-loader").show();
-                        $(".real-table, .table-footer").addClass("d-none");
-                    },
-                    complete: function () {
-                        $(".table-loader, .input-loader, .label-loader").hide();
-                        $(".real-table, .real-label, .real-input").removeClass("d-none");
-        
-                        if ($("#userTable").DataTable().rows().count() === 0) {
-                            $(".table-footer").addClass("d-none");
-                        } else {
-                            $(".table-footer").removeClass("d-none");
-                        }
-                    },
+                    data: getUserTableData,
+                    headers: getAjaxHeaders(),
+                    error: handleUserTableError,
+                    beforeSend: showTableLoader,
+                    complete: hideTableLoader
                 },
                 columns: [
                     { data: "full_name",
@@ -614,7 +665,7 @@
                                 </span>`;
                         },
                     },
-                    {   
+                    {
                         data: "id",
                         orderable: false,
                         searchable: false,
@@ -664,11 +715,11 @@
                 drawCallback: function () {
                     $(".dataTables_info").addClass("d-none");
                     $(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
-        
-                    var tableWrapper = $(this).closest(".dataTables_wrapper");
-                    var info = tableWrapper.find(".dataTables_info");
-                    var pagination = tableWrapper.find(".dataTables_paginate");
-        
+
+                    const tableWrapper = $(this).closest(".dataTables_wrapper");
+                    const info = tableWrapper.find(".dataTables_info");
+                    const pagination = tableWrapper.find(".dataTables_paginate");
+
                     $(".table-footer")
                         .empty()
                         .append(
@@ -680,6 +731,6 @@
                 },
             });
         }
-    }); 
-    
+    });
+
 }) ();

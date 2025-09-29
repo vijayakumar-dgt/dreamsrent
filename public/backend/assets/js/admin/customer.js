@@ -28,7 +28,7 @@
 
                 document.querySelector("#customerForm").addEventListener("submit", function (event) {
                     event.preventDefault();
-                    
+
                     const intlNumber = iti.getNumber();
                     if (intlNumber) {
                         intlPhoneInput.value = intlNumber;
@@ -40,7 +40,7 @@
                 });
             }
         }
-        
+
         function initDatePicker() {
             if($('.dob').length > 0 ){
                 $('.dob').datetimepicker({
@@ -77,10 +77,10 @@
                     },
                     minDate: moment().startOf('day')
                 });
-            }    
+            }
             $("#sort_by_date").val('');
         }
-        
+
         function initSelect2() {
             $('.language').select2({
                 dropdownParent: $("#add_customer_modal"),
@@ -89,7 +89,7 @@
                 dropdownParent: $("#edit_customer_modal"),
             });
         }
-        
+
         function initValidation(){
             $("#customerForm").validate({
                 rules: {
@@ -204,13 +204,8 @@
                     },
                 },
                 errorPlacement: function (error, element) {
-                    if (element.hasClass("select2-hidden-accessible")) {
-                        var errorId = element.attr("id") + "_error";
-                        $("#" + errorId).text(error.text());
-                    } else {
-                        var errorId = element.attr("id") + "_error";
-                        $("#" + errorId).text(error.text());
-                    }
+                    const errorId = element.attr("id") + "_error";
+                    $("#" + errorId).text(error.text());
                 },
                 highlight: function (element) {
                     if ($(element).hasClass("select2-hidden-accessible")) {
@@ -225,7 +220,7 @@
                     }
                     $(element).removeClass("is-invalid").addClass("is-valid");
                     $('#' + element.id).siblings('span').addClass('me-3');
-                    var errorId = element.id + "_error";
+                    const errorId = element.id + "_error";
                     $("#" + errorId).text("");
                 },
                 onkeyup: function(element) {
@@ -234,13 +229,14 @@
                 onchange: function(element) {
                     $(element).valid();
                 },
-                submitHandler: function(form) {
+
+                submitHandler: function (form) {
                     let formData = new FormData(form);
                     formData.set('phone_number', international_phone_number);
 
                     $.ajax({
-                        type:"POST",
-                        url:"/admin/customer/save",
+                        type: "POST",
+                        url: "/admin/customer/save",
                         data: formData,
                         enctype: "multipart/form-data",
                         processData: false,
@@ -249,36 +245,12 @@
                             'Accept': 'application/json',
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        beforeSend: function () {
-                            $('.submitbtn').attr('disabled', true).html(`
-                                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
-                            `);
-                        },
-                        success:function(resp){
-                            $(".error-text").text("");
-                            $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                            $(".submitbtn").removeAttr("disabled").html(_l('admin.common.create_new'));
-                            if (resp.code === 200) {
-                                showToast('success', resp.message);
-                                $("#add_customer_modal").modal('hide');
-                                $("#customerTable").DataTable().ajax.reload();
-                            }
-                        },
-                        error:function(error){
-                            $(".error-text").text("");
-                            $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                            $(".submitbtn").removeAttr("disabled").html(_l('admin.common.create_new'));
-                            if (error.responseJSON.code === 422) {
-                                $.each(error.responseJSON.errors, function(key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                });
-                            } else {
-                                showToast('error', error.responseJSON.message);
-                            }
-                        }
+                        beforeSend: handleBeforeSend,
+                        success: handleSuccess,
+                        error: handleError
                     });
                 }
+
             });
 
             $("#editCustomerForm").validate({
@@ -393,10 +365,7 @@
                 },
                 errorPlacement: function (error, element) {
                     if (element.hasClass("select2-hidden-accessible")) {
-                        var errorId = element.attr("id") + "_error";
-                        $("#" + errorId).text(error.text());
-                    } else {
-                        var errorId = element.attr("id") + "_error";
+                        const errorId = element.attr("id") + "_error";
                         $("#" + errorId).text(error.text());
                     }
                 },
@@ -422,13 +391,13 @@
                 onchange: function(element) {
                     $(element).valid();
                 },
-                submitHandler: function(form) {
+                submitHandler: function (form) {
                     let formData = new FormData(form);
-                    formData.set('phone_number', $('#edit_international_phone_number').val());
+                    formData.set('phone_number', international_phone_number);
 
                     $.ajax({
-                        type:"POST",
-                        url:"/admin/customer/save",
+                        type: "POST",
+                        url: "/admin/customer/save",
                         data: formData,
                         enctype: "multipart/form-data",
                         processData: false,
@@ -437,45 +406,58 @@
                             'Accept': 'application/json',
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        beforeSend: function () {
-                            $('.submitbtn').attr('disabled', true).html(`
-                                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
-                            `);
-                        },
-                        success:function(resp){
-                            $(".error-text").text("");
-                            $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                            $(".submitbtn").removeAttr("disabled").html(_l('admin.common.save_changes'));
-                            if (resp.code === 200) {
-                                showToast('success', resp.message);
-                                $("#edit_customer_modal").modal('hide');
-                                $("#customerTable").DataTable().ajax.reload();
-                            }
-                        },
-                        error:function(error){
-                            $(".error-text").text("");
-                            $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                            $(".submitbtn").removeAttr("disabled").html(_l('admin.common.save_changes'));
-                            if (error.responseJSON.code === 422) {
-                                $.each(error.responseJSON.errors, function(key, val) {
-                                    $("#edit_" + key).addClass("is-invalid");
-                                    $("#edit_" + key + "_error").text(val[0]);
-                                });
-                            } else {
-                                showToast('error', error.responseJSON.message);
-                            }
-                        }
+                        beforeSend: handleBeforeSend,
+                        success: handleSuccess,
+                        error: handleError
                     });
                 }
+
             });
 
             $.validator.addMethod("filesize", function (value, element, param) {
                 if (element.files.length === 0) return true;
                 return element.files[0].size <= param * 1024;
-            }, "File size must be less than {0} KB.");    
+            }, "File size must be less than {0} KB.");
         }
-        
+
     });
+
+    function handleBeforeSend() {
+        $('.submitbtn')
+            .attr('disabled', true)
+            .html(`
+                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
+            `);
+    }
+
+    function handleSuccess(resp) {
+        resetFormState();
+
+        if (resp.code === 200) {
+            showToast('success', resp.message);
+            $("#add_customer_modal").modal('hide');
+            $("#customerTable").DataTable().ajax.reload();
+        }
+    }
+
+    function handleError(error) {
+        resetFormState();
+
+        if (error.responseJSON.code === 422) {
+            $.each(error.responseJSON.errors, function (key, val) {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(val[0]);
+            });
+        } else {
+            showToast('error', error.responseJSON.message);
+        }
+    }
+
+    function resetFormState() {
+        $(".error-text").text("");
+        $(".form-control, .select2-container").removeClass("is-invalid is-valid");
+        $(".submitbtn").removeAttr("disabled").html(_l('admin.common.create_new'));
+    }
 
     function initEvents(){
         $('#image').on('change', function (event) {
@@ -488,11 +470,11 @@
                 $('.upload_icon').addClass('d-none');
             };
             reader.readAsDataURL(event.target.files[0]);
-            var file = this.files[0];
+            let file = this.files[0];
             if (file) {
-                var img = new Image();
-                var objectURL = URL.createObjectURL(file);
-                
+                let img = new Image();
+                let objectURL = URL.createObjectURL(file);
+
                 img.onload = function () {
                     if (this.width < 180 || this.height < 180) {
                         $("#image_error").text(_l('admin.common.image_pixel', {width: 180, height: 180}));
@@ -514,11 +496,11 @@
                 $('.upload_icon').addClass('d-none');
             };
             reader.readAsDataURL(event.target.files[0]);
-            var file = this.files[0];
+            let file = this.files[0];
             if (file) {
-                var img = new Image();
-                var objectURL = URL.createObjectURL(file);
-                
+                let img = new Image();
+                let objectURL = URL.createObjectURL(file);
+
                 img.onload = function () {
                     if (this.width < 180 || this.height < 180) {
                         $("#edit_image_error").text(_l('admin.common.image_pixel', {width: 180, height: 180}));
@@ -545,9 +527,11 @@
         $('#gender').on('change', function () {
             $(this).valid();
         });
+
         $("#phone_number").on("input", function () {
-            $(this).val($(this).val().replace(/[^0-9]/g, ""));
+            $(this).val($(this).val().replace(/\D/g, ""));
         });
+
         $("#card_number").on("input", function () {
             $(this).val($(this).val().replace(/[^a-zA-Z0-9]/g, ""));
         });
@@ -555,7 +539,7 @@
             $(this).valid();
         });
         $("#edit_phone_number").on("input", function () {
-            $(this).val($(this).val().replace(/[^0-9]/g, ""));
+            $(this).val($(this).val().replace(/\D/g, ""));
         });
         $("#edit_card_number").on("input", function () {
             $(this).val($(this).val().replace(/[^a-zA-Z0-9]/g, ""));
@@ -575,7 +559,7 @@
         });
 
         $(document).on('click', '.sort_by_list .dropdown-item', function () {
-            let sortBy = $(this).data('sort');
+            var sortBy = $(this).data('sort');
             $('#sort_by_input').val(sortBy);
             $('#current_sort').text(sortBy.charAt(0).toUpperCase() + sortBy.slice(1).toLowerCase());
             $('.sort_by_list .dropdown-item').removeClass('active');
@@ -584,7 +568,7 @@
         });
 
         $('#sort_by_date').on('change', function() {
-            var sort_by_date = $(this).val();
+            const sort_by_date = $(this).val();
             initTable(sort_by_date);
         });
 
@@ -644,7 +628,7 @@
             let selectedIds = [];
 
             $('.select-multiple:checked').each(function () {
-                var id = $(this).val(); 
+                const id = $(this).val();
                 if (id) {
                     selectedIds.push(id);
                 }
@@ -656,10 +640,10 @@
             }
 
             $.ajax({
-                url: '/admin/customer/delete', 
+                url: '/admin/customer/delete',
                 type: 'POST',
                 data: {
-                    _token: $('meta[name="csrf-token"]').attr('content'), 
+                    _token: $('meta[name="csrf-token"]').attr('content'),
                     ids: selectedIds,
                 },
                 success: function (response) {
@@ -717,20 +701,13 @@
                         }
                         $('.document-preview-container').empty();
                         if (data.documents && data.documents.length > 0) {
-                            $.each(response.data.documents, function(index, value) {
-                                $('.document-preview-container').append(
-                                    `<div class="document-preview me-2">
-                                        <a href="${value.document_url}" target="_blank" class="btn btn-sm btn-light me-0" ><i class="ti ti-file-text fs-40"></i></a>
-                                        <button type="button" class="btn btn-sm btn-light remove-document" data-id="${value.id}"><i class="ti ti-trash"></i></button>
-                                    </div>`
-                                );
-                            });
+                            data.documents.forEach(appendDocumentPreview);
                         }
 
                         const phoneNumber = data.phone_number ? data.phone_number.trim() : data.phone_number;
                         const phoneInput = document.querySelector(".edit_customer_phone_number");
                         const hiddenInput = document.querySelector("#edit_international_phone_number");
-                        
+
                         if ($(phoneInput).data('itiInstance')) {
                             $(phoneInput).data('itiInstance').destroy();
                         }
@@ -742,22 +719,18 @@
                             formatOnDisplay: false,
                         });
                         $(phoneInput).data('itiInstance', iti);
-                
+
                         if (phoneNumber) {
                             iti.setNumber(phoneNumber);
                             hiddenInput.value = iti.getNumber();
                             initialPhoneNumber = phoneNumber;
                         }
-                        const updateHiddenPhoneNumber = () => {
-                            const currentPhoneNumber = iti.getNumber();
-                            if (currentPhoneNumber !== initialPhoneNumber) {
-                                hiddenInput.value = currentPhoneNumber.trim();
-                            }
-                        };
+
+                       const updateHiddenPhoneNumber = () => updatePhoneNumber(iti, hiddenInput, initialPhoneNumber);
 
                         phoneInput.addEventListener("input", updateHiddenPhoneNumber);
                         phoneInput.addEventListener("countrychange", updateHiddenPhoneNumber);
-                
+
                         if (!hiddenInput.value) {
                             hiddenInput.value = initialPhoneNumber;
                         }
@@ -772,10 +745,29 @@
             $("#delete_id").val(id);
         });
     }
-   
+
+    function appendDocumentPreview(value, index) {
+        $('.document-preview-container').append(
+            `<div class="document-preview me-2">
+                <a href="${value.document_url}" target="_blank" class="btn btn-sm btn-light me-0">
+                    <i class="ti ti-file-text fs-40"></i>
+                </a>
+                <button type="button" class="btn btn-sm btn-light remove-document" data-id="${value.id}">
+                    <i class="ti ti-trash"></i>
+                </button>
+            </div>`
+        );
+    }
+
+    function updatePhoneNumber(itiInstance, hiddenInputElement, originalNumber) {
+        const currentNumber = itiInstance.getNumber().trim();
+        if (currentNumber !== originalNumber) {
+            hiddenInputElement.value = currentNumber;
+        }
+    }
+
     function initTable(sortByDate = '') {
         $("#customerTable").DataTable({
-            processing: true,
             serverSide: true,
             destroy: true,
             processing: false,
@@ -840,7 +832,7 @@
                 { data: "language",
                     render: function (data, type, row) {
                         return `
-                            ${row.language_name ? 
+                            ${row.language_name ?
                             `<div class="d-flex align-items-center">
                                 <span class="avatar avatar-xxs rounded-circle me-1 flex-shrink-0">
                                     <img src="${row.language_flag}" class="rounded-circle" alt="Profile Image">
@@ -853,7 +845,7 @@
                     render: function (data, type, row) {
                         if (row.documents && row.documents.length > 0) {
                             let docUrl = row.documents[0].document_url;
-                
+
                             return `
                                 <div class="d-flex align-items-center">
                                     <span class="table-icon me-2"><i class="ti ti-file-text"></i></span>
@@ -873,7 +865,7 @@
                             </div>`;
                     },
                 },
-                {   
+                {
                     data: "id",
                     orderable: false,
                     searchable: false,
@@ -888,11 +880,11 @@
                                     <li>
                                         <a class="dropdown-item rounded-1" href="/admin/customer-details/${row.encrypted_id}"><i class="ti ti-eye me-1"></i>${_l('admin.common.view_details')}</a>
                                     </li>
-                                    ${ hasPermission(permissions, 'customers', 'edit') ? 
+                                    ${ hasPermission(permissions, 'customers', 'edit') ?
                                     `<li>
                                         <button type="button" class="dropdown-item rounded-1 edit-customer" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button>
                                     </li>`:''}
-                                    ${ hasPermission(permissions, 'customers', 'delete') ? 
+                                    ${ hasPermission(permissions, 'customers', 'delete') ?
                                     `<li>
                                         <button type="button" class="dropdown-item rounded-1 delete-customer" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                     </li>`:''}
@@ -929,9 +921,10 @@
                 $(".dataTables_info").addClass("d-none");
                 $(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
 
-                var tableWrapper = $(this).closest(".dataTables_wrapper");
-                var info = tableWrapper.find(".dataTables_info");
-                var pagination = tableWrapper.find(".dataTables_paginate");
+                const tableWrapper = $(this).closest(".dataTables_wrapper");
+                const info = tableWrapper.find(".dataTables_info");
+                const pagination = tableWrapper.find(".dataTables_paginate");
+
 
                 $(".table-footer")
                     .empty()

@@ -343,104 +343,27 @@
     });
 
     function checkAndFetchVehicles() {
-        if (startDate && startTime) {
-            $(".summary_start_date").text(startDate + " " + startTime);
-        } else {
-            $(".summary_start_date").text("-");
-        }
+        updateSummaryDate(".summary_start_date", startDate, startTime);
+        updateSummaryDate(".summary_end_date", endDate, endTime);
 
-        if (endDate && endTime) {
-            $(".summary_end_date").text(endDate + " " + endTime);
-        } else {
-            $(".summary_end_date").text("-");
-        }
-
-        if (startDate && startTime && endDate && endTime) {
-            let startDateTime = moment(
-                startDate + " " + startTime,
-                "DD-MM-YYYY HH:mm"
-            );
-            let endDateTime = moment(
-                endDate + " " + endTime,
-                "DD-MM-YYYY HH:mm"
-            );
-
-            let diffMinutes = endDateTime.diff(startDateTime, "minutes");
-
-            if (diffMinutes < 60) {
-                $("#end_date, #end_time")
-                    .addClass("is-invalid")
-                    .removeClass("is-valid");
-                $("#end_date_error").text(
-                    _l("admin.bookings.duration_must_be_atleast_one_hour")
-                );
-                $(".summary_rental_period").text("-");
-                $("#vehicle_list_main_container").addClass("d-none");
-                return;
-            } else {
-                $("#end_date, #end_time").removeClass("is-invalid");
-                $("#end_date_error").text("");
-            }
-
-            if (startDateTime.isSame(endDateTime)) {
-                no_of_days = 1;
-            } else if (
-                startDateTime.format("DD-MM-YYYY") ===
-                endDateTime.format("DD-MM-YYYY")
-            ) {
-                no_of_days = 1;
-            } else if (diffMinutes === 1440) {
-                no_of_days = 1;
-            } else if (diffMinutes > 1440 && diffMinutes <= 2880) {
-                no_of_days = 2;
-            } else {
-                no_of_days = Math.ceil(diffMinutes / 1440);
-            }
-            let rentalPeriodText =
-                no_of_days + " day" + (no_of_days > 1 ? "s" : "");
-            $(".summary_rental_period").text(rentalPeriodText.trim());
-
-            no_of_months = 0;
-            let tempStart = moment(
-                startDate + " " + startTime,
-                "DD-MM-YYYY HH:mm"
-            );
-            while (tempStart.isBefore(endDateTime, "month")) {
-                let daysInMonth = tempStart.daysInMonth();
-                if (tempStart.add(daysInMonth, "days").isAfter(endDateTime))
-                    break;
-                no_of_months++;
-            }
-
-            no_of_years = 0;
-            let startMoment = moment(startDate, "DD-MM-YYYY");
-            let endMoment = moment(endDate, "DD-MM-YYYY");
-            let totalDaysLeft = endMoment.diff(startMoment, "days");
-            let daysInYear = 365;
-            let remainingDays = totalDaysLeft;
-
-            while (remainingDays >= daysInYear) {
-                no_of_years++;
-                remainingDays -= daysInYear;
-                if (startMoment.isLeapYear()) {
-                    daysInYear = 366;
-                }
-            }
-            if (remainingDays > 0) {
-                no_of_years++;
-            }
-        } else {
+        if (!areDatesAndTimesValid()) {
             $(".summary_rental_period").text("-");
+            return;
         }
 
-        if (
-            startDate &&
-            startTime &&
-            endDate &&
-            endTime &&
-            pickup_location_val &&
-            return_location_val
-        ) {
+        const startDateTime = moment(`${startDate} ${startTime}`, "DD-MM-YYYY HH:mm");
+        const endDateTime = moment(`${endDate} ${endTime}`, "DD-MM-YYYY HH:mm");
+        const diffMinutes = endDateTime.diff(startDateTime, "minutes");
+
+        if (!validateDuration(diffMinutes)) return;
+
+        const no_of_days = calculateNumberOfDays(startDateTime, endDateTime, diffMinutes);
+        $(".summary_rental_period").text(formatRentalPeriod(no_of_days));
+
+        const no_of_months = calculateNumberOfMonths(startDateTime, endDateTime);
+        const no_of_years = calculateNumberOfYears(startDate, endDate);
+
+        if (shouldFetchVehicles()) {
             $("#vehicle_list_main_container").removeClass("d-none");
             lastPage = false;
             currentPage = 1;
@@ -448,11 +371,79 @@
         }
     }
 
+    // --- Helper Functions ---
+
+    function updateSummaryDate(selector, date, time) {
+        $(selector).text(date && time ? `${date} ${time}` : "-");
+    }
+
+    function areDatesAndTimesValid() {
+        return startDate && startTime && endDate && endTime;
+    }
+
+    function validateDuration(diffMinutes) {
+        if (diffMinutes < 60) {
+            $("#end_date, #end_time").addClass("is-invalid").removeClass("is-valid");
+            $("#end_date_error").text(_l("admin.bookings.duration_must_be_atleast_one_hour"));
+            $(".summary_rental_period").text("-");
+            $("#vehicle_list_main_container").addClass("d-none");
+            return false;
+        }
+        $("#end_date, #end_time").removeClass("is-invalid");
+        $("#end_date_error").text("");
+        return true;
+    }
+
+    function calculateNumberOfDays(start, end, diffMinutes) {
+        if (start.isSame(end) || start.format("DD-MM-YYYY") === end.format("DD-MM-YYYY") || diffMinutes === 1440) {
+            return 1;
+        } else if (diffMinutes > 1440 && diffMinutes <= 2880) {
+            return 2;
+        } else {
+            return Math.ceil(diffMinutes / 1440);
+        }
+    }
+
+    function formatRentalPeriod(days) {
+        return `${days} day${days > 1 ? "s" : ""}`.trim();
+    }
+
+    function calculateNumberOfMonths(start, end) {
+        let months = 0;
+        let temp = start.clone();
+        while (temp.isBefore(end, "month")) {
+            const daysInMonth = temp.daysInMonth();
+            if (temp.add(daysInMonth, "days").isAfter(end)) break;
+            months++;
+        }
+        return months;
+    }
+
+    function calculateNumberOfYears(startDate, endDate) {
+        let years = 0;
+        let startMoment = moment(startDate, "DD-MM-YYYY");
+        let endMoment = moment(endDate, "DD-MM-YYYY");
+        let remainingDays = endMoment.diff(startMoment, "days");
+        let daysInYear = 365;
+
+        while (remainingDays >= daysInYear) {
+            years++;
+            remainingDays -= daysInYear;
+            if (startMoment.isLeapYear()) daysInYear = 366;
+        }
+
+        if (remainingDays > 0) years++;
+        return years;
+    }
+
+    function shouldFetchVehicles() {
+        return startDate && startTime && endDate && endTime && pickup_location_val && return_location_val;
+    }
+
     $(document).on("change", "#tariff", function () {
         tariff = $(this).find("option:selected").text().toLowerCase();
 
         let todayDateTime = moment();
-        let todayDate = todayDateTime.clone().startOf("day");
         let lastDateTime;
 
         if (tariff === "daily") {
@@ -649,7 +640,7 @@
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             beforeSend: function () {
-                if (isLoadMore == false) {
+                if (!isLoadMore) {
                     $(".list-loader").show();
                     $(".card-loader").show();
                     $("#vehicle_list_container").addClass("d-none");
@@ -1198,7 +1189,7 @@
         $(this).val(
             $(this)
                 .val()
-                .replace(/[^0-9]/g, "")
+                .replace(/\D/g, "")
         );
     });
 
@@ -1251,7 +1242,7 @@
         $(this).val(
             $(this)
                 .val()
-                .replace(/[^0-9]/g, "")
+                .replace(/\D/g, "")
         );
     });
 
@@ -1259,7 +1250,7 @@
         $(this).val(
             $(this)
                 .val()
-                .replace(/[^0-9]/g, "")
+                .replace(/\D/g, "")
         );
     });
 
@@ -1314,10 +1305,7 @@
         },
         errorPlacement: function (error, element) {
             if (element.hasClass("select2-hidden-accessible")) {
-                var errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            } else {
-                var errorId = element.attr("id") + "_error";
+                const errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             }
         },
@@ -1344,7 +1332,7 @@
             $("#" + element.id)
                 .siblings("span")
                 .addClass("me-3");
-            var errorId = element.id + "_error";
+            const errorId = element.id + "_error";
             $("#" + errorId).text("");
         },
         onkeyup: function (element) {
@@ -1481,10 +1469,7 @@
         },
         errorPlacement: function (error, element) {
             if (element.hasClass("select2-hidden-accessible")) {
-                var errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            } else {
-                var errorId = element.attr("id") + "_error";
+                const errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             }
         },
@@ -1505,7 +1490,7 @@
                     .addClass("is-valid");
             }
             $(element).removeClass("is-invalid").addClass("is-valid");
-            var errorId = element.id + "_error";
+            const errorId = element.id + "_error";
             $("#" + errorId).text("");
         },
         onkeyup: function (element) {
@@ -1517,17 +1502,13 @@
     });
 
     function calculateVehiclePrice() {
-        let tariffVal = $("#tariff")
-            .find("option:selected")
-            .text()
-            .toLowerCase();
         let vehiclePriceRate = vehiclePrice;
-        var driverPriceVal = parseFloat($("#driver_price").val()) || 0;
-        var securityDeposit =
+        const driverPriceVal = parseFloat($("#driver_price").val()) || 0;
+        const securityDeposit =
             $("#security_deposit").val() !== ""
                 ? parseFloat($("#security_deposit").val())
                 : 0;
-        var response = [];
+        const response = [];
 
         if (vehiclePriceType === "daily") {
             vehiclePriceRate = no_of_days * vehiclePrice;
@@ -1541,10 +1522,10 @@
             vehiclePriceRate = no_of_days * vehiclePrice;
         }
 
-        var total_extra_service_price = 0;
-        var total_extra_service = 0;
-        var extraServiceName = "";
-        var isExtraService;
+        let total_extra_service_price = 0;
+        let total_extra_service = 0;
+        let extraServiceName = "";
+        let isExtraService;
         if ($(".vehicle_extra_service").length > 0) {
             $(".vehicle_extra_service").each(function () {
                 isExtraService = $(this).is(":checked");
@@ -1570,9 +1551,9 @@
             });
         }
 
-        var total_insurance_price = 0;
-        var total_insurance = 0;
-        var insuranceName = "";
+        let total_insurance_price = 0;
+        let total_insurance = 0;
+        let insuranceName = "";
         if ($(".vehicle_insurance").length > 0) {
             $(".vehicle_insurance").each(function () {
                 if ($(this).is(":checked")) {
@@ -1654,7 +1635,7 @@
             let driver_name = $("#driver_detail").data("name") ?? "";
             let driver_phone = $("#driver_detail").data("phone") ?? "";
 
-            var totalAmount = calculateVehiclePrice();
+            const totalAmount = calculateVehiclePrice();
 
             $("#extra_service_summary").append(`
             <div class="border-bottom mb-3 border-top pt-3">
@@ -1819,7 +1800,7 @@
             }
         });
         $(".insurance_summary_container").addClass("d-none");
-        var response = calculateVehiclePrice();
+        const response = calculateVehiclePrice();
         if (response) {
             $(".extra_service_price").text(
                 response[0]["total_extra_service_price"]
@@ -1984,7 +1965,7 @@
 
     $(document).on("click", ".vehicle_extra_service", function () {
         $(this).closest(".custom-checkbox").toggleClass("active", this.checked);
-        var response = calculateVehiclePrice();
+        const response = calculateVehiclePrice();
 
         if (response) {
             $(".extra_service_price").text(
@@ -2004,166 +1985,156 @@
         $.ajax({
             url: "/get-vehicle-insurances",
             type: "POST",
-            data: {
-                vehicle_ids: selected_vehicle_ids,
-            },
+            data: { vehicle_ids: selected_vehicle_ids },
             dataType: "json",
             headers: {
                 Accept: "application/json",
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
-            success: function (result) {
-                if (result.data && result.data.length > 0) {
-                    let data = result.data;
-                    $("#insurance_list_container").empty();
-
-                    data.forEach((item) => {
-                        let isChecked = selected_insurance_ids.includes(
-                            item.id.toString()
-                        );
-                        let isActive = isChecked ? "active" : "";
-
-                        let benefits = item.insurance_benefits
-                            .map((b) => b.benefit)
-                            .join(", ");
-
-                        let insuranceType = "";
-                        switch (item.insurance_type) {
-                            case "fixed":
-                                insuranceType = "Fixed";
-                                break;
-                            case "daily":
-                                insuranceType = "Daily";
-                                break;
-                            case "percentage":
-                                insuranceType = "Percentage";
-                                break;
-                            default:
-                                insuranceType = item.insurance_type;
-                        }
-
-                        // Outer column div
-                        const colDiv = $("<div>").addClass("col-md-6");
-                        const customCheckbox = $("<div>").addClass(
-                            `custom-checkbox ${isActive}`
-                        );
-
-                        // Form check input
-                        const formCheckDiv = $("<div>").addClass(
-                            "form-check form-check-md"
-                        );
-                        const inputCheckbox = $("<input>", {
-                            class: "form-check-input vehicle_insurance",
-                            type: "checkbox",
-                            name: "insurances[]",
-                            id: `insurance_${item.id}`,
-                            value: item.id,
-                            "data-price": item.price,
-                            "data-price_type": item.insurance_type,
-                            "data-name": item.insurance_name,
-                        });
-                        if (isChecked) {
-                            inputCheckbox.prop("checked", true);
-                        }
-                        formCheckDiv.append(inputCheckbox);
-
-                        // Label and benefits
-                        const flexDiv = $("<div>").addClass(
-                            "d-flex align-items-center justify-content-between"
-                        );
-
-                        const label = $("<label>", {
-                            class: "form-check-label ms-2 ps-4",
-                            for: `insurance_${item.id}`,
-                        });
-                        $("<span>")
-                            .addClass("fw-semibold text-gray-9 d-block mb-1")
-                            .text(item.insurance_name)
-                            .appendTo(label);
-
-                        const benefitsSpan = $("<span>")
-                            .addClass("d-block text-info")
-                            .text(
-                                `+${item.insurance_benefits_count} ${_l(
-                                    "admin.common.benefits"
-                                )}`
-                            );
-                        if (benefits) {
-                            const tooltipIcon = $("<i>", {
-                                class: "ti ti-info-circle-filled text-gray-5 ms-1",
-                                "data-bs-toggle": "tooltip",
-                                "data-bs-placement": "top",
-                                "data-bs-original-title": benefits,
-                            });
-                            benefitsSpan.append(tooltipIcon);
-                        }
-                        label.append(benefitsSpan);
-
-                        // Price section
-                        const priceDiv = $("<div>").addClass("text-end");
-                        $("<p>")
-                            .addClass("mb-1")
-                            .text(insuranceType)
-                            .appendTo(priceDiv);
-                        if (item.insurance_type === "percentage") {
-                            $("<h6>").text(`${item.price}%`).appendTo(priceDiv);
-                        } else {
-                            $("<h6>")
-                                .html(`${default_currency}${item.price}`)
-                                .appendTo(priceDiv);
-                        }
-
-                        // Combine
-                        flexDiv.append(label, priceDiv);
-                        customCheckbox.append(formCheckDiv, flexDiv);
-                        colDiv.append(customCheckbox);
-
-                        $("#insurance_list_container").append(colDiv);
-                    });
-
-                    // Update price section
-                    let response = calculateVehiclePrice();
-                    if (response) {
-                        $(".total_insurance_price").text(
-                            response[0]["total_insurance_price"]
-                        );
-                        $(".total_price_val").text(response[0]["total_price"]);
-                        $(".insurance_count").text(
-                            response[0]["total_insurance"]
-                        );
-                        $(".insurance_tooltip").attr(
-                            "data-bs-original-title",
-                            response[0]["insurance_name"]
-                        );
-                    }
-
-                    initializeTooltips();
-                } else {
-                    $("#insurance_list_container").html(`
-                    <div class="row">
-                        <span class="text-center mb-3">${_l(
-                            "admin.bookings.no_insurance_found"
-                        )}</span>
-                    </div>
-                `);
-                }
-            },
-            error: function (error) {
-                if (error.responseJSON.code === 500) {
-                    showToast("error", error.responseJSON.message);
-                } else {
-                    showToast(
-                        "error",
-                        _l("admin.common.default_retrieve_error")
-                    );
-                }
-            },
+            success: handleInsuranceSuccess,
+            error: handleInsuranceError,
         });
+    }
+
+    // --- Helper Functions ---
+
+    function handleInsuranceSuccess(result) {
+        const data = result?.data || [];
+
+        if (!data.length) {
+            showNoInsuranceMessage();
+            return;
+        }
+
+        $("#insurance_list_container").empty();
+
+        data.forEach((item) => {
+            const colDiv = createInsuranceColumn(item);
+            $("#insurance_list_container").append(colDiv);
+        });
+
+        updateInsurancePrice();
+        initializeTooltips();
+    }
+
+    function handleInsuranceError(error) {
+        const msg =
+            error?.responseJSON?.code === 500
+                ? error.responseJSON.message
+                : _l("admin.common.default_retrieve_error");
+        showToast("error", msg);
+    }
+
+    function showNoInsuranceMessage() {
+        $("#insurance_list_container").html(`
+            <div class="row">
+                <span class="text-center mb-3">${_l("admin.bookings.no_insurance_found")}</span>
+            </div>
+        `);
+    }
+
+    function createInsuranceColumn(item) {
+        const isChecked = selected_insurance_ids.includes(item.id.toString());
+        const isActive = isChecked ? "active" : "";
+
+        const colDiv = $("<div>").addClass("col-md-6");
+        const customCheckbox = $("<div>").addClass(`custom-checkbox ${isActive}`);
+
+        const formCheckDiv = $("<div>").addClass("form-check form-check-md");
+        const inputCheckbox = $("<input>", {
+            class: "form-check-input vehicle_insurance",
+            type: "checkbox",
+            name: "insurances[]",
+            id: `insurance_${item.id}`,
+            value: item.id,
+            "data-price": item.price,
+            "data-price_type": item.insurance_type,
+            "data-name": item.insurance_name,
+        });
+        if (isChecked) inputCheckbox.prop("checked", true);
+        formCheckDiv.append(inputCheckbox);
+
+        const flexDiv = $("<div>").addClass("d-flex align-items-center justify-content-between");
+        flexDiv.append(createInsuranceLabel(item), createInsurancePrice(item));
+
+        customCheckbox.append(formCheckDiv, flexDiv);
+        colDiv.append(customCheckbox);
+
+        return colDiv;
+    }
+
+    function createInsuranceLabel(item) {
+        const label = $("<label>", {
+            class: "form-check-label ms-2 ps-4",
+            for: `insurance_${item.id}`,
+        });
+
+        $("<span>")
+            .addClass("fw-semibold text-gray-9 d-block mb-1")
+            .text(item.insurance_name)
+            .appendTo(label);
+
+        if (item.insurance_benefits?.length) {
+            const benefits = item.insurance_benefits.map((b) => b.benefit).join(", ");
+            const benefitsSpan = $("<span>")
+                .addClass("d-block text-info")
+                .text(`+${item.insurance_benefits_count} ${_l("admin.common.benefits")}`);
+
+            const tooltipIcon = $("<i>", {
+                class: "ti ti-info-circle-filled text-gray-5 ms-1",
+                "data-bs-toggle": "tooltip",
+                "data-bs-placement": "top",
+                "data-bs-original-title": benefits,
+            });
+            benefitsSpan.append(tooltipIcon);
+            label.append(benefitsSpan);
+        }
+
+        return label;
+    }
+
+    function createInsurancePrice(item) {
+        const priceDiv = $("<div>").addClass("text-end");
+
+        const insuranceType = mapInsuranceType(item.insurance_type);
+        $("<p>").addClass("mb-1").text(insuranceType).appendTo(priceDiv);
+
+        const priceText =
+            item.insurance_type === "percentage"
+                ? `${item.price}%`
+                : `${default_currency}${item.price}`;
+        $("<h6>").html(priceText).appendTo(priceDiv);
+
+        return priceDiv;
+    }
+
+    function mapInsuranceType(type) {
+        switch (type) {
+            case "fixed":
+                return "Fixed";
+            case "daily":
+                return "Daily";
+            case "percentage":
+                return "Percentage";
+            default:
+                return type;
+        }
+    }
+
+    function updateInsurancePrice() {
+        const response = calculateVehiclePrice();
+        if (!response) return;
+
+        const data = response[0];
+        $(".total_insurance_price").text(data.total_insurance_price);
+        $(".total_price_val").text(data.total_price);
+        $(".insurance_count").text(data.total_insurance);
+        $(".insurance_tooltip").attr("data-bs-original-title", data.insurance_name);
     }
 
     $(document).on("click", ".vehicle_insurance", function () {
         $(this).closest(".custom-checkbox").toggleClass("active", this.checked);
-        var response = calculateVehiclePrice();
+        const response = calculateVehiclePrice();
 
         if (response) {
             $(".total_insurance_price").text(
@@ -2188,7 +2159,6 @@
             }
         });
 
-        let vehicle_name = $(".vehicle_select:checked").data("vehicle_name");
         let vehicle_season_id = $(".vehicle_select:checked").data(
             "vehicle_season_id"
         );
@@ -2308,199 +2278,146 @@
         let selectedDrivers = [];
         let selectedCartypes = [];
 
+       function getCsrfToken() {
+            const tokenEl = document.querySelector('meta[name="csrf-token"]');
+            return tokenEl ? tokenEl.getAttribute("content") : "";
+        }
+
         async function fetchCalendarData() {
-            let filterData = {
-                status: selectedStatus,
-                vehicles: selectedVehicles.length > 0 ? selectedVehicles : [],
-                customers:
-                    selectedCustomers.length > 0 ? selectedCustomers : [],
-                drivers: selectedDrivers.length > 0 ? selectedDrivers : [],
-                cartypes: selectedCartypes.length > 0 ? selectedCartypes : [],
+            const filterData = {
+                status: selectedStatus || null,
+                vehicles: selectedVehicles.length ? selectedVehicles : undefined,
+                customers: selectedCustomers.length ? selectedCustomers : undefined,
+                drivers: selectedDrivers.length ? selectedDrivers : undefined,
+                cartypes: selectedCartypes.length ? selectedCartypes : undefined,
             };
 
             try {
-                const response = await fetch("/admin/calendar-info", {
+                const res = await fetch("/admin/calendar-info", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document
-                            .querySelector('meta[name="csrf-token"]')
-                            .getAttribute("content"),
+                        "X-CSRF-TOKEN": getCsrfToken(),
                     },
                     body: JSON.stringify(filterData),
                 });
 
-                return await response.json();
-            } catch (error) {
-                console.error("Error fetching calendar data:", error);
-                return { data: [] }; // Return empty array on error
+                if (!res.ok) {
+                    console.warn("Fetch returned non-OK status:", res.status);
+                    return { data: [] };
+                }
+
+                const json = await res.json();
+                return json.data ? json : { data: [] };
+            } catch (err) {
+                console.error("Failed to fetch calendar data:", err);
+                return { data: [] };
             }
+        }
+
+
+        function getEventBackgroundColor(status) {
+            const colorMap = {
+                1: "#FFF6B3", // In Progress
+                4: "#AEEA94", // Booked
+                5: "#A1E3F9", // Completed
+                6: "#FFA09B", // Cancelled
+            };
+            return colorMap[status] || "#AEEA94";
+        }
+
+        function buildCalendarEvents(bookings) {
+            return bookings.map((booking) => ({
+                id: booking.id,
+                title: booking.name,
+                booking_status: booking.booking_status,
+                backgroundColor: getEventBackgroundColor(booking.booking_status),
+                textColor: "#111827",
+                start: booking.start_datetime,
+                end: booking.end_datetime,
+                display: "block",
+            }));
+        }
+
+        function renderBookingDetails(response) {
+            if (response.code !== 200) return;
+
+            const { booking, vehicleType, pickupLocation, returnLocation, driverDetails, customerDetails, currency } = response;
+
+            if (customerDetails) {
+                $("#customer_name").text(`${customerDetails.first_name} ${customerDetails.last_name}`);
+                $("#customer_num").text(customerDetails.phone_number);
+                $("#customer_img").attr("src", customerDetails.profile_image);
+                $("#customer_section").removeClass("d-none");
+            } else {
+                $("#customer_section").addClass("d-none");
+            }
+
+            $("#car_img").attr("src", booking.vehicle.vehicle_image);
+            $("#car_title").text(booking.vehicle.name);
+            $("#car_price").text(`${currency}${booking.vehicle_price}/${booking.rental_type}`);
+
+            $("#start_date_time").text(booking.start_datetime);
+            $("#end_date_time").text(booking.end_datetime);
+            $("#rent_period").text(`${booking.no_of_days} Days`);
+
+            $("#drive_type").text(
+                booking.delivery_type && booking.delivery_type !== "N/A" ? booking.delivery_type : "N/A"
+            );
+
+            $("#pickLan").text(pickupLocation);
+            $("#retLan").text(returnLocation);
+            $("#passenger_name").text(booking.passenger_name);
+
+            if (driverDetails.driver_name?.trim()) {
+                $("#driver_name").text(driverDetails.driver_name);
+                $("#driver_num").text(driverDetails.phone_number);
+                $("#driver_img").attr("src", driverDetails.image);
+                $(".driverInfo").show();
+            } else {
+                $(".driverInfo").addClass("d-none");
+            }
+
+            $("#final_price").text(`$${booking.final_price}`);
+            $("#booking_details_modal").modal("show");
+        }
+
+        function handleEventClick(info) {
+            $.ajax({
+                url: "/admin/calendar-detail",
+                type: "GET",
+                data: { booking_id: info.event.id },
+                success: renderBookingDetails,
+                error: () => alert("Error fetching booking details."),
+            });
         }
 
         async function loadCalendar() {
             const data = await fetchCalendarData();
 
-            document
-                .querySelectorAll(".adminCalendar")
-                .forEach((calendarEl) => {
-                    if (calendarEl.fcInstance) {
-                        calendarEl.fcInstance.destroy(); // Destroy previous instance
-                    }
+            document.querySelectorAll(".adminCalendar").forEach((calendarEl) => {
+                if (calendarEl.fcInstance) {
+                    calendarEl.fcInstance.destroy();
+                }
 
-                    var calendar = new FullCalendar.Calendar(calendarEl, {
-                        headerToolbar: {
-                            left: "prev,next today",
-                            center: "title",
-                            right: "dayGridMonth,timeGridWeek,timeGridDay",
-                        },
-                        initialView: "dayGridMonth",
-                        events: data.data.map((booking) => {
-                            let backgroundColor = "#AEEA94";
-
-                            switch (booking.booking_status) {
-                                case 1:
-                                    backgroundColor = "#FFF6B3";
-                                    break;
-                                case 4:
-                                    backgroundColor = "#AEEA94";
-                                    break;
-                                case 5:
-                                    backgroundColor = "#A1E3F9";
-                                    break;
-                                case 6:
-                                    backgroundColor = "#FFA09B";
-                                    break;
-                            }
-
-                            return {
-                                id: booking.id,
-                                title: booking.name,
-                                booking_status: booking.booking_status,
-                                backgroundColor: backgroundColor,
-                                textColor: "#111827",
-                                start: booking.start_datetime,
-                                end: booking.end_datetime,
-                                display: "block",
-                            };
-                        }),
-                        eventClick: function (info) {
-                            const bookingId = info.event.id;
-                            $.ajax({
-                                url: "/admin/calendar-detail",
-                                type: "GET",
-                                data: { booking_id: bookingId },
-                                success: function (response) {
-                                    if (response.code === 200) {
-                                        const booking = response.booking;
-                                        const vehicleType =
-                                            response.vehicleType;
-                                        const pickupLocation =
-                                            response.pickupLocation;
-                                        const returnLocation =
-                                            response.returnLocation;
-                                        const driverDetails =
-                                            response.driverDetails;
-                                        const customer =
-                                            response.customerDetails;
-                                        const currency = response.currency;
-
-                                        if (customer) {
-                                            $("#customer_name").text(
-                                                `${customer.first_name} ${customer.last_name}`
-                                            );
-                                            $("#customer_num").text(
-                                                customer.phone_number
-                                            );
-                                            $("#customer_img").attr(
-                                                "src",
-                                                customer.profile_image
-                                            );
-                                            $("#customer_section").removeClass(
-                                                "d-none"
-                                            ); // assuming it's hidden by default
-                                        } else {
-                                            $("#customer_section").addClass(
-                                                "d-none"
-                                            );
-                                        }
-
-                                        $("#car_img").attr(
-                                            "src",
-                                            booking.vehicle.vehicle_image
-                                        );
-                                        $("#car_title").text(
-                                            booking.vehicle.name
-                                        );
-
-                                        $("#car_price").text(
-                                            `${currency}${booking.vehicle_price}/${booking.rental_type}`
-                                        );
-
-                                        $("#start_date_time").text(
-                                            booking.start_datetime
-                                        );
-                                        $("#end_date_time").text(
-                                            booking.end_datetime
-                                        );
-                                        $("#rent_period").text(
-                                            `${booking.no_of_days} Days`
-                                        );
-
-                                        $("#drive_type").text(
-                                            booking.delivery_type &&
-                                                booking.delivery_type !== "N/A"
-                                                ? booking.delivery_type
-                                                : "N/A"
-                                        );
-
-                                        $("#pickLan").text(pickupLocation);
-                                        $("#retLan").text(returnLocation);
-                                        $("#passenger_name").text(
-                                            booking.passenger_name
-                                        );
-                                        if (
-                                            driverDetails.driver_name &&
-                                            driverDetails.driver_name.trim() !==
-                                                ""
-                                        ) {
-                                            $("#driver_name").text(
-                                                driverDetails.driver_name
-                                            );
-                                            $("#driver_num").text(
-                                                driverDetails.phone_number
-                                            );
-                                            $("#driver_img").attr(
-                                                "src",
-                                                driverDetails.image
-                                            );
-                                            $(".driverInfo").show();
-                                        } else {
-                                            $(".driverInfo").addClass("d-none");
-                                        }
-                                        $("#final_price").text(
-                                            `$${booking.final_price}`
-                                        );
-
-                                        $("#booking_details_modal").modal(
-                                            "show"
-                                        );
-                                    }
-                                },
-                                error: function () {
-                                    alert("Error fetching booking details.");
-                                },
-                            });
-                        },
-                        editable: false,
-                        eventContent: function (arg) {
-                            return { html: `<div>${arg.event.title}</div>` };
-                        },
-                    });
-
-                    calendarEl.fcInstance = calendar;
-                    calendar.render();
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    headerToolbar: {
+                        left: "prev,next today",
+                        center: "title",
+                        right: "dayGridMonth,timeGridWeek,timeGridDay",
+                    },
+                    initialView: "dayGridMonth",
+                    events: buildCalendarEvents(data.data),
+                    eventClick: handleEventClick,
+                    editable: false,
+                    eventContent: (arg) => ({ html: `<div>${arg.event.title}</div>` }),
                 });
+
+                calendarEl.fcInstance = calendar;
+                calendar.render();
+            });
         }
+
     });
 
     let selectedStatus = "";
@@ -2541,203 +2458,131 @@
         const data = await fetchCalendarData();
 
         document.querySelectorAll(".adminCalendar").forEach((calendarEl) => {
-            if (calendarEl.fcInstance) {
-                calendarEl.fcInstance.destroy(); // Destroy previous instance
-            }
+            if (calendarEl.fcInstance) calendarEl.fcInstance.destroy();
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            const calendar = new FullCalendar.Calendar(calendarEl, {
                 headerToolbar: {
                     left: "prev,next today",
                     center: "title",
                     right: "dayGridMonth,timeGridWeek,timeGridDay",
                 },
                 initialView: "dayGridMonth",
-                events: data.data.map((booking) => {
-                    let backgroundColor = "#AEEA94";
-
-                    switch (booking.booking_status) {
-                        case 1:
-                            backgroundColor = "#FFF6B3";
-                            break;
-                        case 4:
-                            backgroundColor = "#AEEA94";
-                            break;
-                        case 5:
-                            backgroundColor = "#A1E3F9";
-                            break;
-                        case 6:
-                            backgroundColor = "#FFA09B";
-                            break;
-                    }
-
-                    return {
-                        id: booking.id,
-                        title: booking.name,
-                        booking_status: booking.booking_status,
-                        backgroundColor: backgroundColor,
-                        textColor: "#111827",
-                        start: booking.start_datetime,
-                        end: booking.end_datetime,
-                        display: "block",
-                    };
-                }),
-                eventClick: function (info) {
-                    const bookingId = info.event.id;
-                    $.ajax({
-                        url: "/admin/calendar-detail",
-                        type: "GET",
-                        data: { booking_id: bookingId },
-                        success: function (response) {
-                            if (response.code === 200) {
-                                const booking = response.booking;
-                                const vehicleType = response.vehicleType;
-                                const pickupLocation = response.pickupLocation;
-                                const returnLocation = response.returnLocation;
-                                const driverDetails = response.driverDetails;
-                                const customer = response.customerDetails;
-                                const currency = response.currency;
-
-                                if (customer) {
-                                    $("#customer_name").text(
-                                        `${customer.first_name} ${customer.last_name}`
-                                    );
-                                    $("#customer_num").text(
-                                        customer.phone_number
-                                    );
-                                    $("#customer_img").attr(
-                                        "src",
-                                        customer.profile_image
-                                    );
-                                    $("#customer_section").removeClass(
-                                        "d-none"
-                                    );
-                                } else {
-                                    $("#customer_section").addClass("d-none");
-                                }
-
-                                const statusMap = {
-                                    1: {
-                                        text: "In Progress",
-                                        class: "badge-soft-warning",
-                                    },
-                                    2: {
-                                        text: "Confirmed",
-                                        class: "badge-soft-primary",
-                                    },
-                                    3: {
-                                        text: "Rejected",
-                                        class: "badge-soft-danger",
-                                    },
-                                    4: {
-                                        text: "Booked",
-                                        class: "badge-soft-info",
-                                    },
-                                    5: {
-                                        text: "Completed",
-                                        class: "badge-soft-success",
-                                    },
-                                    6: {
-                                        text: "Cancelled",
-                                        class: "badge-soft-secondary",
-                                    },
-                                };
-
-                                const bookingStatus = booking.booking_status;
-                                const statusInfo = statusMap[bookingStatus] || {
-                                    text: "Unknown",
-                                    class: "badge-soft-dark",
-                                };
-
-                                $("#book_status").text(statusInfo.text);
-
-                                $("#book_status")
-                                    .removeClass(
-                                        "badge-soft-success badge-soft-warning badge-soft-primary badge-soft-danger badge-soft-info badge-soft-secondary badge-soft-dark"
-                                    )
-                                    .addClass(statusInfo.class);
-
-                                $("#car_img").attr(
-                                    "src",
-                                    booking.vehicle.vehicle_image
-                                );
-                                $("#car_title").text(booking.vehicle.name);
-                                $("#car_type").text(vehicleType.name);
-                                $("#car_price").text(
-                                    `${currency}${booking.vehicle_price}/${booking.rental_type}`
-                                );
-
-                                $("#start_date_time").text(
-                                    booking.start_datetime
-                                );
-                                $("#end_date_time").text(booking.end_datetime);
-                                $("#rent_period").text(
-                                    `${booking.no_of_days} Days`
-                                );
-
-                                $("#drive_type").text(
-                                    booking.delivery_type &&
-                                        booking.delivery_type !== "N/A"
-                                        ? booking.delivery_type
-                                        : "N/A"
-                                );
-
-                                $("#pickLan").text(pickupLocation);
-                                $("#retLan").text(returnLocation);
-                                $("#passenger_name").text(
-                                    booking.passenger_name
-                                );
-                                if (
-                                    driverDetails.driver_name &&
-                                    driverDetails.driver_name.trim() !== ""
-                                ) {
-                                    $("#driver_name").text(
-                                        driverDetails.driver_name
-                                    );
-                                    $("#driver_num").text(
-                                        driverDetails.phone_number
-                                    );
-                                    $("#driver_img").attr(
-                                        "src",
-                                        driverDetails.image
-                                    );
-                                    $(".driverInfo").show();
-                                } else {
-                                    $(".driverInfo").addClass("d-none");
-                                }
-                                $("#totalValue").text(
-                                    `${currency}${booking.vehicle_total_price}`
-                                );
-                                $("#taxValue").text(
-                                    `${currency}${booking.tax_val ?? 0}`
-                                );
-                                $("#extraService").text(
-                                    `${currency}${booking.total_extra_service_price}`
-                                );
-                                $("#inService").text(
-                                    `${currency}${booking.total_insurance_price}`
-                                );
-                                $("#final_price").text(
-                                    `${currency}${booking.final_price}`
-                                );
-
-                                $("#booking_details_modal").modal("show");
-                            }
-                        },
-                        error: function () {
-                            alert("Error fetching booking details.");
-                        },
-                    });
-                },
+                events: data.data.map((booking) => mapBookingToEvent(booking)),
+                eventClick: (info) => handleBookingClick(info.event.id),
                 editable: false,
-                eventContent: function (arg) {
-                    return { html: `<div>${arg.event.title}</div>` };
-                },
+                eventContent: (arg) => ({ html: `<div>${arg.event.title}</div>` }),
             });
 
             calendarEl.fcInstance = calendar;
             calendar.render();
         });
     }
+
+    // --- Helper Functions ---
+
+    function mapBookingToEvent(booking) {
+        const backgroundColor = getBookingColor(booking.booking_status);
+        return {
+            id: booking.id,
+            title: booking.name,
+            booking_status: booking.booking_status,
+            backgroundColor,
+            textColor: "#111827",
+            start: booking.start_datetime,
+            end: booking.end_datetime,
+            display: "block",
+        };
+    }
+
+    function getBookingColor(status) {
+        switch (status) {
+            case 1:
+                return "#FFF6B3";
+            case 4:
+                return "#AEEA94";
+            case 5:
+                return "#A1E3F9";
+            case 6:
+                return "#FFA09B";
+            default:
+                return "#AEEA94";
+        }
+    }
+
+    function handleBookingClick(bookingId) {
+        $.ajax({
+            url: "/admin/calendar-detail",
+            type: "GET",
+            data: { booking_id: bookingId },
+            success: (response) => renderBookingDetails(response),
+            error: () => alert("Error fetching booking details."),
+        });
+    }
+
+    function renderBookingDetails(response) {
+        if (response.code !== 200) return;
+
+        const { booking, vehicleType, pickupLocation, returnLocation, driverDetails, customerDetails: customer, currency } = response;
+
+        // Customer info
+        if (customer) {
+            $("#customer_name").text(`${customer.first_name} ${customer.last_name}`);
+            $("#customer_num").text(customer.phone_number);
+            $("#customer_img").attr("src", customer.profile_image);
+            $("#customer_section").removeClass("d-none");
+        } else {
+            $("#customer_section").addClass("d-none");
+        }
+
+        // Booking status
+        const statusMap = {
+            1: { text: "In Progress", class: "badge-soft-warning" },
+            2: { text: "Confirmed", class: "badge-soft-primary" },
+            3: { text: "Rejected", class: "badge-soft-danger" },
+            4: { text: "Booked", class: "badge-soft-info" },
+            5: { text: "Completed", class: "badge-soft-success" },
+            6: { text: "Cancelled", class: "badge-soft-secondary" },
+        };
+        const statusInfo = statusMap[booking.booking_status] || { text: "Unknown", class: "badge-soft-dark" };
+        $("#book_status").text(statusInfo.text)
+            .removeClass("badge-soft-success badge-soft-warning badge-soft-primary badge-soft-danger badge-soft-info badge-soft-secondary badge-soft-dark")
+            .addClass(statusInfo.class);
+
+        // Vehicle info
+        $("#car_img").attr("src", booking.vehicle.vehicle_image);
+        $("#car_title").text(booking.vehicle.name);
+        $("#car_type").text(vehicleType.name);
+        $("#car_price").text(`${currency}${booking.vehicle_price}/${booking.rental_type}`);
+
+        // Booking details
+        $("#start_date_time").text(booking.start_datetime);
+        $("#end_date_time").text(booking.end_datetime);
+        $("#rent_period").text(`${booking.no_of_days} Days`);
+        $("#drive_type").text(booking.delivery_type && booking.delivery_type !== "N/A" ? booking.delivery_type : "N/A");
+        $("#pickLan").text(pickupLocation);
+        $("#retLan").text(returnLocation);
+        $("#passenger_name").text(booking.passenger_name);
+
+        // Driver info
+        if (driverDetails.driver_name?.trim()) {
+            $("#driver_name").text(driverDetails.driver_name);
+            $("#driver_num").text(driverDetails.phone_number);
+            $("#driver_img").attr("src", driverDetails.image);
+            $(".driverInfo").show();
+        } else {
+            $(".driverInfo").addClass("d-none");
+        }
+
+        // Prices
+        $("#totalValue").text(`${currency}${booking.vehicle_total_price}`);
+        $("#taxValue").text(`${currency}${booking.tax_val ?? 0}`);
+        $("#extraService").text(`${currency}${booking.total_extra_service_price}`);
+        $("#inService").text(`${currency}${booking.total_insurance_price}`);
+        $("#final_price").text(`${currency}${booking.final_price}`);
+
+        $("#booking_details_modal").modal("show");
+    }
+
 
     loadCalendar();
 

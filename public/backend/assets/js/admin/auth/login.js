@@ -16,7 +16,9 @@
                 $("#loginForm input[name='password']").val(password);
             });
         });
+
         $(".submitbtn").attr("disabled", false);
+
         $("#loginForm").validate({
             rules: {
                 email: {
@@ -41,7 +43,7 @@
                 },
             },
             errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "_error";
+                const errorId = element.attr("id") + "_error"; // fixed var → const
                 $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
@@ -49,7 +51,7 @@
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                const errorId = element.id + "_error"; // fixed var → const
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -65,45 +67,47 @@
                 );
                 $("#loginForm .submitbtn").attr("disabled", true);
                 $("#error").text("");
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/verify-login",
                     data: _formData,
                     processData: false,
                     contentType: false,
-                    success: function (resp) {
-                        if (resp.status) {
-                            window.location.href = "/admin";
-                        } else {
-                            showToast("error", resp.message);
-                            $("#loginForm .submitbtn").text(
-                                _l("admin.auth.login")
-                            );
-                            $("#loginForm .submitbtn").prop("disabled", false);
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            $("#error").text(error.responseJSON.message);
-                        }
-                        $("#loginForm .submitbtn").text(
-                            _l("admin.auth.login")
-                        );
-                        $("#loginForm .submitbtn").prop("disabled", false);
-                    },
+                    success: handleLoginSuccess,
+                    error: handleLoginError,
                 });
             },
         });
+
+        // Extracted success callback
+        function handleLoginSuccess(resp) {
+            if (resp.status) {
+                window.location.href = "/admin";
+            } else {
+                showToast("error", resp.message);
+                $("#loginForm .submitbtn").text(_l("admin.auth.login"));
+                $("#loginForm .submitbtn").prop("disabled", false);
+            }
+        }
+
+        // Extracted error callback
+        function handleLoginError(error) {
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+
+            if (error.responseJSON.code === 422) {
+                $.each(error.responseJSON.errors, function (key, val) {
+                    $("#" + key).addClass("is-invalid");
+                    $("#" + key + "_error").text(val[0]);
+                });
+            } else {
+                $("#error").text(error.responseJSON.message);
+            }
+
+            $("#loginForm .submitbtn").text(_l("admin.auth.login"));
+            $("#loginForm .submitbtn").prop("disabled", false);
+        }
 
         $(document).on("keyup", "#password", function () {
             $("#error").text("");
@@ -111,7 +115,7 @@
 
         $(document).on("click", "#toggle-password", function () {
             $(this).toggleClass("fa-eye fa-eye-slash");
-            var input = $("#password");
+            const input = $("#password"); // fixed var → const
             input.attr("type") === "password"
                 ? input.attr("type", "text")
                 : input.attr("type", "password");

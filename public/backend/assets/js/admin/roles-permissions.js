@@ -48,55 +48,83 @@
             },
             submitHandler: function (form) {
                 const formData = new FormData(form);
-                if ($("#id").val() !== "") {
-                    formData.append("id", $("#id").val());
-                    formData.append("status", $("#status").is(":checked") ? 1 : 0);
-                }
+                appendRoleFormData(formData);
 
-                $.ajax({
-                    type: "POST",
-                    url: "/admin/role/save",
-                    data: formData,
-                    enctype: "multipart/form-data",
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        "Accept": "application/json",
-                        "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
-                    },
-                    beforeSend: function () {
-                        $(".submitbtn").attr("disabled", true).html(
-                            "<span class=\"spinner-border spinner-border-sm align-middle\" role=\"status\" aria-hidden=\"true\"></span> " + 
-                            _l("admin.common.saving") + ".."
-                        );
-                    },
-                    success: function (resp) {
-                        $(".error-text").text("");
-                        $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                        $(".submitbtn").removeAttr("disabled").html(_l("admin.common.create_new"));
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#role_modal").modal("hide");
-                            $("#roleTable").DataTable().ajax.reload();
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                        $(".submitbtn").removeAttr("disabled").html(_l("admin.common.create_new"));
-                        if (error.responseJSON.code === 422) {
-                            $.each(error.responseJSON.errors, function (key, val) {
-                                $("#" + key).addClass("is-invalid");
-                                $("#" + key + "_error").text(val[0]);
-                            });
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    }
-                });
+                submitRoleForm(formData);
             }
         });
     });
+
+    function appendRoleFormData(formData) {
+        const id = $("#id").val();
+        if (id !== "") {
+            formData.append("id", id);
+            formData.append("status", $("#status").is(":checked") ? 1 : 0);
+        }
+    }
+
+    // --- Submit form via AJAX ---
+    function submitRoleForm(formData) {
+        $.ajax({
+            type: "POST",
+            url: "/admin/role/save",
+            data: formData,
+            enctype: "multipart/form-data",
+            processData: false,
+            contentType: false,
+            headers: getAjaxHeaders(),
+            beforeSend: handleRoleBeforeSend,
+            success: handleRoleSuccess,
+            error: handleRoleError
+        });
+    }
+
+    // --- AJAX headers ---
+    function getAjaxHeaders() {
+        return {
+            "Accept": "application/json",
+            "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+        };
+    }
+
+    // --- Before sending AJAX ---
+    function handleRoleBeforeSend() {
+        $(".submitbtn").attr("disabled", true).html(
+            `<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l("admin.common.saving")}..`
+        );
+    }
+
+    // --- Success callback ---
+    function handleRoleSuccess(resp) {
+        resetRoleFormState();
+
+        if (resp.code === 200) {
+            showToast("success", resp.message);
+            $("#role_modal").modal("hide");
+            $("#roleTable").DataTable().ajax.reload();
+        }
+    }
+
+    // --- Error callback ---
+    function handleRoleError(error) {
+        resetRoleFormState();
+
+        if (error.responseJSON?.code === 422) {
+            $.each(error.responseJSON.errors, function (key, val) {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(val[0]);
+            });
+        } else {
+            showToast("error", error.responseJSON?.message || _l("admin.common.default_error"));
+        }
+    }
+
+    // --- Reset form state ---
+    function resetRoleFormState() {
+        $(".error-text").text("");
+        $(".form-control, .select2-container").removeClass("is-invalid is-valid");
+        $(".submitbtn").removeAttr("disabled").html(_l("admin.common.create_new"));
+    }
 
     $("#add_role").on("click", function () {
         $(".modal-title").text(_l("admin.user_management.create_role"));
@@ -139,7 +167,7 @@
             },
             columns: [
                 { data: "role_name" },
-                { 
+                {
                     data: "created_at",
                     render: function (data, type, row) {
                         return row.created_date;
