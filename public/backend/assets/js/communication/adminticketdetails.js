@@ -1,4 +1,3 @@
-
 (async () => {
     "use strict";
     await loadTranslationFile('admin', 'common, support');
@@ -45,7 +44,7 @@ $("#editTickets").validate({
         }
     },
     errorPlacement: function (error, element) {
-        var errorId = element.attr("id") + "Error";
+        const errorId = element.attr("id") + "Error";
         $("#" + errorId).text(error.text());
     },
     highlight: function (element) {
@@ -53,7 +52,7 @@ $("#editTickets").validate({
     },
     unhighlight: function (element) {
         $(element).removeClass("is-invalid").addClass("is-valid");
-        var errorId = $(element).attr("id") + "Error";
+        const errorId = $(element).attr("id") + "Error";
         $("#" + errorId).text("");
     },
     onkeyup: function (element) {
