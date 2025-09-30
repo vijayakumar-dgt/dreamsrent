@@ -4,15 +4,16 @@
     const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
-        getLocations('', function(response) {
+        getLocations(function(response) {
             appendLocationData('#pickUpLocationList .custom-scroll', 'pickup_location_checkbox', response);
             appendLocationData('#dropOffLocationList .custom-scroll', 'drop_location_checkbox', response);
-        });
+        }, '');
+
         bookingList();
         initEvents();
     });
 
-    function getLocations(search = '', callback) {
+    function getLocations(callback, search = '') {
         $.ajax({
             url: "/get-locations",
             type: "POST",
@@ -66,35 +67,18 @@
                 appendLocationData('#pickUpLocationList .custom-scroll', 'pickup_location_checkbox', response);
             });
         });
-        
+
         $(document).on('keyup', '#drop_off_location_search', function () {
             let search = $(this).val().trim();
             getLocations(search, function(response) {
                 appendLocationData('#dropOffLocationList .custom-scroll', 'drop_location_checkbox', response);
             });
         });
-        
+
         $(document).on('click', '#apply_filter', function () {
-            let pickup_location_ids = [];
-            let drop_location_ids = [];
-            let status = [];
-        
-            $('.pickup_location_checkbox:checked').each(function() {
-                pickup_location_ids.push($(this).val());
-            });
-        
-            $('.drop_location_checkbox:checked').each(function() {
-                drop_location_ids.push($(this).val());
-            });
-        
-            $('.status_checkbox:checked').each(function() {
-                status.push($(this).val());
-            });
-        
             $('#reservationTable').DataTable().ajax.reload();
-        
         });
-        
+
         $(document).on('click', '#reset_filter', function () {
             $('#pickUpLocationList input:checkbox').prop('checked', false);
             $('#dropOffLocationList input:checkbox').prop('checked', false);
@@ -103,11 +87,11 @@
             $('#sort_by_input').val('');
             $('#reservationTable').DataTable().ajax.reload();
         });
-        
+
         $('#overall_search').on('keyup', function(e) {
             $('#reservationTable').DataTable().ajax.reload();
         });
-        
+
         $(document).on('click', '.sort_by_list .dropdown-item', function () {
             let sortBy = $(this).data('sort');
             $('#sort_by_input').val(sortBy);
@@ -118,7 +102,7 @@
             $(this).addClass('active');
             $('#reservationTable').DataTable().ajax.reload();
         });
-        
+
         $('#sort_by_date').val('');
 
         $('#sort_by_date').on('change', function() {
@@ -255,12 +239,12 @@
                 }},
                 { data: 'start_datetime', render: function(data, type, row) {
                     let dateObj = new Date(data);
-            
+
                     let day = String(dateObj.getDate()).padStart(2, '0');
                     let month = dateObj.toLocaleString('en-us', { month: 'short' });
                     let year = dateObj.getFullYear();
                     let time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-            
+
                     return `
                         <div class="d-flex align-items-center">
                             <div class="border rounded text-center flex-shrink-0 p-1 me-2">
@@ -276,7 +260,7 @@
                 }},
                 { data: 'end_datetime', render: function(data, type, row) {
                     let dateObj = new Date(data);
-            
+
                     let day = String(dateObj.getDate()).padStart(2, '0');
                     let month = dateObj.toLocaleString('en-us', { month: 'short' });
                     let year = dateObj.getFullYear();
@@ -294,27 +278,32 @@
                         </div>
                     `;
                 }},
-                { data: 'booking_status_text', render: function(data, type, row) {
-                    let booking_cls = 'bg-success-transparent';
-                    if (row.booking_status == 1) {
-                        booking_cls = 'bg-violet-transparent';
-                    } else if (row.booking_status == 2) {
-                        booking_cls = 'bg-orange-transparent';
-                    } else if (row.booking_status == 3) {
-                        booking_cls = 'bg-danger-transparent';
-                    } else if (row.booking_status == 4) {
-                        booking_cls = 'bg-violet-transparent';
-                    } else if (row.booking_status == 5) {
-                        booking_cls = 'bg-success-transparent';
-                    } else if (row.booking_status == 6) {
-                        booking_cls = 'bg-danger-transparent';
-                    } 
-                    return `
-                        <span class="badge ${booking_cls} d-inline-flex align-items-center badge-sm">
-                            <i class="ti ti-point-filled me-1"></i>${row.booking_status_text}
-                        </span>
-                    `;
-                }},
+                {
+                    data: 'booking_status_text',
+                    render: function(data, type, row) {
+                        let booking_cls;
+
+                        if (row.booking_status == 1) {
+                            booking_cls = 'bg-violet-transparent';
+                        } else if (row.booking_status == 2) {
+                            booking_cls = 'bg-orange-transparent';
+                        } else if (row.booking_status == 3) {
+                            booking_cls = 'bg-danger-transparent';
+                        } else if (row.booking_status == 4) {
+                            booking_cls = 'bg-violet-transparent';
+                        } else if (row.booking_status == 5) {
+                            booking_cls = 'bg-success-transparent';
+                        } else if (row.booking_status == 6) {
+                            booking_cls = 'bg-danger-transparent';
+                        }
+
+                        return `
+                            <span class="badge ${booking_cls} d-inline-flex align-items-center badge-sm">
+                                <i class="ti ti-point-filled me-1"></i>${row.booking_status_text}
+                            </span>
+                        `;
+                    }
+                },
                 { data: 'id', orderable: false, searchable: false, render: function(data, type, row) {
                     return `
                         <div class="dropdown">
@@ -356,6 +345,6 @@
             },
             language: getDataTableLanguage(),
         });
-    }   
+    }
 
 })();
