@@ -71,7 +71,7 @@
                     },
                     beforeSend() {
                         $(".submit-review").prop("disabled", true).html(
-                            "<span class=\"spinner-border spinner-border-sm align-middle\" role=\"status\" aria-hidden=\"true\"></span> " 
+                            "<span class=\"spinner-border spinner-border-sm align-middle\" role=\"status\" aria-hidden=\"true\"></span> "
                             + _l("web.home.submitting") + ".."
                         );
                     },
@@ -81,7 +81,7 @@
                         $(".submit-review").prop("disabled", false).html(_l("web.home.submit_review"));
                         $reviewForm[0].reset();
                         $(".service_ratings, .location_ratings, .facility_ratings, .value_for_money_ratings, .cleanliness_ratings").prop("checked", false);
-                        
+
                         if (resp.code === 200) {
                             showToast("success", resp.message);
                             $("#addReviewModal").modal("hide");
@@ -403,17 +403,17 @@ const renderButtons = (data) => {
 
     switch (data.status) {
         case 4:
-            html += `<a href="javascript:void(0);" id="cancel_booking" data-id="${data.id}" class="btn me-2 btn-sm btn-secondary">
+            html += `<a href="#!" id="cancel_booking" data-id="${data.id}" class="btn me-2 btn-sm btn-secondary">
                         ${_l("web.common.cancel")} ${_l("web.user.booking")}
                     </a>`;
             if (showStartRideButton) {
-                html += `<a href="javascript:void(0);" id="start_ride" data-id="${data.id}" class="btn btn-sm btn-primary">
+                html += `<a href="#!" id="start_ride" data-id="${data.id}" class="btn btn-sm btn-primary">
                             ${_l("web.user.start_ride")}
                         </a>`;
             }
             break;
         case 1:
-            html += `<a href="javascript:void(0);" id="complete_booking" data-id="${data.id}" class="btn btn-sm btn-primary">
+            html += `<a href="#!" id="complete_booking" data-id="${data.id}" class="btn btn-sm btn-primary">
                         ${_l("web.user.complete_ride")}
                      </a>`;
             break;
@@ -422,7 +422,7 @@ const renderButtons = (data) => {
             break;
     }
 
-    document.querySelector(".modal_footer").innerHTML = html;
+    return html;
 };
 
 // Fetch & Show Booking Details

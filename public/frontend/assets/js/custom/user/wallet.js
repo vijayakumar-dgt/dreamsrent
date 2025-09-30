@@ -112,7 +112,7 @@
                         row.append($("<td>").text(`#${value.id || "N/A"}`));
 
                         const paymentLink = $("<a>", {
-                            href: "javascript:void(0);",
+                            href: "#!",
                             class: "mb-0"
                         }).text(ucfirst(value.payment_type));
 

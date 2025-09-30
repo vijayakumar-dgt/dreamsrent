@@ -780,6 +780,8 @@ return [
         'new_password_required'                         => 'The new password field is required.',
         'password_must_be_8'                            => 'The password must be at least 8 characters long.',
         'new_pass_must_be_diff'                         => 'The new password and current password must be different.',
+        'confirm_password_required'                     => 'The confirm password field is required.',
+        'confirm_password_match'                        => 'The confirm password does not match the new password.',
         'no_data_found'                                 => 'No data found',
         'not_available'                                 => 'Not Available',
         'not_yet'                                       => 'Not Yet',
