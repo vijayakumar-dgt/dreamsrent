@@ -360,12 +360,12 @@
     function createVehicleListCard(vehicle) {
         "use strict";
 
-        const { priceType, priceValue } = extractPrice(vehicle);
+        const { priceType, priceValue } = extractVehiclePrice(vehicle);
         const wishlistButton = buildWishlistButton(vehicle);
         const listingImage = buildListingImage(vehicle, wishlistButton);
         const featureList = buildFeatureList(vehicle);
         const listingContent = buildListingContent(vehicle, priceType, priceValue, featureList);
-        const tag = buildTag(vehicle);
+        const tag = buildVehicleTag(vehicle);
 
         return `
             <div class="listview-car">
@@ -382,7 +382,7 @@
     /* ---------- Helper Functions ---------- */
 
     // Extract first available price
-    function extractPrice(vehicle) {
+    function extractVehiclePrice(vehicle) {
         if (vehicle.price.length > 0) {
             const [type, value] = Object.entries(vehicle.price[0])[0];
             return { priceType: type, priceValue: value };
@@ -505,17 +505,6 @@
             </div>`;
     }
 
-    // Build optional tag
-    function buildTag(vehicle) {
-        if (vehicle.is_featured) {
-            return `<div class="feature-text"><span class="bg-danger">${_l("web.common.featured")}</span></div>`;
-        }
-        if (vehicle.is_top_rated) {
-            return `<div class="feature-text"><span class="bg-warning">${_l("web.common.top_rated")}</span></div>`;
-        }
-        return "";
-    }
-
     function ucfirst(str) {
         if (!str) return "";
         return str.charAt(0).toUpperCase() + str.slice(1);
@@ -561,16 +550,6 @@
     }
 
     /* ---------- Helper Functions ---------- */
-
-    // Extract first price entry
-    function extractVehiclePrice(vehicle) {
-        if (vehicle.price.length > 0) {
-            const [type, value] = Object.entries(vehicle.price[0])[0];
-            return { priceType: type, priceValue: value };
-        }
-        return { priceType: "", priceValue: "" };
-    }
-
     // Build grid image section
     function buildVehicleGridImage(vehicle) {
         const vehicleImages = vehicle.multiple_vehicle_images
@@ -582,10 +561,15 @@
                 </div>`)
             .join("");
 
+        let selectedClass = "";
+        if (vehicle.wishlist) {
+            selectedClass = "selected";
+        }
+
         const wishlistBtn = vehicle.authenticated
-            ? `<button type="button" class="fav-icon wishlist-icon ${vehicle.wishlist ? "selected" : ""}" data-id="${vehicle.id}">
+            ? `<button type="button" class="fav-icon wishlist-icon ${selectedClass}" data-id="${vehicle.id}">
                     <i class="feather-heart"></i>
-                </button>`
+            </button>`
             : "";
 
         if (vehicle.has_multiple_image) {

@@ -47,74 +47,121 @@
   }
 
   function initValidation() {
-    $.validator.addMethod("filesize", (value, el, param) => !el.files.length || el.files[0].size <= param * 1024, "File size must be less than {0} KB.");
+      // Custom filesize validator
+      $.validator.addMethod(
+          "filesize",
+          (value, el, param) => !el.files.length || el.files[0].size <= param * 1024,
+          "File size must be less than {0} KB."
+      );
 
-    $("#userProfileForm").validate({
-      rules: {
-        profile_photo: { extension: "jpeg|jpg|png", filesize: 2048 },
-        first_name: { required: true, maxlength: 30 },
-        last_name: { required: true, maxlength: 30 },
-        email: { required: true, email: true },
-        user_phone: { required: true, minlength: 10, maxlength: 15 },
-        address_line: { required: true, maxlength: 50 },
-        country: { required: true },
-        state: { required: true },
-        city: { required: true },
-        postal_code: { required: true, pattern: /^[0-9a-zA-Z]+$/ }
-      },
-      messages: {
-        first_name: { required: _l("web.user.enter_first_name"), maxlength: _l("web.common.maxlength_30") },
-        last_name: { required: _l("web.user.enter_last_name"), maxlength: _l("web.common.maxlength_30") },
-        email: { required: _l("web.user.enter_email"), email: _l("web.home.valid_email") },
-        user_phone: { required: _l("web.user.phone_number_required"), minlength: _l("web.home.phone_number_minlength"), maxlength: _l("web.home.phone_number_maxlength") },
-        address_line: { required: _l("web.user.enter_address"), maxlength: _l("web.user.maxlength_50") },
-        postal_code: { required: _l("web.home.enter_pincode"), pattern: "Please enter a valid postal code" }
-      },
-      errorPlacement: (error, element) => $("#" + element.attr("id") + "_error").text(error.text()),
-      highlight: (el) => {
-        const $el = $(el);
-        $el.addClass("is-invalid").removeClass("is-valid");
-        if ($el.hasClass("select2-hidden-accessible")) $el.next(".select2-container").addClass("is-invalid").removeClass("is-valid");
-      },
-      unhighlight: (el) => {
-        const $el = $(el);
-        $el.removeClass("is-invalid").addClass("is-valid");
-        if ($el.hasClass("select2-hidden-accessible")) $el.next(".select2-container").removeClass("is-invalid").addClass("is-valid");
-        $("#" + el.id + "_error").text("");
-      },
-      submitHandler: function (form) {
-        const data = new FormData(form);
-        data.set("user_phone", $("#international_phone_number").val());
-        data.append("_token", $("meta[name='csrf-token']").attr("content"));
+      $("#userProfileForm").validate({
+          rules: getValidationRules(),
+          messages: getValidationMessages(),
+          errorPlacement: placeError,
+          highlight: highlightField,
+          unhighlight: unhighlightField,
+          submitHandler: handleFormSubmit
+      });
+  }
 
-        const $btn = $(".btn-primary").text(_l("web.user.plz_wait")).prop("disabled", true);
+  // Validation rules
+  function getValidationRules() {
+      return {
+          profile_photo: { extension: "jpeg|jpg|png", filesize: 2048 },
+          first_name: { required: true, maxlength: 30 },
+          last_name: { required: true, maxlength: 30 },
+          email: { required: true, email: true },
+          user_phone: { required: true, minlength: 10, maxlength: 15 },
+          address_line: { required: true, maxlength: 50 },
+          country: { required: true },
+          state: { required: true },
+          city: { required: true },
+          postal_code: { required: true, pattern: /^[0-9a-zA-Z]+$/ }
+      };
+  }
 
-        $.ajax({
+  // Validation messages
+  function getValidationMessages() {
+      return {
+          first_name: { required: _l("web.user.enter_first_name"), maxlength: _l("web.common.maxlength_30") },
+          last_name: { required: _l("web.user.enter_last_name"), maxlength: _l("web.common.maxlength_30") },
+          email: { required: _l("web.user.enter_email"), email: _l("web.home.valid_email") },
+          user_phone: { required: _l("web.user.phone_number_required"), minlength: _l("web.home.phone_number_minlength"), maxlength: _l("web.home.phone_number_maxlength") },
+          address_line: { required: _l("web.user.enter_address"), maxlength: _l("web.user.maxlength_50") },
+          postal_code: { required: _l("web.home.enter_pincode"), pattern: "Please enter a valid postal code" }
+      };
+  }
+
+  // Error placement
+  function placeError(error, element) {
+      $("#" + element.attr("id") + "_error").text(error.text());
+  }
+
+  // Highlight invalid field
+  function highlightField(el) {
+      const $el = $(el);
+      $el.addClass("is-invalid").removeClass("is-valid");
+      if ($el.hasClass("select2-hidden-accessible")) {
+          $el.next(".select2-container").addClass("is-invalid").removeClass("is-valid");
+      }
+  }
+
+  // Unhighlight valid field
+  function unhighlightField(el) {
+      const $el = $(el);
+      $el.removeClass("is-invalid").addClass("is-valid");
+      if ($el.hasClass("select2-hidden-accessible")) {
+          $el.next(".select2-container").removeClass("is-invalid").addClass("is-valid");
+      }
+      $("#" + el.id + "_error").text("");
+  }
+
+  // Handle form submit
+  function handleFormSubmit(form) {
+      const data = new FormData(form);
+      data.set("user_phone", $("#international_phone_number").val());
+      data.append("_token", $("meta[name='csrf-token']").attr("content"));
+
+      const $btn = $(".btn-primary").text(_l("web.user.plz_wait")).prop("disabled", true);
+
+      sendProfileAjax(data, $btn);
+  }
+
+  // AJAX request
+  function sendProfileAjax(data, $btn) {
+      $.ajax({
           type: "POST",
           url: "/userprofile",
           data: data,
           processData: false,
           contentType: false,
-          success: (resp) => {
-            showToast("success", resp.message);
-            if (resp.data.profile_image) $(".header_profile_image").attr("src", resp.data.profile_image);
-            $btn.text(_l("web.user.save_changes")).prop("disabled", false);
-          },
-          error: (err) => {
-            $btn.text(_l("web.user.save_changes")).prop("disabled", false);
-            $(".form-control").removeClass("is-invalid is-valid");
-            if (err.responseJSON?.code === 422) {
-              $.each(err.responseJSON.errors, (k, v) => {
-                $("#" + k).addClass("is-invalid");
-                $("#" + k + "_error").text(v[0]);
-              });
-            } else {
-              showToast("error", err.responseJSON?.message || "An error occurred.");
-            }
-          }
-        });
+          success: (resp) => handleProfileSuccess(resp, $btn),
+          error: (err) => handleProfileError(err, $btn)
+      });
+  }
+
+  // Handle AJAX success
+  function handleProfileSuccess(resp, $btn) {
+      showToast("success", resp.message);
+      if (resp.data?.profile_image) {
+          $(".header_profile_image").attr("src", resp.data.profile_image);
       }
-    });
+      $btn.text(_l("web.user.save_changes")).prop("disabled", false);
+  }
+
+  // Handle AJAX error
+  function handleProfileError(err, $btn) {
+      $btn.text(_l("web.user.save_changes")).prop("disabled", false);
+      $(".form-control").removeClass("is-invalid is-valid");
+
+      if (err.responseJSON?.code === 422 && err.responseJSON.errors) {
+          $.each(err.responseJSON.errors, (k, v) => {
+              $("#" + k).addClass("is-invalid");
+              $("#" + k + "_error").text(v[0]);
+          });
+      } else {
+          showToast("error", err.responseJSON?.message || "An error occurred.");
+      }
   }
 
   function initIntelInput() {

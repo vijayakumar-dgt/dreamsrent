@@ -951,11 +951,6 @@
             loadStatesForCountry(countryId);
         });
 
-        // Resets city dropdown
-        function resetCityDropdown() {
-            $("#city_id").html(`<option value="">${_l("web.home.select_city")}</option>`);
-        }
-
         // Resets state dropdown
         function resetStateDropdown() {
             $("#state_id").html(`<option value="">${_l("web.home.select_state")}</option>`);
