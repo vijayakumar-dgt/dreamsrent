@@ -239,29 +239,6 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="histroy_ticket">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="mb-0">{{__('web.user.history_ticket')}}</h5>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
-                </button>
-            </div>
-            <form id="editTicketstatus">
-                <div class="modal-body histroy-ticket pb-1">
-                </div>
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</a>
-                        <button type="submit" class="btn btn-primary d-none">{{__('admin.user.update')}}</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 <!-- /Edit Status ticket -->
 
 <!-- Delete  -->

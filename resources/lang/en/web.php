@@ -247,6 +247,7 @@ return [
         'facilities'                               => 'Facilities',
         'cleanliness'                              => 'Cleanliness',
         'leave_reply'                              => 'Leave a Reply',
+        'leave_review'                             => 'Leave a Review',
         'send_reply'                               => 'Send Reply',
         'pricing'                                  => 'Pricing',
         'delivery'                                 => 'Delivery',

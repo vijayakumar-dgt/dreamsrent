@@ -249,6 +249,7 @@ return  [
     'facilities'                               => 'الوسائط',
     'cleanliness'                              => 'النظافة',
     'leave_reply'                              => 'اترك ردًا',
+    'leave_review'                             => 'اترك مراجعة',
     'send_reply'                               => 'ارسل رد',
     'pricing'                                  => 'الاسعار',
     'delivery'                                 => 'التوصيل',

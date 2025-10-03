@@ -384,6 +384,14 @@
             .join("");
 
         // Construct image block (slider or single)
+        // Wishlist button HTML
+        const wishlistButton = vehicle.authenticated
+            ? `<button type="button" class="fav-icon wishlist-icon ${vehicle.wishlist ? "selected" : ""}" data-id="${vehicle.id}">
+                <i class="feather-heart"></i>
+            </button>`
+            : "";
+
+        // Listing image HTML
         const listingImage = vehicle.has_multiple_image
             ? `
             <div class="blog-img">
@@ -392,38 +400,16 @@
                 </div>
                 <div class="fav-item justify-content-end">
                     <span class="img-count"><i class="feather-image"></i>04</span>
-                    ${
-                        vehicle.authenticated
-                            ? `
-                        <button type="button" class="fav-icon wishlist-icon ${
-                            vehicle.wishlist ? "selected" : ""
-                        }" data-id="${vehicle.id}">
-                            <i class="feather-heart"></i>
-                        </button>`
-                            : ""
-                    }
+                    ${wishlistButton}
                 </div>
             </div>`
             : `
             <div class="blog-img">
-                <a href="/vehicle-details/${
-                    vehicle.slug
-                }?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
-                    <img src="${
-                        vehicle.multiple_vehicle_images[0]
-                    }" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
+                <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
+                    <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
                 </a>
                 <div class="fav-item justify-content-end">
-                    ${
-                        vehicle.authenticated
-                            ? `
-                        <button type="button" class="fav-icon wishlist-icon ${
-                            vehicle.wishlist ? "selected" : ""
-                        }" data-id="${vehicle.id}">
-                            <i class="feather-heart"></i>
-                        </button>`
-                            : ""
-                    }
+                    ${wishlistButton}
                 </div>
             </div>`;
 
@@ -589,10 +575,14 @@
             .join("");
 
         const hasMultipleImages = vehicle.has_multiple_image;
+        // Determine the wishlist class
+        const wishlistClass = vehicle.wishlist ? "selected" : "";
+
+        // Authenticated wishlist button HTML
         const authWishlistBtn = vehicle.authenticated
-            ? `<button type="button" class="fav-icon wishlist-icon ${
-                  vehicle.wishlist ? "selected" : ""
-              }" data-id="${vehicle.id}"><i class="feather-heart"></i></button>`
+            ? `<button type="button" class="fav-icon wishlist-icon ${wishlistClass}" data-id="${vehicle.id}">
+                <i class="feather-heart"></i>
+            </button>`
             : "";
 
         const listingImage = hasMultipleImages

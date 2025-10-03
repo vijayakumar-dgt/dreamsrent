@@ -648,7 +648,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                let errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
         });
@@ -873,86 +873,87 @@
 
     let $stateDropdown = $("#state_id");
     let $cityDropdown = $("#city_id");
+    
+    function loadStates(
+        countryId,
+        selectedStateId = null,
+        selectedCityId = null
+    ) {
+        $stateDropdown
+            .prop("disabled", true)
+            .html("<option>Loading...</option>");
+
+        $.ajax({
+            url: "/get-states/" + countryId,
+            type: "GET",
+            success: function (response) {
+                $stateDropdown
+                    .empty()
+                    .append("<option value=\"\">Select State</option>");
+
+                if (response.length > 0) {
+                    $.each(response, function (key, state) {
+                        $stateDropdown.append(
+                            `<option value="${state.id}" ${
+                                selectedStateId == state.id
+                                    ? "selected"
+                                    : ""
+                            }>${state.name}</option>`
+                        );
+                    });
+
+                    // Only load cities if this is from edit mode
+                    if (selectedStateId && selectedCityId) {
+                        loadCities(selectedStateId, selectedCityId);
+                    }
+                }
+
+                $stateDropdown.prop("disabled", false);
+            },
+            error: function () {
+                alert("Failed to fetch states. Please try again.");
+                $stateDropdown
+                    .html("<option value=\"\">Select State</option>")
+                    .prop("disabled", false);
+            },
+        });
+    }
+
+    function loadCities(stateId, selectedCityId = null) {
+        $cityDropdown
+            .prop("disabled", true)
+            .html("<option>Loading...</option>");
+
+        $.ajax({
+            url: "/get-cities/" + stateId,
+            type: "GET",
+            success: function (response) {
+                $cityDropdown
+                    .empty()
+                    .append("<option value=\"\">Select City</option>");
+
+                if (response.length > 0) {
+                    $.each(response, function (key, city) {
+                        $cityDropdown.append(
+                            `<option value="${city.id}" ${
+                                selectedCityId == city.id ? "selected" : ""
+                            }>${city.name}</option>`
+                        );
+                    });
+                }
+
+                $cityDropdown.prop("disabled", false);
+            },
+            error: function () {
+                alert("Failed to fetch cities. Please try again.");
+                $cityDropdown
+                    .html("<option value=\"\">Select City</option>")
+                    .prop("disabled", false);
+            },
+        });
+    }
 
     $(document).ready(function () {
-        function loadStates(
-            countryId,
-            selectedStateId = null,
-            selectedCityId = null
-        ) {
-            $stateDropdown
-                .prop("disabled", true)
-                .html("<option>Loading...</option>");
-
-            $.ajax({
-                url: "/get-states/" + countryId,
-                type: "GET",
-                success: function (response) {
-                    $stateDropdown
-                        .empty()
-                        .append("<option value=\"\">Select State</option>");
-
-                    if (response.length > 0) {
-                        $.each(response, function (key, state) {
-                            $stateDropdown.append(
-                                `<option value="${state.id}" ${
-                                    selectedStateId == state.id
-                                        ? "selected"
-                                        : ""
-                                }>${state.name}</option>`
-                            );
-                        });
-
-                        // Only load cities if this is from edit mode
-                        if (selectedStateId && selectedCityId) {
-                            loadCities(selectedStateId, selectedCityId);
-                        }
-                    }
-
-                    $stateDropdown.prop("disabled", false);
-                },
-                error: function () {
-                    alert("Failed to fetch states. Please try again.");
-                    $stateDropdown
-                        .html("<option value=\"\">Select State</option>")
-                        .prop("disabled", false);
-                },
-            });
-        }
-
-        function loadCities(stateId, selectedCityId = null) {
-            $cityDropdown
-                .prop("disabled", true)
-                .html("<option>Loading...</option>");
-
-            $.ajax({
-                url: "/get-cities/" + stateId,
-                type: "GET",
-                success: function (response) {
-                    $cityDropdown
-                        .empty()
-                        .append("<option value=\"\">Select City</option>");
-
-                    if (response.length > 0) {
-                        $.each(response, function (key, city) {
-                            $cityDropdown.append(
-                                `<option value="${city.id}" ${
-                                    selectedCityId == city.id ? "selected" : ""
-                                }>${city.name}</option>`
-                            );
-                        });
-                    }
-
-                    $cityDropdown.prop("disabled", false);
-                },
-                error: function () {
-                    alert("Failed to fetch cities. Please try again.");
-                    $cityDropdown
-                        .html("<option value=\"\">Select City</option>")
-                        .prop("disabled", false);
-                },
-            });
-        }
 
         const selectedCountryId = $("#country_id").val();
         const selectedStateId = $("#selected_state_id").val();
@@ -1064,15 +1065,11 @@
                 );
             }
         });
-    });
 
-    $(document).ready(function () {
         $(".Number").on("input", function () {
-            this.value = this.value.replace(/[^0-9]/g, ""); // Remove any non-numeric characters
+            this.value = this.value.replace(/\D/g, ""); // Remove any non-numeric characters
         });
-    });
 
-    $(document).ready(function () {
         // Initialize Select2
         $("#delivery_location, #delivery_return_location").select2();
         $("#pickup_location, #pickup_return_location").select2();
@@ -1116,39 +1113,33 @@
                     .trigger("change");
             }
         });
-    });
 
-    $(document).ready(function () {
+        // Driver file upload
         $("#driver_file").on("change", function (event) {
-            const files = event.target.files;
+            const file = event.target.files?.[0]; // Optional chaining
             const imagePreview = $(".imagePreview");
             imagePreview.html(""); // Clear previous preview
 
-            if (files && files[0]) {
-                const file = files[0];
-                if (!file.type.match("image.*")) {
-                    $("#driver_file_error").text(
-                        "Please upload a valid image file."
-                    );
-                    return;
-                }
+            if (!file) return;
 
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = $("<img>", {
-                        src: e.target.result,
-                        class: "img-thumbnail",
-                        width: 150,
-                    });
-                    imagePreview.append(img);
-                    $("#driver_file_error").text(""); // Clear error
-                };
-                reader.readAsDataURL(file);
+            if (!file.type?.match("image.*")) { // Optional chaining
+                $("#driver_file_error").text("Please upload a valid image file.");
+                return;
             }
-        });
-    });
 
-    $(document).ready(function () {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = $("<img>", {
+                    src: e.target.result,
+                    class: "img-thumbnail",
+                    width: 150,
+                });
+                imagePreview.append(img);
+                $("#driver_file_error").text(""); // Clear error
+            };
+            reader.readAsDataURL(file);
+        });
+
         $(".more-adon-info").hide();
 
         $(".adon-info-btn").on("click", function () {
@@ -1171,12 +1162,12 @@
             const insuranceId = $(this).data("insurance-id");
 
             $("#benefit-list").html(`
-    <div class="d-flex justify-content-center py-3">
-        <div class="spinner-border text-warning" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-`);
+                <div class="d-flex justify-content-center py-3">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `);
 
             $.ajax({
                 type: "POST",

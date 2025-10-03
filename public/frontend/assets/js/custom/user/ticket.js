@@ -76,7 +76,7 @@
     function initValidation() {
         "use strict";
 
-        const csrfToken = () => $("meta[name='csrf-token']").attr("content");
+        const getCsrfToken = () => $("meta[name='csrf-token']").attr("content");
 
         const ajaxRequest = (url, data, successCallback, errorCallback) => {
             $.ajax({
@@ -87,134 +87,108 @@
                 contentType: false,
                 headers: {
                     "Accept": "application/json",
-                    "X-CSRF-TOKEN": csrfToken()
+                    "X-CSRF-TOKEN": getCsrfToken()
                 },
                 success: successCallback,
                 error: errorCallback
             });
         };
 
-        $("#addTicket").validate({
-            rules: {
-                category: { required: true },
-                priority: { required: true },
-                description: { required: true, maxlength: 600 },
-                "document[]": {
-                    accept: "application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                }
-            },
-            messages: {
-                category: { required: _l("web.user.subject_required") },
-                priority: { required: _l("web.user.priority_required") },
-                description: {
-                    required: _l("web.user.description_required"),
-                    maxlength: _l("web.user.desc_max_60_words")
+        const handleValidationError = (error, isEdit = false) => {
+            $(".error-text, .error-message").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+
+            if (error.responseJSON?.code === 422) {
+                $.each(error.responseJSON.errors, (key, val) => {
+                    const errorId = isEdit ? `${key}Error` : `${key}_error`;
+                    $(`#${key}`).addClass("is-invalid");
+                    $(`#${errorId}`).text(val[0]);
+                });
+            } else {
+                showToast("error", error.responseJSON?.message || "An error occurred");
+            }
+        };
+
+        const toggleButtonState = ($btn, text, disabled = false) => {
+            $btn.text(text).prop("disabled", disabled);
+        };
+
+        const resetFormFields = ($form) => {
+            $form[0].reset();
+            $(".form-control").removeClass("is-invalid is-valid");
+        };
+
+        const initFormValidation = (selector, url, successBtnText, isEdit = false) => {
+            $(selector).validate({
+                rules: {
+                    category: { required: !isEdit },
+                    priority: { required: !isEdit },
+                    description: { required: !isEdit, maxlength: 600 },
+                    "document[]": {
+                        accept: "application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    },
+                    assign_staff: { required: false },
+                    status: { required: isEdit },
+                    reply: { required: isEdit, maxlength: 60 }
                 },
-                "document[]": {
-                    accept: _l("web.user.ticket_doc_extension")
+                messages: {
+                    category: { required: _l("web.user.subject_required") },
+                    priority: { required: _l("web.user.priority_required") },
+                    description: {
+                        required: _l("web.user.description_required"),
+                        maxlength: _l("web.user.desc_max_60_words")
+                    },
+                    "document[]": { accept: _l("web.user.ticket_doc_extension") },
+                    assign_staff: { required: _l("web.user.select_staff_member") },
+                    status: { required: _l("web.user.select_status") },
+                    reply: {
+                        required: _l("web.user.plz_enter_reply"),
+                        maxlength: _l("web.user.desc_max_60_words")
+                    }
+                },
+                errorPlacement(error, element) {
+                    const errorId = isEdit ? `${element.attr("id")}Error` : `${element.attr("id")}_error`;
+                    $(`#${errorId}`).text(error.text());
+                },
+                highlight(element) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight(element) {
+                    const $el = $(element);
+                    $el.removeClass("is-invalid").addClass("is-valid");
+                    const errorId = isEdit ? `${$el.attr("id")}Error` : `${$el.attr("id")}_error`;
+                    $(`#${errorId}`).text("");
+                },
+                onkeyup(element) { $(element).valid(); },
+                onchange(element) { $(element).valid(); },
+                submitHandler(form) {
+                    const formData = new FormData(form);
+                    const $submitBtn = $(".btn-primary");
+                    toggleButtonState($submitBtn, _l("web.user.plz_wait"), true);
+
+                    ajaxRequest(url, formData, (resp) => {
+                        if (resp.code === 200) {
+                            showToast("success", resp.message);
+                            if (!isEdit) {
+                                $("#add_ticket").modal("hide");
+                                resetFormFields($(form));
+                            } else {
+                                $("#edit_ticket").modal("hide");
+                            }
+                            toggleButtonState($submitBtn, successBtnText);
+                            TicketTable();
+                        }
+                    }, (error) => {
+                        handleValidationError(error, isEdit);
+                        toggleButtonState($submitBtn, successBtnText);
+                    });
                 }
-            },
-            errorPlacement(error, element) {
-                const errorId = `${element.attr("id")}_error`;
-                $(`#${errorId}`).text(error.text());
-            },
-            highlight(element) {
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight(element) {
-                const $el = $(element);
-                $el.removeClass("is-invalid").addClass("is-valid");
-                const errorId = `${$el.attr("id")}_error`;
-                $(`#${errorId}`).text("");
-            },
-            onkeyup(element) { $(element).valid(); },
-            onchange(element) { $(element).valid(); },
-            submitHandler(form) {
-                const ticketData = new FormData(form);
-                const $submitBtn = $(".btn-primary").text(_l("web.user.plz_wait")).prop("disabled", true);
+            });
+        };
 
-                ajaxRequest("/user/ticket/store", ticketData, (resp) => {
-                    if (resp.code === 200) {
-                        showToast("success", resp.message);
-                        $("#add_ticket").modal("hide");
-                        $("#addTicket")[0].reset();
-                        $submitBtn.text(_l("web.user.create")).prop("disabled", false);
-                        TicketTable();
-                    }
-                }, (error) => {
-                    $(".error-text").text("");
-                    $(".form-control").removeClass("is-invalid is-valid");
-
-                    if (error.responseJSON?.code === 422) {
-                        $.each(error.responseJSON.errors, (key, val) => {
-                            $(`#${key}`).addClass("is-invalid");
-                            $(`#${key}_error`).text(val[0]);
-                        });
-                    } else {
-                        showToast("error", error.responseJSON?.message || "An error occurred");
-                    }
-                    $submitBtn.text(_l("web.user.create")).prop("disabled", false);
-                });
-            }
-        });
-
-        $("#editTicketstatus").validate({
-            rules: {
-                assign_staff: { required: false },
-                status: { required: true },
-                reply: { required: true, maxlength: 60 }
-            },
-            messages: {
-                assign_staff: { required: _l("web.user.select_staff_member") },
-                status: { required: _l("web.user.select_status") },
-                reply: {
-                    required: _l("web.user.plz_enter_reply"),
-                    maxlength: _l("web.user.desc_max_60_words")
-                }
-            },
-            errorPlacement(error, element) {
-                const errorId = `${element.attr("id")}Error`;
-                $(`#${errorId}`).text(error.text());
-            },
-            highlight(element) {
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight(element) {
-                const $el = $(element);
-                $el.removeClass("is-invalid").addClass("is-valid");
-                const errorId = `${$el.attr("id")}Error`;
-                $(`#${errorId}`).text("");
-            },
-            onkeyup(element) { $(element).valid(); },
-            onchange(element) { $(element).valid(); },
-            submitHandler(form) {
-                const editData = new FormData(form);
-                const $submitBtn = $(".btn-primary").text(_l("web.user.plz_wait")).prop("disabled", true);
-
-                ajaxRequest("/ticket/update", editData, (resp) => {
-                    if (resp.code === 200) {
-                        showToast("success", resp.message);
-                        $("#edit_ticket").modal("hide");
-                        $submitBtn.text("Update").prop("disabled", false);
-                        TicketTable();
-                    }
-                }, (error) => {
-                    $(".error-message").text("");
-                    $(".form-control").removeClass("is-invalid is-valid");
-
-                    if (error.responseJSON?.code === 422) {
-                        $.each(error.responseJSON.errors, (key, val) => {
-                            $(`#${key}`).addClass("is-invalid");
-                            $(`#${key}Error`).text(val[0]);
-                        });
-                    } else {
-                        showToast("error", error.responseJSON?.message || "An error occurred");
-                    }
-
-                    $submitBtn.text(_l("web.user.update")).prop("disabled", false);
-                });
-            }
-        });
+        // Initialize both forms
+        initFormValidation("#addTicket", "/user/ticket/store", _l("web.user.create"));
+        initFormValidation("#editTicketstatus", "/ticket/update", _l("web.user.update"), true);
     }
 
     function TicketTable() {
@@ -423,11 +397,11 @@
         $("#category").val(categoryId);
         $("#priority").val(priority).trigger("change");
         $("#status").val(status).trigger("change");
-        $("#reply").val(reply);
 
         let plainText = $("<div>").html(description).text();
         plainText = plainText.charAt(0).toUpperCase() + plainText.slice(1);
         $(".description").text(plainText);
+        $("#reply").summernote("code", "");
     }
 
     function deleteTicket(id) {
