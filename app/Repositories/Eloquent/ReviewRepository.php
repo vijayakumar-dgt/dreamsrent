@@ -215,6 +215,7 @@ class ReviewRepository implements ReviewRepositoryInterface
             ->join('users', 'users.id', '=', 'review_messages.user_id')
             ->leftJoin('user_details', 'user_details.user_id', '=', 'review_messages.user_id')
             ->where('review_messages.parent_id', $reviewId)
+            ->orderBy('review_messages.id', 'desc')
             ->get()->map(function ($reply) {
                 $reply->profile_image = is_string($reply->profile_image) || is_null($reply->profile_image)
                     ? uploadedAsset($reply->profile_image, 'profile')
