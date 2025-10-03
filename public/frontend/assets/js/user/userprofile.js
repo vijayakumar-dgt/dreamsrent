@@ -15,13 +15,22 @@
     setTimeout(() => $("#country").trigger("change"), 100);
 
     $("#country").on("change", function () {
-      const id = $(this).val();
-      id ? fetchStatesByCountry(id) : (updateStateOptions(), updateCityOptions());
+        const id = $(this).val();
+        if (id) {
+            fetchStatesByCountry(id);
+        } else {
+            updateStateOptions();
+            updateCityOptions();
+        }
     });
 
     $("#state").on("change", function () {
-      const id = $(this).val();
-      id ? fetchCitiesByState(id) : updateCityOptions();
+        const id = $(this).val();
+        if (id) {
+            fetchCitiesByState(id);
+        } else {
+            updateCityOptions();
+        }
     });
   }
 
@@ -118,7 +127,8 @@
       utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
       separateDialCode: true,
       placeholderNumberType: "",
-      autoPlaceholder: "off"
+      autoPlaceholder: "off",
+      formatOnDisplay: false
     });
 
     form.addEventListener("submit", (e) => {

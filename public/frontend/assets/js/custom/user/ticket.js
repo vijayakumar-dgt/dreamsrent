@@ -57,6 +57,14 @@
                 }
             });
         });
+
+        $(document).on('click', '#add_ticket_btn', function () {
+            $("#addTicket")[0].reset();
+            $("#description").summernote("code", "");
+            $("#priority").val('').trigger("change");
+            $('.error-text').text('');
+            $(".form-control").removeClass("is-invalid is-valid");
+        });
     }
 
     function initSummerNote() {
@@ -119,6 +127,36 @@
         };
 
         const initFormValidation = (selector, url, successBtnText, isEdit = false) => {
+            const handleAjaxSuccess = (resp, form, $submitBtn) => {
+                if (resp.code === 200) {
+                    showToast("success", resp.message);
+                    if (!isEdit) {
+                        $("#add_ticket").modal("hide");
+                        resetFormFields($(form));
+                    } else {
+                        $("#edit_ticket").modal("hide");
+                    }
+                    toggleButtonState($submitBtn, successBtnText);
+                    TicketTable();
+                }
+            };
+
+            const handleAjaxError = (error, $submitBtn) => {
+                handleValidationError(error, isEdit);
+                toggleButtonState($submitBtn, successBtnText);
+            };
+
+            const submitFormHandler = (form) => {
+                const formData = new FormData(form);
+                const $submitBtn = $(".submitbtn");
+                toggleButtonState($submitBtn, _l("web.user.plz_wait"), true);
+
+                ajaxRequest(url, formData,
+                    (resp) => handleAjaxSuccess(resp, form, $submitBtn),
+                    (error) => handleAjaxError(error, $submitBtn)
+                );
+            };
+
             $(selector).validate({
                 rules: {
                     category: { required: !isEdit },
@@ -161,28 +199,7 @@
                 },
                 onkeyup(element) { $(element).valid(); },
                 onchange(element) { $(element).valid(); },
-                submitHandler(form) {
-                    const formData = new FormData(form);
-                    const $submitBtn = $(".btn-primary");
-                    toggleButtonState($submitBtn, _l("web.user.plz_wait"), true);
-
-                    ajaxRequest(url, formData, (resp) => {
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            if (!isEdit) {
-                                $("#add_ticket").modal("hide");
-                                resetFormFields($(form));
-                            } else {
-                                $("#edit_ticket").modal("hide");
-                            }
-                            toggleButtonState($submitBtn, successBtnText);
-                            TicketTable();
-                        }
-                    }, (error) => {
-                        handleValidationError(error, isEdit);
-                        toggleButtonState($submitBtn, successBtnText);
-                    });
-                }
+                submitHandler: submitFormHandler
             });
         };
 

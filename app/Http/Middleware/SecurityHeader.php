@@ -24,6 +24,8 @@ class SecurityHeader
         $response->headers->set('Pragma', 'no-cache');
         $response->headers->set('Expires', '0');
         $response->headers->set('Referrer-Policy', 'no-referrer-when-downgrade');
+        $response->headers->set('Cross-Origin-Embedder-Policy', 'require-corp');
+        $response->headers->set('Cross-Origin-Opener-Policy', 'same-origin');
 
         return $response;
     }

@@ -34,16 +34,6 @@
 <!-- Page Content -->
 <div class="content">
     <div class="container">
-        <!-- Content Header -->
-        <div class="content-header d-none">
-            <h4>{{ __('admin.support.tickets') }}</h4>
-            <div class="mb-2">
-                <button type="button" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_ticket">
-                    <i class="ti ti-plus me-2"></i>{{ __('web.user.add_new_ticket') }}
-                </button>
-            </div>
-        </div>
-        <!-- /Content Header -->
         <!-- Ticket Table -->
         <div class="row">
             <div class="col-lg-12 d-flex">
@@ -54,7 +44,7 @@
                                 <h5>{{ __('web.user.tickets') }}</h5>
                             </div>
                             <div class="col-md-7 d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-primary btn-sm d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_ticket">
+                                <button type="button" class="btn btn-primary btn-sm d-flex align-items-center" id="add_ticket_btn" data-bs-toggle="modal" data-bs-target="#add_ticket">
                                     <i class="ti ti-plus me-2"></i>{{ __('web.user.add_new_ticket') }}
                                 </button>
                             </div>
@@ -155,7 +145,7 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <a href="javascript:void(0);" class="btn btn-dark me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</a>
-                        <button type="submit" class="btn btn-primary">{{__('admin.common.create')}}</button>
+                        <button type="submit" class="btn btn-primary submitbtn">{{__('admin.common.create')}}</button>
                     </div>
                 </div>
             </form>
@@ -221,7 +211,7 @@
                                         <p class="mt-2">{{ __('web.user.max_60_words') }}</p>
                                         <div class="mb-2">
                                             <a href="javascript:void(0);" class="btn btn-dark me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                                            <button type="submit" class="btn btn-primary">{{ __('admin.common.update') }}</button>
+                                            <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.update') }}</button>
                                         </div>
                                     </div>
                                 </div>
