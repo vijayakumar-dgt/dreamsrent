@@ -8,8 +8,8 @@
         console.error("Error: bookingData is not defined or is not an array.");
     }
 
-    var incomeData = [];
-    var categories = [];
+    const incomeData = [];
+    const categories = [];
 
     if (Array.isArray(bookingData) && bookingData.length > 0) {
         bookingData.forEach((booking) => {
@@ -27,7 +27,7 @@
         console.warn("No booking data available.");
     }
 
-    var options = {
+    const options = {
         series: [{ name: "Income", data: incomeData }],
         chart: { type: "bar", height: 350 },
         plotOptions: {
@@ -44,8 +44,9 @@
         grid: { borderColor: "#f1f1f1" },
     };
 
+    let chart;
     if (typeof ApexCharts !== "undefined") {
-        var chart = new ApexCharts(
+        chart = new ApexCharts(
             document.querySelector("#income_expense_chart"),
             options
         );
@@ -213,7 +214,7 @@
 
         if (incomeAmount) {
             incomeAmount.innerHTML = `
-            $${totalIncome.toLocaleString()} 
+            $${totalIncome.toLocaleString()}
             <span class="${
                 percentageChange >= 0 ? "text-success" : "text-danger"
             } fs-13 fw-semibold">
@@ -258,18 +259,25 @@
             );
         }
 
-        dropdownItems.forEach((item) => {
-            item.addEventListener("click", function () {
-                dropdownItems.forEach((el) => el.classList.remove("active"));
-                this.classList.add("active");
+        dropdownItems.forEach((item) => item.addEventListener("click", handleDropdownClick));
 
-                activeSortFilter = this.getAttribute("data-filter");
-                selectedFilter.innerText = this.innerText;
+        // ------------------- Handler Function -------------------
+        function handleDropdownClick(event) {
+            const clickedItem = event.currentTarget;
 
-                resetTableData();
-                applyFilters();
-            });
-        });
+            // Remove "active" from all items and add to the clicked one
+            dropdownItems.forEach((el) => el.classList.remove("active"));
+            clickedItem.classList.add("active");
+
+            // Update current filter
+            activeSortFilter = clickedItem.getAttribute("data-filter");
+            selectedFilter.innerText = clickedItem.innerText;
+
+            // Reset table and apply filters
+            resetTableData();
+            applyFilters();
+        }
+
 
         $(dateRangeInput).daterangepicker({
             autoUpdateInput: false,
@@ -367,11 +375,12 @@
             tableBody.getElementsByTagName("tr")
         ).map((row) => row.cloneNode(true));
 
-        function resetTableData() {
+        function resetTableData(transformFn) {
             tableBody.innerHTML = "";
-            originalTableData.forEach((row) =>
-                tableBody.appendChild(row.cloneNode(true))
-            );
+            originalTableData.forEach((row) => {
+                const newRow = row.cloneNode(true);
+                tableBody.appendChild(transformFn ? transformFn(newRow) : newRow);
+            });
         }
 
         function applyFilters() {
@@ -484,54 +493,54 @@
         });
     });
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const tableBody = document
-            .getElementById("incomeTable")
-            .querySelector("tbody");
+    document.addEventListener("DOMContentLoaded", initIncomeTableActions);
 
-        document
-            .getElementById("printButton")
-            .addEventListener("click", function () {
-                let printWindow = window.open("", "", "width=900,height=700");
-                printWindow.document.write(
-                    "<html><head><title>Print Table</title>"
-                );
-                printWindow.document.write(
-                    "<style>table {width: 100%; border-collapse: collapse;} th, td {border: 1px solid black; padding: 8px; text-align: left;} </style>"
-                );
-                printWindow.document.write("</head><body>");
-                printWindow.document.write("<h2>Printed Data</h2>");
-                printWindow.document.write(
-                    "<table>" +
-                        document.getElementById("incomeTable").innerHTML +
-                        "</table>"
-                );
-                printWindow.document.write("</body></html>");
-                printWindow.document.close();
-                printWindow.print();
+    function initIncomeTableActions() {
+        const table = document.getElementById("incomeTable");
+        const tableBody = table.querySelector("tbody");
+        const printButton = document.getElementById("printButton");
+        const exportButton = document.getElementById("exportButton");
+
+        // Attach event listeners
+        printButton.addEventListener("click", handlePrintTable);
+        exportButton.addEventListener("click", handleExportTable);
+
+        // ------------------- Print Table -------------------
+        function handlePrintTable() {
+            const printWindow = window.open("", "", "width=900,height=700");
+            printWindow.document.write("<html><head><title>Print Table</title>");
+            printWindow.document.write(
+                "<style>table {width: 100%; border-collapse: collapse;} th, td {border: 1px solid black; padding: 8px; text-align: left;}</style>"
+            );
+            printWindow.document.write("</head><body>");
+            printWindow.document.write("<h2>Printed Data</h2>");
+            printWindow.document.write("<table>" + table.innerHTML + "</table>");
+            printWindow.document.write("</body></html>");
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // ------------------- Export Table as CSV -------------------
+        function handleExportTable() {
+            const rows = Array.from(tableBody.getElementsByTagName("tr"));
+            let csvContent = "data:text/csv;charset=utf-8,";
+
+            rows.forEach((row) => {
+                const cells = row.querySelectorAll("td");
+                const rowData = Array.from(cells)
+                    .map((cell) => `"${cell.innerText.trim()}"`)
+                    .join(",");
+                csvContent += rowData + "\n";
             });
 
-        document
-            .getElementById("exportButton")
-            .addEventListener("click", function () {
-                let rows = Array.from(tableBody.getElementsByTagName("tr"));
-                let csvContent = "data:text/csv;charset=utf-8,";
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "income_table.csv");
+            document.body.appendChild(link);
+            link.dispatchEvent(new MouseEvent("click"));
+            document.body.removeChild(link);
+        }
+    }
 
-                rows.forEach((row) => {
-                    let cells = row.querySelectorAll("td");
-                    let rowData = Array.from(cells)
-                        .map((cell) => `"${cell.innerText.trim()}"`)
-                        .join(",");
-                    csvContent += rowData + "\n";
-                });
-
-                let encodedUri = encodeURI(csvContent);
-                let link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", "income_table.csv");
-                document.body.appendChild(link);
-                link.dispatchEvent(new MouseEvent("click"));
-                document.body.removeChild(link);
-            });
-    });
 })();

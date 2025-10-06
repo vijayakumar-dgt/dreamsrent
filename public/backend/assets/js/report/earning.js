@@ -28,14 +28,14 @@
                     chartData[item.month - 1] = item.total_income;
                 });
 
-                var options = {
+                const options = {
                     series: [{ name: "Earnings", data: chartData }],
                     chart: { type: "area", height: 300 },
                     xaxis: { categories: months },
                     colors: ["#ff9900"],
                 };
 
-                var chart = new ApexCharts(
+                const chart = new ApexCharts(
                     document.querySelector("#expense-analysis"),
                     options
                 );
@@ -61,7 +61,7 @@
                 let colors = ["#7d3289", "#008778", "#ffa633"];
 
                 // Render Pie Chart
-                var options = {
+                const options = {
                     series: values,
                     chart: {
                         type: "pie",
@@ -72,7 +72,7 @@
                     colors: colors,
                 };
 
-                var chart = new ApexCharts(
+                const chart = new ApexCharts(
                     document.querySelector("#project-report"),
                     options
                 );
@@ -114,96 +114,118 @@
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-        let filterDropdown = document.getElementById("filterDropdown");
-        let filterText = document.getElementById("filterText");
+        const filterText = document.getElementById("filterText");
         let tableRows = document.querySelectorAll("#earningTable tbody tr");
 
-        // Add event listeners to all filter options
-        document.querySelectorAll(".filter-option").forEach((item) => {
-            item.addEventListener("click", function () {
-                let selectedFilter = this.getAttribute("data-filter");
+        const filterOptions = document.querySelectorAll(".filter-option");
 
-                // Update the filter text in dropdown
-                filterText.innerText = this.innerText;
-
-                // Clear previous filter
-                tableRows.forEach((row) => (row.style.display = ""));
-
-                // Apply new filter
-                applyFilter(selectedFilter);
-            });
+        filterOptions.forEach((item) => {
+            item.addEventListener("click", handleFilterClick);
         });
 
-        function applyFilter(filterType) {
-            let now = new Date();
-            tableRows.forEach((row) => {
-                let dateCell = row.querySelector("td:nth-child(4) p").innerText; // Get Date Column (4th Column)
-                let parsedDate = new Date(dateCell); // Convert to Date object
+        function handleFilterClick(event) {
+            const selectedFilter = event.currentTarget.getAttribute("data-filter");
 
-                switch (filterType) {
-                    case "latest":
-                        tableRows = Array.from(tableRows).sort((a, b) => {
-                            let dateA = new Date(
-                                a.querySelector("td:nth-child(4) p").innerText
-                            );
-                            let dateB = new Date(
-                                b.querySelector("td:nth-child(4) p").innerText
-                            );
-                            return dateB - dateA; // Sort by latest (Descending)
-                        });
-                        break;
-
-                    case "ascending":
-                        tableRows = Array.from(tableRows).sort((a, b) => {
-                            let amountA = parseFloat(
-                                a
-                                    .querySelector("td:nth-child(2) p")
-                                    .innerText.replace(/[^0-9.-]+/g, "")
-                            );
-                            let amountB = parseFloat(
-                                b
-                                    .querySelector("td:nth-child(2) p")
-                                    .innerText.replace(/[^0-9.-]+/g, "")
-                            );
-                            return amountA - amountB; // Ascending order
-                        });
-                        break;
-
-                    case "descending":
-                        tableRows = Array.from(tableRows).sort((a, b) => {
-                            let amountA = parseFloat(
-                                a
-                                    .querySelector("td:nth-child(2) p")
-                                    .innerText.replace(/[^0-9.-]+/g, "")
-                            );
-                            let amountB = parseFloat(
-                                b
-                                    .querySelector("td:nth-child(2) p")
-                                    .innerText.replace(/[^0-9.-]+/g, "")
-                            );
-                            return amountB - amountA; // Descending order
-                        });
-                        break;
-
-                    case "last_month":
-                        let lastMonth = new Date();
-                        lastMonth.setMonth(lastMonth.getMonth() - 1);
-                        if (parsedDate < lastMonth) row.style.display = "none";
-                        break;
-
-                    case "last_7_days":
-                        let last7Days = new Date();
-                        last7Days.setDate(last7Days.getDate() - 7);
-                        if (parsedDate < last7Days) row.style.display = "none";
-                        break;
-                }
-            });
-
-            // Reorder table rows
-            let tbody = document.querySelector("#earningTable tbody");
-            tbody.innerHTML = "";
-            tableRows.forEach((row) => tbody.appendChild(row));
+            updateFilterText(event.currentTarget.innerText);
+            resetTableFilters();
+            applyFilter(selectedFilter);
         }
+
+        function updateFilterText(text) {
+            const filterText = document.getElementById("filterText");
+            if (filterText) filterText.innerText = text;
+        }
+
+        function resetTableFilters() {
+            const tableRows = document.querySelectorAll("#earningTable tbody tr");
+            tableRows.forEach((row) => (row.style.display = ""));
+        }
+
+        function applyFilter(filterType) {
+            const tbody = document.querySelector("#earningTable tbody");
+            const tableRowsArray = Array.from(tableRows); // Convert NodeList to Array
+
+            let filteredRows;
+
+            switch (filterType) {
+                case "latest":
+                    filteredRows = sortByDateDesc(tableRowsArray);
+                    break;
+                case "ascending":
+                    filteredRows = sortByAmountAsc(tableRowsArray);
+                    break;
+                case "descending":
+                    filteredRows = sortByAmountDesc(tableRowsArray);
+                    break;
+                case "last_month":
+                    filteredRows = filterByLastMonth(tableRowsArray);
+                    break;
+                case "last_7_days":
+                    filteredRows = filterByLast7Days(tableRowsArray);
+                    break;
+                default:
+                    filteredRows = tableRowsArray;
+            }
+
+            // Clear tbody and append filtered/sorted rows
+            tbody.innerHTML = "";
+            filteredRows.forEach((row) => tbody.appendChild(row));
+        }
+
+        // ------------------- Helper Functions -------------------
+
+        function sortByDateDesc(rows) {
+            return rows.sort((a, b) => {
+                const dateA = new Date(a.querySelector("td:nth-child(4) p").innerText);
+                const dateB = new Date(b.querySelector("td:nth-child(4) p").innerText);
+                return dateB - dateA;
+            });
+        }
+
+        function sortByAmountAsc(rows) {
+            return rows.sort((a, b) => {
+                const amountA = parseFloat(
+                    a.querySelector("td:nth-child(2) p").innerText.replace(/[^0-9.-]+/g, "")
+                );
+                const amountB = parseFloat(
+                    b.querySelector("td:nth-child(2) p").innerText.replace(/[^0-9.-]+/g, "")
+                );
+                return amountA - amountB;
+            });
+        }
+
+        function sortByAmountDesc(rows) {
+            return rows.sort((a, b) => {
+                const amountA = parseFloat(
+                    a.querySelector("td:nth-child(2) p").innerText.replace(/[^0-9.-]+/g, "")
+                );
+                const amountB = parseFloat(
+                    b.querySelector("td:nth-child(2) p").innerText.replace(/[^0-9.-]+/g, "")
+                );
+                return amountB - amountA;
+            });
+        }
+
+        function filterByLastMonth(rows) {
+            const lastMonth = new Date();
+            lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+            return rows.filter((row) => {
+                const dateCell = new Date(row.querySelector("td:nth-child(4) p").innerText);
+                return dateCell >= lastMonth;
+            });
+        }
+
+        function filterByLast7Days(rows) {
+            const last7Days = new Date();
+            last7Days.setDate(last7Days.getDate() - 7);
+
+            return rows.filter((row) => {
+                const dateCell = new Date(row.querySelector("td:nth-child(4) p").innerText);
+                return dateCell >= last7Days;
+            });
+        }
+
     });
 
     $(document).ready(function () {
@@ -339,11 +361,20 @@
         }
     });
 
-    $(document).ready(function () {
-        $(".btn-print").on("click", function () {
-            let printContent = $("#earningTable").clone();
-            let newWindow = window.open("", "", "width=800,height=600");
-            newWindow.document.write(`
+    $(document).ready(initEarningsTableActions);
+
+    // ------------------- Initialization -------------------
+    function initEarningsTableActions() {
+        $(".btn-print").on("click", handlePrint);
+        $(".btn-export").on("click", handleExportCSV);
+    }
+
+    // ------------------- Print Table -------------------
+    function handlePrint() {
+        const printContent = $("#earningTable").clone();
+        const newWindow = window.open("", "", "width=800,height=600");
+
+        const html = `
             <html>
                 <head>
                     <title>Print Table</title>
@@ -354,43 +385,53 @@
                     ${printContent.prop("outerHTML")}
                 </body>
             </html>
-        `);
-            newWindow.document.close();
-            newWindow.print();
+        `;
+
+        newWindow.document.write(html);
+        newWindow.document.close();
+        newWindow.print();
+    }
+
+    // ------------------- Export CSV -------------------
+    function handleExportCSV() {
+        const table = $("#earningTable");
+        const csvData = [];
+
+        csvData.push(getTableHeaders(table));
+        csvData.push(...getTableRows(table));
+
+        const csvContent = "data:text/csv;charset=utf-8," + csvData.join("\n");
+        downloadCSV(csvContent, "earnings_report.csv");
+    }
+
+    function getTableHeaders(table) {
+        const headers = [];
+        table.find("thead th").each(function () {
+            headers.push($(this).text().trim());
         });
+        return headers.join(",");
+    }
 
-        // Export table data as CSV
-        $(".btn-export").on("click", function () {
-            let table = $("#earningTable");
-            let csvData = [];
-            let headers = [];
-
-            // Get table headers
-            table.find("thead th").each(function () {
-                headers.push($(this).text().trim());
+    function getTableRows(table) {
+        const rows = [];
+        table.find("tbody tr:visible").each(function () {
+            const row = [];
+            $(this).find("td").each(function () {
+                row.push($(this).text().trim());
             });
-            csvData.push(headers.join(",")); // Add headers to CSV
-
-            // Get visible table rows
-            table.find("tbody tr:visible").each(function () {
-                let row = [];
-                $(this)
-                    .find("td")
-                    .each(function () {
-                        row.push($(this).text().trim());
-                    });
-                csvData.push(row.join(","));
-            });
-
-            let csvContent =
-                "data:text/csv;charset=utf-8," + csvData.join("\n");
-            let encodedUri = encodeURI(csvContent);
-            let link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "earnings_report.csv");
-            document.body.appendChild(link);
-            link.dispatchEvent(new MouseEvent("click"));
-            document.body.removeChild(link);
+            rows.push(row.join(","));
         });
-    });
+        return rows;
+    }
+
+    function downloadCSV(csvContent, filename) {
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.href = encodedUri;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.dispatchEvent(new MouseEvent("click"));
+        document.body.removeChild(link);
+    }
+
 })();
