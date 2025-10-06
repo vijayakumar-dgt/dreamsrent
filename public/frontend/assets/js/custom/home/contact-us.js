@@ -123,7 +123,7 @@
               $("#" + key + "_error").text(val[0]);
             });
           } else {
-            const msg = (error.responseJSON && error.responseJSON.message) || "Something went wrong";
+            const msg = error.responseJSON?.message ?? "Something went wrong";
             showToast("error", msg);
           }
 

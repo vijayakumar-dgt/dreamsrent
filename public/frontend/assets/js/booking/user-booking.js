@@ -648,7 +648,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                let errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
         });
@@ -694,265 +694,241 @@
         $("#sumbit_btn").on("click", function (event) {
             event.preventDefault();
 
-            let carLocationInfoData = $("#bookLocationForm").serializeArray();
-            let carExtraInfoData = $("#bookExtraDetailsForm").serializeArray();
-            let carUserInfoData = $("#bookUserInfoForm").serializeArray();
-            let carpaymentInfoData = $("#bookPaymentForm").serializeArray();
+            if (!$("#bookPaymentForm").valid()) return;
 
-            if ($("#bookPaymentForm").valid()) {
-                let finalFormData = new FormData();
+            const finalFormData = prepareFinalFormData();
 
-                finalFormData.append(
-                    "_token",
-                    $("meta[name=\"csrf-token\"]").attr("content")
-                );
+            disableSubmitButton();
 
-                [
-                    ...carLocationInfoData,
-                    ...carExtraInfoData,
-                    ...carUserInfoData,
-                    ...carpaymentInfoData,
-                ].forEach(function (item) {
+            sendPaymentRequest(finalFormData);
+        });
+
+        // Prepare FormData with all sections, extras, insurance, and prices
+        function prepareFinalFormData() {
+            const finalFormData = new FormData();
+            finalFormData.append("_token", $("meta[name='csrf-token']").attr("content"));
+
+            const sections = [
+                "#bookLocationForm",
+                "#bookExtraDetailsForm",
+                "#bookUserInfoForm",
+                "#bookPaymentForm"
+            ];
+
+            sections.forEach(formSelector => {
+                $(formSelector).serializeArray().forEach(item => {
                     finalFormData.append(item.name, item.value);
                 });
+            });
 
-                let selectedExtras = [];
+            finalFormData.append("extra_services", JSON.stringify(getSelectedExtras()));
+            finalFormData.append("insurance", JSON.stringify(getSelectedInsurance()));
 
-                $("input[name=\"add_extra\"]:checked").each(function () {
-                    let parent = $(this).closest("li");
-                    let extraId = parent.data("service-id");
-                    let extraPrice = parseFloat(
-                        parent.find(".adon-price").text().replace("$", "")
-                    );
-                    let extraType = parent
-                        .find("input[name='extra_type[]']")
-                        .val();
+            // Append numeric fields
+            const fields = [
+                "extra_price_total",
+                "insurance_price_total",
+                "driver_price_total",
+                "vehicle_price",
+                "vehicle_price_total",
+                "total_price",
+                "tax_val"
+            ];
 
-                    selectedExtras.push({
-                        id: extraId,
-                        price: extraPrice,
-                        value: extraType,
-                    });
+            fields.forEach(fieldId => {
+                finalFormData.append(fieldId, parseFloat($(`#${fieldId}`).val()) || 0);
+            });
+
+            const rentType = $("input[name='rent_type']:checked").val();
+            finalFormData.append("rent_type", rentType ?? "");
+
+            return finalFormData;
+        }
+
+        // Collect selected extras
+        function getSelectedExtras() {
+            const extras = [];
+            $("input[name='add_extra']:checked").each(function () {
+                const parent = $(this).closest("li");
+                extras.push({
+                    id: parent.data("service-id"),
+                    price: parseFloat(parent.find(".adon-price").text().replace("$", "")),
+                    value: parent.find("input[name='extra_type[]']").val(),
                 });
+            });
+            return extras;
+        }
 
-                finalFormData.append(
-                    "extra_services",
-                    JSON.stringify(selectedExtras)
-                );
-
-                let selectedInsurance = [];
-
-                $("input[name=\"add_insurance\"]:checked").each(function () {
-                    let parent = $(this).closest(".insurance-select");
-                    let insuranceId = parent
-                        .find("input[name=\"insurance_id[]\"]")
-                        .val();
-                    let insurancePrice = parseFloat(
-                        parent.find("h6").text().replace("$", "")
-                    );
-                    let insuranceType = parent
-                        .find("input[name=\"insurance_id[]\"]")
-                        .val();
-
-                    selectedInsurance.push({
-                        id: insuranceId,
-                        price: insurancePrice,
-                        value: insuranceType,
-                    });
+        // Collect selected insurance
+        function getSelectedInsurance() {
+            const insurance = [];
+            $("input[name='add_insurance']:checked").each(function () {
+                const parent = $(this).closest(".insurance-select");
+                const insuranceId = parent.find("input[name='insurance_id[]']").val();
+                insurance.push({
+                    id: insuranceId,
+                    price: parseFloat(parent.find("h6").text().replace("$", "")),
+                    value: insuranceId,
                 });
+            });
+            return insurance;
+        }
 
-                finalFormData.append(
-                    "insurance",
-                    JSON.stringify(selectedInsurance)
-                );
+        // Disable submit button and navigation
+        function disableSubmitButton() {
+            $("#sumbit_btn")
+                .text(_l("web.home.processing_please_wait"))
+                .prop("disabled", true);
+            $(".backUserInfo").prop("disabled", true);
+        }
 
-                let vehicleExtraPrice =
-                    parseFloat($("#extra_price_total").val()) || 0;
-                finalFormData.append("extra_price_total", vehicleExtraPrice);
+        // Send AJAX request
+        function sendPaymentRequest(finalFormData) {
+            $.ajax({
+                url: "/create/payments",
+                method: "POST",
+                data: finalFormData,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                cache: false,
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content"),
+                },
+            })
+                .done(handlePaymentSuccess)
+                .fail(handlePaymentError);
+        }
 
-                let vehicleInsurancePrice =
-                    parseFloat($("#insurance_price_total").val()) || 0;
-                finalFormData.append(
-                    "insurance_price_total",
-                    vehicleInsurancePrice
-                );
-
-                let vehicleDriverPrice =
-                    parseFloat($("#driver_price_total").val()) || 0;
-                finalFormData.append("driver_price_total", vehicleDriverPrice);
-
-                let vehiclePrice = parseFloat($("#vehicle_price").val()) || 0;
-                finalFormData.append("vehicle_price", vehiclePrice);
-
-                let vehicleTotalPrice =
-                    parseFloat($("#vehicle_price_total").val()) || 0;
-                finalFormData.append("vehicle_price_total", vehicleTotalPrice);
-
-                let totalPrice = parseFloat($("#total_price").val()) || 0;
-                finalFormData.append("total_price", totalPrice);
-
-                let totalTax = parseFloat($("#tax_val").val()) || 0;
-                finalFormData.append("tax_val", totalTax);
-
-                let rentType = $("input[name=\"rent_type\"]:checked").val();
-                finalFormData.append("rent_type", rentType ?? "");
-
-                $("#sumbit_btn")
-                    .text(_l("web.home.processing_please_wait"))
-                    .prop("disabled", true);
-                $(".backUserInfo").prop("disabled", true);
-                $.ajax({
-                    url: "/create/payments",
-                    method: "POST",
-                    data: finalFormData,
-                    dataType: "json",
-                    contentType: false,
-                    processData: false,
-                    cache: false,
-                    headers: {
-                        Accept: "application/json",
-                        "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr(
-                            "content"
-                        ),
-                    },
-                })
-
-                    .done((response) => {
-                        if (response.code === 200 && response.cod) {
-                            showToast("success", response.message);
-                            window.location.href = response.redirect_url; // Redirect to success page
-                        }
-
-                        if (response.paypal_url) {
-                            showToast("success", response.message);
-                            window.location.href = response.paypal_url;
-                        }
-
-                        if (response.stripurl) {
-                            showToast("success", response.message);
-                            window.location.href = response.stripurl;
-                        }
-                    })
-                    .fail((error) => {
-                        $("#serviceLoader").hide();
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid");
-                        $(".add_btn").removeAttr("disabled");
-                        $(".add_btn").html(_l("web.common.submit"));
-
-                        $("#sumbit_btn")
-                            .text(_l("web.home.pay_and_place_reservation"))
-                            .prop("disabled", false);
-                        $(".backUserInfo").prop("disabled", false);
-
-                        if (error.status === 422) {
-                            if (error.responseJSON.errors) {
-                                // Laravel field-level validation errors
-                                $.each(
-                                    error.responseJSON.errors,
-                                    function (key, val) {
-                                        $("#" + key).addClass("is-invalid");
-                                        $("#" + key + "_error").text(val[0]);
-                                    }
-                                );
-                            } else if (error.responseJSON.message) {
-                                // Custom error message (like wallet balance)
-                                showToast("error", error.responseJSON.message);
-                            }
-                        } else {
-                            showToast(
-                                "error",
-                                error.responseJSON.message ||
-                                    _l("web.home.something_went_wrong")
-                            );
-                        }
-                    });
+        // Handle successful payment response
+        function handlePaymentSuccess(response) {
+            if (response.code === 200 && response.cod) {
+                showToast("success", response.message);
+                window.location.href = response.redirect_url;
+                return;
             }
-        });
+            if (response.paypal_url) {
+                showToast("success", response.message);
+                window.location.href = response.paypal_url;
+                return;
+            }
+            if (response.stripurl) {
+                showToast("success", response.message);
+                window.location.href = response.stripurl;
+            }
+        }
+
+        // Handle failed payment response
+        function handlePaymentError(error) {
+            $("#serviceLoader").hide();
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid");
+            $(".add_btn").removeAttr("disabled").html(_l("web.common.submit"));
+
+            $("#sumbit_btn")
+                .text(_l("web.home.pay_and_place_reservation"))
+                .prop("disabled", false);
+            $(".backUserInfo").prop("disabled", false);
+
+            if (error.status === 422 && error.responseJSON.errors) {
+                // Laravel validation errors
+                $.each(error.responseJSON.errors, (key, val) => {
+                    $(`#${key}`).addClass("is-invalid");
+                    $(`#${key}_error`).text(val[0]);
+                });
+            } else {
+                showToast(
+                    "error",
+                    error.responseJSON?.message || _l("web.home.something_went_wrong")
+                );
+            }
+        }
     });
 
     let $stateDropdown = $("#state_id");
     let $cityDropdown = $("#city_id");
 
+    function loadStates(
+        countryId,
+        selectedStateId = null,
+        selectedCityId = null
+    ) {
+        $stateDropdown
+            .prop("disabled", true)
+            .html("<option>Loading...</option>");
+
+        $.ajax({
+            url: "/get-states/" + countryId,
+            type: "GET",
+            success: function (response) {
+                $stateDropdown
+                    .empty()
+                    .append("<option value=\"\">Select State</option>");
+
+                if (response.length > 0) {
+                    $.each(response, function (key, state) {
+                        $stateDropdown.append(
+                            `<option value="${state.id}" ${
+                                selectedStateId == state.id
+                                    ? "selected"
+                                    : ""
+                            }>${state.name}</option>`
+                        );
+                    });
+
+                    // Only load cities if this is from edit mode
+                    if (selectedStateId && selectedCityId) {
+                        loadCities(selectedStateId, selectedCityId);
+                    }
+                }
+
+                $stateDropdown.prop("disabled", false);
+            },
+            error: function () {
+                alert("Failed to fetch states. Please try again.");
+                $stateDropdown
+                    .html("<option value=\"\">Select State</option>")
+                    .prop("disabled", false);
+            },
+        });
+    }
+
+    function loadCities(stateId, selectedCityId = null) {
+        $cityDropdown
+            .prop("disabled", true)
+            .html("<option>Loading...</option>");
+
+        $.ajax({
+            url: "/get-cities/" + stateId,
+            type: "GET",
+            success: function (response) {
+                $cityDropdown
+                    .empty()
+                    .append("<option value=\"\">Select City</option>");
+
+                if (response.length > 0) {
+                    $.each(response, function (key, city) {
+                        $cityDropdown.append(
+                            `<option value="${city.id}" ${
+                                selectedCityId == city.id ? "selected" : ""
+                            }>${city.name}</option>`
+                        );
+                    });
+                }
+
+                $cityDropdown.prop("disabled", false);
+            },
+            error: function () {
+                alert("Failed to fetch cities. Please try again.");
+                $cityDropdown
+                    .html("<option value=\"\">Select City</option>")
+                    .prop("disabled", false);
+            },
+        });
+    }
+
     $(document).ready(function () {
-        function loadStates(
-            countryId,
-            selectedStateId = null,
-            selectedCityId = null
-        ) {
-            $stateDropdown
-                .prop("disabled", true)
-                .html("<option>Loading...</option>");
-
-            $.ajax({
-                url: "/get-states/" + countryId,
-                type: "GET",
-                success: function (response) {
-                    $stateDropdown
-                        .empty()
-                        .append("<option value=\"\">Select State</option>");
-
-                    if (response.length > 0) {
-                        $.each(response, function (key, state) {
-                            $stateDropdown.append(
-                                `<option value="${state.id}" ${
-                                    selectedStateId == state.id
-                                        ? "selected"
-                                        : ""
-                                }>${state.name}</option>`
-                            );
-                        });
-
-                        // Only load cities if this is from edit mode
-                        if (selectedStateId && selectedCityId) {
-                            loadCities(selectedStateId, selectedCityId);
-                        }
-                    }
-
-                    $stateDropdown.prop("disabled", false);
-                },
-                error: function () {
-                    alert("Failed to fetch states. Please try again.");
-                    $stateDropdown
-                        .html("<option value=\"\">Select State</option>")
-                        .prop("disabled", false);
-                },
-            });
-        }
-
-        function loadCities(stateId, selectedCityId = null) {
-            $cityDropdown
-                .prop("disabled", true)
-                .html("<option>Loading...</option>");
-
-            $.ajax({
-                url: "/get-cities/" + stateId,
-                type: "GET",
-                success: function (response) {
-                    $cityDropdown
-                        .empty()
-                        .append("<option value=\"\">Select City</option>");
-
-                    if (response.length > 0) {
-                        $.each(response, function (key, city) {
-                            $cityDropdown.append(
-                                `<option value="${city.id}" ${
-                                    selectedCityId == city.id ? "selected" : ""
-                                }>${city.name}</option>`
-                            );
-                        });
-                    }
-
-                    $cityDropdown.prop("disabled", false);
-                },
-                error: function () {
-                    alert("Failed to fetch cities. Please try again.");
-                    $cityDropdown
-                        .html("<option value=\"\">Select City</option>")
-                        .prop("disabled", false);
-                },
-            });
-        }
 
         const selectedCountryId = $("#country_id").val();
         const selectedStateId = $("#selected_state_id").val();
@@ -964,115 +940,108 @@
 
         // On country change
         $("#country_id").on("change", function () {
-            let countryId = $(this).val();
-            $("#city_id").html("<option value=\"\">Select City</option>"); // Reset city
-            if (countryId) {
-                $stateDropdown
-                    .prop("disabled", true)
-                    .html("<option>Loading...</option>");
-                $cityDropdown.html(
-                    `<option value="">${_l("web.home.select_city")}</option>`
-                ); // Reset city dropdown
+            const countryId = $(this).val();
+            resetCityDropdown();
 
-                $.ajax({
-                    url: "/get-states/" + countryId,
-                    type: "GET",
-                    success: function (response) {
-                        $stateDropdown
-                            .empty()
-                            .append(
-                                `<option value="">${_l(
-                                    "web.home.select_state"
-                                )}</option>`
-                            );
-
-                        if (response.length > 0) {
-                            $.each(response, function (key, state) {
-                              $stateDropdown.append(
-                                    `<option value="${state.id}">${state.name}</option>`
-                                );
-                            });
-                        }
-
-                        $stateDropdown.prop("disabled", false);
-                    },
-                    error: function () {
-                        alert("Failed to fetch states. Please try again.");
-                        $stateDropdown
-                            .html(
-                                `<option value="">${_l(
-                                    "web.home.select_state"
-                                )}</option>`
-                            )
-                            .prop("disabled", false);
-                    },
-                });
-
-                loadStates(countryId);
-            } else {
-                $("#state_id").html(
-                    `<option value="">${_l("web.home.select_state")}</option>`
-                );
+            if (!countryId) {
+                resetStateDropdown();
+                return;
             }
+
+            loadStatesForCountry(countryId);
         });
+
+        // Resets state dropdown
+        function resetStateDropdown() {
+            $("#state_id").html(`<option value="">${_l("web.home.select_state")}</option>`);
+        }
+
+        // Load states via AJAX
+        function loadStatesForCountry(countryId) {
+            $stateDropdown.prop("disabled", true).html("<option>Loading...</option>");
+            resetCityDropdown();
+
+            $.ajax({
+                url: "/get-states/" + countryId,
+                type: "GET",
+                success: handleStateSuccess,
+                error: handleStateError,
+            });
+
+            loadStates(countryId); // Existing function call if needed
+        }
+
+        // Handle AJAX success
+        function handleStateSuccess(response) {
+            $stateDropdown.empty().append(`<option value="">${_l("web.home.select_state")}</option>`);
+
+            if (response.length > 0) {
+                response.forEach(state => {
+                    $stateDropdown.append(`<option value="${state.id}">${state.name}</option>`);
+                });
+            }
+
+            $stateDropdown.prop("disabled", false);
+        }
+
+        // Handle AJAX error
+        function handleStateError() {
+            alert("Failed to fetch states. Please try again.");
+            $stateDropdown.html(`<option value="">${_l("web.home.select_state")}</option>`).prop("disabled", false);
+        }
 
         // On state change
         $("#state_id").on("change", function () {
-            let stateId = $(this).val();
-            if (stateId) {
-                $cityDropdown
-                    .prop("disabled", true)
-                    .html(`<option>${_l("web.home.loading")}</option>`);
+            const stateId = $(this).val();
+            resetCityDropdown();
 
-                $.ajax({
-                    url: "/get-cities/" + stateId,
-                    type: "GET",
-                    success: function (response) {
-                        $cityDropdown
-                            .empty()
-                            .append(
-                                `<option value="">${_l(
-                                    "web.home.select_city"
-                                )}</option>`
-                            );
+            if (!stateId) return;
 
-                        if (response.length > 0) {
-                            $.each(response, function (key, city) {
-                          $cityDropdown.append(
-                                `<option value="${city.id}">${city.name}</option>`
-                            );
-                            });
-                        }
+            loadCitiesForState(stateId);
+        });
 
-                        $cityDropdown.prop("disabled", false);
-                    },
-                    error: function () {
-                        alert("Failed to fetch cities. Please try again.");
-                        $cityDropdown
-                            .html(
-                                `<option value="">${_l(
-                                    "web.home.select_city"
-                                )}</option>`
-                            )
-                            .prop("disabled", false);
-                    },
+        // Resets city dropdown
+        function resetCityDropdown() {
+            $cityDropdown.html(`<option value="">${_l("web.home.select_city")}</option>`);
+        }
+
+        // Load cities via AJAX
+        function loadCitiesForState(stateId) {
+            $cityDropdown.prop("disabled", true).html(`<option>${_l("web.home.loading")}</option>`);
+
+            $.ajax({
+                url: "/get-cities/" + stateId,
+                type: "GET",
+                success: handleCitySuccess,
+                error: handleCityError,
+            });
+
+            loadCities(stateId); // Existing function call if needed
+        }
+
+        // Handle AJAX success
+        function handleCitySuccess(response) {
+            $cityDropdown.empty().append(`<option value="">${_l("web.home.select_city")}</option>`);
+
+            if (response.length > 0) {
+                response.forEach(city => {
+                    $cityDropdown.append(`<option value="${city.id}">${city.name}</option>`);
                 });
-                loadCities(stateId);
-            } else {
-                $("#city_id").html(
-                    `<option value="">${_l("web.home.select_city")}</option>`
-                );
             }
-        });
-    });
 
-    $(document).ready(function () {
+            $cityDropdown.prop("disabled", false);
+        }
+
+        // Handle AJAX error
+        function handleCityError() {
+            alert("Failed to fetch cities. Please try again.");
+            $cityDropdown.html(`<option value="">${_l("web.home.select_city")}</option>`).prop("disabled", false);
+        }
+
         $(".Number").on("input", function () {
-            this.value = this.value.replace(/[^0-9]/g, ""); // Remove any non-numeric characters
+            this.value = this.value.replace(/\D/g, ""); // Remove any non-numeric characters
         });
-    });
 
-    $(document).ready(function () {
         // Initialize Select2
         $("#delivery_location, #delivery_return_location").select2();
         $("#pickup_location, #pickup_return_location").select2();
@@ -1116,39 +1085,33 @@
                     .trigger("change");
             }
         });
-    });
 
-    $(document).ready(function () {
+        // Driver file upload
         $("#driver_file").on("change", function (event) {
-            const files = event.target.files;
+            const file = event.target.files?.[0]; // Optional chaining
             const imagePreview = $(".imagePreview");
             imagePreview.html(""); // Clear previous preview
 
-            if (files && files[0]) {
-                const file = files[0];
-                if (!file.type.match("image.*")) {
-                    $("#driver_file_error").text(
-                        "Please upload a valid image file."
-                    );
-                    return;
-                }
+            if (!file) return;
 
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = $("<img>", {
-                        src: e.target.result,
-                        class: "img-thumbnail",
-                        width: 150,
-                    });
-                    imagePreview.append(img);
-                    $("#driver_file_error").text(""); // Clear error
-                };
-                reader.readAsDataURL(file);
+            if (!file.type?.match("image.*")) { // Optional chaining
+                $("#driver_file_error").text("Please upload a valid image file.");
+                return;
             }
-        });
-    });
 
-    $(document).ready(function () {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = $("<img>", {
+                    src: e.target.result,
+                    class: "img-thumbnail",
+                    width: 150,
+                });
+                imagePreview.append(img);
+                $("#driver_file_error").text(""); // Clear error
+            };
+            reader.readAsDataURL(file);
+        });
+
         $(".more-adon-info").hide();
 
         $(".adon-info-btn").on("click", function () {
@@ -1170,14 +1133,23 @@
             e.preventDefault();
             const insuranceId = $(this).data("insurance-id");
 
-            $("#benefit-list").html(`
-    <div class="d-flex justify-content-center py-3">
-        <div class="spinner-border text-warning" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-`);
+            showBenefitLoading();
+            fetchInsuranceBenefits(insuranceId);
+        });
 
+        // Show loading spinner in benefit list
+        function showBenefitLoading() {
+            $("#benefit-list").html(`
+                <div class="d-flex justify-content-center py-3">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `);
+        }
+
+        // Fetch insurance benefits via AJAX
+        function fetchInsuranceBenefits(insuranceId) {
             $.ajax({
                 type: "POST",
                 url: "/get/benefits",
@@ -1185,24 +1157,25 @@
                     id: insuranceId,
                     _token: $("meta[name=\"csrf-token\"]").attr("content"),
                 },
-                success: function (response) {
-                    const $list = $("#benefit-list");
-                    $list.empty();
-
-                    if (response.length > 0) {
-                        response.forEach((item, index) => {
-                            const number = index + 1;
-                            const $li = $("<li class=\"mb-2\"></li>");
-                            $li.text(`${number}. ${item.benefit}`);
-                            $list.append($li);
-                        });
-                    } else {
-                        $list.append($("<li></li>").text("No benefits available."));
-                    }
-
-                    $("#show_benifit").modal("show");
-                }
+                success: handleBenefitSuccess,
             });
-        });
+        }
+
+        // Handle AJAX success
+        function handleBenefitSuccess(response) {
+            const $list = $("#benefit-list");
+            $list.empty();
+
+            if (response.length > 0) {
+                response.forEach((item, index) => {
+                    const $li = $("<li class=\"mb-2\"></li>").text(`${index + 1}. ${item.benefit}`);
+                    $list.append($li);
+                });
+            } else {
+                $list.append($("<li></li>").text("No benefits available."));
+            }
+
+            $("#show_benifit").modal("show");
+        }
     });
 })();

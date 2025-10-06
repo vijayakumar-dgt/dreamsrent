@@ -10,12 +10,43 @@
         const $reviewForm = $("#reviewForm");
         const csrfToken = $("meta[name=\"csrf-token\"]").attr("content");
 
+        function getRatingsCount(selector) {
+            return $(`${selector} input[type="checkbox"]:checked`).length;
+        }
+
+        function resetForm() {
+            $reviewForm[0].reset();
+            $(".service_ratings, .location_ratings, .facility_ratings, .value_for_money_ratings, .cleanliness_ratings").prop("checked", false);
+            $(".form-control").removeClass("is-invalid is-valid");
+            $(".error-text").text("");
+            $(".submit-review").prop("disabled", false).html(_l("web.home.submit_review"));
+        }
+
+        function handleError(error) {
+            resetForm();
+            if (error?.responseJSON?.code === 422) {
+                const { errors } = error.responseJSON;
+                Object.keys(errors).forEach((key) => {
+                    $(`#${key}`).addClass("is-invalid");
+                    $(`#${key}_error`).text(errors[key][0]);
+                });
+            } else {
+                showToast("error", error?.responseJSON?.message || "Something went wrong");
+            }
+        }
+
+        function handleSuccess(resp) {
+            resetForm();
+            if (resp.code === 200) {
+                showToast("success", resp.message);
+                $("#addReviewModal").modal("hide");
+                fetchUserBookings();
+            }
+        }
+
         $reviewForm.validate({
             rules: {
-                comments: {
-                    required: true,
-                    minlength: 3
-                }
+                comments: { required: true, minlength: 3 }
             },
             messages: {
                 comments: {
@@ -43,21 +74,21 @@
                 const errorId = `${element.id}_error`;
                 $(`#${errorId}`).text("");
             },
-            onkeyup(element) {
-                $(element).valid();
-            },
-            onchange(element) {
-                $(element).valid();
-            },
+            onkeyup(element) { $(element).valid(); },
+            onchange(element) { $(element).valid(); },
             submitHandler() {
                 const formData = new FormData();
                 formData.append("comments", $("#comments").val());
-                formData.append("service_ratings", $("#service_ratings input[type=\"checkbox\"]:checked").length);
-                formData.append("location_ratings", $("#location_ratings input[type=\"checkbox\"]:checked").length);
-                formData.append("facility_ratings", $("#facility_ratings input[type=\"checkbox\"]:checked").length);
-                formData.append("value_for_money_ratings", $("#value_for_money_ratings input[type=\"checkbox\"]:checked").length);
-                formData.append("cleanliness_ratings", $("#cleanliness_ratings input[type=\"checkbox\"]:checked").length);
+                formData.append("service_ratings", getRatingsCount("#service_ratings"));
+                formData.append("location_ratings", getRatingsCount("#location_ratings"));
+                formData.append("facility_ratings", getRatingsCount("#facility_ratings"));
+                formData.append("value_for_money_ratings", getRatingsCount("#value_for_money_ratings"));
+                formData.append("cleanliness_ratings", getRatingsCount("#cleanliness_ratings"));
                 formData.append("vehicle_id", $("#reviewForm .vehicle_id").val());
+
+                $(".submit-review").prop("disabled", true).html(
+                    `<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l("web.home.submitting")}..`
+                );
 
                 $.ajax({
                     type: "POST",
@@ -69,44 +100,12 @@
                         Accept: "application/json",
                         "X-CSRF-TOKEN": csrfToken
                     },
-                    beforeSend() {
-                        $(".submit-review").prop("disabled", true).html(
-                            "<span class=\"spinner-border spinner-border-sm align-middle\" role=\"status\" aria-hidden=\"true\"></span> " 
-                            + _l("web.home.submitting") + ".."
-                        );
-                    },
-                    success(resp) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        $(".submit-review").prop("disabled", false).html(_l("web.home.submit_review"));
-                        $reviewForm[0].reset();
-                        $(".service_ratings, .location_ratings, .facility_ratings, .value_for_money_ratings, .cleanliness_ratings").prop("checked", false);
-                        
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#addReviewModal").modal("hide");
-                            fetchUserBookings();
-                        }
-                    },
-                    error(error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        $(".submit-review").prop("disabled", false).html(_l("web.home.submit_review"));
-
-                        if (error?.responseJSON?.code === 422) {
-                            const { errors } = error.responseJSON;
-                            Object.keys(errors).forEach((key) => {
-                                $(`#${key}`).addClass("is-invalid");
-                                $(`#${key}_error`).text(errors[key][0]);
-                            });
-                        } else {
-                            showToast("error", error?.responseJSON?.message || "Something went wrong");
-                        }
-                    }
+                    success: handleSuccess,
+                    error: handleError
                 });
             }
-      });
-})();
+        });
+    })();
 
 const fetchUserBookings = (callback = null) => {
     const status = $(".status_filter.active").data("status") || "";
@@ -367,25 +366,30 @@ const createBookingCard = (booking) => {
 
 const formatStatusLabel = (status) => {
     const labels = {
-    1: "warning",
-    2: "success",
-    3: "danger",
-    4: "secondary",
-    5: "success",
-    6: "danger"
+        1: "warning",
+        2: "success",
+        3: "danger",
+        4: "secondary",
+        5: "success",
+        6: "danger"
     };
 
     const texts = {
-    1: "inprogress",
-    2: "confirmed",
-    3: "rejected",
-    4: "booked",
-    5: "completed",
-    6: "cancelled"
+        1: "inprogress",
+        2: "confirmed",
+        3: "rejected",
+        4: "booked",
+        5: "completed",
+        6: "cancelled"
     };
 
-    return `<span class="badge badge-light-${labels[status] ?? "dark"}">${_l(`web.common.${texts[status] ?? "-"}`)}</span>`;
+    const labelClass = labels[status] ?? "dark";
+    const labelText = texts[status] ?? "-";
+    const localizedText = _l(`web.common.${labelText}`);
+
+    return `<span class="badge badge-light-${labelClass}">${localizedText}</span>`;
 };
+
 // Utility Functions
 const ucfirst = str => str?.charAt(0).toUpperCase() + str.slice(1);
 const formatDrivingType = type => type?.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
@@ -403,26 +407,23 @@ const renderButtons = (data) => {
 
     switch (data.status) {
         case 4:
-            html += `<a href="javascript:void(0);" id="cancel_booking" data-id="${data.id}" class="btn me-2 btn-sm btn-secondary">
+            html += `<a href="#!" id="cancel_booking" data-id="${data.id}" class="btn me-2 btn-sm btn-secondary">
                         ${_l("web.common.cancel")} ${_l("web.user.booking")}
                     </a>`;
             if (showStartRideButton) {
-                html += `<a href="javascript:void(0);" id="start_ride" data-id="${data.id}" class="btn btn-sm btn-primary">
+                html += `<a href="#!" id="start_ride" data-id="${data.id}" class="btn btn-sm btn-primary">
                             ${_l("web.user.start_ride")}
                         </a>`;
             }
             break;
         case 1:
-            html += `<a href="javascript:void(0);" id="complete_booking" data-id="${data.id}" class="btn btn-sm btn-primary">
+            html += `<a href="#!" id="complete_booking" data-id="${data.id}" class="btn btn-sm btn-primary">
                         ${_l("web.user.complete_ride")}
                      </a>`;
             break;
-        default:
-            html = "";
-            break;
     }
 
-    document.querySelector(".modal_footer").innerHTML = html;
+    return html;
 };
 
 // Fetch & Show Booking Details

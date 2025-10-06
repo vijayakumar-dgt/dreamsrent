@@ -336,7 +336,7 @@
                                 </div>
                                 <div class="progress-percent" id="avg_service_ratings">0.0</div>
                             </div>
-                            
+
                             <div class="progress-info">
                                 <h6>{{ __('web.user.location') }}</h6>
                                 <div class="progress">
@@ -344,7 +344,7 @@
                                 </div>
                                 <div class="progress-percent" id="avg_location_ratings">0.0</div>
                             </div>
-                            
+
                             <div class="progress-info">
                                 <h6>{{ __('web.home.value_for_money') }}</h6>
                                 <div class="progress">
@@ -352,7 +352,7 @@
                                 </div>
                                 <div class="progress-percent" id="avg_value_for_money_ratings">0.0</div>
                             </div>
-                            
+
                             <div class="progress-info">
                                 <h6>{{ __('web.home.facilities') }}</h6>
                                 <div class="progress">
@@ -657,7 +657,7 @@
                     </div>
                     <div class="modal-form-group">
                         <label for="enquiry_phone">{{ __('web.home.phone_number') }} <em class="text-danger">*</em></label>
-                        <input type="text" class="form-control" name="enquiry_phone" id="enquiry_phone" placeholder="{{__('web.home.enter_phone_number')}}" value="{{ Auth::guard('web')->user()->phone_number ?? '' }}">
+                        <input type="text" class="form-control" name="enquiry_phone" id="enquiry_phone" placeholder="{{__('web.home.enter_phone_number')}}" value="{{ Auth::guard('web')->user()->phone_number ?? '' }}" data-phone="{{ Auth::guard('web')->user()->phone_number ?? '' }}">
                         <input type="hidden" name="international_phone_number" id="international_phone_number" class="international_phone_number">
                         <span class="error-text text-danger" id="enquiry_phone_error"></span>
                     </div>

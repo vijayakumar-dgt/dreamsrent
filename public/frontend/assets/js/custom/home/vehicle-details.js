@@ -6,6 +6,8 @@
 
     let _pricing_type;
     let _vehicleDetails;
+    let isRtl = ($("body").data("dir") || "").toLowerCase() === "rtl";
+    let initialPhoneNumber = null;
 
     $(document).ready(function () {
         fetchVehicleDetails();
@@ -14,28 +16,11 @@
 
         $("#enquiryForm").validate({
             rules: {
-                enquiry_name: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 30,
-                },
-                enquiry_email: {
-                    required: true,
-                    email: true,
-                    maxlength: 50,
-                },
-                enquiry_phone: {
-                    required: true,
-                    minlength: 10,
-                    maxlength: 15,
-                },
-                enquiry_message: {
-                    required: true,
-                    minlength: 3,
-                },
-                terms: {
-                    required: true,
-                },
+                enquiry_name: { required: true, minlength: 3, maxlength: 30 },
+                enquiry_email: { required: true, email: true, maxlength: 50 },
+                enquiry_phone: { required: true, minlength: 10, maxlength: 15 },
+                enquiry_message: { required: true, minlength: 3 },
+                terms: { required: true },
             },
             messages: {
                 enquiry_name: {
@@ -57,12 +42,10 @@
                     required: _l("web.home.message_required"),
                     minlength: _l("web.home.message_minlength"),
                 },
-                terms: {
-                    required: _l("web.home.terms_required"),
-                },
+                terms: { required: _l("web.home.terms_required") },
             },
             errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "_error";
+                const errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
@@ -70,8 +53,7 @@
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
-                $("#" + errorId).text("");
+                $("#" + element.id + "_error").text("");
             },
             onkeyup: function (element) {
                 $(element).valid();
@@ -79,48 +61,7 @@
             onchange: function (element) {
                 $(element).valid();
             },
-            submitHandler: function (form) {
-                let enquiryFormData = new FormData(form);
-                $("#enquiryForm .submitbtn").html(
-                    `<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                        "web.common.saving"
-                    )}..`
-                );
-                $("#enquiryForm .submitbtn").attr("disabled", true);
-                $.ajax({
-                    type: "POST",
-                    url: "/user/store_enquiry",
-                    data: enquiryFormData,
-                    processData: false,
-                    contentType: false,
-                    success: function (resp) {
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#enquiry").modal("hide");
-                        }
-                        $("#enquiryForm")[0].reset();
-                        $("#enquiry .submitbtn").text(_l("web.common.submit"));
-                        $("#enquiry .submitbtn").prop("disabled", false);
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                        $("#enquiry .submitbtn").text(_l("web.common.submit"));
-                        $("#enquiry .submitbtn").prop("disabled", false);
-                    },
-                });
-            },
+            submitHandler: submitEnquiry,
         });
 
         function toggleContainer() {
@@ -258,148 +199,170 @@
             "blur",
             calculatePrice
         );
-
-        $("#validate_btn").on("click", function (e) {
-            e.preventDefault(); // Prevent default form submission
-
-            let errors = [];
-
-            // Validate price type
-            let selectedPriceType = $("input[name='price_rate']:checked").data(
-                "price-type"
-            );
-            if (!selectedPriceType) {
-                errors.push(_l("web.home.select_price_type"));
-            }
-
-            // Validate pickup/return locations based on rent type
-            let selectedRentType = $("input[name='rent_type']:checked").attr(
-                "id"
-            );
-            let pickupLocation = "",
-                returnLocation = "";
-
-            if (selectedRentType === "location_delivery") {
-                pickupLocation = $("#delivery_location").val();
-                returnLocation = $("#delivery_return_location").val();
-            } else if (selectedRentType === "location_pickup") {
-                pickupLocation = $("#pickup_location").val();
-                returnLocation = $("#pickup_return_location").val();
-            }
-
-            if (!pickupLocation || !returnLocation) {
-                errors.push(_l("web.home.enter_pickup_and_return_locations"));
-            }
-
-            // Validate date/time for all price types
-            let pickupDate = $("#pickup_date").val();
-            let pickupTime = $("#pickup_time").val();
-            let returnDate = $("#return_date").val();
-            let returnTime = $("#return_time").val();
-
-            let pickupDateTime, returnDateTime;
-
-            if (!pickupDate || !pickupTime || !returnDate || !returnTime) {
-                errors.push(_l("web.home.all_date_time_fields_are_required"));
-            } else {
-                pickupDateTime = moment(
-                    pickupDate + " " + pickupTime,
-                    "DD-MM-YYYY HH:mm"
-                );
-                returnDateTime = moment(
-                    returnDate + " " + returnTime,
-                    "DD-MM-YYYY HH:mm"
-                );
-
-                if (!pickupDateTime.isValid() || !returnDateTime.isValid()) {
-                    errors.push(_l("web.home.invalid_date_or_time_format"));
-                } else {
-                    if (returnDateTime.isBefore(pickupDateTime, "minute")) {
-                        errors.push(
-                            _l(
-                                "web.home.return_date_cannot_be_before_pickup_date"
-                            )
-                        );
-                    }
-
-                    if (
-                        selectedPriceType === "daily" &&
-                        returnDateTime.diff(pickupDateTime, "hours") < 2
-                    ) {
-                        errors.push(_l("web.home.duration_must_be_2_hours"));
-                    }
-                }
-            }
-
-            // Show errors if any
-            if (errors.length > 0) {
-                errors.forEach((error) => showToast("error", error));
-                return;
-            }
-
-            // Format datetime (set seconds as 00)
-            let formattedPickup = pickupDateTime.format("YYYY-MM-DD HH:mm:00");
-            let formattedReturn = returnDateTime.format("YYYY-MM-DD HH:mm:00");
-            let vehicleId = $("#vehicle_id").val();
-
-            $("#validate_btn")
-                .text(_l("web.home.checking_availability"))
-                .prop("disabled", true);
-
-            // AJAX call to check booking availability
-            $.ajax({
-                url: "/api/check-booking",
-                type: "POST",
-                data: {
-                    start_datetime: formattedPickup,
-                    end_datetime: formattedReturn,
-                    vehicle_id: vehicleId,
-                },
-                headers: {
-                    Accept: "application/json",
-                    "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr(
-                        "content"
-                    ),
-                },
-                success: function (response) {
-                    if (response.status === "success") {
-                        $("#validateVehicleBook").submit();
-                    } else {
-                        showToast(
-                            "error",
-                            response.message ||
-                                _l(
-                                    "web.home.vehicle_not_available_for_selected_time"
-                                )
-                        );
-                        $("#validate_btn").text("Book").prop("disabled", false);
-                    }
-                },
-                error: function () {
-                    showToast("error", _l("web.common.default_error"));
-                    $("#validate_btn").text("Book").prop("disabled", false);
-                },
-            });
-        });
-
-        const $userPhoneInput = $("#enquiry_phone");
-        const $intlPhoneInput = $("#international_phone_number");
-        const $userProfileForm = $("#enquiryForm");
-
-        if ($userPhoneInput.length && $userProfileForm.length) {
-            const iti = window.intlTelInput($userPhoneInput[0], {
-                utilsScript: `${window.location.origin}/backend/assets/plugins/intltelinput/js/utils.js`,
-                separateDialCode: true,
-            });
-
-            $userPhoneInput.addClass("iti");
-            $userPhoneInput.parent().addClass("intl-tel-input");
-
-            $userPhoneInput.on("keyup", function () {
-                $intlPhoneInput.val(iti.getNumber());
-            });
-        }
     });
+
+    // =======================
+    // Helper Functions
+    // =======================
+    function validatePriceType(errors) {
+        const selectedPriceType = $("input[name='price_rate']:checked").data("price-type");
+        if (!selectedPriceType) errors.push(_l("web.home.select_price_type"));
+        return selectedPriceType;
+    }
+
+    function getLocations(errors) {
+        const selectedRentType = $("input[name='rent_type']:checked").attr("id");
+        let pickup = "", returnLoc = "";
+        if (selectedRentType === "location_delivery") {
+            pickup = $("#delivery_location").val();
+            returnLoc = $("#delivery_return_location").val();
+        } else if (selectedRentType === "location_pickup") {
+            pickup = $("#pickup_location").val();
+            returnLoc = $("#pickup_return_location").val();
+        }
+        if (!pickup || !returnLoc) errors.push(_l("web.home.enter_pickup_and_return_locations"));
+        return { pickup, returnLoc };
+    }
+
+    function validateDateTimes(selectedPriceType, errors) {
+        const pickupDate = $("#pickup_date").val();
+        const pickupTime = $("#pickup_time").val();
+        const returnDate = $("#return_date").val();
+        const returnTime = $("#return_time").val();
+
+        if (!pickupDate || !pickupTime || !returnDate || !returnTime) {
+            errors.push(_l("web.home.all_date_time_fields_are_required"));
+            return {};
+        }
+
+        const pickupDateTime = moment(pickupDate + " " + pickupTime, "DD-MM-YYYY HH:mm");
+        const returnDateTime = moment(returnDate + " " + returnTime, "DD-MM-YYYY HH:mm");
+
+        if (!pickupDateTime.isValid() || !returnDateTime.isValid()) {
+            errors.push(_l("web.home.invalid_date_or_time_format"));
+            return {};
+        }
+
+        if (returnDateTime.isBefore(pickupDateTime, "minute")) {
+            errors.push(_l("web.home.return_date_cannot_be_before_pickup_date"));
+        }
+
+        if (selectedPriceType === "daily" && returnDateTime.diff(pickupDateTime, "hours") < 2) {
+            errors.push(_l("web.home.duration_must_be_2_hours"));
+        }
+
+        return { pickupDateTime, returnDateTime };
+    }
+
+    function handleAvailabilitySuccess(response, $btn) {
+        if (response.status === "success") {
+            $("#validateVehicleBook").submit();
+        } else {
+            showToast("error", response.message || _l("web.home.vehicle_not_available_for_selected_time"));
+            $btn.text("Book").prop("disabled", false);
+        }
+    }
+
+    function handleAvailabilityError($btn) {
+        showToast("error", _l("web.common.default_error"));
+        $btn.text("Book").prop("disabled", false);
+    }
+
+    // =======================
+    // Main Click Handler
+    // =======================
+    $(document).on("click", "#validate_btn", function (e) {
+        e.preventDefault();
+
+        const errors = [];
+
+        // Validate fields
+        const selectedPriceType = validatePriceType(errors);
+        getLocations(errors);
+        const { pickupDateTime, returnDateTime } = validateDateTimes(selectedPriceType, errors);
+
+        // Show errors if any
+        if (errors.length > 0) {
+            errors.forEach((err) => showToast("error", err));
+            return;
+        }
+
+        // Format datetime for API
+        const formattedPickup = pickupDateTime.format("YYYY-MM-DD HH:mm:00");
+        const formattedReturn = returnDateTime.format("YYYY-MM-DD HH:mm:00");
+        const vehicleId = $("#vehicle_id").val();
+        const $btn = $("#validate_btn").text(_l("web.home.checking_availability")).prop("disabled", true);
+
+        // AJAX call
+        $.ajax({
+            url: "/api/check-booking",
+            type: "POST",
+            data: {
+                start_datetime: formattedPickup,
+                end_datetime: formattedReturn,
+                vehicle_id: vehicleId,
+            },
+            headers: {
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content"),
+            },
+            success: function (response) {
+                handleAvailabilitySuccess(response, $btn);
+            },
+            error: function () {
+                handleAvailabilityError($btn);
+            },
+        });
+    });
+
+    function handleEnquirySuccess(resp) {
+        if (resp.code === 200) {
+            showToast("success", resp.message);
+            $("#enquiry").modal("hide");
+        }
+        $("#enquiryForm")[0].reset();
+        $("#enquiry .submitbtn").text(_l("web.common.submit"));
+        $("#enquiry .submitbtn").prop("disabled", false);
+    }
+
+    function handleEnquiryError(error) {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+
+        if (error.responseJSON?.code === 422) {
+            $.each(error.responseJSON.errors, function (key, val) {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(val[0]);
+            });
+        } else {
+            showToast("error", error.responseJSON?.message || "Something went wrong");
+        }
+
+        $("#enquiry .submitbtn").text(_l("web.common.submit"));
+        $("#enquiry .submitbtn").prop("disabled", false);
+    }
+
+    function submitEnquiry(form) {
+        const enquiryFormData = new FormData(form);
+        const $submitBtn = $("#enquiryForm .submitbtn");
+
+        $submitBtn.html(
+            `<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
+                "web.common.saving"
+            )}..`
+        );
+        $submitBtn.attr("disabled", true);
+
+        $.ajax({
+            type: "POST",
+            url: "/user/store_enquiry",
+            data: enquiryFormData,
+            processData: false,
+            contentType: false,
+            success: handleEnquirySuccess,
+            error: handleEnquiryError,
+        });
+    }
 
     function fetchRecommendedVehicles() {
         $.ajax({
@@ -443,14 +406,13 @@
                     .data("DateTimePicker")
                     .date();
 
-                if (pickupDate && pickupDate.isSame(moment(), "day")) {
-                    $(".booking_timepicker")
-                        .data("DateTimePicker")
-                        .minDate(moment());
-                } else {
-                    $(".booking_timepicker")
-                        .data("DateTimePicker")
-                        .minDate(false);
+                const timepicker = $(".booking_timepicker").data("DateTimePicker");
+                if (timepicker) {
+                    if (pickupDate?.isSame(moment(), "day")) {
+                        timepicker.minDate(moment());
+                    } else {
+                        timepicker.minDate(false);
+                    }
                 }
 
                 if (pickupDate) {
@@ -803,36 +765,77 @@
         });
     }
 
-    $(document).on("click", ".review_reply_btn", function () {
-        $(".review_reply_box").empty();
-        let parentContainer = $(this).closest(".review-wraps");
-        let replyContainer = parentContainer.find(".review_reply_box");
-        let review_id = $(this).data("id");
+    // =======================
+    // Review Helper Functions
+    // =======================
+    function clearReplyFormErrors(formSelector = "#reply_review_form") {
+        $(".error-text").text("");
+        $(formSelector + " .form-control").removeClass("is-invalid is-valid");
+    }
 
-        replyContainer.html(`
-            <form id="reply_review_form">
-                <div class="input-group mt-3 reply-box">
-                    <textarea class="form-control reply-text" id="reply_comments" name="reply_comments" rows="1" placeholder="${_l(
-                        "web.home.write_a_reply"
-                    )}..."></textarea>
-                    <button class="btn btn-primary btn-sm send-reply" data-review-id="1">
-                    <i class="fa-solid fa-paper-plane"></i> ${_l(
-                        "web.home.send_reply"
-                    )}
-                    </button>
-                </div>
-                <span class="error-text text-danger" id="reply_comments_error"></span>
-            </form>
+    function disableReplyButton() {
+        $(".send-reply").attr("disabled", true).html(`
+            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
+                "web.common.sending"
+            )}..
         `);
-        $(".review_reply_box").not(replyContainer).slideUp();
-        replyContainer.slideToggle();
+    }
 
-        $("#reply_review_form").validate({
+    function enableReplyButton() {
+        $(".send-reply").removeAttr("disabled").html(_l("web.common.send_reply"));
+    }
+
+    function handleReplySuccess(resp) {
+        clearReplyFormErrors();
+        enableReplyButton();
+        $("#reply_review_form")[0].reset();
+
+        if (resp.code === 200) {
+            showToast("success", resp.message);
+            listReviews();
+        }
+    }
+
+    function handleReplyError(error) {
+        clearReplyFormErrors();
+        enableReplyButton();
+
+        if (error.responseJSON?.code === 422) {
+            $.each(error.responseJSON.errors, function (key, val) {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(val[0]);
+            });
+        } else {
+            showToast("error", error.responseJSON?.message || "Something went wrong");
+        }
+    }
+
+    function submitReplyForm(form, review_id) {
+        const formData = new FormData(form);
+        formData.append("review_id", review_id);
+        formData.append("vehicle_id", $("#vehicle_id").val());
+
+        disableReplyButton();
+
+        $.ajax({
+            type: "POST",
+            url: "/user/add-reply-review",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content"),
+            },
+            success: handleReplySuccess,
+            error: handleReplyError,
+        });
+    }
+
+    function initReplyFormValidation(formSelector, review_id) {
+        $(formSelector).validate({
             rules: {
-                reply_comments: {
-                    required: true,
-                    minlength: 3,
-                },
+                reply_comments: { required: true, minlength: 3 },
             },
             messages: {
                 reply_comments: {
@@ -840,99 +843,53 @@
                     minlength: _l("web.home.reply_comments_minlength"),
                 },
             },
-          errorPlacement: function (error, element) {
-                const errorId = element.attr("id") + "_error";
-
-                if (element.hasClass("select2-hidden-accessible")) {
-                    $("#" + errorId).text(error.text());
-                } else {
-                    $("#" + errorId).text(error.text());
-                }
+            errorPlacement: function (error, element) {
+                $("#" + element.attr("id") + "_error").text(error.text());
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
-                    $(element)
-                        .next(".select2-container")
-                        .addClass("is-invalid")
-                        .removeClass("is-valid");
+                    $(element).next(".select2-container").addClass("is-invalid").removeClass("is-valid");
                 }
                 $(element).addClass("is-invalid").removeClass("is-valid");
             },
             unhighlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
-                    $(element)
-                        .next(".select2-container")
-                        .removeClass("is-invalid")
-                        .addClass("is-valid");
+                    $(element).next(".select2-container").removeClass("is-invalid").addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
-                $("#" + errorId).text("");
+                $("#" + element.id + "_error").text("");
             },
-            onkeyup: function (element) {
-                $(element).valid();
-            },
-            onchange: function (element) {
-                $(element).valid();
-            },
-            submitHandler: function (form) {
-                let formData = new FormData(form);
-                formData.append("review_id", review_id);
-                formData.append("vehicle_id", $("#vehicle_id").val());
-
-                $.ajax({
-                    type: "POST",
-                    url: "/user/add-reply-review",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        Accept: "application/json",
-                        "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr(
-                            "content"
-                        ),
-                    },
-                    beforeSend: function () {
-                        $(".send-reply").attr("disabled", true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                                "web.common.sending"
-                            )}..
-                        `);
-                    },
-                    success: function (resp) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        $(".send-reply")
-                            .removeAttr("disabled")
-                            .html(_l("web.common.send_reply"));
-                        $("#reply_review_form")[0].reset();
-
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            listReviews();
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        $(".send-reply")
-                            .removeAttr("disabled")
-                            .html(_l("web.common.send_reply"));
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
-                });
-            },
+            onkeyup: function (element) { $(element).valid(); },
+            onchange: function (element) { $(element).valid(); },
+            submitHandler: function (form) { submitReplyForm(form, review_id); },
         });
+    }
+
+    $(document).on("click", ".review_reply_btn", function () {
+        $(".review_reply_box").empty();
+        const parentContainer = $(this).closest(".review-wraps");
+        const replyContainer = parentContainer.find(".review_reply_box");
+        const review_id = $(this).data("id");
+
+        replyContainer.html(`
+            <form id="reply_review_form">
+                <div class="input-group mt-3 reply-box">
+                    <textarea class="form-control reply-text" id="reply_comments" name="reply_comments" rows="1" placeholder="${_l(
+                        "web.home.write_a_reply"
+                    )}..."></textarea>
+                    <button class="btn btn-primary btn-sm send-reply" type="submit" data-review-id="${review_id}">
+                        <i class="fa-solid fa-paper-plane"></i> ${_l("web.home.send_reply")}
+                    </button>
+                </div>
+                <span class="error-text text-danger" id="reply_comments_error"></span>
+            </form>
+        `);
+
+        $(".review_reply_box").not(replyContainer).slideUp();
+        replyContainer.slideToggle();
+
+        // Initialize validation after form is added to DOM
+        initReplyFormValidation("#reply_review_form", review_id);
     });
 
     $(document).on("click", ".send-reply", function () {
@@ -1100,10 +1057,7 @@
     }
 
     $(document).on("click", ".view-policies", function () {
-        let policies =
-            _vehicleDetails && _vehicleDetails.multiple_vehicle_policy
-                ? _vehicleDetails.multiple_vehicle_policy
-                : [];
+        let policies = _vehicleDetails?.multiple_vehicle_policy ?? [];
         if (policies.length > 0) {
             $.each(policies, function (index, policy) {
                 window.open(policy, "_blank");
@@ -1337,12 +1291,17 @@
         const currency = vehicle.currency;
         const currency_position = "after";
 
-        const formatPrice = (price) =>
-            price
-                ? currency_position === "before"
-                    ? `${currency}${price}`
-                    : `${price}${currency}`
-                : "";
+        const formatPrice = (price) => {
+            if (!price) {
+                return "";
+            }
+
+            if (currency_position === "before") {
+                return `${currency}${price}`;
+            }
+
+            return `${price}${currency}`;
+        };
 
         const tbody = document.querySelector("#tarrifTable tbody");
 
@@ -1453,23 +1412,22 @@
             return "";
         }
 
+        let wishlistButton = "";
+        if (vehicle.authenticated) {
+            wishlistButton = `
+                <button type="button" data-id="${vehicle.id}"
+                    class="fav-icon border-0 wishlist-icon ${vehicle.wishlist ? "selected" : ""}">
+                    <i class="fa-regular fa-heart"></i>
+                </button>`;
+        }
+
         const vehicleInfo = `
             <div class="pro-info">
                 <div class="">
                     <span class="badge-km d-none">
                         <i class="fa-solid fa-person-walking"></i> 4.2 Km Away
                     </span>
-                    ${
-                        vehicle.authenticated
-                            ? `<button type="button" data-id="${
-                                  vehicle.id
-                              }" class="fav-icon border-0 wishlist-icon ${
-                                  vehicle.wishlist ? "selected" : ""
-                              }">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>`
-                            : ""
-                    }
+                    ${wishlistButton}
                 </div>
             </div>`;
 
@@ -1498,10 +1456,6 @@
     }
 
     function reinitializeSleek() {
-        let isRtl =
-            $("body").data("dir") && $("body").data("dir") == "rtl"
-                ? true
-                : false;
         if ($(".detail-bigimg").length > 0) {
             $(".detail-bigimg").slick({
                 slidesToShow: 1,
@@ -1528,7 +1482,6 @@
     }
 
     function reInitializeCarousel(className) {
-        let isRtl = $("body").data("dir") && $("body").data("dir") == "rtl";
         $(className).owlCarousel({
             loop: true,
             margin: 24,
@@ -1586,6 +1539,41 @@
     });
 
     $(document).on("click", "#enquire_us", function () {
+        const phoneNumber = $("#enquiry_phone").data('phone');
+        const phoneInput = document.querySelector("#enquiry_phone");
+        const hiddenInput = document.querySelector("#international_phone_number");
+
+        if ($(phoneInput).data("itiInstance")) {
+            $(phoneInput).data("itiInstance").destroy();
+        }
+        const iti = intlTelInput(phoneInput, {
+            utilsScript: window.location.origin + "/backend/assets/plugins/intltelinput/js/utils.js",
+            separateDialCode: true,
+            placeholderNumberType: "",
+            autoPlaceholder: "off",
+            formatOnDisplay: false,
+        });
+        $(phoneInput).data("itiInstance", iti);
+
+        if (phoneNumber) {
+            iti.setNumber(phoneNumber);
+            hiddenInput.value = iti.getNumber();
+            initialPhoneNumber = phoneNumber;
+        }
+        const updateHiddenPhoneNumber = () => {
+            const currentPhoneNumber = iti.getNumber();
+            if (currentPhoneNumber !== initialPhoneNumber) {
+                hiddenInput.value = currentPhoneNumber.trim();
+            }
+        };
+
+        phoneInput.addEventListener("input", updateHiddenPhoneNumber);
+        phoneInput.addEventListener("countrychange", updateHiddenPhoneNumber);
+
+        if (!hiddenInput.value) {
+            hiddenInput.value = initialPhoneNumber;
+        }
+
         $("#enquiry").modal("show");
     });
 })();

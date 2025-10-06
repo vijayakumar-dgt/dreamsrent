@@ -42,6 +42,8 @@
         fetchVehicles();
     }, 200);
     function fetchVehicles() {
+        $("html, body").animate({ scrollTop: 0 }, "fast");
+
         const $pickupSelected = $("#pickup-suggestions li.selected");
         const $dropSelected = $("#drop-suggestions li.selected");
         const $pickupLocation = $("#pickuplocation");
@@ -358,200 +360,149 @@
     function createVehicleListCard(vehicle) {
         "use strict";
 
-        let priceType, priceValue;
-        const currency = vehicle.currency;
+        const { priceType, priceValue } = extractVehiclePrice(vehicle);
+        const wishlistButton = buildWishlistButton(vehicle);
+        const listingImage = buildListingImage(vehicle, wishlistButton);
+        const featureList = buildFeatureList(vehicle);
+        const listingContent = buildListingContent(vehicle, priceType, priceValue, featureList);
+        const tag = buildVehicleTag(vehicle);
 
-        // Extract first price entry if exists
-        if (vehicle.price.length > 0) {
-            const firstPrice = vehicle.price[0];
-            [priceType, priceValue] = Object.entries(firstPrice)[0];
-        }
-
-        // Create HTML for multiple images
-        const vehicleImages = vehicle.multiple_vehicle_images
-            .map(
-                (img) => `
-        <div class="slide-images">
-            <a href="/vehicle-details/${
-                vehicle.slug
-            }?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
-                <img src="${img}" class="img-fluid" alt="${ucfirst(
-                    vehicle.name ?? ""
-                )}">
-            </a>
-        </div>`
-            )
-            .join("");
-
-        // Construct image block (slider or single)
-        const listingImage = vehicle.has_multiple_image
-            ? `
-            <div class="blog-img">
-                <div class="img-slider owl-carousel">
-                    ${vehicleImages}
-                </div>
-                <div class="fav-item justify-content-end">
-                    <span class="img-count"><i class="feather-image"></i>04</span>
-                    ${
-                        vehicle.authenticated
-                            ? `
-                        <button type="button" class="fav-icon wishlist-icon ${
-                            vehicle.wishlist ? "selected" : ""
-                        }" data-id="${vehicle.id}">
-                            <i class="feather-heart"></i>
-                        </button>`
-                            : ""
-                    }
-                </div>
-            </div>`
-            : `
-            <div class="blog-img">
-                <a href="/vehicle-details/${
-                    vehicle.slug
-                }?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
-                    <img src="${
-                        vehicle.multiple_vehicle_images[0]
-                    }" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
-                </a>
-                <div class="fav-item justify-content-end">
-                    ${
-                        vehicle.authenticated
-                            ? `
-                        <button type="button" class="fav-icon wishlist-icon ${
-                            vehicle.wishlist ? "selected" : ""
-                        }" data-id="${vehicle.id}">
-                            <i class="feather-heart"></i>
-                        </button>`
-                            : ""
-                    }
+        return `
+            <div class="listview-car">
+                <div class="card">
+                    <div class="blog-widget d-flex">
+                        ${listingImage}
+                        ${listingContent}
+                        ${tag}
+                    </div>
                 </div>
             </div>`;
+    }
 
-        // Attribute icon depending on vehicle type
-        const attrIcon =
-            vehicle.category === "Car"
-                ? `<li><span><img src="/frontend/assets/img/icons/door-icon.svg" alt="${
-                      vehicle.num_doors ?? 0
-                  }"></span><p>${vehicle.num_doors ?? 0}</p></li>`
-                : `<li><span><img src="/frontend/assets/img/icons/color.svg" alt="${
-                      vehicle.color ?? ""
-                  }"></span><p>${vehicle.color ?? ""}</p></li>`;
+    /* ---------- Helper Functions ---------- */
 
-        // Feature list block
-        const featureList = `
-        <ul>
-            <li><span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${ucfirst(
-                vehicle.transmission ?? ""
-            )}"></span><p>${ucfirst(vehicle.transmission ?? "")}</p></li>
-            <li><span><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="${
-                vehicle.mileage ? Math.ceil(vehicle.mileage) : 0
-            } KM"></span><p>${
-            vehicle.mileage ? Math.ceil(vehicle.mileage) : 0
-        } KM</p></li>
-            <li><span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${ucfirst(
-                vehicle.fuel_type ?? ""
-            )}"></span><p>${ucfirst(vehicle.fuel_type ?? "")}</p></li>
-            ${attrIcon}
-            <li><span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="${_l(
-                "web.home.persons"
-            )}"></span><p>${vehicle.passenger_capacity ?? 0} ${_l(
-            "web.home.persons"
-        )}</p></li>
-            <li><span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${
-                vehicle.year ?? ""
-            }"></span><p>${vehicle.year ?? ""}</p></li>
-        </ul>`;
+    // Extract first available price
+    function extractVehiclePrice(vehicle) {
+        if (vehicle.price.length > 0) {
+            const [type, value] = Object.entries(vehicle.price[0])[0];
+            return { priceType: type, priceValue: value };
+        }
+        return { priceType: "", priceValue: "" };
+    }
 
-        const vehicleRating = vehicle.rating ?? 0;
+    // Build wishlist button
+    function buildWishlistButton(vehicle) {
+        if (!vehicle.authenticated) return "";
+        const selectedClass = vehicle.wishlist ? "selected" : "";
+        return `
+            <button type="button" class="fav-icon wishlist-icon ${selectedClass}" data-id="${vehicle.id}">
+                <i class="feather-heart"></i>
+            </button>`;
+    }
 
-        // Listing content block
-        const listingContent = `
-        <div class="bloglist-content w-100">
-            <div class="card-body">
-                <div class="blog-list-head d-flex">
-                    <div class="blog-list-title">
-                        <h3><a href="/vehicle-details/${
-                            vehicle.slug
-                        }?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">${ucfirst(
-            vehicle.name
-        )}</a></h3>
-                        <h6>${_l("web.common.category")} : <span>${ucfirst(
-            vehicle.brand ?? ""
-        )}</span></h6>
+    // Build listing image block
+    function buildListingImage(vehicle, wishlistButton) {
+        const imagesHtml = vehicle.multiple_vehicle_images
+            .map(img => `
+                <div class="slide-images">
+                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
+                        <img src="${img}" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
+                    </a>
+                </div>`)
+            .join("");
+
+        if (vehicle.has_multiple_image) {
+            return `
+                <div class="blog-img">
+                    <div class="img-slider owl-carousel">${imagesHtml}</div>
+                    <div class="fav-item justify-content-end">
+                        <span class="img-count"><i class="feather-image"></i>04</span>
+                        ${wishlistButton}
                     </div>
-                    <div class="blog-list-rate">
-                        <div class="list-rating">
-                            ${(() => {
-                                let starsHtml = "";
-                                const filledStars = Math.floor(vehicleRating);
-                                for (let i = 1; i <= 5; i++) {
-                                    starsHtml += `<i class="fas fa-star ${
-                                        i <= filledStars ? "filled" : ""
-                                    }"></i>`;
-                                }
-                                return starsHtml;
-                            })()}
-                            <span>(${vehicleRating.toFixed(1)}) ${
-            vehicle.review_count || 0
-        } ${_l("web.home.reviews")}</span>
-                        </div>
-                        <h6>${currency}${priceValue} <span>/ ${ucfirst(
-            priceType ?? ""
-        )}</span></h6>
-                    </div>
-                </div>
-                <div class="listing-details-group">${featureList}</div>
-                <div class="blog-list-head list-head-bottom d-flex">
-                    <div class="blog-list-title">
-                        <div class="title-bottom">
-                            <div class="car-list-icon">
-                                <img src="${
-                                    vehicle.avatar_image ??
-                                    "/frontend/assets/img/profiles/avatar-01.jpg"
-                                }" alt="user">
-                            </div>
-                            <div class="address-info">
-                                <h6><i class="feather-map-pin"></i>${ucfirst(
-                                    vehicle.location ?? ""
-                                )}</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="listing-button">
-                        <a href="/vehicle-details/${
-                            vehicle.slug
-                        }?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}" class="btn btn-order">
-                            <span><i class="feather-calendar me-2"></i></span>${_l(
-                                "web.home.rent_now"
-                            )}
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-
-        // Optional tag block
-        let tag = "";
-        if (vehicle.is_featured) {
-            tag = `<div class="feature-text"><span class="bg-danger">${_l(
-                "web.common.featured"
-            )}</span></div>`;
-        } else if (vehicle.is_top_rated) {
-            tag = `<div class="feature-text"><span class="bg-warning">${_l(
-                "web.common.top_rated"
-            )}</span></div>`;
+                </div>`;
         }
 
         return `
-        <div class="listview-car">
-            <div class="card">
-                <div class="blog-widget d-flex">
-                    ${listingImage}
-                    ${listingContent}
-                    ${tag}
+            <div class="blog-img">
+                <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
+                    <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
+                </a>
+                <div class="fav-item justify-content-end">${wishlistButton}</div>
+            </div>`;
+    }
+
+    // Build attribute icon (door count vs color)
+    function buildAttrIcon(vehicle) {
+        if (vehicle.category === "Car") {
+            return `<li><span><img src="/frontend/assets/img/icons/door-icon.svg" alt="${vehicle.num_doors ?? 0}"></span><p>${vehicle.num_doors ?? 0}</p></li>`;
+        }
+        return `<li><span><img src="/frontend/assets/img/icons/color.svg" alt="${vehicle.color ?? ""}"></span><p>${vehicle.color ?? ""}</p></li>`;
+    }
+
+    // Build feature list
+    function buildFeatureList(vehicle) {
+        return `
+            <ul>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${ucfirst(vehicle.transmission ?? "")}"></span><p>${ucfirst(vehicle.transmission ?? "")}</p></li>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} KM"></span><p>${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} KM</p></li>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${ucfirst(vehicle.fuel_type ?? "")}"></span><p>${ucfirst(vehicle.fuel_type ?? "")}</p></li>
+                ${buildAttrIcon(vehicle)}
+                <li><span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="${_l("web.home.persons")}"></span><p>${vehicle.passenger_capacity ?? 0} ${_l("web.home.persons")}</p></li>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${vehicle.year ?? ""}"></span><p>${vehicle.year ?? ""}</p></li>
+            </ul>`;
+    }
+
+    // Build rating stars
+    function buildRatingStars(rating) {
+        let starsHtml = "";
+        const filledStars = Math.floor(rating);
+        for (let i = 1; i <= 5; i++) {
+            starsHtml += `<i class="fas fa-star ${i <= filledStars ? "filled" : ""}"></i>`;
+        }
+        return starsHtml;
+    }
+
+    // Build listing content
+    function buildListingContent(vehicle, priceType, priceValue, featureList) {
+        const currency = vehicle.currency;
+        const vehicleRating = vehicle.rating ?? 0;
+
+        return `
+            <div class="bloglist-content w-100">
+                <div class="card-body">
+                    <div class="blog-list-head d-flex">
+                        <div class="blog-list-title">
+                            <h3><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">${ucfirst(vehicle.name)}</a></h3>
+                            <h6>${_l("web.common.category")} : <span>${ucfirst(vehicle.brand ?? "")}</span></h6>
+                        </div>
+                        <div class="blog-list-rate">
+                            <div class="list-rating">
+                                ${buildRatingStars(vehicleRating)}
+                                <span>(${vehicleRating.toFixed(1)}) ${vehicle.review_count || 0} ${_l("web.home.reviews")}</span>
+                            </div>
+                            <h6>${currency}${priceValue} <span>/ ${ucfirst(priceType ?? "")}</span></h6>
+                        </div>
+                    </div>
+                    <div class="listing-details-group">${featureList}</div>
+                    <div class="blog-list-head list-head-bottom d-flex">
+                        <div class="blog-list-title">
+                            <div class="title-bottom">
+                                <div class="car-list-icon">
+                                    <img src="${vehicle.avatar_image ?? "/frontend/assets/img/profiles/avatar-01.jpg"}" alt="user">
+                                </div>
+                                <div class="address-info">
+                                    <h6><i class="feather-map-pin"></i>${ucfirst(vehicle.location ?? "")}</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="listing-button">
+                            <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}" class="btn btn-order">
+                                <span><i class="feather-calendar me-2"></i></span>${_l("web.home.rent_now")}
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>`;
+            </div>`;
     }
 
     function ucfirst(str) {
@@ -560,7 +511,7 @@
     }
 
     /**
-     * Creates a grid card HTML structure for a vehicle item.
+     * Generates a grid card HTML structure for a vehicle item.
      * @param {Object} vehicle - The vehicle object.
      * @returns {string} HTML string for the vehicle grid card.
      */
@@ -568,178 +519,148 @@
         const currency = vehicle.currency ?? "";
         const vehicleName = ucfirst(vehicle.name ?? "");
         const allowBooking = $("#general-settings").attr("data-allow_booking");
-        let price_type = "";
-        let price_value = "";
 
-        if (vehicle.price.length > 0) {
-            const firstPrice = vehicle.price[0];
-            [price_type, price_value] = Object.entries(firstPrice)[0];
-        }
+        const { priceType, priceValue } = extractVehiclePrice(vehicle);
+        const listingImage = buildVehicleGridImage(vehicle);
+        const featureList = buildVehicleFeatureList(vehicle);
+        const ratingStars = buildVehicleRatingStars(vehicle.rating ?? 0);
 
+        const listingContent = buildVehicleGridContent(
+            vehicle,
+            vehicleName,
+            currency,
+            priceType,
+            priceValue,
+            featureList,
+            ratingStars,
+            allowBooking
+        );
+
+        const tag = buildVehicleTag(vehicle);
+
+        return `
+            <div class="col-xxl-4 col-lg-6 col-md-6 col-12">
+                <div class="listing-item">
+                    ${listingImage}
+                    ${listingContent}
+                    ${tag}
+                </div>
+            </div>
+        `;
+    }
+
+    /* ---------- Helper Functions ---------- */
+    // Build grid image section
+    function buildVehicleGridImage(vehicle) {
         const vehicleImages = vehicle.multiple_vehicle_images
-            .map(
-                (img) => `
-      <div class="slide-images">
-        <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
-          <img src="${img}" class="img-fluid" alt="${vehicleName}">
-        </a>
-      </div>
-    `
-            )
+            .map(img => `
+                <div class="slide-images">
+                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
+                        <img src="${img}" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
+                    </a>
+                </div>`)
             .join("");
 
-        const hasMultipleImages = vehicle.has_multiple_image;
-        const authWishlistBtn = vehicle.authenticated
-            ? `<button type="button" class="fav-icon wishlist-icon ${
-                  vehicle.wishlist ? "selected" : ""
-              }" data-id="${vehicle.id}"><i class="feather-heart"></i></button>`
+        let selectedClass = "";
+        if (vehicle.wishlist) {
+            selectedClass = "selected";
+        }
+
+        const wishlistBtn = vehicle.authenticated
+            ? `<button type="button" class="fav-icon wishlist-icon ${selectedClass}" data-id="${vehicle.id}">
+                    <i class="feather-heart"></i>
+            </button>`
             : "";
 
-        const listingImage = hasMultipleImages
-            ? `
-      <div class="listing-img">
-        <div class="img-slider owl-carousel">${vehicleImages}</div>
-        <div class="fav-item justify-content-end">
-          <span class="img-count"><i class="feather-image"></i>${
-              vehicle.multiple_vehicle_images.length
-          }</span>
-          ${authWishlistBtn}
-        </div>
-        <span class="featured-text">${vehicle.brand ?? ""}</span>
-      </div>
-    `
-            : `
-      <div class="listing-img">
-        <a href="/vehicle-details/${
-            vehicle.slug
-        }?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
-          <img src="${
-              vehicle.multiple_vehicle_images[0]
-          }" class="img-fluid" alt="${vehicleName}">
-        </a>
-        <div class="fav-item justify-content-end">${authWishlistBtn}</div>
-        <span class="featured-text">${ucfirst(vehicle.brand ?? "")}</span>
-      </div>
-    `;
-
-        const attrIcon =
-            vehicle.category === "Car"
-                ? `<li><span><img src="/frontend/assets/img/icons/door-icon.svg" alt="Doors"></span><p>${
-                      vehicle.num_doors ?? 0
-                  }</p></li>`
-                : `<li><span><img src="/frontend/assets/img/icons/color.svg" alt="Color"></span><p>${
-                      vehicle.color ?? ""
-                  }</p></li>`;
-
-        const featureList = `
-    <ul>
-      <li><span><img src="/frontend/assets/img/icons/car-parts-01.svg" alt="${ucfirst(
-          vehicle.transmission ?? ""
-      )}"></span><p>${ucfirst(vehicle.transmission ?? "")}</p></li>
-      <li><span><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="${
-          vehicle.mileage ? Math.ceil(vehicle.mileage) : 0
-      } ${_l("web.home.miles")}"></span><p>${
-            vehicle.mileage ? Math.ceil(vehicle.mileage) : 0
-        } ${_l("web.home.miles")}</p></li>
-      <li><span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${ucfirst(
-          vehicle.fuel_type ?? ""
-      )}"></span><p>${ucfirst(vehicle.fuel_type ?? "")}</p></li>
-    </ul>
-    <ul>
-      ${attrIcon}
-      <li><span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${
-          vehicle.year ?? ""
-      }"></span><p>${vehicle.year ?? ""}</p></li>
-      <li><span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="${_l(
-          "web.home.persons"
-      )}"></span><p>${vehicle.passenger_capacity ?? 0} ${_l(
-            "web.home.persons"
-        )}</p></li>
-    </ul>
-  `;
-
-        const vehicleRating = vehicle.rating ?? 0;
-        const ratingStars = (() => {
-            const filledStars = Math.floor(vehicleRating);
-            return Array.from(
-                { length: 5 },
-                (_, i) =>
-                    `<i class="fas fa-star ${
-                        i < filledStars ? "filled" : ""
-                    }"></i>`
-            ).join("");
-        })();
-
-        const listingContent = `
-    <div class="listing-content">
-      <div class="listing-features d-flex align-items-end justify-content-between">
-        <div class="list-rating">
-          <button type="button" class="author-img btn border-0">
-            <img src="${
-                vehicle.avatar_image ??
-                "/frontend/assets/img/profiles/avatar-01.jpg"
-            }" alt="author">
-          </button>
-          <h3 class="listing-title">
-            <a href="/vehicle-details/${
-                vehicle.slug
-            }?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">${vehicleName}</a>
-          </h3>
-          <div class="list-rating">
-            ${ratingStars}
-            <span>(${vehicleRating.toFixed(1)}) ${
-            vehicle.review_count || 0
-        } ${_l("web.home.reviews")}</span>
-          </div>
-        </div>
-        <div class="list-km d-none">
-          <span class="km-count"><img src="/frontend/assets/img/icons/map-pin.svg" alt="author">3.5m</span>
-        </div>
-      </div>
-      <div class="listing-details-group">${featureList}</div>
-      <div class="listing-location-details">
-        <div class="listing-price"><span><i class="feather-map-pin"></i></span>${ucfirst(
-            vehicle.location ?? ""
-        )}</div>
-        <div class="listing-price"><h6>${currency}${price_value} <span> / ${ucfirst(
-            price_type
-        )}</span></h6></div>
-      </div>
-      <div class="listing-button">
-        <a href="/vehicle-details/${
-            vehicle.slug
-        }?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}" class="btn btn-order ${
-            allowBooking !== "1" ? "disabled" : ""
-        }">
-          <span><i class="feather-calendar me-2"></i></span>${_l(
-              "web.home.rent_now"
-          )}
-        </a>
-      </div>
-    </div>
-  `;
-
-        let tag = "";
-        if (vehicle.is_featured) {
-            tag = `<div class="feature-text"><span class="bg-danger">${_l(
-                "web.common.featured"
-            )}</span></div>`;
-        }
-        if (vehicle.is_top_rated) {
-            tag = `<div class="feature-text"><span class="bg-warning">${_l(
-                "web.common.top_rated"
-            )}</span></div>`;
+        if (vehicle.has_multiple_image) {
+            return `
+                <div class="listing-img">
+                    <div class="img-slider owl-carousel">${vehicleImages}</div>
+                    <div class="fav-item justify-content-end">
+                        <span class="img-count"><i class="feather-image"></i>${vehicle.multiple_vehicle_images.length}</span>
+                        ${wishlistBtn}
+                    </div>
+                    <span class="featured-text">${vehicle.brand ?? ""}</span>
+                </div>`;
         }
 
         return `
-    <div class="col-xxl-4 col-lg-6 col-md-6 col-12">
-      <div class="listing-item">
-        ${listingImage}
-        ${listingContent}
-        ${tag}
-      </div>
-    </div>
-  `;
+            <div class="listing-img">
+                <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
+                    <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
+                </a>
+                <div class="fav-item justify-content-end">${wishlistBtn}</div>
+                <span class="featured-text">${ucfirst(vehicle.brand ?? "")}</span>
+            </div>`;
+    }
+
+    // Build feature list
+    function buildVehicleFeatureList(vehicle) {
+        const attrIcon = vehicle.category === "Car"
+            ? `<li><span><img src="/frontend/assets/img/icons/door-icon.svg" alt="Doors"></span><p>${vehicle.num_doors ?? 0}</p></li>`
+            : `<li><span><img src="/frontend/assets/img/icons/color.svg" alt="Color"></span><p>${vehicle.color ?? ""}</p></li>`;
+
+        return `
+            <ul>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-01.svg" alt="${ucfirst(vehicle.transmission ?? "")}"></span><p>${ucfirst(vehicle.transmission ?? "")}</p></li>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} ${_l("web.home.miles")}"></span><p>${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} ${_l("web.home.miles")}</p></li>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${ucfirst(vehicle.fuel_type ?? "")}"></span><p>${ucfirst(vehicle.fuel_type ?? "")}</p></li>
+            </ul>
+            <ul>
+                ${attrIcon}
+                <li><span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${vehicle.year ?? ""}"></span><p>${vehicle.year ?? ""}</p></li>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="${_l("web.home.persons")}"></span><p>${vehicle.passenger_capacity ?? 0} ${_l("web.home.persons")}</p></li>
+            </ul>`;
+    }
+
+    // Build rating stars
+    function buildVehicleRatingStars(rating) {
+        const filledStars = Math.floor(rating);
+        return Array.from({ length: 5 }, (_, i) =>
+            `<i class="fas fa-star ${i < filledStars ? "filled" : ""}"></i>`
+        ).join("");
+    }
+
+    // Build listing content section
+    function buildVehicleGridContent(vehicle, name, currency, priceType, priceValue, featureList, ratingStars, allowBooking) {
+        return `
+            <div class="listing-content">
+                <div class="listing-features d-flex align-items-end justify-content-between">
+                    <div class="list-rating">
+                        <button type="button" class="author-img btn border-0">
+                            <img src="${vehicle.avatar_image ?? "/frontend/assets/img/profiles/avatar-01.jpg"}" alt="author">
+                        </button>
+                        <h3 class="listing-title">
+                            <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">${name}</a>
+                        </h3>
+                        <div class="list-rating">
+                            ${ratingStars}
+                            <span>(${(vehicle.rating ?? 0).toFixed(1)}) ${vehicle.review_count || 0} ${_l("web.home.reviews")}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="listing-details-group">${featureList}</div>
+                <div class="listing-location-details">
+                    <div class="listing-price"><span><i class="feather-map-pin"></i></span>${ucfirst(vehicle.location ?? "")}</div>
+                    <div class="listing-price"><h6>${currency}${priceValue} <span> / ${ucfirst(priceType)}</span></h6></div>
+                </div>
+                <div class="listing-button">
+                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}" class="btn btn-order ${allowBooking !== "1" ? "disabled" : ""}">
+                        <span><i class="feather-calendar me-2"></i></span>${_l("web.home.rent_now")}
+                    </a>
+                </div>
+            </div>`;
+    }
+
+    // Build optional tag
+    function buildVehicleTag(vehicle) {
+        if (vehicle.is_featured) {
+            return `<div class="feature-text"><span class="bg-danger">${_l("web.common.featured")}</span></div>`;
+        }
+        if (vehicle.is_top_rated) {
+            return `<div class="feature-text"><span class="bg-warning">${_l("web.common.top_rated")}</span></div>`;
+        }
+        return "";
     }
 
     /**
@@ -837,7 +758,34 @@
                 .hide();
         }
 
-        // Handles user input with debounce for location search
+        // Debounce handler
+        function handleSearch(query, cache, displaySuggestions, $suggestions) {
+            if (cache[query]) {
+                displaySuggestions(cache[query]);
+                return;
+            }
+
+            $.ajax({
+                url: "/search-locations",
+                method: "GET",
+                data: { query },
+                success: (response) => handleSuccess(query, response, cache, displaySuggestions),
+                error: () => handleError($suggestions),
+            });
+        }
+
+        function handleSuccess(query, response, cache, displaySuggestions) {
+            if (Array.isArray(response.data)) {
+                cache[query] = response.data;
+                displaySuggestions(response.data);
+            }
+        }
+
+        function handleError($suggestions) {
+            $suggestions.hide();
+        }
+
+        // Main keyup listener
         $input.on("keyup", function () {
             const query = $(this).val().trim().toLowerCase();
             clearTimeout(searchTimeout);
@@ -847,27 +795,8 @@
                 return;
             }
 
-            if (cache[query]) {
-                displaySuggestions(cache[query]);
-                return;
-            }
-
-            // Delay search to avoid rapid AJAX calls
             searchTimeout = setTimeout(() => {
-                $.ajax({
-                    url: "/search-locations",
-                    method: "GET",
-                    data: { query },
-                    success(response) {
-                        if (Array.isArray(response.data)) {
-                            cache[query] = response.data;
-                            displaySuggestions(response.data);
-                        }
-                    },
-                    error() {
-                        $suggestions.hide();
-                    },
-                });
+                handleSearch(query, cache, displaySuggestions, $suggestions);
             }, 300);
         });
 
