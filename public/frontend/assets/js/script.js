@@ -6,28 +6,28 @@ Version      : 1.0
 
 (function($) {
 	"use strict";
-	
+
 	var $slimScrolls = $('.slimscroll');
 	var $wrapper = $('.main-wrapper');
-	
+
 
 	// Sidebar
 	$(".header-information ul li a[href^='#']").on('click', function(e) {
 
 		// prevent default anchor click behavior
 		e.preventDefault();
- 
+
 		// store hash
 		var hash = this.hash;
- 
+
 		// animate
 			var header_height = $('header').outerHeight();
 			$('html, body').animate( { scrollTop: $(hash).offset().top - header_height}, {duration: 500 } );
- 
+
 	 });
 
 
-	
+
 	if($(window).width() <= 991) {
 		var Sidemenu = function() {
 			this.$menuItem = $('.main-nav a');
@@ -52,26 +52,26 @@ Version      : 1.0
 		}
 
 	// Sidebar Initiate
-	
+
 	init();
 	}
 
 	// Mobile menu sidebar overlay
-	
+
 	$('body').append('<div class="sidebar-overlay"></div>');
 	$(document).on('click', '#mobile_btn', function() {
 		$('main-wrapper').toggleClass('slide-nav');
 		$('.sidebar-overlay').toggleClass('opened');
 		$('html').addClass('menu-opened');
 		return false;
-	});	
-	
+	});
+
 	$(document).on('click', '.sidebar-overlay', function() {
 		$('html').removeClass('menu-opened');
 		$(this).removeClass('opened');
 		$('main-wrapper').removeClass('slide-nav');
 	});
-	
+
 	$(document).on('click', '#menu_close', function() {
 		$('html').removeClass('menu-opened');
 		$('.sidebar-overlay').removeClass('opened');
@@ -79,45 +79,45 @@ Version      : 1.0
 	});
 
 	// Select 2
-	
+
 	if ($('.select').length > 0) {
 		$('.select').select2({
 			minimumResultsForSearch: -1,
 			width: '100%'
 		});
 	}
-	
+
 	if ($('.category-select').length > 0) {
 		$(".category-select").select2({
 			placeholder: "Choose Category",
 			allowClear: false
 		});
 	}
-	
+
 	if ($('.loc-select').length > 0) {
 		$(".loc-select").select2({
 			placeholder: "Choose Location",
 			allowClear: false
 		});
 	}
-	
+
 	if ($('.region select').length > 0) {
 		$(".region select").select2({
 			placeholder: "Region",
 			allowClear: false
 		});
 	}
-		
-	// Fade in Scroll 
-	
+
+	// Fade in Scroll
+
 	if($('.main-wrapper .aos').length>0){
 		AOS.init({
 			duration:1200,
 			once:true
 		});
 	}
-	
-	// Datepicker	
+
+	// Datepicker
 
 	if($('.datetimepicker').length > 0 ){
 		$('.datetimepicker').datetimepicker({
@@ -145,15 +145,15 @@ Version      : 1.0
 		});
 	}
 
-	
+
 	// Scroll Down
-	
+
 	$('.price-down').on('click', function() {
-		$('html, body').animate({ scrollTop: $("#price").offset().top - 85}, 150); 
+		$('html, body').animate({ scrollTop: $("#price").offset().top - 85}, 150);
 	});
-	
+
 	//Stick Sidebar
-	
+
 	if ($(window).width() > 767) {
 		if($('.theiaStickySidebar').length > 0) {
 			$('.theiaStickySidebar').theiaStickySidebar({
@@ -162,9 +162,9 @@ Version      : 1.0
 			});
 		}
 	}
-	
+
     //Range Slider
-	
+
 	if($('.input-range').length > 0) {
 		$(".input-range").ionRangeSlider({
 			type: "double",
@@ -173,20 +173,20 @@ Version      : 1.0
 			max: 100,
 			from: 50,
 			to: 100 ,
-			prefix: "$"      
+			prefix: "$"
 		});
 	}
-	
+
 	$('.input-range').on('input', function () {
         $('.demo span').html(this.value);
     });
-	
+
 	//Show Filter
-	
+
 	$(".btn.filterbtn").on('click', function() {
 		  $(".showfilter").toggleClass("filter-open");
-	});		
-	
+	});
+
 	// Password Eye
 
 	$('.toggle-password').on('click', function() {
@@ -257,7 +257,7 @@ Version      : 1.0
 			}
 		});
 	}
-	
+
 	// Most Popular Cartypes Slider
 
 	if($('.popular-cartype-slider').length > 0) {
@@ -273,7 +273,7 @@ Version      : 1.0
 				0:{
 					items:1
 				},
-				
+
 				550:{
 					items:1
 				},
@@ -291,7 +291,7 @@ Version      : 1.0
 	}
 
 	// Recommended Car Rental Deals
-	
+
 	if($('.rental-deal-slider').length > 0) {
 		$('.rental-deal-slider').owlCarousel({
 			loop:false,
@@ -305,7 +305,7 @@ Version      : 1.0
 				0:{
 					items:1
 				},
-				
+
 				550:{
 					items:1
 				},
@@ -336,7 +336,7 @@ Version      : 1.0
 			responsive:{
 				0:{
 					items:1
-				},				
+				},
 				550:{
 					items:1
 				},
@@ -352,7 +352,7 @@ Version      : 1.0
 
 
 	//What People Say Slider
-	
+
 	if($('.about-testimonials').length > 0) {
 		$('.about-testimonials').owlCarousel({
 			loop:true,
@@ -366,7 +366,7 @@ Version      : 1.0
 				0:{
 					items:1
 				},
-				
+
 				550:{
 					items:1
 				},
@@ -403,7 +403,7 @@ Version      : 1.0
 			focusOnSelect: true
 
 		});
-	}	
+	}
 
 	if($('.car-details-slider').length > 0 ){
 		$('.car-details-slider').owlCarousel({
@@ -429,7 +429,7 @@ Version      : 1.0
 					items:3
 				}
 			}
-		});	
+		});
 	}
 
 	if($('.cars-slider').length > 0) {
@@ -445,7 +445,7 @@ Version      : 1.0
 				0:{
 					items:1
 				},
-				
+
 				550:{
 					items:1
 				},
@@ -460,13 +460,13 @@ Version      : 1.0
 	}
 
 	// Select Favourite
-	
+
 	$('.fav-icon').on('click', function() {
 		$(this).toggleClass('selected');
 	});
 
 	// Select Favourite
-	
+
 	$('.rating-select i').on('click', function() {
 		$(this).toggleClass('filled');
 	});
@@ -493,7 +493,7 @@ Version      : 1.0
 		}
 		});
 	}
-	
+
 	// Otp Verfication
 
 	$('.digit-group').find('input').each(function () {
@@ -542,8 +542,8 @@ Version      : 1.0
 	// Rent Types
 
 	if ($('.rent-types').length > 0) {
-		$(".rent-types").on('change', function(){ 
-	        if( $(this).is(":checked")) { 
+		$(".rent-types").on('change', function(){
+	        if( $(this).is(":checked")) {
 				$('.rent-radio').removeClass('active');
 				$(this).closest('.rent-radio').addClass('active');
 	        }
@@ -575,7 +575,7 @@ Version      : 1.0
 	})();
 
 	// Sidebar popup overlay
-	
+
 	if($('.add-popup').length > 0) {
 		$(".add-popup").on("click", function () {
 			$('.toggle-popup').addClass('sidebar-popup');
@@ -596,7 +596,7 @@ Version      : 1.0
 		$(".view-adon-btn").on("click", function() {
 	 		$(this).text($(this).text() === "Less Add-Ons" ? "View More Add-Ons" : "Less Add-Ons");
 	 		$(".more-adons").slideToggle(900);
-		});	  	
+		});
 	}
 
 	if ($('.more-adon-info').length > 0) {
@@ -639,7 +639,7 @@ Version      : 1.0
 			$(".self-driver-info").hide();
 		}
 	});
-	
+
 	// Add New Card
     $(document).on('click', '#add_new_card', function(){
 		if ($(this).is(':checked')) {
@@ -648,7 +648,7 @@ Version      : 1.0
 			$("add-new-cards").hide();
 		}
 	});
-     
+
 	$(document).on('click', '#debit_card', function(){
 		if ($(this).is(':checked')) {
 			$(".add-new-cards").hide();
@@ -696,7 +696,7 @@ Version      : 1.0
 		$(".pickup-location").hide();
 		$(".delivery-location").show();
 	}
-	
+
     $(document).on('change', '#image_sign', function(){
 		$("#frames").html('');
 		for (var i = 0; i < $(this)[0].files.length; i++) {
@@ -710,7 +710,7 @@ Version      : 1.0
 			$(this).addClass("less");
 	 		$(this).text($(this).text() === "Show Less" ? "Show More" : "Show Less");
 	 		$(".more-text").slideToggle(900);
-		});	  	
+		});
 	}
 
 
@@ -1018,7 +1018,7 @@ Version      : 1.0
 			checkbox.prop('checked', !checkbox.prop('checked'));
 		});
 	}
-	
+
 	$(".add-text-link").on("click", function () {
 		$('.service-Price').append(' <div class="row ">'+
 		'<div class="col-lg-6 col-12">'+
@@ -1058,7 +1058,7 @@ Version      : 1.0
 				0:{
 					items:1
 				},
-				
+
 				550:{
 					items:1
 				},
@@ -1090,7 +1090,7 @@ Version      : 1.0
 				0:{
 					items:1
 				},
-				
+
 				550:{
 					items:1
 				},
@@ -1137,7 +1137,7 @@ Version      : 1.0
 			responsive:{
 				0:{
 					items:1
-				},				
+				},
 				550:{
 					items:2
 				},
@@ -1171,7 +1171,7 @@ Version      : 1.0
 			responsive:{
 				0:{
 					items:1
-				},				
+				},
 				550:{
 					items:1
 				},
@@ -1188,8 +1188,8 @@ Version      : 1.0
 	// Fancybox
 
 	if($('[data-fancybox]').length > 0) {
-	  	Fancybox.bind('[data-fancybox]', {});  
-     }  
+	  	Fancybox.bind('[data-fancybox]', {});
+     }
 
 	$(window).scroll(function () {
 		var sticky = $('.header-two'),
@@ -1216,7 +1216,7 @@ Version      : 1.0
 				0:{
 					items:1
 				},
-				
+
 				550:{
 					items:1
 				},
@@ -1239,7 +1239,7 @@ Version      : 1.0
 				0:{
 					items:2
 				},
-				
+
 				550:{
 					items:4
 				},
@@ -1276,9 +1276,9 @@ Version      : 1.0
 			focusOnSelect: true
 
 		});
-	}	
+	}
 
-	// Recommend Bike Slider 
+	// Recommend Bike Slider
 
 	if($('.recommend-slider').length > 0) {
 		$('.recommend-slider').owlCarousel({
@@ -1293,7 +1293,7 @@ Version      : 1.0
 				0:{
 					items:1
 				},
-				
+
 				767:{
 					items:1
 				},
@@ -1318,7 +1318,7 @@ Version      : 1.0
 			responsive:{
 				0:{
 					items:1
-				},				
+				},
 				550:{
 					items:3
 				},
@@ -1352,7 +1352,7 @@ Version      : 1.0
 				0:{
 					items:1
 				},
-				
+
 				550:{
 					items:1
 				},
@@ -1411,7 +1411,7 @@ Version      : 1.0
 		})
 	}
 
-	
+
 	if ($('.yacht-image-slider').length > 0) {
 		$('.yacht-image-slider').owlCarousel({
 			loop: true,
@@ -1439,7 +1439,7 @@ Version      : 1.0
 		})
 	}
 
-	// Recommend Bike Slider 
+	// Recommend Bike Slider
 
 	if($('.client-slider').length > 0) {
 		$('.client-slider').owlCarousel({
@@ -1452,7 +1452,7 @@ Version      : 1.0
 			responsive:{
 				0:{
 					items:2
-				},				
+				},
 				767:{
 					items:4
 				},
@@ -1466,7 +1466,7 @@ Version      : 1.0
 		})
 	}
 
-	// Recommend Bike Slider 
+	// Recommend Bike Slider
 
 	if($('.brands-slider').length > 0) {
 		$('.brands-slider').owlCarousel({
@@ -1479,7 +1479,7 @@ Version      : 1.0
 			responsive:{
 				0:{
 					items:2
-				},				
+				},
 				767:{
 					items:4
 				},
@@ -1493,7 +1493,7 @@ Version      : 1.0
 		})
 	}
 
-	// Recommend Bike Slider 
+	// Recommend Bike Slider
 
 	if($('.car-slider').length > 0) {
 		$('.car-slider').owlCarousel({
@@ -1507,7 +1507,7 @@ Version      : 1.0
 			responsive:{
 				0:{
 					items:1
-				},	
+				},
 			}
 		})
 	}
@@ -1579,11 +1579,4 @@ Version      : 1.0
 			});
 		});
 	}
-
-	(function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "rydu0zsjqr");
-	
 })(jQuery);

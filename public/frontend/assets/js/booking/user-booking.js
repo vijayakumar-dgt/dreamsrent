@@ -54,9 +54,7 @@
 
         // Initial state
         toggleContainer();
-    });
-
-    $(document).ready(function () {
+        
         $("#bookLocationForm").validate({
             rules: {
                 delivery_location: {

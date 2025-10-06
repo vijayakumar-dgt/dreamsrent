@@ -22,6 +22,7 @@
             const reply = $this.data("reply");
             const description = $this.data("description");
             let ticketHistory = $this.data("ticket-data");
+            $("#edit_ticket .submitbtn").text(_l("web.user.update"));
 
             populateEditForm(ticketId, assigneeId, subject, priority, status, reply, description);
             showTicketHistory(ticketId, ticketHistory);
@@ -126,37 +127,42 @@
             $(".form-control").removeClass("is-invalid is-valid");
         };
 
-        const initFormValidation = (selector, url, successBtnText, isEdit = false) => {
-            const handleAjaxSuccess = (resp, form, $submitBtn) => {
-                if (resp.code === 200) {
-                    showToast("success", resp.message);
-                    if (!isEdit) {
-                        $("#add_ticket").modal("hide");
-                        resetFormFields($(form));
-                    } else {
-                        $("#edit_ticket").modal("hide");
-                    }
-                    toggleButtonState($submitBtn, successBtnText);
-                    TicketTable();
+        // Standalone success and error handlers
+        const handleTicketAjaxSuccess = (resp, form, $submitBtn, isEdit, successBtnText) => {
+            if (resp.code === 200) {
+                showToast("success", resp.message);
+                if (!isEdit) {
+                    $("#add_ticket").modal("hide");
+                    resetFormFields($(form));
+                } else {
+                    $("#edit_ticket").modal("hide");
                 }
-            };
-
-            const handleAjaxError = (error, $submitBtn) => {
-                handleValidationError(error, isEdit);
                 toggleButtonState($submitBtn, successBtnText);
-            };
+                TicketTable();
+            }
+        };
 
-            const submitFormHandler = (form) => {
-                const formData = new FormData(form);
-                const $submitBtn = $(".submitbtn");
-                toggleButtonState($submitBtn, _l("web.user.plz_wait"), true);
+        const handleTicketAjaxError = (error, $submitBtn, isEdit, successBtnText) => {
+            handleValidationError(error, isEdit);
+            toggleButtonState($submitBtn, successBtnText);
+        };
 
-                ajaxRequest(url, formData,
-                    (resp) => handleAjaxSuccess(resp, form, $submitBtn),
-                    (error) => handleAjaxError(error, $submitBtn)
-                );
-            };
+        // Standalone form submission handler
+        const submitTicketForm = (form, url, isEdit, successBtnText) => {
+            const formData = new FormData(form);
+            const $submitBtn = $(".submitbtn");
+            toggleButtonState($submitBtn, _l("web.user.plz_wait"), true);
 
+            ajaxRequest(
+                url,
+                formData,
+                (resp) => handleTicketAjaxSuccess(resp, form, $submitBtn, isEdit, successBtnText),
+                (error) => handleTicketAjaxError(error, $submitBtn, isEdit, successBtnText)
+            );
+        };
+
+        // Initialize form validation
+        const initFormValidation = (selector, url, successBtnText, isEdit = false) => {
             $(selector).validate({
                 rules: {
                     category: { required: !isEdit },
@@ -188,9 +194,7 @@
                     const errorId = isEdit ? `${element.attr("id")}Error` : `${element.attr("id")}_error`;
                     $(`#${errorId}`).text(error.text());
                 },
-                highlight(element) {
-                    $(element).addClass("is-invalid").removeClass("is-valid");
-                },
+                highlight(element) { $(element).addClass("is-invalid").removeClass("is-valid"); },
                 unhighlight(element) {
                     const $el = $(element);
                     $el.removeClass("is-invalid").addClass("is-valid");
@@ -199,7 +203,9 @@
                 },
                 onkeyup(element) { $(element).valid(); },
                 onchange(element) { $(element).valid(); },
-                submitHandler: submitFormHandler
+                submitHandler: function(form) {
+                    submitTicketForm(form, url, isEdit, successBtnText);
+                }
             });
         };
 

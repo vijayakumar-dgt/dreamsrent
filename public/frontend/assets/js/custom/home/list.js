@@ -525,16 +525,26 @@
         const featureList = buildVehicleFeatureList(vehicle);
         const ratingStars = buildVehicleRatingStars(vehicle.rating ?? 0);
 
-        const listingContent = buildVehicleGridContent(
+        // const listingContent = buildVehicleGridContent(
+        //     vehicle,
+        //     vehicleName,
+        //     currency,
+        //     priceType,
+        //     priceValue,
+        //     featureList,
+        //     ratingStars,
+        //     allowBooking
+        // );
+        const listingContent = buildVehicleGridContent({
             vehicle,
-            vehicleName,
+            name: vehicleName,
             currency,
             priceType,
             priceValue,
             featureList,
             ratingStars,
             allowBooking
-        );
+        });
 
         const tag = buildVehicleTag(vehicle);
 
@@ -622,7 +632,16 @@
     }
 
     // Build listing content section
-    function buildVehicleGridContent(vehicle, name, currency, priceType, priceValue, featureList, ratingStars, allowBooking) {
+    function buildVehicleGridContent({
+        vehicle,
+        name,
+        currency,
+        priceType,
+        priceValue,
+        featureList,
+        ratingStars,
+        allowBooking
+    }) {
         return `
             <div class="listing-content">
                 <div class="listing-features d-flex align-items-end justify-content-between">

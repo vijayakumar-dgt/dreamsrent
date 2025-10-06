@@ -57,7 +57,7 @@
                                 <input type="email" name="email" id="email" class="form-control">
                             </div>
                             <button type="submit" id="forgot_otp" class="btn btn-outline-light w-100 btn-size">
-                                {{ __('web.auth.save_changes') }}
+                                {{ __('web.auth.reset_password_title') }}
                             </button>
                         </div>
                     </div>

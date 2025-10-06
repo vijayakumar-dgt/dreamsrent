@@ -108,7 +108,7 @@ Version      : 1.0
 		});
 	}
 
-	// Fade in Scroll 
+	// Fade in Scroll
 
 	if ($('.main-wrapper .aos').length > 0) {
 		AOS.init({
@@ -117,7 +117,7 @@ Version      : 1.0
 		});
 	}
 
-	// Datepicker	
+	// Datepicker
 
 	if ($('.datetimepicker').length > 0) {
 		$('.datetimepicker').datetimepicker({
@@ -488,7 +488,7 @@ Version      : 1.0
 		});
 	}
 
-	
+
 	// Datatable
 	if($('.datatable').length > 0) {
 		$('.datatable').DataTable({
@@ -1278,7 +1278,7 @@ Version      : 1.0
 		});
 	}
 
-	// Recommend Bike Slider 
+	// Recommend Bike Slider
 
 	if ($('.recommend-slider').length > 0) {
 		$('.recommend-slider').owlCarousel({
@@ -1446,8 +1446,8 @@ Version      : 1.0
 	}
 
 	if($('[data-fancybox]').length > 0) {
-		Fancybox.bind('[data-fancybox]', {});  
-    }  
+		Fancybox.bind('[data-fancybox]', {});
+    }
 
 	$(window).scroll(function () {
 		var sticky = $('.header-four'),
@@ -1466,11 +1466,4 @@ Version      : 1.0
 			overflow: "visible"
 		});
 	});
-
-	(function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "rydu0zsjqr");
-	
 })(jQuery);
