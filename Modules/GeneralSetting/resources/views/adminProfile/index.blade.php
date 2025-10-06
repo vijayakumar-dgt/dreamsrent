@@ -129,8 +129,8 @@
                             </div>
                             <div class="card-footer d-none real-card">
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3">{{ __('admin.general_settings.cancel') }}</a>
-                                    <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.save_changes') }}</button>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3">{{ __('admin.common.cancel') }}</a>
+                                    <button type="submit" class="btn btn-primary">{{ __('admin.common.save_changes') }}</button>
                                 </div>
                             </div>
                         </div>

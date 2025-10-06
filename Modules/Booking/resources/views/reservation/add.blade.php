@@ -7,7 +7,7 @@
     <div class="page-wrapper">
         <div class="content me-4">
             <div class="mb-3">
-                <a href="{{ route('reservation.index') }}" class="d-inline-flex align-items-center fw-medium"><i class="ti ti-arrow-narrow-left me-2"></i>{{ __('admin.bookings.reservation') }}</a>
+                <a href="{{ route('reservation.index') }}" class="d-inline-flex align-items-center fw-medium"><i class="ti ti-arrow-narrow-left me-2"></i>{{ __('admin.general_settings.reservation') }}</a>
             </div>
             <div class="wizard-form">
                 <fieldset id="first-field">

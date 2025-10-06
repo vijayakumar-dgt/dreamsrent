@@ -40,7 +40,7 @@
                         </button>
                         <ul class="dropdown-menu  dropdown-menu-end p-2">
                             <li><button type="button" class="dropdown-item rounded-1 filter-option" data-type="status" data-value="paid">{{ __('admin.finance_accounts.paid') }}</button></li>
-                            <li><button type="button" class="dropdown-item rounded-1 filter-option" data-type="status" data-value="pending">{{ __('admin.finance_accounts.pending') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 filter-option" data-type="status" data-value="pending">{{ __('admin.rentals.pending') }}</button></li>
                             <li><button type="button" class="dropdown-item rounded-1 filter-option" data-type="status" data-value="overdue">{{ __('admin.finance_accounts.overdue') }}</button></li>
                             <li><button type="button" class="dropdown-item rounded-1 filter-option" data-type="status" data-value="unpaid">{{ __('admin.finance_accounts.unpaid') }}</button></li>
                         </ul>
@@ -69,7 +69,7 @@
                             <th>{{ strtoupper(__('admin.finance_accounts.invoice_no')) }}</th>
                             <th>{{ strtoupper(__('admin.common.name')) }}</th>
                             <th>{{ strtoupper(__('admin.common.email')) }}</th>
-                            <th>{{ strtoupper(__('admin.finance_accounts.created_date')) }}</th>
+                            <th>{{ strtoupper(__('admin.cms.created_date')) }}</th>
                             <th>{{ strtoupper(__('admin.finance_accounts.due_date')) }}</th>
                             <th>{{ strtoupper(__('admin.common.amount')) }}</th>
                             <th>{{ strtoupper(__('admin.common.status')) }}</th>
@@ -113,7 +113,7 @@
                                 @elseif ($invoice->status == "Pending")
                                 <span class="badge badge-soft-info d-inline-flex align-items-center badge-sm">
                                     <i class="ti ti-point-filled me-1"></i>
-                                    {{__('admin.finance_accounts.pending')}}
+                                    {{__('admin.rentals.pending')}}
                                 </span>
                                 @elseif ($invoice->status == "Overdue")
                                 <span class="badge bg-violet-transparent d-inline-flex align-items-center badge-sm">

@@ -119,7 +119,7 @@
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>{{ __('admin.general_settings.device') }}</th>
-                                                        <th>{{ __('admin.general_settings.date') }}</th>
+                                                        <th>{{ __('admin.common.date') }}</th>
                                                         <th>{{ __('admin.general_settings.ip_address') }}</th>
                                                         <th>{{ __('admin.general_settings.location') }}</th>
                                                         <th></th>
@@ -197,9 +197,9 @@
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3"
-                    data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
+                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                 <button type="submit"
-                    class="btn btn-primary submitbtn">{{ __('admin.general_settings.save_changes') }}</button>
+                    class="btn btn-primary submitbtn">{{ __('admin.common.save_changes') }}</button>
             </div>
         </x-slot>
     </x-admin.modal>
@@ -246,9 +246,9 @@
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3"
-                    data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
+                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                 <button type="submit"
-                    class="btn btn-primary submitbtn">{{ __('admin.general_settings.save_changes') }}</button>
+                    class="btn btn-primary submitbtn">{{ __('admin.common.save_changes') }}</button>
             </div>
         </x-slot>
     </x-admin.modal>
@@ -290,10 +290,10 @@
     <x-slot name="footer">
         <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
-                {{ __('admin.general_settings.cancel') }}
+                {{ __('admin.common.cancel') }}
             </button>
             <button type="submit" class="btn btn-primary submitbtn">
-                {{ __('admin.general_settings.save_changes') }}
+                {{ __('admin.common.save_changes') }}
             </button>
         </div>
     </x-slot>

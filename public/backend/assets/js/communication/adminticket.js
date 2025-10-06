@@ -232,13 +232,13 @@
                         let statusBadge = "";
                         switch (ticket.status) {
                             case 1:
-                                statusBadge = `<span class="badge bg-violet-transparent"><i class="ti ti-point-filled text-violet me-1"></i>${_l('admin.support.open')}</span>`;
+                                statusBadge = `<span class="badge bg-violet-transparent"><i class="ti ti-point-filled text-violet me-1"></i>${_l('admin.general_settings.open')}</span>`;
                                 break;
                             case 2:
                                 statusBadge = `<span class="badge bg-primary-transparent"><i class="ti ti-point-filled text-primary me-1"></i>${_l('admin.support.assigned')}</span>`;
                                 break;
                             case 3:
-                                statusBadge = `<span class="badge bg-info-transparent"><i class="ti ti-point-filled text-info me-1"></i>${_l('admin.support.inprogress')}</span>`;
+                                statusBadge = `<span class="badge bg-info-transparent"><i class="ti ti-point-filled text-info me-1"></i>${_l('admin.rentals.inprogress')}</span>`;
                                 break;
                             case 4:
                                 statusBadge = `<span class="badge bg-success-transparent"><i class="ti ti-point-filled text-success me-1"></i>${_l('admin.support.closed')}</span>`;

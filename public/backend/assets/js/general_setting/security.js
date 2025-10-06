@@ -26,7 +26,7 @@
             $("#changePhoneNumberForm")[0].reset();
             $("#changePhoneNumberForm #id").val("");
             $("#changePhoneNumberForm .submitbtn").text(
-                _l("admin.general_settings.save_changes")
+                _l("admin.common.save_changes")
             );
             $("#changePhoneNumberForm .submitbtn").prop("disabled", false);
             $("#phone_current_password_error, .error-text").text("");

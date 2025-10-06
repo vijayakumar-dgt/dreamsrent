@@ -593,7 +593,7 @@
                                                         <label for="tax_type" class="form-label">{{ __('admin.bookings.tax_type') }} <span class="text-danger">*</span></label>
                                                         <select class="select" name="tax_type" id="tax_type">
                                                             <option value="">{{ __('admin.bookings.select') }}</option>
-                                                            <option value="percentage" {{ old('tax_type', $booking->tax_type) == 'percentage' ? 'selected' : '' }}>{{ __('admin.bookings.percentage') }}</option>
+                                                            <option value="percentage" {{ old('tax_type', $booking->tax_type) == 'percentage' ? 'selected' : '' }}>{{ __('admin.common.percentage') }}</option>
                                                             <option value="fixed" {{ old('tax_type', $booking->tax_type) == 'fixed' ? 'selected' : '' }}>">{{ __('admin.bookings.fixed') }}</option>
                                                         </select>
                                                         <span class="error-text text-danger" id="tax_type_error"></span>

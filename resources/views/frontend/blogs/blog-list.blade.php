@@ -32,7 +32,7 @@
                     <div class="card">
                         <h4>
                             <img src="/backend/assets/img/icons/details-icon.svg" alt="details-icon">
-                            {{ __('web.blog.filter') }}
+                            {{ __('web.common.filter') }}
                         </h4>
                         <div class="filter-content looking-input input-block mb-0">
                             <input type="text" id="blogSearch" class="form-control" placeholder="{{ __('web.blog.to_search_type_and_hit_enter') }}">
@@ -60,7 +60,7 @@
                     <div class="card tags-widget">
                         <h4>
                             <i class="feather-tag"></i>
-                            {{ __('web.blog.tags') }}
+                            {{ __('web.common.tags') }}
                         </h4>
                         <ul class="tags">
                             @if(count($tags) != 0)

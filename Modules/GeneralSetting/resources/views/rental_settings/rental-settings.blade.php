@@ -37,7 +37,7 @@
                                                 </div>
                                             </div>
                                             <div class="localization-list">
-                                                <p class="text-gray-9 fw-medium ">{{ __('admin.general_settings.enquiries') }}</p>
+                                                <p class="text-gray-9 fw-medium ">{{ __('admin.common.enquiries') }}</p>
                                                 <div>
                                                     <div class="form-check form-check-md form-switch">
                                                         <input id="enquiries" name="enquiries" class="form-check-input form-label" type="checkbox" role="switch" checked aria-checked="true">
@@ -69,7 +69,7 @@
                                                 </div>
                                             </div>
                                             <div class="localization-list">
-                                                <p class="text-gray-9 fw-medium ">{{ __('admin.general_settings.faq') }}</p>
+                                                <p class="text-gray-9 fw-medium ">{{ __('admin.cms.faq') }}</p>
                                                 <div>
                                                     <div class="form-check form-check-md form-switch">
                                                         <input id="faq" name="faq" class="form-check-input form-label" type="checkbox" role="switch" checked aria-checked="true">
@@ -78,7 +78,7 @@
                                                 </div>
                                             </div>
                                             <div class="localization-list">
-                                                <p class="text-gray-9 fw-medium ">{{ __('admin.general_settings.damages') }}</p>
+                                                <p class="text-gray-9 fw-medium ">{{ __('admin.rentals.damages') }}</p>
                                                 <div>
                                                     <div class="form-check form-check-md form-switch">
                                                         <input id="damages" name="damages" class="form-check-input form-label" type="checkbox" role="switch" checked aria-checked="true">
@@ -100,9 +100,9 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="d-flex justify-content-end">
-                                        <a href="{{ route('dashboard') }}" class="btn btn-light me-3 " >{{ __('admin.general_settings.cancel') }}</a>
+                                        <a href="{{ route('dashboard') }}" class="btn btn-light me-3 " >{{ __('admin.common.cancel') }}</a>
                                         @if (hasPermission($permissions, 'rental_settings', 'edit'))
-                                        <button type="submit" class="btn btn-primary submitBtn">{{ __('admin.general_settings.save_changes') }}</button>
+                                        <button type="submit" class="btn btn-primary submitBtn">{{ __('admin.common.save_changes') }}</button>
                                         @endif
                                     </div>
                                 </div>

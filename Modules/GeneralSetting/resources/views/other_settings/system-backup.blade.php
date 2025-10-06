@@ -66,7 +66,7 @@
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
-                    {{ __('admin.general_settings.cancel') }}
+                    {{ __('admin.common.cancel') }}
                 </button>
                 <a href="{{ route('system-backup') }}" class="btn btn-primary">
                     {{ __('admin.general_settings.generate') }}
@@ -80,7 +80,7 @@
     <x-admin.delete-modal className="deletemodal" id="delete_backup" formId="deleteSystemDbBackup"
         :hiddenInputs="['delete_id' => '']" :title="__('admin.general_settings.delete_backup')"
         :description="__('admin.general_settings.confirmation_delete_backup')"
-        cancelText="{{ __('admin.general_settings.cancel') }}" submitText="{{ __('admin.general_settings.yes_delete') }}">
+        cancelText="{{ __('admin.common.cancel') }}" submitText="{{ __('admin.common.yes_delete') }}">
     </x-admin.delete-modal>
 
     <!-- /Delete -->

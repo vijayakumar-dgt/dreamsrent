@@ -38,7 +38,7 @@
                                 <input type="hidden" name="group_id" id="group_id" class="form-control" value="6">
                                 <!-- Meta Title -->
                                 <div class="mb-3">
-                                    <label class="form-label " for="metaTitle">{{ __('admin.general_settings.meta_title') }}<span class="text-danger ms-1">*</span></label>
+                                    <label class="form-label " for="metaTitle">{{ __('admin.page.meta_title') }}<span class="text-danger ms-1">*</span></label>
                                     <input type="text" id="metaTitle" name="metaTitle" class="form-control">
                                     <span id="metaTitle_error" class="text-danger error-text"></span>
                                 </div>
@@ -50,7 +50,7 @@
                                 </div>
                                 <!-- Keywords -->
                                 <div class="mb-3 pb-3 border-bottom">
-                                    <label class="form-label" for="keywords">{{ __('admin.general_settings.keywords') }}<span class="text-danger ms-1">*</span></label>
+                                    <label class="form-label" for="keywords">{{ __('admin.page.keywords') }}<span class="text-danger ms-1">*</span></label>
                                     <div class="">
                                         <input class="input-tags form-control" id="keywords" type="text" data-role="tagsinput" name="keywords" value="">
                                     </div>

@@ -13,7 +13,7 @@
                     <nav>
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{ __('admin.general_settings.home') }}</a>
+                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('admin.general_settings.settings') }}</li>
                         </ol>

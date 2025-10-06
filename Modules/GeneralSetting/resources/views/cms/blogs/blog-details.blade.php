@@ -19,7 +19,7 @@
                         <img src="{{asset ('/storage/'.$blogPosts->image)}}" class="w-100 rounded-3" alt="Blog">
                     </div>
                     <div class="d-flex align-items-center flex-wrap gap-2">
-                        <h6 class="me-2">{{ __('admin.blog.tags') }}: </h6>
+                        <h6 class="me-2">{{ __('admin.common.tags') }}: </h6>
                         @php
                         $tagIds = is_array($blogPosts->tags) ? $blogPosts->tags : json_decode($blogPosts->tags, true);
                         $tagNames = \Modules\GeneralSetting\Models\BlogTag::whereIn('id', $tagIds)->pluck('name');

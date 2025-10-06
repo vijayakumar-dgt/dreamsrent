@@ -29,9 +29,9 @@
                             <div class="dropdown">
                                 <select class="select form-control status" id="status" name="status">
                                     <option value="">{{ __('admin.common.select') }}</option>
-                                    <option value="1">{{ __('admin.support.open') }}</option>
+                                    <option value="1">{{ __('admin.general_settings.open') }}</option>
                                     <option value="2">{{ __('admin.support.assigned') }}</option>
-                                    <option value="3">{{ __('admin.support.inprogress') }}</option>
+                                    <option value="3">{{ __('admin.retals.inprogress') }}</option>
                                     <option value="4">{{ __('admin.support.closed') }}</option>
                                 </select>
                             </div>

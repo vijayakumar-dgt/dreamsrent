@@ -112,7 +112,7 @@
                         </li>
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
-                                <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="1">{{ __('admin.support.open') }}
+                                <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="1">{{ __('admin.general_settings.open') }}
                             </label>
                         </li>
                         <li>
@@ -122,7 +122,7 @@
                         </li>
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
-                                <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="3">{{ __('admin.support.inprogress') }}
+                                <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="3">{{ __('admin.rentals.inprogress') }}
                             </label>
                         </li>
                         <li>
@@ -147,7 +147,7 @@
                         <th>{{ strtoupper(__('admin.support.tickets_code')) }}</th>
                         <th>{{ strtoupper(__('admin.common.created_by')) }}</th>
                         <th>{{ strtoupper(__('admin.common.subject')) }}</th>
-                        <th>{{ strtoupper(__('admin.support.created_date')) }}</th>
+                        <th>{{ strtoupper(__('admin.cms.created_date')) }}</th>
                         <th>{{ strtoupper(__('admin.support.priority')) }}</th>
                         <th>{{ strtoupper(__('admin.support.assignee')) }}</th>
                         <th>{{ strtoupper(__('admin.common.status')) }}</th>

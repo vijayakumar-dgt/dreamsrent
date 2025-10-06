@@ -44,7 +44,7 @@
                                                 <th>{{ strtoupper(__('admin.general_settings.currency')) }}</th>
                                                 <th>{{ strtoupper(__('admin.general_settings.code')) }}</th>
                                                 <th>{{ strtoupper(__('admin.general_settings.symbol')) }}</th>
-                                                <th>{{ strtoupper(__('admin.general_settings.status')) }}</th>
+                                                <th>{{ strtoupper(__('admin.common.status')) }}</th>
                                                 @if (hasPermission($permissions, 'finance_settings', 'edit') || hasPermission($permissions, 'finance_settings', 'delete'))
                                                     <th>{{ strtoupper(__('admin.common.action')) }}</th>
                                                 @endif
@@ -107,10 +107,10 @@
                 </div>
                 <div class="d-flex justify-content-center">
                     <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
-                        {{ __('admin.general_settings.cancel') }}
+                        {{ __('admin.common.cancel') }}
                     </button>
                     <button type="submit" class="btn btn-primary submitbtn">
-                        {{ __('admin.general_settings.create_new') }}
+                        {{ __('admin.common.create_new') }}
                     </button>
                 </div>
             </div>

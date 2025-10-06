@@ -40,7 +40,7 @@
                                     <span class="text-danger" id="language_error"></span>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="copy_right_description" class="form-label">{{__('admin.general_settings.description')}}</label>
+                                    <label for="copy_right_description" class="form-label">{{__('admin.common.description')}}</label>
                                     <div class="d-none real-label">
                                         <textarea id="copy_right_description" name="copy_right_description" class="form-control summernote"></textarea>
                                     </div>
@@ -50,9 +50,9 @@
                             <!-- Card Footer -->
                             <div class="card-footer d-none real-card">
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{__('admin.general_settings.cancel')}}</a>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{__('admin.common.cancel')}}</a>
                                     @if (hasPermission($permissions, 'copyright', 'edit'))
-                                    <button type="submit" class="btn btn-primary submitbtn">{{__('admin.general_settings.save_changes')}}</button>
+                                    <button type="submit" class="btn btn-primary submitbtn">{{__('admin.common.save_changes')}}</button>
                                     @endif
                                 </div>
                             </div>

@@ -78,7 +78,7 @@
                                                 <select class="select form-control" name="status" id="status">
                                                     <option>{{ __('admin.common.select') }}</option>
                                                     <option value="Paid">{{ __('admin.finance_accounts.paid') }}</option>
-                                                    <option value="Pending">{{ __('admin.finance_accounts.pending') }}</option>
+                                                    <option value="Pending">{{ __('admin.rentals.pending') }}</option>
                                                     <option value="Overdue">{{ __('admin.finance_accounts.overdue') }}</option>
                                                     <option value="Unpaid">{{ __('admin.finance_accounts.unpaid') }}</option>
                                                 </select>
@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="ms-lg-3">
-                                    <h5 class="mb-3">{{ __('admin.finance_accounts.billing_details') }}</h5>
+                                    <h5 class="mb-3">{{ __('admin.bookings.billing_details') }}</h5>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="mb-3">
@@ -181,7 +181,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="payment_method" class="form-label">{{ __('admin.finance_accounts.payment_method') }}</label>
+                                                    <label for="payment_method" class="form-label">{{ __('admin.general_settings.payment_method') }}</label>
                                                     <select class="select" name="payment_method" id="payment_method">
                                                         @foreach($payments as $payment)
                                                         <?php

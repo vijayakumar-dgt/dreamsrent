@@ -47,7 +47,7 @@
                         </li>
                         <li>
                             <button type="button" class="dropdown-item rounded-1 statusfilter"
-                                data-status="rejected">{{ __('admin.rentals.rejected') }}</button>
+                                data-status="rejected">{{ __('admin.common.rejected') }}</button>
                         </li>
                     </ul>
                 </div>
@@ -175,7 +175,7 @@
                     <option value="inprogress">{{ __('admin.rentals.inprogress') }}</option>
                     <option value="pending">{{ __('admin.rentals.pending') }}</option>
                     <option value="onhold">{{ __('admin.rentals.onhold') }}</option>
-                    <option value="rejected">{{ __('admin.rentals.rejected') }}</option>
+                    <option value="rejected">{{ __('admin.common.rejected') }}</option>
                 </select>
                 <span class="text-danger error-text" id="inspection_status_error"></span>
             </div>
@@ -189,7 +189,7 @@
                     <option value="inprogress">{{ __('admin.rentals.inprogress') }}</option>
                     <option value="pending">{{ __('admin.rentals.pending') }}</option>
                     <option value="onhold">{{ __('admin.rentals.onhold') }}</option>
-                    <option value="rejected">{{ __('admin.rentals.rejected') }}</option>
+                    <option value="rejected">{{ __('admin.common.rejected') }}</option>
                 </select>
                 <span class="text-danger error-text" id="repair_status_error"></span>
             </div>

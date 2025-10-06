@@ -67,7 +67,7 @@
                                 <!-- Tags -->
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="blog_tags" class="form-label">{{__('admin.blog.tags')}} <span class="text-danger">*</span></label>
+                                        <label for="blog_tags" class="form-label">{{__('admin.common.tags')}} <span class="text-danger">*</span></label>
                                         <select class="select form-control" id="blog_tags" name="tag_id[]" multiple>
                                             @php
                                                 $selectedTags = is_array($blog->tags) ? $blog->tags : json_decode($blog->tags, true);
@@ -83,7 +83,7 @@
                                 <!-- Description -->
                                 <div class="col-md-12">
                                     <div class="mb-0">
-                                        <label for="description" class="form-label">{{__('admin.blog.description')}}</label>
+                                        <label for="description" class="form-label">{{__('admin.common.description')}}</label>
                                         <textarea id="editor" name="description" id="description" class="summernote form-control">{{ $blog->description }}</textarea>
                                     </div>
                                 </div>
@@ -96,12 +96,12 @@
                                     <label for="status" class="form-check-label form-label mt-0 mb-0">
                                         <input class="form-check-input form-label me-2" name="status" id="status" type="checkbox"
                                             {{ (int) $blog->status == 1 ? 'checked' : '' }}>
-                                        {{__('admin.blog.status')}}
+                                        {{__('admin.common.status')}}
                                     </label>
                                 </div>
                                 <div class="d-flex justify-content-center">
-                                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</button>
-                                    <button type="button" id="saveBlogBtn" class="btn btn-primary">{{__('admin.blog.save_changes')}}</button>
+                                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</button>
+                                    <button type="button" id="saveBlogBtn" class="btn btn-primary">{{__('admin.common.save_changes')}}</button>
                                 </div>
                             </div>
                         </div>

@@ -13,7 +13,7 @@
                 <nav>
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('dashboard') }}">{{__('admin.page.home')}}</a>
+                            <a href="{{ route('dashboard') }}">{{__('admin.common.home')}}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">{{__('admin.page.pages')}}</li>
                     </ol>
@@ -37,49 +37,49 @@
             <div class="d-flex align-items-center flex-wrap row-gap-3">
                 <div class="dropdown me-2">
                     <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                        <i class="ti ti-filter me-1"></i> {{ __('admin.page.sort_by') }}: <span id="sortLabel">{{ __('admin.page.latest') }}</span>
+                        <i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }}: <span id="sortLabel">{{ __('admin.common.latest') }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-2" id="sortFilter">
                         <li>
                             <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="latest">
-                                {{ __('admin.page.latest') }}
+                                {{ __('admin.common.latest') }}
                             </button>
                         </li>
                         <li>
                             <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="asc">
-                                {{ __('admin.page.ascending') }}
+                                {{ __('admin.common.ascending') }}
                             </button>
                         </li>
                         <li>
                             <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="desc">
-                                {{ __('admin.page.descending') }}
+                                {{ __('admin.common.descending') }}
                             </button>
                         </li>
                         <li>
                             <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_month">
-                                {{ __('admin.page.last_month') }}
+                                {{ __('admin.common.last_month') }}
                             </button>
                         </li>
                         <li>
                             <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">
-                                {{ __('admin.page.last_7_days') }}
+                                {{ __('admin.common.last_7_days') }}
                             </button>
                         </li>
                     </ul>
                 </div>
                 <div class="dropdown me-2">
                     <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                        <i class="ti ti-badge me-1"></i> {{ __('admin.page.status') }}
+                        <i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-2" id="statusFilter">
                         <li>
                             <a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="1">
-                                {{ __('admin.page.published') }}
+                                {{ __('admin.cms.published') }}
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="0">
-                                {{ __('admin.page.unpublished') }}
+                                {{ __('admin.cms.unpublished') }}
                             </a>
                         </li>
                     </ul>

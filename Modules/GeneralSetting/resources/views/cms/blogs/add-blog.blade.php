@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="blog_tags" class="form-label">{{__('admin.blog.tags')}} <span class="text-danger">*</span></label>
+                                        <label for="blog_tags" class="form-label">{{__('admin.common.tags')}} <span class="text-danger">*</span></label>
                                         <select class="select" id="blog_tags" name="tag_id[]" multiple required>
                                             @foreach($tags as $tag)
                                             <option value="{{ $tag->id }}">{{ $tag->name }}</option>
@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-0">
-                                        <label for="blog_description" class="form-label">{{__('admin.blog.description')}} <span class="text-danger">*</span></label>
+                                        <label for="blog_description" class="form-label">{{__('admin.common.description')}} <span class="text-danger">*</span></label>
                                         <textarea id="editor" name="description" class="summernote form-control" required>
                                         {{ old('description', $blog->description ?? '') }}
                                         </textarea>
@@ -94,8 +94,8 @@
                         </div>
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</button>
-                                <button type="button" class="btn btn-primary" id="create_blog_btn">{{__('admin.blog.create_new')}}</button>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</button>
+                                <button type="button" class="btn btn-primary" id="create_blog_btn">{{__('admin.common.create_new')}}</button>
                             </div>
                         </div>
                     </div>

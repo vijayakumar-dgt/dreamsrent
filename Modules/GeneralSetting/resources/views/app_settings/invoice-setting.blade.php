@@ -154,10 +154,10 @@
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
                                 <a href="{{ route('dashboard') }}"
-                                    class="btn btn-light me-3">{{ __('admin.general_settings.cancel') }}</a>
+                                    class="btn btn-light me-3">{{ __('admin.common.cancel') }}</a>
                                 @if (hasPermission($permissions, 'app_settings', 'edit'))
                                 <button type="submit"
-                                    class="btn btn-primary">{{ __('admin.general_settings.save_changes') }}</button>
+                                    class="btn btn-primary">{{ __('admin.common.save_changes') }}</button>
                                 @endif
                             </div>
                         </div>

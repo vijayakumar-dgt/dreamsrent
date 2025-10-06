@@ -39,7 +39,7 @@
                     <thead class="thead-light">
                         <tr>
                             <th>{{ strtoupper(__('admin.user_management.role')) }}</th>
-                            <th>{{ strtoupper(__('admin.user_management.created_date')) }}</th>
+                            <th>{{ strtoupper(__('admin.retals.created_date')) }}</th>
                             <th>{{ strtoupper(__('admin.common.status')) }}</th>
                             @if (hasPermission($permissions, 'roles_permissions', 'edit') || hasPermission($permissions, 'roles_permissions', 'delete'))
                             <th>{{ strtoupper(__('admin.common.action')) }}</th>

@@ -69,7 +69,7 @@
                                     <div class="col-md-4">
                                         <div class="form-check form-check-md form-switch me-2">
                                             <label class="form-check-label form-label mt-0 mb-0" for="login">
-                                                {{ __('admin.general_settings.login') }}
+                                                {{ __('admin.auth.login') }}
                                             </label>
                                             <input id="login" name="login" class="form-check-input form-label me-2" type="checkbox" role="switch" checked aria-checked="true">
                                             <span id="login_error" class="text-danger error-text"></span>

@@ -1,13 +1,13 @@
 @extends('admin.admin')
 
-@section('meta_title', __('admin.general_settings.faq') . ' || ' . $companyName)
+@section('meta_title', __('admin.cms.faq') . ' || ' . $companyName)
 
 @section('content')
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb :title="__('admin.general_settings.faq')" :breadcrumbs="[
-                    __('admin.general_settings.faq') => ''
+            <x-admin.breadcrumb :title="__('admin.cms.faq')" :breadcrumbs="[
+                    __('admin.cms.faq') => ''
                 ]"
                 :buttonText="__('admin.general_settings.add_faq')"
                 :modalId="'add_FAQ'"
@@ -21,20 +21,20 @@
                     <div class="dropdown">
                         <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                             data-bs-toggle="dropdown">
-                            <i class="ti ti-filter me-1"></i> {{ __('admin.general_settings.sort_by') }} :
-                            {{ __('admin.general_settings.latest') }}
+                            <i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} :
+                            {{ __('admin.common.latest') }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2">
                             <li><button type="button" class="dropdown-item rounded-1 sort-option"
-                                    data-sort="desc">{{ __('admin.general_settings.latest') }}</button></li>
+                                    data-sort="desc">{{ __('admin.common.latest') }}</button></li>
                             <li><button type="button" class="dropdown-item rounded-1 sort-option"
-                                    data-sort="asc">{{ __('admin.general_settings.ascending') }}</button></li>
+                                    data-sort="asc">{{ __('admin.common.ascending') }}</button></li>
                             <li><button type="button" class="dropdown-item rounded-1 sort-option"
-                                    data-sort="desc">{{ __('admin.general_settings.descending') }}</button></li>
+                                    data-sort="desc">{{ __('admin.common.descending') }}</button></li>
                             <li><button type="button" class="dropdown-item rounded-1 sort-option"
-                                    data-sort="last_month">{{ __('admin.general_settings.last_month') }}</button></li>
+                                    data-sort="last_month">{{ __('admin.common.last_month') }}</button></li>
                             <li><button type="button" class="dropdown-item rounded-1 sort-option"
-                                    data-sort="last_7_days">{{ __('admin.general_settings.last_7_days') }}</button></li>
+                                    data-sort="last_7_days">{{ __('admin.common.last_7_days') }}</button></li>
                         </ul>
                     </div>
                     <!-- Filter Collapse -->
@@ -73,23 +73,23 @@
             <!-- /Table Header -->
             <div class="collapse" id="filtercollapse">
                 <div class="filterbox mb-3 d-flex align-items-center">
-                    <h6 class="me-3">{{__('admin.general_settings.filters')}}</h6>
+                    <h6 class="me-3">{{__('admin.common.filters')}}</h6>
                     <div class="dropdown me-3">
                         <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                             data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                            {{__('admin.general_settings.status')}}
+                            {{__('admin.common.status')}}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-lg p-2">
                             <li><button type="button" class="dropdown-item rounded-1 filter-option"
-                                    data-status="1">{{__('admin.general_settings.published')}}</button></li>
+                                    data-status="1">{{__('admin.cms.published')}}</button></li>
                             <li><button type="button" class="dropdown-item rounded-1 filter-option"
-                                    data-status="0">{{__('admin.general_settings.unpublished')}}</button></li>
+                                    data-status="0">{{__('admin.cms.unpublished')}}</button></li>
                         </ul>
                     </div>
                     <button type="button" id="applyFilters"
                         class="text-purple links border-0 bg-transparent">{{__('admin.general_settings.apply_filters')}}</button>
                     <button type="button" id="clearFilters"
-                        class="text-danger links border-0 bg-transparent">{{__('admin.general_settings.clear_all')}}</button>
+                        class="text-danger links border-0 bg-transparent">{{__('admin.common.clear_all')}}</button>
                 </div>
             </div>
             <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
@@ -153,9 +153,9 @@
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3"
-                    data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
+                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                 <button type="submit"
-                    class="btn btn-primary submitbtn">{{ __('admin.general_settings.create_new') }}</button>
+                    class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
             </div>
         </x-slot>
     </x-admin.modal>
@@ -198,14 +198,14 @@
                     <label class="form-check-label form-label mt-0 mb-0">
                         <input id="editFaqStatus" name="editFaqStatus" class="form-check-input form-label me-2"
                             type="checkbox" role="switch" aria-checked="false">
-                        {{ __('admin.general_settings.status') }}
+                        {{ __('admin.common.status') }}
                     </label>
                 </div>
                 <div class="d-flex justify-content-center">
                     <button type="button" class="btn btn-light me-3"
-                        data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
+                        data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                     <button type="submit"
-                        class="btn btn-primary savebtn">{{ __('admin.general_settings.save_changes') }}</button>
+                        class="btn btn-primary savebtn">{{ __('admin.common.save_changes') }}</button>
                 </div>
             </div>
         </x-slot>

@@ -78,7 +78,7 @@
                     required: _l("admin.page.keyword_required"),
                 },
                 description: {
-                    required: _l("admin.page.description_required"),
+                    required: _l("admin.cms.description_required"),
                     minlength: _l("admin.page.description_min"),
                 },
                 mete_title: {
@@ -169,14 +169,14 @@
                             }, 1500);
                         }
                         $("#add-page")
-                            .text(_l("admin.page.create_new"))
+                            .text(_l("admin.common.create_new"))
                             .prop("disabled", false);
                     },
                     error: function (error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
                         $("#add-page")
-                            .text(_l("admin.page.create_new"))
+                            .text(_l("admin.common.create_new"))
                             .prop("disabled", false);
 
                         if (error.responseJSON.code === 422) {

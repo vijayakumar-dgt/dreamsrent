@@ -144,7 +144,7 @@
         </x-slot>
         <x-slot name="footer">
             <button type="button" class="btn btn-light me-2"
-                data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
+                data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
             <button type="submit" class="btn btn-primary">{{ __('admin.common.submit') }}</button>
         </x-slot>
     </x-admin.modal>

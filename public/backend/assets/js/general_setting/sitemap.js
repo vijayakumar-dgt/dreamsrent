@@ -74,7 +74,7 @@
                         }
                         $("#sitemapForm")[0].reset();
                         $("#sitemapForm .submitbtn").text(
-                            _l("admin.general_settings.create_new")
+                            _l("admin.common.create_new")
                         );
 
                         table.ajax.reload();
@@ -94,7 +94,7 @@
                             showToast("error", error.responseJSON.message);
                         }
                         $("#sitemapForm .submitbtn").text(
-                            _l("admin.general_settings.create_new")
+                            _l("admin.common.create_new")
                         );
                     },
                 });
@@ -258,7 +258,7 @@
                 success: function (response) {
                     $("#deleteForm .submitbtn").prop("disabled", false);
                     $("#deleteForm .submitbtn").text(
-                        _l("admin.general_settings.yes_delete")
+                        _l("admin.common.yes_delete")
                     );
                     $("#delete-modal").modal("hide");
                     table.ajax.reload();
@@ -268,7 +268,7 @@
                     showToast("error", error.responseJSON.message);
                     $("#deleteForm .submitbtn").prop("disabled", false);
                     $("#deleteForm .submitbtn").text(
-                        _l("admin.general_settings.yes_delete")
+                        _l("admin.common.yes_delete")
                     );
                     $("#delete-modal").modal("hide");
                 },

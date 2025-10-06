@@ -42,7 +42,7 @@
                                         <tr>
                                             <th>{{ __('admin.general_settings.template_name') }}</th>
                                             <th>{{ __('admin.general_settings.created_on') }}</th>
-                                            <th>{{ __('admin.general_settings.status') }}</th>
+                                            <th>{{ __('admin.common.status') }}</th>
                                             @if (hasPermission($permissions, 'system_settings', 'edit') || hasPermission($permissions, 'system_settings', 'delete'))
                                                 <th>{{ __('admin.common.action') }}</th>
                                             @endif
@@ -101,7 +101,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-lg-12">
-                    <label for="placeholder">{{ __('admin.general_settings.tags') }}</label>
+                    <label for="placeholder">{{ __('admin.common.tags') }}</label>
                     <div class="placeholders" id="placeholders">
                         @if(!empty($tags) && count($tags) > 0)
                             @foreach($tags as $tag)
@@ -115,7 +115,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <label for="description">{{ __('admin.general_settings.description') }} <em class="text-danger">*</em></label>
+                    <label for="description">{{ __('admin.common.description') }} <em class="text-danger">*</em></label>
                     <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
                     <span id="description_error" class="text-danger error-text"></span>
                 </div>
@@ -142,14 +142,14 @@
                     <label for="status" class="form-check-label form-label mt-0 mb-0">
                         <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status"
                             id="status" aria-checked="false">
-                        {{ __('admin.general_settings.status') }}
+                        {{ __('admin.common.status') }}
                     </label>
                 </div>
                 <div class="d-flex justify-content-center">
                     <button type="button" class="btn btn-light me-3"
-                        data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
+                        data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                     <button type="submit"
-                        class="btn btn-primary submitbtn savebtn">{{ __('admin.general_settings.create_new') }}</button>
+                        class="btn btn-primary submitbtn savebtn">{{ __('admin.common.create_new') }}</button>
                 </div>
             </div>
         </x-slot>
@@ -178,8 +178,8 @@
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <a href="javascript:void(0);" class="btn btn-light me-3"
-                    data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
-                <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.yes_delete') }}</button>
+                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
             </div>
         </x-slot>
     </x-admin.delete-modal>

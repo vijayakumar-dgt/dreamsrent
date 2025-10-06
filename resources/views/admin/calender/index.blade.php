@@ -195,13 +195,13 @@
                     </div>
                     <div class="col-3">
                         <div>
-                            <h6 class="fs-14 mb-1">{{ __('admin.general_settings.price') }}</h6>
+                            <h6 class="fs-14 mb-1">{{ __('admin.common.price') }}</h6>
                             <p class="fs-14 text-gray-9" id="car_price"> <span class="text-gray-5 fw-normal"></span></p>
                         </div>
                     </div>
                     <div class="col-3">
                         <div>
-                            <h6 class="fs-14 mb-1">{{ __('admin.general_settings.status') }}</h6>
+                            <h6 class="fs-14 mb-1">{{ __('admin.common.status') }}</h6>
                             <span class="badge badge-soft-success d-inline-flex align-items-center badge-sm" id="book_status">
                                 <i class="ti ti-point-filled me-1"></i>
                             </span>
@@ -224,7 +224,7 @@
                 <p id="rent_period"></p>
             </div>
             <div class="d-flex align-items-center justify-content-between mb-3">
-                <h6 class="fw-medium fs-14">{{ __('admin.dashboard.driving_type') }}</h6>
+                <h6 class="fw-medium fs-14">{{ __('admin.bookings.driving_type') }}</h6>
                 <p id="drive_type"></p>
             </div>
             <div class="d-flex align-items-center justify-content-between mb-3">

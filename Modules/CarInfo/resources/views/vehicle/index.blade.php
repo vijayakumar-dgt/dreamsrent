@@ -23,33 +23,33 @@
                 <div class="dropdown me-2">
                     <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                         data-bs-toggle="dropdown">
-                        <i class="ti ti-filter me-1"></i> {{ __('admin.page.sort_by') }}: <span
-                            id="sortLabel">{{ __('admin.page.latest') }}</span>
+                        <i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }}: <span
+                            id="sortLabel">{{ __('admin.common.latest') }}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end p-2" id="sortFilter">
                         <li>
                             <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="latest">
-                                {{ __('admin.page.latest') }}
+                                {{ __('admin.common.latest') }}
                             </button>
                         </li>
                         <li>
                             <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="asc">
-                                {{ __('admin.page.ascending') }}
+                                {{ __('admin.common.ascending') }}
                             </button>
                         </li>
                         <li>
                             <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="desc">
-                                {{ __('admin.page.descending') }}
+                                {{ __('admin.common.descending') }}
                             </button>
                         </li>
                         <li>
                             <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_month">
-                                {{ __('admin.page.last_month') }}
+                                {{ __('admin.common.last_month') }}
                             </button>
                         </li>
                         <li>
                             <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">
-                                {{ __('admin.page.last_7_days') }}
+                                {{ __('admin.common.last_7_days') }}
                             </button>
                         </li>
                     </ul>
@@ -98,7 +98,7 @@
         </div>
         <div class="collapse" id="filtercollapse">
             <div class="filterbox mb-3 d-flex align-items-center">
-                <h6 class="me-3">{{ __('admin.rentals.filter') }}</h6>
+                <h6 class="me-3">{{ __('admin.common.filter') }}</h6>
                 <div class="dropdown me-2">
                     <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                         data-bs-toggle="dropdown" data-bs-auto-close="outside">
@@ -186,21 +186,21 @@
                 <div class="dropdown me-3">
                     <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                         data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                        {{ __('admin.rentals.status') }}
+                        {{ __('admin.common.status') }}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-md p-2 statusFilter">
                         <li class="dropdown-item">
                             {{ __('admin.rentals.active') }}
                         </li>
                         <li class="dropdown-item">
-                            {{ __('admin.rentals.inactive') }}
+                            {{ __('admin.common.inactive') }}
                         </li>
                     </ul>
                 </div>
                 <button type="button" class="border-0 bg-transparent text-purple links"
                     id="applyFilter">{{ __('admin.rentals.apply') }}</button>
                 <button type="button" class="text-danger border-0 bg-transparent links"
-                    id="clearFilter">{{ __('admin.rentals.clear_all') }}</button>
+                    id="clearFilter">{{ __('admin.common.clear_all') }}</button>
             </div>
         </div>
         <div class="custom-datatable-filter table-responsive brandstable">
@@ -214,14 +214,14 @@
                         </th>
                         <th>{{ strtoupper(__('admin.common.vehicle')) }}</th>
                         <th>{{ strtoupper(__('admin.rentals.base_location')) }}</th>
-                        <th>{{ strtoupper(__('admin.rentals.price')) }}</th>
+                        <th>{{ strtoupper(__('admin.common.price')) }}</th>
                         <th>{{ strtoupper(__('admin.rentals.damages')) }}</th>
                         <th>{{ strtoupper(__('admin.rentals.is_featured')) }}</th>
                         <th>{{ strtoupper(__('admin.rentals.is_recommended')) }}</th>
-                        <th>{{ strtoupper(__('admin.rentals.created_date')) }}</th>
+                        <th>{{ strtoupper(__('admin.cms.created_date')) }}</th>
                         @if (hasPermission($permissions, 'vehicles', 'edit') || hasPermission($permissions, 'vehicles',
                         'delete'))
-                        <th>{{ strtoupper(__('admin.rentals.status')) }}</th>
+                        <th>{{ strtoupper(__('admin.common.status')) }}</th>
                         @endif
                         <th>{{ strtoupper(__('admin.common.action')) }}</th>
                     </tr>

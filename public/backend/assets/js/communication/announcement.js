@@ -147,7 +147,7 @@
                         required: _l('admin.support.user_type_required'),
                     },
                     description: {
-                        required: _l('admin.support.description_required'),
+                        required: _l('admin.cms.description_required'),
                         maxlength: _l('admin.support.description_maxlength'),
                     },
                 },
@@ -239,7 +239,7 @@
                         required: _l('admin.support.user_type_required'),
                     },
                     edit_description: {
-                        required: _l('admin.support.description_required'),
+                        required: _l('admin.cms.description_required'),
                         maxlength: _l('admin.support.description_maxlength'),
                     },
                 },
@@ -349,7 +349,7 @@
                                 <td><strong>${value.announcement_title.length > 80 ? value.announcement_title.substring(0, 80) + "..." : value.announcement_title}</strong></td>
                                 <td>
                                     <span class="badge ${(value.status == 1) ? 'badge-success-transparent' : 'badge-danger-transparent'} d-inline-flex align-items-center badge-sm">
-                                        <i class="ti ti-point-filled me-1"></i>${(value.status == 1) ? `${_l('admin.support.published')}` : `${_l('admin.support.unpublished')}`}
+                                        <i class="ti ti-point-filled me-1"></i>${(value.status == 1) ? `${_l('admin.cms.published')}` : `${_l('admin.cms.unpublished')}`}
                                     </span>
                                 </td>
                                 ${hasPermission(permissions, 'announcements', 'edit') || hasPermission(permissions, 'announcements', 'delete') ?

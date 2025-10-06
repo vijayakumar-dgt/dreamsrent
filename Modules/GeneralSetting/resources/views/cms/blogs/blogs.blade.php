@@ -34,14 +34,14 @@
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="dropdown me-2">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedFilterTextCategory">
-                            <i class="ti ti-filter me-1"></i> {{__('admin.blog.sort_by')}} : <span>{{__('admin.blog.latest')}}</span>
+                            <i class="ti ti-filter me-1"></i> {{__('admin.common.sort_by')}} : <span>{{__('admin.common.latest')}}</span>
                         </a>
                         <ul id="sortDropdownBlog" class="dropdown-menu dropdown-menu-end p-2">
-                            <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="latest">{{__('admin.blog.latest')}}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="asc">{{__('admin.blog.ascending')}}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="desc">{{__('admin.blog.descending')}}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="last_month">{{__('admin.blog.last_month')}}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="last_7_days">{{__('admin.blog.last_7_days')}}</a></li>
+                            <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="latest">{{__('admin.common.latest')}}</a></li>
+                            <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="asc">{{__('admin.common.ascending')}}</a></li>
+                            <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="desc">{{__('admin.common.descending')}}</a></li>
+                            <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="last_month">{{__('admin.common.last_month')}}</a></li>
+                            <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="last_7_days">{{__('admin.common.last_7_days')}}</a></li>
                         </ul>
                     </div>
                     <div class="dropdown">
@@ -68,7 +68,7 @@
             <!-- /Table Header -->
             <div class="collapse" id="filtercollapse">
                 <div class="filterbox mb-3 d-flex align-items-center">
-                    <h6 class="me-3">{{__('admin.blog.filter')}}</h6>
+                    <h6 class="me-3">{{__('admin.common.filter')}}</h6>
                     <div class="dropdown me-3">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                             {{__('admin.blog.category')}}

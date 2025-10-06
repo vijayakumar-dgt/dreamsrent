@@ -53,7 +53,7 @@
                             <th>{{ strtoupper(__('admin.support.from')) }}</th>
                             <th>{{ strtoupper(__('admin.common.phone')) }}</th>
                             <th>{{ strtoupper(__('admin.common.email')) }}</th>
-                            <th>{{ strtoupper(__('admin.support.created_date')) }}</th>
+                            <th>{{ strtoupper(__('admin.cms.created_date')) }}</th>
                             <th>{{ strtoupper(__('admin.support.message')) }}</th>
                             @if (hasPermission($permissions, 'contact_messages', 'delete'))
                             <th>{{ strtoupper(__('admin.common.action')) }}</th>

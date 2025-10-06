@@ -55,12 +55,12 @@
         <!-- /Table Header -->
         <div class="collapse" id="filtercollapse">
             <div class="filterbox mb-3 d-flex align-items-center">
-                <h6 class="me-3">{{ __('admin.finance_accounts.payment_method') }}</h6>
+                <h6 class="me-3">{{ __('admin.general_settings.payment_method') }}</h6>
                 <div class="dropdown me-2">
                     <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                         data-bs-toggle="dropdown" data-bs-auto-close="outside">
                         <span
-                            class="badge badge-xs rounded-pill bg-success me-2"></span>{{ __('admin.finance_accounts.payment_method') }}
+                            class="badge badge-xs rounded-pill bg-success me-2"></span>{{ __('admin.general_settings.payment_method') }}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-lg p-2 filyerPaymentType">
                         @foreach ($GetPayments as $payment)
@@ -85,19 +85,19 @@
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
                                 <input class="form-check-input m-0 me-2" value="2"
-                                    type="checkbox">{{ __('admin.finance_accounts.completed') }}
+                                    type="checkbox">{{ __('admin.common.completed') }}
                             </label>
                         </li>
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
                                 <input class="form-check-input m-0 me-2" value="3"
-                                    type="checkbox">{{ __('admin.finance_accounts.pending') }}
+                                    type="checkbox">{{ __('admin.rentals.pending') }}
                             </label>
                         </li>
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
                                 <input class="form-check-input m-0 me-2" value="1"
-                                    type="checkbox">{{ __('admin.finance_accounts.open') }}
+                                    type="checkbox">{{ __('admin.general_settings.open') }}
                             </label>
                         </li>
                         <li>
@@ -122,7 +122,7 @@
                         <th>{{ strtoupper(__('admin.finance_accounts.transaction_id')) }}</th>
                         <th>{{ strtoupper(__('admin.common.name')) }}</th>
                         <th>{{ strtoupper(__('admin.common.amount')) }}</th>
-                        <th>{{ strtoupper(__('admin.finance_accounts.payment_method')) }}</th>
+                        <th>{{ strtoupper(__('admin.general_settings.payment_method')) }}</th>
                         <th>{{ strtoupper(__('admin.common.date')) }}</th>
                         <th>{{ strtoupper(__('admin.common.status')) }}</th>
                     </tr>

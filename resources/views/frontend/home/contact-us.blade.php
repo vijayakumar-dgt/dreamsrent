@@ -17,7 +17,7 @@
                         <div class="col-lg-3 col-md-6 col-12 d-flex" data-aos="fade-down" data-aos-duration="1200" data-aos-delay="0.2">
                             <div class="single-contact-info flex-fill">
                                 <span><i class="feather-mail"></i></span>
-                                <h3>{{ __('web.home.email_address') }}</h3>
+                                <h3>{{ __('web.auth.email_address') }}</h3>
                                 <a href="mailto:{{ $companyEmail }}">{{ $companyEmail ?? "-" }}</a>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="input-block">
-                                            <label for="contact_email">{{ __('web.home.email_address') }} <span class="text-danger">*</span></label>
+                                            <label for="contact_email">{{ __('web.auth.email_address') }} <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" name="contact_email" id="contact_email" placeholder="{{ __('web.home.email_placeholder') }}">
                                             <span class="error-text text-danger" id="contact_email_error"></span>
                                         </div>

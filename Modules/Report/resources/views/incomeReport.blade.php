@@ -219,7 +219,7 @@
                                         </li>
                                         <li>
                                             <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2 status-checkbox" type="checkbox" value="pending">{{__('admin.reports.pending')}}
+                                                <input class="form-check-input m-0 me-2 status-checkbox" type="checkbox" value="pending">{{__('admin.rentals.pending')}}
                                             </label>
                                         </li>
                                     </ul>
@@ -277,7 +277,7 @@
                                                 $isPaid = ($booking->booking_by === 'admin' && ($booking->payment_status === null || $booking->payment_status == 2)) ||
                                                          ($booking->booking_by !== 'admin' && $booking->payment_status == 2);
                                                 $statusClass = $isPaid ? 'success' : 'danger';
-                                                $statusText = $isPaid ? __('admin.reports.paid') : __('admin.reports.pending');
+                                                $statusText = $isPaid ? __('admin.reports.paid') : __('admin.rentals.pending');
                                             @endphp
                                             <span class="badge badge-soft-{{ $statusClass }} d-inline-flex align-items-center badge-sm payment-status">
                                                 <i class="ti ti-point-filled me-1 text-{{ $statusClass }}"></i>

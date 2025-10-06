@@ -1,13 +1,13 @@
 @extends('admin.admin')
 
-@section('meta_title', __('admin.dashboard.dashboard') . ' || ' . $companyName)
+@section('meta_title', __('admin.common.dashboard') . ' || ' . $companyName)
 
 @section('content')
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content pb-0">
             <x-admin.breadcrumb
-                :title="__('admin.dashboard.dashboard')"
+                :title="__('admin.common.dashboard')"
                 :breadcrumbs="[
                     __('admin.dashboard.admin_dashboard') => ''
                 ]"
@@ -79,7 +79,7 @@
                                             <span class="avatar avatar-sm bg-orange-100 text-orange me-2">
                                                 <i class="ti ti-moneybag fs-14"></i>
                                             </span>
-                                            <p>{{ __('admin.dashboard.total_earnings') }}</p>
+                                            <p>{{ __('admin.reports.total_earnings') }}</p>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between gap-2">
@@ -148,7 +148,7 @@
                             <div class="row g-2 justify-content-center">
                                 <div class="col-sm-4 col-6 d-flex">
                                     <div class="bg-light p-2 br-5 flex-fill text-center">
-                                        <h6 class="fs-14 fw-semibold">{{ __('admin.dashboard.fuel_type') }}</h6>
+                                        <h6 class="fs-14 fw-semibold">{{ __('admin.rentals.fuel_type') }}</h6>
                                         <span class="fs-13">{{$carTypes[0]->fuel_type ?? ""}}</span>
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@
                                 </div>
                                 <div class="col-sm-4 col-6 d-flex">
                                     <div class="bg-light p-2 br-5 flex-fill text-center">
-                                        <h6 class="fs-14 fw-semibold">{{ __('admin.dashboard.driving_type') }}</h6>
+                                        <h6 class="fs-14 fw-semibold">{{ __('admin.bookings.driving_type') }}</h6>
                                         <span class="fs-13">{{$carTypes[0]->driving_name ?? ""}}</span>
                                     </div>
                                 </div>
@@ -510,7 +510,7 @@
                                             <th>{{ __('admin.dashboard.INVOICE_NO') }}</th>
                                             <th>{{ __('admin.dashboard.NAME') }}</th>
                                             <th>{{ __('admin.dashboard.EMAIL') }}</th>
-                                            <th>{{ __('admin.dashboard.CREATED_DATE') }}</th>
+                                            <th>{{ __('admin.blog.CREATED_DATE') }}</th>
                                             <th>{{ __('admin.dashboard.DUE_DATE') }}</th>
                                             <th>{{ __('admin.dashboard.INVOICE_AMOUNT') }}</th>
                                             <th>{{ __('admin.dashboard.STATUS') }}</th>

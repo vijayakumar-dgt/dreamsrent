@@ -181,7 +181,7 @@
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
-                    {{ __('admin.general_settings.cancel') }}
+                    {{ __('admin.common.cancel') }}
                 </button>
                 <button type="submit" class="btn btn-primary submitbtn savebtn">
                     {{ __('admin.common.submit') }}
@@ -216,7 +216,7 @@
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
-                    {{ __('admin.general_settings.cancel') }}
+                    {{ __('admin.common.cancel') }}
                 </button>
                 <button type="submit" class="btn btn-primary submitbtn savebtn">
                     {{ __('admin.common.submit') }}

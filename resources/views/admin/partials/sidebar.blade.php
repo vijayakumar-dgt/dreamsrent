@@ -21,7 +21,7 @@
                     <ul>
                         <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                             <a href="{{ route('dashboard') }}">
-                                <i class="ti ti-layout-grid-add"></i><span>{{ __('admin.main.dashboard') }}</span>
+                                <i class="ti ti-layout-grid-add"></i><span>{{ __('admin.common.dashboard') }}</span>
                             </a>
                         </li>
                     </ul>

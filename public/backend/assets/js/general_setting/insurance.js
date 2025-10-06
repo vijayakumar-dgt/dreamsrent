@@ -532,7 +532,7 @@ function editInsurance(id) {
                 $("#insurance_modal .modal-title").text(
                     _l("admin.general_settings.edit_insurance")
                 );
-                $(".submitBtn").text(_l("admin.general_settings.save_changes"));
+                $(".submitBtn").text(_l("admin.common.save_changes"));
                 $("#statusDiv")
                     .removeClass("d-none")
                     .parent()

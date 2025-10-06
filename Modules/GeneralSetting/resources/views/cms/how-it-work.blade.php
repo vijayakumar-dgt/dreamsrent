@@ -38,17 +38,17 @@
                                     <span class="text-danger" id="language_error"></span>
                                 </div>
                                 <div class="mb-0">
-                                    <label for="howitwork_description" class="form-label">{{__('admin.general_settings.description')}}</label>
+                                    <label for="howitwork_description" class="form-label">{{__('admin.common.description')}}</label>
                                     <textarea id="howitwork_description" name="howitwork_description" class="form-control summernote"></textarea>
                                     <span id="howitwork_description_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</a>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</a>
                                     
                                     @if (hasPermission($permissions, 'how_it_work', 'edit'))
-                                    <button type="submit" class="btn btn-primary  submitbtn">{{__('admin.general_settings.save_changes')}}</button>
+                                    <button type="submit" class="btn btn-primary  submitbtn">{{__('admin.common.save_changes')}}</button>
                                     @endif
                                 </div>
                             </div>

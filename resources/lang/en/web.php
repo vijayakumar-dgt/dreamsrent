@@ -206,7 +206,6 @@ return [
         'phone_number_maxlength'                   => 'Phone number should be at most 15 characters.',
         'message_required'                         => 'Message is required.',
         'message_minlength'                        => 'Message should be at least 3 characters.',
-        'email_address'                            => 'Email Address',
         'get_in_touch'                             => 'Get in touch!',
         'comments'                                 => 'Comments',
         'send_enquiry'                             => 'Send Enquiry',
@@ -707,7 +706,6 @@ return [
         'search'                                        => 'Search',
         'amount_must_be_greater_than_50'                => 'The wallet amount must be greater than 50 and cannot be empty.',
         'enter_amount_and_select_payment_method'        => 'Please enter amount and select payment method.',
-        'something_went_wrong'                          => 'Something went wrong. Please try again.',
         'no_wallet_transaction_available'               => 'No wallet transaction available.',
         'errot_occured_while_retrieving_wallet_history' => 'Error occurred while retrieving wallet history.',
         'add_new_ticket'                                => 'Add New Ticket',
@@ -828,7 +826,6 @@ return [
         'reviews'                      => 'Comments',
         'leave_a_reply'                => 'Leave a Reply',
         'full_name'                    => 'Full Name',
-        'email_address'                => 'Email Address',
         'comments'                     => 'Comments',
         'submit_review'                => 'Submit',
         'blogs_title'                  => 'Blogs | Dreams Rent',
@@ -836,6 +833,5 @@ return [
         'no_data_found'                => 'No Data Found',
         'all_fields_are_required'      => 'All fields are required.',
         'review_added_successfully'    => 'Review added successfully',
-        'something_went_wrong'         => 'Something went wrong. Please try again.',
     ]
 ];

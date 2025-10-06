@@ -7,7 +7,7 @@
     <div class="content me-4 pb-0">
         <div class="mb-3">
             <a href="{{ route('vehicle.list') }}" class="d-inline-flex align-items-center fw-medium"><i
-                    class="ti ti-arrow-left me-1"></i>{{ __('admin.rentals.back_to_list') }}</a>
+                    class="ti ti-arrow-left me-1"></i>{{ __('admin.common.back_to_list') }}</a>
         </div>
         <div class="card mb-0">
             <div class="card-body">
@@ -45,7 +45,7 @@
                         </li>
                         <li class="nav-item" id="seventhBar">
                             <button type="button" class="nav-link d-flex align-items-center">
-                                <i class="ti ti-question-mark me-1"></i>{{ __('admin.rentals.faq') }}
+                                <i class="ti ti-question-mark me-1"></i>{{ __('admin.cms.faq') }}
                             </button>
                         </li>
                         <li class="nav-item" id="eightBar">
@@ -122,7 +122,7 @@
                                     </div>
                                     <div class="col-xl-9">
                                         <div class="mb-3">
-                                            <label for="title" class="form-label">{{ __('admin.rentals.name') }}<span
+                                            <label for="title" class="form-label">{{ __('admin.common.name') }}<span
                                                     class="text-danger">*</span></label>
                                             <input type="text" name="title" id="title" class="form-control"
                                                 value="{{ $query->name }}">
@@ -355,7 +355,7 @@
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
                                                     <label for="vehicle_passenger"
-                                                        class="form-label">{{ __('admin.rentals.passengers') }} <span
+                                                        class="form-label">{{ __('admin.dashboard.passengers') }} <span
                                                             class="text-danger">*</span></label></label>
                                                     <input name="vehicle_passenger" maxlength="2" id="vehicle_passenger"
                                                         value="{{ $query->passenger_capacity }}" type="text"
@@ -441,7 +441,7 @@
                                             <div class="col-lg-12 col-md-6">
                                                 <div class="mb-3">
                                                     <label for="description"
-                                                        class="form-label">{{ __('admin.rentals.description') }}</label>
+                                                        class="form-label">{{ __('admin.common.description') }}</label>
                                                     <textarea type="text" class="form-control summernote"
                                                         maxlength="500" placeholder="Enter description"
                                                         name="description"
@@ -1224,7 +1224,7 @@
         <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3"
                 data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-            <button type="button" class="btn btn-primary" id="price_btn">{{ __('admin.rentals.create_new') }}</button>
+            <button type="button" class="btn btn-primary" id="price_btn">{{ __('admin.common.create_new') }}</button>
         </div>
     </x-slot>
 </x-admin.modal>
@@ -1280,7 +1280,7 @@
             <button type="button" class="btn btn-light me-3"
                 data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
             <button type="button" class="btn btn-primary"
-                id="service_save_btn">{{ __('admin.rentals.save_changes') }}</button>
+                id="service_save_btn">{{ __('admin.common.save_changes') }}</button>
         </div>
     </x-slot>
 </x-admin.modal>
@@ -1321,7 +1321,7 @@
         <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3"
                 data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
-            <button type="button" class="btn btn-primary" id="damage_btn">{{ __('admin.rentals.create_new') }}</button>
+            <button type="button" class="btn btn-primary" id="damage_btn">{{ __('admin.common.create_new') }}</button>
         </div>
     </x-slot>
 </x-admin.modal>
@@ -1347,7 +1347,7 @@
         <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3"
                 data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
-            <button type="button" class="btn btn-primary" id="faq_btn">{{ __('admin.rentals.create_new') }}</button>
+            <button type="button" class="btn btn-primary" id="faq_btn">{{ __('admin.common.create_new') }}</button>
         </div>
     </x-slot>
 </x-admin.modal>
@@ -1376,7 +1376,7 @@
                     value="{{ $insurance->price_type_id }}">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <p class="fs-13 fw-medium border-end pe-2 mb-0">
-                        {{ __('admin.rentals.price') }}: <span class="text-gray-9">
+                        {{ __('admin.common.price') }}: <span class="text-gray-9">
                             @if ($insurance->price_type_id == 7)
                             {{ rtrim(rtrim(number_format($insurance->price, 2), '0'), '.') }}%
                             @else
@@ -1420,7 +1420,7 @@
 <x-admin.modal className="addmodal" id="edit_insurance" :title="__('admin.rentals.edit_insurance')">
     <x-slot name="body">
         <div class="mb-3">
-            <div class="form-label">{{ __('admin.rentals.price_type') }} <span class="text-danger"> *</span></div>
+            <div class="form-label">{{ __('admin.common.price_type') }} <span class="text-danger"> *</span></div>
             <div class="d-flex align-items-center">
                 <div class="form-check me-3">
                     <input class="form-check-input" type="radio" name="Radio" id="Radio-sm" checked>
@@ -1437,7 +1437,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="Radio" id="Radio-sm3">
                     <label class="form-check-label" for="Radio-sm3">
-                        {{ __('admin.rentals.percentage') }}
+                        {{ __('admin.common.percentage') }}
                     </label>
                 </div>
             </div>

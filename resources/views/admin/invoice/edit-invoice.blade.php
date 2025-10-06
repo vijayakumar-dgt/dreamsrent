@@ -100,7 +100,7 @@
                                                         {{ __('admin.finance_accounts.paid') }}</option>
                                                     <option value="Pending"
                                                         {{ $invoice->status == 'Pending' ? 'selected' : '' }}>
-                                                        {{ __('admin.finance_accounts.pending') }}</option>
+                                                        {{ __('admin.rentals.pending') }}</option>
                                                     <option value="Overdue"
                                                         {{ $invoice->status == 'Overdue' ? 'selected' : '' }}>
                                                         {{ __('admin.finance_accounts.overdue') }}</option>
@@ -115,7 +115,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="ms-lg-3">
-                                    <h5 class="mb-3">{{ __('admin.finance_accounts.billing_details') }}</h5>
+                                    <h5 class="mb-3">{{ __('admin.bookings.billing_details') }}</h5>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="mb-3">
@@ -253,7 +253,7 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="payment_method"
-                                                        class="form-label">{{ __('admin.finance_accounts.payment_method') }}</label>
+                                                        class="form-label">{{ __('admin.general_settings.payment_method') }}</label>
                                                     <select class="select" name="payment_method" id="payment_method">
                                                         @foreach($payments as $payment)
                                                         <?php

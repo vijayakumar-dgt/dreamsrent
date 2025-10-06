@@ -214,7 +214,7 @@
                     <h6 class="me-3">{{__('admin.common.filters')}}</h6>
                     <div class="dropdown me-2">
                         <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                            {{__('admin.reports.payment_method')}}
+                            {{__('admin.general_settings.payment_method')}}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-lg p-2">
                             <li>
@@ -286,7 +286,7 @@
                         <tr>
                             <th>{{ strtoupper(__('admin.common.customer')) }}</th>
                             <th>{{ strtoupper(__('admin.common.amount')) }}</th>
-                            <th>{{ strtoupper(__('admin.reports.payment_method')) }}</th>
+                            <th>{{ strtoupper(__('admin.general_settings.payment_method')) }}</th>
                             <th>{{ strtoupper(__('admin.common.date')) }}</th>
                             <th>{{ strtoupper(__('admin.common.status')) }}</th>
                         </tr>

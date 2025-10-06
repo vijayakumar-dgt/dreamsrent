@@ -16,28 +16,28 @@
                     <button type="button" id="selectedFilter"
                         class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                         data-bs-toggle="dropdown">
-                        <i class="ti ti-filter me-1"></i> {{__('admin.blog.sort_by')}} : <span
-                            id="filterText">{{__('admin.blog.latest')}}</span>
+                        <i class="ti ti-filter me-1"></i> {{__('admin.common.sort_by')}} : <span
+                            id="filterText">{{__('admin.common.latest')}}</span>
                     </button>
                     <ul class="dropdown-menu  dropdown-menu-end p-2">
                         <li>
-                            <button type="button" class="dropdown-item rounded-1">{{__('admin.blog.latest')}}</button>
+                            <button type="button" class="dropdown-item rounded-1">{{__('admin.common.latest')}}</button>
                         </li>
                         <li>
                             <button type="button"
-                                class="dropdown-item rounded-1">{{__('admin.blog.ascending')}}</button>
+                                class="dropdown-item rounded-1">{{__('admin.common.ascending')}}</button>
                         </li>
                         <li>
                             <button type="button"
-                                class="dropdown-item rounded-1">{{__('admin.blog.descending')}}</button>
+                                class="dropdown-item rounded-1">{{__('admin.common.descending')}}</button>
                         </li>
                         <li>
                             <button type="button"
-                                class="dropdown-item rounded-1">{{__('admin.blog.last_month')}}</button>
+                                class="dropdown-item rounded-1">{{__('admin.common.last_month')}}</button>
                         </li>
                         <li>
                             <button type="button"
-                                class="dropdown-item rounded-1">{{__('admin.blog.last_7_days')}}</button>
+                                class="dropdown-item rounded-1">{{__('admin.common.last_7_days')}}</button>
                         </li>
                     </ul>
                 </div>
@@ -115,8 +115,8 @@
                 <p class="mb-3">{{__('admin.blog.are_you_sure_you_want_to_delete_page')}}?</p>
                 <div class="d-flex justify-content-center">
                     <button type="button" class="btn btn-light me-3"
-                        data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</button>
-                    <button type="button" class="btn btn-primary">{{__('admin.blog.yes_delete')}}</button>
+                        data-bs-dismiss="modal">{{__('admin.common.cancel')}}</button>
+                    <button type="button" class="btn btn-primary">{{__('admin.common.yes_delete')}}</button>
                 </div>
             </div>
         </div>

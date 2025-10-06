@@ -16,20 +16,20 @@
                 <div class="dropdown me-2">
                     <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                         data-bs-toggle="dropdown" id="selectedFilterText">
-                        <i class="ti ti-filter me-1"></i> {{__('admin.blog.sort_by')}} :
-                        <span>{{__('admin.blog.latest')}}</span>
+                        <i class="ti ti-filter me-1"></i> {{__('admin.common.sort_by')}} :
+                        <span>{{__('admin.common.latest')}}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end p-2">
                         <li><button type="button" class="dropdown-item rounded-1 sort-option-tag"
-                                data-sort="latest">{{__('admin.blog.latest')}}</button></li>
+                                data-sort="latest">{{__('admin.common.latest')}}</button></li>
                         <li><button type="button" class="dropdown-item rounded-1 sort-option-tag"
-                                data-sort="asc">{{__('admin.blog.ascending')}}</button></li>
+                                data-sort="asc">{{__('admin.common.ascending')}}</button></li>
                         <li><button type="button" class="dropdown-item rounded-1 sort-option-tag"
-                                data-sort="desc">{{__('admin.blog.descending')}}</button></li>
+                                data-sort="desc">{{__('admin.common.descending')}}</button></li>
                         <li><button type="button" class="dropdown-item rounded-1 sort-option-tag"
-                                data-sort="last_month">{{__('admin.blog.last_month')}}</button></li>
+                                data-sort="last_month">{{__('admin.common.last_month')}}</button></li>
                         <li><button type="button" class="dropdown-item rounded-1 sort-option-tag"
-                                data-sort="last_7_days">{{__('admin.blog.last_7_days')}}</button></li>
+                                data-sort="last_7_days">{{__('admin.common.last_7_days')}}</button></li>
                     </ul>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                         <td>
                             @if($tag->status == 1)
                             <span class="badge badge-md badge-soft-success"><i
-                                    class="ti ti-point-filled"></i>{{__('admin.blog.published')}}</span>
+                                    class="ti ti-point-filled"></i>{{__('admin.cms.published')}}</span>
                             @endif
                             @if($tag->status == 0)
                             <span class="badge badge-md badge-soft-danger"><i
@@ -150,8 +150,8 @@
     <x-slot name="footer">
         <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3"
-                data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</button>
-            <button type="submit" id="create_tag_btn" class="btn btn-primary">{{__('admin.blog.create_new')}}</button>
+                data-bs-dismiss="modal">{{__('admin.common.cancel')}}</button>
+            <button type="submit" id="create_tag_btn" class="btn btn-primary">{{__('admin.common.create_new')}}</button>
         </div>
     </x-slot>
 </x-admin.modal>
@@ -173,11 +173,11 @@
                 <label for="edit_tag_status" class="form-check-label form-label mt-0 mb-0">
                     <input class="form-check-input form-label me-2" id="edit_tag_status" type="checkbox" role="switch"
                         aria-checked="false">
-                    {{__('admin.blog.status')}}
+                    {{__('admin.common.status')}}
                 </label>
             </div>
             <div class="d-flex justify-content-center">
-                <button class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</button>
+                <button class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</button>
                 <button class="btn btn-primary" id="update_tag_btn">{{__('admin.blog.update')}}</button>
             </div>
         </div>

@@ -37,7 +37,7 @@
                                             @if (hasPermission($permissions, 'other_settings', 'create'))
                                                 <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center"
                                                     data-bs-toggle="modal" data-bs-target="#add_sitemap"><i
-                                                        class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new') }}</a>
+                                                        class="ti ti-plus me-2"></i>{{ __('admin.common.add_new') }}</a>
                                             @endif
                                         </div>
                                     </div>
@@ -50,7 +50,7 @@
                                     <table class="table" id="sitemapTable">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>{{ __('admin.general_settings.url') }}</th>
+                                                <th>{{ __('admin.cms.url') }}</th>
                                                 <th>{{ __('admin.general_settings.file_name') }}</th>
                                                 @if (hasPermission($permissions, 'other_settings', 'edit') || hasPermission($permissions, 'other_settings', 'delete'))
                                                     <th>{{ __('admin.common.action') }}</th>
@@ -85,7 +85,7 @@
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-light me-3"
-                    data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
+                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                 <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.submit') }}</button>
             </div>
         </x-slot>

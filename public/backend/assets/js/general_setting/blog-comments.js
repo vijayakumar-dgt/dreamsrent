@@ -105,19 +105,19 @@
                 const table = $("#blogCommentTable").DataTable();
 
                 switch (selected) {
-                    case _l("admin.blog.ascending"):
+                    case _l("admin.common.ascending"):
                         table.order([1, "asc"]).draw();
                         break;
-                    case _l("admin.blog.descending"):
+                    case _l("admin.common.descending"):
                         table.order([1, "desc"]).draw();
                         break;
-                    case _l("admin.blog.last_month"):
+                    case _l("admin.common.last_month"):
                         filterByDateRange(30, table);
                         break;
-                    case _l("admin.blog.last_7_days"):
+                    case _l("admin.common.last_7_days"):
                         filterByDateRange(7, table);
                         break;
-                    case _l("admin.blog.latest"):
+                    case _l("admin.common.latest"):
                     default:
                         table.order([1, "desc"]).draw();
                         break;

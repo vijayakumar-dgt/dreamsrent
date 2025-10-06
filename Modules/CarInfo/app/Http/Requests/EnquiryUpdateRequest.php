@@ -23,7 +23,7 @@ class EnquiryUpdateRequest extends CustomFailedValidation
     {
         return [
             'comment.required' => __('admin.bookings.comment_required'),
-            'status.required'  => __('admin.bookings.status_required'),
+            'status.required'  => __('admin.rentals.status_required'),
         ];
     }
 }

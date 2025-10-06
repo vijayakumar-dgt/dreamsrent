@@ -172,7 +172,7 @@
                             <div class="topnav-dropdown-header">
                                 <span class="notification-title">{{ __('web.user.notifications') }}</span>
                                 <button type="button" class="clear-noti has-notification d-none btn border-0" id="markAllAsRead">
-                                    {{ __('web.user.clear_all') }}
+                                    {{ __('web.common.clear_all') }}
                                 </button>
                             </div>
                             <div class="noti-content">

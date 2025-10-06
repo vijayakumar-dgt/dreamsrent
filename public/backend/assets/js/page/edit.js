@@ -64,7 +64,7 @@
                     required: _l("admin.page.keyword_required"),
                 },
                 description: {
-                    required: _l("admin.page.description_required"),
+                    required: _l("admin.cms.description_required"),
                     minlength: _l("admin.page.description_min"),
                 },
                 mete_title: {

@@ -309,7 +309,7 @@
                 }
 
                 $(".btn-primary")
-                    .text(_l("admin.general_settings.save_changes"))
+                    .text(_l("admin.common.save_changes"))
                     .prop("disabled", false);
             },
             complete: function () {
