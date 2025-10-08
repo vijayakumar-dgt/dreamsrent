@@ -13,37 +13,9 @@
             pageLength: 10,
             lengthChange: false,
             drawCallback: function () {
-                $(".dataTables_info").addClass("d-none");
-                $(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
-
-                const tableWrapper = $(this).closest(".dataTables_wrapper");
-                const info = tableWrapper.find(".dataTables_info");
-                const pagination = tableWrapper.find(".dataTables_paginate");
-
-                $(".table-footer").empty().append(
-                    $("<div>", { class: "d-flex justify-content-between align-items-center w-100" }).append(
-                        $("<div>", { class: "datatable-info" }).append(info.clone(true)),
-                        $("<div>", { class: "datatable-pagination" }).append(pagination.clone(true))
-                    )
-                );
-
-                $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+                customizeTableFooter($(this));
             },
-            language: {
-                emptyTable: _l("admin.common.empty_table"),
-                info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
-                infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
-                infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
-                lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
-                search: _l("admin.common.search") + ":",
-                zeroRecords: _l("admin.common.no_matching_records"),
-                paginate: {
-                    first: _l("admin.common.first"),
-                    last: _l("admin.common.last"),
-                    next: _l("admin.common.next"),
-                    previous: _l("admin.common.previous")
-                }
-            },
+            language: getDataTableLanguage(),
             initComplete: function () {
                 $(".table-loader, .input-loader, .label-loader").hide();
                 $(".real-table, .real-label, .real-input").removeClass("d-none");
@@ -247,7 +219,7 @@
                     }
                 }
             });
-        }); 
+        });
     });
 
     $(document).ready(function () {

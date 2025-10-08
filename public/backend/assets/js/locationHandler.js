@@ -27,10 +27,10 @@
             },
             errorPlacement: function (error, element) {
                 if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
+                    let errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 } else {
-                    var errorId = element.attr("id") + "_error";
+                    let errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 }
             },
@@ -51,7 +51,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                let errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -292,11 +292,11 @@
                                 ".dataTables_wrapper .dataTables_paginate"
                             ).addClass("d-none");
 
-                            var tableWrapper = $(this).closest(
+                            let tableWrapper = $(this).closest(
                                 ".dataTables_wrapper"
                             );
-                            var info = tableWrapper.find(".dataTables_info");
-                            var pagination = tableWrapper.find(
+                            let info = tableWrapper.find(".dataTables_info");
+                            let pagination = tableWrapper.find(
                                 ".dataTables_paginate"
                             );
 

@@ -32,7 +32,7 @@
                 },
             },
             errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "_error";
+                let errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
@@ -40,7 +40,7 @@
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = $(element).attr("id") + "_error";
+                let errorId = $(element).attr("id") + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -185,9 +185,9 @@
                 const img = new Image();
                 img.src = e.target.result;
 
-                img.onload = function () {                   
+                img.onload = function () {
                     preview.attr("src", e.target.result).show();
-                    $(".frames").removeClass("d-none");                   
+                    $(".frames").removeClass("d-none");
                 };
             };
 

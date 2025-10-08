@@ -11,7 +11,7 @@
     const bookingData = JSON.parse(chartDataElement.dataset.bookings);
 
     document.addEventListener("DOMContentLoaded", function () {
-        var options = {
+        let options = {
             chart: {
                 type: "heatmap",
                 height: 400,
@@ -57,7 +57,7 @@
             series: series,
         };
 
-        var chart = new ApexCharts(
+        let chart = new ApexCharts(
             document.querySelector("#statistics_chart"),
             options
         );
@@ -68,8 +68,8 @@
         showToast("error", "Booking data is not available or not an array");
     }
 
-    var incomeData = [];
-    var categories = [];
+    let incomeData = [];
+    let categories = [];
 
     if (Array.isArray(bookingData) && bookingData.length > 0) {
         bookingData.forEach((booking) => {
@@ -87,7 +87,7 @@
         showToast("error", "No booking data available for processing");
     }
 
-    var optionsIncome = {
+    let optionsIncome = {
         series: [{ name: "Income", data: incomeData }],
         chart: { type: "bar", height: 280 },
         plotOptions: {
@@ -105,7 +105,7 @@
     };
 
     if (typeof ApexCharts !== "undefined") {
-        var chart = new ApexCharts(
+        let chart = new ApexCharts(
             document.querySelector("#income_expense_chart"),
             optionsIncome
         );
@@ -231,7 +231,7 @@
 
         if (incomeAmount) {
             incomeAmount.innerHTML = `
-            $${totalIncome.toLocaleString()} 
+            $${totalIncome.toLocaleString()}
             <span class="fs-13 fw-semibold">0%</span>
         `;
         }

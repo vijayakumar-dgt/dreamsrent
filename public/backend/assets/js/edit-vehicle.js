@@ -70,7 +70,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                                                            
+                </div>
             </div>
         `;
 
@@ -361,7 +361,7 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-2 icon-list">
-                    <a href="#" class="edit-icon d-flex align-items-center justify-content-center me-2" 
+                    <a href="#" class="edit-icon d-flex align-items-center justify-content-center me-2"
                     data-id="${DOMPurify.sanitize(
                         uniqueId
                     )}" data-bs-toggle="modal" data-bs-target="#add_price">
@@ -437,7 +437,7 @@
                 )}">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
-                        ${_l("admin.rentals.day_price")} : 
+                        ${_l("admin.rentals.day_price")} :
                         <span class="text-gray-9">${currency}${parseFloat(
             tarrif.tariff_daily_price
         ).toFixed(0)}</span>
@@ -446,7 +446,7 @@
                         ).toFixed(0)}">
                     </p>
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 from-days">
-                        ${_l("admin.rentals.from_days")} : 
+                        ${_l("admin.rentals.from_days")} :
                         <span class="text-gray-9">${DOMPurify.sanitize(
                             tarrif.tariff_from_days.toString()
                         )}</span>
@@ -455,7 +455,7 @@
                         )}">
                     </p>
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 to-days">
-                        ${_l("admin.rentals.to_days")} : 
+                        ${_l("admin.rentals.to_days")} :
                         <span class="text-gray-9">${DOMPurify.sanitize(
                             tarrif.tariff_to_days.toString()
                         )}</span>
@@ -464,7 +464,7 @@
                         )}">
                     </p>
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 base-km">
-                        ${_l("admin.rentals.base_km")} : 
+                        ${_l("admin.rentals.base_km")} :
                         <span class="text-gray-9">${DOMPurify.sanitize(
                             tarrif.tariff_base_km.toString()
                         )}</span>
@@ -473,7 +473,7 @@
                         )}">
                     </p>
                     <p class="fs-13 fw-medium pe-2 mb-0 extra-price">
-                        ${_l("admin.rentals.extra_price")} : 
+                        ${_l("admin.rentals.extra_price")} :
                         <span class="text-gray-9">${currency}${parseFloat(
             tarrif.tariff_extra_price
         ).toFixed(0)}</span>
@@ -882,7 +882,7 @@
             errorElement: "span",
             errorPlacement: function (error, element) {
                 if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
+                    let errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 } else if (element.attr("name") === "vehicle_image") {
                     $("#vehicle_image_error_container").html(error); // Append error to a separate div
@@ -908,7 +908,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                let errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
         });
@@ -918,9 +918,9 @@
         });
 
         $("#vehicle_image").on("change", function () {
-            var file = this.files[0];
+            let file = this.files[0];
             if (file) {
-                var img = new Image();
+                let img = new Image();
                 img.src = URL.createObjectURL(file);
                 img.onload = function () {
                     // No validation; optionally still use image load event if needed
@@ -2066,7 +2066,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>                                                 
+                            </div>
                         </div>`;
 
                     $("#car_damage_append").append(newDamage);

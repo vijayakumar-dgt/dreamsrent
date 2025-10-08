@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Config;
 use Modules\Communication\Exceptions\SendGridConfigurationException;
 use Modules\Communication\Exceptions\SmtpConfigurationException;
 use Modules\GeneralSetting\Models\CommunicationSetting;
+use Modules\GeneralSetting\Models\GeneralSetting;
 
 class MailConfigurator
 {
@@ -77,6 +78,11 @@ class MailConfigurator
             ->where('key', 'smtp_host')
             ->value('value');
 
+        $getPort = CommunicationSetting::where('settings_type', 1)
+            ->where('type', 'smtp')
+            ->where('key', 'smtp_port')
+            ->value('value');
+
 
          if (!$getmail || !$getpassword || !$gethost) {
             throw new SmtpConfigurationException("SMTP settings are incomplete.");
@@ -88,7 +94,7 @@ class MailConfigurator
         Config::set('mail.mailers.smtp', [
             'transport'  => 'smtp',
             'host'       => $gethost,
-            'port'       => 587,
+            'port'       => $getPort ?? 587,
             'encryption' => 'tls',
             'username'   => $getmail,
             'password'   => $getpassword,
@@ -107,12 +113,14 @@ class MailConfigurator
             ->where('key', 'sendgrid_key')
             ->value('value');
 
+        $companyName = GeneralSetting::where('key', 'organization_name')->first();
+
           if (!$getmail || !$getkey) {
             throw new SendGridConfigurationException("SendGrid settings are incomplete.");
         }
 
         Config::set('mail.from.address', $getmail);
-        Config::set('mail.from.name', 'Truelysell');
+        Config::set('mail.from.name', $companyName->value ?? "No-Reply");
         Config::set('mail.default', 'smtp');
         Config::set('mail.mailers.smtp', [
             'transport'  => 'smtp',

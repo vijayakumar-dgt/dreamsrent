@@ -45,13 +45,10 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                } else if (element.attr("name") === "price_type_id") {
+                if (element.attr("name") === "price_type_id") {
                     $("#price_type_error").text(error.text()).show();
                 } else {
-                    var errorId = element.attr("id") + "_error";
+                    let errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 }
             },
@@ -72,7 +69,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                let errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -229,13 +226,13 @@
                                 ? _l("admin.common.benefits")
                                 : _l("admin.common.benefit")
                         }
-                           <button 
+                           <button
                                 type="button"
                                 class="btn btn-xs btn-info-light fs-14 extlinkbtn py-0 px-1 ms-1 view-benefits-btn"
                                 data-benefits='${JSON.stringify(
                                     row.insurance_benefits
                                 )}'
-                                data-bs-toggle="modal" 
+                                data-bs-toggle="modal"
                                 data-bs-target="#view-benifits"
                             >
                                 <i class="ti ti-external-link"></i>
@@ -277,9 +274,9 @@
                                 "edit"
                             )
                                 ? `<li>
-                               <button 
-                                    type="button" 
-                                    class="dropdown-item rounded-1 edit-insurance-btn" 
+                               <button
+                                    type="button"
+                                    class="dropdown-item rounded-1 edit-insurance-btn"
                                     data-id="${data}"
                                 >
                                     <i class="ti ti-edit me-1"></i>${_l(
@@ -297,11 +294,11 @@
                                  "delete"
                              )
                                  ? `<li>
-                                <button 
-                                    type="button" 
-                                    class="dropdown-item rounded-1 delete-insurance-btn" 
-                                    data-id="${data}" 
-                                    data-bs-toggle="modal" 
+                                <button
+                                    type="button"
+                                    class="dropdown-item rounded-1 delete-insurance-btn"
+                                    data-id="${data}"
+                                    data-bs-toggle="modal"
                                     data-bs-target="#delete-modal"
                                 >
                                     <i class="ti ti-trash me-1"></i>${_l(
@@ -326,74 +323,10 @@
             lengthChange: false,
             responsive: false,
             autoWidth: false,
-            language: {
-                emptyTable: _l("admin.common.empty_table"),
-                info:
-                    _l("admin.common.showing") +
-                    " _START_ " +
-                    _l("admin.common.to") +
-                    " _END_ " +
-                    _l("admin.common.of") +
-                    " _TOTAL_ " +
-                    _l("admin.common.entries"),
-                infoEmpty:
-                    _l("admin.common.showing") +
-                    " 0 " +
-                    _l("admin.common.to") +
-                    " 0 " +
-                    _l("admin.common.of") +
-                    " 0 " +
-                    _l("admin.common.entries"),
-                infoFiltered:
-                    "(" +
-                    _l("admin.common.filtered_from") +
-                    " _MAX_ " +
-                    _l("admin.common.total_entries") +
-                    ")",
-                lengthMenu:
-                    _l("admin.common.show") +
-                    " _MENU_ " +
-                    _l("admin.common.entries"),
-                search: _l("admin.common.search") + ":",
-                zeroRecords: _l("admin.common.no_matching_records"),
-                paginate: {
-                    first: _l("admin.common.first"),
-                    last: _l("admin.common.last"),
-                    next: _l("admin.common.next"),
-                    previous: _l("admin.common.previous"),
-                },
-            },
             drawCallback: function () {
-                $(".dataTables_info").addClass("d-none");
-                $(".dataTables_wrapper .dataTables_paginate").addClass(
-                    "d-none"
-                );
-
-                var tableWrapper = $(this).closest(".dataTables_wrapper");
-                var info = tableWrapper.find(".dataTables_info");
-                var pagination = tableWrapper.find(".dataTables_paginate");
-
-                $(".table-footer")
-                    .empty()
-                    .append(
-                        $(
-                            '<div class="d-flex justify-content-between align-items-center w-100"></div>'
-                        )
-                            .append(
-                                $('<div class="datatable-info"></div>').append(
-                                    info.clone(true)
-                                )
-                            )
-                            .append(
-                                $(
-                                    '<div class="datatable-pagination"></div>'
-                                ).append(pagination.clone(true))
-                            )
-                    );
-                $(".table-footer")
-                    .find(".dataTables_paginate")
-                    .removeClass("d-none");
+                customizeTableFooter($(this));
             },
+            language: getDataTableLanguage(),
         });
     }
 

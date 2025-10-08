@@ -17,7 +17,7 @@
                 },
             },
             errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "_error";
+                let errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
@@ -25,7 +25,7 @@
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                let errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {

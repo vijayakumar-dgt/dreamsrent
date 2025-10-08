@@ -11,36 +11,10 @@
             searching: false,
             pageLength: 10,
             lengthChange: false,
-            "drawCallback": function () {
-                $(".dataTables_info").addClass("d-none");
-                $(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
-
-                var tableWrapper = $(this).closest(".dataTables_wrapper");
-                var info = tableWrapper.find(".dataTables_info");
-                var pagination = tableWrapper.find(".dataTables_paginate");
-
-                $(".table-footer").empty()
-                    .append($("<div class='d-flex justify-content-between align-items-center w-100'></div>")
-                        .append($("<div class='datatable-info'></div>").append(info.clone(true)))
-                        .append($("<div class='datatable-pagination'></div>").append(pagination.clone(true)))
-                    );
-                $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+            drawCallback: function () {
+                customizeTableFooter($(this));
             },
-            language: {
-                emptyTable: _l("admin.common.empty_table"),
-                info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
-                infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
-                infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
-                lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
-                search: _l("admin.common.search") + ":",
-                zeroRecords: _l("admin.common.empty_table"),
-                paginate: {
-                    first: _l("admin.common.first"),
-                    last: _l("admin.common.last"),
-                    next: _l("admin.common.next"),
-                    previous: _l("admin.common.previous"),
-                },
-            },
+            language: getDataTableLanguage(),
             initComplete: function () {
                 $(".table-loader, .input-loader, .label-loader").hide();
                 $(".real-table, .real-label, .real-input").removeClass("d-none");
@@ -53,7 +27,7 @@
         });
 
     })();
-    
+
     document.addEventListener("DOMContentLoaded", function () {
         let filters = {
             sort: null,
@@ -108,26 +82,26 @@
         // Apply date range filter (for last_7_days and last_month)
         if (filters.sort === "last_7_days" || filters.sort === "last_month") {
             const now = new Date();
-        
+
             filteredRows = filteredRows.filter((row) => {
                 const createdAttr = row.getAttribute("data-created");
                 const rowDate = new Date(createdAttr); // YYYY-MM-DD is safely parsable
-        
+
                 if (filters.sort === "last_7_days") {
                     const sevenDaysAgo = new Date();
                     sevenDaysAgo.setDate(now.getDate() - 7);
                     return rowDate >= sevenDaysAgo && rowDate <= now;
                 }
-        
+
                 if (filters.sort === "last_month") {
                     const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
                     const lastDayLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
                     return rowDate >= firstDayLastMonth && rowDate <= lastDayLastMonth;
                 }
-        
+
                 return true;
             });
-        
+
             // Sort after filter
             filteredRows.sort((a, b) => {
                 const dateA = new Date(a.getAttribute("data-created"));
@@ -192,7 +166,7 @@
                     if (response.success) {
                         showToast("success", response.message);
                         $("#delete_modal").modal("hide");
-                        location.reload(); 
+                        location.reload();
                     } else {
                         showToast(response.message);
                     }

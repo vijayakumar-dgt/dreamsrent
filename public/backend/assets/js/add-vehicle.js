@@ -177,7 +177,7 @@
             errorElement: "span",
             errorPlacement: function (error, element) {
                 if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
+                    let errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 } else if (element.attr("name") === "vehicle_image") {
                     $("#vehicle_image_error_container").html(error);
@@ -203,7 +203,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                let errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
         });
@@ -213,9 +213,9 @@
         });
 
         $("#vehicle_image").on("change", function () {
-            var file = this.files[0];
+            let file = this.files[0];
             if (file) {
-                var img = new Image();
+                let img = new Image();
                 img.src = URL.createObjectURL(file);
                 img.onload = function () {
                     // Removed dimension check and validation
@@ -1271,7 +1271,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                                                            
+                    </div>
                 </div>`;
 
                     $("#car_damage_append").append(newDamage);
@@ -2022,7 +2022,7 @@
         });
 
         $(document).on("click", ".change-language", function () {
-            var languageCode = $(this).data("language_code");
+            let languageCode = $(this).data("language_code");
 
             $.ajax({
                 url: "/admin/flag-change-language",
@@ -2189,9 +2189,9 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center icon-list">
-                            <a href="#" class="edit-icon-in me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
-                                data-id="${uniqueId}" 
-                                data-price="${insurancePrice}" 
+                            <a href="#" class="edit-icon-in me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance"
+                                data-id="${uniqueId}"
+                                data-price="${insurancePrice}"
                                 data-price-type="${
                                     insurancePriceTypeId == 7
                                         ? "percentage"

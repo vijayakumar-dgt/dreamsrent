@@ -214,7 +214,7 @@
             $.ajax({
                 url: "/admin/settings/tax-rate/delete",
                 type: "POST",
-                data: $(this).serialize(), 
+                data: $(this).serialize(),
                 headers: {
                     Accept: "application/json",
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
@@ -276,7 +276,7 @@
             $.ajax({
                 url: "/admin/settings/tax-group/delete",
                 type: "POST",
-                data: $(this).serialize(), 
+                data: $(this).serialize(),
                 headers: {
                     Accept: "application/json",
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
@@ -515,78 +515,10 @@
                         searching: false,
                         pageLength: 10,
                         lengthChange: false,
-                        language: {
-                            emptyTable: _l("admin.common.empty_table"),
-                            info:
-                                _l("admin.common.showing") +
-                                " _START_ " +
-                                _l("admin.common.to") +
-                                " _END_ " +
-                                _l("admin.common.of") +
-                                " _TOTAL_ " +
-                                _l("admin.common.entries"),
-                            infoEmpty:
-                                _l("admin.common.showing") +
-                                " 0 " +
-                                _l("admin.common.to") +
-                                " 0 " +
-                                _l("admin.common.of") +
-                                " 0 " +
-                                _l("admin.common.entries"),
-                            infoFiltered:
-                                "(" +
-                                _l("admin.common.filtered_from") +
-                                " _MAX_ " +
-                                _l("admin.common.total_entries") +
-                                ")",
-                            lengthMenu:
-                                _l("admin.common.show") +
-                                " _MENU_ " +
-                                _l("admin.common.entries"),
-                            search: _l("admin.common.search") + ":",
-                            zeroRecords: _l("admin.common.no_matching_records"),
-                            paginate: {
-                                first: _l("admin.common.first"),
-                                last: _l("admin.common.last"),
-                                next: _l("admin.common.next"),
-                                previous: _l("admin.common.previous"),
-                            },
-                        },
                         drawCallback: function () {
-                            $(".dataTables_info").addClass("d-none");
-                            $(
-                                ".dataTables_wrapper .dataTables_paginate"
-                            ).addClass("d-none");
-
-                            var tableWrapper = $(this).closest(
-                                ".dataTables_wrapper"
-                            );
-                            var info = tableWrapper.find(".dataTables_info");
-                            var pagination = tableWrapper.find(
-                                ".dataTables_paginate"
-                            );
-
-                            $(".first-table .table-footer")
-                                .empty()
-                                .append(
-                                    $(
-                                        '<div class="d-flex justify-content-between align-items-center w-100"></div>'
-                                    )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-info"></div>'
-                                            ).append(info.clone(true))
-                                        )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-pagination"></div>'
-                                            ).append(pagination.clone(true))
-                                        )
-                                );
-                            $(".first-table .table-footer")
-                                .find(".dataTables_paginate")
-                                .removeClass("d-none");
+                            customizeTableFooter($(this));
                         },
+                        language: getDataTableLanguage(),
                     });
                 }
             },
@@ -717,78 +649,10 @@
                         searching: false,
                         pageLength: 10,
                         lengthChange: false,
-                        language: {
-                            emptyTable: _l("admin.common.empty_table"),
-                            info:
-                                _l("admin.common.showing") +
-                                " _START_ " +
-                                _l("admin.common.to") +
-                                " _END_ " +
-                                _l("admin.common.of") +
-                                " _TOTAL_ " +
-                                _l("admin.common.entries"),
-                            infoEmpty:
-                                _l("admin.common.showing") +
-                                " 0 " +
-                                _l("admin.common.to") +
-                                " 0 " +
-                                _l("admin.common.of") +
-                                " 0 " +
-                                _l("admin.common.entries"),
-                            infoFiltered:
-                                "(" +
-                                _l("admin.common.filtered_from") +
-                                " _MAX_ " +
-                                _l("admin.common.total_entries") +
-                                ")",
-                            lengthMenu:
-                                _l("admin.common.show") +
-                                " _MENU_ " +
-                                _l("admin.common.entries"),
-                            search: _l("admin.common.search") + ":",
-                            zeroRecords: _l("admin.common.no_matching_records"),
-                            paginate: {
-                                first: _l("admin.common.first"),
-                                last: _l("admin.common.last"),
-                                next: _l("admin.common.next"),
-                                previous: _l("admin.common.previous"),
-                            },
-                        },
                         drawCallback: function () {
-                            $(".dataTables_info").addClass("d-none");
-                            $(
-                                ".dataTables_wrapper .dataTables_paginate"
-                            ).addClass("d-none");
-
-                            var tableWrapper = $(this).closest(
-                                ".dataTables_wrapper"
-                            );
-                            var info = tableWrapper.find(".dataTables_info");
-                            var pagination = tableWrapper.find(
-                                ".dataTables_paginate"
-                            );
-
-                            $(".second-table .table-footer")
-                                .empty()
-                                .append(
-                                    $(
-                                        '<div class="d-flex justify-content-between align-items-center w-100"></div>'
-                                    )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-info"></div>'
-                                            ).append(info.clone(true))
-                                        )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-pagination"></div>'
-                                            ).append(pagination.clone(true))
-                                        )
-                                );
-                            $(".second-table .table-footer")
-                                .find(".dataTables_paginate")
-                                .removeClass("d-none");
+                            customizeTableFooter($(this));
                         },
+                        language: getDataTableLanguage(),
                     });
                 }
             },

@@ -53,7 +53,7 @@
                     required: true,
                     pattern: /^[0-9]+$/,
                 },
-               
+
             },
             messages: {
                 organization_name: {
@@ -89,7 +89,7 @@
                 },
             },
             errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "_error";
+                let errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
@@ -97,7 +97,7 @@
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                let errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -176,7 +176,7 @@
                     },
                 },
                 errorPlacement: function (error, element) {
-                    var errorId = element.attr("name") + "_error";
+                    let errorId = element.attr("name") + "_error";
                     $("#" + errorId).text(error.text());
                 },
                 highlight: function (element) {
@@ -184,7 +184,7 @@
                 },
                 unhighlight: function (element) {
                     $(element).removeClass("is-invalid").addClass("is-valid");
-                    var errorId = element.name + "_error";
+                    let errorId = element.name + "_error";
                     $("#" + errorId).text("");
                 },
                 submitHandler: function (form) {
@@ -335,9 +335,9 @@
                 const img = new Image();
                 img.src = e.target.result;
 
-                img.onload = function () {                   
+                img.onload = function () {
                     preview.attr("src", e.target.result).show();
-                    $(".frames").removeClass("d-none");                    
+                    $(".frames").removeClass("d-none");
                 };
             };
 

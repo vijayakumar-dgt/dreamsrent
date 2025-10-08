@@ -63,7 +63,7 @@
                 },
             },
             errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "_error";
+                let errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
@@ -71,7 +71,7 @@
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                let errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -165,7 +165,7 @@
                 },
             },
             errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "_error";
+                let errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
@@ -173,7 +173,7 @@
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                let errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -313,17 +313,17 @@
                                          "edit"
                                      )
                                          ? `<li>
-                                           <button 
-                                                type="button" 
-                                                class="dropdown-item rounded-1 edit-signature-btn" 
-                                                data-id="${value.id}" 
+                                           <button
+                                                type="button"
+                                                class="dropdown-item rounded-1 edit-signature-btn"
+                                                data-id="${value.id}"
                                                 data-name="${
                                                     value.signature_name
-                                                }" 
+                                                }"
                                                 data-image="${
                                                     value.signature_image
-                                                }" 
-                                                data-status="${value.status}" 
+                                                }"
+                                                data-status="${value.status}"
                                                 data-is_default="${
                                                     value.is_default
                                                 }">
@@ -341,11 +341,11 @@
                                                   "delete"
                                               )
                                                   ? `<li>
-                                           <button 
-                                                type="button" 
-                                                class="dropdown-item rounded-1 delete-signature-btn" 
-                                                data-id="${value.id}" 
-                                                data-bs-toggle="modal" 
+                                           <button
+                                                type="button"
+                                                class="dropdown-item rounded-1 delete-signature-btn"
+                                                data-id="${value.id}"
+                                                data-bs-toggle="modal"
                                                 data-bs-target="#delete_signature"
                                             >
                                                 <i class="ti ti-trash me-1"></i>${_l(
@@ -381,40 +381,9 @@
                         pageLength: 10,
                         lengthChange: false,
                         drawCallback: function () {
-                            $(".dataTables_info").addClass("d-none");
-                            $(
-                                ".dataTables_wrapper .dataTables_paginate"
-                            ).addClass("d-none");
-
-                            var tableWrapper = $(this).closest(
-                                ".dataTables_wrapper"
-                            );
-                            var info = tableWrapper.find(".dataTables_info");
-                            var pagination = tableWrapper.find(
-                                ".dataTables_paginate"
-                            );
-
-                            $(".table-footer")
-                                .empty()
-                                .append(
-                                    $(
-                                        '<div class="d-flex justify-content-between align-items-center w-100"></div>'
-                                    )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-info"></div>'
-                                            ).append(info.clone(true))
-                                        )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-pagination"></div>'
-                                            ).append(pagination.clone(true))
-                                        )
-                                );
-                            $(".table-footer")
-                                .find(".dataTables_paginate")
-                                .removeClass("d-none");
+                            customizeTableFooter($(this));
                         },
+                        language: getDataTableLanguage(),
                     });
                 }
             },

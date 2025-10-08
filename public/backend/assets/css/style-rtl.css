@@ -985,7 +985,7 @@ ul .btn-primary:not(:disabled):not(.disabled):active:focus, ul .btn-primary:not(
 }
 
 .bg-danger-transparent {
-  background: #FFF6F4;
+  background-color: #FFEDE9 !important;
   border-color: #FFF6F4 !important;
   color: #FF0000 !important;
 }
@@ -20850,7 +20850,7 @@ span.flatpickr-weekday {
 }
 
 .chat-page-group {
-  background-image: url(../../img/bg/chat-bg.png);
+  background-image: url(../../assets/img/bg/chat-bg.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

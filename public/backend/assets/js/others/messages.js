@@ -194,36 +194,36 @@
 
     function createMessageCard(message) {
         let msgbody = "";
-        if (message.alignment === 'right') {
+        if (message.alignment === 'left') {
             msgbody = `<div class="chats">
                             <div class="chat-avatar">
-                                <img src="${message.sender_avatar}" class="rounded-circle" alt="image">
+                                <img src="${message.sender_avatar}" class="rounded-circle" alt="profile">
                             </div>
-                            <div class="chat-content">							
+                            <div class="chat-content">
                                 <div class="chat-profile-name">
                                     <h6>${message.sender_username}<i class="ti ti-circle-filled fs-7 mx-2"></i><span class="chat-time">${message.time}</span></h6>
                                 </div>
                                 <div class="chat-info">
                                     <div class="message-content">
                                         ${message.message_type == 'text' ? message.message : `<a href="${message.file_path}" target="_blank"><i class="fa fa-link"></i>  ${message.message}</a>`}
-                                    </div> 
-                                </div>			
+                                    </div>
+                                </div>
                             </div>
                         </div>`;
         } else {
             msgbody = `<div class="chats chats-right">
                         <div class="chat-content">
                             <div class="chat-profile-name text-end">
-                                <h6>${message.sender_username}<i class="ti ti-circle-filled fs-7 mx-2"></i><span class="chat-time">${message.time}</span></h6>                                        
+                                <h6>${message.sender_username}<i class="ti ti-circle-filled fs-7 mx-2"></i><span class="chat-time">${message.time}</span></h6>
                             </div>
-                            <div class="chat-info">   
+                            <div class="chat-info">
                                 <div class="message-content">
                                    ${message.message_type == 'text' ? message.message : `<a href="${message.file_path}" target="_blank"><i class="fa fa-link"></i>  ${message.message}</a>`}
-                                </div>   
+                                </div>
                             </div>
                         </div>
                         <div class="chat-avatar">
-                            <img src="${message.sender_avatar}" class="rounded-circle dreams_chat" alt="image">
+                            <img src="${message.sender_avatar}" class="rounded-circle dreams_chat" alt="profile">
                         </div>
                     </div>`;
         }

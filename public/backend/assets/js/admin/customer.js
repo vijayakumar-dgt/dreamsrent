@@ -382,7 +382,7 @@
                     }
                     $(element).removeClass("is-invalid").addClass("is-valid");
                     $('#' + element.id).siblings('span').addClass('me-3');
-                    var errorId = element.id + "_error";
+                    let errorId = element.id + "_error";
                     $("#" + errorId).text("");
                 },
                 onkeyup: function(element) {
@@ -559,7 +559,7 @@
         });
 
         $(document).on('click', '.sort_by_list .dropdown-item', function () {
-            var sortBy = $(this).data('sort');
+            let sortBy = $(this).data('sort');
             $('#sort_by_input').val(sortBy);
             $('#current_sort').text(sortBy.charAt(0).toUpperCase() + sortBy.slice(1).toLowerCase());
             $('.sort_by_list .dropdown-item').removeClass('active');

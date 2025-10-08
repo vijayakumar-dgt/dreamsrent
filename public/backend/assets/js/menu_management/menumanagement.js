@@ -166,9 +166,10 @@
                         return;
                     }
 
-                    const uniqueId = `menu-${Date.now()}-${Math.floor(
-                        Math.random() * 1000
-                    )}`;
+                    const uniqueId =
+                        typeof crypto !== "undefined" && crypto.randomUUID
+                            ? `menu-${crypto.randomUUID()}`
+                            : `menu-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
 
                     const newItem = `
                     <li class="list-group-item" data-title="${title}" data-link="${slug}">
@@ -364,7 +365,11 @@
                             const menuItems = JSON.parse(menu.menus);
 
                             menuItems.forEach((item) => {
-                                const uniqueId = `menu-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                                let uniqueId =
+                                    typeof crypto !== "undefined" && crypto.randomUUID
+                                        ? `menu-${crypto.randomUUID()}`
+                                        : `menu-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+
                                 const safeLabel = DOMPurify.sanitize(item.label || "Untitled");
                                 const safeLink = DOMPurify.sanitize(item.link || "/");
                                 const slug = safeLink === "/" ? "/" : safeLink.replace(/^\/+/, "");
