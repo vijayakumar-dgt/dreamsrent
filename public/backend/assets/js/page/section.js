@@ -8,8 +8,11 @@
 
         $("#addBannerOneForm").submit(function (event) {
             event.preventDefault();
+            const formData = new FormData(this);
+            submitBannerForm(formData);
+        });
 
-            var formData = new FormData(this);
+        function submitBannerForm(formData) {
             $.ajax({
                 url: "/admin/section-store",
                 method: "POST",
@@ -20,49 +23,50 @@
                 cache: false,
                 headers: {
                     Accept: "application/json",
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
-                    ),
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                 },
-                beforeSend: function () {
-                    $(".banner_one").attr("disabled", true).html(`
-                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                            "admin.common.saving"
-                        )}..
-                    `);
-                },
-                complete: function () {
-                    $(".banner_one")
-                        .attr("disabled", false)
-                        .html(_l("admin.common.save_changes"));
-                },
+                beforeSend: onBannerBeforeSend,
+                complete: onBannerComplete,
             })
-                .done((response, statusText, xhr) => {
-                    $(".error-text").text("");
-                    $(".form-control").removeClass("is-invalid");
-                    if (response.code === 200) {
-                        showToast("success", response.message);
+                .done(onBannerSuccess)
+                .fail(onBannerError);
+        }
 
-                        $("#add_banner_sec").modal("hide");
-                        initTable();
-                    } else {
-                        showToast("success", response.message);
-                    }
-                })
-                .fail((error) => {
-                    $(".error-text").text("");
-                    $(".form-control").removeClass("is-invalid");
+        function onBannerBeforeSend() {
+            $(".banner_one").attr("disabled", true).html(`
+                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l("admin.common.saving")}..
+            `);
+        }
 
-                    if (error.status == 422) {
-                        $.each(error.responseJSON, function (key, val) {
-                            $("#" + key).addClass("is-invalid");
-                            $("#" + key + "_error").text(val[0]);
-                        });
-                    } else {
-                        showToast("error", error.responseJSON.message);
-                    }
+        function onBannerComplete() {
+            $(".banner_one").attr("disabled", false).html(_l("admin.common.save_changes"));
+        }
+
+        function onBannerSuccess(response) {
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid");
+            if (response.code === 200) {
+                showToast("success", response.message);
+                $("#add_banner_sec").modal("hide");
+                initTable();
+            } else {
+                showToast("success", response.message);
+            }
+        }
+
+        function onBannerError(error) {
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid");
+            if (error.status == 422) {
+                $.each(error.responseJSON, function (key, val) {
+                    $("#" + key).addClass("is-invalid");
+                    $("#" + key + "_error").text(val[0]);
                 });
-        });
+            } else {
+                showToast("error", error.responseJSON.message);
+            }
+        }
+
 
         $(document).on("click", ".section_data", function (e) {
             e.preventDefault();
@@ -778,19 +782,19 @@
                                                         ? `/storage/${value.thumbnail_image_boat_experience_2}`
                                                         : ""
                                                 }"
-                                                
+
                                                 data-thumbnail_image_boat_benefits_main="${
                                                     value.thumbnail_image_boat_benefits_main
                                                         ? `/storage/${value.thumbnail_image_boat_benefits_main}`
                                                         : ""
                                                 }"
-                                                
+
                                                 data-thumbnail_image_bike_experience_1="${
                                                     value.thumbnail_image_bike_experience_1
                                                         ? `/storage/${value.thumbnail_image_bike_experience_1}`
                                                         : ""
                                                 }"
-                                                
+
                                                 data-why_icon_1="${
                                                     value.why_icon_1
                                                         ? `/storage/${value.why_icon_1}`

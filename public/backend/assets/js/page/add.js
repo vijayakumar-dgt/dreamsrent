@@ -108,13 +108,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                } else {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
+                const errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
@@ -133,7 +128,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                const errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -158,29 +153,21 @@
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
                         if (resp.code === 200) {
-                            showToast(
-                                "success",
-                                _l("admin.page.new_page_created")
-                            );
+                            showToast("success", _l("admin.page.new_page_created"));
 
                             setTimeout(() => {
-                                window.location.href =
-                                    window.location.origin + "/admin/pages";
+                                window.location.href = window.location.origin + "/admin/pages";
                             }, 1500);
                         }
-                        $("#add-page")
-                            .text(_l("admin.common.create_new"))
-                            .prop("disabled", false);
+                        $("#add-page").text(_l("admin.common.create_new")).prop("disabled", false);
                     },
                     error: function (error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-                        $("#add-page")
-                            .text(_l("admin.common.create_new"))
-                            .prop("disabled", false);
+                        $("#add-page").text(_l("admin.common.create_new")).prop("disabled", false);
 
                         if (error.responseJSON.code === 422) {
-                            showToast("error", error.responseJSON.message); // Show error using Toastr
+                            showToast("error", error.responseJSON.message);
                         } else {
                             toastr.error("An unexpected error occurred!");
                         }
@@ -190,6 +177,56 @@
         });
 
         initializeSummernote();
+
+        function handlePageCreateSuccess(resp) {
+            clearFormErrors();
+
+            if (resp.code === 200) {
+                showToast("success", _l("admin.page.new_page_created"));
+                redirectToPages();
+            }
+
+            resetAddPageButton();
+        }
+
+        function handlePageCreateError(error) {
+            clearFormErrors();
+            resetAddPageButton();
+
+            if (error?.responseJSON?.code === 422) {
+                showToast("error", error.responseJSON.message);
+            } else {
+                toastr.error("An unexpected error occurred!");
+            }
+        }
+
+        function clearFormErrors() {
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+        }
+
+        function resetAddPageButton() {
+            $("#add-page").text(_l("admin.common.create_new")).prop("disabled", false);
+        }
+
+        function redirectToPages() {
+            setTimeout(() => {
+                window.location.href = `${window.location.origin}/admin/pages`;
+            }, 1500);
+        }
+
+        function submitPageForm(formData) {
+            $.ajax({
+                type: "POST",
+                url: "/admin/page/store",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: handlePageCreateSuccess,
+                error: handlePageCreateError,
+            });
+        }
+
 
         $("#addTextarea").on("click", function () {
             const uniqueId = `status_${Date.now()}`;
@@ -268,16 +305,18 @@
     let themeId = 1;
 
     function updateThemeSelection(selectedButton) {
-        let selectedText = $(selectedButton).text().trim();
-        
-        themeId =
-            selectedText === "First Screen"
-                ? 1
-                : selectedText === "Second Screen"
-                ? 2
-                : selectedText === "Third Screen"
-                ? 3
-                : 4;
+        const selectedText = $(selectedButton).text().trim();
+        let themeId;
+
+        if (selectedText === "First Screen") {
+            themeId = 1;
+        } else if (selectedText === "Second Screen") {
+            themeId = 2;
+        } else if (selectedText === "Third Screen") {
+            themeId = 3;
+        } else {
+            themeId = 4;
+        }
 
         $("#theme_id").val(themeId);
 
@@ -287,9 +326,11 @@
         fetchSection();
     }
 
+
     function fetchSection() {
         $(".table-loader").show();
         $(".real-table, .real-data").addClass("d-none");
+
         $.ajax({
             url: "/api/page-builder/section-list",
             type: "POST",
@@ -303,60 +344,64 @@
                 Authorization: "Bearer " + localStorage.getItem("admin_token"),
                 Accept: "application/json",
             },
-            success: function (response) {
-                if (response.code === 200) {
-                    var sectionHtml = '<div class="row p-1 row-gap-3">';
-
-                    $.each(response.data, function (index, section) {
-                        $.each(section, function (key, value) {
-                            if (
-                                key !== "id" &&
-                                key !== "name" &&
-                                key !== "icon" &&
-                                key !== "status"
-                            ) {
-                                sectionHtml += `
-                        <div class="col-xl-6 col-lg-12 col-md-4 col-sm-6 d-flex">
-                            <div class="card mb-0 draggable-card shadow-sm rounded flex-fill" draggable="true" data-value="${value}">
-                                <div class="py-2 text-center">
-                                    <span>${section.icon}</span>
-                                    <p class="fs-13 fw-medium mb-0">${section.name}</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                            }
-                        });
-                    });
-
-                    sectionHtml += "</div>";
-
-                    $("#cardContainer").html(sectionHtml);
-                }
-            },
-            error: function (error) {
-                if (error.status === 422) {
-                    var errors = error.responseJSON.errors;
-                    if (errors) {
-                        $.each(errors, function (key, messages) {
-                            toastr.error(messages[0]);
-                        });
-                    } else {
-                        toastr.error("An error occurred while fetching.");
-                    }
-                } else {
-                    toastr.error("An error occurred while fetching.");
-                }
-            },
-            complete: function () {
-                $(".table-loader").hide();
-                $(".label-loader, .input-loader").hide();
-                $(
-                    ".real-label, .real-table, .real-data, .real-input"
-                ).removeClass("d-none");
-            },
+            success: handleSectionSuccess,
+            error: handleSectionError,
+            complete: handleSectionComplete,
         });
     }
+
+    function handleSectionSuccess(response) {
+        if (response.code !== 200) return;
+
+        const sectionHtml = buildSectionHtml(response.data);
+        $("#cardContainer").html(sectionHtml);
+    }
+
+    function buildSectionHtml(data) {
+        const fragments = ['<div class="row p-1 row-gap-3">'];
+
+        data.forEach(section => {
+            Object.entries(section).forEach(([key, value]) => {
+                if (["id", "name", "icon", "status"].includes(key)) return;
+
+                fragments.push(`
+                    <div class="col-xl-6 col-lg-12 col-md-4 col-sm-6 d-flex">
+                        <div class="card mb-0 draggable-card shadow-sm rounded flex-fill" draggable="true" data-value="${value}">
+                            <div class="py-2 text-center">
+                                <span>${section.icon}</span>
+                                <p class="fs-13 fw-medium mb-0">${section.name}</p>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+        });
+
+        fragments.push('</div>');
+        return fragments.join('');
+    }
+
+    function handleSectionError(error) {
+        if (error.status === 422) {
+            const errors = error.responseJSON?.errors;
+            if (errors) {
+                Object.values(errors).forEach(messages => {
+                    toastr.error(messages[0]);
+                });
+            } else {
+                toastr.error("An error occurred while fetching.");
+            }
+        } else {
+            toastr.error("An error occurred while fetching.");
+        }
+    }
+
+    function handleSectionComplete() {
+        $(".table-loader").hide();
+        $(".label-loader, .input-loader").hide();
+        $(".real-label, .real-table, .real-data, .real-input").removeClass("d-none");
+    }
+
 
     function initializeSummernote() {
         $(".summer").summernote({

@@ -35,75 +35,74 @@
             },
             success: function (response) {
                 let tableBody = "";
+
                 if ($.fn.DataTable.isDataTable("#page_datatable")) {
                     $("#page_datatable").DataTable().destroy();
                 }
 
                 if (response.code === 200 && response.data.length > 0) {
-                    let data = response.data;
+                    const data = response.data;
 
                     $.each(data, function (index, value) {
-                        tableBody += `<tr>
-                            <td>${value.page_title}</td>
-                            <td>${value.slug}</td>
-                            <td>${value.updated_date}</td>
-                            <td>
-                                <span class="badge ${
-                                    value.status == 1
-                                        ? "badge-success-transparent"
-                                        : "badge-danger-transparent"
-                                } d-inline-flex align-items-center badge-sm">
-                                    <i class="ti ti-point-filled me-1"></i>${
-                                        value.status == 1
-                                            ? "Active"
-                                            : "Inactive"
-                                    }
-                                </span>
-                            </td>
-                            ${
-                                hasPermission(permissions, "page", "edit") ||
-                                hasPermission(permissions, "page", "delete")
-                                    ? `<td>
+                        const statusClass =
+                            value.status == 1
+                                ? "badge-success-transparent"
+                                : "badge-danger-transparent";
+
+                        const statusText = value.status == 1 ? "Active" : "Inactive";
+
+                        let actionDropdown = "";
+                        if (
+                            hasPermission(permissions, "page", "edit") ||
+                            hasPermission(permissions, "page", "delete")
+                        ) {
+                            let editButton = "";
+                            if (hasPermission(permissions, "page", "edit")) {
+                                editButton = `
+                                    <li>
+                                        <button class="dropdown-item border-0 bg-white rounded-1 edit-page" data-slug="${value.slug}">
+                                            <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                        </button>
+                                    </li>`;
+                            }
+
+                            let deleteButton = "";
+                            if (
+                                hasPermission(permissions, "page", "delete") &&
+                                value.read !== "static"
+                            ) {
+                                deleteButton = `
+                                    <li>
+                                        <button type="button" id="delete-page" class="dropdown-item rounded-1 delete-seat-type-btn" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete_page">
+                                            <i class="ti ti-trash me-1"></i>Delete
+                                        </button>
+                                    </li>`;
+                            }
+
+                            actionDropdown = `
+                                <td>
                                     <div class="dropdown">
                                         <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="ti ti-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                                            ${
-                                                hasPermission(
-                                                    permissions,
-                                                    "page",
-                                                    "edit"
-                                                )
-                                                    ? `<li>
-                                                        <button class="dropdown-item border-0 bg-white rounded-1 edit-page" data-slug="${
-                                                            value.slug
-                                                        }">
-                                                            <i class="ti ti-edit me-1"></i>${_l(
-                                                                "admin.common.edit"
-                                                            )}
-                                                        </button>
-                                                    </li>`
-                                                    : ""
-                                            }
-                                            ${
-                                                hasPermission(
-                                                    permissions,
-                                                    "page",
-                                                    "delete"
-                                                ) && value.read !== "static"
-                                                    ? `<li>
-                                                        <button type="button" id="delete-page" class="dropdown-item rounded-1 delete-seat-type-btn" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete_page">
-                                                            <i class="ti ti-trash me-1"></i>Delete
-                                                        </button>
-                                                    </li>`
-                                                    : ""
-                                            }
+                                            ${editButton}
+                                            ${deleteButton}
                                         </ul>
                                     </div>
-                                </td>`
-                                    : ""
-                            }                                
+                                </td>`;
+                        }
+
+                        tableBody += `<tr>
+                            <td>${value.page_title}</td>
+                            <td>${value.slug}</td>
+                            <td>${value.updated_date}</td>
+                            <td>
+                                <span class="badge ${statusClass} d-inline-flex align-items-center badge-sm">
+                                    <i class="ti ti-point-filled me-1"></i>${statusText}
+                                </span>
+                            </td>
+                            ${actionDropdown}
                         </tr>`;
                     });
                 } else {
@@ -115,6 +114,7 @@
                 }
 
                 $("#page_datatable tbody").html(tableBody);
+
                 if (response.data.length > 0) {
                     $("#page_datatable").DataTable({
                         ordering: true,
@@ -123,38 +123,21 @@
                         lengthChange: false,
                         drawCallback: function () {
                             $(".dataTables_info").addClass("d-none");
-                            $(
-                                ".dataTables_wrapper .dataTables_paginate"
-                            ).addClass("d-none");
+                            $(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
 
-                            var tableWrapper = $(this).closest(
-                                ".dataTables_wrapper"
-                            );
-                            var info = tableWrapper.find(".dataTables_info");
-                            var pagination = tableWrapper.find(
-                                ".dataTables_paginate"
-                            );
+                            const tableWrapper = $(this).closest(".dataTables_wrapper");
+                            const info = tableWrapper.find(".dataTables_info");
+                            const pagination = tableWrapper.find(".dataTables_paginate");
 
                             $(".table-footer")
                                 .empty()
                                 .append(
-                                    $(
-                                        '<div class="d-flex justify-content-between align-items-center w-100"></div>'
-                                    )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-info"></div>'
-                                            ).append(info.clone(true))
-                                        )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-pagination"></div>'
-                                            ).append(pagination.clone(true))
-                                        )
+                                    $('<div class="d-flex justify-content-between align-items-center w-100"></div>')
+                                        .append($('<div class="datatable-info"></div>').append(info.clone(true)))
+                                        .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
                                 );
-                            $(".table-footer")
-                                .find(".dataTables_paginate")
-                                .removeClass("d-none");
+
+                            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
                         },
                         language: {
                             emptyTable: _l("admin.common.no_matching_records"),

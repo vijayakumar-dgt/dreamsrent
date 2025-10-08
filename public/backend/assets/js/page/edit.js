@@ -94,13 +94,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                } else {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
+                const errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
@@ -119,7 +114,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                const errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -129,14 +124,11 @@
                 $(element).valid();
             },
             submitHandler: function (form) {
-                let formData = new FormData(form);
+                const formData = new FormData(form);
                 formData.append("status", $("#status").is(":checked") ? 1 : 0);
-
                 formData.set("language_id", $("#language_id").val());
 
-                $("#edit-page")
-                    .text(_l("admin.page.please_wait"))
-                    .prop("disabled", true);
+                setEditButtonLoading(true);
 
                 $.ajax({
                     type: "POST",
@@ -144,38 +136,55 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function (resp) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (resp.code === 200) {
-                            showToast("success", "Page Updated Successfully!");
-                            setTimeout(() => {
-                                window.location.href =
-                                    window.location.origin + "/admin/pages";
-                            }, 1500);
-                        }
-                        $("#edit-page")
-                            .text(_l("admin.common.update"))
-                            .prop("disabled", false);
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        $("#edit-page")
-                            .text(_l("admin.common.update"))
-                            .prop("disabled", false);
-
-                        if (error.responseJSON.code === 422) {
-                            toastr.error(error.responseJSON.message); // Show error using Toastr
-                        } else {
-                            toastr.error("An unexpected error occurred!");
-                        }
-                    },
+                    success: handlePageUpdateSuccess,
+                    error: handlePageUpdateError,
                 });
             },
         });
 
         fetchSection();
+
+        function handlePageUpdateSuccess(resp) {
+            clearFormFeedback();
+
+            if (resp.code === 200) {
+                showToast("success", "Page Updated Successfully!");
+                redirectToPages();
+            }
+
+            setEditButtonLoading(false);
+        }
+
+        function handlePageUpdateError(error) {
+            clearFormFeedback();
+            setEditButtonLoading(false);
+
+            if (error?.responseJSON?.code === 422) {
+                toastr.error(error.responseJSON.message);
+            } else {
+                toastr.error("An unexpected error occurred!");
+            }
+        }
+
+        // ---------------- Utility functions ----------------
+
+        function clearFormFeedback() {
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+        }
+
+        function setEditButtonLoading(isLoading) {
+            $("#edit-page")
+                .text(isLoading ? _l("admin.page.please_wait") : _l("admin.common.update"))
+                .prop("disabled", isLoading);
+        }
+
+        function redirectToPages() {
+            setTimeout(() => {
+                window.location.href = window.location.origin + "/admin/pages";
+            }, 1500);
+        }
+
         let pageId = $("#page_id").val();
 
         if (pageId) {
@@ -193,12 +202,12 @@
                 },
                 success: function (response) {
                     if (response.success) {
-                        var data = response.data;
+                        const data = response.data;
                         if (
                             data.page_content &&
                             data.page_content.trim() !== ""
                         ) {
-                            var pageContentArray = JSON.parse(
+                            const pageContentArray = JSON.parse(
                                 data.page_content
                             );
                             let count = 1;
@@ -383,10 +392,10 @@
         });
 
         $("#language_id").on("change", function () {
-            var langId = $(this).val();
+            const langId = $(this).val();
 
-            var pathSegments = window.location.pathname.split("/");
-            var slug = pathSegments[pathSegments.length - 1];
+            const pathSegments = window.location.pathname.split("/");
+            const slug = pathSegments[pathSegments.length - 1];
 
             if (langId && slug) {
                 window.location.href =
@@ -436,7 +445,7 @@
             callbacks: {
                 onDrop: function (event) {
                     event.preventDefault();
-                    var data =
+                    const data =
                         event.originalEvent.dataTransfer.getData("text/plain");
                     if (data) {
                         $(this).summernote("pasteHTML", data);
@@ -464,7 +473,7 @@
             },
             success: function (response) {
                 if (response.code === 200) {
-                    var sectionHtml = '<div class="row p-1">';
+                    let sectionHtml = '<div class="row p-1">';
 
                     $.each(response.data, function (index, section) {
                         $.each(section, function (key, value) {
@@ -495,7 +504,7 @@
             },
             error: function (error) {
                 if (error.status === 422) {
-                    var errors = error.responseJSON.errors;
+                    const errors = error.responseJSON.errors;
                     if (errors) {
                         $.each(errors, function (key, messages) {
                             toastr.error(messages[0]);
