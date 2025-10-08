@@ -454,6 +454,7 @@ return [
         'car'                                      => 'Car',
         'yacht'                                    => 'Yacht',
         'car_theme'                                => 'Car Theme',
+        'theme_3_footer_contact_us_title'          => 'Want to book a bike instantly Contact Us !!!',
     ],
     'common' => [
         'updated_on'               => 'Updated On',

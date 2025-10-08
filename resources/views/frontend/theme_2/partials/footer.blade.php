@@ -42,7 +42,7 @@
                     <div class="row">
                         @if (!empty($footers))
                             @foreach ($footers as $footer)
-                                <div class="col-lg-4 col-md-6">
+                                <div class="col-lg-4 col-md-6 mb-3">
                                     <!-- Footer Widget -->
                                     <div class="footer-widget footer-menu">
                                         <h5 class="footer-title">{{ ucfirst($footer->name) }}</h5>

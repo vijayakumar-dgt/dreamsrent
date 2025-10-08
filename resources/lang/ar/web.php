@@ -457,6 +457,7 @@ return  [
     'car'                                      => 'سيارة',
     'yacht'                                    => 'يخت',
     'car_theme'                                => 'سيارة',
+    'theme_3_footer_contact_us_title'          => 'هل تريد حجز دراجة على الفور اتصل بنا !!!',
   ],
   'common' =>
    [

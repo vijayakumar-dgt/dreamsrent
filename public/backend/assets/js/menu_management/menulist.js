@@ -8,115 +8,147 @@
         initFormValidation();
         initEvents();
     });
-    
+
     function initFormValidation() {
-        $("#addMenu").validate({
+        setupAddMenuValidation();
+        setupEditMenuValidation();
+    }
+
+    /** -----------------------------
+     * ADD MENU VALIDATION
+     * ----------------------------- */
+    function setupAddMenuValidation() {
+        $("#addMenu").validate(getAddMenuValidationConfig());
+    }
+
+    /** -----------------------------
+     * EDIT MENU VALIDATION
+     * ----------------------------- */
+    function setupEditMenuValidation() {
+        $("#editMenuForm").validate(getEditMenuValidationConfig());
+    }
+
+    /** -----------------------------
+     * COMMON VALIDATION HANDLERS
+     * ----------------------------- */
+    function errorPlacementHandler(error, element) {
+        const errorId = `${element.attr("id")}Error`;
+        $(`#${errorId}`).text(error.text());
+    }
+
+    function highlightHandler(element) {
+        $(element).addClass("is-invalid").removeClass("is-valid");
+    }
+
+    function unhighlightHandler(element) {
+        $(element).removeClass("is-invalid").addClass("is-valid");
+        const errorId = `${element.id}Error`;
+        $(`#${errorId}`).text("");
+    }
+
+    function onKeyUpHandler(element) {
+        $(element).valid();
+    }
+
+    function onChangeHandler(element) {
+        $(element).valid();
+    }
+
+    /** -----------------------------
+     * FORM SUBMISSION HELPERS
+     * ----------------------------- */
+    function submitForm(form, url, btnSelector, successText, resetFormId) {
+        const formData = new FormData(form);
+
+        $.ajax({
+            type: "POST",
+            url,
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: () => {
+                $(btnSelector)
+                    .attr('disabled', true)
+                    .html(`<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..`);
+            },
+            complete: () => {
+                $(btnSelector)
+                    .attr('disabled', false)
+                    .html(successText);
+            },
+            success: (resp) => handleSuccessResponse(resp, resetFormId),
+            error: handleErrorResponse
+        });
+    }
+
+    function handleSuccessResponse(resp, resetFormId) {
+        if (resp.code === 200) {
+            $(`#${resetFormId}`).closest('.modal').modal('hide');
+            showToast('success', resp.message);
+            $(`#${resetFormId}`)[0].reset();
+            $(".form-control").removeClass("is-invalid is-valid");
+            menuTable();
+        } else {
+            showToast('error', resp.message);
+        }
+    }
+
+    function handleErrorResponse(error) {
+        $(".error-message").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+
+        const response = error.responseJSON;
+        if (response.code === 422) {
+            $.each(response.errors, (key, val) => {
+                $(`#${key}`).addClass("is-invalid");
+                $(`#${key}Error`).text(val[0]);
+            });
+        } else {
+            showToast('error', response.message);
+        }
+    }
+
+    /** -----------------------------
+     * VALIDATION CONFIGS
+     * ----------------------------- */
+    function getAddMenuValidationConfig() {
+        return {
             rules: {
-                language: {
-                    required: true,
-                },
-                menu_type: {
-                    required: true,
-                },
-                menu_name: {
-                    required: true,
-                    minlength: 3
-                },
-                menu_permalink: {
-                    required: true,
-                    url: true
-                }
+                language: { required: true },
+                menu_type: { required: true },
+                menu_name: { required: true, minlength: 3 },
+                menu_permalink: { required: true, url: true }
             },
             messages: {
                 menu_name: {
                     required: _l('admin.cms.menu_name_required'),
                     minlength: _l('admin.cms.menu_name_minlength')
                 },
-                menu_type: {
-                    required: _l('admin.cms.menu_type_required')
-                },
+                menu_type: { required: _l('admin.cms.menu_type_required') },
                 menu_permalink: {
                     required: _l('admin.cms.permalink_required'),
                     url: _l('admin.cms.valid_url')
                 }
             },
-            errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "Error";
-                $("#" + errorId).text(error.text());
-            },
-            highlight: function (element) {
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight: function (element) {
-                $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "Error";
-                $("#" + errorId).text("");
-            },
-            onkeyup: function (element) {
-                $(element).valid();
-            },
-            onchange: function (element) {
-                $(element).valid();
-            },
-            submitHandler: function (form) {
-                let formData = new FormData(form);
-    
-                $.ajax({
-                    type: "POST",
-                    url: "/admin/menus/store", // Change this to your actual backend route
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    beforeSend: function () {
-                        $('#createMenuBtn').attr('disabled', true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
-                        `);
-                    },
-                    complete: function () {
-                        $('#createMenuBtn').attr('disabled', false).html(_l('admin.common.create_new'));
-                    },
-                    success: function (resp) {
-                        if (resp.code === 200) {
-                            $("#add_menu").modal('hide');
-                            showToast('success', resp.message);
-                            $("#addMenu")[0].reset();
-                            $(".form-control").removeClass("is-invalid is-valid");
-                            menuTable();
-                        } else {
-                            showToast('error', resp.message);
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-message").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-    
-                        if (error.responseJSON.code === 422) {
-                            $.each(error.responseJSON.errors, function (key, val) {
-                                $("#" + key).addClass("is-invalid");
-                                $("#" + key + "Error").text(val[0]);
-                            });
-                        } else {
-                            showToast('error', error.responseJSON.message);
-                        }
-                    }
-                });
-            }
-        });
-    
-        $("#editMenuForm").validate({
+            errorPlacement: errorPlacementHandler,
+            highlight: highlightHandler,
+            unhighlight: unhighlightHandler,
+            onkeyup: onKeyUpHandler,
+            onchange: onChangeHandler,
+            submitHandler: (form) =>
+                submitForm(form, "/admin/menus/store", "#createMenuBtn", _l('admin.common.create_new'), "addMenu")
+        };
+    }
+
+    function getEditMenuValidationConfig() {
+        return {
             rules: {
-                editMenuName: {
-                    required: true,
-                    minlength: 3
-                },
-                editMenuPermalink: {
-                    required: true,
-                    url: true
-                }
+                editMenuName: { required: true, minlength: 3 },
+                editMenuPermalink: { required: true, url: true }
             },
             messages: {
                 editMenuName: {
@@ -128,72 +160,14 @@
                     url: _l('admin.cms.valid_url')
                 }
             },
-            errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "Error";
-                $("#" + errorId).text(error.text());
-            },
-            highlight: function (element) {
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight: function (element) {
-                $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "Error";
-                $("#" + errorId).text("");
-            },
-            onkeyup: function (element) {
-                $(element).valid();
-            },
-            onchange: function (element) {
-                $(element).valid();
-            },
-            submitHandler: function (form) {
-                let formData = new FormData(form);
-    
-                $.ajax({
-                    type: "POST",
-                    url: "/admin/menus/update",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    beforeSend: function () {
-                        $('.savebtn').attr('disabled', true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
-                        `);
-                    },
-                    complete: function () {
-                        $('.savebtn').attr('disabled', false).html(_l('admin.common.save_changes'));
-                    },
-                    success: function (resp) {
-                        if (resp.code === 200) {
-                            $("#edit_menu").modal('hide');
-                            showToast('success', resp.message);
-                            $("#editMenuForm")[0].reset();
-                            $(".form-control").removeClass("is-invalid is-valid");
-                            menuTable();
-                        } else {
-                            showToast('error', resp.message);
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-message").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-    
-                        if (error.responseJSON.code === 422) {
-                            $.each(error.responseJSON.errors, function (key, val) {
-                                $("#" + key).addClass("is-invalid");
-                                $("#" + key + "Error").text(val[0]);
-                            });
-                        } else {
-                            showToast('error', error.responseJSON.message);
-                        }
-                    }
-                });
-            }
-        });
+            errorPlacement: errorPlacementHandler,
+            highlight: highlightHandler,
+            unhighlight: unhighlightHandler,
+            onkeyup: onKeyUpHandler,
+            onchange: onChangeHandler,
+            submitHandler: (form) =>
+                submitForm(form, "/admin/menus/update", ".savebtn", _l('admin.common.save_changes'), "editMenuForm")
+        };
     }
 
     function initEvents() {
@@ -292,75 +266,98 @@
 
                 if (response.data && response.data.length > 0) {
                     $.each(response.data, function(index, value) {
+
+                        // Determine status badge
+                        const statusBadge = `
+                            <span class="badge badge-${value.status === 1 ? 'soft-success' : 'soft-danger'} d-inline-flex align-items-center badge-sm">
+                                <i class="ti ti-point-filled me-1 ${value.status === 1 ? 'text-success' : 'text-danger'}"></i>
+                                ${value.status === 1 ? _l('admin.cms.published') : _l('admin.cms.unpublished')}
+                            </span>
+                        `;
+
+                        // Action buttons
+                        let actionButtons = '';
+                        if (hasPermission(permissions, 'menu_management', 'edit') || hasPermission(permissions, 'menu_management', 'delete')) {
+                            let editBtn = '';
+                            if (hasPermission(permissions, 'menu_management', 'edit')) {
+                                editBtn = `
+                                    <li>
+                                        <button
+                                            type="button"
+                                            class="dropdown-item rounded-1 edit-menu-btn"
+                                            data-id="${value.id}"
+                                            data-name="${value.name}"
+                                            data-permalink="${value.permenantlink}"
+                                            data-status="${value.status}"
+                                            data-language-id="${value.language_id}"
+                                            data-menu-type="${value.menu_type}"
+                                        >
+                                            <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                        </button>
+                                    </li>
+                                `;
+                            }
+
+                            let menuManagementBtn = '';
+                            if (hasPermission(permissions, 'menu_management', 'edit')) {
+                                menuManagementBtn = `
+                                    <li>
+                                        <button
+                                            type="button"
+                                            class="dropdown-item rounded-1 menu-management-btn"
+                                            data-id="${value.id}"
+                                            data-name="${value.name}"
+                                            data-permalink="${value.permenantlink}"
+                                            data-status="${value.status}"
+                                            data-language-id="${value.language_id}"
+                                        >
+                                            <i class="ti ti-menu-2 me-1"></i>${_l('admin.cms.menu_management')}
+                                        </button>
+                                    </li>
+                                `;
+                            }
+
+                            let deleteBtn = '';
+                            if (hasPermission(permissions, 'menu_management', 'delete')) {
+                                deleteBtn = `
+                                    <li>
+                                        <button
+                                            type="button"
+                                            class="dropdown-item rounded-1 delete-menu-btn"
+                                            data-id="${value.id}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#delete_menu"
+                                        >
+                                            <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                        </button>
+                                    </li>
+                                `;
+                            }
+
+                            actionButtons = `
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown">
+                                            <i class="ti ti-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end p-2">
+                                            ${editBtn}${menuManagementBtn}${deleteBtn}
+                                        </ul>
+                                    </div>
+                                </td>
+                            `;
+                        }
+
+                        // Build row
                         tableBody += `
-                        <tr>
-                            <td>
-                                <p class="text-gray-9">${value.name}</p>
-                            </td>
-                            <td>
-                                <p class="text-gray-9">${value.menu_type.charAt(0).toUpperCase() + value.menu_type.slice(1)}</p>
-                            </td>
-                            <td>
-                                <p class="text-gray-9">${value.created_date}</p>
-                            </td>
-                            <td>
-                                <span class="badge badge-${value.status === 1 ? 'soft-success' : 'soft-danger'} d-inline-flex align-items-center badge-sm">
-                                    <i class="ti ti-point-filled me-1 ${value.status === 1 ? 'text-success' : 'text-danger'}"></i>
-                                    ${value.status === 1 ? `${_l('admin.cms.published')}` : `${_l('admin.cms.unpublished')}`}
-                                </span>
-                            </td>
-                            ${hasPermission(permissions, 'menu_management', 'edit') || hasPermission(permissions, 'menu_management', 'delete') ?
-                            `<td>
-                                <div class="dropdown">
-                                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown">
-                                        <i class="ti ti-dots-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                        ${hasPermission(permissions, 'menu_management', 'edit') ?
-                                        `<li>
-                                            <button 
-                                                type="button" 
-                                                class="dropdown-item rounded-1 edit-menu-btn" 
-                                                data-id="${value.id}" 
-                                                data-name="${value.name}" 
-                                                data-permalink="${value.permenantlink}" 
-                                                data-status="${value.status}" 
-                                                data-language-id="${value.language_id}" 
-                                                data-menu-type="${value.menu_type}"
-                                            >
-                                                <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
-                                            </button>
-                                        </li>`:''}                 
-                                        ${hasPermission(permissions, 'menu_management', 'edit') ?
-                                        `<li>
-                                            <button 
-                                                type="button" 
-                                                class="dropdown-item rounded-1 menu-management-btn" 
-                                                data-id="${value.id}" 
-                                                data-name="${value.name}" 
-                                                data-permalink="${value.permenantlink}" 
-                                                data-status="${value.status}" 
-                                                data-language-id="${value.language_id}"
-                                            >
-                                                <i class="ti ti-menu-2 me-1"></i>${_l('admin.cms.menu_management')}
-                                            </button>
-                                        </li>`:''}
-                                                        ${hasPermission(permissions, 'menu_management', 'delete') ?
-                                        `<li>
-                                            <button 
-                                                type="button" 
-                                                class="dropdown-item rounded-1 delete-menu-btn" 
-                                                data-id="${value.id}" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#delete_menu"
-                                            >
-                                                <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                            </button>
-                                        </li>`:''}
-                                    </ul>
-                                </div>
-                            </td>`:''}
-                        </tr>`;
+                            <tr>
+                                <td><p class="text-gray-9">${value.name}</p></td>
+                                <td><p class="text-gray-9">${value.menu_type.charAt(0).toUpperCase() + value.menu_type.slice(1)}</p></td>
+                                <td><p class="text-gray-9">${value.created_date}</p></td>
+                                <td>${statusBadge}</td>
+                                ${actionButtons}
+                            </tr>
+                        `;
                     });
                 } else {
                     tableBody = `<tr><td colspan="6" class="text-center">${_l('admin.common.empty_table')}</td></tr>`;
@@ -375,36 +372,10 @@
                         searching: false, // Disable DataTable search as we handle it server-side
                         pageLength: 10,
                         lengthChange: false,
-                        drawCallback: function() {
-                            $(".dataTables_info").addClass('d-none');
-                            $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-
-                            var tableWrapper = $(this).closest('.dataTables_wrapper');
-                            var info = tableWrapper.find('.dataTables_info');
-                            var pagination = tableWrapper.find('.dataTables_paginate');
-
-                            $('.table-footer').empty()
-                                .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
-                                    .append($('<div class="datatable-info"></div>').append(info.clone(true)))
-                                    .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
-                                );
-                            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+                        drawCallback: function () {
+                            customizeTableFooter($(this));
                         },
-                        language: {
-                            emptyTable: _l("admin.common.empty_table"),
-                            info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
-                            infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
-                            infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
-                            lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
-                            search: _l("admin.common.search") + ":",
-                            zeroRecords: _l("admin.common.no_matching_records"),
-                            paginate: {
-                                first: _l("admin.common.first"),
-                                last: _l("admin.common.last"),
-                                next: _l("admin.common.next"),
-                                previous: _l("admin.common.previous"),
-                            },
-                        },
+                        language: getDataTableLanguage(),
                     });
                 }
             },
@@ -422,14 +393,14 @@
         $('#editMenuStatus').prop('checked', status == 1);
         $('#editMenuLanguage').val(languageId).trigger('change');
         $('#editMenuType').val(menu_type).trigger('change');
-    
+
         $('#edit_menu').modal('show');
     }
 
     function menuManagement(id, name, permalink, status, languageId) {
         localStorage.setItem('menu_id', id);
         localStorage.setItem('menu_name', name);
-    
+
         window.location.href = "/admin/menu-management";
     }
 })();

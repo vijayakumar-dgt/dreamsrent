@@ -19,7 +19,7 @@
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <label for="menu_name" class="form-label fw-normal">{{__('admin.cms.select_menu_you_want_to_edit')}}</label>
-                            <select class="select" id="menu_name" name="menu_name">
+                            <select class="form-control select" id="menu_name" name="menu_name">
                                 @foreach($menus as $menu)
                                     <option value="{{ $menu->id }}">{{ $menu->name }}</option>
                                 @endforeach

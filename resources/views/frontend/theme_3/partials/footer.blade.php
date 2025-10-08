@@ -9,8 +9,8 @@
                         <div class="footer-logo">
                             <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid aos" alt="logo">
                         </div>
-                        <div class="footer-contact-info">
-                            <h6>Want to book a bike instantly Contact Us !!!</h6>
+                        <div class="footer-contact-info mb-4">
+                            <h6>{{ __('web.home.theme_3_footer_contact_us_title') }}</h6>
                             <div class="footer-address">
                                 <div class="addr-info">
                                     <a href="tel:{{ $companyPhoneNumber ?? "" }}"><i class="bx bxs-phone"></i>{{ $companyPhoneNumber ?? "" }}</a>
@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                         </div>
-                        <ul class="store-icon">
+                        <ul class="store-icon mb-4">
                             <li>
                                 <a href="javascript:void(0);">
                                     <img src="{{ asset('frontend/assets/img/icons/play-icon.svg') }}" class="img-fluid" alt="logo">

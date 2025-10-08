@@ -2,14 +2,14 @@
     "use strict";
 
     $(document).ready(function () {
-        var menuId = localStorage.getItem("menu_id");
+        let menuId = localStorage.getItem("menu_id");
 
         if (menuId) {
             $("#menu_name").val(menuId).change();
         }
 
         $("#menu_name").on("change", function () {
-            var selectedMenuId = $(this).val();
+            let selectedMenuId = $(this).val();
             localStorage.setItem("menu_id", selectedMenuId);
             menuTable();
         });
@@ -88,15 +88,6 @@
                 urlInput.value = "http://";
                 labelInput.value = "";
             });
-
-        function isValidUrl(string) {
-            try {
-                new URL(string);
-                return true;
-            } catch (_) {
-                return false;
-            }
-        }
 
         function isMenuItemExists(title, link) {
             const existingItems = document.querySelectorAll(
@@ -260,15 +251,6 @@
 
             return false;
         }
-
-        function isValidUrl(string) {
-            try {
-                new URL(string);
-                return true;
-            } catch (_) {
-                return false;
-            }
-        }
     });
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -346,6 +328,15 @@
                     });
             });
     });
+
+    function isValidUrl(string) {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
 
     menuTable();
     function menuTable() {
