@@ -168,13 +168,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                } else {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
+                const errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
@@ -199,7 +194,7 @@
                 $("#" + element.id)
                     .siblings("span")
                     .addClass("me-3");
-                var errorId = element.id + "_error";
+                const errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -228,13 +223,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
+                    const errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
-                } else {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
@@ -253,7 +243,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                const errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -486,109 +476,103 @@
     }
 
     function checkAndFetchVehicles() {
-        if (startDate && startTime) {
-            $(".summary_start_date").text(startDate + " " + startTime);
-        } else {
-            $(".summary_start_date").text("-");
-        }
+        updateSummaryDates();
 
-        if (endDate && endTime) {
-            $(".summary_end_date").text(endDate + " " + endTime);
-        } else {
-            $(".summary_end_date").text("-");
-        }
-
-        if (startDate && startTime && endDate && endTime) {
-            let startDateTime = moment(
-                startDate + " " + startTime,
-                "DD-MM-YYYY HH:mm"
-            );
-            let endDateTime = moment(
-                endDate + " " + endTime,
-                "DD-MM-YYYY HH:mm"
-            );
-
-            let diffMinutes = endDateTime.diff(startDateTime, "minutes");
-
-            if (diffMinutes < 60) {
-                $("#end_date, #end_time")
-                    .addClass("is-invalid")
-                    .removeClass("is-valid");
-                $("#end_date_error").text(
-                    _l("admin.bookings.duration_must_be_atleast_one_hour")
-                );
-                $(".summary_rental_period").text("-");
-                $("#vehicle_list_main_container").addClass("d-none");
-                return;
-            } else {
-                $("#end_date, #end_time").removeClass("is-invalid");
-                $("#end_date_error").text("");
-            }
-
-            if (startDateTime.isSame(endDateTime)) {
-                no_of_days = 1;
-            } else if (
-                startDateTime.format("DD-MM-YYYY") ===
-                endDateTime.format("DD-MM-YYYY")
-            ) {
-                no_of_days = 1;
-            } else if (diffMinutes === 1440) {
-                no_of_days = 1;
-            } else if (diffMinutes > 1440 && diffMinutes <= 2880) {
-                no_of_days = 2;
-            } else {
-                no_of_days = Math.ceil(diffMinutes / 1440);
-            }
-            let rentalPeriodText =
-                no_of_days + " day" + (no_of_days > 1 ? "s" : "");
-            $(".summary_rental_period").text(rentalPeriodText.trim());
-
-            no_of_months = 0;
-            let tempStart = moment(
-                startDate + " " + startTime,
-                "DD-MM-YYYY HH:mm"
-            );
-            while (tempStart.isBefore(endDateTime, "month")) {
-                let daysInMonth = tempStart.daysInMonth();
-                if (tempStart.add(daysInMonth, "days").isAfter(endDateTime))
-                    break;
-                no_of_months++;
-            }
-
-            no_of_years = 0;
-            let startMoment = moment(startDate, "DD-MM-YYYY");
-            let endMoment = moment(endDate, "DD-MM-YYYY");
-            let totalDaysLeft = endMoment.diff(startMoment, "days");
-            let daysInYear = 365;
-            let remainingDays = totalDaysLeft;
-
-            while (remainingDays >= daysInYear) {
-                no_of_years++;
-                remainingDays -= daysInYear;
-                if (startMoment.isLeapYear()) {
-                    daysInYear = 366;
-                }
-            }
-            if (remainingDays > 0) {
-                no_of_years++;
-            }
-        } else {
+        if (!areDatesValid()) {
             $(".summary_rental_period").text("-");
+            $("#vehicle_list_main_container").addClass("d-none");
+            return;
         }
 
-        if (
-            startDate &&
-            startTime &&
-            endDate &&
-            endTime &&
-            pickup_location_val &&
-            return_location_val
-        ) {
+        const startDateTime = moment(`${startDate} ${startTime}`, "DD-MM-YYYY HH:mm");
+        const endDateTime = moment(`${endDate} ${endTime}`, "DD-MM-YYYY HH:mm");
+        const diffMinutes = endDateTime.diff(startDateTime, "minutes");
+
+        if (!isDurationValid(diffMinutes)) {
+            return;
+        }
+
+        const noOfDays = calculateRentalDays(startDateTime, endDateTime, diffMinutes);
+        $(".summary_rental_period").text(formatRentalPeriod(noOfDays));
+
+        const noOfMonths = calculateMonths(startDateTime, endDateTime);
+        const noOfYears = calculateYears(startDateTime, endDateTime);
+
+        if (areAllInputsFilled()) {
             $("#vehicle_list_main_container").removeClass("d-none");
             lastPage = false;
             currentPage = 1;
             getVehicles();
         }
+    }
+
+    // ------------------- Helper Functions -------------------
+
+    function updateSummaryDates() {
+        $(".summary_start_date").text(startDate && startTime ? `${startDate} ${startTime}` : "-");
+        $(".summary_end_date").text(endDate && endTime ? `${endDate} ${endTime}` : "-");
+    }
+
+    function areDatesValid() {
+        return startDate && startTime && endDate && endTime;
+    }
+
+    function isDurationValid(diffMinutes) {
+        if (diffMinutes < 60) {
+            $("#end_date, #end_time").addClass("is-invalid").removeClass("is-valid");
+            $("#end_date_error").text(_l("admin.bookings.duration_must_be_atleast_one_hour"));
+            $(".summary_rental_period").text("-");
+            $("#vehicle_list_main_container").addClass("d-none");
+            return false;
+        } else {
+            $("#end_date, #end_time").removeClass("is-invalid");
+            $("#end_date_error").text("");
+            return true;
+        }
+    }
+
+    function calculateRentalDays(start, end, diffMinutes) {
+        if (start.isSame(end) || start.format("DD-MM-YYYY") === end.format("DD-MM-YYYY") || diffMinutes === 1440) {
+            return 1;
+        } else if (diffMinutes > 1440 && diffMinutes <= 2880) {
+            return 2;
+        } else {
+            return Math.ceil(diffMinutes / 1440);
+        }
+    }
+
+    function formatRentalPeriod(noOfDays) {
+        return `${noOfDays} day${noOfDays > 1 ? "s" : ""}`.trim();
+    }
+
+    function calculateMonths(start, end) {
+        let tempStart = start.clone();
+        let months = 0;
+        while (tempStart.isBefore(end, "month")) {
+            let daysInMonth = tempStart.daysInMonth();
+            if (tempStart.clone().add(daysInMonth, "days").isAfter(end)) break;
+            tempStart.add(daysInMonth, "days");
+            months++;
+        }
+        return months;
+    }
+
+    function calculateYears(start, end) {
+        let startMoment = start.clone();
+        let endMoment = end.clone();
+        let totalDays = endMoment.diff(startMoment, "days");
+        let years = 0;
+
+        while (totalDays >= 365) {
+            years++;
+            totalDays -= startMoment.isLeapYear() ? 366 : 365;
+        }
+
+        return totalDays > 0 ? years + 1 : years;
+    }
+
+    function areAllInputsFilled() {
+        return startDate && startTime && endDate && endTime && pickup_location_val && return_location_val;
     }
 
     function getVehicles(filterData = {}, isLoadMore = false) {
@@ -620,7 +604,7 @@
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             beforeSend: function () {
-                if (isLoadMore == false) {
+                if (!isLoadMore) {
                     $(".list-loader").show();
                     $(".card-loader").show();
                     $("#vehicle_list_container").addClass("d-none");
@@ -804,124 +788,92 @@
     }
 
     function calculateVehiclePrice() {
-        let tariffVal = $("#tariff")
-            .find("option:selected")
-            .text()
-            .toLowerCase();
         let vehiclePriceRate = vehiclePrice;
-        var driverPriceVal = parseFloat($("#driver_price").val()) || 0;
-        var securityDeposit =
-            $("#security_deposit").val() !== ""
-                ? parseFloat($("#security_deposit").val())
-                : 0;
-        var response = [];
+        const driverPriceVal = parseFloat($("#driver_price").val()) || 0;
+        const securityDeposit = $("#security_deposit").val() !== ""
+            ? parseFloat($("#security_deposit").val())
+            : 0;
 
-        if (vehiclePriceType === "daily") {
-            vehiclePriceRate = no_of_days * vehiclePrice;
-        } else if (vehiclePriceType === "weekly") {
-            vehiclePriceRate = Math.ceil(no_of_days / 7) * vehiclePrice;
-        } else if (vehiclePriceType === "monthly") {
-            vehiclePriceRate = no_of_months * vehiclePrice;
-        } else if (vehiclePriceType === "yearly") {
-            vehiclePriceRate = no_of_years * vehiclePrice;
-        } else {
-            vehiclePriceRate = no_of_days * vehiclePrice;
+        // Calculate vehicle price based on type
+        switch (vehiclePriceType) {
+            case "daily":
+                vehiclePriceRate = no_of_days * vehiclePrice;
+                break;
+            case "weekly":
+                vehiclePriceRate = Math.ceil(no_of_days / 7) * vehiclePrice;
+                break;
+            case "monthly":
+                vehiclePriceRate = no_of_months * vehiclePrice;
+                break;
+            case "yearly":
+                vehiclePriceRate = no_of_years * vehiclePrice;
+                break;
+            default:
+                vehiclePriceRate = no_of_days * vehiclePrice;
         }
 
-        var total_extra_service_price = 0;
-        var total_extra_service = 0;
-        var extraServiceName = "";
-        if ($(".vehicle_extra_service").length > 0) {
-            $(".vehicle_extra_service").each(function () {
-                let isExtraService = $(this).is(":checked");
-                if (isExtraService) {
-                    if ($(this).data("price_type") == "per_day") {
-                        total_extra_service_price +=
-                            no_of_days * parseFloat($(this).data("price"));
-                        total_extra_service++;
-                    } else if ($(this).data("price_type") == "one_time") {
-                        total_extra_service_price += parseFloat(
-                            $(this).data("price")
-                        );
-                        total_extra_service++;
-                    } else if ($(this).data("price_type") == "percentage") {
-                        total_extra_service_price +=
-                            (vehiclePriceRate *
-                                parseFloat($(this).data("price"))) /
-                            100;
-                        total_extra_service++;
-                    }
-                    extraServiceName += $(this).data("name") + ", ";
-                }
-            });
-        }
+        const extraServiceData = calculateExtraOrInsurance(".vehicle_extra_service", vehiclePriceRate, no_of_days);
+        const insuranceData = calculateExtraOrInsurance(".vehicle_insurance", vehiclePriceRate, no_of_days);
 
-        var total_insurance_price = 0;
-        var total_insurance = 0;
-        var insuranceName = "";
-        if ($(".vehicle_insurance").length > 0) {
-            $(".vehicle_insurance").each(function () {
-                if ($(this).is(":checked")) {
-                    if ($(this).data("price_type") == "daily") {
-                        total_insurance_price +=
-                            no_of_days * parseFloat($(this).data("price"));
-                        total_insurance++;
-                    } else if ($(this).data("price_type") == "fixed") {
-                        total_insurance_price += parseFloat(
-                            $(this).data("price")
-                        );
-                        total_insurance++;
-                    } else if ($(this).data("price_type") == "percentage") {
-                        total_insurance_price +=
-                            (vehiclePriceRate *
-                                parseFloat($(this).data("price"))) /
-                            100;
-                        total_insurance++;
-                    }
-                    insuranceName += $(this).data("name") + ", ";
-                }
-            });
-        }
+        // Round all numeric values
+        const roundedVehiclePrice = parseFloat(vehiclePriceRate).toFixed(2);
+        const roundedDriverPrice = parseFloat(driverPriceVal).toFixed(2);
+        const roundedSecurityDeposit = parseFloat(securityDeposit).toFixed(2);
+        const roundedExtraServicePrice = parseFloat(extraServiceData.totalPrice).toFixed(2);
+        const roundedInsurancePrice = parseFloat(insuranceData.totalPrice).toFixed(2);
 
-        vehiclePriceRate = parseFloat(vehiclePriceRate).toFixed(2);
-        driverPriceVal = parseFloat(driverPriceVal).toFixed(2);
-        securityDeposit = parseFloat(securityDeposit).toFixed(2);
-        total_insurance_price = parseFloat(total_insurance_price).toFixed(2);
-        total_extra_service_price = parseFloat(
-            total_extra_service_price
+        const totalPriceVal = (
+            parseFloat(roundedDriverPrice) +
+            parseFloat(roundedSecurityDeposit) +
+            parseFloat(roundedVehiclePrice) +
+            parseFloat(roundedExtraServicePrice)
         ).toFixed(2);
 
-        let totalPriceVal = (
-            parseFloat(driverPriceVal) +
-            parseFloat(securityDeposit) +
-            parseFloat(vehiclePriceRate) +
-            parseFloat(total_extra_service_price)
+        const totalPriceVal2 = (
+            parseFloat(totalPriceVal) + parseFloat(roundedInsurancePrice)
         ).toFixed(2);
 
-        let totalPriceVal2 = (
-            parseFloat(driverPriceVal) +
-            parseFloat(securityDeposit) +
-            parseFloat(vehiclePriceRate) +
-            parseFloat(total_extra_service_price) +
-            parseFloat(total_insurance_price)
-        ).toFixed(2);
-
-        response.push({
-            vehicle_price_rate: vehiclePriceRate,
+        return [{
+            vehicle_price_rate: roundedVehiclePrice,
             vehicle_price_type: vehiclePriceType,
-            driver_price: driverPriceVal,
-            security_deposit: securityDeposit,
-            total_extra_service_price: total_extra_service_price,
-            total_extra_service: total_extra_service,
+            driver_price: roundedDriverPrice,
+            security_deposit: roundedSecurityDeposit,
+            total_extra_service_price: roundedExtraServicePrice,
+            total_extra_service: extraServiceData.count,
             total_price_val: totalPriceVal,
             total_price: totalPriceVal2,
-            total_insurance_price: total_insurance_price,
-            total_insurance: total_insurance,
-            insurance_name: insuranceName,
-            extra_service_name: extraServiceName,
+            total_insurance_price: roundedInsurancePrice,
+            total_insurance: insuranceData.count,
+            insurance_name: insuranceData.names,
+            extra_service_name: extraServiceData.names,
+        }];
+    }
+
+    // ----------------- Helper Function -----------------
+    function calculateExtraOrInsurance(selector, vehiclePriceRate, no_of_days) {
+        let totalPrice = 0;
+        let count = 0;
+        let names = "";
+
+        $(selector).each(function() {
+            if ($(this).is(":checked")) {
+                const priceType = $(this).data("price_type");
+                const price = parseFloat($(this).data("price")) || 0;
+
+                if (priceType === "per_day" || priceType === "daily") {
+                    totalPrice += no_of_days * price;
+                } else if (priceType === "one_time" || priceType === "fixed") {
+                    totalPrice += price;
+                } else if (priceType === "percentage") {
+                    totalPrice += (vehiclePriceRate * price) / 100;
+                }
+
+                count++;
+                names += $(this).data("name") + ", ";
+            }
         });
 
-        return response;
+        return { totalPrice, count, names };
     }
 
     function getExtraServices() {
@@ -943,7 +895,7 @@
 
                     data.forEach(item => {
                         let isSelected = selected_extra_service_ids.includes(item.id.toString());
-                        let isChecked = isSelected ? true : false;
+                        let isChecked = isSelected;
                         let isActive = isSelected ? 'active' : '';
 
                         let extraServiceType = '';
@@ -1038,123 +990,119 @@
         $.ajax({
             url: "/get-vehicle-insurances",
             type: "POST",
-            data: {
-                vehicle_ids: selected_vehicle_ids,
-            },
+            data: { vehicle_ids: selected_vehicle_ids },
             dataType: "json",
             headers: {
                 Accept: "application/json",
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
-            success: function (result) {
-                if (result.data && result.data.length > 0) {
-                    let data = result.data;
-                    $('#insurance_list_container').empty(); // Clear existing content
-
-                    data.forEach(item => {
-                        let isSelected = selected_insurance_ids.includes(item.id.toString());
-                        let isChecked = isSelected ? true : false;
-                        let isActive = isSelected ? 'active' : '';
-
-                        let benefits = item.insurance_benefits.map(b => b.benefit).join(', ');
-                        let tooltipAttr = benefits ? {
-                            'data-bs-toggle': 'tooltip',
-                            'data-bs-placement': 'top',
-                            'data-bs-original-title': benefits
-                        } : {};
-
-                        let insuranceType = '';
-                        switch (item.insurance_type) {
-                            case 'fixed':
-                                insuranceType = 'Fixed';
-                                break;
-                            case 'daily':
-                                insuranceType = 'Daily';
-                                break;
-                            case 'percentage':
-                                insuranceType = 'Percentage';
-                                break;
-                            default:
-                                insuranceType = item.insurance_type;
-                        }
-
-                        // Build structure
-                        let $col = $('<div>').addClass('col-md-6');
-                        let $checkboxWrapper = $('<div>').addClass(`custom-checkbox ${isActive}`);
-
-                        // Checkbox input
-                        let $formCheck = $('<div>').addClass('form-check form-check-md');
-                        let $input = $('<input>', {
-                            type: 'checkbox',
-                            class: 'form-check-input vehicle_insurance',
-                            name: 'insurances[]',
-                            id: `insurance_${item.id}`,
-                            value: item.id,
-                            checked: isChecked,
-                            'data-price': item.price,
-                            'data-price_type': item.insurance_type,
-                            'data-name': item.insurance_name
-                        });
-                        $formCheck.append($input);
-
-                        // Label and info section
-                        let $labelSection = $('<div>').addClass('d-flex align-items-center justify-content-between');
-
-                        let $label = $('<label>', {
-                            class: 'form-check-label ms-2 ps-4',
-                            for: `insurance_${item.id}`
-                        });
-
-                        $('<span>').addClass('fw-semibold text-gray-9 d-block mb-1').text(item.insurance_name).appendTo($label);
-
-                        let $benefitSpan = $('<span>').addClass('d-block text-info').html(`+${item.insurance_benefits_count} ${_l('admin.common.benefits')}`);
-                        let $tooltipIcon = $('<i>').addClass('ti ti-info-circle-filled text-gray-5 ms-1').attr(tooltipAttr);
-                        $benefitSpan.append($tooltipIcon);
-                        $label.append($benefitSpan);
-
-                        // Price section
-                        let $priceInfo = $('<div>').addClass('text-end');
-                        $('<p>').addClass('mb-1').text(insuranceType).appendTo($priceInfo);
-                        $('<h6>').html(item.insurance_type === 'percentage' ? `${item.price}%` : `${default_currency}${item.price}`).appendTo($priceInfo);
-
-                        // Combine all parts
-                        $labelSection.append($label).append($priceInfo);
-                        $checkboxWrapper.append($formCheck).append($labelSection);
-                        $col.append($checkboxWrapper);
-
-                        $('#insurance_list_container').append($col);
-                    });
-
-                    // Price calculation + tooltip update
-                    let response = calculateVehiclePrice();
-                    if (response) {
-                        $('.total_insurance_price').text(response[0]['total_insurance_price']);
-                        $('.total_price_val').text(response[0]['total_price']);
-                        $('.insurance_count').text(response[0]['total_insurance']);
-                        $('.insurance_tooltip').attr('data-bs-original-title', response[0]['insurance_name']);
-                    }
-
-                    initializeTooltips();
-                } else {
-                    $('#insurance_list_container').html(`
-                        <div class="row">
-                            <span class="text-center mb-3">${_l('admin.bookings.no_insurance_found')}</span>
-                        </div>
-                    `);
-                }
-            },
-            error: function (error) {
-                if (error.responseJSON.code === 500) {
-                    showToast("error", error.responseJSON.message);
-                } else {
-                    showToast(
-                        "error",
-                        _l("admin.common.default_retrieve_error")
-                    );
-                }
-            },
+            success: handleInsuranceResponse,
+            error: handleInsuranceError,
         });
     }
+
+    // ---------------- Helper Functions ----------------
+
+    function handleInsuranceResponse(result) {
+        const container = $('#insurance_list_container');
+        container.empty();
+
+        if (result.data && result.data.length > 0) {
+            result.data.forEach(item => container.append(buildInsuranceItem(item)));
+            updateInsurancePrices();
+            initializeTooltips();
+        } else {
+            container.html(`
+                <div class="row">
+                    <span class="text-center mb-3">${_l('admin.bookings.no_insurance_found')}</span>
+                </div>
+            `);
+        }
+    }
+
+    function handleInsuranceError(error) {
+        if (error.responseJSON?.code === 500) {
+            showToast("error", error.responseJSON.message);
+        } else {
+            showToast("error", _l("admin.common.default_retrieve_error"));
+        }
+    }
+
+    function buildInsuranceItem(item) {
+        const isSelected = selected_insurance_ids.includes(item.id.toString());
+        const isChecked = isSelected;
+        const isActive = isSelected ? 'active' : '';
+
+        const benefits = item.insurance_benefits.map(b => b.benefit).join(', ');
+        const tooltipAttr = benefits ? {
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'data-bs-original-title': benefits
+        } : {};
+
+        const insuranceType = getInsuranceTypeLabel(item.insurance_type);
+
+        // Column wrapper
+        const $col = $('<div>').addClass('col-md-6');
+        const $checkboxWrapper = $('<div>').addClass(`custom-checkbox ${isActive}`);
+
+        // Checkbox input
+        const $formCheck = $('<div>').addClass('form-check form-check-md');
+        const $input = $('<input>', {
+            type: 'checkbox',
+            class: 'form-check-input vehicle_insurance',
+            name: 'insurances[]',
+            id: `insurance_${item.id}`,
+            value: item.id,
+            checked: isChecked,
+            'data-price': item.price,
+            'data-price_type': item.insurance_type,
+            'data-name': item.insurance_name
+        });
+        $formCheck.append($input);
+
+        // Label & benefits
+        const $labelSection = $('<div>').addClass('d-flex align-items-center justify-content-between');
+        const $label = $('<label>', { class: 'form-check-label ms-2 ps-4', for: `insurance_${item.id}` });
+        $('<span>').addClass('fw-semibold text-gray-9 d-block mb-1').text(item.insurance_name).appendTo($label);
+
+        const $benefitSpan = $('<span>').addClass('d-block text-info').html(`+${item.insurance_benefits_count} ${_l('admin.common.benefits')}`);
+        $('<i>').addClass('ti ti-info-circle-filled text-gray-5 ms-1').attr(tooltipAttr).appendTo($benefitSpan);
+        $label.append($benefitSpan);
+
+        // Price section
+        const $priceInfo = $('<div>').addClass('text-end');
+        $('<p>').addClass('mb-1').text(insuranceType).appendTo($priceInfo);
+        $('<h6>').html(item.insurance_type === 'percentage' ? `${item.price}%` : `${default_currency}${item.price}`).appendTo($priceInfo);
+
+        // Combine
+        $labelSection.append($label, $priceInfo);
+        $checkboxWrapper.append($formCheck, $labelSection);
+        $col.append($checkboxWrapper);
+
+        return $col;
+    }
+
+    function getInsuranceTypeLabel(type) {
+        switch (type) {
+            case 'fixed': return 'Fixed';
+            case 'daily': return 'Daily';
+            case 'percentage': return 'Percentage';
+            default: return type;
+        }
+    }
+
+    function updateInsurancePrices() {
+        const response = calculateVehiclePrice();
+        if (!response) return;
+
+        const data = response[0];
+        $('.total_insurance_price').text(data.total_insurance_price);
+        $('.total_price_val').text(data.total_price);
+        $('.insurance_count').text(data.total_insurance);
+        $('.insurance_tooltip').attr('data-bs-original-title', data.insurance_name);
+    }
+
 
     $(document).on(
         "blur",
@@ -1199,7 +1147,6 @@
         tariff = $(this).find("option:selected").text().toLowerCase();
 
         let todayDateTime = moment();
-        let todayDate = todayDateTime.clone().startOf("day");
         let lastDateTime;
 
         if (tariff === "daily") {
@@ -1659,7 +1606,7 @@
         $(this).val(
             $(this)
                 .val()
-                .replace(/[^0-9]/g, "")
+                .replace(/\D/g, "")
         );
     });
 
@@ -1667,7 +1614,7 @@
         $(this).val(
             $(this)
                 .val()
-                .replace(/[^0-9]/g, "")
+                .replace(/\D/g, "")
         );
     });
 
@@ -1675,7 +1622,7 @@
         $(this).val(
             $(this)
                 .val()
-                .replace(/[^0-9]/g, "")
+                .replace(/\D/g, "")
         );
     });
 
@@ -1779,7 +1726,7 @@
             let driver_name = $("#driver_detail").data("name") ?? "";
             let driver_phone = $("#driver_detail").data("phone") ?? "";
 
-            var totalAmount = calculateVehiclePrice();
+            const totalAmount = calculateVehiclePrice();
 
             $("#extra_service_summary").append(`
                 <div class="border-bottom mb-3 border-top pt-3">
@@ -1944,7 +1891,7 @@
             }
         });
         $(".insurance_summary_container").addClass("d-none");
-        var response = calculateVehiclePrice();
+        const response = calculateVehiclePrice();
         if (response) {
             $(".extra_service_price").text(
                 response[0]["total_extra_service_price"]
@@ -1961,7 +1908,7 @@
 
     $(document).on("click", ".vehicle_extra_service", function () {
         $(this).closest(".custom-checkbox").toggleClass("active", this.checked);
-        var response = calculateVehiclePrice();
+        const response = calculateVehiclePrice();
 
         if (response) {
             $(".extra_service_price").text(
@@ -1979,7 +1926,7 @@
 
     $(document).on("click", ".vehicle_insurance", function () {
         $(this).closest(".custom-checkbox").toggleClass("active", this.checked);
-        var response = calculateVehiclePrice();
+        const response = calculateVehiclePrice();
 
         if (response) {
             $(".total_insurance_price").text(

@@ -516,9 +516,9 @@
                     "d-none"
                 );
 
-                var tableWrapper = $(this).closest(".dataTables_wrapper");
-                var info = tableWrapper.find(".dataTables_info");
-                var pagination = tableWrapper.find(".dataTables_paginate");
+                const tableWrapper = $(this).closest(".dataTables_wrapper");
+                const info = tableWrapper.find(".dataTables_info");
+                const pagination = tableWrapper.find(".dataTables_paginate");
 
                 $(".table-footer")
                     .empty()
