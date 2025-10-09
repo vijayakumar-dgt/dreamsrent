@@ -26,7 +26,7 @@
                 },
             },
             errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "_error";
+                const errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
@@ -34,7 +34,7 @@
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                const errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -51,46 +51,62 @@
                     data: tagFormData,
                     processData: false,
                     contentType: false,
-                    beforeSend: function () {
-                        $(".submitbtn").attr("disabled", true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                                "admin.common.saving"
-                            )}...
-                        `);
-                    },
-                    success: function (resp) {
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#add_tag").modal("hide");
-                            initTable();
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
-                    complete: function () {
-                        $(".submitbtn")
-                            .attr("disabled", false)
-                            .html(
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            );
-                    },
+                    beforeSend: handleTagBeforeSend,
+                    success: handleTagSuccess,
+                    error: handleTagError,
+                    complete: handleTagComplete,
                 });
             },
+        });
+    }
+
+    function handleTagBeforeSend() {
+        $(".submitbtn")
+            .attr("disabled", true)
+            .html(`
+                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>
+                ${_l("admin.common.saving")}...
+            `);
+    }
+
+    function handleTagSuccess(resp) {
+        if (resp.code === 200) {
+            showToast("success", resp.message);
+            $("#add_tag").modal("hide");
+            initTable();
+        }
+    }
+
+    function handleTagError(error) {
+        resetTagValidation();
+
+        const response = error.responseJSON;
+        if (!response) return showToast("error", "Unexpected error occurred.");
+
+        if (response.code === 422) {
+            displayTagValidationErrors(response.errors);
+        } else {
+            showToast("error", response.message);
+        }
+    }
+
+    function handleTagComplete() {
+        const buttonText = $("#id").val()
+            ? _l("admin.common.save_changes")
+            : _l("admin.common.create_new");
+
+        $(".submitbtn").attr("disabled", false).html(buttonText);
+    }
+
+    function resetTagValidation() {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+    }
+
+    function displayTagValidationErrors(errors) {
+        Object.entries(errors).forEach(([key, val]) => {
+            $("#" + key).addClass("is-invalid");
+            $("#" + key + "_error").text(val[0]);
         });
     }
 
@@ -110,7 +126,7 @@
         });
 
         $(document).on("click", ".statusfilter", function () {
-            var statusFilter = $(this).data("status");
+            let statusFilter = $(this).data("status");
             if (statusFilter == 1) {
                 $("#status_text").text(_l("admin.common.active"));
             } else if (statusFilter == 0) {
@@ -260,9 +276,9 @@
                                                 "edit"
                                             )
                                                 ? `<li>
-                                            <button 
+                                            <button
                                                 type="button"
-                                                class="dropdown-item rounded-1 edit-tag" 
+                                                class="dropdown-item rounded-1 edit-tag"
                                                 id="editTag"
                                                 data-id="${value.id}">
                                                 <i class="ti ti-edit me-1"></i>${_l(
@@ -279,12 +295,12 @@
                                                 "delete"
                                             )
                                                 ? `<li>
-                                            <button 
+                                            <button
                                                 type="button"
-                                                class="dropdown-item rounded-1 delete-tag" 
+                                                class="dropdown-item rounded-1 delete-tag"
                                                 id="deleteTag"
-                                                data-id="${value.id}" 
-                                                data-bs-toggle="modal" 
+                                                data-id="${value.id}"
+                                                data-bs-toggle="modal"
                                                 data-bs-target="#delete-modal">
                                                 <i class="ti ti-trash me-1"></i>${_l(
                                                     "admin.common.delete"
@@ -322,11 +338,11 @@
                             $(
                                 ".dataTables_wrapper .dataTables_paginate"
                             ).addClass("d-none");
-                            var tableWrapper = $(this).closest(
+                            let tableWrapper = $(this).closest(
                                 ".dataTables_wrapper"
                             );
-                            var info = tableWrapper.find(".dataTables_info");
-                            var pagination = tableWrapper.find(
+                            let info = tableWrapper.find(".dataTables_info");
+                            let pagination = tableWrapper.find(
                                 ".dataTables_paginate"
                             );
                             $(".table-footer")

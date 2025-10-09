@@ -26,13 +26,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
+                    const errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
-                } else {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
@@ -51,7 +46,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                const errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -80,53 +75,65 @@
                         Accept: "application/json",
                         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                     },
-                    beforeSend: function () {
-                        $(".submitbtn").attr("disabled", true).html(`
-                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                            "admin.common.saving"
-                        )}..
-                    `);
-                    },
-                    success: function (resp) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        $(".submitbtn")
-                            .removeAttr("disabled")
-                            .html(
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            );
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#safety_feature_modal").modal("hide");
-                            $("#safetyFeatureTable").DataTable().ajax.reload();
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        $(".submitbtn")
-                            .removeAttr("disabled")
-                            .html(
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            );
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
+                    beforeSend: handleSafetyBeforeSend,
+                    success: handleSafetySuccess,
+                    error: handleSafetyError,
                 });
             },
+        });
+    }
+
+    function handleSafetyBeforeSend() {
+        $(".submitbtn")
+            .attr("disabled", true)
+            .html(`
+                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>
+                ${_l("admin.common.saving")}..
+            `);
+    }
+
+    function handleSafetySuccess(resp) {
+        resetSafetyValidation();
+        resetSafetySubmitButton();
+
+        if (resp.code === 200) {
+            showToast("success", resp.message);
+            $("#safety_feature_modal").modal("hide");
+            $("#safetyFeatureTable").DataTable().ajax.reload();
+        }
+    }
+
+    function handleSafetyError(error) {
+        resetSafetyValidation();
+        resetSafetySubmitButton();
+
+        const response = error.responseJSON;
+        if (!response) return showToast("error", "Unexpected error occurred.");
+
+        if (response.code === 422) {
+            displaySafetyValidationErrors(response.errors);
+        } else {
+            showToast("error", response.message);
+        }
+    }
+
+    function resetSafetyValidation() {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+    }
+
+    function resetSafetySubmitButton() {
+        const buttonText = $("#id").val()
+            ? _l("admin.common.save_changes")
+            : _l("admin.common.create_new");
+
+        $(".submitbtn").removeAttr("disabled").html(buttonText);
+    }
+
+    function displaySafetyValidationErrors(errors) {
+        Object.entries(errors).forEach(([key, val]) => {
+            $("#" + key).addClass("is-invalid");
+            $("#" + key + "_error").text(val[0]);
         });
     }
 
@@ -209,9 +216,9 @@
                                             "edit"
                                         )
                                             ? `<li>
-                                        <button 
-                                            type="button" 
-                                            class="dropdown-item rounded-1 edit-safety-feature-btn" 
+                                        <button
+                                            type="button"
+                                            class="dropdown-item rounded-1 edit-safety-feature-btn"
                                             data-id="${data}"
                                         >
                                             <i class="ti ti-edit me-1"></i>${_l(
@@ -228,11 +235,11 @@
                                             "delete"
                                         )
                                             ? `<li>
-                                        <button 
-                                            type="button" 
-                                            class="dropdown-item rounded-1 delete-safety-feature-btn" 
-                                            data-id="${data}" 
-                                            data-bs-toggle="modal" 
+                                        <button
+                                            type="button"
+                                            class="dropdown-item rounded-1 delete-safety-feature-btn"
+                                            data-id="${data}"
+                                            data-bs-toggle="modal"
                                             data-bs-target="#delete-modal"
                                         >
                                             <i class="ti ti-trash me-1"></i>${_l(
@@ -307,9 +314,9 @@
                     "d-none"
                 );
 
-                var tableWrapper = $(this).closest(".dataTables_wrapper");
-                var info = tableWrapper.find(".dataTables_info");
-                var pagination = tableWrapper.find(".dataTables_paginate");
+                let tableWrapper = $(this).closest(".dataTables_wrapper");
+                let info = tableWrapper.find(".dataTables_info");
+                let pagination = tableWrapper.find(".dataTables_paginate");
 
                 $(".table-footer")
                     .empty()

@@ -31,13 +31,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
+                    const errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
-                } else {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
@@ -56,7 +51,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                const errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -75,48 +70,64 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    beforeSend: function () {
-                        $(".submitbtn").attr("disabled", true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                                "admin.common.saving"
-                            )}..
-                        `);
-                    },
-                    complete: function () {
-                        $(".submitbtn")
-                            .attr("disabled", false)
-                            .html(
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            );
-                    },
-                    success: function (resp) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#car_transmission_modal").modal("hide");
-                            initTable();
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
+                    beforeSend: handleBeforeSend,
+                    complete: handleComplete,
+                    success: handleSuccess,
+                    error: handleError,
                 });
             },
+        });
+    }
+
+    function handleBeforeSend() {
+        $(".submitbtn")
+            .attr("disabled", true)
+            .html(`
+                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>
+                ${_l("admin.common.saving")}..
+            `);
+    }
+
+    function handleComplete() {
+        const buttonText = $("#id").val()
+            ? _l("admin.common.save_changes")
+            : _l("admin.common.create_new");
+
+        $(".submitbtn").attr("disabled", false).html(buttonText);
+    }
+
+    function handleSuccess(resp) {
+        resetValidation();
+
+        if (resp.code === 200) {
+            showToast("success", resp.message);
+            $("#car_transmission_modal").modal("hide");
+            initTable();
+        }
+    }
+
+    function handleError(error) {
+        resetValidation();
+
+        const response = error.responseJSON;
+        if (!response) return showToast("error", "Unexpected error occurred.");
+
+        if (response.code === 422) {
+            displayValidationErrors(response.errors);
+        } else {
+            showToast("error", response.message);
+        }
+    }
+
+    function resetValidation() {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+    }
+
+    function displayValidationErrors(errors) {
+        Object.entries(errors).forEach(([key, val]) => {
+            $("#" + key).addClass("is-invalid");
+            $("#" + key + "_error").text(val[0]);
         });
     }
 
@@ -305,7 +316,7 @@
                                                         )}</button>
                                             </li>`
                                                       : ""
-                                              }                                        
+                                              }
                                         </ul>
                                     </div>
                                 </td>`
@@ -335,11 +346,11 @@
                                 ".dataTables_wrapper .dataTables_paginate"
                             ).addClass("d-none");
 
-                            var tableWrapper = $(this).closest(
+                            let tableWrapper = $(this).closest(
                                 ".dataTables_wrapper"
                             );
-                            var info = tableWrapper.find(".dataTables_info");
-                            var pagination = tableWrapper.find(
+                            let info = tableWrapper.find(".dataTables_info");
+                            let pagination = tableWrapper.find(
                                 ".dataTables_paginate"
                             );
 

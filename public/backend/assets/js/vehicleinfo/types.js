@@ -49,13 +49,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
+                    const errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
-                } else {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
@@ -74,7 +69,7 @@
                         .addClass("is-valid");
                 }
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
+                const errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
             onkeyup: function (element) {
@@ -98,47 +93,55 @@
                     data: typeFormData,
                     processData: false,
                     contentType: false,
-                    success: function (resp) {
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#add_type").modal("hide");
-                            table.ajax.reload();
-                        }
-                        $("#add_type .submitbtn").text(
-                            `${
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            }`
-                        );
-                        $("#add_type .submitbtn").prop("disabled", false);
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        $("#add_type .submitbtn").text(
-                            `${
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            }`
-                        );
-                        $("#add_type .submitbtn").prop("disabled", false);
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
+                    success: handleStoreTypeSuccess,
+                    error: handleStoreTypeError,
                 });
             },
         });
+
+        function handleStoreTypeSuccess(resp) {
+            if (resp.code === 200) {
+                showToast("success", resp.message);
+                $("#add_type").modal("hide");
+                table.ajax.reload();
+            }
+
+            resetSubmitButton("#add_type");
+        }
+
+        function handleStoreTypeError(error) {
+            clearValidationErrors();
+            resetSubmitButton("#add_type");
+
+            const response = error.responseJSON;
+            if (!response) return showToast("error", "Unexpected error occurred.");
+
+            if (response.code === 422) {
+                displayFormErrors(response.errors);
+            } else {
+                showToast("error", response.message);
+            }
+        }
+
+        function resetSubmitButton(modalSelector) {
+            const text = $("#id").val()
+                ? _l("admin.common.save_changes")
+                : _l("admin.common.create_new");
+
+            $(`${modalSelector} .submitbtn`).text(text).prop("disabled", false);
+        }
+
+        function clearValidationErrors() {
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+        }
+
+        function displayFormErrors(errors) {
+            Object.entries(errors).forEach(([key, val]) => {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
 
         $.validator.addMethod(
             "filesize",
@@ -226,12 +229,14 @@
         });
 
         $("#icon").change(function () {
-            if (this.files && this.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    $("#icon_preview").attr("src", e.target.result);
+            const file = this.files?.[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    $("#icon_preview").attr("src", e?.target?.result);
                 };
-                reader.readAsDataURL(this.files[0]);
+                reader.readAsDataURL(file);
                 $("#icon_preview").removeClass("d-none");
                 $(".icon_placeholder").addClass("d-none");
             } else {
@@ -239,6 +244,7 @@
                 $(".icon_placeholder").removeClass("d-none");
             }
         });
+
 
         $("#deleteType").on("submit", function (e) {
             e.preventDefault();
@@ -376,7 +382,7 @@
                                         )
                                             ? `<li>
                                             <button type="button"
-                                                class="dropdown-item rounded-1 edit-type" 
+                                                class="dropdown-item rounded-1 edit-type"
                                                 data-id="${row.id}">
                                                 <i class="ti ti-edit me-1"></i>${_l(
                                                     "admin.common.edit"
@@ -393,9 +399,9 @@
                                         )
                                             ? `<li>
                                             <button type="button"
-                                                class="dropdown-item rounded-1 delete-type" 
-                                                data-id="${row.id}" 
-                                                data-bs-toggle="modal" 
+                                                class="dropdown-item rounded-1 delete-type"
+                                                data-id="${row.id}"
+                                                data-bs-toggle="modal"
                                                 data-bs-target="#delete-modal">
                                                 <i class="ti ti-trash me-1"></i>${_l(
                                                     "admin.common.delete"
@@ -425,9 +431,9 @@
                 $(".dataTables_wrapper .dataTables_paginate").addClass(
                     "d-none"
                 );
-                var tableWrapper = $(this).closest(".dataTables_wrapper");
-                var info = tableWrapper.find(".dataTables_info");
-                var pagination = tableWrapper.find(".dataTables_paginate");
+                let tableWrapper = $(this).closest(".dataTables_wrapper");
+                let info = tableWrapper.find(".dataTables_info");
+                let pagination = tableWrapper.find(".dataTables_paginate");
 
                 $(".table-footer")
                     .empty()
