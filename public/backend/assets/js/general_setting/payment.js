@@ -4,193 +4,110 @@
 
     $(document).ready(function () {
         initList();
-        $("#PaypalSettingForm").validate({
-            rules: {
-                paypal_email: {
-                    required: true,
-                },
-                paypal_key: {
-                    required: true,
-                },
-                paypal_secret: {
-                    required: true,
-                },
-            },
-            messages: {
-                paypal_email: {
-                    required: _l(
-                        "admin.general_settings.paypal_email_required"
-                    ),
-                },
-                paypal_key: {
-                    required: _l("admin.general_settings.paypal_key_required"),
-                },
-                paypal_secret: {
-                    required: _l(
-                        "admin.general_settings.paypal_secret_required"
-                    ),
-                },
-            },
-            errorPlacement: function (error, element) {
-                let errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            },
-            highlight: function (element) {
-                if ($(element).hasClass("select2-hidden-accessible")) {
-                    $(element)
-                        .next(".select2-container")
-                        .addClass("is-invalid")
-                        .removeClass("is-valid");
-                }
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight: function (element) {
-                if ($(element).hasClass("select2-hidden-accessible")) {
-                    $(element)
-                        .next(".select2-container")
-                        .removeClass("is-invalid")
-                        .addClass("is-valid");
-                }
-                $(element).removeClass("is-invalid").addClass("is-valid");
-                let errorId = element.id + "_error";
-                $("#" + errorId).text("");
-            },
-            onkeyup: function (element) {
-                $(element).valid();
-            },
-            onchange: function (element) {
-                $(element).valid();
-            },
-            submitHandler: function (form) {
-                let formData = new FormData(form);
-
-                $.ajax({
-                    type: "POST",
-                    url: "/admin/settings/updatepaymentSettings",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (resp) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#add_paypal").modal("hide");
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            toastr.error(error.responseJSON.message);
-                        }
-                    },
-                });
-            },
-        });
-
-        $("#StripeSettingForm").validate({
-            rules: {
-                stripe_email: {
-                    required: true,
-                },
-                stripe_key: {
-                    required: true,
-                },
-                stripe_secret: {
-                    required: true,
-                },
-            },
-            messages: {
-                stripe_email: {
-                    required: _l(
-                        "admin.general_settings.stripe_email_required"
-                    ),
-                },
-                stripe_key: {
-                    required: _l("admin.general_settings.stripe_key_required"),
-                },
-                stripe_secret: {
-                    required: _l(
-                        "admin.general_settings.stripe_secret_required"
-                    ),
-                },
-            },
-            errorPlacement: function (error, element) {
-                let errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            },
-            highlight: function (element) {
-                if ($(element).hasClass("select2-hidden-accessible")) {
-                    $(element)
-                        .next(".select2-container")
-                        .addClass("is-invalid")
-                        .removeClass("is-valid");
-                }
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight: function (element) {
-                if ($(element).hasClass("select2-hidden-accessible")) {
-                    $(element)
-                        .next(".select2-container")
-                        .removeClass("is-invalid")
-                        .addClass("is-valid");
-                }
-                $(element).removeClass("is-invalid").addClass("is-valid");
-                let errorId = element.id + "_error";
-                $("#" + errorId).text("");
-            },
-            onkeyup: function (element) {
-                $(element).valid();
-            },
-            onchange: function (element) {
-                $(element).valid();
-            },
-            submitHandler: function (form) {
-                let formData = new FormData(form);
-
-                $.ajax({
-                    type: "POST",
-                    url: "/admin/settings/updatepaymentSettings",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (resp) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#add_stripe").modal("hide");
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            toastr.error(error.responseJSON.message);
-                        }
-                    },
-                });
-            },
-        });
+        // Initialize forms
+        initPaymentFormValidation("PaypalSettingForm", "add_paypal", ["paypal_email", "paypal_key", "paypal_secret"]);
+        initPaymentFormValidation("StripeSettingForm", "add_stripe", ["stripe_email", "stripe_key", "stripe_secret"]);
     });
-    
+
+    // Generic function to initialize payment form validation
+    function initPaymentFormValidation(formId, modalId, fields) {
+        $(`#${formId}`).validate({
+            rules: generateRules(fields),
+            messages: generateMessages(fields),
+            errorPlacement: handleErrorPlacement,
+            highlight: handleHighlight,
+            unhighlight: handleUnhighlight,
+            onkeyup: (el) => $(el).valid(),
+            onchange: (el) => $(el).valid(),
+            submitHandler: (form) => submitPaymentForm(form, modalId),
+        });
+    }
+
+    // Helper: Generate rules from fields
+    function generateRules(fields) {
+        const rules = {};
+        fields.forEach((field) => {
+            rules[field] = { required: true };
+        });
+        return rules;
+    }
+
+    // Helper: Generate messages from fields
+    function generateMessages(fields) {
+        const messages = {};
+        fields.forEach((field) => {
+            const key = `admin.general_settings.${field}_required`;
+            messages[field] = { required: _l(key) };
+        });
+        return messages;
+    }
+
+    // Helper: Error placement
+    function handleErrorPlacement(error, element) {
+        const errorId = element.attr("id") + "_error";
+        $("#" + errorId).text(error.text());
+    }
+
+    // Helper: Highlight invalid fields
+    function handleHighlight(element) {
+        const $el = $(element);
+        if ($el.hasClass("select2-hidden-accessible")) {
+            $el.next(".select2-container").addClass("is-invalid").removeClass("is-valid");
+        }
+        $el.addClass("is-invalid").removeClass("is-valid");
+    }
+
+    // Helper: Unhighlight valid fields
+    function handleUnhighlight(element) {
+        const $el = $(element);
+        if ($el.hasClass("select2-hidden-accessible")) {
+            $el.next(".select2-container").removeClass("is-invalid").addClass("is-valid");
+        }
+        $el.removeClass("is-invalid").addClass("is-valid");
+        $("#" + element.id + "_error").text("");
+    }
+
+    // Helper: Submit form via AJAX
+    function submitPaymentForm(form, modalId) {
+        const formData = new FormData(form);
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/settings/updatepaymentSettings",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (resp) => handlePaymentSuccess(resp, modalId),
+            error: handlePaymentError,
+        });
+    }
+
+    // Helper: Handle successful response
+    function handlePaymentSuccess(resp, modalId) {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+
+        if (resp.code === 200) {
+            showToast("success", resp.message);
+            $(`#${modalId}`).modal("hide");
+        }
+    }
+
+    // Helper: Handle AJAX error
+    function handlePaymentError(error) {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+
+        if (error.responseJSON?.code === 422) {
+            Object.entries(error.responseJSON.errors).forEach(([key, val]) => {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(val[0]);
+            });
+        } else {
+            showToast('error', error.responseJSON?.message || "Something went wrong");
+        }
+    }
+
     $(document).on("change", ".checkStatus", function () {
         let status = $(this).is(":checked") ? 1 : 0;
         let key = $(this).attr("name");
@@ -266,9 +183,9 @@
             },
             error: function (error) {
                 if (error.responseJSON && error.responseJSON.code === 500) {
-                    toastr.error(error.responseJSON.message);
+                    showToast('error', error.responseJSON.message);
                 } else {
-                    toastr.error(
+                    showToast('error',
                         "An error occurred while retrieving payment settings."
                     );
                 }

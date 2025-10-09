@@ -5,106 +5,118 @@
     let table;
 
     $(document).ready(function () {
+        // Initialize form
+        initCurrencyForm();
         initTable();
-
-        $("#currencyForm").validate({
-            rules: {
-                currency_name: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 50,
-                },
-                code: {
-                    required: true,
-                },
-                symbol: {
-                    required: true,
-                    maxlength: 20,
-                },
-            },
-            messages: {
-                currency_name: {
-                    required: _l("admin.general_settings.enter_currency_name"),
-                },
-                code: {
-                    required: _l("admin.general_settings.enter_currency_code"),
-                },
-                symbol: {
-                    required: _l(
-                        "admin.general_settings.enter_currency_symbol"
-                    ),
-                },
-            },
-            errorPlacement: function (error, element) {
-                let errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            },
-            highlight: function (element) {
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight: function (element) {
-                $(element).removeClass("is-invalid").addClass("is-valid");
-                let errorId = element.id + "_error";
-                $("#" + errorId).text("");
-            },
-            onkeyup: function (element) {
-                $(element).valid();
-            },
-            onchange: function (element) {
-                $(element).valid();
-            },
-            submitHandler: function (form) {
-                let _formData = new FormData(form);
-                $("#currencyForm .submitbtn").text(
-                    _l("admin.general_settings.please_wait")
-                );
-                $("#currencyForm .submitbtn").attr("disabled", true);
-                $.ajax({
-                    type: "POST",
-                    url: "/admin/settings/save_currency",
-                    data: _formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (resp) {
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#add_currency").modal("hide");
-                        } else {
-                            showToast("error", resp.message);
-                        }
-                        $("#currencyForm .submitbtn").text(
-                            $("#id").val()
-                                ? _l("admin.common.save_changes")
-                                : _l("admin.common.create_new")
-                        );
-                        $("#currencyForm .submitbtn").prop("disabled", false);
-                        table.ajax.reload();
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                        $("#currencyForm .submitbtn").text(
-                            $("#id").val()
-                                ? _l("admin.common.save_changes")
-                                : _l("admin.common.create_new")
-                        );
-                        $("#currencyForm .submitbtn").prop("disabled", false);
-                    },
-                });
-            },
-        });
     });
+
+    // Initialize currency form validation
+    function initCurrencyForm() {
+        $("#currencyForm").validate({
+            rules: getCurrencyRules(),
+            messages: getCurrencyMessages(),
+            errorPlacement: handleCurrencyErrorPlacement,
+            highlight: handleHighlight,
+            unhighlight: handleUnhighlight,
+            onkeyup: (el) => $(el).valid(),
+            onchange: (el) => $(el).valid(),
+            submitHandler: submitCurrencyForm,
+        });
+    }
+
+    // Validation rules
+    function getCurrencyRules() {
+        return {
+            currency_name: { required: true, minlength: 3, maxlength: 50 },
+            code: { required: true },
+            symbol: { required: true, maxlength: 20 },
+        };
+    }
+
+    // Validation messages
+    function getCurrencyMessages() {
+        return {
+            currency_name: { required: _l("admin.general_settings.enter_currency_name") },
+            code: { required: _l("admin.general_settings.enter_currency_code") },
+            symbol: { required: _l("admin.general_settings.enter_currency_symbol") },
+        };
+    }
+
+    // Error placement
+    function handleCurrencyErrorPlacement(error, element) {
+        const errorId = element.attr("id") + "_error";
+        $("#" + errorId).text(error.text());
+    }
+
+    // Highlight invalid fields
+    function handleHighlight(element) {
+        $(element).addClass("is-invalid").removeClass("is-valid");
+    }
+
+    // Unhighlight valid fields
+    function handleUnhighlight(element) {
+        $(element).removeClass("is-invalid").addClass("is-valid");
+        $("#" + element.id + "_error").text("");
+    }
+
+    // Submit form via AJAX
+    function submitCurrencyForm(form) {
+        const formData = new FormData(form);
+        const $btn = $("#currencyForm .submitbtn");
+
+        setCurrencySavingState($btn, true);
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/settings/save_currency",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (resp) => handleCurrencySuccess(resp, $btn),
+            error: (error) => handleCurrencyError(error, $btn),
+            complete: () => setCurrencySavingState($btn, false),
+        });
+    }
+
+    // Show/hide saving state
+    function setCurrencySavingState($btn, isSaving) {
+        if (isSaving) {
+            $btn.text(_l("admin.general_settings.please_wait")).prop("disabled", true);
+        } else {
+            const btnText = $("#id").val()
+                ? _l("admin.common.save_changes")
+                : _l("admin.common.create_new");
+            $btn.text(btnText).prop("disabled", false);
+        }
+    }
+
+    // Success handler
+    function handleCurrencySuccess(resp, $btn) {
+        if (resp.code === 200) {
+            showToast("success", resp.message);
+            $("#add_currency").modal("hide");
+        } else {
+            showToast("error", resp.message);
+        }
+        table.ajax.reload();
+    }
+
+    // Error handler
+    function handleCurrencyError(error, $btn) {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+
+        if (error.responseJSON?.code === 422) {
+            Object.entries(error.responseJSON.errors).forEach(([key, val]) => {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(val[0]);
+            });
+        } else {
+            showToast("error", error.responseJSON?.message || "Something went wrong");
+        }
+
+        setCurrencySavingState($btn, false);
+    }
 
     function initTable() {
         table = $("#currencyTable").DataTable({

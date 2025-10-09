@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: dgt-dreams-db-server.mysql.database.azure.com
--- Generation Time: May 19, 2025 at 10:12 AM
--- Server version: 5.7.44-azure-log
--- PHP Version: 8.1.32
+-- Host: 127.0.0.1
+-- Generation Time: Oct 09, 2025 at 12:21 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `laravel-dreamsrent`
+-- Database: `rental-system-data`
 --
 
 -- --------------------------------------------------------
@@ -29,11 +29,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `addons` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `version` varchar(255) NOT NULL,
+  `price` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -54,11 +54,11 @@ INSERT INTO `addons` (`id`, `name`, `slug`, `version`, `price`, `status`, `creat
 
 CREATE TABLE `announcements` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `announcement_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `announcement_title` varchar(255) NOT NULL,
   `announcement_type` bigint(20) UNSIGNED NOT NULL,
-  `user_type` enum('user','admin') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_type` enum('user','admin') NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `description` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -79,8 +79,8 @@ INSERT INTO `announcements` (`id`, `announcement_title`, `announcement_type`, `u
 
 CREATE TABLE `announcement_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `name` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -103,12 +103,12 @@ INSERT INTO `announcement_types` (`id`, `name`, `status`, `created_at`, `updated
 
 CREATE TABLE `banks` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `bank_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `account_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `account_holder_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `branch` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ifsc` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `default` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bank_name` varchar(255) NOT NULL,
+  `account_number` varchar(255) NOT NULL,
+  `account_holder_name` varchar(255) NOT NULL,
+  `branch` varchar(255) NOT NULL,
+  `ifsc` varchar(255) NOT NULL,
+  `default` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -130,11 +130,11 @@ INSERT INTO `banks` (`id`, `bank_name`, `account_number`, `account_holder_name`,
 
 CREATE TABLE `blog_categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `parent_id` int(11) NOT NULL DEFAULT '0',
-  `language_id` int(11) NOT NULL DEFAULT '1',
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `parent_id` int(11) NOT NULL DEFAULT 0,
+  `language_id` int(11) NOT NULL DEFAULT 1,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -159,10 +159,10 @@ INSERT INTO `blog_categories` (`id`, `parent_id`, `language_id`, `name`, `slug`,
 CREATE TABLE `blog_comments` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `post_id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `comment` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `comment` text NOT NULL,
   `comment_date` datetime NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -177,17 +177,17 @@ CREATE TABLE `blog_comments` (
 
 CREATE TABLE `blog_posts` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
   `category` bigint(20) UNSIGNED NOT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `popular` tinyint(1) NOT NULL DEFAULT '1',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `tags` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `seo_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `seo_description` text COLLATE utf8mb4_unicode_ci,
-  `language_id` int(11) NOT NULL DEFAULT '1',
+  `description` longtext NOT NULL,
+  `popular` tinyint(1) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `tags` varchar(255) DEFAULT NULL,
+  `seo_title` varchar(255) DEFAULT NULL,
+  `seo_description` text DEFAULT NULL,
+  `language_id` int(11) NOT NULL DEFAULT 1,
   `created_by` int(11) NOT NULL,
   `updated_by` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -219,11 +219,11 @@ CREATE TABLE `blog_reviews` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `comments` varchar(1000) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL,
   `blog_id` varchar(255) NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -233,10 +233,10 @@ CREATE TABLE `blog_reviews` (
 
 CREATE TABLE `blog_tags` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `parent_id` int(11) NOT NULL DEFAULT '0',
-  `language_id` int(11) NOT NULL DEFAULT '1',
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `parent_id` int(11) NOT NULL DEFAULT 0,
+  `language_id` int(11) NOT NULL DEFAULT 1,
+  `name` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -284,8 +284,8 @@ CREATE TABLE `bookings` (
   `driver_price` double(10,2) DEFAULT NULL,
   `vehicle_price` double(10,2) DEFAULT NULL,
   `vehicle_total_price` double(10,2) DEFAULT NULL,
-  `insurance` text,
-  `extra_service` text,
+  `insurance` text DEFAULT NULL,
+  `extra_service` text DEFAULT NULL,
   `payment_type` enum('cod','paypal','stripe','wallet') DEFAULT NULL,
   `payment_status` int(11) DEFAULT NULL,
   `transaction_id` varchar(225) DEFAULT NULL,
@@ -303,10 +303,10 @@ CREATE TABLE `bookings` (
   `delivery_price` int(11) DEFAULT NULL,
   `tax_type` varchar(225) DEFAULT NULL,
   `tax_val` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `bookings`
@@ -403,10 +403,10 @@ CREATE TABLE `booking_details` (
   `seasonal_weekly_rate` double(10,2) DEFAULT NULL,
   `seasonal_monthly_rate` double(10,2) DEFAULT NULL,
   `seasonal_late_fee` double(10,2) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking_details`
@@ -429,13 +429,13 @@ INSERT INTO `booking_details` (`id`, `booking_id`, `has_tariff`, `has_season`, `
 CREATE TABLE `booking_histories` (
   `id` bigint(20) NOT NULL,
   `booking_id` bigint(20) NOT NULL,
-  `data` longtext,
+  `data` longtext DEFAULT NULL,
   `action` varchar(255) DEFAULT NULL,
-  `message` text,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `message` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking_histories`
@@ -561,25 +561,25 @@ INSERT INTO `booking_histories` (`id`, `booking_id`, `data`, `action`, `message`
 CREATE TABLE `booking_user_infos` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `booking_id` bigint(20) UNSIGNED NOT NULL,
-  `driver_first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `driver_last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver_first_name` varchar(255) DEFAULT NULL,
+  `driver_last_name` varchar(255) DEFAULT NULL,
   `driver_age` int(11) DEFAULT NULL,
-  `driver_mobile_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `driver_licence` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `driver_check` tinyint(1) NOT NULL DEFAULT '0',
-  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `no_person` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `driver_mobile_number` varchar(255) DEFAULT NULL,
+  `driver_licence` varchar(255) DEFAULT NULL,
+  `driver_check` tinyint(1) NOT NULL DEFAULT 0,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `no_person` varchar(255) NOT NULL,
+  `company` varchar(255) DEFAULT NULL,
+  `address` text NOT NULL,
   `country_id` bigint(20) UNSIGNED NOT NULL,
   `state_id` bigint(20) UNSIGNED NOT NULL,
   `city_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `pincode` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `add_info` text COLLATE utf8mb4_unicode_ci,
-  `terms_check` tinyint(1) NOT NULL DEFAULT '0',
+  `pincode` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone_number` varchar(255) NOT NULL,
+  `add_info` text DEFAULT NULL,
+  `terms_check` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -665,12 +665,12 @@ INSERT INTO `booking_user_infos` (`id`, `booking_id`, `driver_first_name`, `driv
 
 CREATE TABLE `brands` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `brand_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brand_icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brand_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `total_cars` double DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
+  `brand_image` varchar(255) DEFAULT NULL,
+  `brand_icon` varchar(255) DEFAULT NULL,
+  `brand_name` varchar(255) DEFAULT NULL,
+  `total_cars` double DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -697,8 +697,8 @@ INSERT INTO `brands` (`id`, `language_id`, `brand_image`, `brand_icon`, `brand_n
 --
 
 CREATE TABLE `cache` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `value` mediumtext NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -718,8 +718,8 @@ INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
 --
 
 CREATE TABLE `cache_locks` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -731,10 +731,10 @@ CREATE TABLE `cache_locks` (
 
 CREATE TABLE `cartypes` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
+  `name` varchar(255) DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -770,10 +770,10 @@ INSERT INTO `cartypes` (`id`, `language_id`, `name`, `icon`, `status`, `created_
 
 CREATE TABLE `car_colors` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `value` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
+  `name` varchar(255) DEFAULT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -802,9 +802,9 @@ INSERT INTO `car_colors` (`id`, `language_id`, `name`, `value`, `status`, `creat
 
 CREATE TABLE `car_fuels` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `fuel_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
+  `fuel_type` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -831,11 +831,11 @@ INSERT INTO `car_fuels` (`id`, `language_id`, `fuel_type`, `status`, `created_at
 
 CREATE TABLE `car_models` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `model_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `language_id` int(11) DEFAULT 1,
+  `model_name` varchar(255) DEFAULT NULL,
   `brand_id` int(11) DEFAULT NULL,
   `total_cars` double DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -872,8 +872,8 @@ INSERT INTO `car_models` (`id`, `language_id`, `model_name`, `brand_id`, `total_
 
 CREATE TABLE `car_steerings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `steering_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `steering_type` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -897,9 +897,9 @@ INSERT INTO `car_steerings` (`id`, `steering_type`, `status`, `created_at`, `upd
 
 CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
+  `name` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -925,9 +925,9 @@ INSERT INTO `categories` (`id`, `language_id`, `name`, `status`, `created_at`, `
 
 CREATE TABLE `checklists` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `name` varchar(255) DEFAULT NULL,
+  `description` longtext DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -959,10 +959,10 @@ CREATE TABLE `cities` (
   `id` bigint(20) NOT NULL,
   `state_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `cities`
@@ -49404,9 +49404,9 @@ INSERT INTO `cities` (`id`, `state_id`, `name`, `status`, `created_at`, `updated
 
 CREATE TABLE `communication_settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` text COLLATE utf8mb4_unicode_ci,
+  `type` varchar(255) NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `value` text DEFAULT NULL,
   `settings_type` int(11) DEFAULT NULL COMMENT '1 = Email and 2 = SMS and 3 = Pushnotification	',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -49452,7 +49452,7 @@ CREATE TABLE `configurations` (
   `value` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `configurations`
@@ -49470,11 +49470,11 @@ INSERT INTO `configurations` (`id`, `config`, `value`, `created_at`, `updated_at
 
 CREATE TABLE `contacts` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone_number` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -49501,10 +49501,10 @@ CREATE TABLE `countries` (
   `name` varchar(255) NOT NULL,
   `code` varchar(255) DEFAULT NULL,
   `phonecode` varchar(255) DEFAULT NULL,
-  `status` int(11) NOT NULL DEFAULT '1',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `countries`
@@ -49769,12 +49769,12 @@ CREATE TABLE `currencies` (
   `currency_name` varchar(100) DEFAULT NULL,
   `code` varchar(100) DEFAULT NULL,
   `symbol` varchar(100) DEFAULT NULL,
-  `exchange_rate` double(15,2) NOT NULL DEFAULT '0.00',
-  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `exchange_rate` double(15,2) NOT NULL DEFAULT 0.00,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `currencies`
@@ -49794,8 +49794,8 @@ INSERT INTO `currencies` (`id`, `currency_name`, `code`, `symbol`, `exchange_rat
 
 CREATE TABLE `cylinders` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `cylinder_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `cylinder_type` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -49822,9 +49822,9 @@ INSERT INTO `cylinders` (`id`, `cylinder_type`, `status`, `created_at`, `updated
 
 CREATE TABLE `damage_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `damage_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
+  `damage_type` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -49852,9 +49852,9 @@ CREATE TABLE `date_formats` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `date_formats`
@@ -49885,8 +49885,8 @@ INSERT INTO `date_formats` (`id`, `title`, `name`, `created_at`, `updated_at`) V
 
 CREATE TABLE `dbbackups` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` int(11) NOT NULL DEFAULT '1',
+  `name` varchar(255) NOT NULL,
+  `type` int(11) NOT NULL DEFAULT 1,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -49912,8 +49912,8 @@ INSERT INTO `dbbackups` (`id`, `name`, `type`, `deleted_at`, `created_at`, `upda
 
 CREATE TABLE `door_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `door_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `door_type` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -49936,17 +49936,17 @@ INSERT INTO `door_types` (`id`, `door_type`, `status`, `created_at`, `updated_at
 
 CREATE TABLE `drivers` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `driver_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gender` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `assigned_cars` text COLLATE utf8mb4_unicode_ci,
-  `card_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `date_of_issue` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `valid_date` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `image` varchar(255) DEFAULT NULL,
+  `driver_name` varchar(255) DEFAULT NULL,
+  `gender` varchar(255) DEFAULT NULL,
+  `phone_number` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `assigned_cars` text DEFAULT NULL,
+  `card_number` varchar(255) DEFAULT NULL,
+  `date_of_issue` varchar(255) DEFAULT NULL,
+  `valid_date` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -49972,7 +49972,7 @@ INSERT INTO `drivers` (`id`, `image`, `driver_name`, `gender`, `phone_number`, `
 CREATE TABLE `driver_documents` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `driver_id` bigint(20) UNSIGNED NOT NULL,
-  `document` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `document` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -49998,10 +49998,10 @@ INSERT INTO `driver_documents` (`id`, `driver_id`, `document`, `created_at`, `up
 CREATE TABLE `driving_types` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `driving_types`
@@ -50021,15 +50021,15 @@ CREATE TABLE `email_templates` (
   `id` int(11) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `notification_type` int(11) NOT NULL,
-  `description` longtext,
-  `subject` text,
-  `sms_content` text,
-  `notification_content` text,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `description` longtext DEFAULT NULL,
+  `subject` text DEFAULT NULL,
+  `sms_content` text DEFAULT NULL,
+  `notification_content` text DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `email_templates`
@@ -50057,13 +50057,13 @@ INSERT INTO `email_templates` (`id`, `title`, `notification_type`, `description`
 CREATE TABLE `enquiries` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `car_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `customer_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `customer_name` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
   `enquiry_date` date NOT NULL,
-  `enquiry_details` text COLLATE utf8mb4_unicode_ci,
-  `status` enum('1','2','3') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
-  `comment` text COLLATE utf8mb4_unicode_ci,
+  `enquiry_details` text DEFAULT NULL,
+  `status` enum('1','2','3') NOT NULL DEFAULT '1',
+  `comment` text DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -50090,12 +50090,12 @@ INSERT INTO `enquiries` (`id`, `car_id`, `customer_name`, `email`, `phone`, `enq
 
 CREATE TABLE `extra_services` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
+  `name` varchar(255) DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `description` longtext DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50118,11 +50118,11 @@ INSERT INTO `extra_services` (`id`, `language_id`, `name`, `icon`, `image`, `des
 
 CREATE TABLE `faqs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `order_by` int(11) NOT NULL DEFAULT '0',
-  `question` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `answer` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `language_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
+  `order_by` int(11) NOT NULL DEFAULT 0,
+  `question` varchar(255) NOT NULL,
+  `answer` text NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` bigint(20) UNSIGNED NOT NULL DEFAULT 1,
   `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -50147,8 +50147,8 @@ INSERT INTO `faqs` (`id`, `order_by`, `question`, `answer`, `status`, `language_
 
 CREATE TABLE `features` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `name` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50162,8 +50162,8 @@ CREATE TABLE `features` (
 
 CREATE TABLE `general_settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` text COLLATE utf8mb4_unicode_ci,
+  `key` varchar(255) NOT NULL,
+  `value` text DEFAULT NULL,
   `group_id` bigint(20) UNSIGNED DEFAULT NULL,
   `language_id` bigint(20) UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -50308,7 +50308,7 @@ INSERT INTO `general_settings` (`id`, `key`, `value`, `group_id`, `language_id`,
 
 CREATE TABLE `industry_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -50334,12 +50334,12 @@ CREATE TABLE `inspections` (
   `vehicle_info_id` bigint(20) UNSIGNED NOT NULL,
   `inspection_date` date DEFAULT NULL,
   `inspector_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `odometer` double DEFAULT '0',
-  `fuel` double DEFAULT '0',
-  `check_list` text COLLATE utf8mb4_unicode_ci,
-  `notes` longtext COLLATE utf8mb4_unicode_ci,
-  `inspection_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `repair_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `odometer` double DEFAULT 0,
+  `fuel` double DEFAULT 0,
+  `check_list` text DEFAULT NULL,
+  `notes` longtext DEFAULT NULL,
+  `inspection_status` varchar(255) DEFAULT NULL,
+  `repair_status` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50362,11 +50362,11 @@ INSERT INTO `inspections` (`id`, `vehicle_info_id`, `inspection_date`, `inspecto
 
 CREATE TABLE `insurances` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
   `price_type_id` int(11) DEFAULT NULL,
-  `insurance_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `price` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `insurance_name` varchar(255) DEFAULT NULL,
+  `price` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50396,7 +50396,7 @@ INSERT INTO `insurances` (`id`, `language_id`, `price_type_id`, `insurance_name`
 CREATE TABLE `insurance_benefits` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `insurance_id` bigint(20) UNSIGNED NOT NULL,
-  `benefit` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `benefit` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -50429,14 +50429,14 @@ CREATE TABLE `invoices` (
   `subtotal` double NOT NULL,
   `tax` double DEFAULT NULL,
   `grand_total` double NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `from_date` datetime NOT NULL,
   `to_date` datetime NOT NULL,
   `discount` varchar(255) DEFAULT NULL,
   `language_id` bigint(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `invoices`
@@ -50456,14 +50456,14 @@ INSERT INTO `invoices` (`id`, `invoice_number`, `car_id`, `currency_id`, `status
 CREATE TABLE `invoice_items` (
   `id` int(11) NOT NULL,
   `invoice_id` bigint(11) NOT NULL,
-  `description` text,
+  `description` text DEFAULT NULL,
   `qty` int(255) DEFAULT NULL,
   `price` double DEFAULT NULL,
   `tax` double DEFAULT NULL,
   `total_price` double DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `invoice_items`
@@ -50483,9 +50483,9 @@ INSERT INTO `invoice_items` (`id`, `invoice_id`, `description`, `qty`, `price`, 
 CREATE TABLE `languages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `language_id` bigint(20) UNSIGNED NOT NULL,
-  `rtl` tinyint(1) NOT NULL DEFAULT '0',
-  `default` tinyint(1) NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `rtl` tinyint(1) NOT NULL DEFAULT 0,
+  `default` tinyint(1) NOT NULL DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50507,18 +50507,18 @@ INSERT INTO `languages` (`id`, `language_id`, `rtl`, `default`, `status`, `creat
 
 CREATE TABLE `locations` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image` longtext COLLATE utf8mb4_unicode_ci,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` longtext COLLATE utf8mb4_unicode_ci,
+  `language_id` int(11) DEFAULT 1,
+  `name` varchar(255) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `image` longtext DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `address` longtext DEFAULT NULL,
   `country` bigint(20) UNSIGNED DEFAULT NULL,
   `state` bigint(20) UNSIGNED DEFAULT NULL,
   `city` bigint(20) UNSIGNED DEFAULT NULL,
-  `pincode` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `pincode` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50545,10 +50545,10 @@ INSERT INTO `locations` (`id`, `language_id`, `name`, `location`, `image`, `emai
 CREATE TABLE `location_working_days` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `location_id` bigint(20) UNSIGNED NOT NULL,
-  `day` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `day` varchar(255) DEFAULT NULL,
   `start_time` time DEFAULT NULL,
   `end_time` time DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -50590,11 +50590,11 @@ INSERT INTO `location_working_days` (`id`, `location_id`, `day`, `start_time`, `
 CREATE TABLE `maintenances` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `odometer` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `start_date` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `end_date` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `details` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1' COMMENT 'planned => 1, inprogress => 2, completed => 3',
+  `odometer` varchar(255) DEFAULT NULL,
+  `start_date` varchar(255) NOT NULL,
+  `end_date` varchar(255) NOT NULL,
+  `details` text NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT '1' COMMENT 'planned => 1, inprogress => 2, completed => 3',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50619,12 +50619,12 @@ INSERT INTO `maintenances` (`id`, `vehicle_id`, `odometer`, `start_date`, `end_d
 
 CREATE TABLE `menus` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `menu_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'footer',
-  `permenantlink` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `menus` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
-  `language_id` bigint(20) UNSIGNED DEFAULT '1',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `name` varchar(255) NOT NULL,
+  `menu_type` varchar(255) NOT NULL DEFAULT 'footer',
+  `permenantlink` varchar(255) NOT NULL,
+  `menus` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `language_id` bigint(20) UNSIGNED DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50655,11 +50655,11 @@ CREATE TABLE `messages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `sender_id` bigint(20) UNSIGNED NOT NULL,
   `receiver_id` bigint(20) UNSIGNED NOT NULL,
-  `message` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` enum('text','file') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'text',
-  `file` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mime_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `size` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `message` longtext NOT NULL,
+  `type` enum('text','file') NOT NULL DEFAULT 'text',
+  `file` varchar(255) DEFAULT NULL,
+  `mime_type` varchar(255) DEFAULT NULL,
+  `size` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -50687,7 +50687,7 @@ INSERT INTO `messages` (`id`, `sender_id`, `receiver_id`, `message`, `type`, `fi
 
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -50744,8 +50744,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 
 CREATE TABLE `modules` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `module_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `module_slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module_name` varchar(255) NOT NULL,
+  `module_slug` varchar(255) NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `user_type` int(11) NOT NULL COMMENT 'Admin => 1',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -50818,7 +50818,7 @@ INSERT INTO `modules` (`id`, `module_name`, `module_slug`, `parent_id`, `user_ty
 
 CREATE TABLE `newsletter_subscribers` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50842,14 +50842,14 @@ INSERT INTO `newsletter_subscribers` (`id`, `email`, `created_at`, `updated_at`,
 CREATE TABLE `notifications` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `subject` text,
-  `content` longtext,
-  `readed` int(11) NOT NULL DEFAULT '0',
+  `subject` text DEFAULT NULL,
+  `content` longtext DEFAULT NULL,
+  `readed` int(11) NOT NULL DEFAULT 0,
   `read_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `notifications`
@@ -50970,10 +50970,10 @@ INSERT INTO `notifications` (`id`, `user_id`, `subject`, `content`, `readed`, `r
 CREATE TABLE `notification_tags` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `notification_tags`
@@ -50995,11 +50995,11 @@ CREATE TABLE `notification_types` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `slug` varchar(255) DEFAULT NULL,
-  `tags` longtext,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `tags` longtext DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `notification_types`
@@ -51026,8 +51026,8 @@ CREATE TABLE `otp_settings` (
   `id` bigint(20) NOT NULL,
   `email` varchar(225) NOT NULL,
   `otp` varchar(225) NOT NULL,
-  `expires_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `expires_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `otp_settings`
@@ -51046,21 +51046,21 @@ INSERT INTO `otp_settings` (`id`, `email`, `otp`, `expires_at`) VALUES
 
 CREATE TABLE `pages` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `theme_id` int(11) NOT NULL DEFAULT '1',
+  `theme_id` int(11) NOT NULL DEFAULT 1,
   `parent_id` int(11) DEFAULT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `read` enum('static','dynamic') COLLATE utf8mb4_unicode_ci DEFAULT 'dynamic',
-  `page_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `page_content` longtext COLLATE utf8mb4_unicode_ci,
-  `seo_tag` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `seo_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `seo_description` text COLLATE utf8mb4_unicode_ci,
-  `canonical_url` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `og_title` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `og_description` longtext COLLATE utf8mb4_unicode_ci,
-  `keywords` longtext COLLATE utf8mb4_unicode_ci,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
+  `read` enum('static','dynamic') DEFAULT 'dynamic',
+  `page_title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `page_content` longtext DEFAULT NULL,
+  `seo_tag` varchar(255) DEFAULT NULL,
+  `seo_title` varchar(255) DEFAULT NULL,
+  `seo_description` text DEFAULT NULL,
+  `canonical_url` varchar(225) DEFAULT NULL,
+  `og_title` varchar(225) DEFAULT NULL,
+  `og_description` longtext DEFAULT NULL,
+  `keywords` longtext DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -51095,8 +51095,8 @@ INSERT INTO `pages` (`id`, `theme_id`, `parent_id`, `language_id`, `read`, `page
 --
 
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -51110,11 +51110,11 @@ CREATE TABLE `permissions` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `role_id` bigint(20) UNSIGNED NOT NULL,
   `module_id` bigint(20) DEFAULT NULL,
-  `create` tinyint(1) NOT NULL DEFAULT '0',
-  `edit` tinyint(1) NOT NULL DEFAULT '0',
-  `delete` tinyint(1) NOT NULL DEFAULT '0',
-  `view` tinyint(1) NOT NULL DEFAULT '0',
-  `allow_all` tinyint(1) NOT NULL DEFAULT '0',
+  `create` tinyint(1) NOT NULL DEFAULT 0,
+  `edit` tinyint(1) NOT NULL DEFAULT 0,
+  `delete` tinyint(1) NOT NULL DEFAULT 0,
+  `view` tinyint(1) NOT NULL DEFAULT 0,
+  `allow_all` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -51214,9 +51214,9 @@ INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `create`, `edit`, `dele
 
 CREATE TABLE `pricing_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `pricing_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pricing_type` varchar(255) DEFAULT NULL,
   `type` int(11) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -51250,7 +51250,7 @@ CREATE TABLE `reviews` (
   `facility_ratings` int(11) NOT NULL,
   `value_for_money_ratings` int(11) NOT NULL,
   `cleanliness_ratings` int(11) NOT NULL,
-  `average_ratings` double(3,1) DEFAULT '0.0',
+  `average_ratings` double(3,1) DEFAULT 0.0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -51273,10 +51273,10 @@ CREATE TABLE `review_messages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `review_id` bigint(20) UNSIGNED DEFAULT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
-  `comments` text COLLATE utf8mb4_unicode_ci,
-  `likes` int(11) NOT NULL DEFAULT '0',
-  `dislikes` int(11) NOT NULL DEFAULT '0',
+  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+  `comments` text DEFAULT NULL,
+  `likes` int(11) NOT NULL DEFAULT 0,
+  `dislikes` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -51297,9 +51297,9 @@ INSERT INTO `review_messages` (`id`, `review_id`, `user_id`, `parent_id`, `comme
 
 CREATE TABLE `roles` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `role_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `created_by` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `role_name` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_by` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -51323,9 +51323,9 @@ INSERT INTO `roles` (`id`, `role_name`, `status`, `created_by`, `created_at`, `u
 
 CREATE TABLE `safety_features` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `feature` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
+  `feature` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -51350,8 +51350,8 @@ INSERT INTO `safety_features` (`id`, `language_id`, `feature`, `status`, `create
 
 CREATE TABLE `seasons` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `name` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -51373,8 +51373,8 @@ INSERT INTO `seasons` (`id`, `name`, `status`, `created_at`, `updated_at`, `dele
 
 CREATE TABLE `seat_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `seat_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `seat_type` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -51401,10 +51401,10 @@ CREATE TABLE `sections` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `theme_id` int(11) NOT NULL,
   `order_by` int(11) DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `datas` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `content` longtext COLLATE utf8mb4_unicode_ci,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `name` varchar(255) NOT NULL,
+  `datas` longtext NOT NULL,
+  `content` longtext DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -51452,12 +51452,12 @@ INSERT INTO `sections` (`id`, `theme_id`, `order_by`, `name`, `datas`, `content`
 
 CREATE TABLE `section_datas` (
   `id` bigint(20) NOT NULL,
-  `language_id` int(11) DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
   `section_id` int(11) DEFAULT NULL,
-  `datas` longtext,
-  `created_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `datas` longtext DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `update_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `section_datas`
@@ -51480,11 +51480,11 @@ INSERT INTO `section_datas` (`id`, `language_id`, `section_id`, `datas`, `create
 --
 
 CREATE TABLE `sessions` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) NOT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_agent` text COLLATE utf8mb4_unicode_ci,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `payload` longtext NOT NULL,
   `last_activity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -51505,10 +51505,10 @@ INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, 
 
 CREATE TABLE `signature_settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `signature_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `signature_image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `is_default` tinyint(1) NOT NULL DEFAULT '0',
+  `signature_name` varchar(255) NOT NULL,
+  `signature_image` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `is_default` tinyint(1) NOT NULL DEFAULT 0,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -51535,11 +51535,11 @@ INSERT INTO `signature_settings` (`id`, `signature_name`, `signature_image`, `st
 
 CREATE TABLE `sitemap_urls` (
   `id` int(11) NOT NULL,
-  `url` text,
-  `sitemap_path` text,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `url` text DEFAULT NULL,
+  `sitemap_path` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `sitemap_urls`
@@ -51559,10 +51559,10 @@ CREATE TABLE `states` (
   `id` bigint(20) NOT NULL,
   `country_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `states`
@@ -55705,8 +55705,8 @@ CREATE TABLE `sub_taxes` (
 
 CREATE TABLE `tags` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tag` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `tag` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -55730,8 +55730,8 @@ INSERT INTO `tags` (`id`, `tag`, `status`, `created_at`, `updated_at`, `deleted_
 
 CREATE TABLE `tax_groups` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tax_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `tax_name` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -55745,9 +55745,9 @@ CREATE TABLE `tax_groups` (
 
 CREATE TABLE `tax_rates` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tax_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tax_name` varchar(255) NOT NULL,
   `tax_rate` decimal(10,2) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -55758,8 +55758,8 @@ CREATE TABLE `tax_rates` (
 --
 
 INSERT INTO `tax_rates` (`id`, `tax_name`, `tax_rate`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'fgzx', '324.00', 1, '2025-04-29 09:49:03', '2025-04-29 09:49:24', '2025-04-29 09:49:24'),
-(2, 'fdvfvv', '34.00', 1, '2025-04-29 10:53:44', '2025-04-29 10:53:59', '2025-04-29 10:53:59');
+(1, 'fgzx', 324.00, 1, '2025-04-29 09:49:03', '2025-04-29 09:49:24', '2025-04-29 09:49:24'),
+(2, 'fdvfvv', 34.00, 1, '2025-04-29 10:53:44', '2025-04-29 10:53:59', '2025-04-29 10:53:59');
 
 -- --------------------------------------------------------
 
@@ -55769,7 +55769,7 @@ INSERT INTO `tax_rates` (`id`, `tax_name`, `tax_rate`, `status`, `created_at`, `
 
 CREATE TABLE `team_sizes` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -55793,13 +55793,13 @@ INSERT INTO `team_sizes` (`id`, `name`, `deleted_at`, `created_at`, `updated_at`
 
 CREATE TABLE `testimonials` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `customer_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `review` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `language_id` int(11) DEFAULT 1,
+  `customer_name` varchar(255) NOT NULL,
+  `review` text NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
   `ratings` int(11) DEFAULT NULL,
-  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `location` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `order_by` int(11) DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -55823,15 +55823,15 @@ INSERT INTO `testimonials` (`id`, `language_id`, `customer_name`, `review`, `ima
 
 CREATE TABLE `tickets` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `ticket_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `priority` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ticket_id` varchar(255) NOT NULL,
+  `priority` varchar(200) NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
-  `user_type` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` int(11) NOT NULL DEFAULT '1',
-  `reply_description` text COLLATE utf8mb4_unicode_ci,
-  `attachment` text COLLATE utf8mb4_unicode_ci,
+  `subject` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `user_type` varchar(200) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `reply_description` text DEFAULT NULL,
+  `attachment` text DEFAULT NULL,
   `assignee_id` bigint(20) UNSIGNED DEFAULT NULL,
   `created_by` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -55860,7 +55860,7 @@ INSERT INTO `tickets` (`id`, `ticket_id`, `priority`, `user_id`, `subject`, `des
 
 CREATE TABLE `ticket_categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -55885,11 +55885,11 @@ CREATE TABLE `ticket_histories` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `ticket_id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext NOT NULL,
   `created_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -55914,10 +55914,10 @@ INSERT INTO `ticket_histories` (`id`, `ticket_id`, `user_id`, `description`, `cr
 
 CREATE TABLE `timezones` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `utc_offset` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `name` varchar(255) NOT NULL,
+  `utc_offset` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -56305,9 +56305,9 @@ INSERT INTO `timezones` (`id`, `name`, `utc_offset`, `created_at`, `updated_at`)
 CREATE TABLE `time_formats` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `time_formats`
@@ -56333,9 +56333,9 @@ INSERT INTO `time_formats` (`id`, `name`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `translation_languages` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `name` varchar(255) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -56361,9 +56361,9 @@ INSERT INTO `translation_languages` (`id`, `name`, `code`, `status`, `created_at
 
 CREATE TABLE `transmissions` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT '1',
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` int(11) DEFAULT 1,
+  `name` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -56390,22 +56390,22 @@ INSERT INTO `transmissions` (`id`, `language_id`, `name`, `status`, `created_at`
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `user_type` int(11) DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone_number` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone_number` varchar(20) DEFAULT NULL,
   `region_id` int(11) DEFAULT NULL,
-  `language_id` int(11) NOT NULL DEFAULT '1',
+  `language_id` int(11) NOT NULL DEFAULT 1,
   `role_id` int(11) DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `last_password_changed_at` timestamp NULL DEFAULT NULL,
-  `google_auth_enabled` tinyint(1) NOT NULL DEFAULT '0',
-  `booking_confirmation` tinyint(1) NOT NULL DEFAULT '0',
-  `desktop_notifications` tinyint(1) NOT NULL DEFAULT '0',
-  `email_notifications` tinyint(1) NOT NULL DEFAULT '0',
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `google_auth_enabled` tinyint(1) NOT NULL DEFAULT 0,
+  `booking_confirmation` tinyint(1) NOT NULL DEFAULT 0,
+  `desktop_notifications` tinyint(1) NOT NULL DEFAULT 0,
+  `email_notifications` tinyint(1) NOT NULL DEFAULT 0,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -56453,22 +56453,22 @@ INSERT INTO `users` (`id`, `name`, `user_type`, `email`, `phone_number`, `region
 CREATE TABLE `user_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `parent_id` int(11) NOT NULL DEFAULT '0',
-  `profile_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mobile_number` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gender` enum('male','female','other') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent_id` int(11) NOT NULL DEFAULT 0,
+  `profile_image` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `mobile_number` varchar(20) DEFAULT NULL,
+  `gender` enum('male','female','other') DEFAULT NULL,
   `dob` date DEFAULT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `card_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `card_number` varchar(255) DEFAULT NULL,
   `date_of_issue` date DEFAULT NULL,
   `valid_date` date DEFAULT NULL,
   `country_id` int(11) DEFAULT NULL,
   `state_id` int(11) DEFAULT NULL,
   `city_id` int(11) DEFAULT NULL,
-  `postal_code` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency_code` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `postal_code` varchar(20) DEFAULT NULL,
+  `currency_code` varchar(10) DEFAULT NULL,
   `latitude` decimal(10,8) DEFAULT NULL,
   `longitude` decimal(11,8) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -56525,7 +56525,7 @@ CREATE TABLE `user_devices` (
   `location` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_devices`
@@ -56614,7 +56614,7 @@ INSERT INTO `user_devices` (`id`, `user_id`, `device_type`, `browser`, `os`, `ip
 CREATE TABLE `user_documents` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `document` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `document` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -56641,10 +56641,10 @@ INSERT INTO `user_documents` (`id`, `user_id`, `document`, `created_at`, `update
 CREATE TABLE `vehicle_damages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `damage_loaction` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `damage_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `damage_loaction` varchar(255) NOT NULL,
+  `damage_type` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -56666,7 +56666,7 @@ CREATE TABLE `vehicle_extra_services` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
   `extra_service_id` bigint(20) UNSIGNED NOT NULL,
-  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -56677,24 +56677,24 @@ CREATE TABLE `vehicle_extra_services` (
 --
 
 INSERT INTO `vehicle_extra_services` (`id`, `vehicle_id`, `extra_service_id`, `value`, `price`, `created_at`, `updated_at`) VALUES
-(12, 2, 1, 'per_day', '5.00', '2025-04-25 10:02:46', '2025-04-25 10:02:46'),
-(16, 5, 1, 'per_day', '500.00', '2025-04-25 11:12:11', '2025-04-25 11:12:11'),
-(108, 1, 1, 'one_time', '0.00', '2025-05-06 15:07:02', '2025-05-06 15:07:02'),
-(120, 6, 1, 'per_day', '45.00', '2025-05-07 10:26:15', '2025-05-07 10:26:15'),
-(145, 41, 1, 'one_time', '30.00', '2025-05-07 12:57:03', '2025-05-07 12:57:03'),
-(147, 38, 1, 'one_time', '20.00', '2025-05-07 13:06:37', '2025-05-07 13:06:37'),
-(150, 20, 1, 'one_time', '30.00', '2025-05-07 13:22:29', '2025-05-07 13:22:29'),
-(156, 4, 1, 'per_day', '180.00', '2025-05-07 14:23:37', '2025-05-07 14:23:37'),
-(158, 3, 1, 'per_day', '40.00', '2025-05-07 14:57:48', '2025-05-07 14:57:48'),
-(162, 42, 1, 'one_time', '40.00', '2025-05-07 15:30:53', '2025-05-07 15:30:53'),
-(163, 44, 1, 'per_day', '25.00', '2025-05-07 15:33:11', '2025-05-07 15:33:11'),
-(164, 19, 1, 'one_time', '30.00', '2025-05-07 15:36:28', '2025-05-07 15:36:28'),
-(165, 7, 1, 'one_time', '20.00', '2025-05-07 15:37:44', '2025-05-07 15:37:44'),
-(168, 46, 1, 'one_time', '30.00', '2025-05-09 11:19:59', '2025-05-09 11:19:59'),
-(172, 54, 1, 'per_day', '18.00', '2025-05-13 11:10:18', '2025-05-13 11:10:18'),
-(173, 43, 1, 'one_time', '25.00', '2025-05-15 00:22:02', '2025-05-15 00:22:02'),
-(176, 55, 2, 'one_time', '0.00', '2025-05-16 15:29:27', '2025-05-16 15:29:27'),
-(177, 55, 1, 'one_time', '0.00', '2025-05-16 15:29:27', '2025-05-16 15:29:27');
+(12, 2, 1, 'per_day', 5.00, '2025-04-25 10:02:46', '2025-04-25 10:02:46'),
+(16, 5, 1, 'per_day', 500.00, '2025-04-25 11:12:11', '2025-04-25 11:12:11'),
+(108, 1, 1, 'one_time', 0.00, '2025-05-06 15:07:02', '2025-05-06 15:07:02'),
+(120, 6, 1, 'per_day', 45.00, '2025-05-07 10:26:15', '2025-05-07 10:26:15'),
+(145, 41, 1, 'one_time', 30.00, '2025-05-07 12:57:03', '2025-05-07 12:57:03'),
+(147, 38, 1, 'one_time', 20.00, '2025-05-07 13:06:37', '2025-05-07 13:06:37'),
+(150, 20, 1, 'one_time', 30.00, '2025-05-07 13:22:29', '2025-05-07 13:22:29'),
+(156, 4, 1, 'per_day', 180.00, '2025-05-07 14:23:37', '2025-05-07 14:23:37'),
+(158, 3, 1, 'per_day', 40.00, '2025-05-07 14:57:48', '2025-05-07 14:57:48'),
+(162, 42, 1, 'one_time', 40.00, '2025-05-07 15:30:53', '2025-05-07 15:30:53'),
+(163, 44, 1, 'per_day', 25.00, '2025-05-07 15:33:11', '2025-05-07 15:33:11'),
+(164, 19, 1, 'one_time', 30.00, '2025-05-07 15:36:28', '2025-05-07 15:36:28'),
+(165, 7, 1, 'one_time', 20.00, '2025-05-07 15:37:44', '2025-05-07 15:37:44'),
+(168, 46, 1, 'one_time', 30.00, '2025-05-09 11:19:59', '2025-05-09 11:19:59'),
+(172, 54, 1, 'per_day', 18.00, '2025-05-13 11:10:18', '2025-05-13 11:10:18'),
+(173, 43, 1, 'one_time', 25.00, '2025-05-15 00:22:02', '2025-05-15 00:22:02'),
+(176, 55, 2, 'one_time', 0.00, '2025-05-16 15:29:27', '2025-05-16 15:29:27'),
+(177, 55, 1, 'one_time', 0.00, '2025-05-16 15:29:27', '2025-05-16 15:29:27');
 
 -- --------------------------------------------------------
 
@@ -56705,8 +56705,8 @@ INSERT INTO `vehicle_extra_services` (`id`, `vehicle_id`, `extra_service_id`, `v
 CREATE TABLE `vehicle_faqs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `question` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `answer` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `question` varchar(255) NOT NULL,
+  `answer` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -56808,48 +56808,48 @@ CREATE TABLE `vehicle_info` (
   `vehicle_metatitle` varchar(100) DEFAULT NULL,
   `vehicle_metadesc` varchar(255) DEFAULT NULL,
   `vehicle_metakeywords` varchar(255) DEFAULT NULL,
-  `description` longtext,
+  `description` longtext DEFAULT NULL,
   `features` varchar(225) DEFAULT NULL,
   `popular` int(11) DEFAULT NULL,
   `recommended` int(11) DEFAULT NULL,
   `feature` int(11) DEFAULT NULL,
   `views` int(11) DEFAULT NULL,
-  `status` int(11) NOT NULL DEFAULT '1',
+  `status` int(11) NOT NULL DEFAULT 1,
   `created_by` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `vehicle_info`
 --
 
 INSERT INTO `vehicle_info` (`id`, `parent_id`, `language_id`, `name`, `vehicle_image`, `perma_link`, `slug`, `category_id`, `type_id`, `brand_id`, `model_id`, `plate_number`, `vin`, `main_location_id`, `other_location_id`, `fuel_type_id`, `odometer`, `color_id`, `year`, `transmission_id`, `mileage`, `passenger_capacity`, `num_seats`, `num_doors`, `num_airbags`, `vehicle_price`, `vehicle_basekm`, `vehicle_extrakmprice`, `vehicle_video`, `vehicle_metatitle`, `vehicle_metadesc`, `vehicle_metakeywords`, `description`, `features`, `popular`, `recommended`, `feature`, `views`, `status`, `created_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 0, 1, 'Audi A7', 'vehicles/ba32dbf8-e9bc-47f1-9292-e8feb0d3a825_1745563304.jpg', 'https://www.example.com/cars/audi-a7', 'audi-a7', 1, 5, 1, 3, 'IN A7030E', 'A1212', 2, '[\"2\",\"1\"]', 1, 2000, 4, 2025, 1, '5.00', 4, 4, 4, 6, '[{\"weekly\":\"800\"}]', '232.00', '343.00', NULL, 'Audi A7', 'Audi A7', 'Audi A7', '<p><span style=\"color: rgb(28, 32, 41); font-family: poppins, Arial, sans-serif; font-size: 17px;\">The new Audi wagon also has wide wheel arches that add a sporty aesthetic. Retractable door handles improve the car\'s aerodynamics. The current A6 Avant is about 16 feet long, and the new one likely has roughly the same footprint.<br></span></p><p style=\"--tw-border-spacing-x: 0; --tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; --tw-shadow: 0 0 transparent; --tw-shadow-colored: 0 0 transparent; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; border: 0px; margin-right: 0px; margin-bottom: 28px; margin-left: 0px; font-size: 17px; outline-style: initial; outline-width: 0px; padding: 0px; vertical-align: baseline; color: rgb(28, 32, 41); font-family: poppins, Arial, sans-serif;\">Unfortunately, we have no details about the A7\'s interior. To compete against the BMW 5 Series and Mercedes-Benz E-Class, it must offer impressive tech like big screens and cutting-edge driving assistance features.</p><p style=\"--tw-border-spacing-x: 0; --tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; --tw-shadow: 0 0 transparent; --tw-shadow-colored: 0 0 transparent; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; border: 0px; margin-right: 0px; margin-bottom: 28px; margin-left: 0px; font-size: 17px; outline-style: initial; outline-width: 0px; padding: 0px; vertical-align: baseline; color: rgb(28, 32, 41); font-family: poppins, Arial, sans-serif;\">Look for Audi to introduce the A7 sedan first and follow up with the Avant. The two should share cabin setups other than the wagon\'s ability to haul more in the back.</p>', '[1,2,3,4]', 1, 1, 1, 18, 1, 1, '2025-04-23 14:44:48', '2025-05-08 10:38:11', '2025-05-06 16:08:07'),
-(2, 0, 1, 'Sonnet kia', 'vehicles/e6448699-4f5a-4202-b71b-a6c29f334f3d_1745477972.jpg', 'https://www.example.com/cars/sonnet-kia', 'sonnet-kia', 1, 5, 5, 12, 'BE 112u7', '44335', 3, '[\"4\",\"3\",\"1\"]', 1, NULL, 4, 2020, NULL, NULL, 6, 6, 4, 2, '[{\"daily\":\"200\",\"weekly\":\"300\",\"yearly\":\"500\"}]', '10.00', '100.00', NULL, 'kia', 'kia sonnet', 'kia sonnet', '<div class=\"WaaZC\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\"><div class=\"RJPOee EIJn2\" style=\"animation: auto ease 0s 1 normal none running none !important;\"><div class=\"rPeykc\" data-hveid=\"CAkQAQ\" data-ved=\"2ahUKEwjYko7FhfCMAxU5ZWwGHTcLNeMQo_EKegQICRAB\" style=\"margin: 0px 0px 20px; hyphens: auto;\"><span style=\"color: rgb(71, 71, 71); font-size: 16px;\">Kia Corporation was founded in May 1944 and is korea\'s oldest manufacturer of motor vehicles</span><span style=\"color: rgb(71, 71, 71); font-size: 16px;\">. From humble origins making bicycles and motorcycles, Kia has grown – as part of the dynamic, global Hyundai-Kia Automotive Group – to become the world\'s fifth largest vehicle manufacturer.&nbsp;</span></div></div></div>', '[1,2,3,4]', 1, 1, 1, 32, 1, 1, '2025-04-24 12:29:32', '2025-04-29 11:43:09', '2025-04-25 12:38:57'),
-(3, 0, 1, 'Hyndai Verna', 'vehicles/5ca0c58f-24c3-453c-baaf-506bf4848a02_1746610068.jpg', 'https://www.example.com/cars/hyndai-verna', 'hyndai-verna', 1, 4, 5, 12, 'A2211', 'frr44444', 3, '[\"4\",\"3\",\"2\",\"1\"]', 3, 2000, 3, 2020, 4, '10.00', 8, 7, 4, 2, '[{\"daily\":\"150\"}]', NULL, NULL, NULL, 'bolero', 'bolero', 'bolero', '<p><span data-huuid=\"14321316059817583756\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The Mahindra Bolero is a rugged and durable SUV known for its reliability and affordability, making it a popular choice in rural and off-road settings.&nbsp;</span><span data-huuid=\"14321316059817583469\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It\'s a 7-seater with a focus on practicality and basic features, prioritizing toughness and low maintenance over luxury.&nbsp;</span></p>', '[1,2,3,4]', 1, 0, 1, 36, 1, 1, '2025-04-24 15:59:10', '2025-05-16 16:06:00', NULL),
-(4, 0, 1, 'Hyndai Cerita', 'vehicles/c8dec67c-ae57-421e-a8ef-846670107916_1746608017.jpg', 'https://www.example.com/cars/hyndai-cerita', 'hyndai-cerita', 1, 2, 5, 12, NULL, NULL, 4, '[\"3\",\"2\"]', 3, NULL, 2, 2021, 3, '34.00', 6, 7, 4, 3, '[{\"daily\":\"150\"}]', NULL, NULL, NULL, 'thar', 'thar', 'thar', '<p><span data-huuid=\"8432008288970154208\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The Mahindra Thar is a&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">rugged, off-road capable SUV known for its distinctive design, robust construction, and off-road prowess</mark>.&nbsp;</span><span data-huuid=\"8432008288970156257\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It\'s a lifestyle off-roader, combining a strong road presence with punchy engines and a smooth transmission.&nbsp;</span></p>', '[1,2,3,4]', 1, 0, 1, 15, 1, 1, '2025-04-24 16:17:40', '2025-05-15 18:03:41', NULL),
-(5, 0, 1, 'Audi', 'vehicles/bb8710f9-f342-44bb-8aa8-65fefc92c0df_1745559701.jpg', 'https://www.example.com/cars/audi', 'audi', 1, 3, 1, 3, NULL, NULL, 3, '[\"4\",\"1\"]', 2, NULL, 5, 2010, 4, NULL, 6, 6, 4, 4, '[{\"daily\":\"600\",\"weekly\":\"700\",\"yearly\":\"790\"}]', NULL, NULL, NULL, 'audi', 'audi', 'audi', '<p><span style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Audi is&nbsp;</span><mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px; font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">a German luxury automotive manufacturer, known for its sporty vehicles, high-quality engineering, and progressive design, often described as embodying the principle of \"Vorsprung durch Technik,\" which translates to \"Progress through Technology\"</mark></p>', '[1,2,3,4]', 1, 1, 1, 6, 1, 1, '2025-04-24 16:21:10', '2025-04-29 12:22:29', '2025-04-25 11:53:06'),
-(6, 0, 1, 'Inova V6', 'vehicles/432be19c-6c81-4188-b6fa-a9061d290b75_1745927475.jpg', 'https://www.example.com/cars/inova-v6', 'inova-v6', 1, 4, 6, 6, '334455r', 'E444322', 4, '[\"3\",\"1\"]', 4, 1400, 1, 2020, 3, '36.00', 6, 6, 4, 5, '[{\"daily\":\"500\"}]', '232.00', '343.00', NULL, 'kia', 'kia', 'kia', '<p><span data-huuid=\"16668689062515580493\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Kia is&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">a global mobility brand founded in 1944, offering a wide range of vehicles and mobility solutions</mark>.&nbsp;</span><span data-huuid=\"16668689062515577438\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It\'s the world\'s fifth-largest vehicle manufacturer, operating in over 190 markets and producing around three million vehicles annually.&nbsp;</span></p><p><span data-huuid=\"16668689062515577438\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\"><br></span></p>', '[1,2,3,4]', 1, 1, 1, 22, 1, 1, '2025-04-25 11:36:04', '2025-05-16 16:06:27', NULL),
-(7, 0, 1, 'Benz', 'vehicles/9af42ca7-bcfd-474d-8295-a50c9302322d_1746606317.jpg', 'https://www.example.com/cars/benz', 'benz', 1, 1, 3, 9, NULL, NULL, 4, NULL, 5, 1500, 2, 2021, 4, '43.00', 6, 6, 2, 4, '[{\"daily\":\"150\"}]', '24.00', '343.00', NULL, 'benz', 'benz', 'benz', '<p><span data-huuid=\"5263709591680840097\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Mercedes-Benz, often shortened to Mercedes or Benz, is&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">a German luxury automotive brand, a subsidiary of Mercedes-Benz Group AG</mark>.&nbsp;</span><span data-huuid=\"5263709591680841480\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">They produce a range of luxury vehicles and light commercial vehicles.&nbsp;</span><span data-huuid=\"5263709591680842863\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The company is known for its engineering, innovation, and premium quality.&nbsp;</span><span data-huuid=\"5263709591680840150\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Mercedes-Benz is a global player</span></p>', '[1,2,3,4]', 1, 0, 1, 32, 1, 1, '2025-04-25 12:27:23', '2025-05-19 13:34:23', NULL),
-(19, 0, 1, 'BMW AMG', 'vehicles/d4b8ea13-e491-4b38-8395-f7c977993d87_1745566788.jpg', 'https://www.example.com/cars/bmw', 'bmw-amg', 1, 2, 2, 1, NULL, NULL, 3, '[\"2\",\"1\"]', 5, 2000, 3, 2021, 4, '45.00', 8, 8, 4, 4, '[{\"daily\":\"150\"}]', '234.00', '156.00', NULL, 'bmw', 'bmw', 'bmw', '<p><span data-huuid=\"5546190469078410934\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">BMW (Bayerische Motoren Werke) is&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">a German multinational manufacturer of luxury automobiles, motorcycles, and engines</mark>, with a global footprint spanning over 30 production sites.&nbsp;</span><span data-huuid=\"5546190469078410837\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The company also offers financial and mobility services, and is known for its BMW, MINI, Rolls-Royce etc</span></p>', '[1,2,3,4]', 1, 0, 1, 23, 1, 1, '2025-04-25 13:09:48', '2025-05-16 16:30:42', NULL),
-(20, 0, 1, 'Ford', 'vehicles/2cb3c150-5ddd-4184-b0d2-80334b03ef75_1746604267.jpg', 'https://www.example.com/cars/ford', 'ford', 1, 5, 4, 7, NULL, NULL, 3, '[\"2\",\"1\"]', 5, 1300, 3, 2020, 3, '45.00', 4, 4, 4, 2, '[{\"weekly\":\"800\"}]', NULL, NULL, NULL, 'ford', 'ford', 'ford', '<p><span data-huuid=\"9391290848987236172\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It produces a wide range of vehicles, including trucks, SUVs, electric vehicles, and commercial and luxury cars, operating under the Ford and Lincoln brands.&nbsp;</span><span data-huuid=\"9391290848987235629\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Ford\'s legacy includes revolutionizing the automotive industry with mass production and the moving assembly line.</span></p>', '[1,2,3,4]', 1, 0, 1, 18, 1, 1, '2025-04-25 13:31:10', '2025-05-15 11:27:45', NULL),
-(38, 0, 1, 'BMW', 'vehicles/51a7751f-1ea0-4ebe-aa93-5dd509d2416b_1746603281.jpg', 'https://www.example.com/cars/bmw', 'bmw', 1, 4, 2, 1, 'JK78457', '7845230054', 2, '[\"3\",\"1\"]', 2, 1000, 1, 2020, 3, '3.00', 4, 4, 2, 6, '[{\"daily\":\"300\"}]', NULL, NULL, NULL, 'BMW', 'BMW', 'BMW', '<div class=\"Gur8Ad\" style=\"font-size: 16px; line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1); color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><span data-huuid=\"4707926916653413804\"><strong>Luxury and Performance:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); font-size: 16px; letter-spacing: 0.1px; line-height: 22px; font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><span data-huuid=\"4707926916653415015\">BMW vehicles are known for their luxurious interiors, advanced technology, and strong performance, particularly in their high-end model.</span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); font-size: 16px; letter-spacing: 0.1px; line-height: 22px; font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><span data-huuid=\"4707926916653415015\"><ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjLkvmq6PKMAxUl-TgGHa4SDasQm_YKegQIKxAB\" style=\"margin: 10px 0px 20px; padding-left: 24px; line-height: 22px; color: rgb(0, 29, 53); letter-spacing: normal;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; padding: 0px 0px 0px 4px; list-style-position: inherit; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 8px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"4707926916653413341\"><strong>Engineering and Innovation:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"4707926916653414552\">The brand has a long history of innovation and engineering, pushing the boundaries of automotive technology.<span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d411b0b0-41fc-4dbd-ba1e-56b8378bd2ed\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></div></div></div></div></li></ul></span></div>', '[1,2,3,4]', 1, 0, 1, 32, 1, 1, '2025-04-25 15:03:16', '2025-05-16 11:56:42', NULL),
-(41, 0, 1, 'Benz AG', 'vehicles/e6ac007d-0dcb-4b51-9608-423fb335c476_1745574147.jpg', 'https://www.example.com/cars/benz-ag', 'benz-ag', 1, 3, 3, 10, NULL, NULL, 2, '[\"4\",\"1\"]', 4, 1000, 3, 2021, 3, '5.00', 4, 4, 4, 5, '[{\"daily\":\"150\"}]', NULL, NULL, NULL, 'benz', 'benz', 'benz', '<p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Mercedes-Benz vehicles are known for their luxurious interiors, advanced technology, and strong performance, particularly in their high-end models.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"bb05f580-3f87-46ba-b94f-1aeeca99cf82\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"bb05f580-3f87-46ba-b94f-1aeeca99cf82\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">The brand has a long history of innovation and engineering, pushing the boundaries of automotive technology.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d411b0b0-41fc-4dbd-ba1e-56b8378bd2ed\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"bb05f580-3f87-46ba-b94f-1aeeca99cf82\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d411b0b0-41fc-4dbd-ba1e-56b8378bd2ed\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">Mercedes-Benz operates globally, with production facilities in various countries and a wide range of models sold worldwide.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"eff23b8d-6445-4473-99c9-43b074833af5\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></span></span></p>', '[1,2,3,4]', 1, 0, 1, 23, 1, 1, '2025-04-25 15:12:27', '2025-05-16 15:51:08', NULL),
-(42, 0, 1, 'Toyota', 'vehicles/9df2cc2d-6a9d-461e-8ced-242d2e9dfa9b_1746601351.jpg', 'https://www.example.com/cars/toyota', 'toyota', 1, 5, 6, 5, NULL, NULL, 2, '[\"4\",\"1\"]', 2, NULL, 1, 2015, 1, '5.00', 6, 6, 4, 4, '[{\"daily\":\"150\"}]', '345.00', '234.00', NULL, 'toyota', 'toyota', 'toyota', '<p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Toyota\'s primary focus is designing, manufacturing, and selling a wide range of vehicles, including passenger cars, trucks, SUVs, and commercial vehicles.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d3a0b44d-40df-46a7-991e-2d5096bf9e27\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d3a0b44d-40df-46a7-991e-2d5096bf9e27\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">Toyota operates in over 170 countries and territories, with manufacturing plants and distribution networks worldwide.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"91a551cf-4656-4d6e-976b-ae1efbd37377\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d3a0b44d-40df-46a7-991e-2d5096bf9e27\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"91a551cf-4656-4d6e-976b-ae1efbd37377\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">Toyota is known for its efficient production system, \"Just-in-Time,\" which emphasizes producing only what is needed, when it is needed, and in the amount needed.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"cd2ca514-b9c5-4274-88fd-67ae17211f91\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></span></span></p>', '[1,2,3,4]', 1, 1, 1, 58, 1, 1, '2025-04-25 15:18:17', '2025-05-14 16:15:06', NULL),
-(43, 0, 1, 'Fiesta', 'vehicles/11c754e6-539c-4d64-bf25-c70130b65362_1745576290.jpg', 'https://www.example.com/cars/fiesta', 'fiesta', 1, 4, 4, 7, NULL, NULL, 1, '[\"3\",\"2\"]', 4, 1200, 2, 2020, 3, '56.00', 6, 4, 4, 4, '[{\"daily\":\"150\"}]', NULL, NULL, NULL, 'ford', 'ford', 'ford', '<p><span style=\"color: inherit;\"><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Ford utility vehicles are designed for capability and versatility, with features like elevated driver\'s seats and cargo areas.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"9e7dedfe-7166-4861-a5f0-8bf766149cab\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></p><p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Ford offers a variety of trucks, including the F-Series, known for their strength and durability.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"6babb89c-615d-444e-a0ed-0dea7f27d853\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span><span style=\"color: inherit;\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"9e7dedfe-7166-4861-a5f0-8bf766149cab\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><br></span></span></p><p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Ford is also expanding its electric vehicle portfolio, including the Mustang Mach-E, which offers a blend of performance and sustainability.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"0b3da06f-f626-41af-ac45-c5be1ca0e51f\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></p>', '[1,2,3,4]', 1, 0, 1, 29, 1, 1, '2025-04-25 15:48:10', '2025-05-16 15:50:50', NULL),
-(44, 0, 1, 'Audi A8', 'vehicles/68afb6bc-1141-4a01-b7a8-e06746da21d6_1746597040.jpg', 'https://www.example.com/cars/audi-a8', 'audi-a8', 1, 1, 1, 4, NULL, NULL, 1, '[\"4\",\"2\"]', 2, 1000, 4, 2016, 1, '45.00', 4, 4, 4, 4, '[{\"weekly\":\"800\"}]', '345.00', '234.00', NULL, 'audi', 'audi', 'audi', '<ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjczaSz-_KMAxVoRmwGHd8wNboQm_YKegQIKxAB\" style=\"margin: 10px 0px 20px; padding-left: 24px; font-size: 16px; line-height: 22px; color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; padding: 0px 0px 0px 4px; list-style-position: inherit; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 0px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"3025610098028757191\"><strong>Design:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028760962\">Audi cars are known for their sleek and modern exterior and interior designs, emphasizing luxury and comfort.<span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"5f925f61-984f-4e2c-9689-1a139948850e\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028760962\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"5f925f61-984f-4e2c-9689-1a139948850e\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjczaSz-_KMAxVoRmwGHd8wNboQm_YKegQIKxAB\" style=\"margin: 10px 0px 20px; padding-left: 24px; line-height: 22px; color: rgb(0, 29, 53); letter-spacing: normal; text-wrap-mode: wrap;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; padding: 0px 0px 0px 4px; list-style-position: inherit; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 8px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"3025610098028759337\"><strong>Performance:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028759012\">Audi offers a variety of engines, from sporty to high-performance, known for their power and efficiency.<span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"2583ff77-a993-45d1-a7a2-a8bc9fa147ff\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028759012\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"2583ff77-a993-45d1-a7a2-a8bc9fa147ff\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjczaSz-_KMAxVoRmwGHd8wNboQm_YKegQIKxAB\" style=\"padding-left: 24px; margin: 10px 0px 20px; text-wrap-mode: wrap; line-height: 22px; color: rgb(0, 29, 53); letter-spacing: normal;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; list-style-position: inherit; padding: 0px 0px 0px 4px; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 8px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"3025610098028760312\"><span style=\"font-weight: 700;\">Technology:</span></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028759987\">They incorporate advanced technology, including innovative drive systems like the Quattro all-wheel drive, and a range of driver-assistance</span></div></div></div></div></li></ul></span></span></span></div></div></div></div></li></ul></span></span></span></div></div></div></div></li></ul>', '[1,2,3,4]', 1, 0, 1, 113, 1, 1, '2025-04-25 15:54:51', '2025-05-16 11:56:25', NULL),
-(46, 0, 1, 'Audi RS Q8', 'vehicles/be1c3e9a-3fc4-4b7c-bf7d-ab8304a1e12a_1745915451.jpg', 'https://www.example.com/cars/audi-rs-q8', 'audi-rs-q8', 1, 10, 1, 13, 'FG45 4000', '78457845', 2, '[\"3\"]', 1, 234, 6, 2018, 2, '3.00', 5, 5, 4, 8, '[{\"daily\":\"150\",\"weekly\":\"750\"}]', '300.00', '10.00', NULL, 'Audi RS Q8 – Luxury Performance SUV with Twin-Turbo V8 Power', 'Audi RS Q8, Audi RS Q8 specs, RS Q8 SUV, Audi RS Q8 engine, luxury SUV, performance SUV, Audi RS Q8 top speed, twin-turbo V8 SUV, Audi quattro SUV, RS Q8 features', 'Audi RS Q8, Audi RS Q8 specs, RS Q8 SUV, Audi RS Q8 engine, luxury SUV, performance SUV, Audi RS Q8 top speed, twin-turbo V8 SUV, Audi quattro SUV, RS Q8 features', '<p data-start=\"117\" data-end=\"393\" class=\"\">The Audi RS Q8 is where high performance and refined luxury come together in a bold, unmistakable SUV. Beneath its sculpted hood lies a 4.0-liter twin-turbocharged V8 engine that delivers a thrilling 591 horsepower, launching the RS Q8 from 0 to 100 km/h in just 3.8 seconds.</p>', '[1,2,3,4]', 1, 0, 1, 94, 1, 1, '2025-04-29 14:00:51', '2025-05-16 11:19:35', NULL),
-(47, 0, 2, 'أودي A3', 'vehicles/b8e49dc3-4073-4832-bed2-1c9239fd3008_1745920056.jpg', 'https://www.example.com/cars/-a3', 'aody-a3', 5, 16, 7, 14, 'RF34', 'RF24', 6, '[\"6\"]', 6, 23, 7, 2021, 6, '3.00', 4, 2, 2, 4, '[{\"daily\":\"345\"}]', NULL, NULL, NULL, 'الفخامة الألمانية بأعلى معايير الأداء', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', '<p>أودي هي واحدة من أبرز شركات السيارات الألمانية، معروفة بتقديم سيارات تتميز بالفخامة والتقنيات المتقدمة. تجمع أودي بين التصميم العصري والديناميكية الرياضية والتكنولوجيا الذكية، مثل نظام quattro للدفع الرباعي وشاشات العرض الرقمية المتطورة. تناسب سيارات أودي من يبحث عن الرفاهية مع أداء قوي وراحة فائقة.</p>', '[]', 1, 1, 1, 6, 1, 1, '2025-04-29 15:17:36', '2025-05-14 17:32:22', NULL),
-(48, 0, 2, 'مرسيدس بنز', 'vehicles/d744769b-485f-4a1e-88ca-98db94045c3b_1745920762.jpg', 'https://www.example.com/cars/-', 'mrsyds-bnz', 5, 16, 8, 15, 'FG34', 'GH434', 6, '[\"6\"]', 6, 12, 7, 2020, 6, '12.00', 4, 2, 4, 2, '[{\"daily\":\"260\"}]', NULL, NULL, NULL, 'مرسيدس بنز - الفخامة الألمانية بلا حدود', 'مرسيدس، سيارات فاخرة، مرسيدس جي كلاس، مرسيدس إي كلاس، سيارات ألمانية', 'مرسيدس، سيارات فاخرة، مرسيدس جي كلاس، مرسيدس إي كلاس، سيارات ألمانية', NULL, '[]', 1, 1, 1, NULL, 1, 1, '2025-04-29 15:20:44', '2025-04-29 17:32:31', NULL),
-(49, 0, 2, 'بي إم دبليو', 'vehicles/f25a2922-1db8-4feb-9257-02f73fddd1dc_1745920740.jpg', 'https://www.example.com/cars/-', 'by-am-dblyo', 5, 16, 8, 15, 'TG34', 'GT45', 6, '[\"6\"]', 6, 34, 8, 2021, 5, '4.00', 5, 2, 4, 4, '[{\"daily\":\"150\"}]', NULL, NULL, NULL, 'بي إم دبليو - تجربة قيادة لا تُنسى', 'بي إم دبليو، سيارات رياضية، BMW X5، BMW 3 Series، سيارات ألمانية فاخرة', 'بي إم دبليو، سيارات رياضية، BMW X5، BMW 3 Series، سيارات ألمانية فاخرة', '<p>تُعرف بي إم دبليو بأنها رمز القيادة الديناميكية والفخامة الألمانية، وتقدم مجموعة واسعة من السيارات التي تلبي احتياجات السائق العصري. من الفئة الرياضية إلى السيارات الفاخرة والعائلية، توفر BMW تجربة قيادة ممتعة مع تقنيات مبتكرة ومحركات قوية تُميزها عن باقي المنافسين.تُعرف بي إم دبليو بأنها رمز القيادة الديناميكية والفخامة الألمانية، وتقدم مجموعة واسعة من السيارات التي تلبي احتياجات السائق العصري. من الفئة الرياضية إلى السيارات الفاخرة والعائلية، توفر BMW تجربة قيادة ممتعة مع تقنيات مبتكرة ومحركات قوية تُميزها عن باقي المنافسين.</p>', '[]', 1, 1, 1, 3, 1, 1, '2025-04-29 15:24:48', '2025-05-08 13:01:38', NULL),
-(50, 0, 2, 'بي إم دبليو  S2', 'vehicles/8d03f46f-6d45-4bb3-9a3d-fd61f08c5b07_1745920960.jpg', 'https://www.example.com/cars/-s2', 'by-am-dblyo-s2', 5, 16, 8, 15, NULL, NULL, 5, NULL, 6, NULL, 8, 2021, 6, NULL, 3, NULL, NULL, 5, '[{\"daily\":\"150\",\"weekly\":\"45\"}]', NULL, NULL, NULL, 'انطلق بثقة مع سيارات بي إم دبليو التي تمزج بين الديناميكية الرياضية والفخامة المطلقة والتقنيات', 'بي إم دبليو، سيارات رياضية، BMW X5، BMW 3 Series، سيارات ألمانية فاخرة', 'بي إم دبليو، سيارات رياضية، BMW X5، BMW 3 Series، سيارات ألمانية فاخرة', NULL, '[]', 1, 1, 1, 2, 1, 1, '2025-04-29 15:32:40', '2025-05-08 13:01:19', NULL),
-(51, 0, 2, 'أودي Q6', 'vehicles/cfa1075a-e788-41b7-b496-e61484d7ce53_1745921260.jpg', 'https://www.example.com/cars/-q6', 'aody-q6', 5, 16, 7, 14, 'RF23', 'RF32', 6, '[\"6\"]', 6, 23, 8, 2021, 6, '23.00', 4, 4, 4, 2, '[{\"daily\":\"150\",\"weekly\":\"54\"}]', NULL, NULL, NULL, 'أودي - الفخامة الألمانية بأعلى معايير الأداء', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', '<p>أودي هي واحدة من أبرز شركات السيارات الألمانية، معروفة بتقديم سيارات تتميز بالفخامة والتقنيات المتقدمة. تجمع أودي بين التصميم العصري والديناميكية الرياضية والتكنولوجيا الذكية، مثل نظام quattro للدفع الرباعي وشاشات العرض الرقمية المتطورة. تناسب سيارات أودي من يبحث عن الرفاهية مع أداء قوي وراحة فائقة.</p>', '[]', 1, 1, 1, 3, 1, 1, '2025-04-29 15:37:40', '2025-04-29 19:03:48', NULL),
-(52, 0, 2, 'أودي  V2', 'vehicles/fe3271d7-cf93-4249-956d-31290e49fe01_1745921416.jpg', 'https://www.example.com/cars/-v2', 'aody-v2', 5, 16, 7, 14, 'TB546', 'TG343', 6, '[\"6\",\"5\"]', 6, 23, 7, 2021, 6, '34.00', 4, 4, 4, 3, '[{\"daily\":\"340\",\"weekly\":\"78\"}]', '324.00', '23.00', NULL, 'أودي - الفخامة الألمانية بأعلى معايير الأداء', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', '<p>أودي هي واحدة من أبرز شركات السيارات الألمانية، معروفة بتقديم سيارات تتميز بالفخامة والتقنيات المتقدمة. تجمع أودي بين التصميم العصري والديناميكية الرياضية والتكنولوجيا الذكية، مثل نظام quattro للدفع الرباعي وشاشات العرض الرقمية المتطورة. تناسب سيارات أودي من يبحث عن الرفاهية مع أداء قوي وراحة فائقة.</p>', '[]', 1, 1, 1, 5, 1, 1, '2025-04-29 15:40:16', '2025-04-29 19:08:05', NULL),
-(53, 0, 2, 'أودي RS Q3', 'vehicles/1d213f77-66c2-477f-920e-05970bcf0016_1745921505.jpg', 'https://www.example.com/cars/-rs-q3', 'aody-rs-q3', 5, 16, 7, 16, 'EG7845', '7845568956', 6, '[\"6\"]', 6, 34, 7, 2018, 6, '4.00', 5, 5, 4, 8, '[{\"daily\":\"150\",\"weekly\":\"750\"}]', '200.00', '5.00', NULL, 'أودي RS Q3 – سيارة SUV رياضية فاخرة بقوة مذهلة', 'أودي RS Q3، سيارة SUV رياضية، أودي 2025، أودي RS، سيارات أودي، سيارة قوية، محرك 400 حصان، أودي RS Q3 سعر، أودي RS Q3 المواصفات', 'أودي RS Q3، سيارة SUV رياضية، أودي 2025، أودي RS، سيارات أودي، سيارة قوية، محرك 400 حصان، أودي RS Q3 سعر، أودي RS Q3 المواصفات', '<p data-start=\"242\" data-end=\"744\" class=\"\"><strong data-start=\"242\" data-end=\"256\">أودي RS Q3</strong> هي سيارة SUV مدمجة عالية الأداء تجمع بين العملية اليومية وروح رياضية قوية مستوحاة من سيارات السباق. تأتي بمحرك خماسي الأسطوانات سعة 2.5 لتر توربو يولد قوة تصل إلى 400 حصان، مما يتيح تسارعًا مثيرًا من 0 إلى 100 كم/س في أقل من 4.5 ثوانٍ. تتميز بتصميم خارجي جذاب مع شبك أمامي واسع ولمسات رياضية حادة، إضافةً إلى مقصورة داخلية فاخرة مزودة بتقنيات متقدمة مثل نظام MMI للمعلومات والترفيه وشاشة رقمية بالكامل. أودي RS Q3 مثالية لمن يبحث عن الأداء القوي والتصميم الفاخر في سيارة SUV صغيرة الحجم.</p>', '[]', 1, 1, 1, 5, 1, 1, '2025-04-29 15:41:45', '2025-04-29 19:05:46', NULL),
-(54, 0, 1, 'Range Rover', 'vehicles/50f6a11c-7f9f-4c74-b470-6ab210841744_1745925691.jpg', 'https://www.example.com/cars/range-rover', 'range-rover', 1, 10, 2, 2, '233434566', '65466234', 3, '[\"4\"]', 2, 232, 4, 2020, 3, '32.00', 3, 4, 4, 2, '[{\"daily\":\"250\",\"monthly\":\"2200\"}]', '455.00', '100.00', NULL, 'BMW i7 – Luxury Electric Sedan | Ultimate Performance and Innovation', 'BMW i7', 'BMW i7', '<p>The <strong data-start=\"4\" data-end=\"19\">Range Rover</strong> is the flagship luxury SUV from <strong data-start=\"52\" data-end=\"66\">Land Rover</strong>, renowned for its combination of <strong data-start=\"100\" data-end=\"120\">refined elegance</strong>, <strong data-start=\"122\" data-end=\"145\">off-road capability</strong>, and <strong data-start=\"151\" data-end=\"178\">cutting-edge technology</strong>. It offers an unparalleled driving experience, blending performance with luxury, making it a symbol of prestige and adventure.</p>', '[1,2,3,4]', 1, 1, 1, 123, 1, 1, '2025-04-29 16:21:14', '2025-05-16 14:38:13', NULL),
-(55, 0, 1, 'Audi Q', 'vehicles/cfe5d71b-afa8-4d87-ad23-9f1361cb55f0_1747386374.jpg', 'https://www.example.com/cars/audi-q', 'audi-q', 1, 10, 1, 3, 'AZ094342', 'LN32432', 2, '[\"3\",\"2\"]', 3, 15000, 6, 2020, 2, '4.00', 4, 4, 4, 5, '[{\"daily\":\"75\",\"weekly\":\"600\"}]', '150.00', '30.00', NULL, 'Audi', 'audi', 'audi', '<p><font color=\"#1f1f1f\" face=\"Google Sans, Arial, sans-serif\"><span style=\"font-size: 16px;\">The Audi Q3 is a well-rounded luxury SUV that offers a compelling combination of style, performance, and technology, making it a worthy purchase for those seeking an entry-level premium SUV. It\'s particularly appealing to those who appreciate a sleek design, a refined interior, and a fun driving experience,</span></font></p>', '[1,2,4]', NULL, NULL, NULL, 22, 1, 1, '2025-05-16 14:36:14', '2025-05-19 13:33:30', NULL);
+(1, 0, 1, 'Audi A7', 'vehicles/ba32dbf8-e9bc-47f1-9292-e8feb0d3a825_1745563304.jpg', 'https://www.example.com/cars/audi-a7', 'audi-a7', 1, 5, 1, 3, 'IN A7030E', 'A1212', 2, '[\"2\",\"1\"]', 1, 2000, 4, '2025', 1, 5.00, 4, 4, 4, 6, '[{\"weekly\":\"800\"}]', 232.00, 343.00, NULL, 'Audi A7', 'Audi A7', 'Audi A7', '<p><span style=\"color: rgb(28, 32, 41); font-family: poppins, Arial, sans-serif; font-size: 17px;\">The new Audi wagon also has wide wheel arches that add a sporty aesthetic. Retractable door handles improve the car\'s aerodynamics. The current A6 Avant is about 16 feet long, and the new one likely has roughly the same footprint.<br></span></p><p style=\"--tw-border-spacing-x: 0; --tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; --tw-shadow: 0 0 transparent; --tw-shadow-colored: 0 0 transparent; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; border: 0px; margin-right: 0px; margin-bottom: 28px; margin-left: 0px; font-size: 17px; outline-style: initial; outline-width: 0px; padding: 0px; vertical-align: baseline; color: rgb(28, 32, 41); font-family: poppins, Arial, sans-serif;\">Unfortunately, we have no details about the A7\'s interior. To compete against the BMW 5 Series and Mercedes-Benz E-Class, it must offer impressive tech like big screens and cutting-edge driving assistance features.</p><p style=\"--tw-border-spacing-x: 0; --tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; --tw-shadow: 0 0 transparent; --tw-shadow-colored: 0 0 transparent; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; border: 0px; margin-right: 0px; margin-bottom: 28px; margin-left: 0px; font-size: 17px; outline-style: initial; outline-width: 0px; padding: 0px; vertical-align: baseline; color: rgb(28, 32, 41); font-family: poppins, Arial, sans-serif;\">Look for Audi to introduce the A7 sedan first and follow up with the Avant. The two should share cabin setups other than the wagon\'s ability to haul more in the back.</p>', '[1,2,3,4]', 1, 1, 1, 18, 1, 1, '2025-04-23 14:44:48', '2025-05-08 10:38:11', '2025-05-06 16:08:07'),
+(2, 0, 1, 'Sonnet kia', 'vehicles/e6448699-4f5a-4202-b71b-a6c29f334f3d_1745477972.jpg', 'https://www.example.com/cars/sonnet-kia', 'sonnet-kia', 1, 5, 5, 12, 'BE 112u7', '44335', 3, '[\"4\",\"3\",\"1\"]', 1, NULL, 4, '2020', NULL, NULL, 6, 6, 4, 2, '[{\"daily\":\"200\",\"weekly\":\"300\",\"yearly\":\"500\"}]', 10.00, 100.00, NULL, 'kia', 'kia sonnet', 'kia sonnet', '<div class=\"WaaZC\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\"><div class=\"RJPOee EIJn2\" style=\"animation: auto ease 0s 1 normal none running none !important;\"><div class=\"rPeykc\" data-hveid=\"CAkQAQ\" data-ved=\"2ahUKEwjYko7FhfCMAxU5ZWwGHTcLNeMQo_EKegQICRAB\" style=\"margin: 0px 0px 20px; hyphens: auto;\"><span style=\"color: rgb(71, 71, 71); font-size: 16px;\">Kia Corporation was founded in May 1944 and is korea\'s oldest manufacturer of motor vehicles</span><span style=\"color: rgb(71, 71, 71); font-size: 16px;\">. From humble origins making bicycles and motorcycles, Kia has grown – as part of the dynamic, global Hyundai-Kia Automotive Group – to become the world\'s fifth largest vehicle manufacturer.&nbsp;</span></div></div></div>', '[1,2,3,4]', 1, 1, 1, 32, 1, 1, '2025-04-24 12:29:32', '2025-04-29 11:43:09', '2025-04-25 12:38:57'),
+(3, 0, 1, 'Hyndai Verna', 'vehicles/5ca0c58f-24c3-453c-baaf-506bf4848a02_1746610068.jpg', 'https://www.example.com/cars/hyndai-verna', 'hyndai-verna', 1, 4, 5, 12, 'A2211', 'frr44444', 3, '[\"4\",\"3\",\"2\",\"1\"]', 3, 2000, 3, '2020', 4, 10.00, 8, 7, 4, 2, '[{\"daily\":\"150\"}]', NULL, NULL, NULL, 'bolero', 'bolero', 'bolero', '<p><span data-huuid=\"14321316059817583756\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The Mahindra Bolero is a rugged and durable SUV known for its reliability and affordability, making it a popular choice in rural and off-road settings.&nbsp;</span><span data-huuid=\"14321316059817583469\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It\'s a 7-seater with a focus on practicality and basic features, prioritizing toughness and low maintenance over luxury.&nbsp;</span></p>', '[1,2,3,4]', 1, 0, 1, 36, 1, 1, '2025-04-24 15:59:10', '2025-05-16 16:06:00', NULL),
+(4, 0, 1, 'Hyndai Cerita', 'vehicles/c8dec67c-ae57-421e-a8ef-846670107916_1746608017.jpg', 'https://www.example.com/cars/hyndai-cerita', 'hyndai-cerita', 1, 2, 5, 12, NULL, NULL, 4, '[\"3\",\"2\"]', 3, NULL, 2, '2021', 3, 34.00, 6, 7, 4, 3, '[{\"daily\":\"150\"}]', NULL, NULL, NULL, 'thar', 'thar', 'thar', '<p><span data-huuid=\"8432008288970154208\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The Mahindra Thar is a&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">rugged, off-road capable SUV known for its distinctive design, robust construction, and off-road prowess</mark>.&nbsp;</span><span data-huuid=\"8432008288970156257\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It\'s a lifestyle off-roader, combining a strong road presence with punchy engines and a smooth transmission.&nbsp;</span></p>', '[1,2,3,4]', 1, 0, 1, 15, 1, 1, '2025-04-24 16:17:40', '2025-05-15 18:03:41', NULL),
+(5, 0, 1, 'Audi', 'vehicles/bb8710f9-f342-44bb-8aa8-65fefc92c0df_1745559701.jpg', 'https://www.example.com/cars/audi', 'audi', 1, 3, 1, 3, NULL, NULL, 3, '[\"4\",\"1\"]', 2, NULL, 5, '2010', 4, NULL, 6, 6, 4, 4, '[{\"daily\":\"600\",\"weekly\":\"700\",\"yearly\":\"790\"}]', NULL, NULL, NULL, 'audi', 'audi', 'audi', '<p><span style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Audi is&nbsp;</span><mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px; font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">a German luxury automotive manufacturer, known for its sporty vehicles, high-quality engineering, and progressive design, often described as embodying the principle of \"Vorsprung durch Technik,\" which translates to \"Progress through Technology\"</mark></p>', '[1,2,3,4]', 1, 1, 1, 6, 1, 1, '2025-04-24 16:21:10', '2025-04-29 12:22:29', '2025-04-25 11:53:06'),
+(6, 0, 1, 'Inova V6', 'vehicles/432be19c-6c81-4188-b6fa-a9061d290b75_1745927475.jpg', 'https://www.example.com/cars/inova-v6', 'inova-v6', 1, 4, 6, 6, '334455r', 'E444322', 4, '[\"3\",\"1\"]', 4, 1400, 1, '2020', 3, 36.00, 6, 6, 4, 5, '[{\"daily\":\"500\"}]', 232.00, 343.00, NULL, 'kia', 'kia', 'kia', '<p><span data-huuid=\"16668689062515580493\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Kia is&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">a global mobility brand founded in 1944, offering a wide range of vehicles and mobility solutions</mark>.&nbsp;</span><span data-huuid=\"16668689062515577438\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It\'s the world\'s fifth-largest vehicle manufacturer, operating in over 190 markets and producing around three million vehicles annually.&nbsp;</span></p><p><span data-huuid=\"16668689062515577438\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\"><br></span></p>', '[1,2,3,4]', 1, 1, 1, 22, 1, 1, '2025-04-25 11:36:04', '2025-05-16 16:06:27', NULL),
+(7, 0, 1, 'Benz', 'vehicles/9af42ca7-bcfd-474d-8295-a50c9302322d_1746606317.jpg', 'https://www.example.com/cars/benz', 'benz', 1, 1, 3, 9, NULL, NULL, 4, NULL, 5, 1500, 2, '2021', 4, 43.00, 6, 6, 2, 4, '[{\"daily\":\"150\"}]', 24.00, 343.00, NULL, 'benz', 'benz', 'benz', '<p><span data-huuid=\"5263709591680840097\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Mercedes-Benz, often shortened to Mercedes or Benz, is&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">a German luxury automotive brand, a subsidiary of Mercedes-Benz Group AG</mark>.&nbsp;</span><span data-huuid=\"5263709591680841480\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">They produce a range of luxury vehicles and light commercial vehicles.&nbsp;</span><span data-huuid=\"5263709591680842863\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The company is known for its engineering, innovation, and premium quality.&nbsp;</span><span data-huuid=\"5263709591680840150\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Mercedes-Benz is a global player</span></p>', '[1,2,3,4]', 1, 0, 1, 32, 1, 1, '2025-04-25 12:27:23', '2025-05-19 13:34:23', NULL),
+(19, 0, 1, 'BMW AMG', 'vehicles/d4b8ea13-e491-4b38-8395-f7c977993d87_1745566788.jpg', 'https://www.example.com/cars/bmw', 'bmw-amg', 1, 2, 2, 1, NULL, NULL, 3, '[\"2\",\"1\"]', 5, 2000, 3, '2021', 4, 45.00, 8, 8, 4, 4, '[{\"daily\":\"150\"}]', 234.00, 156.00, NULL, 'bmw', 'bmw', 'bmw', '<p><span data-huuid=\"5546190469078410934\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">BMW (Bayerische Motoren Werke) is&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">a German multinational manufacturer of luxury automobiles, motorcycles, and engines</mark>, with a global footprint spanning over 30 production sites.&nbsp;</span><span data-huuid=\"5546190469078410837\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The company also offers financial and mobility services, and is known for its BMW, MINI, Rolls-Royce etc</span></p>', '[1,2,3,4]', 1, 0, 1, 23, 1, 1, '2025-04-25 13:09:48', '2025-05-16 16:30:42', NULL),
+(20, 0, 1, 'Ford', 'vehicles/2cb3c150-5ddd-4184-b0d2-80334b03ef75_1746604267.jpg', 'https://www.example.com/cars/ford', 'ford', 1, 5, 4, 7, NULL, NULL, 3, '[\"2\",\"1\"]', 5, 1300, 3, '2020', 3, 45.00, 4, 4, 4, 2, '[{\"weekly\":\"800\"}]', NULL, NULL, NULL, 'ford', 'ford', 'ford', '<p><span data-huuid=\"9391290848987236172\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It produces a wide range of vehicles, including trucks, SUVs, electric vehicles, and commercial and luxury cars, operating under the Ford and Lincoln brands.&nbsp;</span><span data-huuid=\"9391290848987235629\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Ford\'s legacy includes revolutionizing the automotive industry with mass production and the moving assembly line.</span></p>', '[1,2,3,4]', 1, 0, 1, 18, 1, 1, '2025-04-25 13:31:10', '2025-05-15 11:27:45', NULL),
+(38, 0, 1, 'BMW', 'vehicles/51a7751f-1ea0-4ebe-aa93-5dd509d2416b_1746603281.jpg', 'https://www.example.com/cars/bmw', 'bmw', 1, 4, 2, 1, 'JK78457', '7845230054', 2, '[\"3\",\"1\"]', 2, 1000, 1, '2020', 3, 3.00, 4, 4, 2, 6, '[{\"daily\":\"300\"}]', NULL, NULL, NULL, 'BMW', 'BMW', 'BMW', '<div class=\"Gur8Ad\" style=\"font-size: 16px; line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1); color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><span data-huuid=\"4707926916653413804\"><strong>Luxury and Performance:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); font-size: 16px; letter-spacing: 0.1px; line-height: 22px; font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><span data-huuid=\"4707926916653415015\">BMW vehicles are known for their luxurious interiors, advanced technology, and strong performance, particularly in their high-end model.</span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); font-size: 16px; letter-spacing: 0.1px; line-height: 22px; font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><span data-huuid=\"4707926916653415015\"><ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjLkvmq6PKMAxUl-TgGHa4SDasQm_YKegQIKxAB\" style=\"margin: 10px 0px 20px; padding-left: 24px; line-height: 22px; color: rgb(0, 29, 53); letter-spacing: normal;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; padding: 0px 0px 0px 4px; list-style-position: inherit; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 8px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"4707926916653413341\"><strong>Engineering and Innovation:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"4707926916653414552\">The brand has a long history of innovation and engineering, pushing the boundaries of automotive technology.<span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d411b0b0-41fc-4dbd-ba1e-56b8378bd2ed\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></div></div></div></div></li></ul></span></div>', '[1,2,3,4]', 1, 0, 1, 32, 1, 1, '2025-04-25 15:03:16', '2025-05-16 11:56:42', NULL),
+(41, 0, 1, 'Benz AG', 'vehicles/e6ac007d-0dcb-4b51-9608-423fb335c476_1745574147.jpg', 'https://www.example.com/cars/benz-ag', 'benz-ag', 1, 3, 3, 10, NULL, NULL, 2, '[\"4\",\"1\"]', 4, 1000, 3, '2021', 3, 5.00, 4, 4, 4, 5, '[{\"daily\":\"150\"}]', NULL, NULL, NULL, 'benz', 'benz', 'benz', '<p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Mercedes-Benz vehicles are known for their luxurious interiors, advanced technology, and strong performance, particularly in their high-end models.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"bb05f580-3f87-46ba-b94f-1aeeca99cf82\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"bb05f580-3f87-46ba-b94f-1aeeca99cf82\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">The brand has a long history of innovation and engineering, pushing the boundaries of automotive technology.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d411b0b0-41fc-4dbd-ba1e-56b8378bd2ed\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"bb05f580-3f87-46ba-b94f-1aeeca99cf82\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d411b0b0-41fc-4dbd-ba1e-56b8378bd2ed\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">Mercedes-Benz operates globally, with production facilities in various countries and a wide range of models sold worldwide.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"eff23b8d-6445-4473-99c9-43b074833af5\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></span></span></p>', '[1,2,3,4]', 1, 0, 1, 23, 1, 1, '2025-04-25 15:12:27', '2025-05-16 15:51:08', NULL),
+(42, 0, 1, 'Toyota', 'vehicles/9df2cc2d-6a9d-461e-8ced-242d2e9dfa9b_1746601351.jpg', 'https://www.example.com/cars/toyota', 'toyota', 1, 5, 6, 5, NULL, NULL, 2, '[\"4\",\"1\"]', 2, NULL, 1, '2015', 1, 5.00, 6, 6, 4, 4, '[{\"daily\":\"150\"}]', 345.00, 234.00, NULL, 'toyota', 'toyota', 'toyota', '<p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Toyota\'s primary focus is designing, manufacturing, and selling a wide range of vehicles, including passenger cars, trucks, SUVs, and commercial vehicles.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d3a0b44d-40df-46a7-991e-2d5096bf9e27\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d3a0b44d-40df-46a7-991e-2d5096bf9e27\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">Toyota operates in over 170 countries and territories, with manufacturing plants and distribution networks worldwide.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"91a551cf-4656-4d6e-976b-ae1efbd37377\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d3a0b44d-40df-46a7-991e-2d5096bf9e27\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"91a551cf-4656-4d6e-976b-ae1efbd37377\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">Toyota is known for its efficient production system, \"Just-in-Time,\" which emphasizes producing only what is needed, when it is needed, and in the amount needed.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"cd2ca514-b9c5-4274-88fd-67ae17211f91\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></span></span></p>', '[1,2,3,4]', 1, 1, 1, 58, 1, 1, '2025-04-25 15:18:17', '2025-05-14 16:15:06', NULL),
+(43, 0, 1, 'Fiesta', 'vehicles/11c754e6-539c-4d64-bf25-c70130b65362_1745576290.jpg', 'https://www.example.com/cars/fiesta', 'fiesta', 1, 4, 4, 7, NULL, NULL, 1, '[\"3\",\"2\"]', 4, 1200, 2, '2020', 3, 56.00, 6, 4, 4, 4, '[{\"daily\":\"150\"}]', NULL, NULL, NULL, 'ford', 'ford', 'ford', '<p><span style=\"color: inherit;\"><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Ford utility vehicles are designed for capability and versatility, with features like elevated driver\'s seats and cargo areas.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"9e7dedfe-7166-4861-a5f0-8bf766149cab\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></p><p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Ford offers a variety of trucks, including the F-Series, known for their strength and durability.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"6babb89c-615d-444e-a0ed-0dea7f27d853\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span><span style=\"color: inherit;\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"9e7dedfe-7166-4861-a5f0-8bf766149cab\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><br></span></span></p><p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Ford is also expanding its electric vehicle portfolio, including the Mustang Mach-E, which offers a blend of performance and sustainability.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"0b3da06f-f626-41af-ac45-c5be1ca0e51f\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></p>', '[1,2,3,4]', 1, 0, 1, 29, 1, 1, '2025-04-25 15:48:10', '2025-05-16 15:50:50', NULL),
+(44, 0, 1, 'Audi A8', 'vehicles/68afb6bc-1141-4a01-b7a8-e06746da21d6_1746597040.jpg', 'https://www.example.com/cars/audi-a8', 'audi-a8', 1, 1, 1, 4, NULL, NULL, 1, '[\"4\",\"2\"]', 2, 1000, 4, '2016', 1, 45.00, 4, 4, 4, 4, '[{\"weekly\":\"800\"}]', 345.00, 234.00, NULL, 'audi', 'audi', 'audi', '<ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjczaSz-_KMAxVoRmwGHd8wNboQm_YKegQIKxAB\" style=\"margin: 10px 0px 20px; padding-left: 24px; font-size: 16px; line-height: 22px; color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; padding: 0px 0px 0px 4px; list-style-position: inherit; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 0px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"3025610098028757191\"><strong>Design:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028760962\">Audi cars are known for their sleek and modern exterior and interior designs, emphasizing luxury and comfort.<span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"5f925f61-984f-4e2c-9689-1a139948850e\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028760962\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"5f925f61-984f-4e2c-9689-1a139948850e\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjczaSz-_KMAxVoRmwGHd8wNboQm_YKegQIKxAB\" style=\"margin: 10px 0px 20px; padding-left: 24px; line-height: 22px; color: rgb(0, 29, 53); letter-spacing: normal; text-wrap-mode: wrap;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; padding: 0px 0px 0px 4px; list-style-position: inherit; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 8px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"3025610098028759337\"><strong>Performance:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028759012\">Audi offers a variety of engines, from sporty to high-performance, known for their power and efficiency.<span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"2583ff77-a993-45d1-a7a2-a8bc9fa147ff\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028759012\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"2583ff77-a993-45d1-a7a2-a8bc9fa147ff\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjczaSz-_KMAxVoRmwGHd8wNboQm_YKegQIKxAB\" style=\"padding-left: 24px; margin: 10px 0px 20px; text-wrap-mode: wrap; line-height: 22px; color: rgb(0, 29, 53); letter-spacing: normal;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; list-style-position: inherit; padding: 0px 0px 0px 4px; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 8px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"3025610098028760312\"><span style=\"font-weight: 700;\">Technology:</span></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028759987\">They incorporate advanced technology, including innovative drive systems like the Quattro all-wheel drive, and a range of driver-assistance</span></div></div></div></div></li></ul></span></span></span></div></div></div></div></li></ul></span></span></span></div></div></div></div></li></ul>', '[1,2,3,4]', 1, 0, 1, 113, 1, 1, '2025-04-25 15:54:51', '2025-05-16 11:56:25', NULL),
+(46, 0, 1, 'Audi RS Q8', 'vehicles/be1c3e9a-3fc4-4b7c-bf7d-ab8304a1e12a_1745915451.jpg', 'https://www.example.com/cars/audi-rs-q8', 'audi-rs-q8', 1, 10, 1, 13, 'FG45 4000', '78457845', 2, '[\"3\"]', 1, 234, 6, '2018', 2, 3.00, 5, 5, 4, 8, '[{\"daily\":\"150\",\"weekly\":\"750\"}]', 300.00, 10.00, NULL, 'Audi RS Q8 – Luxury Performance SUV with Twin-Turbo V8 Power', 'Audi RS Q8, Audi RS Q8 specs, RS Q8 SUV, Audi RS Q8 engine, luxury SUV, performance SUV, Audi RS Q8 top speed, twin-turbo V8 SUV, Audi quattro SUV, RS Q8 features', 'Audi RS Q8, Audi RS Q8 specs, RS Q8 SUV, Audi RS Q8 engine, luxury SUV, performance SUV, Audi RS Q8 top speed, twin-turbo V8 SUV, Audi quattro SUV, RS Q8 features', '<p data-start=\"117\" data-end=\"393\" class=\"\">The Audi RS Q8 is where high performance and refined luxury come together in a bold, unmistakable SUV. Beneath its sculpted hood lies a 4.0-liter twin-turbocharged V8 engine that delivers a thrilling 591 horsepower, launching the RS Q8 from 0 to 100 km/h in just 3.8 seconds.</p>', '[1,2,3,4]', 1, 0, 1, 94, 1, 1, '2025-04-29 14:00:51', '2025-05-16 11:19:35', NULL),
+(47, 0, 2, 'أودي A3', 'vehicles/b8e49dc3-4073-4832-bed2-1c9239fd3008_1745920056.jpg', 'https://www.example.com/cars/-a3', 'aody-a3', 5, 16, 7, 14, 'RF34', 'RF24', 6, '[\"6\"]', 6, 23, 7, '2021', 6, 3.00, 4, 2, 2, 4, '[{\"daily\":\"345\"}]', NULL, NULL, NULL, 'الفخامة الألمانية بأعلى معايير الأداء', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', '<p>أودي هي واحدة من أبرز شركات السيارات الألمانية، معروفة بتقديم سيارات تتميز بالفخامة والتقنيات المتقدمة. تجمع أودي بين التصميم العصري والديناميكية الرياضية والتكنولوجيا الذكية، مثل نظام quattro للدفع الرباعي وشاشات العرض الرقمية المتطورة. تناسب سيارات أودي من يبحث عن الرفاهية مع أداء قوي وراحة فائقة.</p>', '[]', 1, 1, 1, 6, 1, 1, '2025-04-29 15:17:36', '2025-05-14 17:32:22', NULL),
+(48, 0, 2, 'مرسيدس بنز', 'vehicles/d744769b-485f-4a1e-88ca-98db94045c3b_1745920762.jpg', 'https://www.example.com/cars/-', 'mrsyds-bnz', 5, 16, 8, 15, 'FG34', 'GH434', 6, '[\"6\"]', 6, 12, 7, '2020', 6, 12.00, 4, 2, 4, 2, '[{\"daily\":\"260\"}]', NULL, NULL, NULL, 'مرسيدس بنز - الفخامة الألمانية بلا حدود', 'مرسيدس، سيارات فاخرة، مرسيدس جي كلاس، مرسيدس إي كلاس، سيارات ألمانية', 'مرسيدس، سيارات فاخرة، مرسيدس جي كلاس، مرسيدس إي كلاس، سيارات ألمانية', NULL, '[]', 1, 1, 1, NULL, 1, 1, '2025-04-29 15:20:44', '2025-04-29 17:32:31', NULL),
+(49, 0, 2, 'بي إم دبليو', 'vehicles/f25a2922-1db8-4feb-9257-02f73fddd1dc_1745920740.jpg', 'https://www.example.com/cars/-', 'by-am-dblyo', 5, 16, 8, 15, 'TG34', 'GT45', 6, '[\"6\"]', 6, 34, 8, '2021', 5, 4.00, 5, 2, 4, 4, '[{\"daily\":\"150\"}]', NULL, NULL, NULL, 'بي إم دبليو - تجربة قيادة لا تُنسى', 'بي إم دبليو، سيارات رياضية، BMW X5، BMW 3 Series، سيارات ألمانية فاخرة', 'بي إم دبليو، سيارات رياضية، BMW X5، BMW 3 Series، سيارات ألمانية فاخرة', '<p>تُعرف بي إم دبليو بأنها رمز القيادة الديناميكية والفخامة الألمانية، وتقدم مجموعة واسعة من السيارات التي تلبي احتياجات السائق العصري. من الفئة الرياضية إلى السيارات الفاخرة والعائلية، توفر BMW تجربة قيادة ممتعة مع تقنيات مبتكرة ومحركات قوية تُميزها عن باقي المنافسين.تُعرف بي إم دبليو بأنها رمز القيادة الديناميكية والفخامة الألمانية، وتقدم مجموعة واسعة من السيارات التي تلبي احتياجات السائق العصري. من الفئة الرياضية إلى السيارات الفاخرة والعائلية، توفر BMW تجربة قيادة ممتعة مع تقنيات مبتكرة ومحركات قوية تُميزها عن باقي المنافسين.</p>', '[]', 1, 1, 1, 3, 1, 1, '2025-04-29 15:24:48', '2025-05-08 13:01:38', NULL),
+(50, 0, 2, 'بي إم دبليو  S2', 'vehicles/8d03f46f-6d45-4bb3-9a3d-fd61f08c5b07_1745920960.jpg', 'https://www.example.com/cars/-s2', 'by-am-dblyo-s2', 5, 16, 8, 15, NULL, NULL, 5, NULL, 6, NULL, 8, '2021', 6, NULL, 3, NULL, NULL, 5, '[{\"daily\":\"150\",\"weekly\":\"45\"}]', NULL, NULL, NULL, 'انطلق بثقة مع سيارات بي إم دبليو التي تمزج بين الديناميكية الرياضية والفخامة المطلقة والتقنيات', 'بي إم دبليو، سيارات رياضية، BMW X5، BMW 3 Series، سيارات ألمانية فاخرة', 'بي إم دبليو، سيارات رياضية، BMW X5، BMW 3 Series، سيارات ألمانية فاخرة', NULL, '[]', 1, 1, 1, 2, 1, 1, '2025-04-29 15:32:40', '2025-05-08 13:01:19', NULL),
+(51, 0, 2, 'أودي Q6', 'vehicles/cfa1075a-e788-41b7-b496-e61484d7ce53_1745921260.jpg', 'https://www.example.com/cars/-q6', 'aody-q6', 5, 16, 7, 14, 'RF23', 'RF32', 6, '[\"6\"]', 6, 23, 8, '2021', 6, 23.00, 4, 4, 4, 2, '[{\"daily\":\"150\",\"weekly\":\"54\"}]', NULL, NULL, NULL, 'أودي - الفخامة الألمانية بأعلى معايير الأداء', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', '<p>أودي هي واحدة من أبرز شركات السيارات الألمانية، معروفة بتقديم سيارات تتميز بالفخامة والتقنيات المتقدمة. تجمع أودي بين التصميم العصري والديناميكية الرياضية والتكنولوجيا الذكية، مثل نظام quattro للدفع الرباعي وشاشات العرض الرقمية المتطورة. تناسب سيارات أودي من يبحث عن الرفاهية مع أداء قوي وراحة فائقة.</p>', '[]', 1, 1, 1, 3, 1, 1, '2025-04-29 15:37:40', '2025-04-29 19:03:48', NULL),
+(52, 0, 2, 'أودي  V2', 'vehicles/fe3271d7-cf93-4249-956d-31290e49fe01_1745921416.jpg', 'https://www.example.com/cars/-v2', 'aody-v2', 5, 16, 7, 14, 'TB546', 'TG343', 6, '[\"6\",\"5\"]', 6, 23, 7, '2021', 6, 34.00, 4, 4, 4, 3, '[{\"daily\":\"340\",\"weekly\":\"78\"}]', 324.00, 23.00, NULL, 'أودي - الفخامة الألمانية بأعلى معايير الأداء', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', 'أودي، سيارات أودي، Audi Q5، Audi A6، سيارات ألمانية فاخرة', '<p>أودي هي واحدة من أبرز شركات السيارات الألمانية، معروفة بتقديم سيارات تتميز بالفخامة والتقنيات المتقدمة. تجمع أودي بين التصميم العصري والديناميكية الرياضية والتكنولوجيا الذكية، مثل نظام quattro للدفع الرباعي وشاشات العرض الرقمية المتطورة. تناسب سيارات أودي من يبحث عن الرفاهية مع أداء قوي وراحة فائقة.</p>', '[]', 1, 1, 1, 5, 1, 1, '2025-04-29 15:40:16', '2025-04-29 19:08:05', NULL),
+(53, 0, 2, 'أودي RS Q3', 'vehicles/1d213f77-66c2-477f-920e-05970bcf0016_1745921505.jpg', 'https://www.example.com/cars/-rs-q3', 'aody-rs-q3', 5, 16, 7, 16, 'EG7845', '7845568956', 6, '[\"6\"]', 6, 34, 7, '2018', 6, 4.00, 5, 5, 4, 8, '[{\"daily\":\"150\",\"weekly\":\"750\"}]', 200.00, 5.00, NULL, 'أودي RS Q3 – سيارة SUV رياضية فاخرة بقوة مذهلة', 'أودي RS Q3، سيارة SUV رياضية، أودي 2025، أودي RS، سيارات أودي، سيارة قوية، محرك 400 حصان، أودي RS Q3 سعر، أودي RS Q3 المواصفات', 'أودي RS Q3، سيارة SUV رياضية، أودي 2025، أودي RS، سيارات أودي، سيارة قوية، محرك 400 حصان، أودي RS Q3 سعر، أودي RS Q3 المواصفات', '<p data-start=\"242\" data-end=\"744\" class=\"\"><strong data-start=\"242\" data-end=\"256\">أودي RS Q3</strong> هي سيارة SUV مدمجة عالية الأداء تجمع بين العملية اليومية وروح رياضية قوية مستوحاة من سيارات السباق. تأتي بمحرك خماسي الأسطوانات سعة 2.5 لتر توربو يولد قوة تصل إلى 400 حصان، مما يتيح تسارعًا مثيرًا من 0 إلى 100 كم/س في أقل من 4.5 ثوانٍ. تتميز بتصميم خارجي جذاب مع شبك أمامي واسع ولمسات رياضية حادة، إضافةً إلى مقصورة داخلية فاخرة مزودة بتقنيات متقدمة مثل نظام MMI للمعلومات والترفيه وشاشة رقمية بالكامل. أودي RS Q3 مثالية لمن يبحث عن الأداء القوي والتصميم الفاخر في سيارة SUV صغيرة الحجم.</p>', '[]', 1, 1, 1, 5, 1, 1, '2025-04-29 15:41:45', '2025-04-29 19:05:46', NULL),
+(54, 0, 1, 'Range Rover', 'vehicles/50f6a11c-7f9f-4c74-b470-6ab210841744_1745925691.jpg', 'https://www.example.com/cars/range-rover', 'range-rover', 1, 10, 2, 2, '233434566', '65466234', 3, '[\"4\"]', 2, 232, 4, '2020', 3, 32.00, 3, 4, 4, 2, '[{\"daily\":\"250\",\"monthly\":\"2200\"}]', 455.00, 100.00, NULL, 'BMW i7 – Luxury Electric Sedan | Ultimate Performance and Innovation', 'BMW i7', 'BMW i7', '<p>The <strong data-start=\"4\" data-end=\"19\">Range Rover</strong> is the flagship luxury SUV from <strong data-start=\"52\" data-end=\"66\">Land Rover</strong>, renowned for its combination of <strong data-start=\"100\" data-end=\"120\">refined elegance</strong>, <strong data-start=\"122\" data-end=\"145\">off-road capability</strong>, and <strong data-start=\"151\" data-end=\"178\">cutting-edge technology</strong>. It offers an unparalleled driving experience, blending performance with luxury, making it a symbol of prestige and adventure.</p>', '[1,2,3,4]', 1, 1, 1, 123, 1, 1, '2025-04-29 16:21:14', '2025-05-16 14:38:13', NULL),
+(55, 0, 1, 'Audi Q', 'vehicles/cfe5d71b-afa8-4d87-ad23-9f1361cb55f0_1747386374.jpg', 'https://www.example.com/cars/audi-q', 'audi-q', 1, 10, 1, 3, 'AZ094342', 'LN32432', 2, '[\"3\",\"2\"]', 3, 15000, 6, '2020', 2, 4.00, 4, 4, 4, 5, '[{\"daily\":\"75\",\"weekly\":\"600\"}]', 150.00, 30.00, NULL, 'Audi', 'audi', 'audi', '<p><font color=\"#1f1f1f\" face=\"Google Sans, Arial, sans-serif\"><span style=\"font-size: 16px;\">The Audi Q3 is a well-rounded luxury SUV that offers a compelling combination of style, performance, and technology, making it a worthy purchase for those seeking an entry-level premium SUV. It\'s particularly appealing to those who appreciate a sleek design, a refined interior, and a fun driving experience,</span></font></p>', '[1,2,4]', NULL, NULL, NULL, 22, 1, 1, '2025-05-16 14:36:14', '2025-05-19 13:33:30', NULL);
 
 -- --------------------------------------------------------
 
@@ -56861,7 +56861,7 @@ CREATE TABLE `vehicle_insurances` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
   `insurances_id` bigint(20) UNSIGNED NOT NULL,
-  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -56873,8 +56873,8 @@ CREATE TABLE `vehicle_insurances` (
 --
 
 INSERT INTO `vehicle_insurances` (`id`, `vehicle_id`, `insurances_id`, `value`, `price`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 54, 8, 'daily', '50.00', '2025-05-13 11:10:18', '2025-05-13 11:10:18', NULL),
-(2, 54, 9, 'daily', '20.00', '2025-05-13 11:10:18', '2025-05-13 11:10:18', NULL);
+(1, 54, 8, 'daily', 50.00, '2025-05-13 11:10:18', '2025-05-13 11:10:18', NULL),
+(2, 54, 9, 'daily', 20.00, '2025-05-13 11:10:18', '2025-05-13 11:10:18', NULL);
 
 -- --------------------------------------------------------
 
@@ -56885,8 +56885,8 @@ INSERT INTO `vehicle_insurances` (`id`, `vehicle_id`, `insurances_id`, `value`, 
 CREATE TABLE `vehicle_metas` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `key` varchar(225) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` longtext COLLATE utf8mb4_unicode_ci,
+  `key` varchar(225) NOT NULL,
+  `value` longtext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -56982,9 +56982,9 @@ INSERT INTO `vehicle_metas` (`id`, `vehicle_id`, `key`, `value`, `created_at`, `
 CREATE TABLE `vehicle_seasons` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `seasonal_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `seasonal_start_date` varchar(225) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `seasonal_end_date` varchar(225) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seasonal_title` varchar(255) NOT NULL,
+  `seasonal_start_date` varchar(225) NOT NULL,
+  `seasonal_end_date` varchar(225) NOT NULL,
   `seasonal_daily_rate` decimal(10,2) NOT NULL,
   `seasonal_weekly_rate` decimal(10,2) NOT NULL,
   `seasonal_monthly_rate` decimal(10,2) NOT NULL,
@@ -57003,12 +57003,12 @@ CREATE TABLE `vehicle_seasons` (
 CREATE TABLE `vehicle_tarrifs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `tariff_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tariff_daily_price` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tariff_from_days` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tariff_to_days` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tariff_base_km` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tariff_extra_price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tariff_title` varchar(255) NOT NULL,
+  `tariff_daily_price` varchar(10) NOT NULL,
+  `tariff_from_days` varchar(255) NOT NULL,
+  `tariff_to_days` varchar(255) NOT NULL,
+  `tariff_base_km` varchar(255) NOT NULL,
+  `tariff_extra_price` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -57031,11 +57031,11 @@ CREATE TABLE `wallet_history` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `amount` decimal(10,2) DEFAULT NULL,
-  `payment_type` enum('paypal','bank_transfer','others','stripe') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` enum('Completed','Pending','Failed','Refunded') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Pending',
+  `payment_type` enum('paypal','bank_transfer','others','stripe') DEFAULT NULL,
+  `status` enum('Completed','Pending','Failed','Refunded') NOT NULL DEFAULT 'Pending',
   `reference_id` int(11) DEFAULT NULL,
-  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 -> Add Amount, 2 -> Booking, 3 -> Leads',
-  `transaction_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` tinyint(4) NOT NULL DEFAULT 1 COMMENT '1 -> Add Amount, 2 -> Booking, 3 -> Leads',
+  `transaction_id` varchar(255) DEFAULT NULL,
   `transaction_date` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -57047,23 +57047,23 @@ CREATE TABLE `wallet_history` (
 --
 
 INSERT INTO `wallet_history` (`id`, `user_id`, `amount`, `payment_type`, `status`, `reference_id`, `type`, `transaction_id`, `transaction_date`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 4, '5000.00', 'stripe', 'Completed', NULL, 1, 'cs_test_a1NGeH44WaSbm4WUgeU3UhWpKIgb8XCY4BBTWxatnoOZav8f6xc7g3mVfH', '2025-04-25 16:08:37', '2025-04-25 16:08:37', '2025-04-25 16:09:41', NULL),
-(2, 4, '2000.00', 'others', 'Completed', 6, 2, 'wallet5027', '2025-04-25 16:10:59', '2025-04-25 16:10:59', '2025-04-25 16:10:59', NULL),
-(3, 4, '1200.00', 'others', 'Completed', 7, 2, 'wallet7293', '2025-04-25 16:11:32', '2025-04-25 16:11:32', '2025-04-25 16:11:32', NULL),
-(4, 4, '500.00', 'paypal', 'Completed', NULL, 1, '60B81320YY765974M', '2025-04-25 16:13:03', '2025-04-25 16:13:03', '2025-04-25 16:14:03', NULL),
-(5, 4, '150.00', 'others', 'Completed', 29, 2, 'wallet1046', '2025-04-29 18:21:50', '2025-04-29 18:21:50', '2025-04-29 18:21:50', NULL),
-(6, 4, '60.00', 'stripe', 'Completed', NULL, 1, 'cs_test_a11H0HYa2VokMjRaI0iAT9bi8GAuvTAfnCNdffOdBLrwaoHewyBuag7CM6', '2025-04-30 15:16:51', '2025-04-30 15:16:51', '2025-04-30 15:17:36', NULL),
-(7, 8, '80.00', 'paypal', 'Completed', NULL, 1, '29J961235X445361Y', '2025-04-30 15:45:19', '2025-04-30 15:45:19', '2025-04-30 15:46:07', NULL),
-(8, 12, '100.00', 'paypal', 'Completed', NULL, 1, '77X860544W0633807', '2025-05-02 11:21:28', '2025-05-02 11:21:28', '2025-05-02 11:22:37', NULL),
-(9, 12, '50.00', 'paypal', 'Completed', NULL, 1, '0JH5985377168815V', '2025-05-02 11:23:14', '2025-05-02 11:23:14', '2025-05-02 11:23:41', NULL),
-(10, 4, '100.00', 'stripe', 'Completed', NULL, 1, 'cs_test_a1jLEI6CJcxGpQ6dzsjgyKRoDnbdamr4dLR3XF8ONeWCHt3e6vOw4COH7q', '2025-05-07 10:32:34', '2025-05-07 10:32:34', '2025-05-07 10:33:31', NULL),
-(11, 4, '180.00', 'others', 'Completed', 43, 2, 'wallet0582', '2025-05-08 12:31:54', '2025-05-08 12:31:54', '2025-05-08 12:31:54', NULL),
-(12, 18, '200.00', 'stripe', 'Completed', NULL, 1, 'cs_test_a18XeSTGuDK7wy4tP0QfdiPNdVFzpsZpnALCllRhYNhpGSjKKdbuXkwFO8', '2025-05-09 16:03:04', '2025-05-09 16:03:04', '2025-05-09 16:03:42', NULL),
-(13, 22, '500.00', 'stripe', 'Pending', NULL, 1, 'cs_test_a1x4mkgq6V0pi6MQkMxgRXMyX6QnmBKPGqf1mWVAtLLcxOrSkfOWTNmc2z', '2025-05-14 17:51:42', '2025-05-14 17:51:42', '2025-05-14 17:51:42', NULL),
-(14, 22, '500.00', 'stripe', 'Pending', NULL, 1, 'cs_test_a16wZspkjyxZ5taTfssHARWKBMpy1ShOf3JLnoe04zpHKfWRhShBAlVuZp', '2025-05-14 17:54:13', '2025-05-14 17:54:13', '2025-05-14 17:54:13', NULL),
-(15, 22, '500.00', 'stripe', 'Pending', NULL, 1, 'cs_test_a1MiRQnD43CorBiYLck7ZZ8KA3JWIc0lgH14ItEPtS6hXY02nntD9pYD0c', '2025-05-14 17:56:03', '2025-05-14 17:56:03', '2025-05-14 17:56:03', NULL),
-(16, 22, '500.00', 'stripe', 'Pending', NULL, 1, 'cs_test_a1wd5moJ0HubFuEEybzUR3H4pozcpWQZ7wOp3g8r4X46Xtkf5bzEVUdZCC', '2025-05-14 17:56:37', '2025-05-14 17:56:37', '2025-05-14 17:56:37', NULL),
-(17, 24, '100.00', 'paypal', 'Completed', NULL, 1, '8GM810968W949644G', '2025-05-14 19:11:41', '2025-05-14 19:11:41', '2025-05-14 19:12:00', NULL);
+(1, 4, 5000.00, 'stripe', 'Completed', NULL, 1, 'cs_test_a1NGeH44WaSbm4WUgeU3UhWpKIgb8XCY4BBTWxatnoOZav8f6xc7g3mVfH', '2025-04-25 16:08:37', '2025-04-25 16:08:37', '2025-04-25 16:09:41', NULL),
+(2, 4, 2000.00, 'others', 'Completed', 6, 2, 'wallet5027', '2025-04-25 16:10:59', '2025-04-25 16:10:59', '2025-04-25 16:10:59', NULL),
+(3, 4, 1200.00, 'others', 'Completed', 7, 2, 'wallet7293', '2025-04-25 16:11:32', '2025-04-25 16:11:32', '2025-04-25 16:11:32', NULL),
+(4, 4, 500.00, 'paypal', 'Completed', NULL, 1, '60B81320YY765974M', '2025-04-25 16:13:03', '2025-04-25 16:13:03', '2025-04-25 16:14:03', NULL),
+(5, 4, 150.00, 'others', 'Completed', 29, 2, 'wallet1046', '2025-04-29 18:21:50', '2025-04-29 18:21:50', '2025-04-29 18:21:50', NULL),
+(6, 4, 60.00, 'stripe', 'Completed', NULL, 1, 'cs_test_a11H0HYa2VokMjRaI0iAT9bi8GAuvTAfnCNdffOdBLrwaoHewyBuag7CM6', '2025-04-30 15:16:51', '2025-04-30 15:16:51', '2025-04-30 15:17:36', NULL),
+(7, 8, 80.00, 'paypal', 'Completed', NULL, 1, '29J961235X445361Y', '2025-04-30 15:45:19', '2025-04-30 15:45:19', '2025-04-30 15:46:07', NULL),
+(8, 12, 100.00, 'paypal', 'Completed', NULL, 1, '77X860544W0633807', '2025-05-02 11:21:28', '2025-05-02 11:21:28', '2025-05-02 11:22:37', NULL),
+(9, 12, 50.00, 'paypal', 'Completed', NULL, 1, '0JH5985377168815V', '2025-05-02 11:23:14', '2025-05-02 11:23:14', '2025-05-02 11:23:41', NULL),
+(10, 4, 100.00, 'stripe', 'Completed', NULL, 1, 'cs_test_a1jLEI6CJcxGpQ6dzsjgyKRoDnbdamr4dLR3XF8ONeWCHt3e6vOw4COH7q', '2025-05-07 10:32:34', '2025-05-07 10:32:34', '2025-05-07 10:33:31', NULL),
+(11, 4, 180.00, 'others', 'Completed', 43, 2, 'wallet0582', '2025-05-08 12:31:54', '2025-05-08 12:31:54', '2025-05-08 12:31:54', NULL),
+(12, 18, 200.00, 'stripe', 'Completed', NULL, 1, 'cs_test_a18XeSTGuDK7wy4tP0QfdiPNdVFzpsZpnALCllRhYNhpGSjKKdbuXkwFO8', '2025-05-09 16:03:04', '2025-05-09 16:03:04', '2025-05-09 16:03:42', NULL),
+(13, 22, 500.00, 'stripe', 'Pending', NULL, 1, 'cs_test_a1x4mkgq6V0pi6MQkMxgRXMyX6QnmBKPGqf1mWVAtLLcxOrSkfOWTNmc2z', '2025-05-14 17:51:42', '2025-05-14 17:51:42', '2025-05-14 17:51:42', NULL),
+(14, 22, 500.00, 'stripe', 'Pending', NULL, 1, 'cs_test_a16wZspkjyxZ5taTfssHARWKBMpy1ShOf3JLnoe04zpHKfWRhShBAlVuZp', '2025-05-14 17:54:13', '2025-05-14 17:54:13', '2025-05-14 17:54:13', NULL),
+(15, 22, 500.00, 'stripe', 'Pending', NULL, 1, 'cs_test_a1MiRQnD43CorBiYLck7ZZ8KA3JWIc0lgH14ItEPtS6hXY02nntD9pYD0c', '2025-05-14 17:56:03', '2025-05-14 17:56:03', '2025-05-14 17:56:03', NULL),
+(16, 22, 500.00, 'stripe', 'Pending', NULL, 1, 'cs_test_a1wd5moJ0HubFuEEybzUR3H4pozcpWQZ7wOp3g8r4X46Xtkf5bzEVUdZCC', '2025-05-14 17:56:37', '2025-05-14 17:56:37', '2025-05-14 17:56:37', NULL),
+(17, 24, 100.00, 'paypal', 'Completed', NULL, 1, '8GM810968W949644G', '2025-05-14 19:11:41', '2025-05-14 19:11:41', '2025-05-14 19:12:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -57351,7 +57351,7 @@ ALTER TABLE `features`
 --
 ALTER TABLE `general_settings`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `general_settings_key_unique` (`key`);
+  ADD UNIQUE KEY `general_settings_key_unique` (`key`,`group_id`,`language_id`) USING BTREE;
 
 --
 -- Indexes for table `industry_types`

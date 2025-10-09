@@ -627,7 +627,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
             $envUpdates = [];
 
             foreach ($data as $key => $value) {
-                if ($key !== 'group_id') {
+                if ($key !== 'group_id' && $key !== '_token') {
                     $this->updateOrCreateSettingPayment(
                         ['key' => $key, 'group_id' => $group_id],
                         ['value' => $value]

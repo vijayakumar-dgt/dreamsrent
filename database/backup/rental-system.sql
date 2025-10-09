@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2025 at 03:11 PM
+-- Generation Time: Oct 09, 2025 at 12:19 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `new-rental-install`
+-- Database: `dreamsrent-installer`
 --
 
 -- --------------------------------------------------------
@@ -55867,7 +55867,7 @@ ALTER TABLE `features`
 --
 ALTER TABLE `general_settings`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `general_settings_key_unique` (`key`);
+  ADD UNIQUE KEY `general_settings_key_unique` (`key`,`group_id`,`language_id`) USING BTREE;
 
 --
 -- Indexes for table `inspections`

@@ -8,7 +8,6 @@ class UpdatePaymentSettingsRequest extends CustomFailedValidation
 {
     public function rules(): array
     {
-        public const SOMETIMES_STRING = 'sometimes|string';
         return [
             'group_id'      => 'required|integer',
             'paypal_key'    => 'sometimes|string',

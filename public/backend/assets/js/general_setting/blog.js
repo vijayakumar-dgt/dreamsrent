@@ -42,216 +42,245 @@
             });
         }
 
-        // Add Image Preview
-        const inputAdd = document.getElementById("featured_image_add");
-        const fileNameDisplayAdd = document.getElementById(
-            "selectedFileNameAdd"
-        );
-        const preview = document.querySelector(".preview-image-add") ?? "";
-
-        if (inputAdd) {
-            inputAdd?.addEventListener("change", (event) => {
-                const file = event.target.files?.[0];
-
-                if (file?.type.startsWith("image/")) {
-                    const reader = new FileReader();
-
-                    reader.onload = (e) => {
-                        const img = new Image();
-                        img.onload = () => {
-                            if (img.width === 900 && img.height === 600) {
-                                fileNameDisplayAdd.textContent = file.name;
-                                preview?.setAttribute("src", e.target.result);
-                            } else {
-                                showToast(
-                                    "error",
-                                    _l(
-                                        "admin.blog.image_dimensions_must_be_exactly_900_600_pixels"
-                                    )
-                                );
-                                inputAdd.value = "";
-                                fileNameDisplayAdd.textContent = _l("admin.blog.no_file_chosen");
-                                preview?.setAttribute("src", "");
-                            }
-                        };
-                        img.src = e.target.result;
-                    };
-
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        // Edit Image Preview
-        const inputEdit = document.getElementById("imageInput");
-        const fileNameDisplay = document.getElementById("selectedFileName");
-        const previewContainer = document.querySelector(".preview-image");
-
-        if (inputEdit) {
-            console.log(inputEdit);
-            inputEdit?.addEventListener("change", (event) => {
-
-                const file = event.target.files?.[0];
-
-                if (file?.type.startsWith("image/")) {
-                    const reader = new FileReader();
-
-                    reader.onload = (e) => {
-                        const img = new Image();
-                        img.onload = () => {
-                            if (img.width === 900 && img.height === 600) {
-                                fileNameDisplay.textContent = file.name;
-                                previewContainer?.setAttribute("src", e.target.result);
-                            } else {
-                                showToast(
-                                    "error",
-                                    _l(
-                                        "admin.blog.image_dimensions_must_be_exactly_900_600_pixels"
-                                    )
-                                );
-                                inputEdit.value = "";
-                                fileNameDisplay.textContent = _l("admin.blog.no_file_chosen");
-                                previewContainer?.setAttribute("src", "");
-                            }
-                        };
-                        img.src = e.target.result;
-                    };
-
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
+        // Initialize both "add" and "edit" previews
+        setupImagePreview("featured_image_add", "selectedFileNameAdd", ".preview-image-add");
+        setupImagePreview("imageInput", "selectedFileName", ".preview-image");
 
         loadBlogs();
     });
 
+    // Helper: Validate image dimensions
+    function validateImageDimensions(img, requiredWidth, requiredHeight) {
+        return img.width === requiredWidth && img.height === requiredHeight;
+    }
+
+    // Helper: Handle invalid image
+    function handleInvalidImage(inputEl, fileNameDisplayEl, previewEl) {
+        showToast(
+            "error",
+            _l("admin.blog.image_dimensions_must_be_exactly_900_600_pixels")
+        );
+        inputEl.value = "";
+        fileNameDisplayEl.textContent = _l("admin.blog.no_file_chosen");
+        previewEl?.setAttribute("src", "");
+    }
+
+    // Helper: Preview valid image
+    function showImagePreview(file, readerEvent, fileNameDisplayEl, previewEl) {
+        fileNameDisplayEl.textContent = file.name;
+        previewEl?.setAttribute("src", readerEvent.target.result);
+    }
+
+    // Generic function for image preview setup
+    function setupImagePreview(inputId, fileNameDisplayId, previewSelector) {
+        const inputEl = document.getElementById(inputId);
+        const fileNameDisplayEl = document.getElementById(fileNameDisplayId);
+        const previewEl = document.querySelector(previewSelector);
+
+        if (!inputEl) return;
+
+        inputEl.addEventListener("change", (event) => {
+            const file = event.target.files?.[0];
+            if (!file || !file.type.startsWith("image/")) return;
+
+            const reader = new FileReader();
+            reader.onload = (readerEvent) => {
+                const img = new Image();
+                img.onload = () => {
+                    const valid = validateImageDimensions(img, 900, 600);
+                    if (valid) {
+                        showImagePreview(file, readerEvent, fileNameDisplayEl, previewEl);
+                    } else {
+                        handleInvalidImage(inputEl, fileNameDisplayEl, previewEl);
+                    }
+                };
+                img.src = readerEvent.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Helper: Filter and sort blogs
+    function filterAndSortBlogs(allBlogs, selectedCategories, searchKeyword, currentSort) {
+        let filtered = allBlogs.filter((blog) => {
+            const matchesCategory =
+                selectedCategories.length === 0 ||
+                selectedCategories.includes(blog.dataset.category);
+            const matchesSearch = blog.dataset.title
+                .toLowerCase()
+                .includes(searchKeyword.toLowerCase());
+            return matchesCategory && matchesSearch;
+        });
+
+        switch (currentSort) {
+            case "asc":
+                filtered.sort((a, b) => a.dataset.title.localeCompare(b.dataset.title));
+                break;
+            case "desc":
+                filtered.sort((a, b) => b.dataset.title.localeCompare(a.dataset.title));
+                break;
+            case "latest":
+                filtered.sort((a, b) => new Date(b.dataset.date) - new Date(a.dataset.date));
+                break;
+            case "last_month": {
+                const lastMonth = new Date();
+                lastMonth.setMonth(lastMonth.getMonth() - 1);
+                filtered = filtered.filter(
+                    (item) => new Date(item.dataset.date) >= lastMonth
+                );
+                break;
+            }
+            case "last_7_days": {
+                const last7Days = new Date();
+                last7Days.setDate(last7Days.getDate() - 7);
+                filtered = filtered.filter(
+                    (item) => new Date(item.dataset.date) >= last7Days
+                );
+                break;
+            }
+        }
+        return filtered;
+    }
+
+    // Helper: Render blogs to DOM
+    function renderBlogs(blogList, filteredBlogs, visibleCount, loadMoreBtn) {
+        if (!blogList) return;
+        blogList.innerHTML = "";
+
+        // Show message if no blogs found
+        if (filteredBlogs.length === 0) {
+            const message = document.createElement("h6");
+            message.className = "no-blogs-message text-center py-4";
+            message.textContent = _l('admin.blog.no_blog_found');
+            blogList.appendChild(message);
+
+            // Hide "Load More" button parent
+            loadMoreBtn?.parentElement?.classList.add("d-none");
+            return;
+        }
+
+        const blogsToShow = filteredBlogs.slice(0, visibleCount);
+        blogsToShow.forEach((blog) => blogList.appendChild(blog));
+
+        const parentDiv = loadMoreBtn?.parentElement;
+        if (visibleCount >= filteredBlogs.length) {
+            parentDiv?.classList.add("d-none");
+        } else {
+            parentDiv?.classList.remove("d-none");
+        }
+    }
+
+    // Helper: Apply filters + render
+    function applyFiltersAndRender({
+        allBlogs,
+        selectedCategories,
+        searchKeyword,
+        currentSort,
+        visibleCount,
+        blogList,
+        loadMoreBtn,
+    }) {
+        const filteredBlogs = filterAndSortBlogs(
+            allBlogs,
+            selectedCategories,
+            searchKeyword,
+            currentSort
+        );
+        renderBlogs(blogList, filteredBlogs, visibleCount.value, loadMoreBtn);
+        return filteredBlogs;
+    }
+
+    // Main function
     function loadBlogs() {
         let currentSort = "latest";
         let selectedCategories = [];
         let searchKeyword = "";
-        let filteredBlogs = [];
-        let visibleCount = 6;
+        let visibleCount = { value: 6 };
 
         const blogList = document.getElementById("blogList");
-        let allBlogs = [];
-
-        if (blogList) {
-            allBlogs = Array.from(blogList.querySelectorAll(".blog-item"));
-        }
-        const sortDropdownItems = document.querySelectorAll(
-            ".dropdown-item-blog"
-        );
-        const categoryCheckboxes =
-            document.querySelectorAll(".category-checkbox");
+        const sortDropdownItems = document.querySelectorAll(".dropdown-item-blog");
+        const categoryCheckboxes = document.querySelectorAll(".category-checkbox");
         const searchInput = document.getElementById("searchInputBlog");
         const loadMoreBtn = document.querySelector(".load-btn");
-        const selectedFilterTextCategoryWrapper = document.getElementById(
-            "selectedFilterTextCategory"
-        );
-        let selectedFilterTextCategory = null;
+        const selectedFilterTextCategoryWrapper = document.getElementById("selectedFilterTextCategory");
+        const selectedFilterTextCategory =
+            selectedFilterTextCategoryWrapper?.querySelector("span") ?? null;
 
-        if (selectedFilterTextCategoryWrapper) {
-            selectedFilterTextCategory =
-                selectedFilterTextCategoryWrapper.querySelector("span");
-        }
+        const allBlogs = blogList
+            ? Array.from(blogList.querySelectorAll(".blog-item"))
+            : [];
 
+        let filteredBlogs = applyFiltersAndRender({
+            allBlogs,
+            selectedCategories,
+            searchKeyword,
+            currentSort,
+            visibleCount,
+            blogList,
+            loadMoreBtn,
+        });
+
+        // 🔹 Event handlers
         sortDropdownItems.forEach((item) => {
-            item.addEventListener("click", function () {
-                currentSort = this.getAttribute("data-filter");
-                selectedFilterTextCategory.innerText = this.innerText;
-                applyFiltersAndRender();
+            item.addEventListener("click", () => {
+                currentSort = item.getAttribute("data-filter");
+                if (selectedFilterTextCategory)
+                    selectedFilterTextCategory.innerText = item.innerText;
+
+                visibleCount.value = 6;
+                filteredBlogs = applyFiltersAndRender({
+                    allBlogs,
+                    selectedCategories,
+                    searchKeyword,
+                    currentSort,
+                    visibleCount,
+                    blogList,
+                    loadMoreBtn,
+                });
             });
         });
 
         categoryCheckboxes.forEach((checkbox) => {
-            checkbox.addEventListener("change", function () {
+            checkbox.addEventListener("change", () => {
                 selectedCategories = Array.from(categoryCheckboxes)
                     .filter((cb) => cb.checked)
                     .map((cb) => cb.value);
-                applyFiltersAndRender();
+
+                visibleCount.value = 6;
+                filteredBlogs = applyFiltersAndRender({
+                    allBlogs,
+                    selectedCategories,
+                    searchKeyword,
+                    currentSort,
+                    visibleCount,
+                    blogList,
+                    loadMoreBtn,
+                });
             });
         });
 
         if (searchInput) {
-            searchInput.addEventListener("input", function () {
-                searchKeyword = this.value;
-                applyFiltersAndRender();
+            searchInput.addEventListener("input", (event) => {
+                searchKeyword = event.target.value;
+                visibleCount.value = 6;
+                filteredBlogs = applyFiltersAndRender({
+                    allBlogs,
+                    selectedCategories,
+                    searchKeyword,
+                    currentSort,
+                    visibleCount,
+                    blogList,
+                    loadMoreBtn,
+                });
             });
         }
 
         if (loadMoreBtn) {
-            loadMoreBtn.addEventListener("click", function () {
-                visibleCount += 6;
-                renderBlogs();
+            loadMoreBtn.addEventListener("click", () => {
+                visibleCount.value += 6;
+                renderBlogs(blogList, filteredBlogs, visibleCount.value, loadMoreBtn);
             });
-        }
-
-        applyFiltersAndRender();
-
-        function filterAndSortBlogs() {
-            filteredBlogs = allBlogs.filter((blog) => {
-                const matchesCategory =
-                    selectedCategories.length === 0 ||
-                    selectedCategories.includes(blog.dataset.category);
-                const matchesSearch = blog.dataset.title
-                    .toLowerCase()
-                    .includes(searchKeyword.toLowerCase());
-                return matchesCategory && matchesSearch;
-            });
-
-            switch (currentSort) {
-                case "asc":
-                    filteredBlogs.sort((a, b) =>
-                        a.dataset.title.localeCompare(b.dataset.title)
-                    );
-                    break;
-                case "desc":
-                    filteredBlogs.sort((a, b) =>
-                        b.dataset.title.localeCompare(a.dataset.title)
-                    );
-                    break;
-                case "latest":
-                    filteredBlogs.sort(
-                        (a, b) =>
-                            new Date(b.dataset.date) - new Date(a.dataset.date)
-                    );
-                    break;
-                case "last_month":
-                    const lastMonth = new Date();
-                    lastMonth.setMonth(lastMonth.getMonth() - 1);
-                    filteredBlogs = filteredBlogs.filter(
-                        (item) => new Date(item.dataset.date) >= lastMonth
-                    );
-                    break;
-                case "last_7_days":
-                    const last7Days = new Date();
-                    last7Days.setDate(last7Days.getDate() - 7);
-                    filteredBlogs = filteredBlogs.filter(
-                        (item) => new Date(item.dataset.date) >= last7Days
-                    );
-                    break;
-            }
-        }
-
-        function renderBlogs() {
-            if (blogList) {
-                blogList.innerHTML = "";
-            }
-            const blogsToShow = filteredBlogs.slice(0, visibleCount);
-            blogsToShow.forEach((blog) => blogList.appendChild(blog));
-            const parentDiv = loadMoreBtn?.parentElement; // get the parent div
-
-            if (visibleCount >= filteredBlogs.length) {
-                parentDiv?.classList.add("d-none"); // hide parent div
-            } else {
-                parentDiv?.classList.remove("d-none"); // show parent div
-            }
-        }
-
-        function applyFiltersAndRender() {
-            visibleCount = 6;
-            filterAndSortBlogs();
-            renderBlogs();
         }
     }
 

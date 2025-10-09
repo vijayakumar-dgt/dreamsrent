@@ -17,98 +17,124 @@
             ],
         });
 
-        $("#copyRightForm").validate({
-            rules: {
-                copy_right_description: {
-                    required: true,
-                    minlength: 10,
-                },
-                language: {
-                    required: true,
-                },
-            },
-            messages: {
-                copy_right_description: {
-                    required: _l("admin.cms.description_required"),
-                    minlength: _l("admin.cms.description_minlength"),
-                },
-                language: {
-                    required: _l("admin.cms.language_required"),
-                },
-            },
-            errorPlacement: function (error, element) {
-                let errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            },
-            highlight: function (element) {
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight: function (element) {
-                $(element).removeClass("is-invalid").addClass("is-valid");
-                let errorId = element.id + "_error";
-                $("#" + errorId).text("");
-            },
-            onkeyup: function (element) {
-                $(element).valid();
-            },
-            onchange: function (element) {
-                $(element).valid();
-            },
-            submitHandler: function (form) {
-                let copyRightData = new FormData(form);
-
-                $.ajax({
-                    type: "POST",
-                    url: "/admin/copyright/update",
-                    data: copyRightData,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        Accept: "application/json",
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                            "content"
-                        ),
-                    },
-                    beforeSend: function () {
-                        $(".submitbtn").attr("disabled", true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                                "admin.common.saving"
-                            )}..
-                        `);
-                    },
-                    complete: function () {
-                        $(".submitbtn")
-                            .attr("disabled", false)
-                            .html(_l("admin.common.save_changes"));
-                    },
-                    success: function (resp) {
-                        if (resp.code === 200) {
-                            loadCopyRightSettings();
-                            showToast("success", resp.message);
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
-                });
-            },
-        });
+        // Initialize the form
+        initCopyRightForm();
 
         loadCopyRightSettings();
     });
+
+    // Initialize form validation
+    function initCopyRightForm() {
+        $("#copyRightForm").validate({
+            rules: getCopyRightRules(),
+            messages: getCopyRightMessages(),
+            errorPlacement: handleCopyRightErrorPlacement,
+            highlight: handleHighlight,
+            unhighlight: handleUnhighlight,
+            onkeyup: (el) => $(el).valid(),
+            onchange: (el) => $(el).valid(),
+            submitHandler: submitCopyRightForm,
+        });
+    }
+
+    // Validation rules
+    function getCopyRightRules() {
+        return {
+            copy_right_description: { required: true, minlength: 10 },
+            language: { required: true },
+        };
+    }
+
+    // Validation messages
+    function getCopyRightMessages() {
+        return {
+            copy_right_description: {
+                required: _l("admin.cms.description_required"),
+                minlength: _l("admin.cms.description_minlength"),
+            },
+            language: {
+                required: _l("admin.cms.language_required"),
+            },
+        };
+    }
+
+    // Error placement
+    function handleCopyRightErrorPlacement(error, element) {
+        const errorId = element.attr("id") + "_error";
+        $("#" + errorId).text(error.text());
+    }
+
+    // Highlight invalid fields
+    function handleHighlight(element) {
+        $(element).addClass("is-invalid").removeClass("is-valid");
+    }
+
+    // Unhighlight valid fields
+    function handleUnhighlight(element) {
+        $(element).removeClass("is-invalid").addClass("is-valid");
+        $("#" + element.id + "_error").text("");
+    }
+
+    // Submit form via AJAX
+    function submitCopyRightForm(form) {
+        const copyRightData = new FormData(form);
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/copyright/update",
+            data: copyRightData,
+            processData: false,
+            contentType: false,
+            headers: getAjaxHeaders(),
+            beforeSend: showCopyRightSavingState,
+            complete: hideCopyRightSavingState,
+            success: handleCopyRightSuccess,
+            error: handleCopyRightError,
+        });
+    }
+
+    // AJAX headers
+    function getAjaxHeaders() {
+        return {
+            Accept: "application/json",
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        };
+    }
+
+    // Show loader
+    function showCopyRightSavingState() {
+        $(".submitbtn").attr("disabled", true).html(`
+            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l("admin.common.saving")}..
+        `);
+    }
+
+    // Hide loader
+    function hideCopyRightSavingState() {
+        $(".submitbtn").attr("disabled", false).html(_l("admin.common.save_changes"));
+    }
+
+    // Success handler
+    function handleCopyRightSuccess(resp) {
+        if (resp.code === 200) {
+            loadCopyRightSettings();
+            showToast("success", resp.message);
+        }
+    }
+
+    // Error handler
+    function handleCopyRightError(error) {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+
+        if (error.responseJSON?.code === 422) {
+            Object.entries(error.responseJSON.errors).forEach(([key, val]) => {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(val[0]);
+            });
+        } else {
+            showToast("error", error.responseJSON?.message || "Something went wrong");
+        }
+    }
 
     function loadCopyRightSettings(languageId = null) {
         const selectedLanguageId = languageId || $("#language").val();
