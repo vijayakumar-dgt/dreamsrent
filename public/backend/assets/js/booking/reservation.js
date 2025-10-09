@@ -4,16 +4,15 @@
     const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
-        getLocations(function(response) {
+        getLocations('', function(response) {
             appendLocationData('#pickUpLocationList .custom-scroll', 'pickup_location_checkbox', response);
             appendLocationData('#dropOffLocationList .custom-scroll', 'drop_location_checkbox', response);
-        }, '');
-
+        });
         bookingList();
         initEvents();
     });
 
-    function getLocations(callback, search = '') {
+    function getLocations(search = '', callback) {
         $.ajax({
             url: "/get-locations",
             type: "POST",

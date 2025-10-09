@@ -34,7 +34,7 @@
                                                     <div class="drag-upload-btn btn btn-md btn-dark">
                                                         <i class="ti ti-photo-up fs-14"></i>
                                                         {{__('admin.blog.upload')}}
-                                                        <input type="file" name="image" id="image" class="form-control image-sign" id="imageInput">
+                                                        <input type="file" name="image" class="form-control image-sign" id="imageInput">
                                                     </div>
                                                     <span id="selectedFileName" class="fs-14 text-muted">{{__('admin.blog.no_file_chosen')}}</span>
                                                 </div>

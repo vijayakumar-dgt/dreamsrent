@@ -29,9 +29,6 @@
         const filterItems = document.querySelectorAll(
             ".dropdown-menu .dropdown-item"
         );
-        const tableRows = document.querySelectorAll(
-            ".custom-blog-table tbody tr"
-        );
         const filterText = document.getElementById("filterText");
 
         filterItems.forEach((item) => {

@@ -2,114 +2,114 @@
     "use strict";
     await loadTranslationFile("admin", "common, general_settings");
     let iti;
+
     $(document).ready(function () {
         initInternationalPhoneInput();
-        $("#profile_photo").on("change", function (event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            const preview = $("#profile_photo_preview");
+        profile_list();
+        fetchCountries();
 
-            if (file) {
-                if (file.size > 5 * 1024 * 1024) {
-                    showToast("error", _l("admin.general_settings.image_5mb"));
-                    $(this).val("");
-                    return;
-                }
+        $("#profile_photo").on("change", handleProfilePhotoChange);
 
-                reader.onload = function (e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-
-                    img.onload = function () {                       
-                        preview.attr("src", e.target.result).show();
-                        $(".frames").removeClass("d-none");                       
-                    };
-                };
-
-                reader.readAsDataURL(file);
+        $("#country").on("change", function () {
+            const id = $(this).val();
+            if (id) {
+                fetchStatesByCountry(id);
+            } else {
+                resetDropdown("#state");
+                resetDropdown("#city");
             }
         });
 
-        $(function () {
-            profile_list();
-            fetchCountries();
+        $("#state").on("change", function () {
+            const id = $(this).val();
+            if (id) {
+                fetchCitiesByState(id);
+            } else {
+                resetDropdown("#city");
+            }
+        });
 
-            $("#country").on("change", function () {
-                const id = $(this).val();
-                if (id) {
-                    fetchStatesByCountry(id);
-                } else {
-                    resetDropdown("#state");
-                    resetDropdown("#city");
-                }
-            });
+        $("#adminProfileForm").validate({
+            rules: getAdminProfileRules(),
+            messages: getAdminProfileMessages(),
+            errorPlacement: placeError,
+            highlight: highlightElement,
+            unhighlight: unhighlightElement,
+            onkeyup: validateOnInput,
+            onchange: validateOnInput,
+            submitHandler: function (form) {
+                const adminProfileData = new FormData(form);
+                adminProfileData.set(
+                    "phone",
+                    $("#international_phone_number").val()
+                );
 
-            $("#state").on("change", function () {
-                const id = $(this).val();
-                if (id) {
-                    fetchCitiesByState(id);
-                } else {
-                    resetDropdown("#city");
-                }
-            });
-
-            $("#adminProfileForm").validate({
-                rules: getAdminProfileRules(),
-                messages: getAdminProfileMessages(),
-                errorPlacement: placeError,
-                highlight: highlightElement,
-                unhighlight: unhighlightElement,
-                onkeyup: validateOnInput,
-                onchange: validateOnInput,
-                submitHandler: function (form) {
-                    const adminProfileData = new FormData(form);
-                    adminProfileData.set(
-                        "phone",
-                        $("#international_phone_number").val()
-                    );
-
-                    $.ajax({
-                        type: "POST",
-                        url: "/admin/update_profile",
-                        data: adminProfileData,
-                        processData: false,
-                        contentType: false,
-                        beforeSend: () => toggleButton(true),
-                        complete: () => toggleButton(false),
-                        success: function (resp) {
-                            if (resp.code === 200) {
-                                showToast("success", resp.message);
-                                profile_list();
-                            }
-                        },
-                        error: handleFormError,
-                    });
-                },
-            });
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/update_profile",
+                    data: adminProfileData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: () => toggleButton(true),
+                    complete: () => toggleButton(false),
+                    success: function (resp) {
+                        if (resp.code === 200) {
+                            showToast("success", resp.message);
+                            profile_list();
+                        }
+                    },
+                    error: handleFormError,
+                });
+            },
         });
 
         $("#admin_phone").on("input", function () {
             $(this).val(
                 $(this)
                     .val()
-                    .replace(/[^0-9]/g, "")
+                    .replace(/\D/g, "")
             );
         });
     });
+
+    function handleProfilePhotoChange(event) {
+        const file = event.target.files[0];
+        const preview = $("#profile_photo_preview");
+
+        if (!file) return;
+
+        if (isFileTooLarge(file)) {
+            showToast("error", _l("admin.general_settings.image_5mb"));
+            $("#profile_photo").val("");
+            return;
+        }
+
+        readFile(file, (dataURL) => displayPreview(dataURL, preview));
+    }
+
+    function isFileTooLarge(file) {
+        return file.size > 5 * 1024 * 1024;
+    }
+
+    function readFile(file, callback) {
+        const reader = new FileReader();
+        reader.onload = (e) => callback(e.target.result);
+        reader.readAsDataURL(file);
+    }
+
+    function displayPreview(dataURL, preview) {
+        const img = new Image();
+        img.onload = () => {
+            preview.attr("src", dataURL).show();
+            $(".frames").removeClass("d-none");
+        };
+        img.src = dataURL;
+    }
+
     function resetDropdown(selector) {
         $(selector)
             .empty()
             .append(`<option value="">${_l("admin.common.select")}</option>`);
-    }
-
-    function generateMessage(selector) {
-        return {
-            required: $(selector).data("required"),
-            minlength: $(selector).data("min"),
-            remote: $(selector).data("incorrect"),
-            notEqualTo: $(selector).data("not_equal"),
-            equalTo: $(selector).data("equal"),
-        };
     }
 
     function placeError(error, element) {
@@ -174,9 +174,9 @@
             first_name: { required: true, maxlength: 30 },
             last_name: { required: true, maxlength: 30 },
             email: { required: true, email: true },
-            admin_phone: { required: true, pattern: /^[0-9]+$/, maxlength: 10 },
-            address_line: { required: true, maxlength: 50 },           
-            postal_code: { required: true, pattern: /^[0-9a-zA-Z]+$/ },
+            admin_phone: { required: true, pattern: /^\d+$/, maxlength: 15 },
+            address_line: { required: true, maxlength: 50 },
+            postal_code: { required: true, pattern: /^[\da-zA-Z]+$/ },
             current_password: { required: false },
             new_password: { required: false, minlength: 6 },
             confirm_password: { required: false, equalTo: "#new_password" },
@@ -314,6 +314,7 @@
             },
         });
     }
+
     function fetchCountryAjax(id) {
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -467,6 +468,7 @@
             });
         });
     }
+
     function profile_list() {
         $.ajax({
             type: "GET",
@@ -553,6 +555,7 @@
             },
         });
     }
+
     function initInternationalPhoneInput() {
         const userPhoneInput = document.querySelector(".admin_phone");
         const intlPhoneInput = document.querySelector(
@@ -566,7 +569,8 @@
                     "/backend/assets/plugins/intltelinput/js/utils.js",
                     separateDialCode: true,
                     placeholderNumberType: "",
-                    autoPlaceholder: "off"
+                    autoPlaceholder: "off",
+                    formatOnDisplay: false
             });
 
             userPhoneInput.classList.add("iti");
@@ -584,9 +588,6 @@
                         ).value = intlNumber;
 
                         intlPhoneInput.value = intlNumber;
-                    }
-
-                    if ($("#adminProfileForm").valid()) {
                     }
                 });
         }

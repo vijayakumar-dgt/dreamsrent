@@ -47,14 +47,14 @@ class AdminProfileRepository implements AdminProfileInterface
             return [
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => __('admin.general_settings.profile_update_success'),
+                'message' => __('admin.common.default_retrieve_success'),
                 'data'    => $profile
             ];
         } catch (\Exception $e) {
             return [
                 'status'  => 'error',
                 'code'    => 500,
-                'message' => __('admin.general_settings.profile_update_error'),
+                'message' => __('admin.common.default_retrieve_error'),
                 'error'   => $e->getMessage()
             ];
         }

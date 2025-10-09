@@ -27,6 +27,7 @@
                     separateDialCode: true,
                     placeholderNumberType: "",
                     autoPlaceholder: "off",
+                    formatOnDisplay: false
                 });
 
                 userPhoneInput.classList.add("iti");
@@ -176,13 +177,8 @@
                     },
                 },
                 errorPlacement: function (error, element) {
-                    if (element.hasClass("select2-hidden-accessible")) {
-                        var errorId = element.attr("id") + "_error";
-                        $("#" + errorId).text(error.text());
-                    } else {
-                        var errorId = element.attr("id") + "_error";
-                        $("#" + errorId).text(error.text());
-                    }
+                    let errorId = element.attr("id") + "_error";
+                    $("#" + errorId).text(error.text());
                 },
                 highlight: function (element) {
                     if ($(element).hasClass("select2-hidden-accessible")) {
@@ -201,7 +197,7 @@
                             .addClass("is-valid");
                     }
                     $(element).removeClass("is-invalid").addClass("is-valid");
-                    var errorId = element.id + "_error";
+                    let errorId = element.id + "_error";
                     $("#" + errorId).text("");
                 },
                 onkeyup: function (element) {
@@ -370,13 +366,8 @@
                     },
                 },
                 errorPlacement: function (error, element) {
-                    if (element.hasClass("select2-hidden-accessible")) {
-                        var errorId = element.attr("id") + "_error";
-                        $("#" + errorId).text(error.text());
-                    } else {
-                        var errorId = element.attr("id") + "_error";
-                        $("#" + errorId).text(error.text());
-                    }
+                    let errorId = element.attr("id") + "_error";
+                    $("#" + errorId).text(error.text());
                 },
                 highlight: function (element) {
                     if ($(element).hasClass("select2-hidden-accessible")) {
@@ -395,7 +386,7 @@
                             .addClass("is-valid");
                     }
                     $(element).removeClass("is-invalid").addClass("is-valid");
-                    var errorId = element.id + "_error";
+                    let errorId = element.id + "_error";
                     $("#" + errorId).text("");
                 },
                 onkeyup: function (element) {
@@ -498,10 +489,10 @@
                     $(".upload_icon").addClass("d-none");
                 };
                 reader.readAsDataURL(event.target.files[0]);
-                var file = this.files[0];
+                let file = this.files[0];
                 if (file) {
-                    var img = new Image();
-                    var objectURL = URL.createObjectURL(file);
+                    let img = new Image();
+                    let objectURL = URL.createObjectURL(file);
 
                     img.onload = function () {
                         if (this.width < 180 || this.height < 180) {
@@ -530,10 +521,10 @@
                     $(".upload_icon").addClass("d-none");
                 };
                 reader.readAsDataURL(event.target.files[0]);
-                var file = this.files[0];
+                let file = this.files[0];
                 if (file) {
-                    var img = new Image();
-                    var objectURL = URL.createObjectURL(file);
+                    let img = new Image();
+                    let objectURL = URL.createObjectURL(file);
                     img.onload = function () {
                         if (this.width < 180 || this.height < 180) {
                             $("#edit_image_error").text(
@@ -588,7 +579,7 @@
             });
 
             $("#sort_by_date").on("change", function () {
-                var sort_by_date = $(this).val();
+                let sort_by_date = $(this).val();
                 initTable(sort_by_date);
             });
 
@@ -698,7 +689,7 @@
                 let status = $(this).data("status");
 
                 $(".select-multiple:checked").each(function () {
-                    var id = $(this).val();
+                    let id = $(this).val();
                     if (id) {
                         selectedIds.push(id);
                     }
@@ -1028,74 +1019,10 @@
                 lengthChange: false,
                 responsive: false,
                 autoWidth: false,
-                language: {
-                    emptyTable: _l("admin.common.empty_table"),
-                    info:
-                        _l("admin.common.showing") +
-                        " _START_ " +
-                        _l("admin.common.to") +
-                        " _END_ " +
-                        _l("admin.common.of") +
-                        " _TOTAL_ " +
-                        _l("admin.common.entries"),
-                    infoEmpty:
-                        _l("admin.common.showing") +
-                        " 0 " +
-                        _l("admin.common.to") +
-                        " 0 " +
-                        _l("admin.common.of") +
-                        " 0 " +
-                        _l("admin.common.entries"),
-                    infoFiltered:
-                        "(" +
-                        _l("admin.common.filtered_from") +
-                        " _MAX_ " +
-                        _l("admin.common.total_entries") +
-                        ")",
-                    lengthMenu:
-                        _l("admin.common.show") +
-                        " _MENU_ " +
-                        _l("admin.common.entries"),
-                    search: _l("admin.common.search") + ":",
-                    zeroRecords: _l("admin.common.empty_table"),
-                    paginate: {
-                        first: _l("admin.common.first"),
-                        last: _l("admin.common.last"),
-                        next: _l("admin.common.next"),
-                        previous: _l("admin.common.previous"),
-                    },
-                },
                 drawCallback: function () {
-                    $(".dataTables_info").addClass("d-none");
-                    $(".dataTables_wrapper .dataTables_paginate").addClass(
-                        "d-none"
-                    );
-
-                    var tableWrapper = $(this).closest(".dataTables_wrapper");
-                    var info = tableWrapper.find(".dataTables_info");
-                    var pagination = tableWrapper.find(".dataTables_paginate");
-
-                    $(".table-footer")
-                        .empty()
-                        .append(
-                            $(
-                                '<div class="d-flex justify-content-between align-items-center w-100"></div>'
-                            )
-                                .append(
-                                    $(
-                                        '<div class="datatable-info"></div>'
-                                    ).append(info.clone(true))
-                                )
-                                .append(
-                                    $(
-                                        '<div class="datatable-pagination"></div>'
-                                    ).append(pagination.clone(true))
-                                )
-                        );
-                    $(".table-footer")
-                        .find(".dataTables_paginate")
-                        .removeClass("d-none");
+                    customizeTableFooter($(this));
                 },
+                language: getDataTableLanguage(),
             });
         }
     });

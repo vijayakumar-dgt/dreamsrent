@@ -1,7 +1,7 @@
 (async () => {
     "use strict";
     await loadTranslationFile("admin", "blog, common");
-    ("use strict");
+    
     if ($(".blogCategoryTable").length > 0) {
         $(".blogCategoryTable").DataTable({
             ordering: true,

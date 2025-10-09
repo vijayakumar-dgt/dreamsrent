@@ -308,6 +308,7 @@ if (! function_exists('registerCommonRoutes')) {
         Route::post('/get-drivers', [DriverController::class, 'getDrivers']);
         Route::post('/get-driver-details', [DriverController::class, 'getDriverDetails']);
         Route::post('/get-vehicle-extra-services', [ExtraServiceController::class, 'getVehicleExtraServices']);
+        Route::post('/get-locations', [LocationController::class, 'getAllLocations']);
     }
 }
 

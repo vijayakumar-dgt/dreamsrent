@@ -77,8 +77,8 @@
                             @foreach($categories as $category)
                             <li>
                                 <button type="button" class="dropdown-item d-flex align-items-center rounded-1">
-                                    <input class="form-check-input m-0 me-2 category-checkbox" type="checkbox" value="{{$category->id}}">
-                                    {{$category->name}}
+                                    <input class="form-check-input m-0 me-2 category-checkbox" id="category_{{$category->id}}" type="checkbox" value="{{$category->id}}">
+                                    <label for="category_{{$category->id}}" class="form-check-label">{{$category->name}}</label>
                                 </button>
                             </li>
                             @endforeach
@@ -145,10 +145,10 @@
                 @endforeach
             </div>
             <div class="d-flex align-items-center justify-content-center mt-3">
-                   @if(count($blogPosts) > 15)
-                <a href="javascript:void(0);" class="load-btn btn btn-primary mt-3">
+                   @if(count($blogPosts) > 6)
+                <button type="button" class="load-btn btn btn-primary mt-3">
                     <i class="ti ti-loader me-1"></i> {{__('admin.blog.load_more')}}
-                </a>
+                </button>
                 @elseif(count($blogPosts) == 0)
                 <p>{{__('admin.blog.no_blog_found')}}</p>
                 @endif
