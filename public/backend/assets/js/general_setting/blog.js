@@ -61,14 +61,27 @@
             _l("admin.blog.image_dimensions_must_be_exactly_900_600_pixels")
         );
         inputEl.value = "";
-        fileNameDisplayEl.textContent = _l("admin.blog.no_file_chosen");
-        previewEl?.setAttribute("src", "");
+        if (fileNameDisplayEl) fileNameDisplayEl.textContent = _l("admin.blog.no_file_chosen");
+        if (previewEl) previewEl.setAttribute("src", "");
     }
 
     // Helper: Preview valid image
     function showImagePreview(file, readerEvent, fileNameDisplayEl, previewEl) {
-        fileNameDisplayEl.textContent = file.name;
-        previewEl?.setAttribute("src", readerEvent.target.result);
+        if (fileNameDisplayEl) fileNameDisplayEl.textContent = file.name;
+        if (previewEl) previewEl.setAttribute("src", readerEvent.target.result);
+    }
+
+    // Helper: Validate image and show preview or error
+    function validateAndPreviewImage(file, readerEvent, inputEl, fileNameDisplayEl, previewEl) {
+        const img = new Image();
+        img.onload = () => {
+            if (validateImageDimensions(img, 900, 600)) {
+                showImagePreview(file, readerEvent, fileNameDisplayEl, previewEl);
+            } else {
+                handleInvalidImage(inputEl, fileNameDisplayEl, previewEl);
+            }
+        };
+        img.src = readerEvent.target.result;
     }
 
     // Generic function for image preview setup
@@ -79,26 +92,18 @@
 
         if (!inputEl) return;
 
-        inputEl.addEventListener("change", (event) => {
-            const file = event.target.files?.[0];
-            if (!file || !file.type.startsWith("image/")) return;
+        const handleFileChange = (event) => {
+            const file = event.target?.files?.[0];
+            if (!file?.type.startsWith("image/")) return;
 
             const reader = new FileReader();
             reader.onload = (readerEvent) => {
-                const img = new Image();
-                img.onload = () => {
-                    const valid = validateImageDimensions(img, 900, 600);
-                    if (valid) {
-                        showImagePreview(file, readerEvent, fileNameDisplayEl, previewEl);
-                    } else {
-                        handleInvalidImage(inputEl, fileNameDisplayEl, previewEl);
-                    }
-                };
-                img.src = readerEvent.target.result;
+                validateAndPreviewImage(file, readerEvent, inputEl, fileNameDisplayEl, previewEl);
             };
-
             reader.readAsDataURL(file);
-        });
+        };
+
+        inputEl.addEventListener("change", handleFileChange);
     }
 
     // Helper: Filter and sort blogs
@@ -204,84 +209,60 @@
         const searchInput = document.getElementById("searchInputBlog");
         const loadMoreBtn = document.querySelector(".load-btn");
         const selectedFilterTextCategoryWrapper = document.getElementById("selectedFilterTextCategory");
-        const selectedFilterTextCategory =
-            selectedFilterTextCategoryWrapper?.querySelector("span") ?? null;
+        const selectedFilterTextCategory = selectedFilterTextCategoryWrapper?.querySelector("span") ?? null;
 
-        const allBlogs = blogList
-            ? Array.from(blogList.querySelectorAll(".blog-item"))
-            : [];
+        const allBlogs = blogList ? Array.from(blogList.querySelectorAll(".blog-item")) : [];
 
-        let filteredBlogs = applyFiltersAndRender({
-            allBlogs,
-            selectedCategories,
-            searchKeyword,
-            currentSort,
-            visibleCount,
-            blogList,
-            loadMoreBtn,
-        });
-
-        // 🔹 Event handlers
-        sortDropdownItems.forEach((item) => {
-            item.addEventListener("click", () => {
-                currentSort = item.getAttribute("data-filter");
-                if (selectedFilterTextCategory)
-                    selectedFilterTextCategory.innerText = item.innerText;
-
-                visibleCount.value = 6;
-                filteredBlogs = applyFiltersAndRender({
-                    allBlogs,
-                    selectedCategories,
-                    searchKeyword,
-                    currentSort,
-                    visibleCount,
-                    blogList,
-                    loadMoreBtn,
-                });
+        // Helper: update filtered blogs and render
+        const updateAndRender = () => {
+            return applyFiltersAndRender({
+                allBlogs,
+                selectedCategories,
+                searchKeyword,
+                currentSort,
+                visibleCount,
+                blogList,
+                loadMoreBtn,
             });
-        });
+        };
 
-        categoryCheckboxes.forEach((checkbox) => {
-            checkbox.addEventListener("change", () => {
-                selectedCategories = Array.from(categoryCheckboxes)
-                    .filter((cb) => cb.checked)
-                    .map((cb) => cb.value);
+        let filteredBlogs = updateAndRender();
 
-                visibleCount.value = 6;
-                filteredBlogs = applyFiltersAndRender({
-                    allBlogs,
-                    selectedCategories,
-                    searchKeyword,
-                    currentSort,
-                    visibleCount,
-                    blogList,
-                    loadMoreBtn,
-                });
-            });
-        });
+        // Helper: handle sort change
+        const handleSortChange = (item) => {
+            currentSort = item.getAttribute("data-filter");
+            if (selectedFilterTextCategory) selectedFilterTextCategory.innerText = item.innerText;
+            visibleCount.value = 6;
+            filteredBlogs = updateAndRender();
+        };
 
-        if (searchInput) {
-            searchInput.addEventListener("input", (event) => {
-                searchKeyword = event.target.value;
-                visibleCount.value = 6;
-                filteredBlogs = applyFiltersAndRender({
-                    allBlogs,
-                    selectedCategories,
-                    searchKeyword,
-                    currentSort,
-                    visibleCount,
-                    blogList,
-                    loadMoreBtn,
-                });
-            });
-        }
+        // Helper: handle category change
+        const handleCategoryChange = () => {
+            selectedCategories = Array.from(categoryCheckboxes)
+                .filter((cb) => cb.checked)
+                .map((cb) => cb.value);
+            visibleCount.value = 6;
+            filteredBlogs = updateAndRender();
+        };
 
-        if (loadMoreBtn) {
-            loadMoreBtn.addEventListener("click", () => {
-                visibleCount.value += 6;
-                renderBlogs(blogList, filteredBlogs, visibleCount.value, loadMoreBtn);
-            });
-        }
+        // Helper: handle search input
+        const handleSearchInput = (event) => {
+            searchKeyword = event.target.value;
+            visibleCount.value = 6;
+            filteredBlogs = updateAndRender();
+        };
+
+        // Helper: handle load more
+        const handleLoadMore = () => {
+            visibleCount.value += 6;
+            renderBlogs(blogList, filteredBlogs, visibleCount.value, loadMoreBtn);
+        };
+
+        // 🔹 Attach event listeners
+        sortDropdownItems.forEach((item) => item.addEventListener("click", () => handleSortChange(item)));
+        categoryCheckboxes.forEach((checkbox) => checkbox.addEventListener("change", handleCategoryChange));
+        if (searchInput) searchInput.addEventListener("input", handleSearchInput);
+        if (loadMoreBtn) loadMoreBtn.addEventListener("click", handleLoadMore);
     }
 
     if ($(".blogCategoryTable").length > 0) {

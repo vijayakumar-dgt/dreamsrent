@@ -830,7 +830,6 @@ return  [
     'pickup_location_required'                  => 'مكان الاستلام مطلوب.',
     'vehicle_required'                          => 'الرجاء اختيار مركبة.',
     'driver_required'                           => 'السائق مطلوب.',
-    'customer_required'                         => 'العميل مطلوب.',
     'pricing_of_vehicle'                        => 'تسعير المركبة',
     'no_extra_services_found'                   => 'لم يتم العثور على خدمات إضافية',
     'no_insurance_found'                        => 'لم يتم العثور على تأمين',
@@ -2121,6 +2120,7 @@ return  [
     'notice'                                => 'ملاحظة',
     'no_notifications_found'                => 'لم يتم العثور على اشعارات',
     'image_size_600_420'                    => 'قم بتحميل صورة بحجم 600*420، بحجم 2MB',
+    'customer_required'                     => 'العميل مطلوب.',
   ],
   'page' =>
    [

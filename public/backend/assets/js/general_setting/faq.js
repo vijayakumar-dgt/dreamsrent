@@ -183,8 +183,6 @@
             },
             submitHandler: function (form) {
                 let faqData = new FormData(form);
-                let faqId = $("#editFaqForm input[name=faq_id]").val();
-
                 let status = $("#editFaqStatus").is(":checked") ? 1 : 0;
                 faqData.append("status", status);
 
@@ -335,111 +333,93 @@
 
                 if (response.data && response.data.length > 0) {
                     $.each(response.data, function (index, value) {
+                        // Shorten question and answer if too long
+                        const shortQuestion =
+                            value.question.length > 50
+                                ? value.question.substring(0, 50) + "..."
+                                : value.question;
+
+                        const shortAnswer =
+                            value.answer.length > 50
+                                ? value.answer.substring(0, 50) + "..."
+                                : value.answer;
+
+                        // Status badge
+                        const statusClass = value.status === 1 ? "soft-success" : "soft-danger";
+                        const statusText =
+                            value.status === 1
+                                ? _l("admin.cms.published")
+                                : _l("admin.cms.unpublished");
+
+                        // Action buttons
+                        let actionButtons = "";
+                        if (
+                            hasPermission(permissions, "faq", "edit") ||
+                            hasPermission(permissions, "faq", "delete")
+                        ) {
+                            const editButton = hasPermission(permissions, "faq", "edit")
+                                ? `<li>
+                                        <button
+                                            type="button"
+                                            class="dropdown-item rounded-1 edit-faq-btn"
+                                            data-id="${value.id}"
+                                            data-question="${value.question}"
+                                            data-answer="${value.answer}"
+                                            data-status="${value.status}"
+                                            data-language-id="${value.language_id}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#edit_FAQ">
+                                            <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                        </button>
+                                </li>`
+                                : "";
+
+                            const deleteButton = hasPermission(permissions, "faq", "delete")
+                                ? `<li>
+                                        <button
+                                            type="button"
+                                            class="dropdown-item rounded-1 delete-faq-btn"
+                                            data-id="${value.id}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#delete_FAQ">
+                                            <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                        </button>
+                                </li>`
+                                : "";
+
+                            actionButtons = `<td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
+                                                        ${editButton}
+                                                        ${deleteButton}
+                                                    </ul>
+                                                </div>
+                                            </td>`;
+                        }
+
                         tableBody += `
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <a href="javascript:void(0);" class="fw-semibold">
-                                            ${
-                                                value.question.length > 50
-                                                    ? value.question.substring(
-                                                          0,
-                                                          50
-                                                      ) + "..."
-                                                    : value.question
-                                            }
-                                        </a>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <a href="javascript:void(0);" class="fw-semibold">${shortQuestion}</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                <p class="text-gray-9 text-truncate">
-                                    ${
-                                        value.answer.length > 50
-                                            ? value.answer.substring(0, 50) +
-                                              "..."
-                                            : value.answer
-                                    }
-                                </p>
-                            </td>
-                            <td>
-                                <span class="badge badge-${
-                                    value.status === 1
-                                        ? "soft-success"
-                                        : "soft-danger"
-                                }">
-                                    <i class="ti ti-point-filled"></i> ${
-                                        value.status === 1
-                                            ? `${_l("admin.cms.published")}`
-                                            : `${_l("admin.cms.unpublished")}`
-                                    }
-                                </span>
-                            </td>
-                            ${
-                                hasPermission(permissions, "faq", "edit") ||
-                                hasPermission(permissions, "faq", "delete")
-                                    ? `<td>
-                                <div class="dropdown">
-                                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown">
-                                        <i class="ti ti-dots-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                        ${
-                                            hasPermission(
-                                                permissions,
-                                                "faq",
-                                                "edit"
-                                            )
-                                                ? `<li>
-                                           <button
-                                                type="button"
-                                                class="dropdown-item rounded-1 edit-faq-btn"
-                                                data-id="${value.id}"
-                                                data-question="${
-                                                    value.question
-                                                }"
-                                                data-answer="${value.answer}"
-                                                data-status="${value.status}"
-                                                data-language-id="${
-                                                    value.language_id
-                                                }"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#edit_FAQ">
-                                                <i class="ti ti-edit me-1"></i>${_l(
-                                                    "admin.common.edit"
-                                                )}
-                                            </button>
-                                        </li>`
-                                                : ""
-                                        }
-                                        ${
-                                            hasPermission(
-                                                permissions,
-                                                "faq",
-                                                "delete"
-                                            )
-                                                ? `<li>
-                                            <button
-                                                type="button"
-                                                class="dropdown-item rounded-1 delete-faq-btn"
-                                                data-id="${value.id}"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#delete_FAQ"
-                                            >
-                                                <i class="ti ti-trash me-1"></i>${_l(
-                                                    "admin.common.delete"
-                                                )}
-                                            </button>
-                                        </li>`
-                                                : ""
-                                        }
-                                    </ul>
-                                </div>
-                            </td>`
-                                    : ""
-                            }
-                        </tr>`;
+                                </td>
+                                <td>
+                                    <p class="text-gray-9 text-truncate">${shortAnswer}</p>
+                                </td>
+                                <td>
+                                    <span class="badge badge-${statusClass}">
+                                        <i class="ti ti-point-filled"></i> ${statusText}
+                                    </span>
+                                </td>
+                                ${actionButtons}
+                            </tr>
+                        `;
                     });
                 } else {
                     tableBody = `<tr><td colspan="4" class="text-center">${_l(

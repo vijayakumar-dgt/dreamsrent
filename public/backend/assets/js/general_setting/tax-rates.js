@@ -353,14 +353,6 @@
         };
     }
 
-    function handleGenericError(error) {
-        showToast(
-            "error",
-            error.responseJSON?.message ||
-                _l("admin.common.default_delete_error")
-        );
-    }
-
     function resetTaxRateForm() {
         $("#tax_rate_form")[0].reset();
         $("#id").val("");
@@ -427,76 +419,53 @@
                     let data = response.data;
 
                     $.each(data, function (index, value) {
-                        tableBody += `
-                    <tr>
-                        <td>
-                            <p class="text-gray-9 fw-semibold fs-14">${
-                                value.tax_name
-                            }</p>
-                        </td>
-                        <td>
-                            <p class="text-gray-9">${value.tax_rate}%</p>
-                        </td>
-                        <td>
-                            <p class="text-gray-9">${value.created_on}</p>
-                        </td>
-                        ${
-                            hasPermission(
-                                permissions,
-                                "finance_settings",
-                                "edit"
-                            ) ||
-                            hasPermission(
-                                permissions,
-                                "finance_settings",
-                                "delete"
-                            )
-                                ? `<td>
-                            <div class="dropdown">
-                                <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="ti ti-dots-vertical"></i>
+                        const canEdit = hasPermission(permissions, "finance_settings", "edit");
+                        const canDelete = hasPermission(permissions, "finance_settings", "delete");
+                        const showActions = canEdit || canDelete;
+
+                        const editButton = canEdit
+                            ? `<li>
+                                <button type="button" class="dropdown-item rounded-1 edit_tax_rate" data-id="${value.id}">
+                                    <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end p-2">
-                                  ${
-                                      hasPermission(
-                                          permissions,
-                                          "finance_settings",
-                                          "edit"
-                                      )
-                                          ? `<li>
-                                        <button type="button" class="dropdown-item rounded-1 edit_tax_rate" data-id="${
-                                            value.id
-                                        }">
-                                            <i class="ti ti-edit me-1"></i>${_l(
-                                                "admin.common.edit"
-                                            )}
-                                        </button>
-                                    </li>`
-                                          : ""
-                                  }
-                                      ${
-                                          hasPermission(
-                                              permissions,
-                                              "finance_settings",
-                                              "delete"
-                                          )
-                                              ? `<li>
-                                        <button type="button" class="dropdown-item rounded-1 delete_tax_rate_btn" data-id="${
-                                            value.id
-                                        }" data-bs-toggle="modal" data-bs-target="#delete_tax_rate">
-                                            <i class="ti ti-trash me-1"></i>${_l(
-                                                "admin.common.delete"
-                                            )}
-                                        </button>
-                                    </li>`
-                                              : ""
-                                      }
-                                </ul>
-                            </div>
-                        </td>`
-                                : ""
-                        }
-                    </tr>  `;
+                            </li>`
+                            : "";
+
+                        const deleteButton = canDelete
+                            ? `<li>
+                                <button type="button" class="dropdown-item rounded-1 delete_tax_rate_btn" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete_tax_rate">
+                                    <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                </button>
+                            </li>`
+                            : "";
+
+                        const actionDropdown = showActions
+                            ? `<td>
+                                <div class="dropdown">
+                                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="ti ti-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end p-2">
+                                        ${editButton}${deleteButton}
+                                    </ul>
+                                </div>
+                            </td>`
+                            : "";
+
+                        tableBody += `
+                            <tr>
+                                <td>
+                                    <p class="text-gray-9 fw-semibold fs-14">${value.tax_name}</p>
+                                </td>
+                                <td>
+                                    <p class="text-gray-9">${value.tax_rate}%</p>
+                                </td>
+                                <td>
+                                    <p class="text-gray-9">${value.created_on}</p>
+                                </td>
+                                ${actionDropdown}
+                            </tr>
+                        `;
                     });
                 } else {
                     tableBody += `
@@ -561,76 +530,56 @@
                     let data = response.data;
 
                     $.each(data, function (index, value) {
-                        tableBody += `
-                    <tr>
-                        <td>
-                            <p class="text-gray-9 fw-semibold fs-14">${
-                                value.tax_name
-                            }</p>
-                        </td>
-                        <td>
-                            <p class="text-gray-9">${value.total_tax_rate}%</p>
-                        </td>
-                        <td>
-                            <p class="text-gray-9">${value.created_on}</p>
-                        </td>
-                            ${
-                                hasPermission(
-                                    permissions,
-                                    "finance_settings",
-                                    "edit"
-                                ) ||
-                                hasPermission(
-                                    permissions,
-                                    "finance_settings",
-                                    "delete"
-                                )
-                                    ? `<td>
-                            <div class="dropdown">
-                                <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="ti ti-dots-vertical"></i>
+                        // Check permissions
+                        const canEdit = hasPermission(permissions, "finance_settings", "edit");
+                        const canDelete = hasPermission(permissions, "finance_settings", "delete");
+                        const showActions = canEdit || canDelete;
+
+                        // Prepare action buttons
+                        const editButton = canEdit
+                            ? `<li>
+                                <button type="button" class="dropdown-item rounded-1 edit_tax_group" data-id="${value.id}">
+                                    <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end p-2">
-                                ${
-                                    hasPermission(
-                                        permissions,
-                                        "finance_settings",
-                                        "edit"
-                                    )
-                                        ? `<li>
-                                        <button type="button" class="dropdown-item rounded-1 edit_tax_group" data-id="${
-                                            value.id
-                                        }">
-                                            <i class="ti ti-edit me-1"></i>${_l(
-                                                "admin.common.edit"
-                                            )}
-                                        </button>
-                                    </li>`
-                                        : ""
-                                }
-                                    ${
-                                        hasPermission(
-                                            permissions,
-                                            "finance_settings",
-                                            "delete"
-                                        )
-                                            ? `<li>
-                                        <button type="button" class="dropdown-item rounded-1 delete_tax_group" data-id="${
-                                            value.id
-                                        }" data-bs-toggle="modal" data-bs-target="#delete_tax_group">
-                                            <i class="ti ti-trash me-1"></i>${_l(
-                                                "admin.common.delete"
-                                            )}
-                                        </button>
-                                    </li>`
-                                            : ""
-                                    }
-                                </ul>
-                            </div>
-                        </td>`
-                                    : ""
-                            }
-                    </tr>  `;
+                            </li>`
+                            : "";
+
+                        const deleteButton = canDelete
+                            ? `<li>
+                                <button type="button" class="dropdown-item rounded-1 delete_tax_group" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete_tax_group">
+                                    <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                </button>
+                            </li>`
+                            : "";
+
+                        const actionDropdown = showActions
+                            ? `<td>
+                                <div class="dropdown">
+                                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="ti ti-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end p-2">
+                                        ${editButton}${deleteButton}
+                                    </ul>
+                                </div>
+                            </td>`
+                            : "";
+
+                        // Build table row
+                        tableBody += `
+                            <tr>
+                                <td>
+                                    <p class="text-gray-9 fw-semibold fs-14">${value.tax_name}</p>
+                                </td>
+                                <td>
+                                    <p class="text-gray-9">${value.total_tax_rate}%</p>
+                                </td>
+                                <td>
+                                    <p class="text-gray-9">${value.created_on}</p>
+                                </td>
+                                ${actionDropdown}
+                            </tr>
+                        `;
                     });
                 } else {
                     tableBody += `

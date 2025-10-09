@@ -80,119 +80,91 @@
                 data: { search: search },
                 success: function (response) {
                     if (response.code === 200) {
-                        if (
-                            response.data &&
-                            Object.keys(response.data).length > 0
-                        ) {
+                        if (response.data && Object.keys(response.data).length > 0) {
                             let response_data = response.data;
                             let html = "";
-                            $.each(response_data, function (key, language) {
-                                html += `<tr>
-                                               <td>
-                                                   <div class="d-flex align-items-center">
-                                                       <img src="${
-                                                           language.lang_img
-                                                       }" alt="img" class="avatar avatar-sm rounded-circle">&nbsp;
-                                                       <p class="fw-semibold">${
-                                                           language.language_name
-                                                       }</p>
-                                                   </div>
-                                               </td>
-                                               <td>
-                                                   ${language.lang_code}
-                                               </td>
-                                               ${ hasPermission(permissions, 'website_settings', 'edit') ?
-                                                `<td>
-                                                    <div class="form-check form-check-md form-switch">
-                                                        <input class="form-check-input form-label" data-field="rtl" data-id="${
-                                                            language.id
-                                                        }" type="checkbox" role="switch" ${
-                                                             language.lang_rtl == 1 ? "checked" : ""
-                                                         }>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check form-check-md form-switch">
-                                                        <input class="form-check-input form-label" data-field="default" data-id="${
-                                                            language.id
-                                                        }" type="checkbox" role="switch" ${
-                                                             language.default == 1 ? "checked" : ""
-                                                         } ${language.default == 1 ? "disabled" : ""}>
-                                                    </div>
-                                                </td>` : ''
-                                               }
-                                               <td>
-                                                   ${language.total_keys}
-                                               </td>
-                                               <td>
-                                                   ${language.translated_keys}
-                                               </td>
-                                               <td>
-                                                   <div class="d-flex align-items-center">
-                                                       <div class="circle-progress" data-value="${
-                                                           language.progress
-                                                       }" data-thickness="2">
-                                                           <span class="progress-left">
-                                                               <span class="progress-bar border-warning"></span>
-                                                           </span>
-                                                           <span class="progress-right">
-                                                               <span class="progress-bar border-warning"></span>
-                                                           </span>
 
-                                                       </div>
-                                                       <div class="progress-value ms-2">${
-                                                           language.progress
-                                                       }%</div>
-                                                   </div>
-                                               </td>
-                                               ${ hasPermission(permissions, 'website_settings', 'edit') ?
-                                               `<td>
-                                                   <div class="form-check form-check-md form-switch">
-                                                       <input class="form-check-input form-label" data-field="status" data-id="${
-                                                           language.id
-                                                       }" type="checkbox" role="switch" ${
-                                                            language.status == 1 ? "checked" : ""
-                                                        } ${
-                                                            language.lang_code == "en" ? "disabled" : ""
-                                                        }>
-                                                   </div>
-                                               </td>` : ''}
-                                               <td>
-                                                   <div class="d-flex align-items-center">
-                                                       <a href="/admin/settings/language?code=${
-                                                           language.lang_code
-                                                       }&type=web" class="btn btn-white me-1">Web</a>
-                                                       <a href="/admin/settings/language?code=${
-                                                           language.lang_code
-                                                       }&type=admin" class="btn btn-white">Admin</a>
-                                                   </div>
-                                               </td>
-                                               ${ hasPermission(permissions, 'website_settings', 'delete') ?
-                                              `<td>
-                                                   <div class="dropdown">
-                                                       <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                           <i class="ti ti-dots-vertical"></i>
-                                                       </button>
-                                                       <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                       ${
-                                                           hasPermission(
-                                                               permissions,
-                                                               "website_settings",
-                                                               "delete"
-                                                           )
-                                                               ? `<li>
-                                                               <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete-modal" id="deleteLanguage" data-id="${
-                                                                   language.id
-                                                               }"><i class="ti ti-trash me-1"></i>${_l(
-                                                                     "admin.common.delete"
-                                                                 )}</a>
-                                                           </li>`
-                                                               : ""
-                                                       }
-                                                       </ul>
-                                                   </div>
-                                               </td>` : '' }
-                            `});
+                            $.each(response_data, function (key, language) {
+                                // Permissions and switches
+                                const canEdit = hasPermission(permissions, "website_settings", "edit");
+                                const canDelete = hasPermission(permissions, "website_settings", "delete");
+
+                                const rtlSwitch = canEdit
+                                    ? `<td>
+                                        <div class="form-check form-check-md form-switch">
+                                            <input class="form-check-input form-label" data-field="rtl" data-id="${language.id}" type="checkbox" role="switch" ${language.lang_rtl == 1 ? "checked" : ""}>
+                                        </div>
+                                    </td>`
+                                    : "";
+
+                                const defaultSwitch = canEdit
+                                    ? `<td>
+                                        <div class="form-check form-check-md form-switch">
+                                            <input class="form-check-input form-label" data-field="default" data-id="${language.id}" type="checkbox" role="switch" ${language.default == 1 ? "checked" : ""} ${language.default == 1 ? "disabled" : ""}>
+                                        </div>
+                                    </td>`
+                                    : "";
+
+                                const statusSwitch = canEdit
+                                    ? `<td>
+                                        <div class="form-check form-check-md form-switch">
+                                            <input class="form-check-input form-label" data-field="status" data-id="${language.id}" type="checkbox" role="switch" ${language.status == 1 ? "checked" : ""} ${language.lang_code == "en" ? "disabled" : ""}>
+                                        </div>
+                                    </td>`
+                                    : "";
+
+                                const deleteButton = canDelete
+                                    ? `<td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end p-2">
+                                                <li>
+                                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete-modal" id="deleteLanguage" data-id="${language.id}">
+                                                        <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>`
+                                    : "";
+
+                                html += `<tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="${language.lang_img}" alt="img" class="avatar avatar-sm rounded-circle">&nbsp;
+                                                    <p class="fw-semibold">${language.language_name}</p>
+                                                </div>
+                                            </td>
+                                            <td>${language.lang_code}</td>
+                                            ${rtlSwitch}${defaultSwitch}
+                                            <td>${language.total_keys}</td>
+                                            <td>${language.translated_keys}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="circle-progress" data-value="${language.progress}" data-thickness="2">
+                                                        <span class="progress-left">
+                                                            <span class="progress-bar border-warning"></span>
+                                                        </span>
+                                                        <span class="progress-right">
+                                                            <span class="progress-bar border-warning"></span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="progress-value ms-2">${language.progress}%</div>
+                                                </div>
+                                            </td>
+                                            ${statusSwitch}
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <a href="/admin/settings/language?code=${language.lang_code}&type=web" class="btn btn-white me-1">Web</a>
+                                                    <a href="/admin/settings/language?code=${language.lang_code}&type=admin" class="btn btn-white">Admin</a>
+                                                </div>
+                                            </td>
+                                            ${deleteButton}
+                                        </tr>`;
+                            });
+
                             $("#languageTable tbody").html(html);
                         } else {
                             $("#languageTable tbody").html(

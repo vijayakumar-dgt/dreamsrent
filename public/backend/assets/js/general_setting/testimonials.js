@@ -35,37 +35,53 @@
      */
     function bindImagePreviewHandlers() {
         const previewImage = (inputSelector, previewSelector) => {
-            $(inputSelector).on("change", function (event) {
-                const file = event.target.files[0];
-                const reader = new FileReader();
-                const preview = $(previewSelector);
+            $(inputSelector).on("change", async (event) => {
+                await handleFileChange(event, inputSelector, previewSelector);
+            });
+        };
 
-                if (file) {
-                    if (file.size > 2 * 1024 * 1024) {
-                        showToast("error", _l("admin.common.image_size"));
-                        $(this).val("");
-                        return;
-                    }
+        const handleFileChange = async (event, inputSelector, previewSelector) => {
+            const file = event.target.files[0];
+            if (!file) return;
 
-                    reader.onload = function (e) {
-                        const img = new Image();
-                        img.src = e.target.result;
+            if (file.size > 2 * 1024 * 1024) {
+                showToast("error", _l("admin.common.image_size"));
+                $(inputSelector).val("");
+                return;
+            }
 
-                        img.onload = function () {
-                            if (img.width === 180 && img.height === 180) {
-                                preview.attr("src", e.target.result).show();
-                            } else {
-                                showToast(
-                                    "error",
-                                    _l("admin.cms.testimonial_image_size")
-                                );
-                                $(inputSelector).val("");
-                            }
-                        };
-                    };
+            try {
+                const dataUrl = await readFileAsync(file);
+                const isValid = await validateImageDimensionsAsync(dataUrl, 180, 180);
 
-                    reader.readAsDataURL(file);
+                if (isValid) {
+                    $(previewSelector).attr("src", dataUrl).show();
+                } else {
+                    showToast("error", _l("admin.cms.testimonial_image_size"));
+                    $(inputSelector).val("");
                 }
+            } catch (err) {
+                console.error(err);
+                showToast("error", _l("admin.common.image_error"));
+                $(inputSelector).val("");
+            }
+        };
+
+        const readFileAsync = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsDataURL(file);
+            });
+        };
+
+        const validateImageDimensionsAsync = (dataUrl, width, height) => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img.width === width && img.height === height);
+                img.onerror = () => resolve(false);
+                img.src = dataUrl;
             });
         };
 
@@ -96,7 +112,7 @@
 
         const commonMessages = {
             customer_name: {
-                required: _l("admin.cms.customer_required"),
+                required: _l("admin.common.customer_required"),
                 minlength: _l("admin.cms.customer_minlength"),
             },
             customer_rating: { required: _l("admin.cms.rating_required") },
@@ -155,7 +171,7 @@
                     filesize: _l("admin.common.image_size"),
                 },
                 edit_testimonial_name: {
-                    required: _l("admin.cms.customer_required"),
+                    required: _l("admin.common.customer_required"),
                     minlength: _l("admin.cms.customer_minlength"),
                 },
                 edit_testimonial_ratings: {
@@ -388,17 +404,60 @@
 
                         let stars = "";
                         for (let i = 1; i <= 5; i++) {
-                            if (i <= testimonial.ratings) {
-                                stars += `<span class="me-1"><i class="ti ti-star-filled text-warning"></i></span>`; // Filled star
-                            } else {
-                                stars += `<span class="me-1"><i class="ti ti-star text-gray-400"></i></span>`; // Empty star
-                            }
+                            stars += i <= testimonial.ratings
+                                ? `<span class="me-1"><i class="ti ti-star-filled text-warning"></i></span>`
+                                : `<span class="me-1"><i class="ti ti-star text-gray-400"></i></span>`;
                         }
 
-                        let reviewText =
-                            testimonial.review.length > 50
-                                ? testimonial.review.substring(0, 50) + "..."
-                                : testimonial.review;
+                        let reviewText = testimonial.review.length > 50
+                            ? testimonial.review.substring(0, 50) + "..."
+                            : testimonial.review;
+
+                        // Extract action buttons into a separate variable
+                        let actionButtons = "";
+                        const canEdit = hasPermission(permissions, "testimonials", "edit");
+                        const canDelete = hasPermission(permissions, "testimonials", "delete");
+
+                        if (canEdit || canDelete) {
+                            actionButtons = `
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ti ti-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end p-2">
+                                            ${canEdit ? `
+                                                <li>
+                                                    <button
+                                                        type="button"
+                                                        class="dropdown-item rounded-1 edit-testimonial-btn"
+                                                        data-id="${testimonial.id}"
+                                                        data-name="${testimonial.customer_name}"
+                                                        data-image="${imageUrl}"
+                                                        data-review="${testimonial.review}"
+                                                        data-ratings="${testimonial.ratings}"
+                                                        data-status="${testimonial.status}"
+                                                    >
+                                                        <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                                    </button>
+                                                </li>` : ""}
+                                            ${canDelete ? `
+                                                <li>
+                                                    <button
+                                                        type="button"
+                                                        class="dropdown-item rounded-1 delete-testimonial-btn"
+                                                        data-id="${testimonial.id}"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#delete_testimonial"
+                                                    >
+                                                        <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                                    </button>
+                                                </li>` : ""}
+                                        </ul>
+                                    </div>
+                                </td>
+                            `;
+                        }
 
                         tableBody += `
                             <tr>
@@ -408,9 +467,7 @@
                                             <img src="${imageUrl}" alt="">
                                         </a>
                                         <div>
-                                            <a href="javascript:void(0);" class="fw-semibold">${
-                                                testimonial.customer_name
-                                            }</a>
+                                            <a href="javascript:void(0);" class="fw-semibold">${testimonial.customer_name}</a>
                                         </div>
                                     </div>
                                 </td>
@@ -420,87 +477,9 @@
                                         <span>(${testimonial.ratings}.0)</span>
                                     </div>
                                 </td>
-                                <td><a href="javascript:void(0);" title="${
-                                    testimonial.review
-                                }">${reviewText}</a></td>
+                                <td><a href="javascript:void(0);" title="${testimonial.review}">${reviewText}</a></td>
                                 <td>${testimonial.created_date}</td>
-
-                             ${
-                                 hasPermission(
-                                     permissions,
-                                     "testimonials",
-                                     "edit"
-                                 ) ||
-                                 hasPermission(
-                                     permissions,
-                                     "testimonials",
-                                     "delete"
-                                 )
-                                     ? `<td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="ti ti-dots-vertical"></i>
-                                        </button>
-
-                                        <ul class="dropdown-menu dropdown-menu-end p-2">
-                                            ${
-                                                hasPermission(
-                                                    permissions,
-                                                    "testimonials",
-                                                    "edit"
-                                                )
-                                                    ? `<li>
-                                               <button
-                                                    type="button"
-                                                    class="dropdown-item rounded-1 edit-testimonial-btn"
-                                                    data-id="${testimonial.id}"
-                                                    data-name="${
-                                                        testimonial.customer_name
-                                                    }"
-                                                    data-image="${imageUrl}"
-                                                    data-review="${
-                                                        testimonial.review
-                                                    }"
-                                                    data-ratings="${
-                                                        testimonial.ratings
-                                                    }"
-                                                    data-status="${
-                                                        testimonial.status
-                                                    }"
-                                                >
-                                                    <i class="ti ti-edit me-1"></i>${_l(
-                                                        "admin.common.edit"
-                                                    )}
-                                                </button>
-
-                                            </li>`
-                                                    : ""
-                                            }
-                                              ${
-                                                  hasPermission(
-                                                      permissions,
-                                                      "testimonials",
-                                                      "delete"
-                                                  )
-                                                      ? `<li>
-                                                <button
-                                                    type="button"
-                                                    class="dropdown-item rounded-1 delete-testimonial-btn"
-                                                    data-id="${testimonial.id}"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#delete_testimonial"
-                                                >
-                                                    <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
-                                                </button>
-
-                                            </li>`
-                                                      : ""
-                                              }
-                                        </ul>
-                                    </div>
-                                </td>`
-                                     : ""
-                             }
+                                ${actionButtons}
                             </tr>
                         `;
                     });

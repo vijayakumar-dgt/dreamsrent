@@ -1461,7 +1461,7 @@
         },
         messages: {
             customer_id: {
-                required: _l("admin.bookings.customer_required"),
+                required: _l("admin.common.customer_required"),
             },
             driver_id: {
                 required: _l("admin.bookings.driver_required"),

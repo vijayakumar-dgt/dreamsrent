@@ -170,7 +170,6 @@
         $(document).on("change", "#currency", function () {
             let currency = $(this).val();
             let symbol = $(this).find(":selected").data("symbol");
-            let currency_position = "";
             $("#currency_symbol").empty();
             $("#currency_position").empty();
             if (currency && symbol) {

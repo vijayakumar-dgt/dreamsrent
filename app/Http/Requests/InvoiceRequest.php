@@ -52,7 +52,7 @@ class InvoiceRequest extends CustomFailedValidation
             'currency_id.required'         => __('admin.finance_accounts.currency_required'),
             'status.required'              => __('admin.rentals.status_required'),
             'biller.required'              => __('admin.finance_accounts.biller_required'),
-            'customer_id.required'         => __('admin.bookings.customer_required'),
+            'customer_id.required'         => __('admin.common.customer_required'),
             'payment_method.required'      => __('admin.finance_accounts.payment_method_required'),
             'terms.required'               => __('admin.finance_accounts.terms_condition_required'),
             'notes.required'               => __('admin.finance_accounts.notes_required'),

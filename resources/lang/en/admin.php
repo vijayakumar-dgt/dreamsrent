@@ -850,7 +850,6 @@ return [
     'pickup_location_required'                  => 'Pickup location is required.',
     'vehicle_required'                          => 'Please select a vehicle.',
     'driver_required'                           => 'Driver is required.',
-    'customer_required'                         => 'Customer is required.',
     'pricing_of_vehicle'                        => 'Pricing of Vehicle',
     'no_extra_services_found'                   => 'No extra services found',
     'no_insurance_found'                        => 'No insurance found',
@@ -2162,6 +2161,7 @@ return [
     'notice'                                => 'Notice',
     'no_notifications_found'                => 'No notifications found',
     'image_size_600_420'                    => 'Upload Image size 600*420, within 2MB',
+    'customer_required'                     => 'Customer is required.',
   ],
   'page' => [
     'pages'                        => 'Pages',

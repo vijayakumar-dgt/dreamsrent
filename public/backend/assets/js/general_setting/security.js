@@ -168,7 +168,7 @@
             let $heavy = $("#heavy");
 
             let lowerCaseRegExp = /[a-zA-Z]/;
-            let numberRegExp = /[0-9]/;
+            let numberRegExp = /\d/;
             let specialCharRegExp = /[#?!@$%^&*()_+\-=<>:{}[\]\\|~`]/;
             let whitespaceRegExp = /\s/;
 
@@ -204,10 +204,7 @@
                 $passwordStrength.removeClass(
                     "poor-active avg-active strong-active heavy-active"
                 );
-                if ($passwordStrength === 0) {
-                    $poor.addClass("active");
-                    $passwordStrength.addClass("poor-active");
-                } else if (passwordStrength === 1) {
+                if ($passwordStrength === 0 || passwordStrength === 1) {
                     $poor.addClass("active");
                     $passwordStrength.addClass("poor-active");
                 } else if (passwordStrength === 2) {
@@ -234,13 +231,13 @@
                     required: true,
                     minlength: 8,
                     maxlength: 15,
-                    pattern: /^\+?[0-9]+$/,
+                    pattern: /^\+?\d+$/,
                 },
                 new_phonenumber: {
                     required: true,
                     minlength: 8,
                     maxlength: 15,
-                    pattern: /^\+?[0-9]+$/,
+                    pattern: /^\+?\d+$/,
                 },
                 phone_current_password: {
                     required: true,
@@ -359,17 +356,6 @@
             },
         });
 
-        function checkCurrentEmail() {
-            return new Promise((resolve, reject) => {
-                let currentemail = $("#current_email").val();
-                let useremail = $("#current_email").data("email");
-                if (currentemail === useremail) {
-                    resolve({ code: 200 });
-                } else {
-                    resolve({ code: 422, error: "incorrect" });
-                }
-            });
-        }
         $("#changeEmailForm").validate({
             rules: {
                 current_email: {

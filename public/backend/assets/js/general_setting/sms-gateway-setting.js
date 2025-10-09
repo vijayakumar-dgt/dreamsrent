@@ -386,6 +386,7 @@
                     });
                 },
             });
+            
             $(".gateway-switch").on("change", function () {
                 const gateway = $(this).attr("name");
                 const status = $(this).prop("checked") ? 1 : 0;

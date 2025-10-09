@@ -6,6 +6,7 @@
         $("#language").on("change", function () {
             loadHowItWorksSettings($(this).val());
         });
+
         $(".summernote").summernote({
             height: 300,
             placeholder: _l("admin.cms.enter_your_description"),
@@ -17,7 +18,68 @@
             ],
         });
 
-        $("#howItWorkForm").validate({
+        // Initialize form
+        initHowItWorkForm();
+
+        loadHowItWorksSettings();
+    });
+
+    function initHowItWorkForm() {
+        const formSelector = "#howItWorkForm";
+        const submitBtnSelector = `${formSelector} .submitbtn`;
+        const csrfToken = $('meta[name="csrf-token"]').attr("content");
+
+        const handleErrorResponse = (error) => {
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+
+            if (error.responseJSON.code === 422) {
+                $.each(error.responseJSON.errors, function (key, val) {
+                    $("#" + key).addClass("is-invalid");
+                    $("#" + key + "_error").text(val[0]);
+                });
+            } else {
+                showToast("error", error.responseJSON.message);
+            }
+        };
+
+        const handleSuccessResponse = (resp) => {
+            if (resp.code === 200) {
+                loadHowItWorksSettings();
+                showToast("success", resp.message);
+            }
+        };
+
+        const ajaxSubmit = (formData) => {
+            $.ajax({
+                type: "POST",
+                url: "/admin/how-it-works/update",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+                beforeSend: () => {
+                    $(submitBtnSelector).attr("disabled", true).html(`
+                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l("admin.common.saving")}..
+                    `);
+                },
+                complete: () => {
+                    $(submitBtnSelector).attr("disabled", false).html(_l("admin.common.save_changes"));
+                },
+                success: handleSuccessResponse,
+                error: handleErrorResponse,
+            });
+        };
+
+        const resetFieldErrors = (element) => {
+            $(element).removeClass("is-invalid").addClass("is-valid");
+            $("#" + element.id + "_error").text("");
+        };
+
+        $(formSelector).validate({
             rules: {
                 maintenance_description: {
                     required: true,
@@ -30,82 +92,19 @@
                     minlength: _l("admin.cms.description_minlength"),
                 },
             },
-            errorPlacement: function (error, element) {
-                let errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
+            errorPlacement: (error, element) => {
+                $("#" + element.attr("id") + "_error").text(error.text());
             },
-            highlight: function (element) {
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight: function (element) {
-                $(element).removeClass("is-invalid").addClass("is-valid");
-                let errorId = element.id + "_error";
-                $("#" + errorId).text("");
-            },
-            onkeyup: function (element) {
-                $(element).valid();
-            },
-            onchange: function (element) {
-                $(element).valid();
-            },
-            submitHandler: function (form) {
-                let howItWorksData = new FormData(form);
-
-                $.ajax({
-                    type: "POST",
-                    url: "/admin/how-it-works/update",
-                    data: howItWorksData,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        Accept: "application/json",
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                            "content"
-                        ),
-                    },
-                    beforeSend: function () {
-                        $(".submitbtn").attr("disabled", true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                                "admin.common.saving"
-                            )}..
-                        `);
-                    },
-                    complete: function () {
-                        $(".submitbtn")
-                            .attr("disabled", false)
-                            .html(
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            );
-                    },
-                    success: function (resp) {
-                        if (resp.code === 200) {
-                            loadHowItWorksSettings();
-                            showToast("success", resp.message);
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
-                });
+            highlight: (element) => $(element).addClass("is-invalid").removeClass("is-valid"),
+            unhighlight: resetFieldErrors,
+            onkeyup: (element) => $(element).valid(),
+            onchange: (element) => $(element).valid(),
+            submitHandler: (form) => {
+                const formData = new FormData(form);
+                ajaxSubmit(formData);
             },
         });
-        loadHowItWorksSettings();
-    });
+    }
 
     function loadHowItWorksSettings(languageId = null) {
         const selectedLanguageId = languageId || $("#language").val();

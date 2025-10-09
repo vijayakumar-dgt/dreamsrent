@@ -80,42 +80,13 @@
                             {{ __('admin.cms.rating') }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-lg p-2">
-                            <li>
-                                <div class="top-search m-2 d-none">
-                                    <div class="top-search-group">
-                                        <span class="input-icon">
-                                            <i class="ti ti-search"></i>
-                                        </span>
-                                        <input type="text" class="form-control"
-                                            placeholder="{{ __('admin.common.search') }}">
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <label class="dropdown-item d-flex align-items-center rounded-1">
-                                    <input class="form-check-input m-0 me-2" type="checkbox">5 {{ __('admin.common.star') }}
-                                </label>
-                            </li>
-                            <li>
-                                <label class="dropdown-item d-flex align-items-center rounded-1">
-                                    <input class="form-check-input m-0 me-2" type="checkbox">4 {{ __('admin.common.star') }}
-                                </label>
-                            </li>
-                            <li>
-                                <label class="dropdown-item d-flex align-items-center rounded-1">
-                                    <input class="form-check-input m-0 me-2" type="checkbox">3 {{ __('admin.common.star') }}
-                                </label>
-                            </li>
-                            <li>
-                                <label class="dropdown-item d-flex align-items-center rounded-1">
-                                    <input class="form-check-input m-0 me-2" type="checkbox">2 {{ __('admin.common.star') }}
-                                </label>
-                            </li>
-                            <li>
-                                <label class="dropdown-item d-flex align-items-center rounded-1">
-                                    <input class="form-check-input m-0 me-2" type="checkbox">1 {{ __('admin.common.star') }}
-                                </label>
-                            </li>
+                            @for ($i = 5; $i >= 1; $i--)
+                                <li>
+                                    <label class="dropdown-item d-flex align-items-center rounded-1">
+                                        <input class="form-check-input m-0 me-2" type="checkbox" name="rating">{{ $i }} {{ __('admin.common.star') }}
+                                    </label>
+                                </li>
+                            @endfor
                         </ul>
                     </div>
                     <button type="button" class="text-purple links bg-transparent border-0">{{ __('admin.common.apply') }}</button>
@@ -156,7 +127,7 @@
             @csrf
             {{-- Image Upload --}}
             <div class="mb-3">
-                <label for="image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
+                <label for="testimonial_image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                 <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                     <div
                         class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
@@ -260,13 +231,13 @@
             {{-- Customer Name --}}
             <div class="mb-3">
                 <label for="edit_testimonial_name" class="form-label">{{ __('admin.common.customer') }} <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="edit_testimonial_name" maxlength="30">
+                <input type="text" class="form-control" id="edit_testimonial_name" name="edit_testimonial_name" maxlength="30">
                 <span id="edit_testimonial_name_error" class="text-danger fs-14"></span>
             </div>
             {{-- Rating --}}
             <div class="mb-3">
                 <label for="edit_testimonial_ratings" class="form-label">{{ __('admin.cms.rating') }} <span class="text-danger">*</span></label>
-                <select class="select form-control" id="edit_testimonial_ratings"
+                <select class="select form-control" id="edit_testimonial_ratings" name="edit_testimonial_ratings"
                     data-placeholder="{{ __('admin.common.select') }}">
                     @for($i = 5; $i >= 1; $i--)
                         <option value="{{ $i }}">{{ $i }} {{ __('admin.common.star') }}</option>
@@ -288,7 +259,7 @@
             {{-- Review --}}
             <div class="mb-0">
                 <label for="edit_testimonial_review" class="form-label">{{ __('admin.cms.review') }} <span class="text-danger">*</span></label>
-                <textarea class="form-control" id="edit_testimonial_review"></textarea>
+                <textarea class="form-control" id="edit_testimonial_review" name="edit_testimonial_review"></textarea>
                 <span id="edit_testimonial_review_error" class="text-danger fs-14"></span>
             </div>
         </x-slot>
@@ -323,5 +294,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('backend/assets/js/general_setting/testimoials.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/general_setting/testimonials.js') }}"></script>
 @endpush

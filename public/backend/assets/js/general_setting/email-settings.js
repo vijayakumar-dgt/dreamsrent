@@ -39,13 +39,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    let errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                } else {
-                    let errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
+                let errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
@@ -179,13 +174,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    let errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                } else {
-                    let errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
+                let errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
@@ -295,13 +285,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    let errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                } else {
-                    let errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
+                let errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {
@@ -401,13 +386,8 @@
                 },
             },
             errorPlacement: function (error, element) {
-                if (element.hasClass("select2-hidden-accessible")) {
-                    let errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                } else {
-                    let errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
-                }
+                let errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
             },
             highlight: function (element) {
                 if ($(element).hasClass("select2-hidden-accessible")) {

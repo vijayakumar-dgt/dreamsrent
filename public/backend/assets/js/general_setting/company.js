@@ -1,6 +1,7 @@
 (async () => {
-    await loadTranslationFile("admin", "general_settings,common");
     "use strict";
+    await loadTranslationFile("admin", "general_settings,common");
+
     $(document).ready(function () {
         companyList();
         initInternationalPhoneInput();
@@ -363,14 +364,6 @@
                 error: (error) => handleDropdownError(error, reject),
             });
         });
-    }
-
-    // CSRF header
-    function getCsrfHeaders() {
-        return {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            accept: "application/json",
-        };
     }
 
     // Handle success response
