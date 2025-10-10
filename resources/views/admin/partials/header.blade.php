@@ -21,7 +21,7 @@
                     <a id="toggle_btn" href="javascript:void(0);">
                         <i class="ti ti-menu-deep"></i>
                     </a>
-                    @if (isAccessMenu('reservation'))
+                    @if (isAccessMenu('reservation') && haspermission($permissions, 'reservations', 'create'))
                     <div class="add-dropdown">
                         <a href="{{ route('reservation.create') }}" class="btn btn-dark d-inline-flex align-items-center">
                             <i class="ti ti-plus me-1"></i>{{ __('admin.bookings.new_reservation') }}

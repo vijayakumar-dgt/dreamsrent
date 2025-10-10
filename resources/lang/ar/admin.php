@@ -2160,6 +2160,7 @@ return  [
     'no_notifications_found'            => 'لم يتم العثور على إشعارات',
     'image_size_600_420'                => 'تحميل صورة بحجم 600*420، في حدود 2 ميجابايت',
     'customer_required'                 => 'العميل مطلوب.',
+    'menu_disabled'                     => 'القايمة معطلة!',
   ],
   'page' => [
     'pages'                        => 'الصفحات',
@@ -2380,5 +2381,7 @@ return  [
     'otp_verified_successfully'              => 'تم التحقق من الرمز بنجاح',
     'otp_does_not_match'                     => 'رمز التحقق غير متطابق',
     'login'                                  => 'تسجيل الدخول',
+    'your_account_is_blocked'                => 'تم حظر حسابك! يرجى الاتصال بالمسؤول.',
+    'login_success'                          => 'تسجيل الدخول بنجاح!',
   ]
 ];

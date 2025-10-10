@@ -230,22 +230,23 @@ class ReviewRepository implements ReviewRepositoryInterface
 
     public function getRatingDescription(mixed $rating): string
     {
-        $rating = "";
+        $description = '';
+
         if ($rating >= 4.5) {
-            $rating = __('web.home.excellent');
+            $description = __('web.home.excellent');
         } elseif ($rating >= 4.0) {
-            $rating = __('web.home.very_good');
+            $description = __('web.home.very_good');
         } elseif ($rating >= 3.5) {
-            $rating = __('web.home.good');
+            $description = __('web.home.good');
         } elseif ($rating >= 3.0) {
-            $rating = __('web.home.average');
+            $description = __('web.home.average');
         } elseif ($rating >= 2.0) {
-            $rating = __('web.home.below_average');
+            $description = __('web.home.below_average');
         } else {
-            $rating = __('web.home.poor');
+            $description = __('web.home.poor');
         }
 
-        return $rating;
+        return $description;
     }
 
     public function getUserReviewsList(Request $request): array

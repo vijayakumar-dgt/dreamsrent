@@ -47,8 +47,16 @@ class DashboardRepository implements DashboardRepositoryInterface
             $change = $thisWeekCount > 0 ? 100 : 0;
         }
 
-        // Format result with + or –
-        $sign = $change > 0 ? '+' : ($change < 0 ? '-' : '');
+        // Determine the sign
+        if ($change > 0) {
+            $sign = '+';
+        } elseif ($change < 0) {
+            $sign = '-';
+        } else {
+            $sign = '';
+        }
+
+        // Format the percentage change
         $percentageChange = $sign . abs(round($change, 2)) . '%';
 
         $bookingCount = Booking::whereDate('start_datetime', '<=', $today)
@@ -79,8 +87,16 @@ class DashboardRepository implements DashboardRepositoryInterface
             $amountChange = $thisWeekAmount > 0 ? 100 : 0;
         }
 
-        // Format with +/– symbol
-        $amountSymbol = $amountChange > 0 ? '+' : ($amountChange < 0 ? '-' : '');
+        // Determine the symbol for amount change
+        if ($amountChange > 0) {
+            $amountSymbol = '+';
+        } elseif ($amountChange < 0) {
+            $amountSymbol = '-';
+        } else {
+            $amountSymbol = '';
+        }
+
+        // Format the amount percentage change
         $amountPercentageChange = $amountSymbol . abs(round($amountChange, 2)) . '%';
 
         $amount = Booking::where(function ($query) {
@@ -115,10 +131,17 @@ class DashboardRepository implements DashboardRepositoryInterface
             $carChange = $thisWeekCars > 0 ? 100 : 0;
         }
 
-        // Format result with +/– symbol
-        $carSymbol = $carChange > 0 ? '+' : ($carChange < 0 ? '-' : '');
-        $carPercentageChange = $carSymbol . abs(round($carChange, 2)) . '%';
+        // Determine the symbol for car change
+        if ($carChange > 0) {
+            $carSymbol = '+';
+        } elseif ($carChange < 0) {
+            $carSymbol = '-';
+        } else {
+            $carSymbol = '';
+        }
 
+        // Format the car percentage change
+        $carPercentageChange = $carSymbol . abs(round($carChange, 2)) . '%';
 
         $upcomingCount = Booking::whereDate('start_datetime', '>', $today)->count();
 

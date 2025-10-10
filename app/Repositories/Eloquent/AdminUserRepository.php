@@ -231,7 +231,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             'user_details.profile_image',
         )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-            ->where(['users.user_type' => 2, 'users.id' => $id])
+            ->where(['users.id' => $id])
             ->first();
 
         if ($data) {

@@ -26,7 +26,8 @@ class LoginController extends Controller
     public function verifyLogin(Request $request): JsonResponse
     {
         $httpStatus = 200;
-        // default response (invalid credentials)
+
+        // default payload
         $payload = [
             'status'  => false,
             'code'    => 401,
@@ -49,70 +50,78 @@ class LoginController extends Controller
         );
 
         if ($validator->fails()) {
-            // validation failed -> set payload and skip auth attempt
             $payload = [
                 'status'  => false,
                 'code'    => 422,
                 'errors'  => $validator->errors()->toArray(),
-                'message' => $validator->errors()->first()
+                'message' => $validator->errors()->first(),
             ];
-        } else {
-            $credentials = $request->only('email', 'password');
-            $remember = $request->get('remember', false);
-
-            if (Auth::guard('admin')->attempt($credentials, $remember)) {
-                $user = Auth::guard('admin')->user();
-
-                if ($user && ($user->status == 1 || $user->user_type == 1 || $user->user_type == 2)) {
-                    if ($user->status == 0 && $user->user_type == 2) {
-                        // blocked user case
-                        $payload = [
-                            'status'  => false,
-                            'code'    => 401,
-                            'message' => 'Currently you are blocked! Please contact to admin.',
-                        ];
-                    } else {
-                        // successful login -> create device record and set success payload
-                        $agent = new Agent();
-                        $ip = $request->ip();
-                        $device_type = $agent->device();
-                        $os = $agent->platform();
-                        $browser = $agent->browser();
-                        $locationData = Http::get("http://ip-api.com/json/{$ip}?fields=status,country,city,regionName,lat,lon")->json();
-                        $localtion = "";
-                        if ($locationData['status'] !== 'success') {
-                            $localtion = "India / Coimbatore";
-                        } else {
-                            $localtion = $locationData['country'] . ' / ' . $locationData['city'];
-                        }
-
-                        $user = Auth::guard('admin')->user();
-                        $user_device = new UserDevice();
-                        if ($user && (property_exists($user, 'id') && $user->id !== null)) {
-                            $user_device->user_id = $user->id;
-                        }
-                        $user_device->device_type = is_string($device_type) ? $device_type : null;
-                        $user_device->browser = is_string($browser) ? $browser : null;
-                        $user_device->os = is_string($os) ? $os : null;
-                        $user_device->ip_address = $ip ?? "";
-                        $user_device->location = $localtion;
-                        $user_device->save();
-
-                        $payload = [
-                            'status'       => true,
-                            'code'         => 200,
-                            'redirect_url' => route('dashboard'),
-                            'message'      => 'Login successfully',
-                        ];
-                    }
-                }
-                // If user didn't meet the outer condition, payload remains "invalid credentials"
-            }
-            // If attempt failed, payload remains "invalid credentials"
+            return response()->json($payload, $httpStatus);
         }
 
-        // single return for all cases
+        // Attempt authentication
+        $credentials = $request->only('email', 'password');
+        $remember = $request->get('remember', false);
+
+        if (!Auth::guard('admin')->attempt($credentials, $remember)) {
+            return response()->json($payload, $httpStatus);
+        }
+
+        $user = Auth::guard('admin')->user();
+
+        if ($this->isBlockedUser($user)) {
+            $payload['message'] = __('admin.auth.your_account_is_blocked');
+            return response()->json($payload, $httpStatus);
+        }
+
+        $this->logUserDevice($request, $user);
+
+        $payload = [
+            'status'       => true,
+            'code'         => 200,
+            'redirect_url' => route('dashboard'),
+            'message'      => __('admin.auth.login_success'),
+        ];
+
         return response()->json($payload, $httpStatus);
+    }
+
+    /**
+     * Check if the user is blocked (type 2 inactive)
+     */
+    private function isBlockedUser($user): bool
+    {
+        return $user && $user->status == 0 && $user->user_type == 2;
+    }
+
+    /**
+     * Log user's device info
+     */
+    private function logUserDevice(Request $request, $user): void
+    {
+        if (!$user || !$user->id) {
+            return;
+        }
+
+        $agent = new Agent();
+        $ip = $request->ip();
+        $deviceType = $agent->device();
+        $os = $agent->platform();
+        $browser = $agent->browser();
+
+        $locationData = Http::get("http://ip-api.com/json/{$ip}?fields=status,country,city")->json();
+        $location = ($locationData['status'] ?? '') === 'success'
+            ? ($locationData['country'] . ' / ' . $locationData['city'])
+            : 'India / Coimbatore';
+
+        UserDevice::create([
+            'user_id'     => $user->id,
+            'device_type' => is_string($deviceType) ? $deviceType : null,
+            'browser'     => is_string($browser) ? $browser : null,
+            'os'          => is_string($os) ? $os : null,
+            'ip_address'  => $ip ?? '',
+            'location'    => $location,
+        ]);
     }
 
     public function logout(): RedirectResponse

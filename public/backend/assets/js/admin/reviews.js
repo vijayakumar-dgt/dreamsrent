@@ -203,36 +203,10 @@
             lengthChange: false,
             responsive: false,
             autoWidth: false,
-            language: {
-                emptyTable: _l("admin.common.empty_table"),
-                info: `${_l("admin.common.showing")} _START_ ${_l("admin.common.to")} _END_ ${_l("admin.common.of")} _TOTAL_ ${_l("admin.common.entries")}`,
-                infoEmpty: `${_l("admin.common.showing")} 0 ${_l("admin.common.to")} 0 ${_l("admin.common.of")} 0 ${_l("admin.common.entries")}`,
-                infoFiltered: `(${_l("admin.common.filtered_from")} _MAX_ ${_l("admin.common.total_entries")})`,
-                lengthMenu: `${_l("admin.common.show")} _MENU_ ${_l("admin.common.entries")}`,
-                search: `${_l("admin.common.search")}:`,
-                zeroRecords: _l("admin.common.no_matching_records"),
-                paginate: {
-                    first: _l("admin.common.first"),
-                    last: _l("admin.common.last"),
-                    next: _l("admin.common.next"),
-                    previous: _l("admin.common.previous")
-                }
-            },
             drawCallback: function () {
-                $(".dataTables_info, .dataTables_paginate").addClass("d-none");
-
-                const tableWrapper = $(this).closest(".dataTables_wrapper");
-                const info = tableWrapper.find(".dataTables_info").clone(true);
-                const pagination = tableWrapper.find(".dataTables_paginate").clone(true);
-
-                $(".table-footer").empty().append(
-                    $("<div>").addClass("d-flex justify-content-between align-items-center w-100").append(
-                        $("<div>").addClass("datatable-info").append(info),
-                        $("<div>").addClass("datatable-pagination").append(pagination)
-                    )
-                );
-                $(".table-footer .dataTables_paginate").removeClass("d-none");
-            }
+                customizeTableFooter($(this));
+            },
+            language: getDataTableLanguage(),
         });
     }
 }) ();

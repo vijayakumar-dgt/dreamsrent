@@ -2160,6 +2160,7 @@ return [
     'no_notifications_found'                => 'No notifications found',
     'image_size_600_420'                    => 'Upload Image size 600*420, within 2MB',
     'customer_required'                     => 'Customer is required.',
+    'menu_disabled'                         => 'Currently this menu is disabled!',
   ],
   'page' => [
     'pages'                        => 'Pages',
@@ -2380,5 +2381,7 @@ return [
     'otp_verified_successfully'                => 'OTP verified successfully',
     'otp_does_not_match'                       => 'OTP does not match',
     'login'                                    => 'Login',
+    'your_account_is_blocked'                  => 'Currently you are blocked! Please contact to admin.',
+    'login_success'                            => 'Login Successfully!',
   ]
 ];

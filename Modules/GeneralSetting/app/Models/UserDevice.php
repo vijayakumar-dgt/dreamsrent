@@ -20,5 +20,12 @@ class UserDevice extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'user_id',
+        'device_type',
+        'browser',
+        'os',
+        'ip_address',
+        'location',
+    ];
 }
