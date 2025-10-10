@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Modules\Installer\Exceptions\LicenseRewriteException;
 
 enum InstallerInfo: string
 {
@@ -157,7 +158,7 @@ enum InstallerInfo: string
         try {
             $encoded = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             if ($encoded === false) {
-                throw new \RuntimeException('Failed to encode license data.');
+                throw new LicenseRewriteException('Failed to encode license data.');
             }
 
             file_put_contents(self::getLicenseFilePath(), $encoded);

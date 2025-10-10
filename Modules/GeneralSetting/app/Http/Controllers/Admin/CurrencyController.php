@@ -10,6 +10,7 @@ use Modules\GeneralSetting\Http\Requests\StoreCurrencyRequest;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Repositories\Contracts\CurrencySettingInterface;
 use Modules\GeneralSetting\Exceptions\CurrencySaveException;
+use Modules\GeneralSetting\Exceptions\CurrencyNotFoundException;
 
 class CurrencyController extends Controller
 {
@@ -110,7 +111,7 @@ class CurrencyController extends Controller
             $currency = $this->currencySettingRepository->findCurrency($id);
 
             if (!$currency) {
-                throw new \Exception(__('admin.general_settings.currency_not_found'));
+                throw new CurrencyNotFoundException(__('admin.general_settings.currency_not_found'));
             }
 
             return response()->json([
@@ -119,12 +120,19 @@ class CurrencyController extends Controller
                 'data'    => $currency,
                 'message' => __('admin.general_settings.currency_fetched_successfully')
             ]);
-        } catch (\Throwable $th) {
+        } catch (CurrencyNotFoundException $e) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 404,
-                'message' => $th->getMessage()
+                'message' => $e->getMessage()
             ], 404);
+        } catch (\Throwable $th) {
+            // Fallback for unexpected errors
+            return response()->json([
+                'status'  => 'error',
+                'code'    => 500,
+                'message' => __('admin.common.default_retrieve_error')
+            ], 500);
         }
     }
 
@@ -134,7 +142,7 @@ class CurrencyController extends Controller
             $deleted = $this->currencySettingRepository->deleteCurrency($request->id);
 
             if (!$deleted) {
-                throw new \Exception(__('admin.general_settings.currency_not_found'));
+                throw new CurrencyNotFoundException(__('admin.general_settings.currency_not_found'));
             }
 
             return response()->json([

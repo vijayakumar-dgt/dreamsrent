@@ -13,6 +13,8 @@ use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\UserDevice;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
+use Modules\GeneralSetting\Exceptions\OtpSettingsSaveException;
+use Modules\GeneralSetting\Exceptions\LanguageNotFoundException;
 
 class GeneralSettingRepository implements GeneralSettingInterface
 {
@@ -311,28 +313,24 @@ class GeneralSettingRepository implements GeneralSettingInterface
 
     public function storeOtpSettings(array $data): void
     {
-        try {
-            $settings = [
-                'otp_type'        => $data['otp_type'],
-                'otp_digit_limit' => $data['otp_digit_limit'],
-                'otp_expire_time' => $data['otp_expire_time'],
-                'login'           => $data['login'] ?? false,
-                'register'        => $data['register'] ?? false,
-            ];
+        $settings = [
+            'otp_type'        => $data['otp_type'],
+            'otp_digit_limit' => $data['otp_digit_limit'],
+            'otp_expire_time' => $data['otp_expire_time'],
+            'login'           => $data['login'] ?? false,
+            'register'        => $data['register'] ?? false,
+        ];
 
-            foreach ($settings as $key => $value) {
-                $saved = GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => is_array($value) ? json_encode($value) : $value]
-                );
+        foreach ($settings as $key => $value) {
+            $saved = GeneralSetting::updateOrCreate(
+                ['key' => $key],
+                ['value' => is_array($value) ? json_encode($value) : $value]
+            );
 
-                if (!$saved) {
-                    throw new Exception("Failed to save $key");
-                }
+            if (!$saved) {
+                \Log::error("Failed to save OTP setting: $key");
+                throw new OtpSettingsSaveException("Failed to save $key");
             }
-        } catch (Exception $e) {
-            \Log::error('Failed to store OTP settings: ' . $e->getMessage());
-            throw $e;
         }
     }
 
@@ -388,49 +386,8 @@ class GeneralSettingRepository implements GeneralSettingInterface
     {
         try {
             $groupId = $data['group_id'] ?? 9;
-            $file = $data['invoice_logo'] ?? null;
-            $isRemove = $data['is_remove_image'] ?? false;
 
-            unset($data['_token'], $data['invoice_logo'], $data['is_remove_image']);
-
-            // Handle invoice logo upload
-            if (!empty($file) && $file instanceof \Illuminate\Http\UploadedFile) {
-                $existing = GeneralSetting::where('key', 'invoice_logo')->first();
-                $oldPath = $existing->value ?? null;
-
-                // Upload new file and get relative path
-                $relativePath = $this->imageResizer->uploadFile(
-                    $file,
-                    'invoices',
-                    $oldPath,
-                    [
-                        'width'     => 300,  // Set desired width
-                        'height'    => 150,  // Set desired height
-                        'thumbnail' => true  // Generate thumbnail
-                    ]
-                );
-
-                GeneralSetting::updateOrCreate(
-                    ['key' => 'invoice_logo'],
-                    ['value' => $relativePath, 'group_id' => $groupId]
-                );
-            }
-
-            if ($isRemove) {
-                $existing = GeneralSetting::where('key', 'invoice_logo')->first();
-                if ($existing && $existing->value) {
-                    $paths = [
-                        storage_path(self::APP_PUBLIC . $existing->value),
-                        storage_path(self::APP_PUBLIC . str_replace('invoices/', 'invoices/thumbnail/', $existing->value)),
-                    ];
-                    foreach ($paths as $path) {
-                        if (File::exists($path)) {
-                            File::delete($path);
-                        }
-                    }
-                    $existing->update(['value' => '']);
-                }
-            }
+            $this->handleInvoiceLogo($data['invoice_logo'] ?? null, $data['is_remove_image'] ?? false, $groupId);
 
             $settings = [
                 'invoice_prefix'       => $data['invoice_prefix'] ?? null,
@@ -441,17 +398,81 @@ class GeneralSettingRepository implements GeneralSettingInterface
                 'invoice_terms'        => $data['invoice_terms'] ?? null,
             ];
 
-            foreach ($settings as $key => $value) {
-                GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $value, 'group_id' => $groupId]
-                );
-            }
+            $this->saveSettings($settings, $groupId);
+
         } catch (Exception $e) {
             \Log::error('Invoice settings update failed: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
             ]);
             throw $e;
+        }
+    }
+
+    /**
+     * Handle invoice logo upload or removal
+     */
+    private function handleInvoiceLogo(?\Illuminate\Http\UploadedFile $file, bool $isRemove, int $groupId): void
+    {
+        if ($file instanceof \Illuminate\Http\UploadedFile) {
+            $existing = GeneralSetting::where('key', 'invoice_logo')->first();
+            $oldPath = $existing->value ?? null;
+
+            $relativePath = $this->imageResizer->uploadFile(
+                $file,
+                'invoices',
+                $oldPath,
+                [
+                    'width'     => 300,
+                    'height'    => 150,
+                    'thumbnail' => true
+                ]
+            );
+
+            GeneralSetting::updateOrCreate(
+                ['key' => 'invoice_logo'],
+                ['value' => $relativePath, 'group_id' => $groupId]
+            );
+        }
+
+        if ($isRemove) {
+            $this->removeInvoiceLogo();
+        }
+    }
+
+    /**
+     * Remove invoice logo and its thumbnail
+     */
+    private function removeInvoiceLogo(): void
+    {
+        $existing = GeneralSetting::where('key', 'invoice_logo')->first();
+        if (!$existing || empty($existing->value)) {
+            return;
+        }
+
+        $paths = [
+            storage_path(self::APP_PUBLIC . $existing->value),
+            storage_path(self::APP_PUBLIC . str_replace('invoices/', 'invoices/thumbnail/', $existing->value)),
+        ];
+
+        foreach ($paths as $path) {
+            if (File::exists($path)) {
+                File::delete($path);
+            }
+        }
+
+        $existing->update(['value' => '']);
+    }
+
+    /**
+     * Save multiple settings at once
+     */
+    private function saveSettings(array $settings, int $groupId): void
+    {
+        foreach ($settings as $key => $value) {
+            GeneralSetting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value, 'group_id' => $groupId]
+            );
         }
     }
 
@@ -473,7 +494,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
             $defaultLanguage = Language::where('default', 1)->first();
 
             if (!$defaultLanguage) {
-                throw new \Exception(__('admin.general_settings.language_not_found'));
+                throw new LanguageNotFoundException();
             }
 
             $languageId = $defaultLanguage->language_id;
@@ -500,6 +521,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
 
         return $formatted;
     }
+
 
     public function storeCookiesSettings(array $data): void
     {
@@ -622,45 +644,39 @@ class GeneralSettingRepository implements GeneralSettingInterface
 
     public function updatePaymentSettings(array $data): bool
     {
-        try {
-            $group_id = $data['group_id'];
-            $envUpdates = [];
+        $group_id = $data['group_id'];
+        $envUpdates = [];
 
-            foreach ($data as $key => $value) {
-                if ($key !== 'group_id' && $key !== '_token') {
-                    $this->updateOrCreateSettingPayment(
-                        ['key' => $key, 'group_id' => $group_id],
-                        ['value' => $value]
-                    );
+        foreach ($data as $key => $value) {
+            if ($key !== 'group_id' && $key !== '_token') {
+                $this->updateOrCreateSettingPayment(
+                    ['key' => $key, 'group_id' => $group_id],
+                    ['value' => $value]
+                );
 
-                    // Track environment variable updates
-                    switch ($key) {
-                        case 'paypal_key':
-                            $envUpdates['PAYPAL_SANDBOX_CLIENT_ID'] = $value;
-                            break;
-                        case 'paypal_secret':
-                            $envUpdates['PAYPAL_SANDBOX_CLIENT_SECRET'] = $value;
-                            break;
-                        case 'stripe_key':
-                            $envUpdates['STRIPE_KEY'] = $value;
-                            break;
-                        case 'stripe_secret':
-                            $envUpdates['STRIPE_SECRET'] = $value;
-                            break;
-                        default:
-                            break;
-                    }
+                // Track environment variable updates
+                switch ($key) {
+                    case 'paypal_key':
+                        $envUpdates['PAYPAL_SANDBOX_CLIENT_ID'] = $value;
+                        break;
+                    case 'paypal_secret':
+                        $envUpdates['PAYPAL_SANDBOX_CLIENT_SECRET'] = $value;
+                        break;
+                    case 'stripe_key':
+                        $envUpdates['STRIPE_KEY'] = $value;
+                        break;
+                    case 'stripe_secret':
+                        $envUpdates['STRIPE_SECRET'] = $value;
+                        break;
                 }
             }
-
-            if (!empty($envUpdates)) {
-                $this->updateEnvVariables($envUpdates);
-            }
-
-            return true;
-        } catch (\Exception $e) {
-            throw $e;
         }
+
+        if (!empty($envUpdates)) {
+            $this->updateEnvVariables($envUpdates);
+        }
+
+        return true;
     }
 
     public function updatePaymentStatus(array $data): bool
@@ -712,39 +728,32 @@ class GeneralSettingRepository implements GeneralSettingInterface
 
     public function updateStorageStatus(string $storageType, bool $status): bool
     {
-        try {
-            $oppositeStorageType = $storageType === 'local_storage' ? 'aws_storage' : 'local_storage';
-            $oppositeStatus = !$status;
+        $oppositeStorageType = $storageType === 'local_storage' ? 'aws_storage' : 'local_storage';
+        $oppositeStatus = !$status;
 
-            $this->updateOrCreateStorageSetting(
-                ['key' => $storageType],
-                ['value' => $status, 'group_id' => 8]
-            );
+        $this->updateOrCreateStorageSetting(
+            ['key' => $storageType],
+            ['value' => $status, 'group_id' => 8]
+        );
 
-            $this->updateOrCreateStorageSetting(
-                ['key' => $oppositeStorageType],
-                ['value' => $oppositeStatus, 'group_id' => 8]
-            );
+        $this->updateOrCreateStorageSetting(
+            ['key' => $oppositeStorageType],
+            ['value' => $oppositeStatus, 'group_id' => 8]
+        );
 
-            return true;
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        return true;
     }
 
     public function updateAwsSettings(array $settings): bool
     {
-        try {
-            foreach ($settings as $key => $value) {
-                $this->updateOrCreateStorageSetting(
-                    ['key' => $key],
-                    ['value' => $value, 'group_id' => 8]
-                );
-            }
-            return true;
-        } catch (\Exception $e) {
-            throw $e;
+        foreach ($settings as $key => $value) {
+            $this->updateOrCreateStorageSetting(
+                ['key' => $key],
+                ['value' => $value, 'group_id' => 8]
+            );
         }
+
+        return true;
     }
 
     public function updateOrCreateStorageSetting(array $conditions, array $data): bool

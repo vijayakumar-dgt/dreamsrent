@@ -24,65 +24,99 @@ class SitemapSettingRepository implements SitemapSettingInterface
         return $sitemap;
     }
 
-    public function generateSitemap()
+    public function generateSitemap(): string
     {
-        $result = '';
-
         try {
             $urls = SitemapUrl::all();
             if ($urls->isEmpty()) {
-                // $result stays '' and will be returned at the end
-            } else {
-                $sitemap = Sitemap::create();
-                foreach ($urls as $item) {
-                    $u = $item->url;
-                    if ($u) {
-                        $sitemap->add(
-                            Url::create($u)
-                                ->setLastModificationDate(now())
-                                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-                                ->setPriority(0.8)
-                        );
-                    }
-                }
-
-                $sitemapFolder = public_path('sitemaps');
-                if (!file_exists($sitemapFolder) && !mkdir($sitemapFolder, 0777, true) && !is_dir($sitemapFolder)) {
-                    // failed to create/ensure folder -> keep $result = ''
-                } else {
-                    $lastBeforeSitemap = SitemapUrl::orderByDesc('id')->skip(1)->first();
-
-                    if ($lastBeforeSitemap && $lastBeforeSitemap->sitemap_path) {
-                        $oldPath = public_path($lastBeforeSitemap->sitemap_path);
-                        if (file_exists($oldPath)) {
-                            $newFilename = 'sitemaps/sitemap-' . date('Y-m-d-H-i-s') . '-' . rand(1000, 9999) . '.xml';
-                            $newFullPath = public_path($newFilename);
-
-                            if (rename($oldPath, $newFullPath)) {
-                                $lastBeforeSitemap->sitemap_path = $newFilename;
-                                $lastBeforeSitemap->save();
-                            }
-                        }
-                    }
-
-                    $relativePath = 'sitemaps/sitemap.xml';
-                    $fullPath = public_path($relativePath);
-                    $sitemap->writeToFile($fullPath);
-
-                    if (file_exists($fullPath)) {
-                        $latestUrl = SitemapUrl::orderByDesc('id')->first();
-                        if ($latestUrl) {
-                            $latestUrl->update(['sitemap_path' => $relativePath]);
-                        }
-                        $result = $relativePath;
-                    }
-                }
+                return '';
             }
+
+            $sitemap = $this->createSitemap($urls);
+
+            $sitemapFolder = public_path('sitemaps');
+            if (!$this->ensureFolderExists($sitemapFolder)) {
+                return '';
+            }
+
+            $this->archivePreviousSitemap();
+
+            $relativePath = 'sitemaps/sitemap.xml';
+            $fullPath = public_path($relativePath);
+            $sitemap->writeToFile($fullPath);
+
+            if (!file_exists($fullPath)) {
+                return '';
+            }
+
+            $this->updateLatestSitemapPath($relativePath);
+
+            return $relativePath;
         } catch (\Throwable $e) {
-            // keep $result as '' on error (same behavior as before)
+            return '';
+        }
+    }
+
+    /**
+     * Create sitemap object from URLs
+     */
+    private function createSitemap($urls)
+    {
+        $sitemap = Sitemap::create();
+        foreach ($urls as $item) {
+            if ($item->url) {
+                $sitemap->add(
+                    Url::create($item->url)
+                        ->setLastModificationDate(now())
+                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                        ->setPriority(0.8)
+                );
+            }
+        }
+        return $sitemap;
+    }
+
+    /**
+     * Ensure folder exists
+     */
+    private function ensureFolderExists(string $folder): bool
+    {
+        return file_exists($folder) || mkdir($folder, 0777, true) || is_dir($folder);
+    }
+
+    /**
+     * Archive the previous sitemap (skip the latest one)
+     */
+    private function archivePreviousSitemap(): void
+    {
+        $lastBeforeSitemap = SitemapUrl::orderByDesc('id')->skip(1)->first();
+        if (!$lastBeforeSitemap || !$lastBeforeSitemap->sitemap_path) {
+            return;
         }
 
-        return $result;
+        $oldPath = public_path($lastBeforeSitemap->sitemap_path);
+        if (!file_exists($oldPath)) {
+            return;
+        }
+
+        $newFilename = 'sitemaps/sitemap-' . date('Y-m-d-H-i-s') . '-' . rand(1000, 9999) . '.xml';
+        $newFullPath = public_path($newFilename);
+
+        if (rename($oldPath, $newFullPath)) {
+            $lastBeforeSitemap->sitemap_path = $newFilename;
+            $lastBeforeSitemap->save();
+        }
+    }
+
+    /**
+     * Update the latest sitemap path in DB
+     */
+    private function updateLatestSitemapPath(string $relativePath): void
+    {
+        $latestUrl = SitemapUrl::orderByDesc('id')->first();
+        if ($latestUrl) {
+            $latestUrl->update(['sitemap_path' => $relativePath]);
+        }
     }
 
     public function getSitemapUrls(array $filters)

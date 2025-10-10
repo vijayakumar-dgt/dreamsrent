@@ -30,6 +30,10 @@ use Modules\GeneralSetting\Http\Requests\UpdateThemeSettingsRequest;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
+use Modules\GeneralSetting\Exceptions\StorageStatusUpdateException;
+use Modules\GeneralSetting\Exceptions\AwsSettingsUpdateException;
+use Modules\GeneralSetting\Exceptions\PaymentSettingsUpdateException;
+use Modules\GeneralSetting\Exceptions\PaymentStatusUpdateException;
 
 class GeneralSettingController extends Controller
 {
@@ -168,19 +172,23 @@ class GeneralSettingController extends Controller
                 (bool) $request->status
             );
 
-            if ($success) {
-                $message = $request->status == 1
-                    ? ucfirst(str_replace('_', ' ', $request->storage_type)) . ' activated'
-                    : ucfirst(str_replace('_', ' ', $request->storage_type)) . ' blocked';
-
-                return response()->json([
-                    'success' => true,
-                    'message' => $message
-                ]);
+            if (!$success) {
+                throw new StorageStatusUpdateException(__('admin.general_settings.update_failed'));
             }
 
-            throw new \Exception(__('admin.general_settings.update_failed'));
-        } catch (\Exception $e) {
+            $action = $request->status == 1 ? 'activated' : 'blocked';
+            $message = ucfirst(str_replace('_', ' ', $request->storage_type)) . " {$action}";
+
+            return response()->json([
+                'success' => true,
+                'message' => $message
+            ]);
+        } catch (StorageStatusUpdateException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        } catch (\Throwable $th) {
             return response()->json([
                 'success' => false,
                 'message' => __('admin.general_settings.retrive_error'),
@@ -201,22 +209,28 @@ class GeneralSettingController extends Controller
 
             $success = $this->repository->updateAwsSettings($settings);
 
-            if ($success) {
-                return response()->json([
-                    'code'    => 200,
-                    'message' => __('admin.general_settings.aws_success'),
-                    'data'    => []
-                ]);
+            if (!$success) {
+                throw new AwsSettingsUpdateException(__('admin.general_settings.update_failed'));
             }
 
-            throw new \Exception(__('admin.general_settings.update_failed'));
-        } catch (\Exception $e) {
+            return response()->json([
+                'code'    => 200,
+                'message' => __('admin.general_settings.aws_success'),
+                'data'    => []
+            ]);
+        } catch (AwsSettingsUpdateException $e) {
+            return response()->json([
+                'code'    => 500,
+                'message' => $e->getMessage(),
+            ], 500);
+        } catch (\Throwable $th) {
             return response()->json([
                 'code'    => 500,
                 'message' => __('admin.general_settings.retrive_error'),
             ], 500);
         }
     }
+
 
     public function storeInvoiceSettings(StoreInvoiceSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
@@ -580,18 +594,23 @@ class GeneralSettingController extends Controller
         try {
             $success = $this->repository->updatePaymentSettings($request->all());
 
-            if ($success) {
-                return response()->json([
-                    'code'    => 200,
-                    'message' => __('admin.general_settings.payment_updated_successfull'),
-                ]);
+            if (!$success) {
+                throw new PaymentSettingsUpdateException(__('admin.general_settings.update_failed'));
             }
 
-            throw new \Exception(__('admin.general_settings.update_failed'));
-        } catch (\Exception $e) {
+            return response()->json([
+                'code'    => 200,
+                'message' => __('admin.general_settings.payment_updated_successfull'),
+            ]);
+        } catch (PaymentSettingsUpdateException $e) {
             return response()->json([
                 'code'    => 500,
-                'message' => __('admin.general_settings.global_settings_error') . $e->getMessage()
+                'message' => $e->getMessage(),
+            ], 500);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'code'    => 500,
+                'message' => __('admin.general_settings.global_settings_error') . $th->getMessage(),
             ], 500);
         }
     }
@@ -601,18 +620,23 @@ class GeneralSettingController extends Controller
         try {
             $success = $this->repository->updatePaymentStatus($request->all());
 
-            if ($success) {
-                return response()->json([
-                    'success' => true,
-                    'message' => __('admin.general_settings.payment_updated_successfull')
-                ]);
+            if (!$success) {
+                throw new PaymentStatusUpdateException(__('admin.general_settings.update_failed'));
             }
 
-            throw new \Exception(__('admin.general_settings.update_failed'));
-        } catch (\Exception $e) {
+            return response()->json([
+                'success' => true,
+                'message' => __('admin.general_settings.payment_updated_successfull')
+            ]);
+        } catch (PaymentStatusUpdateException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
+            ], 500);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => __('admin.general_settings.global_settings_error') . $th->getMessage()
             ], 500);
         }
     }
