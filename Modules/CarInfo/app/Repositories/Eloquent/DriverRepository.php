@@ -29,100 +29,29 @@ class DriverRepository implements DriverRepositoryInterface
     public function store(Request $request): array
     {
         $id = $request->id ?? '';
-        $data = [
-            'driver_name'   => $request->driver_name,
-            'gender'        => $request->gender,
-            'phone_number'  => $request->phone_number,
-            'address'       => $request->address,
-            'card_number'   => $request->card_number,
-            'date_of_issue' => $request->date_of_issue,
-            'valid_date'    => $request->valid_date,
-            'email'         => $request->email,
-        ];
-
-        $successMsg = empty($id) ? __('admin.manage.driver_create_success') : __('admin.manage.driver_update_success');
-        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
+        $successMsg = empty($id)
+            ? __('admin.manage.driver_create_success')
+            : __('admin.manage.driver_update_success');
+        $errorMsg = empty($id)
+            ? __('admin.common.default_create_error')
+            : __('admin.common.default_update_error');
 
         try {
+            $data = $this->prepareDriverData($request);
+
             if (empty($id)) {
-                if ($request->hasFile('image')) {
-                    $file = $request->file('image');
-                    if (!$file || !$file->isValid()) {
-                        return [
-                            'status'  => 'error',
-                            'code'    => 422,
-                            'message' => __('admin.common.file_upload_error')
-                        ];
-                    }
-                    $data['image'] = $this->imageResizer->uploadFile($file, 'profile');
-                }
-                $assignedCars = $request->assigned_cars ;
-                if (is_array($assignedCars)) {
-                    $data['assigned_cars'] = implode(',', $assignedCars);
-                }
                 $driver = Driver::create($data);
-
-                $documents = $request->file('documents');
-
-                if ($documents instanceof \Illuminate\Http\UploadedFile) {
-                    $documents = [$documents];
-                }
-
-                foreach ($documents ?? [] as $file) {
-                    $document = uploadFile($file, 'documents');
-                    DriverDocument::create([
-                        'driver_id' => $driver->id,
-                        'document'  => $document,
-                    ]);
-                }
+                $this->handleDocuments($request->file('documents'), $driver->id);
             } else {
                 /** @var \Modules\CarInfo\Models\Driver */
                 $driver = Driver::find($id);
-                $oldImage = $driver->image;
 
-                if ($request->hasFile('image')) {
-                    $file = $request->file('image');
-                    if ($file && $file->isValid()) {
-                        $oldImage = is_string($oldImage) ? $oldImage : '';
-                        $data['image'] = $this->imageResizer->uploadFile($file, 'profile', $oldImage);
-                    }
-                }
-
-                $assignedCars = $request->assigned_cars ;
-                if (is_array($assignedCars)) {
-                    $data['assigned_cars'] = implode(',', $assignedCars);
-                }
-                $documents = $request->file('documents');
-
-                if ($documents instanceof \Illuminate\Http\UploadedFile) {
-                    $documents = [$documents];
-                }
-                foreach ($documents ?? [] as $file) {
-                    $document = uploadFile($file, 'documents');
-                    DriverDocument::create([
-                        'driver_id' => $driver->id,
-                        'document'  => $document,
-                    ]);
-                }
-
-                $removedDocuments = explode(',', $request->removed_documents);
-
-                foreach ($removedDocuments as $docId) {
-                    $removedDocument = DriverDocument::where('id', $docId)->first();
-                    if ($removedDocument) {
-                        $doc = $removedDocument->document;
-
-                        if (is_string($doc) && Storage::disk('public')->exists('documents' . $doc)) {
-                            Storage::disk('public')->delete('documents' . $doc);
-                        }
-                    }
-                    if (DriverDocument::where('id', $docId)->exists()) {
-                        DriverDocument::where('id', $docId)->delete();
-                    }
-                }
+                $data['image'] = $this->handleImageUpdate($request, $driver->image);
+                $this->handleDocuments($request->file('documents'), $driver->id);
+                $this->removeDocuments($request->removed_documents);
 
                 $data['status'] = $request->status;
-                Driver::where('id', $id)->update($data);
+                $driver->update($data);
             }
 
             return [
@@ -139,119 +68,112 @@ class DriverRepository implements DriverRepositoryInterface
         }
     }
 
+    /**
+    * Prepare driver data array
+    */
+    private function prepareDriverData(Request $request): array
+    {
+        $data = $request->only([
+            'driver_name', 'gender', 'phone_number', 'address',
+            'card_number', 'date_of_issue', 'valid_date', 'email'
+        ]);
+
+       // Assigned cars as comma-separated string
+        if (is_array($request->assigned_cars)) {
+            $data['assigned_cars'] = implode(',', $request->assigned_cars);
+        }
+
+        // Handle driver image
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            if ($file && $file->isValid()) {
+                $data['image'] = $this->imageResizer->uploadFile($file, 'profile');
+            }
+        }
+dd('Data', $data);
+        return $data;
+    }
+
+    /**
+    * Handle uploading multiple documents
+    */
+    private function handleDocuments(?array $documents, int $driverId): void
+    {
+        if ($documents instanceof \Illuminate\Http\UploadedFile) {
+            $documents = [$documents];
+        }
+
+        foreach ($documents ?? [] as $file) {
+            $documentPath = uploadFile($file, 'documents');
+            DriverDocument::create([
+                'driver_id' => $driverId,
+                'document'  => $documentPath,
+            ]);
+        }
+    }
+
+    /**
+    * Handle image update for existing driver
+    */
+    private function handleImageUpdate(Request $request, ?string $oldImage): ?string
+    {
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            if ($file && $file->isValid()) {
+                $oldImage = is_string($oldImage) ? $oldImage : '';
+                return $this->imageResizer->uploadFile($file, 'profile', $oldImage);
+            }
+        }
+        return $oldImage;
+    }
+
+    /**
+    * Remove documents by IDs
+    */
+    private function removeDocuments(?string $removedDocuments): void
+    {
+        $docIds = explode(',', $removedDocuments);
+
+        foreach ($docIds as $docId) {
+            $document = DriverDocument::find($docId);
+            if (!$document) continue;
+
+            $docPath = $document->document;
+            if (is_string($docPath) && Storage::disk('public')->exists('documents/' . $docPath)) {
+                Storage::disk('public')->delete('documents/' . $docPath);
+            }
+
+            $document->delete();
+        }
+    }
+
+
     public function list(Request $request): array
     {
         try {
-            $start = $request->start ?? 0;
-            $length = $request->length ?? 10;
+            $query = Driver::with(['documents']);
+            $this->applySearchFilter($query, $request->search ?? null);
+            $this->applyStatusFilter($query, $request->sort_by_status ?? null);
+            $this->applyDateFilter($query, $request->sort_by_date ?? null);
+            $this->applySortFilter($query, $request->sort_by ?? null);
+
+            // Column ordering for DataTables
             $columnIndex = $request->order[0]['column'] ?? 0;
             $columnName = $request->columns[$columnIndex]['data'] ?? 'driver_name';
             $orderDir = $request->order[0]['dir'] ?? 'asc';
-
-            $query = Driver::with(['documents']);
-
-            // Search Filter
-            if ($request->has('search') && !empty($request->search)) {
-                $search = $request->search;
-                $query->where(function ($q) use ($search) {
-                    $q->where('drivers.driver_name', 'LIKE', "%{$search}%")
-                        ->orWhere('drivers.card_number', 'LIKE', "%{$search}%")
-                        ->orWhere('drivers.phone_number', 'LIKE', "%{$search}%")
-                        ->orWhere('drivers.email', 'LIKE', "%{$search}%");
-                });
-            }
-
-            // Status Filter
-            if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
-                $status = $request->sort_by_status;
-                $query->where('drivers.status', $status);
-            }
-
-            // Date Filter
-            if ($request->has('sort_by_date') && !empty($request->sort_by_date)) {
-                $dates = explode(' - ', $request->sort_by_date);
-                if (count($dates) === 2) {
-                    $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
-                    $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
-
-                    // Apply date filter only if valid date format
-                    if ($startDate && $endDate) {
-                        $query->whereBetween('drivers.created_at', [$startDate->startOfDay(), $endDate->endOfDay()]);
-                    }
-                }
-            }
-
-            // Apply Sort Filter
-            if ($request->has('sort_by') && !empty($request->sort_by)) {
-                switch (strtolower($request->sort_by)) {
-                    case 'latest':
-                        $query->orderBy('drivers.created_at', 'desc');
-                        break;
-
-                    case 'ascending':
-                        $query->orderBy('drivers.driver_name', 'asc');
-                        break;
-
-                    case 'descending':
-                        $query->orderBy('drivers.driver_name', 'desc');
-                        break;
-
-                    case 'last month':
-                        $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
-                        $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
-                        $query->whereBetween('drivers.created_at', [$startDate, $endDate]);
-                        break;
-
-                    case 'last 7 days':
-                        $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
-                        $endDate = \Carbon\Carbon::now()->endOfDay();
-                        $query->whereBetween('drivers.created_at', [$startDate, $endDate]);
-                        break;
-
-                    default:
-                        $query->orderBy('drivers.created_at', 'desc');
-                        break;
-                }
-            }
-
             $query->orderBy($columnName, $orderDir);
 
-            // Total and Filtered Records
+            // Total and filtered records
             $totalRecords = Driver::count();
             $filteredRecords = $query->count();
 
             // Pagination
-            $query->offset($start)->limit($length);
-            $drivers = $query->get();
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+            $drivers = $query->offset($start)->limit($length)->get();
 
-            // Format Response Data
-            $drivers->map(function ($driver) {
-                $assignedCarIds = explode(',', $driver->assigned_cars);
-                $firstCarId = !empty($assignedCarIds[0]) ? trim($assignedCarIds[0]) : null;
+            $drivers->map(fn($driver) => $this->formatDriverData($driver));
 
-                if ($firstCarId) {
-                    $vehicle = VehicleInfo::where('vehicle_info.id', $firstCarId)
-                        ->join('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
-                        ->first(['cartypes.name as cartype_name', 'vehicle_info.id', 'vehicle_info.name as vehicle_name']);
-
-                    if ($vehicle) {
-                        $driver->vehicle = [
-                            'vehicle_id'   => $vehicle->id,
-                            'vehicle_name' => $vehicle->vehicle_name,
-                            'cartype_name' => $vehicle->cartype_name,
-                        ];
-                    }
-                }
-
-                // Format date and image
-                $driver->valid_date = formatDateTime($driver->valid_date, false);
-                $imagePath = is_array($driver->image) ? null : $driver->image;
-                $driver->image = uploadedAsset($imagePath, 'profile');
-
-                return $driver;
-            });
-
-            // Prepare DataTable response
             return [
                 'draw'            => intval($request->draw),
                 'recordsTotal'    => $totalRecords,
@@ -266,6 +188,98 @@ class DriverRepository implements DriverRepositoryInterface
             ];
         }
     }
+
+    /** Apply search filter */
+    private function applySearchFilter($query, ?string $search): void
+    {
+        if (!$search) return;
+
+        $query->where(function ($q) use ($search) {
+            $q->where('drivers.driver_name', 'LIKE', "%{$search}%")
+            ->orWhere('drivers.card_number', 'LIKE', "%{$search}%")
+            ->orWhere('drivers.phone_number', 'LIKE', "%{$search}%")
+            ->orWhere('drivers.email', 'LIKE', "%{$search}%");
+        });
+    }
+
+    /** Apply status filter */
+    private function applyStatusFilter($query, $status): void
+    {
+        if ($status === null || $status === '') return;
+        $query->where('drivers.status', $status);
+    }
+
+    /** Apply date filter */
+    private function applyDateFilter($query, ?string $sortByDate): void
+    {
+        if (!$sortByDate) return;
+
+        $dates = explode(' - ', $sortByDate);
+        if (count($dates) === 2) {
+            $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
+            $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
+            $query->whereBetween('drivers.created_at', [$startDate, $endDate]);
+        }
+    }
+
+    /** Apply sorting filter */
+    private function applySortFilter($query, ?string $sortBy): void
+    {
+        if (!$sortBy) return;
+
+        switch (strtolower($sortBy)) {
+            case 'latest':
+                $query->orderBy('drivers.created_at', 'desc');
+                break;
+            case 'ascending':
+                $query->orderBy('drivers.driver_name', 'asc');
+                break;
+            case 'descending':
+                $query->orderBy('drivers.driver_name', 'desc');
+                break;
+            case 'last month':
+                $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
+                $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
+                $query->whereBetween('drivers.created_at', [$startDate, $endDate]);
+                break;
+            case 'last 7 days':
+                $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
+                $endDate = \Carbon\Carbon::now()->endOfDay();
+                $query->whereBetween('drivers.created_at', [$startDate, $endDate]);
+                break;
+            default:
+                $query->orderBy('drivers.created_at', 'desc');
+                break;
+        }
+    }
+
+    /** Format driver data for response */
+    private function formatDriverData($driver)
+    {
+        // Assigned vehicle
+        $assignedCarIds = explode(',', $driver->assigned_cars);
+        $firstCarId = trim($assignedCarIds[0] ?? '');
+        if ($firstCarId) {
+            $vehicle = VehicleInfo::where('vehicle_info.id', $firstCarId)
+                ->join('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
+                ->first(['cartypes.name as cartype_name', 'vehicle_info.id', 'vehicle_info.name as vehicle_name']);
+
+            if ($vehicle) {
+                $driver->vehicle = [
+                    'vehicle_id'   => $vehicle->id,
+                    'vehicle_name' => $vehicle->vehicle_name,
+                    'cartype_name' => $vehicle->cartype_name,
+                ];
+            }
+        }
+
+        // Format date and image
+        $driver->valid_date = formatDateTime($driver->valid_date, false);
+        $driver->image = uploadedAsset(is_array($driver->image) ? null : $driver->image, 'profile');
+
+        return $driver;
+    }
+
 
     public function getById(int $id): array
     {

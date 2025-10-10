@@ -46,12 +46,19 @@ class VehicleTypeRepository implements VehicleTypeRepositoryInterface
 
             $category = Category::find($request->vehicle_category_id);
 
+            $languageId = $request->language_id ?? ($vehicleType?->language_id ?? $language_id);
+
+            $status = 1; // default for new record
+            if ($id) {
+                $status = $request->input('status') === 'on' ? 1 : 0;
+            }
+
             $data = [
                 'name'        => $request->name,
                 'category_id' => $request->vehicle_category_id,
                 'type'        => $category?->slug,
-                'language_id' => $request->language_id ?? ($vehicleType?->language_id ?? $language_id),
-                'status'      => $id ? ($request->input('status') == 'on' ? 1 : 0) : 1,
+                'language_id' => $languageId,
+                'status'      => $status,
             ];
 
             // Handle image uploads

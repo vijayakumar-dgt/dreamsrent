@@ -329,133 +329,28 @@ class QuotationRepository implements QuotationRepositoryInterface
     public function bookingList(Request $request): array
     {
         try {
-            $query = Booking::select(
-                'bookings.id',
-                'bookings.reservation_id',
-                'bookings.booking_date',
-                self::VEHICLE_NAME_SELECT,
-                'vehicle_info.vehicle_image',
-                DB::raw(self::CUSTOMER_FULLNAME_SELECT),
-                self::CUSTOMER_IMAGE_SELECT,
-                'users.name as user_name',
-                'bookings.start_datetime',
-                'bookings.end_datetime',
-                'pickup_location.name as pickup_location',
-                'drop_location.name as drop_location',
-                'bookings.booking_status',
-                'bookings.booking_by',
-            )
-                ->join('users', 'users.id', '=', 'bookings.customer_id')
-                ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-                ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
-                ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
-                ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
-                ->where('bookings.booking_by', '=', 'quotation');
+            $query = $this->baseBookingQuery();
 
-            //  DataTables Search
-            if ($request->has('search') && !empty($request->search)) {
-                $search = $request->search;
-                $query->where(function ($q) use ($search) {
-                    $search = (string) $search;
-                    $q->where('bookings.reservation_id', 'LIKE', "%{$search}%")
-                        ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
-                        ->orWhere('users.name', 'LIKE', "%{$search}%");
-                });
-            }
+            $this->applyFilters($query, $request);
+            $this->applySorting($query, $request);
 
-            // Status Filter
-            if ($request->has('status') && !empty($request->status)) {
-                $query->whereIn('bookings.booking_status', $request->status);
-            }
-
-            if ($request->has('pickup_location_ids') && !empty($request->pickup_location_ids)) {
-                $query->whereIn('bookings.pickup_location', $request->pickup_location_ids);
-            }
-
-            // Apply Drop Location Filter
-            if ($request->has('drop_location_ids') && !empty($request->drop_location_ids)) {
-                $query->whereIn('bookings.return_location', $request->drop_location_ids);
-            }
-
-            // Date Filter
-            if ($request->has('sort_by_date') && !empty($request->sort_by_date)) {
-                $sortByDate = is_string($request->sort_by_date) ? $request->sort_by_date : '';
-                $dates = explode(' - ', $sortByDate);
-                if (count($dates) === 2) {
-                    $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
-                    $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
-
-                    // Apply date filter only if valid date format
-                    if ($startDate && $endDate) {
-                        $query->whereBetween('bookings.created_at', [$startDate->startOfDay(), $endDate->endOfDay()]);
-                    }
-                }
-            }
-
-            // Apply Sort Filter
-            if ($request->has('sort_by') && !empty($request->sort_by)) {
-                switch (strtolower((string) ($request->sort_by ?? ''))) {
-                    case 'latest':
-                        $query->orderBy('bookings.created_at', 'desc');
-                        break;
-                    case 'ascending':
-                        $query->orderBy('bookings.reservation_id', 'asc');
-                        break;
-                    case 'descending':
-                        $query->orderBy('bookings.reservation_id', 'desc');
-                        break;
-                    case 'last month':
-                        $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
-                        $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
-                        $query->whereBetween('bookings.created_at', [$startDate, $endDate]);
-                        break;
-                    case 'last 7 days':
-                        $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
-                        $endDate = \Carbon\Carbon::now()->endOfDay();
-                        $query->whereBetween('bookings.created_at', [$startDate, $endDate]);
-                        break;
-                    default:
-                        $query->orderBy('bookings.created_at', 'desc');
-                        break;
-                }
-            }
-
-            // Sorting
-            $columns = ['id', 'reservation_id', 'vehicle_name', 'customer_full_name', 'pickup_location', 'drop_location', 'booking_status'];
-            $orderBy = $columns[$request->input('order.0.column', 0)] ?? 'id';
-            $orderDir = $request->input('order.0.dir', 'desc');
-            $query->orderBy($orderBy, $orderDir);
-
-            // Pagination
             $totalRecords = Booking::join('users', 'users.id', '=', 'bookings.customer_id')
-                ->where('bookings.booking_by', '=', 'quotation')
+                ->where('bookings.booking_by', 'quotation')
                 ->count();
+
             $filteredRecords = $query->count();
 
-            $query->offset((int) $request->start)->limit((int) $request->length);
-            $bookings = $query->get();
+            $bookings = $query->offset((int)$request->start)
+                ->limit((int)$request->length)
+                ->get();
 
-            // Format Response Data
-            $bookings->map(function ($booking) {
-                $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-                $vehicleImagePath = $booking->vehicle_image ?? '';
-                $filename = basename($vehicleImagePath);
-                $newpath = self::VEHICLE_IMAGE_PATH . $filename;
-                $file = public_path(self::STORAGE_PATH . $newpath);
-                if (file_exists($file)) {
-                    $vehicleImagePath = $newpath;
-                }
-                $booking->vehicle_image = uploadedAsset($vehicleImagePath);
-                $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
-
-                return $booking;
-            });
+            $bookings->map(fn($booking) => $this->formatBooking($booking));
 
             return [
                 "draw"            => intval($request->input('draw', 0)),
                 "recordsTotal"    => $totalRecords,
                 "recordsFiltered" => $filteredRecords,
-                "data"            => $bookings
+                "data"            => $bookings,
             ];
         } catch (\Exception $e) {
             return [
@@ -465,6 +360,168 @@ class QuotationRepository implements QuotationRepositoryInterface
             ];
         }
     }
+
+    /**
+     * Base Booking Query
+     */
+    private function baseBookingQuery()
+    {
+        return Booking::select(
+            'bookings.id',
+            'bookings.reservation_id',
+            'bookings.booking_date',
+            self::VEHICLE_NAME_SELECT,
+            'vehicle_info.vehicle_image',
+            DB::raw(self::CUSTOMER_FULLNAME_SELECT),
+            self::CUSTOMER_IMAGE_SELECT,
+            'users.name as user_name',
+            'bookings.start_datetime',
+            'bookings.end_datetime',
+            'pickup_location.name as pickup_location',
+            'drop_location.name as drop_location',
+            'bookings.booking_status',
+            'bookings.booking_by'
+        )
+            ->join('users', 'users.id', '=', 'bookings.customer_id')
+            ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
+            ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
+            ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
+            ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
+            ->where('bookings.booking_by', 'quotation');
+    }
+
+    /**
+     * Apply all filters to the query
+     */
+    private function applyFilters($query, Request $request)
+    {
+        $this->applySearch($query, $request->search ?? null);
+        $this->applyStatusFilter($query, $request->status ?? null);
+        $this->applyLocationFilters($query, $request->pickup_location_ids ?? [], $request->drop_location_ids ?? []);
+        $this->applyDateFilter($query, $request->sort_by_date ?? null);
+        $this->applySortByDateRange($query, $request->sort_by ?? null);
+    }
+
+    /**
+     * Search filter
+     */
+    private function applySearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('bookings.reservation_id', 'LIKE', "%{$search}%")
+                    ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
+                    ->orWhere('users.name', 'LIKE', "%{$search}%");
+            });
+        }
+    }
+
+    /**
+     * Status filter
+     */
+    private function applyStatusFilter($query, $status)
+    {
+        if (!empty($status)) {
+            $query->whereIn('bookings.booking_status', $status);
+        }
+    }
+
+    /**
+     * Pickup and drop location filter
+     */
+    private function applyLocationFilters($query, $pickupIds, $dropIds)
+    {
+        if (!empty($pickupIds)) {
+            $query->whereIn('bookings.pickup_location', $pickupIds);
+        }
+        if (!empty($dropIds)) {
+            $query->whereIn('bookings.return_location', $dropIds);
+        }
+    }
+
+    /**
+     * Date filter
+     */
+    private function applyDateFilter($query, $sortByDate)
+    {
+        if (!$sortByDate) return;
+
+        $dates = explode(' - ', $sortByDate);
+        if (count($dates) === 2) {
+            $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
+            $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
+            if ($startDate && $endDate) {
+                $query->whereBetween('bookings.created_at', [$startDate->startOfDay(), $endDate->endOfDay()]);
+            }
+        }
+    }
+
+    /**
+     * Apply sort filters
+     */
+    private function applySortByDateRange($query, $sortBy)
+    {
+        if (!$sortBy) {
+            $query->orderBy('bookings.created_at', 'desc');
+            return;
+        }
+
+        $sortBy = strtolower((string)$sortBy);
+        $now = \Carbon\Carbon::now();
+
+        switch ($sortBy) {
+            case 'latest':
+                $query->orderBy('bookings.created_at', 'desc');
+                break;
+            case 'ascending':
+                $query->orderBy('bookings.reservation_id', 'asc');
+                break;
+            case 'descending':
+                $query->orderBy('bookings.reservation_id', 'desc');
+                break;
+            case 'last month':
+                $query->whereBetween('bookings.created_at', [$now->subMonth()->startOfMonth(), $now->subMonth()->endOfMonth()]);
+                break;
+            case 'last 7 days':
+                $query->whereBetween('bookings.created_at', [$now->subDays(7)->startOfDay(), $now->endOfDay()]);
+                break;
+            default:
+                $query->orderBy('bookings.created_at', 'desc');
+                break;
+        }
+    }
+
+    /**
+     * Apply column sorting
+     */
+    private function applySorting($query, Request $request)
+    {
+        $columns = ['id', 'reservation_id', 'vehicle_name', 'customer_full_name', 'pickup_location', 'drop_location', 'booking_status'];
+        $orderBy = $columns[$request->input('order.0.column', 0)] ?? 'id';
+        $orderDir = $request->input('order.0.dir', 'desc');
+        $query->orderBy($orderBy, $orderDir);
+    }
+
+    /**
+     * Format booking before sending
+     */
+    private function formatBooking($booking)
+    {
+        $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
+
+        $vehicleImagePath = $booking->vehicle_image ?? '';
+        $filename = basename($vehicleImagePath);
+        $newPath = self::VEHICLE_IMAGE_PATH . $filename;
+        $file = public_path(self::STORAGE_PATH . $newPath);
+        if (file_exists($file)) {
+            $vehicleImagePath = $newPath;
+        }
+        $booking->vehicle_image = uploadedAsset($vehicleImagePath);
+        $booking->booking_status_text = Booking::getStatusLabel((int)$booking->booking_status);
+
+        return $booking;
+    }
+
 
     public function getBookingDetails(Request $request): array
     {
@@ -535,7 +592,30 @@ class QuotationRepository implements QuotationRepositoryInterface
     {
         $bookingId = customDecrypt($id, Booking::$reservationSecretKey);
 
-        $booking = Booking::select(
+        $booking = $this->getBookingsDetails($bookingId);
+
+        if ($booking) {
+            $this->formatBookingImages($booking);
+            $this->formatExtraServices($booking);
+            $this->formatInsurance($booking);
+            $this->formatBookingMisc($booking);
+        }
+
+        $bookingHistories = BookingHistory::where('booking_id', $bookingId)
+            ->get(['id', 'booking_id', 'created_at', 'message']);
+
+        return [
+            'bookingHistories' => $bookingHistories,
+            'booking' => $booking,
+        ];
+    }
+
+    /**
+     * Get booking details query
+     */
+    private function getBookingsDetails(int $bookingId)
+    {
+        return Booking::select(
             'bookings.id',
             'bookings.reservation_id',
             'bookings.vehicle_id',
@@ -576,86 +656,110 @@ class QuotationRepository implements QuotationRepositoryInterface
             'bookings.booking_by',
             'driving_types.name as driving_type_name',
         )
-            ->leftjoin('booking_details', 'booking_details.booking_id', '=', 'bookings.id')
+            ->leftJoin('booking_details', 'booking_details.booking_id', '=', 'bookings.id')
             ->join('users', 'users.id', '=', 'bookings.customer_id')
             ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
             ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
             ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
             ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
             ->leftJoin('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
-            ->leftjoin('drivers', 'drivers.id', '=', 'bookings.driver_id')
-            ->leftjoin('driving_types', 'driving_types.id', '=', 'bookings.driving_type')
+            ->leftJoin('drivers', 'drivers.id', '=', 'bookings.driver_id')
+            ->leftJoin('driving_types', 'driving_types.id', '=', 'bookings.driving_type')
             ->where('bookings.id', $bookingId)
             ->firstOrFail();
+    }
 
-        if ($booking) {
-            $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-            $booking->driver_image = uploadedAsset($booking->driver_image, 'profile');
-            $vehicleImagePath = $booking->vehicle_image ?? '';
-            $filename = basename($vehicleImagePath);
-            $newpath = self::VEHICLE_IMAGE_PATH . $filename;
-            $file = public_path(self::STORAGE_PATH . $newpath);
-            if (file_exists($file)) {
-                $vehicleImagePath = $newpath;
-            }
-            $booking->vehicle_image = uploadedAsset($vehicleImagePath);
+    /**
+     * Format booking images
+     */
+    private function formatBookingImages($booking): void
+    {
+        $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
+        $booking->driver_image = uploadedAsset($booking->driver_image, 'profile');
 
-            $booking->extra_service_count = 0;
-            $booking->extra_service_names = [];
+        $vehicleImagePath = $booking->vehicle_image ?? '';
+        $filename = basename($vehicleImagePath);
+        $newPath = self::VEHICLE_IMAGE_PATH . $filename;
+        $file = public_path(self::STORAGE_PATH . $newPath);
+        if (file_exists($file)) {
+            $vehicleImagePath = $newPath;
+        }
+        $booking->vehicle_image = uploadedAsset($vehicleImagePath);
+    }
 
-            if (!empty($booking->extra_service)) {
-                $extraServiceArray = json_decode($booking->extra_service, true);
-                if (is_array($extraServiceArray)) {
-                    $booking->extra_service_formatted = $extraServiceArray;
-                    $booking->extra_service_count = count($extraServiceArray);
-                    $extraServiceIds = collect($extraServiceArray)->pluck('id')->toArray();
-                    $booking->extra_service_names = ExtraService::whereIn('id', $extraServiceIds)->pluck('name')->toArray();
-                }
-            }
+    /**
+     * Format extra services
+     */
+    private function formatExtraServices($booking): void
+    {
+        $booking->extra_service_count = 0;
+        $booking->extra_service_names = [];
+        $booking->extra_service_formatted = [];
 
-            $booking->insurance_count = 0;
-            $booking->insurance_benefits_formatted = [];
-            $booking->insurance_names = [];
+        if (empty($booking->extra_service)) return;
 
-            if (!empty($booking->insurance)) {
-                $insuranceArray = json_decode($booking->insurance, true);
-                if (is_array($insuranceArray)) {
-                    $booking->insurance_formatted = $insuranceArray;
-                    $booking->insurance_count = count($insuranceArray);
-                    $insuranceIds = collect($insuranceArray)->pluck('id')->toArray();
-                    $booking->insurance_names = Insurance::whereIn('id', $insuranceIds)->pluck('insurance_name')->toArray();
-                    $booking->insurance_benefits_formatted = InsuranceBenefit::whereIn('insurance_id', $insuranceIds)->pluck('benefit')->toArray();
-                }
-            }
+        $extraServiceArray = json_decode($booking->extra_service, true);
+        if (!is_array($extraServiceArray)) return;
 
-            $status = is_numeric($booking->booking_status) ? (int) $booking->booking_status : 4;
-            $booking->booking_status_text = Booking::getStatusLabel($status);
-            $booking->currency_symbol = getDefaultCurrencySymbol();
+        $booking->extra_service_formatted = $extraServiceArray;
+        $booking->extra_service_count = count($extraServiceArray);
+        $extraServiceIds = collect($extraServiceArray)->pluck('id')->toArray();
+        $booking->extra_service_names = ExtraService::whereIn('id', $extraServiceIds)
+            ->pluck('name')->toArray();
+    }
 
-            if ($booking->delivery_type) {
-                $booking->delivery_type = $booking->delivery_type == "self_pickup" ? 'Self Pickup' : 'Delivery';
-            }
+    /**
+     * Format insurance details
+     */
+    private function formatInsurance($booking): void
+    {
+        $booking->insurance_count = 0;
+        $booking->insurance_names = [];
+        $booking->insurance_benefits_formatted = [];
+        $booking->insurance_formatted = [];
 
-            $booking->driver_price = number_format((float) ($booking->driver_price ?? 0), 2, '.', '');
-            $booking->vehicle_price = number_format((float) ($booking->vehicle_price ?? 0), 2, '.', '');
-            $booking->vehicle_total_price = number_format((float) ($booking->vehicle_total_price ?? 0), 2, '.', '');
-            $booking->total_insurance_price = number_format((float) ($booking->total_insurance_price ?? 0), 2, '.', '');
-            $booking->total_extra_service_price = number_format((float) ($booking->total_extra_service_price ?? 0), 2, '.', '');
-            $booking->final_price = number_format((float) ($booking->final_price ?? 0), 2, '.', '');
+        if (empty($booking->insurance)) return;
+
+        $insuranceArray = json_decode($booking->insurance, true);
+        if (!is_array($insuranceArray)) return;
+
+        $booking->insurance_formatted = $insuranceArray;
+        $booking->insurance_count = count($insuranceArray);
+        $insuranceIds = collect($insuranceArray)->pluck('id')->toArray();
+
+        $booking->insurance_names = Insurance::whereIn('id', $insuranceIds)
+            ->pluck('insurance_name')->toArray();
+        $booking->insurance_benefits_formatted = InsuranceBenefit::whereIn('insurance_id', $insuranceIds)
+            ->pluck('benefit')->toArray();
+    }
+
+    /**
+     * Format miscellaneous booking fields
+     */
+    private function formatBookingMisc($booking): void
+    {
+        $status = is_numeric($booking->booking_status) ? (int)$booking->booking_status : 4;
+        $booking->booking_status_text = Booking::getStatusLabel($status);
+        $booking->currency_symbol = getDefaultCurrencySymbol();
+
+        if ($booking->delivery_type) {
+            $booking->delivery_type = $booking->delivery_type === "self_pickup" ? 'Self Pickup' : 'Delivery';
         }
 
-        $bookingHistories = BookingHistory::where('booking_id', $bookingId)->get([
-            'id',
-            'booking_id',
-            'created_at',
-            'message',
-        ]);
-
-        return [
-            'bookingHistories' => $bookingHistories,
-            'booking' => $booking,
+        $fields = [
+            'driver_price',
+            'vehicle_price',
+            'vehicle_total_price',
+            'total_insurance_price',
+            'total_extra_service_price',
+            'final_price'
         ];
+
+        foreach ($fields as $field) {
+            $booking->$field = number_format((float)($booking->$field ?? 0), 2, '.', '');
+        }
     }
+
 
     public function delete(Request $request): array
     {

@@ -124,12 +124,14 @@ class PaymentService
 
     private function handlePaypalPayment(Request $request, User $authUser, array $formattedData): array
     {
+        $result = [
+            'success' => false,
+            'code'    => 503,
+            'message' => 'PayPal is currently unavailable. Please choose another payment method.',
+        ];
+
         if (!$this->provider) {
-            return [
-                'success' => false,
-                'code'    => 503,
-                'message' => 'PayPal is currently unavailable. Please choose another payment method.',
-            ];
+            return $result;
         }
 
         $order['intent'] = 'CAPTURE';
@@ -144,17 +146,13 @@ class PaymentService
         $currency_details = $currency->code ?? "usd";
 
         $allowedCurrencies = ['usd', 'inr', 'eur', 'aed'];
-
         $currency = strtolower(trim($currency_details));
-        if (!in_array($currency, $allowedCurrencies)) {
-            return [
-                'code'    => 422,
-                'success' => false,
-                'message' => 'Invalid currency selected. Please use a supported currency like USD, INR, EUR, etc.',
-            ];
-        }
 
-        $purchase_units = [];
+        if (!in_array($currency, $allowedCurrencies)) {
+            $result['code'] = 422;
+            $result['message'] = 'Invalid currency selected. Please use a supported currency like USD, INR, EUR, etc.';
+            return $result;
+        }
 
         $unit = [
             'items' => [
@@ -179,10 +177,7 @@ class PaymentService
             ]
         ];
 
-        $purchase_units[] = $unit;
-
-        $order['purchase_units'] = $purchase_units;
-
+        $order['purchase_units'] = [$unit];
         $order['application_context'] = [
             'return_url' => url('paypal-payment-success'),
             'cancel_url' => url('paypal-payment-failed')
@@ -191,11 +186,7 @@ class PaymentService
         $response = $this->provider->createOrder($order);
 
         if (!is_array($response) || !array_key_exists('id', $response)) {
-            return [
-                'success' => false,
-                'code'    => 503,
-                'message' => 'PayPal is currently unavailable. Please choose another payment method.',
-            ];
+            return $result;
         }
 
         $bookingData = $this->builder->buildBookingData($request, $authUser, $formattedData);
@@ -206,13 +197,13 @@ class PaymentService
 
         $this->builder->createBookingWithInfo($bookingData, $this->builder->buildUserInfoData($request, new Booking()));
 
-        $approve_paypal_url = $response['links'][1]['href'];
-
-        return [
+        $result = [
             'code'       => 200,
             'message'    => __('web.home.order_created_successfully'),
-            'paypal_url' => $approve_paypal_url
+            'paypal_url' => $response['links'][1]['href']
         ];
+
+        return $result;
     }
 
     private function handleStripePayment(Request $request, User $authUser, array $formattedData): array
@@ -435,41 +426,48 @@ class PaymentService
     private function sendBookingNotification(?Booking $booking, ?int $vehicleId): void
     {
         $authUser = Auth::guard('web')->user();
-        $vehicle = VehicleInfo::where('id', $vehicleId)->first();
+        $vehicle = VehicleInfo::find($vehicleId);
         $driver = $booking ? Driver::find($booking->driver_id) : null;
         $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
+
+        $getBookingField = fn($field) => $booking ? ($booking->$field ?? '') : '';
+        $formatDateTimeField = fn($field) => $booking && $booking->$field ? formatDateTime($booking->$field) : '';
+        $pickupLocationName = $booking && $booking->pickupLocation ? $booking->pickupLocation->name : '';
+
         $notifyData = [
             'user_name'       => getCurrentUserFullname($authUser->id ?? null) ?? '',
             'company_name'    => $companyName,
             'email'           => $authUser->email ?? '',
             'phonenumber'     => $authUser->phone_number ?? '',
-            'vehicle_name'    => $vehicle->name ?? "",
-            'driver_name'     => $driver ? $driver->driver_name : "",
-            'reservation_id'  => $booking->reservation_id ?? "",
-            'start_date'      => ($booking && $booking->start_datetime) ? formatDateTime($booking->start_datetime) : '',
-            'end_date'        => ($booking && $booking->end_datetime) ? formatDateTime($booking->end_datetime) : '',
-            'pickup_location' => ($booking && $booking->pickupLocation) ? $booking->pickupLocation->name : '',
-            'delivery_type'   => $booking->delivery_type ?? "",
-            'rental_type'     => $booking->rental_type ?? "",
-            'payment_type'    => $booking->payment_type ?? "",
-            'payment_status'  => $booking->payment_status ?? "",
-            'tototal_amount'  => $booking->final_price ?? ""
+            'vehicle_name'    => $vehicle->name ?? '',
+            'driver_name'     => $driver->driver_name ?? '',
+            'reservation_id'  => $getBookingField('reservation_id'),
+            'start_date'      => $formatDateTimeField('start_datetime'),
+            'end_date'        => $formatDateTimeField('end_datetime'),
+            'pickup_location' => $pickupLocationName,
+            'delivery_type'   => $getBookingField('delivery_type'),
+            'rental_type'     => $getBookingField('rental_type'),
+            'payment_type'    => $getBookingField('payment_type'),
+            'payment_status'  => $getBookingField('payment_status'),
+            'tototal_amount'  => $getBookingField('final_price'),
         ];
+
         try {
+            // Notify admins
             if (rentalNotificationEnabled()) {
                 $appAdmins = User::where('user_type', 1)->get();
-
-                if ($appAdmins) {
-                    foreach ($appAdmins as $appAdmin) {
-                        sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
-                    }
+                foreach ($appAdmins as $appAdmin) {
+                    sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                 }
             }
-            if (userNotificationsEnabled() && $authUser && $authUser->email) {
+
+            // Notify user
+            if (userNotificationsEnabled() && $authUser?->email) {
                 sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
     }
+
 }

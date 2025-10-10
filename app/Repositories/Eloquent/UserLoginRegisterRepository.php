@@ -39,74 +39,86 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
 
     public function getOtpSettings(Request $request): array
     {
+        $response = [];
+
         $email = $request->input('email');
+        $type = $request->input('type');
+
+        // Validate email
         if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return [
+            $response = [
                 'code'  => 400,
                 'error' => __('web.auth.invalid_email')
             ];
+        } else {
+            $user = User::where('email', $email)->first();
+
+            // Check user and demo restrictions
+            if (!$user || ($type === 'forgot' && in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com']))) {
+                $response = [
+                    'code'  => 400,
+                    'error' => __('web.auth.email_not_registered')
+                ];
+            } else {
+                $settings = GeneralSetting::whereIn('key', ['otp_digit_limit', 'otp_expire_time', 'otp_type'])
+                    ->pluck('value', 'key');
+
+                // Validate OTP type
+                if (!in_array($settings['otp_type'], ['email', 'sms'])) {
+                    $response = [
+                        'code'  => 400,
+                        'error' => __('web.auth.unsupported_otp_type')
+                    ];
+                } else {
+                    // Generate OTP and expiration
+                    $otp = in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com'])
+                        ? '1234'
+                        : $this->generateOtp($settings['otp_digit_limit']);
+
+                    $otpExpireMinutes = (int) filter_var($settings['otp_expire_time'], FILTER_SANITIZE_NUMBER_INT);
+                    $expiresAt = now()
+                        ->addMinutes($otpExpireMinutes)
+                        ->setTimezone(self::ASIA_KOLKATA)
+                        ->format('Y-m-d H:i:s');
+
+                    DB::table('otp_settings')->updateOrInsert(
+                        ['email' => $email],
+                        ['otp' => $otp, 'expires_at' => $expiresAt]
+                    );
+
+                    $notifyData = [
+                        'otp'             => $otp,
+                        'expires_at'      => $expiresAt,
+                        'otp_digit_limit' => $settings['otp_digit_limit'],
+                        'user_name'       => $user->name
+                    ];
+
+                    $notificationslug = $type === 'forgot' ? 'forgot-otp' : 'login-otp';
+
+                    try {
+                        sendNotification($email, $notificationslug, $notifyData);
+                        $response = [
+                            'code'            => 200,
+                            'name'            => $user->name,
+                            'otp_digit_limit' => $settings['otp_digit_limit'],
+                            'otp_expire_time' => $settings['otp_expire_time'],
+                            'otp_type'        => $settings['otp_type'],
+                            'expires_at'      => $expiresAt,
+                        ];
+                    } catch (\Throwable $e) {
+                        \Log::error("Failed to send OTP notification: " . $e->getMessage());
+                        $response = [
+                            'code'  => 500,
+                            'error' => __('web.auth.failed_to_send_otp')
+                        ];
+                    }
+                }
+            }
         }
-        $user = User::where('email', $email)->first();
-        $type = $request->input('type');
 
-        if (!$user || ($type === 'forgot' && in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com']))) {
-            return [
-                'code'  => 400,
-                'error' => __('web.auth.email_not_registered')
-            ];
-        }
-        $settings = GeneralSetting::whereIn('key', ['otp_digit_limit', 'otp_expire_time', 'otp_type'])
-            ->pluck('value', 'key');
-        if (!in_array($settings['otp_type'], ['email', 'sms'])) {
-            return [
-                'code'  => 400,
-                'error' => __('web.auth.unsupported_otp_type')
-            ];
-        }
-
-        $otp = in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com'])
-            ? '1234'
-            : $this->generateOtp($settings['otp_digit_limit']);
-
-        $otpExpireMinutes = (int) filter_var($settings['otp_expire_time'], FILTER_SANITIZE_NUMBER_INT);
-        $expiresAt = now()
-            ->addMinutes($otpExpireMinutes)
-            ->setTimezone(self::ASIA_KOLKATA)
-            ->format('Y-m-d H:i:s');
-
-        DB::table('otp_settings')->updateOrInsert(
-            ['email' => $email],
-            ['otp' => $otp, 'expires_at' => $expiresAt]
-        );
-
-        $notifyData = [
-            'otp'             => $otp,
-            'expires_at'      => $expiresAt,
-            'otp_digit_limit' => $settings['otp_digit_limit'],
-            'user_name'       => $user->name
-        ];
-
-        $notificationslug = $type === 'forgot' ? 'forgot-otp' : 'login-otp';
-
-        try {
-            sendNotification($email, $notificationslug, $notifyData);
-        } catch (\Throwable $e) {
-            \Log::error("Failed to send OTP notification: " . $e->getMessage());
-            return [
-                'code'  => 500,
-                'error' => __('web.auth.failed_to_send_otp')
-            ];
-        }
-
-        return [
-            'code'            => 200,
-            'name'            => $user->name,
-            'otp_digit_limit' => $settings['otp_digit_limit'],
-            'otp_expire_time' => $settings['otp_expire_time'],
-            'otp_type'        => $settings['otp_type'],
-            'expires_at'      => $expiresAt,
-        ];
+        return $response;
     }
+
 
     public function generateOtp(int $digitLimit): string
     {
@@ -115,135 +127,153 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
 
     public function verifyOtp(Request $request): array
     {
-        if ($request->login_type == "register") {
-            $request->validate([
-                'otp' => 'required',
-            ]);
-            $otpSetting = DB::table('otp_settings')->where('email', $request->email)->first();
-            if (isset($otpSetting)) {
-                $expire = $otpSetting->expires_at ?? "";
-                if ($expire != '') {
-                    $currentDateTime = now()->setTimezone(self::ASIA_KOLKATA); // Adjust timezone if needed
-                    if ($currentDateTime->greaterThanOrEqualTo($expire)) {
-                        return [
-                            'code'  => 400,
-                            'error' => __('web.auth.otp_is_expired')
-                        ];
-                    }
-                }
-                $otp = $otpSetting->otp ?? "";
-                if ($otp != '' && $otp !== $request->otp) {
-                    return [
-                        'code'  => 400,
-                        'error' => __('web.auth.invalid_otp')
-                    ];
-                }
-            }
-            $data = [
-                'name'         => $request->name,
-                'email'        => $request->email,
-                'phone_number' => $request->phone_number,
-                'password'     => Hash::make($request->password),
-                'user_type'    => 3,
-            ];
-            $save = User::create($data);
-            Auth::login($save);
-            session(['user_id' => $save->id]);
-            Cache::forget('user_auth_id');
-            Cache::forever('user_auth_id', $save->id);
-            DB::table('otp_settings')->where('email', $request->email)->delete();
-            return [
-                'code'    => 200,
-                'message' => __('web.auth.otp_verified_successfully')
-            ];
-        } elseif ($request->login_type == "forgot_email") {
-            $request->validate([
-                'forgot_email' => 'required|email',
-                'otp'          => 'required',
-            ]);
-            $user = User::where('email', $request->forgot_email)->first();
-            if (!$user) {
-                return [
-                    'code'  => 404,
-                    'error' => __('web.auth.user_not_found')
-                ];
-            }
-            $otpSetting = DB::table('otp_settings')->where('email', $request->forgot_email)->first();
-            if (isset($otpSetting)) {
-                $expire = $otpSetting->expires_at ?? "";
-                if ($expire != '') {
-                    $currentDateTime = now()->setTimezone(self::ASIA_KOLKATA);
-                    if ($currentDateTime->greaterThanOrEqualTo($expire)) {
-                        return [
-                            'code'  => 400,
-                            'error' => __('web.auth.otp_is_expired')
-                        ];
-                    }
-                }
-                $otp = $otpSetting->otp ?? "";
-                if ($otp != '' && $otp !== $request->otp) {
-                    return [
-                        'code'  => 400,
-                        'error' => __('web.auth.invalid_otp')
-                    ];
-                }
-            }
-            DB::table('otp_settings')->where('email', $request->forgot_email)->delete();
-            $data = "done";
-            return [
-                'code'    => 200,
-                'message' => __('web.auth.otp_verified_successfully'),
-                'email'   => $request->forgot_email,
-                'data'    => $data
-            ];
-        } else {
-            $request->validate([
-                'email' => 'required|email',
-                'otp'   => 'required',
-            ]);
-            $user = User::where('email', $request->email)->first();
-            if (!$user) {
-                return [
-                    'code'  => 404,
-                    'error' => __('web.auth.user_not_found')
-                ];
-            }
-            $otpSetting = DB::table('otp_settings')->where('email', $request->email)->first();
-            if (isset($otpSetting)) {
-                $expire = $otpSetting->expires_at ?? "";
-                if ($expire != '') {
-                    $currentDateTime = now()->setTimezone(self::ASIA_KOLKATA); // Adjust timezone if needed
-                    if ($currentDateTime->greaterThanOrEqualTo($expire)) {
-                        return [
-                            'code'  => 400,
-                            'error' => __('web.auth.otp_is_expired')
-                        ];
-                    }
-                }
-                $otp = $otpSetting->otp ?? "";
-                if ($otp != '' && $otp !== $request->otp) {
-                    return [
-                        'code'  => 400,
-                        'error' => __('web.auth.invalid_otp')
-                    ];
-                }
-            }
-            Auth::guard('web')->login($user);
-            session(['user_id' => $user->id]);
-            if ($user->user_type == '2') {
-                Cache::forget('provider_auth_id');
-                Cache::forever('provider_auth_id', $user->id);
-            } else {
-                Cache::forget('user_auth_id');
-                Cache::forever('user_auth_id', $user->id);
-            }
-            DB::table('otp_settings')->where('email', $request->email)->delete();
-            return [
-                'code'    => 200,
-                'message' => __('web.auth.otp_verified_successfully')
-            ];
+        $loginType = $request->login_type;
+
+        switch ($loginType) {
+            case 'register':
+                return $this->handleRegisterOtp($request);
+
+            case 'forgot_email':
+                return $this->handleForgotOtp($request);
+
+            default:
+                return $this->handleLoginOtp($request);
         }
     }
+
+    private function handleRegisterOtp(Request $request): array
+    {
+        $request->validate([
+            'otp' => 'required',
+        ]);
+
+        $otpCheck = $this->validateOtp($request->email, $request->otp);
+        if ($otpCheck !== true) {
+            return $otpCheck;
+        }
+
+        $data = [
+            'name'         => $request->name,
+            'email'        => $request->email,
+            'phone_number' => $request->phone_number,
+            'password'     => Hash::make($request->password),
+            'user_type'    => 3,
+        ];
+
+        $user = User::create($data);
+        Auth::login($user);
+        session(['user_id' => $user->id]);
+        Cache::forget('user_auth_id');
+        Cache::forever('user_auth_id', $user->id);
+        DB::table('otp_settings')->where('email', $request->email)->delete();
+
+        return [
+            'code'    => 200,
+            'message' => __('web.auth.otp_verified_successfully'),
+        ];
+    }
+
+    private function handleForgotOtp(Request $request): array
+    {
+        $request->validate([
+            'forgot_email' => 'required|email',
+            'otp'          => 'required',
+        ]);
+
+        $user = User::where('email', $request->forgot_email)->first();
+        if (!$user) {
+            return [
+                'code'  => 404,
+                'error' => __('web.auth.user_not_found'),
+            ];
+        }
+
+        $otpCheck = $this->validateOtp($request->forgot_email, $request->otp);
+        if ($otpCheck !== true) {
+            return $otpCheck;
+        }
+
+        DB::table('otp_settings')->where('email', $request->forgot_email)->delete();
+
+        return [
+            'code'    => 200,
+            'message' => __('web.auth.otp_verified_successfully'),
+            'email'   => $request->forgot_email,
+            'data'    => 'done',
+        ];
+    }
+
+    private function handleLoginOtp(Request $request): array
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp'   => 'required',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return [
+                'code'  => 404,
+                'error' => __('web.auth.user_not_found'),
+            ];
+        }
+
+        $otpCheck = $this->validateOtp($request->email, $request->otp);
+        if ($otpCheck !== true) {
+            return $otpCheck;
+        }
+
+        Auth::guard('web')->login($user);
+        session(['user_id' => $user->id]);
+
+        if ($user->user_type == '2') {
+            Cache::forget('provider_auth_id');
+            Cache::forever('provider_auth_id', $user->id);
+        } else {
+            Cache::forget('user_auth_id');
+            Cache::forever('user_auth_id', $user->id);
+        }
+
+        DB::table('otp_settings')->where('email', $request->email)->delete();
+
+        return [
+            'code'    => 200,
+            'message' => __('web.auth.otp_verified_successfully'),
+        ];
+    }
+
+    private function validateOtp(string $email, string $otp)
+    {
+        $otpSetting = DB::table('otp_settings')->where('email', $email)->first();
+
+        if (!$otpSetting) {
+            return [
+                'code'  => 400,
+                'error' => __('web.auth.invalid_otp'),
+            ];
+        }
+
+        $expire = $otpSetting->expires_at ?? '';
+        if ($expire !== '') {
+            $currentDateTime = now()->setTimezone(self::ASIA_KOLKATA);
+            if ($currentDateTime->greaterThanOrEqualTo($expire)) {
+                return [
+                    'code'  => 400,
+                    'error' => __('web.auth.otp_is_expired'),
+                ];
+            }
+        }
+
+        if (($otpSetting->otp ?? '') !== $otp) {
+            return [
+                'code'  => 400,
+                'error' => __('web.auth.invalid_otp'),
+            ];
+        }
+
+        return true;
+    }
+
 
     public function validateEmail(string $email): array
     {
@@ -256,7 +286,10 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
 
     public function register(Request $request): array
     {
+        $response = [];
+
         $regStatus = DB::table('general_settings')->where('key', 'register')->value('value');
+
         if ($regStatus === "0") {
             $user = User::create([
                 'email'     => $request->email,
@@ -291,7 +324,8 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             if (session()->has('intended_booking')) {
                 $redirectTo = '/redirect-to-booking';
             }
-            return [
+
+            $response = [
                 'status'          => true,
                 'code'            => 200,
                 'register_status' => $regStatus,
@@ -300,54 +334,60 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 'email'           => $request->email,
                 'message'         => __('web.auth.registration_success'),
             ];
+        } else {
+            $email = $request->email;
+
+            if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $response = [
+                    'status'  => false,
+                    'code'    => 400,
+                    'message' => __('web.auth.valid_email'),
+                ];
+            } else {
+                $settings = GeneralSetting::whereIn('key', ['otp_digit_limit', 'otp_expire_time', 'otp_type'])
+                    ->pluck('value', 'key');
+
+                if (!in_array($settings['otp_type'], ['email', 'sms'])) {
+                    $response = [
+                        'status'  => false,
+                        'code'    => 400,
+                        'message' => __('web.auth.unsupported_otp_type'),
+                    ];
+                } else {
+                    $otp = $this->generateOtp($settings['otp_digit_limit']);
+                    $expiresAt = now()
+                        ->addMinutes((int) $settings['otp_expire_time'])
+                        ->setTimezone(self::ASIA_KOLKATA)
+                        ->format('Y-m-d H:i:s');
+
+                    DB::table('otp_settings')->updateOrInsert(
+                        ['email' => $email],
+                        ['otp' => $otp, 'expires_at' => $expiresAt]
+                    );
+
+                    $subject = __('web.auth.otp_verification_for_register');
+                    $content = __('web.auth.your_otp_verification_code_for_register') . ' {{otp}} ';
+                    $content = str_replace(['{{otp}}'], [$otp], $content);
+
+                    $response = [
+                        'status'          => true,
+                        'code'            => 200,
+                        'register_status' => $regStatus,
+                        'message'         => __('web.auth.otp_sent_success'),
+                        'otp_type'        => $settings['otp_type'],
+                        'otp'             => $otp,
+                        'expires_at'      => $expiresAt,
+                        'email_subject'   => $subject,
+                        'email_content'   => $content,
+                        'name'            => $request->username,
+                        'phone_number'    => $request->phone_number,
+                        'email'           => $request->email,
+                    ];
+                }
+            }
         }
-        $email = $request->email;
-        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return [
-                'status'  => false,
-                'code'    => 400,
-                'message' => __('web.auth.valid_email')
-            ];
-        }
-        $settings = GeneralSetting::whereIn('key', ['otp_digit_limit', 'otp_expire_time', 'otp_type'])
-            ->pluck('value', 'key');
-        if (!in_array($settings['otp_type'], ['email', 'sms'])) {
-            return [
-                'status'  => false,
-                'code'    => 400,
-                'message' => __('web.auth.unsupported_otp_type')
-            ];
-        }
-        $otp = $this->generateOtp($settings['otp_digit_limit']);
-        $expiresAt = now()
-            ->addMinutes((int) $settings['otp_expire_time'])
-            ->setTimezone(self::ASIA_KOLKATA)
-            ->format('Y-m-d H:i:s');
-        DB::table('otp_settings')->updateOrInsert(
-            ['email' => $email],
-            ['otp' => $otp, 'expires_at' => $expiresAt]
-        );
-        $subject = __('web.auth.otp_verification_for_register');
-        $content = __('web.auth.your_otp_verification_code_for_register') . ' {{otp}} ';
-        $content = str_replace(
-            ['{{otp}}'],
-            [$otp],
-            $content
-        );
-        return [
-            'status'          => true,
-            'code'            => 200,
-            'register_status' => $regStatus,
-            'message'         => __('web.auth.otp_sent_success'),
-            'otp_type'        => $settings['otp_type'],
-            'otp'             => $otp,
-            'expires_at'      => $expiresAt,
-            'email_subject'   => $subject,
-            'email_content'   => $content,
-            'name'            => $request->username,
-            'phone_number'    => $request->phone_number,
-            'email'           => $request->email,
-        ];
+
+        return $response;
     }
 
     public function login(Request $request): array
@@ -403,4 +443,5 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             'message' => __('web.auth.invalid_credentials'),
         ];
     }
+
 }
