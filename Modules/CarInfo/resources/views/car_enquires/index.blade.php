@@ -167,10 +167,16 @@
     <!-- /Edit Enquiry -->
 
     <!-- Delete Enquiry -->
-    <x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('enquiry.delete') }}"
-        formId="enquiryDeleteForm" method="POST" :hiddenInputs="['delete_id' => '']"
-        :title="__('admin.bookings.delete_enquiry')" :description="__('admin.bookings.delete_enquiry_confirmation')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete-modal',
+        'formId'       => 'enquiryDeleteForm',
+        'action'       => route('enquiry.delete'),
+        'method'       => 'POST',
+        'hiddenInputs' => ['delete_id' => ''],
+        'title'        => __('admin.bookings.delete_enquiry'),
+        'description'  => __('admin.bookings.delete_enquiry_confirmation')
+    ]"/>
     <!-- /Delete Enquiry -->
 @endsection
 

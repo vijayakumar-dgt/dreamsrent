@@ -357,11 +357,16 @@
 <!-- /Edit User -->
 
 <!-- Delete  -->
-<x-admin.delete-modal className="deletemodal" id="delete_modal" action="{{ route('admin.user-delete') }}"
-    formId="deleteUserForm" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.user_management.delete_user')"
-    :description="__('admin.user_management.delete_user_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete_modal',
+    'action'       => route('admin.user-delete'),
+    'formId'       => 'deleteUserForm',
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.user_management.delete_user'),
+    'description'  => __('admin.user_management.delete_user_confirmation')
+]"/>
 <!-- /Delete -->
 @endsection
 

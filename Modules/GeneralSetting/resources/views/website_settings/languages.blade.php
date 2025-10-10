@@ -104,10 +104,15 @@
 <!-- /Page Wrapper -->
 
 <!-- Delete Language  -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="deleteForm"
-    :hiddenInputs="['id' => 'delete_id']" :title="__('admin.general_settings.delete_language')"
-    :description="__('admin.general_settings.delete_language_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteForm',
+    'action'       => '',
+    'hiddenInputs' => ['id' => 'delete_id'],
+    'title'        => __('admin.general_settings.delete_language'),
+    'description'  => __('admin.general_settings.delete_language_confirmation')
+]"/>
 <!-- /Delete Language -->
 @endsection
 

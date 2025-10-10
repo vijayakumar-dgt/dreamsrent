@@ -103,10 +103,16 @@
 <!-- /Add/Edit Seat -->
 
 <!-- Delete Seat -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('carSeat.delete') }}"
-    formId="deleteSeatType" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_seat_type')" :description="__('admin.rentals.delete_seat_type_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteSeatType',
+    'action'       => route('carSeat.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_seat_type'),
+    'description'  => __('admin.rentals.delete_seat_type_confirmation')
+]"/>
 <!-- /Delete Seat -->
 @endsection
 

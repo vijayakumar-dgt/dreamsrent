@@ -104,11 +104,16 @@
 <!-- /Add/Edit Safety Feature -->
 
 <!-- Delete Safety Feature -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('safetyFeature.delete') }}"
-    formId="deleteSafetyFeatureForm" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_safety_feature')"
-    :description="__('admin.rentals.delete_safety_feature_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteSafetyFeatureForm',
+    'action'       => route('safetyFeature.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_safety_feature'),
+    'description'  => __('admin.rentals.delete_safety_feature_confirmation')
+]"/>
 <!-- /Delete Safety Feature -->
 @endsection
 

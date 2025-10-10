@@ -174,11 +174,16 @@
 <!-- Add/Edit Extra Service end -->
 
 <!-- Delete Modal Start-->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('delete_extra_service') }}"
-    formId="deleteExtraService" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_extra_service')"
-    :description="__('admin.rentals.delete_extra_service_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteExtraService',
+    'action'       => route('delete_extra_service'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_extra_service'),
+    'description'  => __('admin.rentals.delete_extra_service_confirmation')
+]"/>
 <!-- Delete Modal End -->
 @endsection
 

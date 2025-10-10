@@ -102,11 +102,16 @@
 <!-- /Add/Edit Transmission -->
 
 <!-- Delete Transmission -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('carTrasmission.delete') }}"
-    formId="delateCarTransmissionForm" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_vehicle_transmission')"
-    :description="__('admin.rentals.delete_vehicle_transmission_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'delateCarTransmissionForm',
+    'action'       => route('carTrasmission.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_vehicle_transmission'),
+    'description'  => __('admin.rentals.delete_vehicle_transmission_confirmation')
+]"/>
 <!-- /Delete Transmission -->
 @endsection
 

@@ -215,10 +215,16 @@
 <!-- /Add/Edit Maintenance -->
 
 <!-- Delete Maintenance -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('maintenance.delete') }}"
-    formId="maintenanceDeleteForm" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_maintenance')" :description="__('admin.rentals.delete_maintenance_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'maintenanceDeleteForm',
+    'action'       => route('maintenance.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_maintenance'),
+    'description'  => __('admin.rentals.delete_maintenance_confirmation')
+]"/>
 <!-- /Delete Maintenance -->
 @endsection
 

@@ -114,11 +114,16 @@
 <!-- /Add/Edit Vehicle Color -->
 
 <!-- Delete Vehicle Color -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('carColor.delete') }}"
-    formId="delateCarColorForm" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_vehicle_color')"
-    :description="__('admin.rentals.delete_vehicle_color_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'delateCarColorForm',
+    'action'       => route('carColor.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_vehicle_color'),
+    'description'  => __('admin.rentals.delete_vehicle_color_confirmation')
+]"/>
 <!-- /Delete Vehicle Color -->
 @endsection
 

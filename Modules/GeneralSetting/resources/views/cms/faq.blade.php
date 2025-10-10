@@ -213,9 +213,15 @@
     <!-- /Edit FAQ -->
 
     <!-- Delete FAQ -->
-    <x-admin.delete-modal className="deletemodal" id="delete_FAQ" action="" formId="deleteFaq" :hiddenInputs="['delete_id' => '']" :title="__('admin.general_settings.delete_faq')"
-        :description="__('admin.general_settings.delete_confirmation')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete_FAQ',
+        'formId'       => 'deleteFaq',
+        'action'       => '',
+        'hiddenInputs' => ['delete_id' => ''],
+        'title'        => __('admin.general_settings.delete_faq'),
+        'description'  => __('admin.general_settings.delete_confirmation')
+    ]"/>
     <!-- /Delete FAQ -->
 @endsection
 

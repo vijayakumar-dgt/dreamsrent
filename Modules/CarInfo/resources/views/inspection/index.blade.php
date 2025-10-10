@@ -215,10 +215,16 @@
 <!-- Add Inspection Modal End-->
 
 <!-- Delete Modal Start-->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('delete_inspection') }}"
-    formId="deleteInspection" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_inspection')" :description="__('admin.rentals.delete_inspection_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteInspection',
+    'action'       => route('delete_inspection'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_inspection'),
+    'description'  => __('admin.rentals.delete_inspection_confirmation')
+]"/>
 <!-- Delete Modal End -->
 @endsection
 

@@ -239,10 +239,16 @@
 </div>
 
 <!-- Delete Modal-->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('vehicle.delete') }}"
-    formId="deleteVehicle" method="POST" :hiddenInputs="['delete_id' => '']" :title="__('admin.common.delete_vehicle')"
-    :description="__('admin.common.delete_vehicle_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteVehicle',
+    'action'       => route('vehicle.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.common.delete_vehicle'),
+    'description'  => __('admin.common.delete_vehicle_confirmation')
+]"/>
 <!-- /Delete Modal-->
 
 <!-- Status Modal-->

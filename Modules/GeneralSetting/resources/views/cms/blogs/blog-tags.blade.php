@@ -186,9 +186,13 @@
 <!-- /Edit Tag -->
 
 <!-- Delete Tag -->
-<x-admin.delete-modal className="deletemodal" id="delete_Tag" :title="__('admin.blog.delete_tag')"
-    :hiddenInputs="['delete_tag_id' => '']" :description="__('admin.blog.are_you_sure_you_want_to_delete_this_tag')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete_Tag',
+    'title'        => __('admin.blog.delete_tag'),
+    'hiddenInputs' => ['delete_tag_id' => ''],
+    'description'  => __('admin.blog.are_you_sure_you_want_to_delete_this_tag')
+]"/>
 <!-- /Delete Tag -->
 @endsection
 

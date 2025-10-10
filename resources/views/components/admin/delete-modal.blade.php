@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             @if (!empty($formId))
-            <form action="{{ $action ?? null }}" method="{{ $method ?? 'POST' }}" id="{{ $formId }}" class="{{ $formClass ?? null }}">
+            <form action="{{ $action ?? '' }}" method="{{ $method ?? 'POST' }}" id="{{ $formId }}" class="{{ $formClass ?? '' }}">
                 @csrf
             @endif
                 @if(!empty($hiddenInputs))

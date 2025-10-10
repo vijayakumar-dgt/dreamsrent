@@ -104,11 +104,16 @@
 <!-- Add/Edit Cylinder Type End -->
 
 <!-- Delete Modal Start-->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('delete_cylinder') }}"
-    formId="deleteCylinder" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_cylinder_type')"
-    :description="__('admin.rentals.delete_cylinder_type_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteCylinder',
+    'action'       => route('delete_cylinder'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_cylinder_type'),
+    'description'  => __('admin.rentals.delete_cylinder_type_confirmation')
+]"/>
 <!-- Delete Modal End -->
 @endsection
 

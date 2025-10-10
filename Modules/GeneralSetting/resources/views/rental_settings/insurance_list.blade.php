@@ -148,10 +148,15 @@
     <!-- /Insurance Benefits -->
 
     <!-- Delete Insurance -->
-    <x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="deleteInsurance"
-        :hiddenInputs="['delete_id' => '']" :title="__('admin.general_settings.delete_insurance')"
-        :description="__('admin.general_settings.delete_insurance_confirmation')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete-modal',
+        'formId'       => 'deleteInsurance',
+        'action'       => '',
+        'hiddenInputs' => ['delete_id' => ''],
+        'title'        => __('admin.general_settings.delete_insurance'),
+        'description'  => __('admin.general_settings.delete_insurance_confirmation')
+    ]"/>
     <!-- /Delete Insurance -->
 
 @endsection

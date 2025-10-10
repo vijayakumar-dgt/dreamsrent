@@ -199,16 +199,16 @@
     <!-- /Page Wrapper -->
 
     <!-- Delete Modal  -->
-    <x-admin.delete-modal
-        className="deletemodal"
-        id="delete_modal"
-        action="{{ route('quotations.delete') }}"
-        formId="quotation_delete_form"
-        method="POST"
-        :hiddenInputs="['delete_id' => '']"
-        :title="__('admin.bookings.delete_quotation')"
-        :description="__('admin.bookings.delete_quotation_confirmation')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete_modal',
+        'formId'       => 'quotation_delete_form',
+        'action'       => route('quotations.delete'),
+        'method'       => 'POST',
+        'hiddenInputs' => ['delete_id' => ''],
+        'title'        => __('admin.bookings.delete_quotation'),
+        'description'  => __('admin.bookings.delete_quotation_confirmation')
+    ]"/>
     <!-- /Delete Modal-->
 @endsection
 

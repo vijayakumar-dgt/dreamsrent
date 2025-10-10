@@ -117,10 +117,15 @@
 <!-- /Add Country -->
 
 <!-- Delete Country -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="delateCountry"
-    :hiddenInputs="['delete_id' => '']" :title="__('admin.cms.delete_country')"
-    :description="__('admin.cms.country_delete_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'delateCountry',
+    'action'       => '',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.cms.delete_country'),
+    'description'  => __('admin.cms.country_delete_confirmation')
+]"/>
 <!-- /Delete Country -->
 
 @endsection

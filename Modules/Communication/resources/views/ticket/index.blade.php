@@ -216,10 +216,14 @@
 </x-admin.modal>
 <!-- /Ticket History -->
 <!-- Delete Ticket -->
-<x-admin.delete-modal className="deletemodal" id="delete_ticket" formId="delete_ticket_form"
-    :hiddenInputs="['delete_id' => '']" :title="__('admin.support.delete_ticket')"
-    :description="__('admin.support.delete_tickets_description')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete_ticket',
+    'formId'       => 'delete_ticket_form',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.support.delete_ticket'),
+    'description'  => __('admin.support.delete_tickets_description')
+]"/>
 <!-- /Delete Ticket -->
 @endsection
 

@@ -121,10 +121,15 @@
 <!-- /Add/Edit State Modal -->
 
 <!-- Delete State Modal -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="delateState"
-    :hiddenInputs="['delete_id' => '']" :title="__('admin.cms.delete_state')"
-    :description="__('admin.cms.state_delete_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'delateState',
+    'action'       => '',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.cms.delete_state'),
+    'description'  => __('admin.cms.state_delete_confirmation')
+]"/>
 <!-- /Delete State Modal -->
 
 @endsection

@@ -93,9 +93,15 @@
     <!-- /Add Sitemap -->
 
     <!-- Delete Sitemap -->
-    <x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="deleteForm" :hiddenInputs="['id' => '']" :title="__('admin.general_settings.delete_sitemap')"
-        :description="__('admin.general_settings.want_to_delete_sitemap')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete-modal',
+        'formId'       => 'deleteForm',
+        'action'       => '',
+        'hiddenInputs' => ['id' => ''],
+        'title'        => __('admin.general_settings.delete_sitemap'),
+        'description'  => __('admin.general_settings.want_to_delete_sitemap')
+    ]"/>
     <!-- /Delete Sitemap -->
 @endsection
 @push('scripts')

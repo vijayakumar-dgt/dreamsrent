@@ -190,10 +190,15 @@
         </x-admin.modal>
 
         <!-- Delete  -->
-        <x-admin.delete-modal className="deletemodal" id="delete_signature" action="" formId="deleteSignature"
-            :hiddenInputs="['delete_id' => '']" :title="__('admin.general_settings.delete_signatures')"
-            :description="__('admin.general_settings.delete_signatures_description')">
-        </x-admin.delete-modal>
+        <x-admin.delete-modal :config="[
+            'className'    => 'deletemodal',
+            'id'           => 'delete_signature',
+            'formId'       => 'deleteSignature',
+            'action'       => '',
+            'hiddenInputs' => ['delete_id' => ''],
+            'title'        => __('admin.general_settings.delete_signatures'),
+            'description'  => __('admin.general_settings.delete_signatures_description')
+        ]"/>
         @include('admin.partials.footer')
     </div>
     <!-- /Page Wrapper -->

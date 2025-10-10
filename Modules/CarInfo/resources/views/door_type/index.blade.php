@@ -103,10 +103,16 @@
 <!-- /Add/Edit Door Type -->
 
 <!-- Delete Door Type -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('doorType.delete') }}"
-    formId="deleteDoorType" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_door_type')" :description="__('admin.rentals.delete_door_type_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteDoorType',
+    'action'       => route('doorType.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_door_type'),
+    'description'  => __('admin.rentals.delete_door_type_confirmation')
+]"/>
 <!-- /Delete Door Type -->
 @endsection
 

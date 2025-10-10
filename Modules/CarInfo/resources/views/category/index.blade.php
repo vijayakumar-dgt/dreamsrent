@@ -102,10 +102,16 @@
 <!-- /Add Category -->
 
 <!-- Delete Category -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('category.delete') }}"
-    formId="deleteCategory" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_category')" :description="__('admin.rentals.delete_category_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteCategory',
+    'action'       => route('category.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_category'),
+    'description'  => __('admin.rentals.delete_category_confirmation')
+]"/>
 <!-- /Delete Category -->
 @endsection
 

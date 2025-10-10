@@ -450,10 +450,16 @@
 <!-- /Edit Driver -->
 
 <!-- Delete Driver -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('driver.delete') }}"
-    formId="driverDeleteForm" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.manage.delete_driver')" :description="__('admin.manage.delete_driver_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'driverDeleteForm',
+    'action'       => route('driver.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.manage.delete_driver'),
+    'description'  => __('admin.manage.delete_driver_confirmation')
+]"/>
 <!-- /Delete Driver -->
 @endsection
 

@@ -139,10 +139,16 @@
 <!-- Add/Edit Type end -->
 
 <!-- Delete Modal Start-->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('deletetype') }}" formId="deleteType"
-    method="POST" :hiddenInputs="['delete_id' => '']" :title="__('admin.rentals.delete_vehicle_type')"
-    :description="__('admin.rentals.delete_vehicle_type_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'   => 'deletemodal',
+    'id'          => 'delete-modal',
+    'formId'      => 'deleteType',
+    'action'      => route('deletetype'),
+    'title'       => __('admin.rentals.delete_vehicle_type'),
+    'description' => __('admin.rentals.delete_vehicle_type_confirmation'),
+    'hiddenInputs'=> ['delete_id' => '']
+]"/>
+
 <!-- Delete Modal End -->
 @endsection
 

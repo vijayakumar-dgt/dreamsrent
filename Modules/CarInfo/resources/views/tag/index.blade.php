@@ -102,10 +102,16 @@
 <!-- Add/Edit Tag end -->
 
 <!-- Delete Modal Start-->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('delete_tag') }}"
-    formId="deleteTagForm" method="POST" :hiddenInputs="['delete_id' => '']" :title="__('admin.rentals.delete_tag')"
-    :description="__('admin.rentals.delete_tag_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteTagForm',
+    'action'       => route('delete_tag'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_tag'),
+    'description'  => __('admin.rentals.delete_tag_confirmation')
+]"/>
 <!-- Delete Modal End -->
 @endsection
 

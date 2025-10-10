@@ -1149,9 +1149,13 @@
     </x-slot>
 </x-admin.modal>
 
-<x-admin.delete-modal className="deletemodal" id="delete_tarrif" :title="__('admin.rentals.delete_tariff')"
-    :description="__('admin.rentals.delete_tariff_confirmation')" deleteBtnType="button">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'      => 'deletemodal',
+    'id'             => 'delete_tarrif',
+    'title'          => __('admin.rentals.delete_tariff'),
+    'description'    => __('admin.rentals.delete_tariff_confirmation'),
+    'deleteBtnType'  => 'button'
+]"/>
 
 <x-admin.modal className="addmodal" id="add_price" :title="__('admin.rentals.create_seasonal_price')"
     modalTitleId="seas_title">
@@ -1229,9 +1233,13 @@
     </x-slot>
 </x-admin.modal>
 
-<x-admin.delete-modal className="deletemodal" id="delete_price" :title="__('admin.rentals.delete_pricing')"
-    :description="__('admin.rentals.delete_pricing_confirmation')" deleteBtnType="button">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'      => 'deletemodal',
+    'id'             => 'delete_price',
+    'title'          => __('admin.rentals.delete_pricing'),
+    'description'    => __('admin.rentals.delete_pricing_confirmation'),
+    'deleteBtnType'  => 'button'
+]"/>
 
 <x-admin.modal className="addmodal" id="edit_price" :title="__('admin.rentals.edit_pricing_title')">
     <x-slot name="body">
@@ -1326,9 +1334,14 @@
     </x-slot>
 </x-admin.modal>
 
-<x-admin.delete-modal className="deletemodal" id="delete_damage" :title="__('admin.rentals.delete_damage_title')"
-    :description="__('admin.rentals.delete_damage_confirmation')" deleteBtnType="button" deleteBtnId="dete-damage">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'      => 'deletemodal',
+    'id'             => 'delete_damage',
+    'title'          => __('admin.rentals.delete_damage_title'),
+    'description'    => __('admin.rentals.delete_damage_confirmation'),
+    'deleteBtnType'  => 'button',
+    'deleteBtnId'    => 'dete-damage'
+]"/>
 
 <x-admin.modal className="addmodal" id="add-faq" :title="__('admin.rentals.create_faq_title')" modalTitleId="faq_title">
     <x-slot name="body">
@@ -1352,9 +1365,14 @@
     </x-slot>
 </x-admin.modal>
 
-<x-admin.delete-modal className="deletemodal" id="delete_faq" :title="__('admin.rentals.delete_faq_title')"
-    :description="__('admin.rentals.delete_faq_confirmation')" deleteBtnType="button" deleteBtnId="dete-faq">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'      => 'deletemodal',
+    'id'             => 'delete_faq',
+    'title'          => __('admin.rentals.delete_faq_title'),
+    'description'    => __('admin.rentals.delete_faq_confirmation'),
+    'deleteBtnType'  => 'button',
+    'deleteBtnId'    => 'dete-faq'
+]"/>
 
 <x-admin.modal className="addmodal" id="select_insurance" :title="__('admin.rentals.select_insurance')"
     formId="set_value">

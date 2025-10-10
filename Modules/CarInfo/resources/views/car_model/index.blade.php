@@ -118,11 +118,16 @@
 <!-- /Add/Edit Vehicle Model -->
 
 <!-- Delete Vehicle Model -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('carModel.delete') }}"
-    formId="deleteCarModel" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_vehicle_model')"
-    :description="__('admin.rentals.delete_vehicle_model_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteCarModel',
+    'action'       => route('carModel.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_vehicle_model'),
+    'description'  => __('admin.rentals.delete_vehicle_model_confirmation')
+]"/>
 <!-- /Delete Vehicle model -->
 @endsection
 

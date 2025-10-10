@@ -160,13 +160,13 @@
     <!-- /Page Wrapper -->
 
     <!-- Delete Blogs -->
-    <x-admin.delete-modal
-        className="deletemodal"
-        id="delete_blogs"
-        :title="__('admin.blog.delete_blog')"
-        :hiddenInputs="['delete_blog_id' => '']"
-        :description="__('admin.blog.are_you_sure_you_want_to_delete_blog')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete_blogs',
+        'title'        => __('admin.blog.delete_blog'),
+        'hiddenInputs' => ['delete_blog_id' => ''],
+        'description'  => __('admin.blog.are_you_sure_you_want_to_delete_blog')
+    ]"/>
     <!-- /Delete Blogs -->
 @endsection
 

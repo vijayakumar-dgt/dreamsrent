@@ -91,16 +91,16 @@
     <!-- /Add/Edit Role -->
 
     <!-- Delete  -->
-    <x-admin.delete-modal
-        className="deletemodal"
-        id="delete_role"
-        action="{{ route('admin.role.delete') }}"
-        formId="roleDeleteForm"
-        method="POST"
-        :hiddenInputs="['delete_id' => '']"
-        :title="__('admin.user_management.delete_role')"
-        :description="__('admin.user_management.delete_role_confirmation')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete_role',
+        'action'       => route('admin.role.delete'),
+        'formId'       => 'roleDeleteForm',
+        'method'       => 'POST',
+        'hiddenInputs' => ['delete_id' => ''],
+        'title'        => __('admin.user_management.delete_role'),
+        'description'  => __('admin.user_management.delete_role_confirmation')
+    ]"/>
     <!-- /Delete -->
 @endsection
 

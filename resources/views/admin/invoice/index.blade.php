@@ -165,12 +165,12 @@
     <!-- /Page Wrapper -->
 
     <!-- Delete Modal  -->
-    <x-admin.delete-modal
-        className="deletemodal"
-        id="delete_modal"
-        :title="__('admin.finance_accounts.delete_invoice')"
-        :description="__('admin.finance_accounts.delete_invoice_confirmation')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'   => 'deletemodal',
+        'id'          => 'delete_modal',
+        'title'       => __('admin.finance_accounts.delete_invoice'),
+        'description' => __('admin.finance_accounts.delete_invoice_confirmation')
+    ]"/>
     <!-- /Delete Modal-->
 @endsection
 

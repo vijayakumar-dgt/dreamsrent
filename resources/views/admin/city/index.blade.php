@@ -122,10 +122,15 @@
 <!-- /Add City -->
 
 <!-- Delete City -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="delateCity"
-    :hiddenInputs="['delete_id' => '']" :title="__('admin.cms.delete_city')"
-    :description="__('admin.cms.city_delete_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'delateCity',
+    'action'       => '',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.cms.delete_city'),
+    'description'  => __('admin.cms.city_delete_confirmation')
+]"/>
 <!-- /Delete City -->
 
 @endsection

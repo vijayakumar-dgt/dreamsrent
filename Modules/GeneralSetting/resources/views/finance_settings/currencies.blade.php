@@ -119,10 +119,15 @@
     <!-- /Add Currency -->
 
     <!-- Delete Currency -->
-    <x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="deleteCurrencyForm"
-        :hiddenInputs="['id' => '']" :title="__('admin.general_settings.delete_currency')"
-        :description="__('admin.general_settings.delete_currency_confirmation')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete-modal',
+        'formId'       => 'deleteCurrencyForm',
+        'action'       => '',
+        'hiddenInputs' => ['id' => ''],
+        'title'        => __('admin.general_settings.delete_currency'),
+        'description'  => __('admin.general_settings.delete_currency_confirmation')
+    ]"/>
     <!-- /Delete Currency -->
 @endsection
 

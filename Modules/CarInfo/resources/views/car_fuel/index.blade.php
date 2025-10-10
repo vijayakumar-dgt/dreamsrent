@@ -102,10 +102,16 @@
 <!-- /Add/Edit Fuel -->
 
 <!-- Delete Fuel -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('fuelType.delete') }}"
-    formId="deletefuelType" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_fuel_type')" :description="__('admin.rentals.delete_fuel_type_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deletefuelType',
+    'action'       => route('fuelType.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_fuel_type'),
+    'description'  => __('admin.rentals.delete_fuel_type_confirmation')
+]"/>
 <!-- /Delete Fuel -->
 @endsection
 

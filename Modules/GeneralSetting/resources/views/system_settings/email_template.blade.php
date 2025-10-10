@@ -168,17 +168,25 @@
     </x-admin.modal>
 
     <!-- Delete  -->
-    <x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="deleteForm" :hiddenInputs="['id' => 'delete_id']" :title="__('admin.general_settings.delete_email_template')"
-        :description="__('admin.general_settings.delete_email_confirmation')">
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete-modal',
+        'formId'       => 'deleteForm',
+        'action'       => '',
+        'hiddenInputs' => ['id' => 'delete_id'],
+        'title'        => __('admin.general_settings.delete_email_template'),
+        'description'  => __('admin.general_settings.delete_email_confirmation')
+    ]">
         <x-slot name="body">
             <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
                 <i class="ti ti-trash-x fs-26"></i>
             </span>
         </x-slot>
+
         <x-slot name="footer">
             <div class="d-flex justify-content-center">
                 <a href="javascript:void(0);" class="btn btn-light me-3"
-                    data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
                 <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
             </div>
         </x-slot>

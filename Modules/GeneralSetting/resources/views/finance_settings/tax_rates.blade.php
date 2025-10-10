@@ -149,9 +149,14 @@
     </x-admin.modal>
 
     <!-- Delete Tax Rate -->
-    <x-admin.delete-modal className="deletemodal" id="delete_tax_rate" formId="delete_tax_rate_form" :hiddenInputs="['id' => 'delete_tax_rate_id']" :title="__('admin.general_settings.delete_tax_rate')"
-        :description="__('admin.general_settings.delete_tax_rate_confirmation')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete_tax_rate',
+        'formId'       => 'delete_tax_rate_form',
+        'hiddenInputs' => ['id' => 'delete_tax_rate_id'],
+        'title'        => __('admin.general_settings.delete_tax_rate'),
+        'description'  => __('admin.general_settings.delete_tax_rate_confirmation')
+    ]"/>
 
     <!-- Add Tax Group -->
     <x-admin.modal className="addmodal" id="tax_group_modal" :title="__('admin.general_settings.create_tax_group')"
@@ -193,10 +198,14 @@
     </x-admin.modal>
 
     <!-- Delete Tax Group -->
-    <x-admin.delete-modal className="deletemodal" id="delete_tax_group" formId="delete_tax_group_form"
-        :hiddenInputs="['id' => 'delete_tax_group_id']" :title="__('admin.general_settings.delete_tax_group')"
-        :description="__('admin.general_settings.delete_tax_group_confirmation')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete_tax_group',
+        'formId'       => 'delete_tax_group_form',
+        'hiddenInputs' => ['id' => 'delete_tax_group_id'],
+        'title'        => __('admin.general_settings.delete_tax_group'),
+        'description'  => __('admin.general_settings.delete_tax_group_confirmation')
+    ]"/>
 
 @endsection
 

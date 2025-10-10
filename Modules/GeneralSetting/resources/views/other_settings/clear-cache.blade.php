@@ -36,11 +36,18 @@
 </div>
 <!-- /Page Wrapper -->
 <!-- Clear Cache Modal -->
-<x-admin.delete-modal className="deletemodal" id="clear_cache" action="{{ route('admin.clear-cache') }}" method="POST"
-    :title="__('admin.general_settings.clear_cache')" :description="__('admin.general_settings.want_to_clear_cache')"
-    modalIconClass="ti ti-trash-x fs-26" deleteBtnType="button" deleteBtnId="clear-cache"
-    deleteBtnText="{{ __('admin.general_settings.yes_clear_cache') }}">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'      => 'deletemodal',
+    'id'             => 'clear_cache',
+    'action'         => route('admin.clear-cache'),
+    'method'         => 'POST',
+    'title'          => __('admin.general_settings.clear_cache'),
+    'description'    => __('admin.general_settings.want_to_clear_cache'),
+    'modalIconClass' => 'ti ti-trash-x fs-26',
+    'deleteBtnType'  => 'button',
+    'deleteBtnId'    => 'clear-cache',
+    'deleteBtnText'  => __('admin.general_settings.yes_clear_cache')
+]"/>
 <!-- /Clear Cache Modal -->
 
 @endsection

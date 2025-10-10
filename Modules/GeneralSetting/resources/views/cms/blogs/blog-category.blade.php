@@ -197,13 +197,13 @@
 <!-- /Edit Category -->
 
 <!-- Delete Category -->
-<x-admin.delete-modal
-    className="deletemodal"
-    id="delete_Category"
-    :title="__('admin.blog.delete_category')"
-    :hiddenInputs="['delete_category_id' => '']"
-    :description="__('admin.blog.are_you_sure_you_want_to_delete_this_category')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete_Category',
+    'title'        => __('admin.blog.delete_category'),
+    'hiddenInputs' => ['delete_category_id' => ''],
+    'description'  => __('admin.blog.are_you_sure_you_want_to_delete_this_category')
+]"/>
 <!-- /Delete Category -->
 @endsection
 

@@ -101,11 +101,16 @@
 <!-- /Add/Edit Steering -->
 
 <!-- Delete Car Steering -->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('steeringType.delete') }}"
-    formId="deleteSteeringType" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.rentals.delete_steering_type')"
-    :description="__('admin.rentals.delete_steering_type_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteSteeringType',
+    'action'       => route('steeringType.delete'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_steering_type'),
+    'description'  => __('admin.rentals.delete_steering_type_confirmation')
+]"/>
 <!-- /Delete Car Steering -->
 @endsection
 

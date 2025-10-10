@@ -77,11 +77,16 @@
 
 
     <!-- Delete  -->
-    <x-admin.delete-modal className="deletemodal" id="delete_backup" formId="deleteDbBackup" :hiddenInputs="['delete_id' => '']" :title="__('admin.general_settings.delete_backup')"
-        :description="__('admin.general_settings.confirmation_delete_backup')"
-        cancelText="{{ __('admin.common.cancel') }}" submitText="{{ __('admin.common.yes_delete') }}">
-    </x-admin.delete-modal>
-
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete_backup',
+        'formId'       => 'deleteDbBackup',
+        'hiddenInputs' => ['delete_id' => ''],
+        'title'        => __('admin.general_settings.delete_backup'),
+        'description'  => __('admin.general_settings.confirmation_delete_backup'),
+        'cancelText'   => __('admin.common.cancel'),
+        'submitText'   => __('admin.common.yes_delete')
+    ]"/>
     <!-- /Delete -->
 @endsection
 

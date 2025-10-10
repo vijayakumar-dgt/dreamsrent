@@ -337,10 +337,16 @@
 <!-- Add/Edit Location end -->
 
 <!-- Delete Modal Start-->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('delete_location') }}"
-    formId="deleteLocation" method="POST" :hiddenInputs="['delete_id' => '']"
-    :title="__('admin.manage.delete_location')" :description="__('admin.manage.delete_location_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteLocation',
+    'action'       => route('delete_location'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.manage.delete_location'),
+    'description'  => __('admin.manage.delete_location_confirmation')
+]"/>
 <!-- Delete Modal End -->
 @endsection
 

@@ -213,11 +213,15 @@
 <!-- /Edit menu -->
 
 <!-- Delete Modal  -->
-<x-admin.delete-modal className="deletemodal" id="delete_menu" action="" formId="deleteMenu"
-    :hiddenInputs="['delete_id' => '']" :title="__('admin.cms.delete_menu')"
-    :description="__('admin.cms.menu_delete_confirmation')">
-</x-admin.delete-modal>
-
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete_menu',
+    'formId'       => 'deleteMenu',
+    'action'       => '',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.cms.delete_menu'),
+    'description'  => __('admin.cms.menu_delete_confirmation')
+]"/>
 <!-- /Delete Modal-->
 @endsection
 

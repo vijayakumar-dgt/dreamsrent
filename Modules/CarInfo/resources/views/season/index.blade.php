@@ -101,10 +101,16 @@
 <!-- Add/Edit Season end -->
 
 <!-- Delete Modal Start-->
-<x-admin.delete-modal className="deletemodal" id="delete-modal" action="{{ route('delete_season') }}"
-    formId="deleteSeason" method="POST" :hiddenInputs="['delete_id' => '']" :title="__('admin.rentals.delete_season')"
-    :description="__('admin.rentals.delete_season_confirmation')">
-</x-admin.delete-modal>
+<x-admin.delete-modal :config="[
+    'className'    => 'deletemodal',
+    'id'           => 'delete-modal',
+    'formId'       => 'deleteSeason',
+    'action'       => route('delete_season'),
+    'method'       => 'POST',
+    'hiddenInputs' => ['delete_id' => ''],
+    'title'        => __('admin.rentals.delete_season'),
+    'description'  => __('admin.rentals.delete_season_confirmation')
+]"/>
 <!-- Delete Modal End -->
 @endsection
 

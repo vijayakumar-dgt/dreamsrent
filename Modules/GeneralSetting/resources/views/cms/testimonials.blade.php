@@ -286,10 +286,15 @@
     <!-- /Edit Testimonial -->
 
     <!-- Delete Testimonial -->
-    <x-admin.delete-modal className="deletemodal" id="delete_testimonial" action="" formId="deleteTestimonialForm"
-        :hiddenInputs="['id' => '']" :title="__('admin.cms.delete_testimonial')"
-        :description="__('admin.cms.delete_testimonial_confirmation')">
-    </x-admin.delete-modal>
+    <x-admin.delete-modal :config="[
+        'className'    => 'deletemodal',
+        'id'           => 'delete_testimonial',
+        'formId'       => 'deleteTestimonialForm',
+        'action'       => '',
+        'hiddenInputs' => ['id' => ''],
+        'title'        => __('admin.cms.delete_testimonial'),
+        'description'  => __('admin.cms.delete_testimonial_confirmation')
+    ]"/>
     <!-- /Delete Testimonial -->
 @endsection
 
