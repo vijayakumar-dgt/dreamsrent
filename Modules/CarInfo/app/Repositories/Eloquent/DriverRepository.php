@@ -90,7 +90,6 @@ class DriverRepository implements DriverRepositoryInterface
                 $data['image'] = $this->imageResizer->uploadFile($file, 'profile');
             }
         }
-dd('Data', $data);
         return $data;
     }
 
@@ -136,7 +135,9 @@ dd('Data', $data);
 
         foreach ($docIds as $docId) {
             $document = DriverDocument::find($docId);
-            if (!$document) continue;
+            if (!$document) {
+                continue;
+            }
 
             $docPath = $document->document;
             if (is_string($docPath) && Storage::disk('public')->exists('documents/' . $docPath)) {
@@ -192,7 +193,9 @@ dd('Data', $data);
     /** Apply search filter */
     private function applySearchFilter($query, ?string $search): void
     {
-        if (!$search) return;
+        if (!$search) {
+            return;
+        }
 
         $query->where(function ($q) use ($search) {
             $q->where('drivers.driver_name', 'LIKE', "%{$search}%")
@@ -205,14 +208,18 @@ dd('Data', $data);
     /** Apply status filter */
     private function applyStatusFilter($query, $status): void
     {
-        if ($status === null || $status === '') return;
+         if ($status === null || $status === '') {
+            return;
+        }
         $query->where('drivers.status', $status);
     }
 
     /** Apply date filter */
     private function applyDateFilter($query, ?string $sortByDate): void
     {
-        if (!$sortByDate) return;
+        if (!$sortByDate) {
+            return;
+        }
 
         $dates = explode(' - ', $sortByDate);
         if (count($dates) === 2) {
@@ -225,7 +232,9 @@ dd('Data', $data);
     /** Apply sorting filter */
     private function applySortFilter($query, ?string $sortBy): void
     {
-        if (!$sortBy) return;
+        if (!$sortBy) {
+            return;
+        }
 
         switch (strtolower($sortBy)) {
             case 'latest':

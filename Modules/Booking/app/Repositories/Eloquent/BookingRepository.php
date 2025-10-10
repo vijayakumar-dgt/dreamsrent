@@ -1240,7 +1240,7 @@ class BookingRepository implements BookingRepositoryInterface
             $this->logBookingsHistory($booking, $historyData);
             $notifyData = $this->prepareNotificationData($booking);
 
-            $this->sendNotifications($booking, $notifyData);
+            $this->sendNotifications($notifyData);
 
             return [
                 'code'         => 200,
@@ -1316,7 +1316,7 @@ class BookingRepository implements BookingRepositoryInterface
     /**
      * Send notifications to admin and customer.
      */
-    protected function sendNotifications(Booking $booking, array $notifyData): void
+    protected function sendNotifications(array $notifyData): void
     {
         try {
             $appAdmin = User::where('user_type', 1)->first();

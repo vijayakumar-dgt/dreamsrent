@@ -130,78 +130,75 @@ class PaymentService
             'message' => 'PayPal is currently unavailable. Please choose another payment method.',
         ];
 
-        if (!$this->provider) {
-            return $result;
-        }
+        if ($this->provider) {
+            $order['intent'] = 'CAPTURE';
 
-        $order['intent'] = 'CAPTURE';
+            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+            $currency = null;
 
-        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-        $currency = null;
+            if ($currencySetting && $currencySetting->value) {
+                $currency = Currency::find($currencySetting->value);
+            }
 
-        if ($currencySetting && $currencySetting->value) {
-            $currency = Currency::find($currencySetting->value);
-        }
+            $currency_details = $currency->code ?? "usd";
+            $allowedCurrencies = ['usd', 'inr', 'eur', 'aed'];
+            $currency = strtolower(trim($currency_details));
 
-        $currency_details = $currency->code ?? "usd";
-
-        $allowedCurrencies = ['usd', 'inr', 'eur', 'aed'];
-        $currency = strtolower(trim($currency_details));
-
-        if (!in_array($currency, $allowedCurrencies)) {
-            $result['code'] = 422;
-            $result['message'] = 'Invalid currency selected. Please use a supported currency like USD, INR, EUR, etc.';
-            return $result;
-        }
-
-        $unit = [
-            'items' => [
-                [
-                    'name'        => 'Rental System',
-                    'quantity'    => 1,
-                    'unit_amount' => [
-                        'currency_code' => $currency_details,
-                        'value'         => $request->total_price,
-                    ]
-                ],
-            ],
-            'amount' => [
-                'currency_code' => $currency_details,
-                'value'         => $request->total_price,
-                'breakdown'     => [
-                    'item_total' => [
-                        'currency_code' => $currency_details,
-                        'value'         => $request->total_price,
+            if (!in_array($currency, $allowedCurrencies)) {
+                $result['code'] = 422;
+                $result['message'] = 'Invalid currency selected. Please use a supported currency like USD, INR, EUR, etc.';
+            } else {
+                $unit = [
+                    'items' => [
+                        [
+                            'name'        => 'Rental System',
+                            'quantity'    => 1,
+                            'unit_amount' => [
+                                'currency_code' => $currency_details,
+                                'value'         => $request->total_price,
+                            ]
+                        ],
                     ],
-                ]
-            ]
-        ];
+                    'amount' => [
+                        'currency_code' => $currency_details,
+                        'value'         => $request->total_price,
+                        'breakdown'     => [
+                            'item_total' => [
+                                'currency_code' => $currency_details,
+                                'value'         => $request->total_price,
+                            ],
+                        ]
+                    ]
+                ];
 
-        $order['purchase_units'] = [$unit];
-        $order['application_context'] = [
-            'return_url' => url('paypal-payment-success'),
-            'cancel_url' => url('paypal-payment-failed')
-        ];
+                $order['purchase_units'] = [$unit];
+                $order['application_context'] = [
+                    'return_url' => url('paypal-payment-success'),
+                    'cancel_url' => url('paypal-payment-failed')
+                ];
 
-        $response = $this->provider->createOrder($order);
+                $response = $this->provider->createOrder($order);
 
-        if (!is_array($response) || !array_key_exists('id', $response)) {
-            return $result;
+                if (is_array($response) && array_key_exists('id', $response)) {
+                    $bookingData = $this->builder->buildBookingData($request, $authUser, $formattedData);
+                    $bookingData['booking_status'] = 1;
+                    $bookingData['transaction_id'] = $response['id'];
+                    $bookingData['payment_status'] = 1;
+                    $bookingData['payment_type'] = "paypal";
+
+                    $this->builder->createBookingWithInfo(
+                        $bookingData,
+                        $this->builder->buildUserInfoData($request, new Booking())
+                    );
+
+                    $result = [
+                        'code'       => 200,
+                        'message'    => __('web.home.order_created_successfully'),
+                        'paypal_url' => $response['links'][1]['href']
+                    ];
+                }
+            }
         }
-
-        $bookingData = $this->builder->buildBookingData($request, $authUser, $formattedData);
-        $bookingData['booking_status'] = 1;
-        $bookingData['transaction_id'] = $response['id'];
-        $bookingData['payment_status'] = 1;
-        $bookingData['payment_type'] = "paypal";
-
-        $this->builder->createBookingWithInfo($bookingData, $this->builder->buildUserInfoData($request, new Booking()));
-
-        $result = [
-            'code'       => 200,
-            'message'    => __('web.home.order_created_successfully'),
-            'paypal_url' => $response['links'][1]['href']
-        ];
 
         return $result;
     }

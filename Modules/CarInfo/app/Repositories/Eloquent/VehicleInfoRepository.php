@@ -356,12 +356,26 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private function prepareVehiclePrice(Request $request): string
     {
         $prices = [];
-        if ($request->has('daily_price'))   $prices['daily'] = $request->daily_price;
-        if ($request->has('weekly_price'))  $prices['weekly'] = $request->weekly_price;
-        if ($request->has('montly_price'))  $prices['monthly'] = $request->montly_price;
-        if ($request->has('yearly_price'))  $prices['yearly'] = $request->yearly_price;
+
+        if ($request->has('daily_price')) {
+            $prices['daily'] = $request->daily_price;
+        }
+
+        if ($request->has('weekly_price')) {
+            $prices['weekly'] = $request->weekly_price;
+        }
+
+        if ($request->has('montly_price')) {
+            $prices['monthly'] = $request->montly_price;
+        }
+
+        if ($request->has('yearly_price')) {
+            $prices['yearly'] = $request->yearly_price;
+        }
+
         return json_encode([$prices]);
     }
+
 
     private function uploadSingleImage(?\Illuminate\Http\UploadedFile $file, string $path): ?string
     {
@@ -374,7 +388,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private function handleVehicleImages(Request $request, VehicleInfo $vehicle)
     {
         $images = $request->file('car_images');
-        if (!$images) return;
+        if (!$images) {
+            return;
+        }
 
         $paths = [];
         foreach ((array)$images as $image) {
@@ -398,7 +414,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     private function handleDocumentUpload($files, int $vehicleId, string $key, string $path)
     {
-        if (!$files) return;
+        if (!$files) {
+            return;
+        }
 
         $paths = [];
         foreach ((array)$files as $file) {
@@ -417,7 +435,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private function handleVehicleFAQs(Request $request, VehicleInfo $vehicle)
     {
         $faqs = json_decode($request->input('vehicle_faq', '[]'), true);
-        if (!is_array($faqs)) return;
+        if (!is_array($faqs)) {
+            return;
+        }
 
         foreach ($faqs as $faq) {
             if (!empty($faq['id'])) {
@@ -440,7 +460,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private function handleVehicleInsurance(Request $request, VehicleInfo $vehicle)
     {
         $insurances = json_decode($request->input('vehicle_insurance', '[]'), true);
-        if (!is_array($insurances)) return;
+        if (!is_array($insurances)) {
+            return;
+        }
 
         foreach ($insurances as $insurance) {
             if (!empty($insurance['id']) && !empty($insurance['price']) && !empty($insurance['type'])) {
@@ -459,7 +481,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private function handleVehicleTariffs(Request $request, VehicleInfo $vehicle)
     {
         $tariffs = json_decode($request->input('tariff', '[]'), true);
-        if (!is_array($tariffs)) return;
+        if (!is_array($tariffs)) {
+            return;
+        }
 
         foreach ($tariffs as $tariff) {
             if (!empty($tariff['id'])) {
@@ -490,7 +514,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private function handleVehicleSeasonals(Request $request, VehicleInfo $vehicle)
     {
         $seasonals = json_decode($request->input('seasonal', '[]'), true);
-        if (!is_array($seasonals)) return;
+        if (!is_array($seasonals)) {
+            return;
+        }
 
         foreach ($seasonals as $season) {
             $data = [
@@ -517,7 +543,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private function handleExtraServices(Request $request, VehicleInfo $vehicle)
     {
         $extraServices = json_decode($request->input('extra_services', '[]'), true);
-        if (!is_array($extraServices)) return;
+        if (!is_array($extraServices)) {
+            return;
+        }
 
         foreach ($extraServices as $service) {
             $existing = VehicleExtraService::where('vehicle_id', $vehicle->id)
@@ -542,7 +570,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private function handleVehicleDamage(Request $request, VehicleInfo $vehicle)
     {
         $damages = json_decode($request->input('vehicle_damage', '[]'), true);
-        if (!is_array($damages)) return;
+        if (!is_array($damages)) {
+            return;
+        }
 
         $damageImages = $request->allFiles()['damage_image'] ?? [];
 
@@ -724,7 +754,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     private function handleMultipleUploads($files, VehicleInfo $vehicle, string $key, string $path): void
     {
-        if (empty($files)) return;
+        if (empty($files)) {
+            return;
+        }
 
         $files = is_array($files) ? $files : [$files];
         $uploadedPaths = [];
@@ -754,10 +786,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     private function handleVehicleFaq(Request $request, VehicleInfo $vehicle): void
     {
-        if (!$request->has('vehicle_faq')) return;
+        if (!$request->has('vehicle_faq')) {
+            return;
+        }
 
         $faqs = json_decode($request->vehicle_faq, true);
-        if (!is_array($faqs)) return;
+        if (!is_array($faqs)) {
+            return;
+        }
 
         VehicleFaq::where('vehicle_id', $vehicle->id)->delete();
         foreach ($faqs as $faq) {
@@ -771,10 +807,15 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     private function handleVehiclesInsurance(Request $request, VehicleInfo $vehicle): void
     {
-        if (!$request->has('vehicle_insurance')) return;
+        if (!$request->has('vehicle_insurance')) {
+            return;
+        }
 
         $insurances = json_decode($request->vehicle_insurance, true);
-        if (!is_array($insurances)) return;
+        if (!is_array($insurances)) {
+            return;
+        }
+
 
         VehicleInsurance::where('vehicle_id', $vehicle->id)->delete();
         foreach ($insurances as $insurance) {
@@ -792,10 +833,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     private function handleTariff(Request $request, VehicleInfo $vehicle): void
     {
-        if (!$request->has('tariff')) return;
+        if (!$request->has('tariff')) {
+            return;
+        }
 
         $tariffs = json_decode($request->tariff, true);
-        if (!is_array($tariffs)) return;
+        if (!is_array($tariffs)) {
+            return;
+        }
 
         foreach ($tariffs as $tariff) {
             $data = [
@@ -817,10 +862,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     private function handleSeasonal(Request $request, VehicleInfo $vehicle): void
     {
-        if (!$request->has('seasonal')) return;
+        if (!$request->has('seasonal')) {
+            return;
+        }
 
         $seasonals = json_decode($request->seasonal, true);
-        if (!is_array($seasonals)) return;
+        if (!is_array($seasonals)) {
+            return;
+        }
 
         foreach ($seasonals as $season) {
             $data = [
@@ -843,10 +892,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     private function handleExtraService(Request $request, VehicleInfo $vehicle): void
     {
-        if (!$request->has('extra_services')) return;
+        if (!$request->has('extra_services')) {
+            return;
+        }
 
         $services = json_decode($request->extra_services, true);
-        if (!is_array($services)) return;
+        if (!is_array($services)) {
+            return;
+        }
 
         VehicleExtraService::where('vehicle_id', $vehicle->id)->delete();
 
@@ -862,10 +915,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     private function handleVehiclesDamage(Request $request, VehicleInfo $vehicle): void
     {
-        if (!$request->has('vehicle_damage')) return;
+        if (!$request->has('vehicle_damage')) {
+            return;
+        }
 
         $damages = json_decode($request->vehicle_damage, true);
-        if (!is_array($damages)) return;
+        if (!is_array($damages)) {
+            return;
+        }
 
         $damageFiles = $request->allFiles()['damage_image'] ?? null;
 
@@ -1015,7 +1072,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private function applyDateFilter($query, string $sortByDate): void
     {
         $dates = explode(' - ', $sortByDate);
-        if (count($dates) !== 2) return;
+        if (count($dates) !== 2) {
+            return;
+        }
 
         try {
             $startDate = Carbon::createFromFormat(self::DATE_FORMAT, trim($dates[0]))->startOfDay();
@@ -1763,19 +1822,35 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     {
         $filteredPrices = [];
         $prices = json_decode($vehiclePrice ?? '', true);
+
         foreach ($prices ?? [] as $price) {
             foreach ($price as $key => $value) {
-                if ($value > 0) $filteredPrices[] = [$key => $value];
+                if ($value > 0) {
+                    $filteredPrices[] = [$key => $value];
+                }
             }
         }
+
         return $filteredPrices;
     }
 
+
     private function formatImages(array $images, ?string $mainImage): array
     {
-        if (!empty($mainImage)) array_unshift($images, $mainImage);
-        return array_map(fn($img) => url('storage' . str_replace(self::VEHICLE_IMAGE, 'vehicles/images/medium/', '/' . ltrim($img, '/'))), $images);
+        if (!empty($mainImage)) {
+            array_unshift($images, $mainImage);
+        }
+
+        return array_map(
+            fn($img) => url('storage' . str_replace(
+                self::VEHICLE_IMAGE,
+                'vehicles/images/medium/',
+                '/' . ltrim($img, '/')
+            )),
+            $images
+        );
     }
+
 
     private function urlizeArray(array $arr): array
     {
@@ -1802,7 +1877,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     private function formatOwner(VehicleInfo $vehicle): ?array
     {
-        if (!$vehicle->owner) return null;
+        if (!$vehicle->owner) {
+            return null;
+        }
         return [
             'name'         => $vehicle->owner->name,
             'phone_number' => $vehicle->owner->mobile_number,
@@ -2093,12 +2170,15 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
     private function checkWishlist(int $vehicleId): bool
     {
         $authId = currentUser()->id ?? null;
-        if (!$authId) return false;
+        if (!$authId) {
+            return false;
+        }
 
         return Wishlist::where("user_id", $authId)
             ->where("vehicle_id", $vehicleId)
             ->exists();
     }
+
 
     /**
      * Get currency symbol
