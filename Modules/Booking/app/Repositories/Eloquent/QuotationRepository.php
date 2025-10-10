@@ -444,17 +444,24 @@ class QuotationRepository implements QuotationRepositoryInterface
      */
     private function applyDateFilter($query, $sortByDate)
     {
-        if (!$sortByDate) return;
+        if (!$sortByDate) {
+            return;
+        }
 
         $dates = explode(' - ', $sortByDate);
         if (count($dates) === 2) {
             $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
             $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
+
             if ($startDate && $endDate) {
-                $query->whereBetween('bookings.created_at', [$startDate->startOfDay(), $endDate->endOfDay()]);
+                $query->whereBetween('bookings.created_at', [
+                    $startDate->startOfDay(),
+                    $endDate->endOfDay()
+                ]);
             }
         }
     }
+
 
     /**
      * Apply sort filters
@@ -696,17 +703,28 @@ class QuotationRepository implements QuotationRepositoryInterface
         $booking->extra_service_names = [];
         $booking->extra_service_formatted = [];
 
-        if (empty($booking->extra_service)) return;
+        if (empty($booking->extra_service)) {
+            return;
+        }
 
         $extraServiceArray = json_decode($booking->extra_service, true);
-        if (!is_array($extraServiceArray)) return;
+
+        if (!is_array($extraServiceArray)) {
+            return;
+        }
 
         $booking->extra_service_formatted = $extraServiceArray;
         $booking->extra_service_count = count($extraServiceArray);
-        $extraServiceIds = collect($extraServiceArray)->pluck('id')->toArray();
+
+        $extraServiceIds = collect($extraServiceArray)
+            ->pluck('id')
+            ->toArray();
+
         $booking->extra_service_names = ExtraService::whereIn('id', $extraServiceIds)
-            ->pluck('name')->toArray();
+            ->pluck('name')
+            ->toArray();
     }
+
 
     /**
      * Format insurance details
@@ -718,19 +736,30 @@ class QuotationRepository implements QuotationRepositoryInterface
         $booking->insurance_benefits_formatted = [];
         $booking->insurance_formatted = [];
 
-        if (empty($booking->insurance)) return;
+        if (empty($booking->insurance)) {
+            return;
+        }
 
         $insuranceArray = json_decode($booking->insurance, true);
-        if (!is_array($insuranceArray)) return;
+
+        if (!is_array($insuranceArray)) {
+            return;
+        }
 
         $booking->insurance_formatted = $insuranceArray;
         $booking->insurance_count = count($insuranceArray);
-        $insuranceIds = collect($insuranceArray)->pluck('id')->toArray();
+
+        $insuranceIds = collect($insuranceArray)
+            ->pluck('id')
+            ->toArray();
 
         $booking->insurance_names = Insurance::whereIn('id', $insuranceIds)
-            ->pluck('insurance_name')->toArray();
+            ->pluck('insurance_name')
+            ->toArray();
+
         $booking->insurance_benefits_formatted = InsuranceBenefit::whereIn('insurance_id', $insuranceIds)
-            ->pluck('benefit')->toArray();
+            ->pluck('benefit')
+            ->toArray();
     }
 
     /**
