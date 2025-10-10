@@ -108,7 +108,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="input-block">
-                                                            <label>{{ __('web.home.comments') }}<span class="text-danger"> *</span></label>
+                                                            <label for="comments">{{ __('web.home.comments') }}<span class="text-danger"> *</span></label>
                                                             <textarea rows="4" class="form-control" name="comments" id="comments" placeholder="{{ __('web.home.comments') }}"></textarea>
                                                             <span class="text-danger error-text" id="comments_error"></span>
                                                         </div>

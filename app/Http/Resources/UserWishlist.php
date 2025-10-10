@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\CarInfo\Models\VehicleInfo;
@@ -49,7 +50,7 @@ class UserWishlist extends JsonResource
             'filtered_price' => ($vehicle instanceof \Modules\CarInfo\Models\VehicleInfo)
                 ? $this->getPrice($vehicle, true, true)
                 : 0,
-            'rating' => rand(1, 5),
+            'rating' => $this->getRating($vehicle->id),
         ];
     }
 
@@ -83,5 +84,11 @@ class UserWishlist extends JsonResource
         }
 
         return $filteredPrices;
+    }
+
+    public function getRating(?int $vehicleId): float
+    {
+        $rating = Review::where('vehicle_id', $vehicleId)->avg('average_ratings');
+        return $rating ?? 0;
     }
 }

@@ -38,16 +38,16 @@ if (!function_exists('clearCache')) {
 }
 
 if (!function_exists('uploadFile')) {
-    function uploadFile(UploadedFile $file, string $path = 'uploads', ?string $oldFileName = '', string $disk = 'public'): ?string
+    function uploadFile(UploadedFile $file, string $path = 'uploads', ?string $oldFileName = '', ?string $disk = ''): ?string
     {
-        $disk = config('filesystems.default');
+        $storageDisk = $disk ?? config('filesystems.default');
         if ($file->isValid()) {
             $oldFileName = $oldFileName ?? '';
-            if (Storage::disk($disk)->exists($oldFileName)) {
-                Storage::disk($disk)->delete($oldFileName);
+            if (Storage::disk($storageDisk)->exists($oldFileName)) {
+                Storage::disk($storageDisk)->delete($oldFileName);
             }
             $filename = str_replace(',', '', Str::uuid() . '_' . time() . '.' . $file->getClientOriginalExtension());
-            $file->storeAs($path, $filename, $disk);
+            $file->storeAs($path, $filename, $storageDisk);
             return $path . "/" . $filename;
         }
         return null;
@@ -55,18 +55,18 @@ if (!function_exists('uploadFile')) {
 }
 
 if (!function_exists('uploadMutipleFile')) {
-    function uploadMutipleFile(UploadedFile $file, string $path = 'uploads', ?string $oldFileName = '', string $disk = 'public'): ?string
+    function uploadMutipleFile(UploadedFile $file, string $path = 'uploads', ?string $oldFileName = '', ?string $disk = ''): ?string
     {
-        $disk = config('filesystems.default');
+        $storageDisk = $disk ?? config('filesystems.default');
 
         if ($file->isValid()) {
             $oldFileName = $oldFileName ?? '';
-            if ($oldFileName && Storage::disk($disk)->exists("$path/$oldFileName")) {
-                Storage::disk($disk)->delete("$path/$oldFileName");
+            if ($oldFileName && Storage::disk($storageDisk)->exists("$path/$oldFileName")) {
+                Storage::disk($storageDisk)->delete("$path/$oldFileName");
             }
 
             $filename = Str::uuid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs($path, $filename, $disk);
+            $file->storeAs($path, $filename, $storageDisk);
 
             return $filename;
         }
@@ -87,7 +87,13 @@ if (!function_exists('formatDateTime')) {
             $timeFormat = optional(TimeFormat::find($generalSettings->get('time_format')))->name ?? $timeFormat;
         }
 
-        $format = $timeOnly ? $timeFormat : ($includeTime ? "$dateFormat $timeFormat" : $dateFormat);
+        if ($timeOnly) {
+            $format = $timeFormat;
+        } elseif ($includeTime) {
+            $format = "$dateFormat $timeFormat";
+        } else {
+            $format = $dateFormat;
+        }
 
         try {
             return Carbon::parse($date)->format($format);
@@ -122,7 +128,7 @@ if (!function_exists('uploadedAsset')) {
 
         // If file does not exist, return default image
         if (!$filePath || !Storage::disk($disk)->exists($filePath)) {
-            return ($defaultImages[$default] ?? $defaultImages['default']);
+            return $defaultImages[$default] ?? $defaultImages['default'];
         }
 
         // Get file details
@@ -572,22 +578,19 @@ function getCommonSettingData(?array $notifyData): array
 {
     $generalData = GeneralSetting::where('group_id', 1)->pluck('value', 'key');
 
-    if ($generalData) {
-        foreach ($generalData as $key => $value) {
-            if ($key == 'organization_name') {
-                $notifyData['company_name'] = $value;
-            }
-            if ($key == 'company_email') {
-                $notifyData['company_email'] = $value;
-            }
-            if ($key == 'company_phone') {
-                $notifyData['company_phone'] = $value;
-            }
-            if ($key == 'company_address_line') {
-                $notifyData['company_address'] = $value;
-            }
-            if ($key == 'company_postal_code') {
-                $notifyData['company_postal_code'] = $value;
+    if ($generalData->isNotEmpty()) {
+        // Map general setting keys to notifyData keys
+        $keyMap = [
+            'organization_name'    => 'company_name',
+            'company_email'        => 'company_email',
+            'company_phone'        => 'company_phone',
+            'company_address_line' => 'company_address',
+            'company_postal_code'  => 'company_postal_code',
+        ];
+
+        foreach ($keyMap as $generalKey => $notifyKey) {
+            if (isset($generalData[$generalKey])) {
+                $notifyData[$notifyKey] = $generalData[$generalKey];
             }
         }
     }

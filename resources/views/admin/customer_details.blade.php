@@ -105,7 +105,7 @@
                                                             <img src="{{ $document->icon }}" alt="Document Icon">
                                                         </span>
                                                         <div>
-                                                            <a href="{{ $document->document_url }}" target="_blank" class="fs-14 fw-medium">{{ $document->file_name ?? 'default-image-02.jpg'}}</a>
+                                                            <a href="{{ $document->document_url }}" target="_blank" rel="noopener" class="fs-14 fw-medium">{{ $document->file_name ?? 'default-image-02.jpg'}}</a>
                                                             <p class="fs-13">{{ $document->size == '0' || $document->size == '' ? '100 KB' : $document->size}}</p>
                                                         </div>
                                                     </div>

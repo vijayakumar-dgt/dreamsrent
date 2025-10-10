@@ -19,8 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         using: function () {
             Route::group(['middleware' => ['web']], function () {
-                require __DIR__ . '/../routes/web.php';
-                require __DIR__ . '/../routes/admin.php';
+                require_once __DIR__ . '/../routes/web.php';
+                require_once __DIR__ . '/../routes/admin.php';
             });
         }
     )

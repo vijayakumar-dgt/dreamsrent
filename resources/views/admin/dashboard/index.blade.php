@@ -294,7 +294,7 @@
                                                     <img src="{{ uploadedAsset($imagePath, 'profile') }}" class="rounded-circle" alt="Profile">
                                                 </div>
                                                 <div class="flex-grow-1 ms-2">
-                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="{{ route('admin.customer-details', $user->encrypted_id) }}" target="_blank">{{ucfirst($user->name)}}</a></h6>
+                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="{{ route('admin.customer-details', $user->encrypted_id) }}" target="_blank" rel="noopener">{{ucfirst($user->name)}}</a></h6>
                                                 </div>
                                             </div>
                                         </td>
