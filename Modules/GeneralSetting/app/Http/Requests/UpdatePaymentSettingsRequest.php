@@ -6,14 +6,16 @@ use App\Library\CustomFailedValidation;
 
 class UpdatePaymentSettingsRequest extends CustomFailedValidation
 {
+    private const OPTIONAL_STRING = 'sometimes|string';
+
     public function rules(): array
     {
         return [
             'group_id'      => 'required|integer',
-            'paypal_key'    => 'sometimes|string',
-            'paypal_secret' => 'sometimes|string',
-            'stripe_key'    => 'sometimes|string',
-            'stripe_secret' => 'sometimes|string',
+            'paypal_key'    => self::OPTIONAL_STRING,
+            'paypal_secret' => self::OPTIONAL_STRING,
+            'stripe_key'    => self::OPTIONAL_STRING,
+            'stripe_secret' => self::OPTIONAL_STRING,
             // Add other payment settings fields as needed
         ];
     }
