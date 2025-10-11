@@ -236,94 +236,73 @@
                 let tableBody = "";
                 if (response.code === 200 && response.data.length > 0) {
                     let data = response.data;
+
                     if ($.fn.DataTable.isDataTable("#steeringTypeTable")) {
                         $("#steeringTypeTable").DataTable().destroy();
                     }
 
                     $.each(data, function (index, value) {
-                        tableBody += `<tr>
-                                <td>${
-                                    value.steering_type.length > 24
-                                        ? value.steering_type.substring(0, 24) +
-                                          "..."
-                                        : value.steering_type
-                                }</td>
-                                <td>
-                                    <span class="badge ${
-                                        value.status == 1
-                                            ? "badge-success-transparent"
-                                            : "badge-danger-transparent"
-                                    } d-inline-flex align-items-center badge-sm">
-                                        <i class="ti ti-point-filled me-1"></i>${
-                                            value.status == 1
-                                                ? `${_l("admin.common.active")}`
-                                                : `${_l(
-                                                      "admin.common.inactive"
-                                                  )}`
+                        let statusBadgeClass = value.status == 1
+                            ? "badge-success-transparent"
+                            : "badge-danger-transparent";
+
+                        let statusText = value.status == 1
+                            ? `${_l("admin.common.active")}`
+                            : `${_l("admin.common.inactive")}`;
+
+                        let canEdit = hasPermission(permissions, "vehicle_attributes", "edit");
+                        let canDelete = hasPermission(permissions, "vehicle_attributes", "delete");
+
+                        let actionButtons = "";
+                        if (canEdit || canDelete) {
+                            actionButtons = `<td>
+                                <div class="dropdown">
+                                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="ti ti-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end p-2">
+                                        ${
+                                            canEdit
+                                                ? `<li>
+                                                    <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="edit-steering-type">
+                                                        <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                                    </button>
+                                                </li>`
+                                                : ""
                                         }
-                                    </span>
-                                </td>
-                                  ${
-                                      hasPermission(
-                                          permissions,
-                                          "vehicle_attributes",
-                                          "edit"
-                                      ) ||
-                                      hasPermission(
-                                          permissions,
-                                          "vehicle_attributes",
-                                          "delete"
-                                      )
-                                          ? `<td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="ti ti-dots-vertical"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end p-2">
-                                          ${
-                                              hasPermission(
-                                                  permissions,
-                                                  "vehicle_attributes",
-                                                  "edit"
-                                              )
-                                                  ? `<li>
-                                                <button type="button" class="dropdown-item rounded-1" data-id="${
-                                                    value.id
-                                                }" id="edit-steering-type"><i class="ti ti-edit me-1"></i>${_l(
-                                                        "admin.common.edit"
-                                                    )}</button>
-                                            </li>`
-                                                  : ""
-                                          }
-                                              ${
-                                                  hasPermission(
-                                                      permissions,
-                                                      "vehicle_attributes",
-                                                      "delete"
-                                                  )
-                                                      ? `<li>
-                                                <button type="button" class="dropdown-item rounded-1" data-id="${
-                                                    value.id
-                                                }" id="delete-steering-type" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
-                                                            "admin.common.delete"
-                                                        )}</button>
-                                            </li>`
-                                                      : ""
-                                              }
-                                        </ul>
-                                    </div>
-                                </td>`
-                                          : ""
-                                  }
-                            </tr>`;
+                                        ${
+                                            canDelete
+                                                ? `<li>
+                                                    <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="delete-steering-type" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                                        <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                                    </button>
+                                                </li>`
+                                                : ""
+                                        }
+                                    </ul>
+                                </div>
+                            </td>`;
+                        }
+
+                        tableBody += `<tr>
+                            <td>${
+                                value.steering_type.length > 24
+                                    ? value.steering_type.substring(0, 24) + "..."
+                                    : value.steering_type
+                            }</td>
+                            <td>
+                                <span class="badge ${statusBadgeClass} d-inline-flex align-items-center badge-sm">
+                                    <i class="ti ti-point-filled me-1"></i>${statusText}
+                                </span>
+                            </td>
+                            ${actionButtons}
+                        </tr>`;
                     });
                 } else {
                     tableBody += `
-                            <tr>
-                                <td colspan="4" class="text-center">${_l(
-                                    "admin.common.empty_table"
-                                )}</td>
-                            </tr>`;
+                        <tr>
+                            <td colspan="4" class="text-center">${_l("admin.common.empty_table")}</td>
+                        </tr>`;
                     $(".table-footer").empty();
                 }
 

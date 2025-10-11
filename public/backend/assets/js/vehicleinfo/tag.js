@@ -232,96 +232,76 @@
                     let data = response.data;
 
                     $.each(data, function (index, value) {
-                        tableBody += `<tr>
-                            <td>
-                                <h6 class="fw-medium text-black">${
-                                    value.tag
-                                }</h6>
-                            </td>
-                            <td>
-                                <span class="badge ${
-                                    value.status == 1
-                                        ? `badge-success-transparent`
-                                        : `badge-danger-transparent`
-                                } d-inline-flex align-items-center badge-sm">
-                                    <i class="ti ti-point-filled me-1"></i>
-                                    ${
-                                        value.status == 1
-                                            ? `${_l("admin.common.active")}`
-                                            : `${_l("admin.common.inactive")}`
-                                    }
-                                </span>
-                            </td>
-                            ${
-                                hasPermission(
-                                    permissions,
-                                    "vehicle_attributes",
-                                    "edit"
-                                ) ||
-                                hasPermission(
-                                    permissions,
-                                    "vehicle_attributes",
-                                    "delete"
-                                )
-                                    ? `<td>
+                        let statusBadgeClass =
+                            value.status == 1
+                                ? "badge-success-transparent"
+                                : "badge-danger-transparent";
+
+                        let statusText =
+                            value.status == 1
+                                ? `${_l("admin.common.active")}`
+                                : `${_l("admin.common.inactive")}`;
+
+                        let canEdit = hasPermission(permissions, "vehicle_attributes", "edit");
+                        let canDelete = hasPermission(permissions, "vehicle_attributes", "delete");
+
+                        let actionButtons = "";
+                        if (canEdit || canDelete) {
+                            actionButtons = `<td>
                                 <div class="dropdown">
                                     <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ti ti-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                         ${
-                                            hasPermission(
-                                                permissions,
-                                                "vehicle_attributes",
-                                                "edit"
-                                            )
+                                            canEdit
                                                 ? `<li>
-                                            <button
-                                                type="button"
-                                                class="dropdown-item rounded-1 edit-tag"
-                                                id="editTag"
-                                                data-id="${value.id}">
-                                                <i class="ti ti-edit me-1"></i>${_l(
-                                                    "admin.common.edit"
-                                                )}
-                                            </button>
-                                        </li>`
+                                                    <button
+                                                        type="button"
+                                                        class="dropdown-item rounded-1 edit-tag"
+                                                        id="editTag"
+                                                        data-id="${value.id}">
+                                                        <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                                    </button>
+                                                </li>`
                                                 : ""
                                         }
                                         ${
-                                            hasPermission(
-                                                permissions,
-                                                "vehicle_attributes",
-                                                "delete"
-                                            )
+                                            canDelete
                                                 ? `<li>
-                                            <button
-                                                type="button"
-                                                class="dropdown-item rounded-1 delete-tag"
-                                                id="deleteTag"
-                                                data-id="${value.id}"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#delete-modal">
-                                                <i class="ti ti-trash me-1"></i>${_l(
-                                                    "admin.common.delete"
-                                                )}
-                                            </button>
-                                        </li>`
+                                                    <button
+                                                        type="button"
+                                                        class="dropdown-item rounded-1 delete-tag"
+                                                        id="deleteTag"
+                                                        data-id="${value.id}"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#delete-modal">
+                                                        <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                                    </button>
+                                                </li>`
                                                 : ""
                                         }
                                     </ul>
                                 </div>
-                            </td>`
-                                    : ""
-                            }
+                            </td>`;
+                        }
+
+                        tableBody += `<tr>
+                            <td>
+                                <h6 class="fw-medium text-black">${value.tag}</h6>
+                            </td>
+                            <td>
+                                <span class="badge ${statusBadgeClass} d-inline-flex align-items-center badge-sm">
+                                    <i class="ti ti-point-filled me-1"></i>${statusText}
+                                </span>
+                            </td>
+                            ${actionButtons}
                         </tr>`;
                     });
                 } else {
                     tableBody += `<tr>
-                                    <td colspan="4" class="text-center">${_l(
-                                        "admin.common.empty_table"
-                                    )}</td>
-                                </tr>`;
+                        <td colspan="4" class="text-center">${_l("admin.common.empty_table")}</td>
+                    </tr>`;
                     $(".table-footer").empty();
                 }
 

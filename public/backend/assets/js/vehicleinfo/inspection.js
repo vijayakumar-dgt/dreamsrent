@@ -50,15 +50,15 @@
                 inspection_by: {
                     required: true,
                 },
-                odometer: {
+               odometer: {
                     required: true,
-                    pattern: /^[0-9]+$/,
+                    pattern: /^\d+$/,
                     min: 0,
                     max: 999999,
                 },
                 fuel: {
                     required: true,
-                    pattern: /^[0-9]+$/,
+                    pattern: /^\d+$/,
                     min: 0,
                     max: 50,
                 },
@@ -141,59 +141,10 @@
                     data: locationFormData,
                     processData: false,
                     contentType: false,
-                    beforeSend: function () {
-                        $(".submitbtn").attr("disabled", true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                                "admin.common.saving"
-                            )}..
-                        `);
-                    },
-                    complete: function () {
-                        $(".submitbtn")
-                            .attr("disabled", false)
-                            .html(
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            );
-                    },
-                    success: function (resp) {
-                        if (resp.code == 200) {
-                            showToast("success", resp.message);
-                            $("#add_inspection").modal("hide");
-                            initTable();
-                            $("#inspectionForm")[0].reset();
-                            $("#inspectionForm #id").val("");
-                            $("#inspectionForm input[type=checkbox]").prop(
-                                "checked",
-                                false
-                            );
-                            $(".error-text").text("");
-                            $(".form-control").removeClass(
-                                "is-invalid is-valid"
-                            );
-                            $("#vehicle_info_id").val(null).trigger("change");
-                            $("#inspection_by").val(null).trigger("change");
-                            $("#inspection_status").val(null).trigger("change");
-                            $("#repair_status").val(null).trigger("change");
-                            $("#checklist_id").val(null).trigger("change");
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
+                    beforeSend: handleBeforeSend,
+                    complete: handleComplete,
+                    success: handleSuccess,
+                    error: handleError,
                 });
             },
         });
@@ -229,6 +180,62 @@
         );
     }
 
+    function handleBeforeSend() {
+        $(".submitbtn").attr("disabled", true).html(`
+            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
+                "admin.common.saving"
+            )}..
+        `);
+    }
+
+    function handleComplete() {
+        $(".submitbtn")
+            .attr("disabled", false)
+            .html(
+                $("#id").val()
+                    ? _l("admin.common.save_changes")
+                    : _l("admin.common.create_new")
+            );
+    }
+
+    function handleSuccess(resp) {
+        if (resp.code !== 200) return;
+
+        showToast("success", resp.message);
+        $("#add_inspection").modal("hide");
+        initTable();
+        const form = $("#inspectionForm")[0];
+        form.reset();
+
+        $("#inspectionForm #id").val("");
+        $("#inspectionForm input[type=checkbox]").prop("checked", false);
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+
+        // Reset select2 fields
+        [
+            "#vehicle_info_id",
+            "#inspection_by",
+            "#inspection_status",
+            "#repair_status",
+            "#checklist_id"
+        ].forEach((selector) => $(selector).val(null).trigger("change"));
+    }
+
+    function handleError(error) {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+
+        if (error.responseJSON?.code === 422) {
+            $.each(error.responseJSON.errors, function (key, val) {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(val[0]);
+            });
+        } else {
+            showToast("error", error.responseJSON?.message);
+        }
+    }
+
     function initEvents() {
         $("#add_inspection").on("shown.bs.modal", function (e) {
             const $vehicle = $("#vehicle_info_id");
@@ -261,7 +268,6 @@
                     },
                 },
             });
-            const vehicleId = $("#id").val();
             const selectedVehicleId = $("#vehicle_info_id").data("selected-id");
             const selectedVehicleText =
                 $("#vehicle_info_id").data("selected-text");
@@ -381,124 +387,86 @@
                     let data = response.data;
 
                     $.each(data, function (index, value) {
-                        let inspection_status = formatInspectionStatus(
-                            value.inspection_status
-                        );
-                        let repair_status = formatRepairStatus(
-                            value.repair_status
-                        );
+                        let inspection_status = formatInspectionStatus(value.inspection_status);
+                        let repair_status = formatRepairStatus(value.repair_status);
+
+                        // Extracted action dropdown logic
+                        let actionDropdown = "";
+                        if (
+                            hasPermission(permissions, "inspections", "edit") ||
+                            hasPermission(permissions, "inspections", "delete")
+                        ) {
+                            let editBtn = hasPermission(permissions, "inspections", "edit")
+                                ? `<li>
+                                    <button type="button" class="dropdown-item rounded-1" data-vehicle-id="${value.id}" data-vehicle-text="${
+                                value.car ? value.car.name : ""
+                                }" data-id="${value.id}" id="editInspection"><i class="ti ti-edit me-1"></i>${_l(
+                                    "admin.common.edit"
+                                )}</button>
+                                </li>`
+                                : "";
+
+                            let deleteBtn = hasPermission(permissions, "inspections", "delete")
+                                ? `<li>
+                                    <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="deletebtn" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
+                                    "admin.common.delete"
+                                )}</button>
+                                </li>`
+                                : "";
+
+                            actionDropdown = `<td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
+                                                        ${editBtn}
+                                                        ${deleteBtn}
+                                                    </ul>
+                                                </div>
+                                            </td>`;
+                        }
 
                         tableBody += `<tr>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="avatar me-2 flex-shrink-0">
-                                                    <img src="${
-                                                        value.car.vehicle_image
-                                                    }" class="admin-vehicle-image" alt="${_l("admin.common.image")}">
+                                                    <img src="${value.car.vehicle_image}" class="admin-vehicle-image" alt="${_l(
+                            "admin.common.image"
+                        )}">
                                                 </div>
                                                 <div>
                                                     <div class="fw-semibold d-block text-black">${
-                                                        value.car
-                                                            ? value.car.name
-                                                            : "-"
+                                                        value.car ? value.car.name : "-"
                                                     }</div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><p class="text-gray-9 mb-0">${
-                                            value.inspectiondate
-                                        }</p></td>
+                                        <td><p class="text-gray-9 mb-0">${value.inspectiondate}</p></td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="avatar me-2 flex-shrink-0"><img class="rounded-circle" src="${
-                                                    value.inspector
-                                                        .profile_image
-                                                }" alt="${_l(
-                            "admin.common.image"
-                        )}"></div>
+                                                    value.inspector.profile_image
+                                                }" alt="${_l("admin.common.image")}"></div>
                                                 <div>
                                                     <div class="fw-semibold d-block text-black">${
-                                                        value.inspector
-                                                            ? value.inspector
-                                                                  .name
-                                                            : ""
+                                                        value.inspector ? value.inspector.name : ""
                                                     }</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>${inspection_status} </td>
                                         <td>${repair_status} </td>
-                                        ${
-                                            hasPermission(
-                                                permissions,
-                                                "inspections",
-                                                "edit"
-                                            ) ||
-                                            hasPermission(
-                                                permissions,
-                                                "inspections",
-                                                "delete"
-                                            )
-                                                ? `<td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="ti ti-dots-vertical"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                    ${
-                                                        hasPermission(
-                                                            permissions,
-                                                            "inspections",
-                                                            "edit"
-                                                        )
-                                                            ? `<li>
-                                                        <button type="button" class="dropdown-item rounded-1" data-vehicle-id="${
-                                                            value.id
-                                                        }" data-vehicle-text="${
-                                                                  value.car
-                                                                      ? value
-                                                                            .car
-                                                                            .name
-                                                                      : ""
-                                                              }" data-id="${
-                                                                  value.id
-                                                              }" id="editInspection"><i class="ti ti-edit me-1"></i>${_l(
-                                                                  "admin.common.edit"
-                                                              )}</button>
-                                                    </li>`
-                                                            : ""
-                                                    }
-                                                    ${
-                                                        hasPermission(
-                                                            permissions,
-                                                            "inspections",
-                                                            "delete"
-                                                        )
-                                                            ? `<li>
-                                                        <button type="button" class="dropdown-item rounded-1" data-id="${
-                                                            value.id
-                                                        }" id="deletebtn" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
-                                                                  "admin.common.delete"
-                                                              )}</button>
-                                                    </li>`
-                                                            : ""
-                                                    }
-                                                </ul>
-                                            </div>
-                                        </td>`
-                                                : ""
-                                        }
+                                        ${actionDropdown}
                                     </tr>`;
                     });
                 } else {
-                    tableBody += `
-                                <tr>
-                                    <td colspan="8" class="text-center">${_l(
-                                        "admin.common.empty_table"
-                                    )}</td>
+                    tableBody += `<tr>
+                                    <td colspan="8" class="text-center">${_l("admin.common.empty_table")}</td>
                                 </tr>`;
                     $(".table-footer").empty();
                 }
+
                 $("#inspectionTable tbody").html(tableBody);
                 if (
                     response.data.length != 0 &&

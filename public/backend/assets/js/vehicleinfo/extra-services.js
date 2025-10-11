@@ -83,44 +83,10 @@
                     data: ExtraServiceFormData,
                     processData: false,
                     contentType: false,
-                    beforeSend: function () {
-                        $(".submitbtn").attr("disabled", true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                                "admin.common.saving"
-                            )}..
-                        `);
-                    },
-                    complete: function () {
-                        $(".submitbtn")
-                            .attr("disabled", false)
-                            .html(
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            );
-                    },
-                    success: function (resp) {
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#add_extra_service").modal("hide");
-                            initTable();
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
-                                function (key, val) {
-                                    $("#" + key).addClass("is-invalid");
-                                    $("#" + key + "_error").text(val[0]);
-                                }
-                            );
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
+                    beforeSend: handleBeforeSend,
+                    complete: handleComplete,
+                    success: handleSuccess,
+                    error: handleError,
                 });
             },
         });
@@ -197,6 +163,50 @@
         );
     }
 
+    // Handle beforeSend
+    function handleBeforeSend() {
+        $(".submitbtn").attr("disabled", true).html(`
+            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
+                "admin.common.saving"
+            )}..
+        `);
+    }
+
+    // Handle complete
+    function handleComplete() {
+        $(".submitbtn")
+            .attr("disabled", false)
+            .html(
+                $("#id").val()
+                    ? _l("admin.common.save_changes")
+                    : _l("admin.common.create_new")
+            );
+    }
+
+    // Handle success
+    function handleSuccess(resp) {
+        if (resp.code === 200) {
+            showToast("success", resp.message);
+            $("#add_extra_service").modal("hide");
+            initTable();
+        }
+    }
+
+    // Handle error
+    function handleError(error) {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+
+        if (error.responseJSON.code === 422) {
+            $.each(error.responseJSON.errors, function (key, val) {
+                $("#" + key).addClass("is-invalid");
+                $("#" + key + "_error").text(val[0]);
+            });
+        } else {
+            showToast("error", error.responseJSON.message);
+        }
+    }
+
     function initEvents() {
         $(document).on("click", ".status_option", function () {
             $(".status_option").removeClass("active");
@@ -208,7 +218,6 @@
         });
 
         $(document).on("keyup", "#keyword", function () {
-            let keyword = $(this).val();
             initTable();
         });
 
@@ -350,12 +359,11 @@
         });
 
         $(document).on("change", "#icon", function () {
-            if (this.files && this.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    $("#icon_preview").attr("src", e.target.result);
-                };
-                reader.readAsDataURL(this.files[0]);
+            const file = this.files?.[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => $("#icon_preview").attr("src", e.target.result);
+                reader.readAsDataURL(file);
                 $("#icon_preview").removeClass("d-none");
                 $(".icon_placeholder").hide();
             } else {
@@ -365,12 +373,12 @@
         });
 
         $(document).on("change", "#image", function () {
-            if (this.files && this.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    $("#image_preview").attr("src", e.target.result);
-                };
-                reader.readAsDataURL(this.files[0]);
+            const file = this.files?.[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => $("#image_preview").attr("src", e.target.result);
+                reader.readAsDataURL(file);
                 $("#image_preview").removeClass("d-none");
                 $(".image_placeholder").hide();
             } else {
@@ -418,116 +426,74 @@
 
                     $.each(data, function (index, value) {
                         let desc = value.description;
-                        if (
-                            value.description &&
-                            value.description.length > 65
-                        ) {
+                        if (value.description && value.description.length > 65) {
                             desc = value.description.substring(0, 65) + "...";
                         }
+
+                        // Extracted badge classes and text
+                        let badgeClass = value.status == 1 ? "badge-success-transparent" : "badge-danger-transparent";
+                        let badgeText = value.status == 1 ? _l("admin.common.active") : _l("admin.common.inactive");
+
                         tableBody += `<tr>
-                                <td><h6 class="fw-medium">${
-                                    value.name
-                                }</h6></td>
+                                <td><h6 class="fw-medium">${value.name}</h6></td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="avatar avatar-lg">
-                                            <img src="${
-                                                value.icon
-                                            }" class="img-fluid" alt="${_l(
-                            "admin.common.image"
-                        )}">
+                                            <img src="${value.icon}" class="img-fluid" alt="${_l("admin.common.image")}">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="avatar avatar-lg">
-                                            <img src="${
-                                                value.image
-                                            }" class="img-fluid" alt="${_l(
-                            "admin.common.image"
-                        )}">
+                                            <img src="${value.image}" class="img-fluid" alt="${_l("admin.common.image")}">
                                         </div>
                                     </div>
                                 </td>
                                 <td>${desc}</td>
                                 <td>
-                                    <span class="badge ${
-                                        value.status == 1
-                                            ? `badge-success-transparent`
-                                            : `badge-danger-transparent`
-                                    }  d-inline-flex align-items-center badge-sm">
-                                        <i class="ti ti-point-filled me-1"></i>${
-                                            value.status == 1
-                                                ? `${_l("admin.common.active")}`
-                                                : `${_l(
-                                                      "admin.common.inactive"
-                                                  )}`
-                                        }
+                                    <span class="badge ${badgeClass} d-inline-flex align-items-center badge-sm">
+                                        <i class="ti ti-point-filled me-1"></i>${badgeText}
                                     </span>
                                 </td>
-                               ${
-                                   hasPermission(
-                                       permissions,
-                                       "extra_service",
-                                       "edit"
-                                   ) ||
-                                   hasPermission(
-                                       permissions,
-                                       "extra_service",
-                                       "delete"
-                                   )
-                                       ? `<td>
+                            ${
+                                hasPermission(permissions, "extra_service", "edit") ||
+                                hasPermission(permissions, "extra_service", "delete")
+                                    ? `<td>
                                     <div class="dropdown">
                                         <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="ti ti-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                                           ${
-                                               hasPermission(
-                                                   permissions,
-                                                   "extra_service",
-                                                   "edit"
-                                               )
-                                                   ? `<li>
-                                                <button type="button" class="dropdown-item rounded-1" id="editExtraservice" data-id="${
-                                                    value.id
-                                                }"><i class="ti ti-edit me-1"></i>${_l(
-                                                         "admin.common.edit"
-                                                     )}</button>
-                                            </li>`
-                                                   : ""
-                                           }
+                                        ${
+                                            hasPermission(permissions, "extra_service", "edit")
+                                                ? `<li>
+                                                    <button type="button" class="dropdown-item rounded-1" id="editExtraservice" data-id="${value.id}">
+                                                        <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                                    </button>
+                                                </li>`
+                                                : ""
+                                        }
                                             ${
-                                                hasPermission(
-                                                    permissions,
-                                                    "extra_service",
-                                                    "delete"
-                                                )
+                                                hasPermission(permissions, "extra_service", "delete")
                                                     ? `<li>
-                                                <button type="button" class="dropdown-item rounded-1" id="deleteService" data-id="${
-                                                    value.id
-                                                }" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                                    <i class="ti ti-trash me-1"></i>${_l(
-                                                        "admin.common.delete"
-                                                    )}
-                                                </button>
-                                            </li>`
+                                                    <button type="button" class="dropdown-item rounded-1" id="deleteService" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                                        <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                                    </button>
+                                                </li>`
                                                     : ""
                                             }
                                         </ul>
                                     </div>
                                 </td>`
-                                       : ""
-                               }
+                                    : ""
+                            }
                             </tr>`;
                     });
                 } else {
                     tableBody += `
                                 <tr>
-                                    <td colspan="7" class="text-center">${_l(
-                                        "admin.common.empty_table"
-                                    )}</td>
+                                    <td colspan="7" class="text-center">${_l("admin.common.empty_table")}</td>
                                 </tr>`;
                     $(".table-footer").empty();
                 }

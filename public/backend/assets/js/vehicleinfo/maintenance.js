@@ -482,7 +482,7 @@
             $(this).val(
                 $(this)
                     .val()
-                    .replace(/[^0-9]/g, "")
+                    .replace(/\D/g, "")
                     .slice(0, 8)
             );
         });

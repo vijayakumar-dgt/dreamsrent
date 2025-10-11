@@ -56,14 +56,21 @@
             dropdownParent: $addLocationModal,
             placeholder: function () {
                 const id = $(this).attr("id");
-                return id === "country"
-                    ? _l("admin.manage.select_country")
-                    : id === "state"
-                    ? _l("admin.manage.select_state")
-                    : _l("admin.manage.select_city");
+                let placeholderText;
+
+                if (id === "country") {
+                    placeholderText = _l("admin.manage.select_country");
+                } else if (id === "state") {
+                    placeholderText = _l("admin.manage.select_state");
+                } else {
+                    placeholderText = _l("admin.manage.select_city");
+                }
+
+                return placeholderText;
             },
         });
     };
+
 
     // Image preview handler
     const handleImagePreview = () => {
@@ -71,10 +78,12 @@
             const $preview = $("#image_preview");
             const $placeholder = $(".image_placeholder");
 
-            if (this.files && this.files[0]) {
+            const file = this.files?.[0]; // optional chaining
+
+            if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => $preview.attr("src", e.target.result);
-                reader.readAsDataURL(this.files[0]);
+                reader.readAsDataURL(file);
                 $preview.removeClass("d-none");
                 $placeholder.hide();
             } else {
@@ -295,6 +304,76 @@
         }
     };
 
+    // Helper to generate working days HTML
+    const getWorkingDaysHtml = (workingDays = []) => {
+        const workingDaysSet = new Set((workingDays || []).map(day => day.day.toLowerCase()));
+        return ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+            .map(day => {
+                const className = workingDaysSet.has(day) ? "working" : "non-working";
+                return `<span class="${className}">${day.charAt(0).toUpperCase()}</span>`;
+            })
+            .join("");
+    };
+
+    // Helper to generate action column HTML
+    const getActionColumn = (id, permissions) => {
+        if (!hasPermission(permissions, "locations", "edit") && !hasPermission(permissions, "locations", "delete")) return "";
+        return `
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="ti ti-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end p-2">
+                        ${hasPermission(permissions, "locations", "edit")
+                            ? `<li><button type="button" class="dropdown-item rounded-1 edit-location-btn" data-id="${id}"><i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}</button></li>`
+                            : ""
+                        }
+                        ${hasPermission(permissions, "locations", "delete")
+                            ? `<li><button type="button" class="dropdown-item rounded-1 delete-location-btn" data-id="${id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}</button></li>`
+                            : ""
+                        }
+                    </ul>
+                </div>
+            </td>`;
+    };
+
+    // Helper to generate table row HTML
+    const getTableRow = (location, permissions) => {
+        const name = DOMPurify.sanitize(location.name);
+        const address = DOMPurify.sanitize(location.address);
+        const phone = DOMPurify.sanitize(location.phone);
+        const imageUrl = DOMPurify.sanitize(location.image_url);
+        const status = parseInt(DOMPurify.sanitize(location.status));
+        const id = DOMPurify.sanitize(location.id);
+
+        const statusClass = status === 1 ? "badge-success-transparent" : "badge-danger-transparent";
+        const statusText = status === 1 ? _l("admin.common.active") : _l("admin.common.inactive");
+
+        return `
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center file-name-icon">
+                        <div class="avatar avatar-lg border">
+                            <img src="${imageUrl}" class="img-fluid" alt="Image Preview">
+                        </div>
+                        <div class="ms-2">
+                            <h6 class="fw-medium text-black">${name}</h6>
+                        </div>
+                    </div>
+                </td>
+                <td><h6 class="fw-medium text-black">${address}</h6></td>
+                <td><h6 class="fw-medium text-black">${phone}</h6></td>
+                <td><div class="working-days">${getWorkingDaysHtml(location.working_days)}</div></td>
+                <td>
+                    <span class="badge ${statusClass} d-inline-flex align-items-center badge-sm">
+                        <i class="ti ti-point-filled me-1"></i>${statusText}
+                    </span>
+                </td>
+                ${getActionColumn(id, permissions)}
+            </tr>`;
+    };
+
     // Initialize data table
     const initTable = (search = "", status = "") => {
         $(".table-loader").show();
@@ -313,80 +392,7 @@
                 }
 
                 if (response.code === 200 && response.data.length > 0) {
-                    const data = response.data;
-
-                    $.each(data, function(index, location) {
-                        const workingDaysSet = new Set(
-                            (location.working_days || []).map(day => day.day.toLowerCase())
-                        );
-
-                        const workingDaysHtml = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"]
-                            .map(day => {
-                                const className = workingDaysSet.has(day) ? "working" : "non-working";
-                                return `<span class="${className}">${day.charAt(0).toUpperCase()}</span>`;
-                            })
-                            .join("");
-
-                        const name = DOMPurify.sanitize(location.name);
-                        const address = DOMPurify.sanitize(location.address);
-                        const phone = DOMPurify.sanitize(location.phone);
-                        const imageUrl = DOMPurify.sanitize(location.image_url);
-                        const status = parseInt(DOMPurify.sanitize(location.status));
-                        const id = DOMPurify.sanitize(location.id);
-
-                        const statusClass = status === 1 ? "badge-success-transparent" : "badge-danger-transparent";
-                        const statusText = status === 1 ? _l("admin.common.active") : _l("admin.common.inactive");
-
-                        let actionColumn = "";
-                        if (
-                            hasPermission(permissions, "locations", "edit") ||
-                            hasPermission(permissions, "locations", "delete")
-                        ) {
-                            actionColumn = `
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="ti ti-dots-vertical"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end p-2">
-                                            ${
-                                                hasPermission(permissions, "locations", "edit")
-                                                    ? `<li><button type="button" class="dropdown-item rounded-1 edit-location-btn" data-id="${id}"><i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}</button></li>`
-                                                    : ""
-                                            }
-                                            ${
-                                                hasPermission(permissions, "locations", "delete")
-                                                    ? `<li><button type="button" class="dropdown-item rounded-1 delete-location-btn" data-id="${id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}</button></li>`
-                                                    : ""
-                                            }
-                                        </ul>
-                                    </div>
-                                </td>`;
-                        }
-
-                        tableBody += `
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center file-name-icon">
-                                        <div class="avatar avatar-lg border">
-                                            <img src="${imageUrl}" class="img-fluid" alt="Image Preview">
-                                        </div>
-                                        <div class="ms-2">
-                                            <h6 class="fw-medium text-black">${name}</h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><h6 class="fw-medium text-black">${address}</h6></td>
-                                <td><h6 class="fw-medium text-black">${phone}</h6></td>
-                                <td><div class="working-days">${workingDaysHtml}</div></td>
-                                <td>
-                                    <span class="badge ${statusClass} d-inline-flex align-items-center badge-sm">
-                                        <i class="ti ti-point-filled me-1"></i>${statusText}
-                                    </span>
-                                </td>
-                                ${actionColumn}
-                            </tr>`;
-                    });
+                    tableBody = response.data.map(location => getTableRow(location, permissions)).join("");
                 } else {
                     tableBody = `
                         <tr>
@@ -776,7 +782,7 @@
 
         // Numeric input
         $(".Number").on("input", function () {
-            this.value = this.value.replace(/[^0-9]/g, "");
+            this.value = this.value.replace(/\D/g, "");
         });
     };
 

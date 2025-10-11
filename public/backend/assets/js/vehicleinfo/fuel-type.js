@@ -58,53 +58,39 @@
                             }
                         </span>`;
 
-                        const actions =
-                            hasPermission(
-                                permissions,
-                                "vehicle_attributes",
-                                "edit"
-                            ) ||
-                            hasPermission(
-                                permissions,
-                                "vehicle_attributes",
-                                "delete"
-                            )
-                                ? `<td>
-                            <div class="dropdown">
-                                <button class="btn btn-icon btn-sm" data-bs-toggle="dropdown">
-                                    <i class="ti ti-dots-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end p-2">
-                                    ${
-                                        hasPermission(
-                                            permissions,
-                                            "vehicle_attributes",
-                                            "edit"
-                                        )
-                                            ? `<li><button class="dropdown-item rounded-1 edit-fuel-type" data-id="${
-                                                  value.id
-                                              }"><i class="ti ti-edit me-1"></i>${_l(
-                                                  "admin.common.edit"
-                                              )}</button></li>`
-                                            : ""
-                                    }
-                                    ${
-                                        hasPermission(
-                                            permissions,
-                                            "vehicle_attributes",
-                                            "delete"
-                                        )
-                                            ? `<li><button class="dropdown-item rounded-1 delete-fuel-type" data-id="${
-                                                  value.id
-                                              }" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
-                                                  "admin.common.delete"
-                                              )}</button></li>`
-                                            : ""
-                                    }
-                                </ul>
-                            </div>
-                        </td>`
-                                : "<td></td>";
+                        // Extracted actions logic
+                        let actions = "<td></td>"; // default empty td
+
+                        if (
+                            hasPermission(permissions, "vehicle_attributes", "edit") ||
+                            hasPermission(permissions, "vehicle_attributes", "delete")
+                        ) {
+                            let editBtn = hasPermission(permissions, "vehicle_attributes", "edit")
+                                ? `<li><button class="dropdown-item rounded-1 edit-fuel-type" data-id="${
+                                    value.id
+                                }"><i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}</button></li>`
+                                : "";
+
+                            let deleteBtn = hasPermission(permissions, "vehicle_attributes", "delete")
+                                ? `<li><button class="dropdown-item rounded-1 delete-fuel-type" data-id="${
+                                    value.id
+                                }" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
+                                    "admin.common.delete"
+                                )}</button></li>`
+                                : "";
+
+                            actions = `<td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-icon btn-sm" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end p-2">
+                                                    ${editBtn}
+                                                    ${deleteBtn}
+                                                </ul>
+                                            </div>
+                                    </td>`;
+                        }
 
                         tableBody += `<tr><td>${fuelName}</td><td>${statusBadge}</td>${actions}</tr>`;
                     });
@@ -179,44 +165,57 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    beforeSend: () => {
-                        $(".submitbtn").attr("disabled", true).html(`
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${_l(
-                            "admin.common.saving"
-                        )}..
-                        `);
-                    },
-                    complete: () => {
-                        $(".submitbtn")
-                            .attr("disabled", false)
-                            .text(
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            );
-                    },
-                    success: function (resp) {
-                        if (resp.code === 200) {
-                            showToast("success", resp.message);
-                            $("#fuel_type_modal").modal("hide");
-                            initTable();
-                        }
-                    },
-                    error: function (error) {
-                        $(".error-text").text("");
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (error.responseJSON.code === 422) {
-                            $.each(error.responseJSON.errors, (key, val) => {
-                                $(`#${key}`).addClass("is-invalid");
-                                $(`#${key}_error`).text(val[0]);
-                            });
-                        } else {
-                            showToast("error", error.responseJSON.message);
-                        }
-                    },
+                    beforeSend: handleBeforeSend,
+                    complete: handleComplete,
+                    success: handleSuccess,
+                    error: handleError,
                 });
             },
         });
+    }
+
+    // Function to handle beforeSend
+    function handleBeforeSend() {
+        $(".submitbtn").attr("disabled", true).html(`
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${_l(
+                "admin.common.saving"
+            )}..
+        `);
+    }
+
+    // Function to handle complete
+    function handleComplete() {
+        $(".submitbtn")
+            .attr("disabled", false)
+            .text(
+                $("#id").val()
+                    ? _l("admin.common.save_changes")
+                    : _l("admin.common.create_new")
+            );
+    }
+
+    // Function to handle success
+    function handleSuccess(resp) {
+        if (resp.code === 200) {
+            showToast("success", resp.message);
+            $("#fuel_type_modal").modal("hide");
+            initTable();
+        }
+    }
+
+    // Function to handle error
+    function handleError(error) {
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+
+        if (error.responseJSON.code === 422) {
+            $.each(error.responseJSON.errors, (key, val) => {
+                $(`#${key}`).addClass("is-invalid");
+                $(`#${key}_error`).text(val[0]);
+            });
+        } else {
+            showToast("error", error.responseJSON.message);
+        }
     }
 
     function setupEventListeners() {
