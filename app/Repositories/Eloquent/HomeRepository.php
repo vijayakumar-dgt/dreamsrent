@@ -109,108 +109,126 @@ class HomeRepository implements HomeRepositoryInterface
 
     public function getVehicleDetails(string $slug): array
     {
-        $vehicle = VehicleInfo::select('id', 'main_location_id', "other_location_id", 'views', "category_id")
-            ->where('slug', $slug)->first();
-        if (!$vehicle) {
-            abort(404);
-        }
-        $allLocation = collect();
+        $vehicle = VehicleInfo::select('id', 'main_location_id', 'other_location_id', 'views', 'category_id')
+            ->where('slug', $slug)
+            ->firstOrFail();
 
-        // Get main location
-        if ($vehicle->main_location_id) {
-            $mainLocations = Location::select('id', 'name', 'address')
-                ->where('id', $vehicle->main_location_id)
-                ->first();
+        $allLocation = $this->collectLocations($vehicle);
+        $mainLocation = $vehicle->mainLocation ?? null;
 
-            if ($mainLocations) {
-                $allLocation->push($mainLocations);
-            }
-        }
+        $this->incrementVehicleViews($vehicle);
 
-        // Get other locations and remove duplicates
-        if (!empty($vehicle->other_location_id)) {
-            $otherIds = json_decode($vehicle->other_location_id, true);
+        $bookingCount   = Booking::where('vehicle_id', $vehicle->id)->count();
+        $vehicleCount   = VehicleInfo::where('id', $vehicle->id)->value('views');
+        $lastUpdate     = formatDateTime(VehicleInfo::where('id', $vehicle->id)->value('updated_at'));
+        $settings       = $this->getVehicleSettings();
+        $vehicleDetail  = $this->getVehicleDetail($vehicle->id);
 
-            if (is_array($otherIds)) {
-                // Remove main_location_id if present in other_location_id
-                $filteredOtherIds = array_filter($otherIds, function ($id) use ($vehicle) {
-                    return $id != $vehicle->main_location_id;
-                });
+        $authorInfo     = $this->getAuthorInfo();
 
-                if ($filteredOtherIds !== []) {
-                    $otherLocations = Location::select('id', 'name', 'address')
-                        ->whereIn('id', $filteredOtherIds)
-                        ->get();
-
-                    $allLocation = $allLocation->merge($otherLocations);
-                }
-            }
-        }
-        if (isset($vehicle->views) && is_numeric($vehicle->views)) {
-            $vehicle->increment('views');
-        } else {
-            $vehicle->update(['views' => 1]);
-        }
-
-        $bookingCount = Booking::where('vehicle_id', $vehicle->id)->count();
-
-        $vehicleCount = VehicleInfo::select("views")->where('id', $vehicle->id)->first();
-
-        $lastUpdate = VehicleInfo::where('id', $vehicle->id)->value('updated_at');
-
-        $lastUpdateFormatted = formatDateTime($lastUpdate);
-
-        $allowBooking = GeneralSetting::where('group_id', 20)
-            ->where('key', 'booking')->value('value') ?? 1;
-        $allowEnquiries = GeneralSetting::where('group_id', 20)
-            ->where('key', 'enquiries')->value('value') ?? 1;
-        $seo_title = '';
-        $seo_description = '';
-        $meta_keywords = '';
-        $og_image = '';
-        $mainLocation = null;
-        $vehicleDetail = VehicleInfo::find($vehicle->id);
-
-        if ($vehicleDetail) {
-            $vehicleDetail->name = ucfirst($vehicleDetail->name ?? '');
-            $vehicleDetail->location_name = $vehicleDetail->mainLocation->name ?? '';
-            $vehicleDetail->image_url = $vehicleDetail->vehicle_image ? uploadedAsset($vehicleDetail->vehicle_image) : '';
-
-            $seo_title = $vehicleDetail->vehicle_metatitle ?? '';
-            $seo_description = $vehicleDetail->vehicle_metadesc ?? '';
-            $meta_keywords = $vehicleDetail->vehicle_metakeywords ?? '';
-            $og_image = $vehicleDetail->vehicle_image ? uploadedAsset($vehicleDetail->vehicle_image) : '';
-            $mainLocation = $vehicleDetail->mainLocation;
-        }
-
-        $author_location = GeneralSetting::where('key', 'company_address_line')->first()->value ?? '';
-        $appAdmin = User::where('user_type', 1)->first();
-        $appAdminDetails = $appAdmin ? UserDetail::where('user_id', $appAdmin->id)->first() : null;
-        $author_profile = $appAdminDetails ? uploadedAsset($appAdminDetails->profile_image, 'profile') : '';
-        $author_email = $appAdmin->email ?? "";
-        $author_phone = $appAdminDetails->mobile_number ?? "";
-        $author_name = getCurrentUserFullname($appAdmin->id);
-
-        return [
-            'author_location' => $author_location,
-            'author_profile'  => $author_profile,
-            'author_email'    => $author_email,
-            'author_phone'    => $author_phone,
-            'author_name'     => $author_name,
+        return array_merge($authorInfo, [
             'vehicle'         => $vehicle,
             'mainLocation'    => $mainLocation,
             'allLocation'     => $allLocation,
             'bookingCount'    => $bookingCount,
             'vehicleCount'    => $vehicleCount,
-            'lastUpdate'      => $lastUpdateFormatted,
-            'allowBooking'    => $allowBooking,
-            'allowEnquiries'  => $allowEnquiries,
-            'vehicleDetail'   => $vehicleDetail,
-            'seo_title'       => $seo_title,
-            'seo_description' => $seo_description,
-            'meta_keywords'   => $meta_keywords,
-            'og_image'        => $og_image,
+            'lastUpdate'      => $lastUpdate,
+            'allowBooking'    => $settings['allowBooking'],
+            'allowEnquiries'  => $settings['allowEnquiries'],
+            'vehicleDetail'   => $vehicleDetail['vehicleDetail'],
+            'seo_title'       => $vehicleDetail['seo_title'],
+            'seo_description' => $vehicleDetail['seo_description'],
+            'meta_keywords'   => $vehicleDetail['meta_keywords'],
+            'og_image'        => $vehicleDetail['og_image'],
             'slug'            => $slug
+        ]);
+    }
+
+    /**
+     * Collect all locations for the vehicle
+     */
+    private function collectLocations($vehicle)
+    {
+        $locations = collect();
+
+        if ($vehicle->main_location_id) {
+            $mainLocation = Location::select('id', 'name', 'address')->find($vehicle->main_location_id);
+            if ($mainLocation) $locations->push($mainLocation);
+        }
+
+        if (!empty($vehicle->other_location_id)) {
+            $otherIds = array_filter(json_decode($vehicle->other_location_id, true) ?? [], fn($id) => $id != $vehicle->main_location_id);
+            if (!empty($otherIds)) {
+                $otherLocations = Location::select('id', 'name', 'address')->whereIn('id', $otherIds)->get();
+                $locations = $locations->merge($otherLocations);
+            }
+        }
+
+        return $locations;
+    }
+
+    /**
+     * Increment or initialize vehicle views
+     */
+    private function incrementVehicleViews($vehicle)
+    {
+        if (is_numeric($vehicle->views)) {
+            $vehicle->increment('views');
+        } else {
+            $vehicle->update(['views' => 1]);
+        }
+    }
+
+    /**
+     * Get vehicle settings
+     */
+    private function getVehicleSettings()
+    {
+        $settings = GeneralSetting::where('group_id', 20)
+            ->whereIn('key', ['booking', 'enquiries'])
+            ->pluck('value', 'key');
+
+        return [
+            'allowBooking'   => $settings['booking'] ?? 1,
+            'allowEnquiries' => $settings['enquiries'] ?? 1
+        ];
+    }
+
+    /**
+     * Get vehicle detail and SEO info
+     */
+    private function getVehicleDetail($vehicleId)
+    {
+        $vehicleDetail = VehicleInfo::find($vehicleId);
+
+        $vehicleDetail->name         = ucfirst($vehicleDetail->name ?? '');
+        $vehicleDetail->location_name = $vehicleDetail->mainLocation->name ?? '';
+        $vehicleDetail->image_url     = $vehicleDetail->vehicle_image ? uploadedAsset($vehicleDetail->vehicle_image) : '';
+
+        return [
+            'vehicleDetail'   => $vehicleDetail,
+            'seo_title'       => $vehicleDetail->vehicle_metatitle ?? '',
+            'seo_description' => $vehicleDetail->vehicle_metadesc ?? '',
+            'meta_keywords'   => $vehicleDetail->vehicle_metakeywords ?? '',
+            'og_image'        => $vehicleDetail->vehicle_image ? uploadedAsset($vehicleDetail->vehicle_image) : ''
+        ];
+    }
+
+    /**
+     * Get author info
+     */
+    private function getAuthorInfo()
+    {
+        $author_location = GeneralSetting::where('key', 'company_address_line')->value('value') ?? '';
+        $appAdmin        = User::where('user_type', 1)->first();
+        $appAdminDetails = $appAdmin ? UserDetail::where('user_id', $appAdmin->id)->first() : null;
+
+        return [
+            'author_location' => $author_location,
+            'author_profile'  => $appAdminDetails ? uploadedAsset($appAdminDetails->profile_image, 'profile') : '',
+            'author_email'    => $appAdmin->email ?? '',
+            'author_phone'    => $appAdminDetails->mobile_number ?? '',
+            'author_name'     => $appAdmin ? getCurrentUserFullname($appAdmin->id) : ''
         ];
     }
 

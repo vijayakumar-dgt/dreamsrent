@@ -26,14 +26,13 @@ class LoginController extends Controller
     public function verifyLogin(Request $request): JsonResponse
     {
         $httpStatus = 200;
-
-        // default payload
         $payload = [
             'status'  => false,
             'code'    => 401,
             'message' => 'Invalid admin credentials',
         ];
 
+        // Validate request
         $validator = Validator::make(
             $request->all(),
             [
@@ -56,32 +55,27 @@ class LoginController extends Controller
                 'errors'  => $validator->errors()->toArray(),
                 'message' => $validator->errors()->first(),
             ];
-            return response()->json($payload, $httpStatus);
+        } else {
+            // Attempt authentication
+            $credentials = $request->only('email', 'password');
+            $remember = $request->get('remember', false);
+
+            if (Auth::guard('admin')->attempt($credentials, $remember)) {
+                $user = Auth::guard('admin')->user();
+
+                if ($this->isBlockedUser($user)) {
+                    $payload['message'] = __('admin.auth.your_account_is_blocked');
+                } else {
+                    $this->logUserDevice($request, $user);
+                    $payload = [
+                        'status'       => true,
+                        'code'         => 200,
+                        'redirect_url' => route('dashboard'),
+                        'message'      => __('admin.auth.login_success'),
+                    ];
+                }
+            }
         }
-
-        // Attempt authentication
-        $credentials = $request->only('email', 'password');
-        $remember = $request->get('remember', false);
-
-        if (!Auth::guard('admin')->attempt($credentials, $remember)) {
-            return response()->json($payload, $httpStatus);
-        }
-
-        $user = Auth::guard('admin')->user();
-
-        if ($this->isBlockedUser($user)) {
-            $payload['message'] = __('admin.auth.your_account_is_blocked');
-            return response()->json($payload, $httpStatus);
-        }
-
-        $this->logUserDevice($request, $user);
-
-        $payload = [
-            'status'       => true,
-            'code'         => 200,
-            'redirect_url' => route('dashboard'),
-            'message'      => __('admin.auth.login_success'),
-        ];
 
         return response()->json($payload, $httpStatus);
     }

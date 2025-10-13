@@ -35,50 +35,90 @@ class MessageRepository implements MessageRepositoryInterface
 
     public function sendMessage(Request $request): array
     {
-        if ($request->messageType == 'file' && $request->hasFile('file')) {
-            $foldername = 'chat';
-            $file = $request->file('file');
-            $filename = $file ? $file->getClientOriginalName() : null;
-            $mime_type = $file ? $file->getClientMimeType() : null;
-            $size = $file ? $file->getSize() : null;
-            $path = $file ? uploadFile($file, $foldername, $filename) : null;
-            $_message = new Message();
-            $_message->sender_id = $request->sender_id;
-            $_message->receiver_id = $request->receiver_id;
-            $_message->type = 'file';
-            $_message->file = $path;
-            $_message->mime_type = $mime_type;
-            $_message->size = $size !== null ? (string) $size : null;
-            $_message->message = $filename ?? '';
-            $_message->save();
+        $messageType = $request->messageType ?? 'text';
+        $senderId    = $request->sender_id;
+        $receiverId  = $request->receiver_id;
+
+        $publishMessage = null;
+
+        // Handle file message
+        if ($messageType === 'file' && $request->hasFile('file')) {
+            $publishMessage = $this->storeFileMessage($request, $senderId, $receiverId);
         }
+
+        // Handle text message
         if (!empty($request->message)) {
-            $message = new Message();
-            $message->sender_id = $request->sender_id;
-            $message->receiver_id = $request->receiver_id;
-            $message->message = $request->message;
-            $message->save();
+            $publishMessage = $this->storeTextMessage($request, $senderId, $receiverId);
         }
-        $publishMessage = ($request->messageType == 'file' && isset($path)) ? $path : $request->message;
-        $payload = [
-            'sender_id'   => $request->sender_id,
-            'receiver_id' => $request->receiver_id,
+
+        if ($publishMessage === null) {
+            return [
+                'success' => false,
+                'message' => __('admin.others.message_encoding_failed')
+            ];
+        }
+
+        // Publish message via MQTT
+        $payload = json_encode([
+            'sender_id'   => $senderId,
+            'receiver_id' => $receiverId,
             'message'     => $publishMessage,
-            'type'        => $request->messageType,
-        ];
-        $payload = json_encode($payload);
+            'type'        => $messageType,
+        ]);
+
         if ($payload === false) {
             return [
                 'success' => false,
                 'message' => __('admin.others.message_encoding_failed')
             ];
         }
-        $mqtt = new MqttService();
-        $mqtt->publish($request->topic, $payload);
+
+        (new MqttService())->publish($request->topic, $payload);
+
         return [
             'success' => true,
             'message' => __('admin.others.message_sent_success')
         ];
+    }
+
+    /**
+     * Store a file message and return the file path
+     */
+    private function storeFileMessage(Request $request, $senderId, $receiverId): ?string
+    {
+        $file = $request->file('file');
+        if (!$file) return null;
+
+        $filename  = $file->getClientOriginalName();
+        $mime_type = $file->getClientMimeType();
+        $size      = $file->getSize();
+        $path      = uploadFile($file, 'chat', $filename);
+
+        $message = new Message();
+        $message->sender_id = $senderId;
+        $message->receiver_id = $receiverId;
+        $message->type = 'file';
+        $message->file = $path;
+        $message->mime_type = $mime_type;
+        $message->size = $size !== null ? (string)$size : null;
+        $message->message = $filename ?? '';
+        $message->save();
+
+        return $path;
+    }
+
+    /**
+     * Store a text message and return the text
+     */
+    private function storeTextMessage(Request $request, $senderId, $receiverId): string
+    {
+        $message = new Message();
+        $message->sender_id = $senderId;
+        $message->receiver_id = $receiverId;
+        $message->message = $request->message;
+        $message->save();
+
+        return $request->message;
     }
 
     public function fetchMessages(Request $request)

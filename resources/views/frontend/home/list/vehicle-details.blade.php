@@ -65,7 +65,7 @@
                             </div>
                             <div class="camaro-location-inner">
                                 <i class='bx bx-show'></i>
-                                <span>{{__('web.home.views')}} : {{ $vehicleCount->views }} </span>
+                                <span>{{__('web.home.views')}} : {{ $vehicleCount }} </span>
                             </div>
                             <div class="camaro-location-inner">
                                 <i class='bx bx-car'></i>

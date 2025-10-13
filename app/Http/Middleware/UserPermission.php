@@ -20,28 +20,35 @@ class UserPermission
         $user = currentUser();
         $userType = $user->user_type ?? '';
 
-        // Admin type 1 bypasses permissions except reservation check
+        $response = $next($request);
+
         if ($userType === 1) {
-            if ($this->isReservationDisabled($routeName)) {
-                return redirect()->route('dashboard')
-                    ->with('permission-error', 'Currently this menu is disabled!');
-            }
-            return $next($request);
-        }
-
-        // Admin type 2 requires permission check
-        if ($userType === 2) {
+            $response = $this->handleAdminTypeOne($routeName, $request, $next);
+        } elseif ($userType === 2) {
             $permissions = getUserPermissions();
-
-            if ($this->isReservationRoute($routeName)) {
-                return $this->handleReservationRoute($routeName, $permissions, $next);
-            }
-
-            return $this->handleGeneralRoute($routeName, $permissions, $next);
+            $response = $this->handleAdminTypeTwo($routeName, $permissions, $next);
         }
 
-        // Default: allow
+        return $response;
+    }
+
+    private function handleAdminTypeOne(?string $routeName, Request $request, Closure $next): Response
+    {
+        if ($this->isReservationDisabled($routeName)) {
+            return redirect()->route('dashboard')
+                ->with('permission-error', __('admin.common.menu_disabled'));
+        }
+
         return $next($request);
+    }
+
+    private function handleAdminTypeTwo(?string $routeName, Collection $permissions, Closure $next): Response
+    {
+        if ($this->isReservationRoute($routeName)) {
+            return $this->handleReservationRoute($routeName, $permissions, $next);
+        }
+
+        return $this->handleGeneralRoute($routeName, $permissions, $next);
     }
 
     /**

@@ -42,60 +42,26 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         $email = $request->input('email');
         $type  = $request->input('type');
         $demoEmails = ['demouser@gmail.com', 'demoprovider@gmail.com'];
+        $response = [];
 
-        // Validate email
-        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return ['code' => 400, 'error' => __('web.auth.invalid_email')];
-        }
-
-        $user = User::where('email', $email)->first();
-
-        // Check user and demo restrictions
-        if (!$user || ($type === 'forgot' && in_array($email, $demoEmails, true))) {
-            return ['code' => 400, 'error' => __('web.auth.email_not_registered')];
+        // Validate email and user
+        if (!$this->isValidUser($email, $type, $demoEmails, $user)) {
+            return $this->errorResponse(400, __('web.auth.invalid_email_or_not_registered'));
         }
 
         // Get OTP settings
-        $settings = GeneralSetting::whereIn('key', ['otp_digit_limit', 'otp_expire_time', 'otp_type'])
-            ->pluck('value', 'key')
-            ->toArray();
-
-        if (!isset($settings['otp_type']) || !in_array($settings['otp_type'], ['email', 'sms'], true)) {
-            return ['code' => 400, 'error' => __('web.auth.unsupported_otp_type')];
+        if (!$settings = $this->getOtpSettingsValues()) {
+            return $this->errorResponse(400, __('web.auth.unsupported_otp_type'));
         }
 
-        // Generate OTP
-        $otp = in_array($email, $demoEmails, true)
-            ? '1234'
-            : $this->generateOtp($settings['otp_digit_limit']);
+        // Generate & store OTP
+        $expiresAt = $this->generateAndStoreOtp($email, $settings['otp_digit_limit'], $settings['otp_expire_time'], in_array($email, $demoEmails, true));
 
-        // Calculate expiry time
-        $otpExpireMinutes = (int) filter_var($settings['otp_expire_time'] ?? 10, FILTER_SANITIZE_NUMBER_INT);
-        $expiresAt = now()
-            ->addMinutes($otpExpireMinutes)
-            ->setTimezone(self::ASIA_KOLKATA)
-            ->format('Y-m-d H:i:s');
-
-        // Store OTP
-        DB::table('otp_settings')->updateOrInsert(
-            ['email' => $email],
-            ['otp' => $otp, 'expires_at' => $expiresAt]
-        );
-
-        // Prepare notification
-        $notifyData = [
-            'otp'             => $otp,
-            'expires_at'      => $expiresAt,
-            'otp_digit_limit' => $settings['otp_digit_limit'],
-            'user_name'       => $user->name,
-        ];
-        $notificationSlug = $type === 'forgot' ? 'forgot-otp' : 'login-otp';
-
-        // Send notification
+        // Send OTP notification
         try {
-            sendNotification($email, $notificationSlug, $notifyData);
+            $this->sendOtpNotification($email, $type, $email === '1234' ? '1234' : $this->getStoredOtp($email), $expiresAt, $settings['otp_digit_limit'], $user->name);
 
-            return [
+            $response = [
                 'code'            => 200,
                 'name'            => $user->name,
                 'otp_digit_limit' => $settings['otp_digit_limit'],
@@ -105,9 +71,80 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             ];
         } catch (\Throwable $e) {
             Log::error("Failed to send OTP notification: " . $e->getMessage());
-
-            return ['code' => 500, 'error' => __('web.auth.failed_to_send_otp')];
+            $response = $this->errorResponse(500, __('web.auth.failed_to_send_otp') . ' ' . $e->getMessage());
         }
+
+        return $response;
+    }
+
+    /* Helper Methods */
+
+    // 1. Validate email & get user
+    private function isValidUser(?string $email, ?string $type, array $demoEmails, ?User &$user = null): bool
+    {
+        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+        $user = User::where('email', $email)->first();
+        if (!$user || ($type === 'forgot' && in_array($email, $demoEmails, true))) {
+            return false;
+        }
+        return true;
+    }
+
+    // 2. Get OTP settings
+    private function getOtpSettingsValues(): ?array
+    {
+        $settings = GeneralSetting::whereIn('key', ['otp_digit_limit', 'otp_expire_time', 'otp_type'])
+            ->pluck('value', 'key')
+            ->toArray();
+
+        if (!isset($settings['otp_type']) || !in_array($settings['otp_type'], ['email', 'sms'], true)) {
+            return null;
+        }
+        return $settings;
+    }
+
+    // 3. Generate & store OTP
+    private function generateAndStoreOtp(string $email, int $digitLimit, $expireMinutes, bool $isDemo = false): string
+    {
+        $otp = $isDemo ? '1234' : $this->generateOtp($digitLimit);
+
+        $minutes = (int) filter_var($expireMinutes ?? 10, FILTER_SANITIZE_NUMBER_INT);
+        $expiresAt = now()->addMinutes($minutes)->setTimezone(self::ASIA_KOLKATA)->format('Y-m-d H:i:s');
+
+        DB::table('otp_settings')->updateOrInsert(
+            ['email' => $email],
+            ['otp' => $otp, 'expires_at' => $expiresAt]
+        );
+
+        return $expiresAt;
+    }
+
+    // Retrieve stored OTP for notification
+    private function getStoredOtp(string $email): string
+    {
+        return DB::table('otp_settings')->where('email', $email)->value('otp');
+    }
+
+    // 4. Send OTP notification
+    private function sendOtpNotification(string $email, ?string $type, string $otp, string $expiresAt, int $digitLimit, string $userName): void
+    {
+        $notifyData = [
+            'otp'             => $otp,
+            'expires_at'      => $expiresAt,
+            'otp_digit_limit' => $digitLimit,
+            'user_name'       => $userName,
+        ];
+
+        $notificationSlug = $type === 'forgot' ? 'forgot-otp' : 'login-otp';
+        sendNotification($email, $notificationSlug, $notifyData);
+    }
+
+    // Error response helper
+    private function errorResponse(int $code, string $message): array
+    {
+        return ['code' => $code, 'error' => $message];
     }
 
     public function generateOtp(int $digitLimit): string
@@ -382,7 +419,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
     {
         $user = User::where('email', $request->email)->first();
 
-        if ($this->isAdminUser($user)) {
+        if (isAdminUser($user)) {
             return $this->response(false, 422, __('web.auth.admin_access_not_allowed'));
         }
 
@@ -396,16 +433,8 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         $this->recordUserDevice($request);
 
         return $this->response(true, 200, __('web.auth.login_success'), [
-            'redirect_url' => $this->determineRedirectUrl(),
+            'redirect_url' => determineRedirectUrl(),
         ]);
-    }
-
-    /**
-     * Check if the user is an admin (type 1 or 2)
-     */
-    private function isAdminUser(?User $user): bool
-    {
-        return $user && in_array($user->user_type, [1, 2], true);
     }
 
     /**
@@ -442,21 +471,6 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         return ($locationData['status'] ?? '') === 'success'
             ? "{$locationData['country']} / {$locationData['city']}"
             : 'India / Coimbatore';
-    }
-
-    /**
-     * Determine post-login redirect URL
-     */
-    private function determineRedirectUrl(): string
-    {
-        $redirectTo = session('intended_url', '/');
-        session()->forget('intended_url');
-
-        if (session()->has('intended_booking')) {
-            return '/redirect-to-booking';
-        }
-
-        return $redirectTo;
     }
 
     /**

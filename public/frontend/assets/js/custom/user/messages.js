@@ -55,7 +55,7 @@
                 }
 
                 if (response.last_message) {
-                    $(".user-last-chat").text(response.last_message.message);
+                    $(".user-last-chat").html(response.last_message.message);
                     $(".last-chat-time").text(response.last_message.created_at);
                 }
 

@@ -338,67 +338,86 @@ class ReviewRepository implements ReviewRepositoryInterface
      */
     public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
     {
+        $result = [];
+
         switch ($duration) {
             case 'this_week':
-                $duration = [
+                $result = [
                     'from' => date(self::START_OF_DAY, strtotime('monday this week')),
                     'to'   => date(self::END_OF_DAY, strtotime('sunday this week'))
                 ];
                 break;
+
             case 'this_month':
-                $duration = [
+                $result = [
                     'from' => date('Y-m-01 00:00:00'),
                     'to'   => date('Y-m-t 23:59:59')
                 ];
                 break;
+
             case 'last30':
-                $duration = [
+                $result = [
                     'from' => date(self::START_OF_DAY, strtotime('-30 days')),
                     'to'   => date(self::END_OF_DAY)
                 ];
                 break;
+
             case 'last60':
-                $duration = [
+                $result = [
                     'from' => date(self::START_OF_DAY, strtotime('-60 days')),
                     'to'   => date(self::END_OF_DAY)
                 ];
                 break;
+
             case 'last7':
-                $duration = [
+                $result = [
                     'from' => date(self::START_OF_DAY, strtotime('-7 days')),
                     'to'   => date(self::END_OF_DAY)
                 ];
                 break;
+
             case 'custom':
-                if ($customFromDate !== null && $customFromDate !== '' && $customFromDate !== '0' && ($customToDate !== null && $customToDate !== '' && $customToDate !== '0')) {
-                    if (strtotime($customFromDate) > strtotime($customToDate)) {
-                        return ['error' => 'Custom from date cannot be greater than to date'];
-                    }
-
-                    $fromTimestamp = strtotime($customFromDate);
-                    $toTimestamp = strtotime($customToDate);
-
-                    if ($fromTimestamp === false || $toTimestamp === false) {
-                        return ['error' => 'Invalid custom date format'];
-                    }
-
-                    if ($fromTimestamp > $toTimestamp) {
-                        return ['error' => 'Custom from date cannot be greater than to date'];
-                    }
-
-                    $duration = [
-                        'from' => date('Y-m-d', $fromTimestamp) . ' 00:00:00',
-                        'to'   => date('Y-m-d', $toTimestamp) . ' 23:59:59'
-                    ];
-                } else {
-                    return ['error' => 'Custom dates are required'];
-                }
+                $result = $this->processCustomDuration($customFromDate, $customToDate);
                 break;
+
             default:
-                $duration = ['error' => 'Invalid duration specified'];
+                $result = ['error' => 'Invalid duration specified'];
         }
 
-        return $duration;
+        return $result;
+    }
+
+    /**
+     * Handle custom date range validation and formatting
+     */
+    private function processCustomDuration(?string $from, ?string $to): array
+    {
+        $error = null;
+        $result = [];
+
+        if (empty($from) || empty($to) || $from === '0' || $to === '0') {
+            $error = 'Custom dates are required';
+        } else {
+            $fromTimestamp = strtotime($from);
+            $toTimestamp   = strtotime($to);
+
+            if ($fromTimestamp === false || $toTimestamp === false) {
+                $error = 'Invalid custom date format';
+            } elseif ($fromTimestamp > $toTimestamp) {
+                $error = 'Custom from date cannot be greater than to date';
+            } else {
+                $result = [
+                    'from' => date('Y-m-d', $fromTimestamp) . ' 00:00:00',
+                    'to'   => date('Y-m-d', $toTimestamp) . ' 23:59:59'
+                ];
+            }
+        }
+
+        if ($error !== null) {
+            return ['error' => $error];
+        }
+
+        return $result;
     }
 
     public function delete(int $id): array
@@ -422,112 +441,18 @@ class ReviewRepository implements ReviewRepositoryInterface
     public function adminReviewsList(Request $request): array
     {
         try {
-            $columnIndex = $request->order[0]['column'] ?? 0;
-            $columnName = $request->columns[$columnIndex]['data'] ?? 'vehicle_name';
-            $orderDir = $request->order[0]['dir'] ?? 'asc';
+            $query = $this->buildBaseReviewQuery($request);
 
-            $query = Review::select(
-                'reviews.id',
-                'reviews.vehicle_id',
-                'reviews.user_id',
-                'reviews.average_ratings',
-                'review_messages.comments',
-                'vehicle_info.name as vehicle_name',
-                'vehicle_info.vehicle_image',
-                'reviews.created_at',
-                'user_details.profile_image',
-                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
-            )
-                ->join('users', 'users.id', '=', 'reviews.user_id')
-                ->leftJoin('user_details', 'user_details.user_id', '=', 'reviews.user_id')
-                ->join('review_messages', 'review_messages.review_id', '=', 'reviews.id')
-                ->join('vehicle_info', 'reviews.vehicle_id', '=', 'vehicle_info.id')
-                ->where('review_messages.parent_id', 0);
-
-            if ($request->has('search') && !empty($request->search)) {
-                $search = $request->search;
-                $query->where(function ($q) use ($search) {
-                    $q->where('users.name', 'LIKE', "%{$search}%")
-                        ->orWhere('users.email', 'LIKE', "%{$search}%")
-                        ->orWhere('users.phone_number', 'LIKE', "%{$search}%")
-                        ->orWhere('user_details.first_name', 'LIKE', "%{$search}%")
-                        ->orWhere('user_details.last_name', 'LIKE', "%{$search}%")
-                        ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%");
-                });
-            }
-
-            if ($request->has('sort_by_date') && !empty($request->sort_by_date)) {
-                $dates = explode(' - ', $request->sort_by_date);
-                if (count($dates) === 2) {
-                    $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
-                    $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
-
-                    if ($startDate && $endDate) {
-                        $query->whereBetween('reviews.created_at', [$startDate->startOfDay(), $endDate->endOfDay()]);
-                    }
-                }
-            }
-
-            if ($request->has('sort_by') && !empty($request->sort_by)) {
-                switch (strtolower($request->sort_by)) {
-                    case 'latest':
-                        $query->orderBy('reviews.created_at', 'desc');
-                        break;
-                    case 'ascending':
-                        $query->orderBy('vehicle_info.name', 'asc');
-                        break;
-                    case 'descending':
-                        $query->orderBy('vehicle_info.name', 'desc');
-                        break;
-                    case 'last month':
-                        $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
-                        $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
-                        $query->whereBetween('reviews.created_at', [$startDate, $endDate]);
-                        break;
-                    case 'last 7 days':
-                        $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
-                        $endDate = \Carbon\Carbon::now()->endOfDay();
-                        $query->whereBetween('reviews.created_at', [$startDate, $endDate]);
-                        break;
-                    default:
-                        $query->orderBy('reviews.created_at', 'desc');
-                        break;
-                }
-            }
-
-            if ($columnName === 'vehicle_name') {
-                $query->orderByRaw("LOWER(CONCAT_WS(' ', vehicle_info.name)) {$orderDir}");
-            } elseif ($columnName === 'customer_full_name') {
-                $query
-                    ->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) {$orderDir}");
-            } elseif ($columnName === 'review_date') {
-                $query->orderBy('reviews.created_at', $orderDir);
-            } else {
-                $query->orderBy($columnName, $orderDir);
-            }
+            $this->applySearchFilter($query, $request);
+            $this->applyDateRangeFilter($query, $request);
+            $this->applySortFilter($query, $request);
+            $this->applyColumnOrdering($query, $request);
 
             $totalRecords = Review::count();
             $filteredRecords = $query->count();
 
             $query->offset($request->start)->limit($request->length);
-
-            $reviews = $query->get()->map(function ($item) {
-                $vehicleImagePath = $item->vehicle_image ?? '';
-                $filename = basename($vehicleImagePath);
-                $newpath = 'vehicles/images/small/' . $filename;
-                $file = public_path('storage/' . $newpath);
-                if (file_exists($file)) {
-                    $vehicleImagePath = $newpath;
-                }
-                $item->vehicle_image = uploadedAsset($vehicleImagePath);
-                $item->profile_image = is_string($item->profile_image) || is_null($item->profile_image)
-                    ? uploadedAsset($item->profile_image, 'profile')
-                    : uploadedAsset(null, 'profile');
-                $item->review_date = formatDateTime($item->created_at, false);
-
-                unset($item->created_at);
-                return $item;
-            });
+            $reviews = $this->formatReviews($query->get());
 
             return [
                 "draw"            => intval($request->draw),
@@ -544,4 +469,118 @@ class ReviewRepository implements ReviewRepositoryInterface
             ];
         }
     }
+
+    private function buildBaseReviewQuery(Request $request)
+    {
+        return Review::select(
+            'reviews.id',
+            'reviews.vehicle_id',
+            'reviews.user_id',
+            'reviews.average_ratings',
+            'review_messages.comments',
+            'vehicle_info.name as vehicle_name',
+            'vehicle_info.vehicle_image',
+            'reviews.created_at',
+            'user_details.profile_image',
+            DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
+        )
+            ->join('users', 'users.id', '=', 'reviews.user_id')
+            ->leftJoin('user_details', 'user_details.user_id', '=', 'reviews.user_id')
+            ->join('review_messages', 'review_messages.review_id', '=', 'reviews.id')
+            ->join('vehicle_info', 'reviews.vehicle_id', '=', 'vehicle_info.id')
+            ->where('review_messages.parent_id', 0);
+    }
+
+    private function applySearchFilter($query, Request $request): void
+    {
+        if (!$request->filled('search')) {
+            return;
+        }
+
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('users.name', 'LIKE', "%{$search}%")
+                ->orWhere('users.email', 'LIKE', "%{$search}%")
+                ->orWhere('users.phone_number', 'LIKE', "%{$search}%")
+                ->orWhere('user_details.first_name', 'LIKE', "%{$search}%")
+                ->orWhere('user_details.last_name', 'LIKE', "%{$search}%")
+                ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%");
+        });
+    }
+
+    private function applyDateRangeFilter($query, Request $request): void
+    {
+        if (!$request->filled('sort_by_date')) {
+            return;
+        }
+
+        $dates = explode(' - ', $request->sort_by_date);
+        if (count($dates) !== 2) {
+            return;
+        }
+
+        $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
+        $endDate   = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('reviews.created_at', [$startDate->startOfDay(), $endDate->endOfDay()]);
+        }
+    }
+
+    private function applySortFilter($query, Request $request): void
+    {
+        if (!$request->filled('sort_by')) {
+            return;
+        }
+
+        $sortBy = strtolower($request->sort_by);
+        $now = \Carbon\Carbon::now();
+
+        match ($sortBy) {
+            'latest' => $query->orderBy('reviews.created_at', 'desc'),
+            'ascending' => $query->orderBy('vehicle_info.name', 'asc'),
+            'descending' => $query->orderBy('vehicle_info.name', 'desc'),
+            'last month' => $query->whereBetween('reviews.created_at', [
+                $now->copy()->subMonth()->startOfMonth(),
+                $now->copy()->subMonth()->endOfMonth()
+            ]),
+            'last 7 days' => $query->whereBetween('reviews.created_at', [
+                $now->copy()->subDays(7)->startOfDay(),
+                $now->endOfDay()
+            ]),
+            default => $query->orderBy('reviews.created_at', 'desc')
+        };
+    }
+
+    private function applyColumnOrdering($query, Request $request): void
+    {
+        $columnIndex = $request->order[0]['column'] ?? 0;
+        $columnName = $request->columns[$columnIndex]['data'] ?? 'vehicle_name';
+        $orderDir = $request->order[0]['dir'] ?? 'asc';
+
+        match ($columnName) {
+            'vehicle_name' => $query->orderByRaw("LOWER(CONCAT_WS(' ', vehicle_info.name)) {$orderDir}"),
+            'customer_full_name' =>
+                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) {$orderDir}"),
+            'review_date' => $query->orderBy('reviews.created_at', $orderDir),
+            default => $query->orderBy($columnName, $orderDir)
+        };
+    }
+
+    private function formatReviews($reviews)
+    {
+        return $reviews->map(function ($item) {
+            $filename = basename($item->vehicle_image ?? '');
+            $path = 'vehicles/images/small/' . $filename;
+            $fileExists = file_exists(public_path('storage/' . $path));
+
+            $item->vehicle_image = uploadedAsset($fileExists ? $path : $item->vehicle_image);
+            $item->profile_image = uploadedAsset($item->profile_image, 'profile');
+            $item->review_date   = formatDateTime($item->created_at, false);
+
+            unset($item->created_at);
+            return $item;
+        });
+    }
+
 }

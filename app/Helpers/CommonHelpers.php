@@ -625,3 +625,20 @@ function getCustomThemeCategoryId($theme_id)
     $category = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
     return $category->id ?? 1;
 }
+
+function determineRedirectUrl(): string
+{
+    $redirectTo = session('intended_url', '/');
+    session()->forget('intended_url');
+
+    if (session()->has('intended_booking')) {
+        return '/redirect-to-booking';
+    }
+
+    return $redirectTo;
+}
+
+function isAdminUser(?User $user): bool
+{
+    return $user && in_array($user->user_type, [1, 2], true);
+}

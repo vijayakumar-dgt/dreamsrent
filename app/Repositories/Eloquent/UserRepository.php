@@ -139,58 +139,76 @@ class UserRepository implements UserRepositoryInterface
     public function getAjaxBookings(Request $request): Collection
     {
         $user = Auth::guard('web')->user();
-
         if (!$user) {
             abort(403, self::UNAUTHORISED_ACCESS_MESSAGE);
         }
+
         $bookings = Booking::where('customer_id', $user->id)
             ->where('booking_by', '!=', 'quotation');
 
+        // Apply optional filters
         if ($request->has('limit')) {
             $bookings->take($request->limit);
         }
 
+        $this->applyDurationFilter($bookings, $request);
+        $this->applyStatusFilter($bookings, $request);
+        $this->applySorting($bookings, $request);
+
+        return $bookings->get();
+    }
+
+    /* --- Helper Methods --- */
+
+    // 1. Duration filter
+    private function applyDurationFilter($query, Request $request): void
+    {
         if ($request->has('duration') && $request->duration != "") {
             $customFrom = $request->custom_from_date ?? "";
             $customTo = $request->custom_to_date ?? "";
             $duration = $this->getDuration($request->duration, $customFrom, $customTo);
 
             if (!isset($duration['error']) && isset($duration['from'])) {
-                $bookings->whereBetween('start_datetime', [$duration['from'], $duration['to']]);
+                $query->whereBetween('start_datetime', [$duration['from'], $duration['to']]);
             }
         }
+    }
 
+    // 2. Status filter
+    private function applyStatusFilter($query, Request $request): void
+    {
         if ($request->has('status') && $request->status != "") {
             if ($request->status === "upcomming") {
-                $bookings->where('start_datetime', '>', now());
+                $query->where('start_datetime', '>', now());
             } else {
-                $bookings->where('booking_status', $request->status);
+                $query->where('booking_status', $request->status);
             }
         }
+    }
+
+    // 3. Sorting
+    private function applySorting($query, Request $request): void
+    {
         if ($request->has('sortby') && $request->sortby != "") {
             switch ($request->sortby) {
                 case 'asc':
-                    $bookings->orderBy('id', 'asc');
+                    $query->orderBy('id', 'asc');
                     break;
                 case 'desc':
-                    $bookings->orderBy('id', 'desc');
+                    $query->orderBy('id', 'desc');
                     break;
                 case 'alphabet':
-                    $bookings->with([
-                        'vehicle' => function ($query) {
-                            $query->orderBy('name', 'asc');
+                    $query->with([
+                        'vehicle' => function ($q) {
+                            $q->orderBy('name', 'asc');
                         }
-                    ])->orderBy(
-                        DB::raw(self::VEHICLE_NAME_SUBQUERY),
-                        'asc'
-                    );
+                    ])->orderBy(DB::raw(self::VEHICLE_NAME_SUBQUERY), 'asc');
                     break;
                 default:
-                    $bookings->orderBy('id', 'desc');
+                    $query->orderBy('id', 'desc');
                     break;
             }
         }
-        return $bookings->get();
     }
 
     public function getBookingDetails(int $id): object

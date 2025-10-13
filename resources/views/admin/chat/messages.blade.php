@@ -16,7 +16,7 @@
                         <div class="chat-search-header border-bottom">
                             <div class="header-title d-flex align-items-center justify-content-between">
                                 <h4>{{ __('admin.others.chats') }}</h4>
-                                <div class="chat-options">
+                                <div class="chat-options d-none">
                                     <ul class="d-flex align-items-center">
                                         <li>
                                             <a href="javascript:void(0)" class="btn chat-search-btn"

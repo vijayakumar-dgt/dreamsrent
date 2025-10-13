@@ -128,25 +128,59 @@ class CalendarRepository implements CalendarRepositoryInterface
             ];
         }
 
-        // Vehicle info
+        $vehicleType = $this->processVehicle($booking);
+        $driverDetails = $this->processDriver($booking);
+        $customerData = $this->processCustomer($booking->customer_id);
+        $pickupLocation = $this->getLocationName($booking->pickup_location);
+        $returnLocation = $this->getLocationName($booking->return_location);
+
+        $booking->driver_type_info = $booking->driving_type ? DrivingType::find($booking->driving_type) : null;
+
+        $booking->delivery_type = $booking->delivery_type
+            ? ucfirst(str_replace('_', ' ', $booking->delivery_type))
+            : 'N/A';
+
+        $currencySymbol = getDefaultCurrencySymbol();
+
+        return [
+            'code'            => 200,
+            'booking'         => $booking,
+            'vehicleType'     => $vehicleType,
+            'pickupLocation'  => $pickupLocation,
+            'returnLocation'  => $returnLocation,
+            'driverDetails'   => $driverDetails,
+            'customerDetails' => $customerData,
+            'currency'        => $currencySymbol,
+        ];
+    }
+
+    /**
+     * Process vehicle and return vehicle type
+     */
+    private function processVehicle($booking)
+    {
         $vehicleType = null;
         $vehicle = $booking->vehicle;
-        if ($vehicle) {
-            $vehicleImagePath = $vehicle->vehicle_image ?? '';
-            $filename = basename($vehicleImagePath);
-            $newPath = 'vehicles/images/small/' . $filename;
-            $file = public_path('storage/' . $newPath);
 
-            $vehicle->vehicle_image = uploadedAsset(file_exists($file) ? $newPath : $vehicleImagePath);
+        if (!$vehicle) return null;
 
-            $vehicleType = Cartype::select('name')->where('id', $vehicle->type_id ?? 0)->first();
-        }
+        $vehicleImagePath = $vehicle->vehicle_image ?? '';
+        $filename = basename($vehicleImagePath);
+        $newPath = 'vehicles/images/small/' . $filename;
+        $file = public_path('storage/' . $newPath);
 
-        // Locations
-        $pickupLocation = Location::where('id', $booking->pickup_location)->value('name');
-        $returnLocation = Location::where('id', $booking->return_location)->value('name');
+        $vehicle->vehicle_image = uploadedAsset(file_exists($file) ? $newPath : $vehicleImagePath);
 
-        // Driver details
+        $vehicleType = Cartype::select('name')->where('id', $vehicle->type_id ?? 0)->first();
+
+        return $vehicleType;
+    }
+
+    /**
+     * Process driver info
+     */
+    private function processDriver($booking)
+    {
         if (!empty($booking->driver_id)) {
             $driverDetails = Driver::select('driver_name', 'image', 'phone_number')
                 ->where('id', $booking->driver_id)
@@ -164,39 +198,32 @@ class CalendarRepository implements CalendarRepositoryInterface
             ];
         }
 
-        // Customer info
-        $userInfo = User::find($booking->customer_id);
-        $customerData = null;
-        if ($userInfo) {
-            $userDetail = $userInfo->userDetail;
-            $customerData = [
-                'first_name'    => $userDetail->first_name ?? '',
-                'last_name'     => $userDetail->last_name ?? '',
-                'phone_number'  => $userInfo->phone_number ?? '',
-                'profile_image' => uploadedAsset($userDetail->profile_image ?? '', 'profile'),
-            ];
-        }
+        return $driverDetails;
+    }
 
-        // Driving type info
-        $booking->driver_type_info = $booking->driving_type ? DrivingType::find($booking->driving_type) : null;
+    /**
+     * Process customer info
+     */
+    private function processCustomer($customerId)
+    {
+        $userInfo = User::find($customerId);
+        if (!$userInfo) return null;
 
-        // Delivery type formatting
-        $booking->delivery_type = $booking->delivery_type
-            ? ucfirst(str_replace('_', ' ', $booking->delivery_type))
-            : 'N/A';
-
-        // Currency symbol
-        $currencySymbol = getDefaultCurrencySymbol();
+        $userDetail = $userInfo->userDetail;
 
         return [
-            'code'            => 200,
-            'booking'         => $booking,
-            'vehicleType'     => $vehicleType,
-            'pickupLocation'  => $pickupLocation,
-            'returnLocation'  => $returnLocation,
-            'driverDetails'   => $driverDetails,
-            'customerDetails' => $customerData,
-            'currency'        => $currencySymbol,
+            'first_name'    => $userDetail->first_name ?? '',
+            'last_name'     => $userDetail->last_name ?? '',
+            'phone_number'  => $userInfo->phone_number ?? '',
+            'profile_image' => uploadedAsset($userDetail->profile_image ?? '', 'profile'),
         ];
+    }
+
+    /**
+     * Fetch location name by ID
+     */
+    private function getLocationName($locationId)
+    {
+        return Location::where('id', $locationId)->value('name');
     }
 }
