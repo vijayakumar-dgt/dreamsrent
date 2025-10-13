@@ -668,6 +668,9 @@ class GeneralSettingRepository implements GeneralSettingInterface
                     case 'stripe_secret':
                         $envUpdates['STRIPE_SECRET'] = $value;
                         break;
+                    default:
+                        // No env update needed
+                        break;
                 }
             }
         }

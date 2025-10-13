@@ -441,7 +441,7 @@ class ReviewRepository implements ReviewRepositoryInterface
     public function adminReviewsList(Request $request): array
     {
         try {
-            $query = $this->buildBaseReviewQuery($request);
+            $query = $this->buildBaseReviewQuery();
 
             $this->applySearchFilter($query, $request);
             $this->applyDateRangeFilter($query, $request);
@@ -470,7 +470,7 @@ class ReviewRepository implements ReviewRepositoryInterface
         }
     }
 
-    private function buildBaseReviewQuery(Request $request)
+    private function buildBaseReviewQuery()
     {
         return Review::select(
             'reviews.id',

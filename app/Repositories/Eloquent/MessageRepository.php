@@ -87,7 +87,9 @@ class MessageRepository implements MessageRepositoryInterface
     private function storeFileMessage(Request $request, $senderId, $receiverId): ?string
     {
         $file = $request->file('file');
-        if (!$file) return null;
+        if (!$file) {
+            return null;
+        }
 
         $filename  = $file->getClientOriginalName();
         $mime_type = $file->getClientMimeType();

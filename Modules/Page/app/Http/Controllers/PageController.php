@@ -3197,7 +3197,6 @@ class PageController extends Controller
                     is_string($section['section_content'])) &&
                     (preg_match('/\[[^\]]+\]/', $section['section_content']) === 0)
                 ) {
-                    $section['section_content'] = $section['section_content'];
                     $section['section_type'] = 'multiple_section';
                 }
             }

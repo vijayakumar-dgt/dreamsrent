@@ -1100,13 +1100,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         $vehicle->vehicle_image = uploadedAsset($vehicleImagePath);
 
         // Currency
-        $currencySymbol = "$";
-        if ($currencySetting = GeneralSetting::where("key", "currency_symbol")->first()) {
-            if ($currencySetting->value && $currency = Currency::find($currencySetting->value)) {
-                $currencySymbol = $currency->symbol;
-            }
-        }
-        $vehicle->currency = $currencySymbol;
+        $vehicle->currency = getDefaultCurrencySymbol();
 
         // Multiple images
         $vehicle->multiple_vehicle_images = [];
@@ -1427,7 +1421,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 'wishlist'                => $wishlistExists,
                 'review_count'            => $review_count,
                 'price'                   => !empty($filteredPrices) ? $filteredPrices : null,
-                'is_featured'             => $vehicle->popular == 1 ? true : false,
+                'is_featured'             => $vehicle->feature ?? 0,
                 'is_top_rated'            => is_numeric($rating) && $rating >= 4,
                 'seo_title'               => $vehicle->vehicle_metatitle,
                 'seo_key'                 => $vehicle->vehicle_metakeywords,
@@ -1705,43 +1699,47 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
     public function vehicleDetailsList(Request $request): array
     {
+        $response = [];
+
         try {
             $vehicleSlug = $request->vehicle_slug;
+
             if (!$vehicleSlug) {
-                return $this->errorResponse('Vehicle ID is required', 400);
+                $response = $this->errorResponse('Vehicle ID is required', 400);
+            } else {
+                $vehicle = VehicleInfo::with([
+                    self::CAR_TYPE,
+                    self::BRAND,
+                    self::CATEGORY,
+                    self::MAIN_LOCATION,
+                    self::COLOR,
+                    self::FUEL_TYPE,
+                    self::TRANSMISSION,
+                    'extraservices.extraService:id,name,icon,description,image',
+                    'faqs:id,vehicle_id,question,answer',
+                    'damages:id,Vehicle_id,damage_type,damage_loaction,image,description',
+                    'tariffs:id,vehicle_id,tariff_title,tariff_daily_price,tariff_from_days,tariff_to_days,tariff_base_km,tariff_extra_price',
+                    'seasonals:id,vehicle_id,seasonal_title,seasonal_start_date,seasonal_end_date,seasonal_daily_rate,seasonal_weekly_rate,seasonal_monthly_rate,seasonal_late_fee',
+                    'owner.userDetails:id,user_id,profile_image'
+                ])->where('slug', $vehicleSlug)->first();
+
+                if (!$vehicle) {
+                    $response = $this->errorResponse('No vehicle found with the provided slug.', 404);
+                } else {
+                    $data = $this->formatVehicleData($vehicle);
+                    $response = [
+                        'code'    => 200,
+                        'success' => true,
+                        'message' => __('admin.common.default_retrieve_success'),
+                        'data'    => $data
+                    ];
+                }
             }
-
-            $vehicle = VehicleInfo::with([
-                self::CAR_TYPE,
-                self::BRAND,
-                self::CATEGORY,
-                self::MAIN_LOCATION,
-                self::COLOR,
-                self::FUEL_TYPE,
-                self::TRANSMISSION,
-                'extraservices.extraService:id,name,icon,description,image',
-                'faqs:id,vehicle_id,question,answer',
-                'damages:id,Vehicle_id,damage_type,damage_loaction,image,description',
-                'tariffs:id,vehicle_id,tariff_title,tariff_daily_price,tariff_from_days,tariff_to_days,tariff_base_km,tariff_extra_price',
-                'seasonals:id,vehicle_id,seasonal_title,seasonal_start_date,seasonal_end_date,seasonal_daily_rate,seasonal_weekly_rate,seasonal_monthly_rate,seasonal_late_fee',
-                'owner.userDetails:id,user_id,profile_image'
-            ])->where('slug', $vehicleSlug)->first();
-
-            if (!$vehicle) {
-                return $this->errorResponse('No vehicle found with the provided slug.', 404);
-            }
-
-            $data = $this->formatVehicleData($vehicle);
-
-            return [
-                'code'    => 200,
-                'success' => true,
-                'message' => __('admin.common.default_retrieve_success'),
-                'data'    => $data
-            ];
         } catch (\Exception $e) {
-            return $this->errorResponse(__('admin.common.default_retrieve_error'), 500);
+            $response = $this->errorResponse(__('admin.common.default_retrieve_error'), 500);
         }
+
+        return $response;
     }
 
     /** Helper to format vehicle data */
@@ -1762,6 +1760,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
         $faqEnabled = $this->getGeneralSetting(20, 'faq');
         $extraServiceEnabled = $this->getGeneralSetting(20, 'extraService');
+        $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
         return [
             'id'                      => $vehicle->id,
@@ -1783,7 +1782,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             'year'                    => $vehicle->year,
             'mileage'                 => $vehicle->mileage,
             'vin'                     => $vehicle->vin,
-            'rating'                  => Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0,
+            'rating'                  => $rating,
             'passenger_capacity'      => $vehicle->passenger_capacity,
             'hatch'                   => $vehicle->hatch,
             'num_seats'               => $vehicle->num_seats,
@@ -1797,8 +1796,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             'seo_title'               => $vehicle->vehicle_metatitle,
             'seo_key'                 => $vehicle->vehicle_metakeywords,
             'seo_description'         => $vehicle->vehicle_metadesc,
-            'is_featured'             => (bool) rand(0, 1),
-            'is_top_rated'            => (bool) rand(0, 1),
+            'is_featured'             => $vehicle->feature ?? 0,
+            'is_top_rated'            => is_numeric($rating) && $rating >= 4,
             'authenticated'           => Auth::guard('web')->check(),
             'description'             => $vehicle->description,
             'extraservice'            => $extraServiceEnabled ? $this->formatExtraServices($vehicle->extraservices) : null,
@@ -2116,8 +2115,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             'wishlist'           => $wishlistExists,
             'review_count'       => $review_count,
             'price'              => !empty($filteredPrices) ? $filteredPrices : null,
-            'is_featured'        => (bool) rand(0, 1),
-            'is_top_rated'       => (bool) rand(0, 1),
+            'is_featured'        => $vehicle->feature ?? 0,
+            'is_top_rated'       => is_numeric($rating) && $rating >= 4,
             'seo_title'          => $vehicle->vehicle_metatitle,
             'seo_key'            => $vehicle->vehicle_metakeywords,
             'seo_description'    => $vehicle->vehicle_metadesc,

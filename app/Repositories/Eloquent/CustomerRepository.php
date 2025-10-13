@@ -43,84 +43,77 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     public function store(Request $request): array
-{
-    $id = $request->id ?? '';
-    $isNew = empty($id);
+    {
+        $id = $request->id ?? '';
+        $isNew = empty($id);
 
-    $successMsg = $isNew
-        ? __('admin.manage.customer_create_success')
-        : __('admin.manage.customer_update_success');
-    $errorMsg = $isNew
-        ? __('admin.common.default_create_error')
-        : __('admin.common.default_update_error');
+        $successMsg = $isNew
+            ? __('admin.manage.customer_create_success')
+            : __('admin.manage.customer_update_success');
+        $errorMsg = $isNew
+            ? __('admin.common.default_create_error')
+            : __('admin.common.default_update_error');
 
-    try {
-        DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
-        // 1️⃣ Create user data arrays
-        $userData = $this->prepareUserData($request);
-        $userDetailsData = $this->prepareUserDetailsData($request);
+            // Create user data arrays
+            $userData = [
+                'email'       => $request->email,
+                'phone_number'=> $request->phone_number,
+                'user_type'   => 3,
+                'language_id' => $request->language,
+            ];
+            $userDetailsData = [
+                'first_name'    => $request->first_name,
+                'last_name'     => $request->last_name,
+                'gender'        => $request->gender,
+                'dob'           => Carbon::createFromFormat('d-m-Y', $request->dob),
+                'address'       => $request->address,
+                'card_number'   => $request->card_number,
+                'date_of_issue' => Carbon::createFromFormat('d-m-Y', $request->date_of_issue),
+                'valid_date'    => Carbon::createFromFormat('d-m-Y', $request->valid_date),
+            ];
 
-        // 2️⃣ Handle profile image
-        $this->handleProfileImage($request, $userDetailsData, $isNew, $id);
+            // Handle profile image
+            $this->handleProfileImage($request, $userDetailsData, $isNew, $id);
 
-        // 3️⃣ Create or update user
-        $userId = $isNew ? $this->createUser($userData, $userDetailsData) : $this->updateUser($id, $userData, $userDetailsData);
+            // Create or update user
+            $userId = $isNew ? $this->createUser($userData, $userDetailsData) : $this->updateUser($id, $userData, $userDetailsData);
 
-        // 4️⃣ Handle documents
-        $this->handleDocuments($request->file('documents'), $userId);
-        $this->removeDocuments($request->removed_documents);
+            // Handle documents
+            $this->handleDocuments($request->file('documents'), $userId);
+            $this->removeDocuments($request->removed_documents);
 
-        DB::commit();
+            DB::commit();
 
-        return [
-            'status'  => 'success',
-            'code'    => 200,
-            'message' => $successMsg,
-        ];
-    } catch (\Throwable $e) {
-        DB::rollBack();
+            return [
+                'status'  => 'success',
+                'code'    => 200,
+                'message' => $successMsg,
+            ];
+        } catch (\Throwable $e) {
+            DB::rollBack();
 
-        return [
-            'status'  => 'error',
-            'code'    => 500,
-            'message' => $errorMsg,
-        ];
+            return [
+                'status'  => 'error',
+                'code'    => 500,
+                'message' => $errorMsg,
+            ];
+        }
     }
-}
 
     // ====================== Helper methods ======================
-
-    private function prepareUserData(Request $request): array
-    {
-        return [
-            'email'       => $request->email,
-            'phone_number'=> $request->phone_number,
-            'user_type'   => 3,
-            'language_id' => $request->language,
-        ];
-    }
-
-    private function prepareUserDetailsData(Request $request): array
-    {
-        return [
-            'first_name'    => $request->first_name,
-            'last_name'     => $request->last_name,
-            'gender'        => $request->gender,
-            'dob'           => Carbon::createFromFormat('d-m-Y', $request->dob),
-            'address'       => $request->address,
-            'card_number'   => $request->card_number,
-            'date_of_issue' => Carbon::createFromFormat('d-m-Y', $request->date_of_issue),
-            'valid_date'    => Carbon::createFromFormat('d-m-Y', $request->valid_date),
-        ];
-    }
-
     private function handleProfileImage(Request $request, array &$userDetailsData, bool $isNew, $id): void
     {
-        if (!$request->hasFile('image')) return;
+        if (!$request->hasFile('image')) {
+            return;
+        }
 
         $file = $request->file('image');
-        if (!$file instanceof UploadedFile) return;
+        if (!$file instanceof UploadedFile) {
+            return;
+        }
 
         $oldImage = !$isNew ? UserDetail::where('user_id', $id)->value('profile_image') : '';
         $userDetailsData['profile_image'] = $this->imageResizer->uploadFile($file, 'profile', $oldImage);
@@ -157,7 +150,9 @@ class CustomerRepository implements CustomerRepositoryInterface
         $removedDocuments = array_filter(explode(',', $removedDocuments ?? ''));
         foreach ($removedDocuments as $docId) {
             $doc = UserDocument::find($docId);
-            if (!$doc) continue;
+            if (!$doc) {
+                continue;
+            }
 
             if (!empty($doc->document) && Storage::disk('public')->exists($doc->document)) {
                 Storage::disk('public')->delete($doc->document);
@@ -270,7 +265,9 @@ class CustomerRepository implements CustomerRepositoryInterface
 
     private function applyCustomSort($query, $sortBy)
     {
-        if (!$sortBy) return;
+        if (!$sortBy) {
+            return;
+        }
 
         switch (strtolower($sortBy)) {
             case 'ascending':

@@ -26,35 +26,33 @@ class SitemapSettingRepository implements SitemapSettingInterface
 
     public function generateSitemap(): string
     {
+        $relativePath = ''; // default return value
+
         try {
             $urls = SitemapUrl::all();
-            if ($urls->isEmpty()) {
-                return '';
+            if ($urls->isNotEmpty()) {
+                $sitemap = $this->createSitemap($urls);
+
+                $sitemapFolder = public_path('sitemaps');
+                if ($this->ensureFolderExists($sitemapFolder)) {
+                    $this->archivePreviousSitemap();
+
+                    $relativePath = 'sitemaps/sitemap.xml';
+                    $fullPath = public_path($relativePath);
+                    $sitemap->writeToFile($fullPath);
+
+                    if (file_exists($fullPath)) {
+                        $this->updateLatestSitemapPath($relativePath);
+                    } else {
+                        $relativePath = ''; // failed to create file
+                    }
+                }
             }
-
-            $sitemap = $this->createSitemap($urls);
-
-            $sitemapFolder = public_path('sitemaps');
-            if (!$this->ensureFolderExists($sitemapFolder)) {
-                return '';
-            }
-
-            $this->archivePreviousSitemap();
-
-            $relativePath = 'sitemaps/sitemap.xml';
-            $fullPath = public_path($relativePath);
-            $sitemap->writeToFile($fullPath);
-
-            if (!file_exists($fullPath)) {
-                return '';
-            }
-
-            $this->updateLatestSitemapPath($relativePath);
-
-            return $relativePath;
         } catch (\Throwable $e) {
-            return '';
+            $relativePath = ''; // in case of exception
         }
+
+        return $relativePath;
     }
 
     /**
@@ -99,7 +97,8 @@ class SitemapSettingRepository implements SitemapSettingInterface
             return;
         }
 
-        $newFilename = 'sitemaps/sitemap-' . date('Y-m-d-H-i-s') . '-' . rand(1000, 9999) . '.xml';
+        $randomSuffix = random_int(1000, 9999);
+        $newFilename = 'sitemaps/sitemap-' . date('Y-m-d-H-i-s') . '-' . $randomSuffix . '.xml';
         $newFullPath = public_path($newFilename);
 
         if (rename($oldPath, $newFullPath)) {

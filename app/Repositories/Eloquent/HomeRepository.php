@@ -153,7 +153,9 @@ class HomeRepository implements HomeRepositoryInterface
 
         if ($vehicle->main_location_id) {
             $mainLocation = Location::select('id', 'name', 'address')->find($vehicle->main_location_id);
-            if ($mainLocation) $locations->push($mainLocation);
+            if ($mainLocation) {
+                $locations->push($mainLocation);
+            }
         }
 
         if (!empty($vehicle->other_location_id)) {

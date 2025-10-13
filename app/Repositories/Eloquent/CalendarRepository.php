@@ -159,10 +159,11 @@ class CalendarRepository implements CalendarRepositoryInterface
      */
     private function processVehicle($booking)
     {
-        $vehicleType = null;
         $vehicle = $booking->vehicle;
 
-        if (!$vehicle) return null;
+        if (!$vehicle) {
+            return null;
+        }
 
         $vehicleImagePath = $vehicle->vehicle_image ?? '';
         $filename = basename($vehicleImagePath);
@@ -171,9 +172,7 @@ class CalendarRepository implements CalendarRepositoryInterface
 
         $vehicle->vehicle_image = uploadedAsset(file_exists($file) ? $newPath : $vehicleImagePath);
 
-        $vehicleType = Cartype::select('name')->where('id', $vehicle->type_id ?? 0)->first();
-
-        return $vehicleType;
+        return Cartype::select('name')->where('id', $vehicle->type_id ?? 0)->first();
     }
 
     /**
@@ -207,7 +206,9 @@ class CalendarRepository implements CalendarRepositoryInterface
     private function processCustomer($customerId)
     {
         $userInfo = User::find($customerId);
-        if (!$userInfo) return null;
+        if (!$userInfo) {
+            return null;
+        }
 
         $userDetail = $userInfo->userDetail;
 
