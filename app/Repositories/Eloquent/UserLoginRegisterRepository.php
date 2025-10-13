@@ -39,86 +39,76 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
 
     public function getOtpSettings(Request $request): array
     {
-        $response = [];
-
         $email = $request->input('email');
-        $type = $request->input('type');
+        $type  = $request->input('type');
+        $demoEmails = ['demouser@gmail.com', 'demoprovider@gmail.com'];
 
         // Validate email
         if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $response = [
-                'code'  => 400,
-                'error' => __('web.auth.invalid_email')
-            ];
-        } else {
-            $user = User::where('email', $email)->first();
-
-            // Check user and demo restrictions
-            if (!$user || ($type === 'forgot' && in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com']))) {
-                $response = [
-                    'code'  => 400,
-                    'error' => __('web.auth.email_not_registered')
-                ];
-            } else {
-                $settings = GeneralSetting::whereIn('key', ['otp_digit_limit', 'otp_expire_time', 'otp_type'])
-                    ->pluck('value', 'key');
-
-                // Validate OTP type
-                if (!in_array($settings['otp_type'], ['email', 'sms'])) {
-                    $response = [
-                        'code'  => 400,
-                        'error' => __('web.auth.unsupported_otp_type')
-                    ];
-                } else {
-                    // Generate OTP and expiration
-                    $otp = in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com'])
-                        ? '1234'
-                        : $this->generateOtp($settings['otp_digit_limit']);
-
-                    $otpExpireMinutes = (int) filter_var($settings['otp_expire_time'], FILTER_SANITIZE_NUMBER_INT);
-                    $expiresAt = now()
-                        ->addMinutes($otpExpireMinutes)
-                        ->setTimezone(self::ASIA_KOLKATA)
-                        ->format('Y-m-d H:i:s');
-
-                    DB::table('otp_settings')->updateOrInsert(
-                        ['email' => $email],
-                        ['otp' => $otp, 'expires_at' => $expiresAt]
-                    );
-
-                    $notifyData = [
-                        'otp'             => $otp,
-                        'expires_at'      => $expiresAt,
-                        'otp_digit_limit' => $settings['otp_digit_limit'],
-                        'user_name'       => $user->name
-                    ];
-
-                    $notificationslug = $type === 'forgot' ? 'forgot-otp' : 'login-otp';
-
-                    try {
-                        sendNotification($email, $notificationslug, $notifyData);
-                        $response = [
-                            'code'            => 200,
-                            'name'            => $user->name,
-                            'otp_digit_limit' => $settings['otp_digit_limit'],
-                            'otp_expire_time' => $settings['otp_expire_time'],
-                            'otp_type'        => $settings['otp_type'],
-                            'expires_at'      => $expiresAt,
-                        ];
-                    } catch (\Throwable $e) {
-                        \Log::error("Failed to send OTP notification: " . $e->getMessage());
-                        $response = [
-                            'code'  => 500,
-                            'error' => __('web.auth.failed_to_send_otp')
-                        ];
-                    }
-                }
-            }
+            return ['code' => 400, 'error' => __('web.auth.invalid_email')];
         }
 
-        return $response;
-    }
+        $user = User::where('email', $email)->first();
 
+        // Check user and demo restrictions
+        if (!$user || ($type === 'forgot' && in_array($email, $demoEmails, true))) {
+            return ['code' => 400, 'error' => __('web.auth.email_not_registered')];
+        }
+
+        // Get OTP settings
+        $settings = GeneralSetting::whereIn('key', ['otp_digit_limit', 'otp_expire_time', 'otp_type'])
+            ->pluck('value', 'key')
+            ->toArray();
+
+        if (!isset($settings['otp_type']) || !in_array($settings['otp_type'], ['email', 'sms'], true)) {
+            return ['code' => 400, 'error' => __('web.auth.unsupported_otp_type')];
+        }
+
+        // Generate OTP
+        $otp = in_array($email, $demoEmails, true)
+            ? '1234'
+            : $this->generateOtp($settings['otp_digit_limit']);
+
+        // Calculate expiry time
+        $otpExpireMinutes = (int) filter_var($settings['otp_expire_time'] ?? 10, FILTER_SANITIZE_NUMBER_INT);
+        $expiresAt = now()
+            ->addMinutes($otpExpireMinutes)
+            ->setTimezone(self::ASIA_KOLKATA)
+            ->format('Y-m-d H:i:s');
+
+        // Store OTP
+        DB::table('otp_settings')->updateOrInsert(
+            ['email' => $email],
+            ['otp' => $otp, 'expires_at' => $expiresAt]
+        );
+
+        // Prepare notification
+        $notifyData = [
+            'otp'             => $otp,
+            'expires_at'      => $expiresAt,
+            'otp_digit_limit' => $settings['otp_digit_limit'],
+            'user_name'       => $user->name,
+        ];
+        $notificationSlug = $type === 'forgot' ? 'forgot-otp' : 'login-otp';
+
+        // Send notification
+        try {
+            sendNotification($email, $notificationSlug, $notifyData);
+
+            return [
+                'code'            => 200,
+                'name'            => $user->name,
+                'otp_digit_limit' => $settings['otp_digit_limit'],
+                'otp_expire_time' => $settings['otp_expire_time'],
+                'otp_type'        => $settings['otp_type'],
+                'expires_at'      => $expiresAt,
+            ];
+        } catch (\Throwable $e) {
+            Log::error("Failed to send OTP notification: " . $e->getMessage());
+
+            return ['code' => 500, 'error' => __('web.auth.failed_to_send_otp')];
+        }
+    }
 
     public function generateOtp(int $digitLimit): string
     {
@@ -244,36 +234,34 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
 
     private function validateOtp(string $email, string $otp)
     {
+        $response = ['code' => 200];
+
         $otpSetting = DB::table('otp_settings')->where('email', $email)->first();
 
         if (!$otpSetting) {
-            return [
+            $response = [
                 'code'  => 400,
                 'error' => __('web.auth.invalid_otp'),
             ];
-        }
-
-        $expire = $otpSetting->expires_at ?? '';
-        if ($expire !== '') {
+        } else {
+            $expire = $otpSetting->expires_at ?? '';
             $currentDateTime = now()->setTimezone(self::ASIA_KOLKATA);
-            if ($currentDateTime->greaterThanOrEqualTo($expire)) {
-                return [
+
+            if ($expire !== '' && $currentDateTime->greaterThanOrEqualTo($expire)) {
+                $response = [
                     'code'  => 400,
                     'error' => __('web.auth.otp_is_expired'),
+                ];
+            } elseif (($otpSetting->otp ?? '') !== $otp) {
+                $response = [
+                    'code'  => 400,
+                    'error' => __('web.auth.invalid_otp'),
                 ];
             }
         }
 
-        if (($otpSetting->otp ?? '') !== $otp) {
-            return [
-                'code'  => 400,
-                'error' => __('web.auth.invalid_otp'),
-            ];
-        }
-
-        return true;
+        return $response['code'] === 200 ? true : $response;
     }
-
 
     public function validateEmail(string $email): array
     {
@@ -393,55 +381,93 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
     public function login(Request $request): array
     {
         $user = User::where('email', $request->email)->first();
-        if ($user && ($user->user_type == 1 || $user->user_type == 2)) {
-            return [
-                'status'  => false,
-                'code'    => 422,
-                'message' => __('web.auth.admin_access_not_allowed'),
-            ];
-        }
-        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->has('remember'))) {
-            $agent = new Agent();
-            $ip = $request->ip();
-            $device_type = $agent->device();
-            $os = $agent->platform();
-            $browser = $agent->browser();
 
-            $locationData = Http::get("http://ip-api.com/json/{$ip}?fields=status,country,city,regionName,lat,lon")->json();
-            $location = ($locationData['status'] === 'success')
-                ? $locationData['country'] . ' / ' . $locationData['city']
-                : 'India / Coimbatore';
-
-            $user = Auth::guard('web')->user();
-
-            if ($user) {
-                $user_device = new UserDevice();
-                $user_device->user_id = (int) $user->id;
-                $user_device->device_type = is_string($device_type) ? $device_type : null;
-                $user_device->browser = is_string($browser) ? $browser : null;
-                $user_device->os = is_string($os) ? $os : null;
-                $user_device->ip_address = $ip;
-                $user_device->location = $location;
-                $user_device->save();
-            }
-            $redirectTo = session('intended_url', '/');
-            session()->forget('intended_url');
-            if (session()->has('intended_booking')) {
-                $redirectTo = '/redirect-to-booking';
-            }
-            return  [
-                'status'       => true,
-                'code'         => 200,
-                'redirect_url' => $redirectTo,
-                'message'      => __('web.auth.login_success'),
-            ];
+        if ($this->isAdminUser($user)) {
+            return $this->response(false, 422, __('web.auth.admin_access_not_allowed'));
         }
 
-        return [
-            'status'  => false,
-            'code'    => 401,
-            'message' => __('web.auth.invalid_credentials'),
-        ];
+        if (!Auth::guard('web')->attempt(
+            ['email' => $request->email, 'password' => $request->password],
+            $request->has('remember')
+        )) {
+            return $this->response(false, 401, __('web.auth.invalid_credentials'));
+        }
+
+        $this->recordUserDevice($request);
+
+        return $this->response(true, 200, __('web.auth.login_success'), [
+            'redirect_url' => $this->determineRedirectUrl(),
+        ]);
     }
 
+    /**
+     * Check if the user is an admin (type 1 or 2)
+     */
+    private function isAdminUser(?User $user): bool
+    {
+        return $user && in_array($user->user_type, [1, 2], true);
+    }
+
+    /**
+     * Record device and location details after login
+     */
+    private function recordUserDevice(Request $request): void
+    {
+        $agent = new Agent();
+        $user = Auth::guard('web')->user();
+
+        if (!$user) {
+            return;
+        }
+
+        $ip = $request->ip();
+        $device = new UserDevice([
+            'user_id'     => (int) $user->id,
+            'device_type' => $agent->device() ?: null,
+            'browser'     => $agent->browser() ?: null,
+            'os'          => $agent->platform() ?: null,
+            'ip_address'  => $ip,
+            'location'    => $this->getLocationFromIp($ip),
+        ]);
+
+        $device->save();
+    }
+
+    /**
+     * Fetch location using IP or fallback
+     */
+    private function getLocationFromIp(string $ip): string
+    {
+        $locationData = Http::get("http://ip-api.com/json/{$ip}?fields=status,country,city")->json();
+        return ($locationData['status'] ?? '') === 'success'
+            ? "{$locationData['country']} / {$locationData['city']}"
+            : 'India / Coimbatore';
+    }
+
+    /**
+     * Determine post-login redirect URL
+     */
+    private function determineRedirectUrl(): string
+    {
+        $redirectTo = session('intended_url', '/');
+        session()->forget('intended_url');
+
+        if (session()->has('intended_booking')) {
+            return '/redirect-to-booking';
+        }
+
+        return $redirectTo;
+    }
+
+    /**
+     * Standard response builder
+     */
+    private function response(bool $status, int $code, string $message, array $extra = []): array
+    {
+        return array_merge([
+            'status'  => $status,
+            'code'    => $code,
+            'message' => $message,
+        ], $extra);
+    }
 }

@@ -45,19 +45,26 @@ class CustomerRepository implements CustomerRepositoryInterface
     public function store(Request $request): array
     {
         $id = $request->id ?? '';
+        $isNew = empty($id);
 
-        $successMsg = empty($id) ? __('admin.manage.customer_create_success') : __('admin.manage.customer_update_success');
-        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
+        $successMsg = $isNew
+            ? __('admin.manage.customer_create_success')
+            : __('admin.manage.customer_update_success');
+        $errorMsg = $isNew
+            ? __('admin.common.default_create_error')
+            : __('admin.common.default_update_error');
 
         try {
             DB::beginTransaction();
 
+            // Prepare user data
             $userData = [
-                'email'        => $request->email,
-                'phone_number' => $request->phone_number,
-                'user_type'    => 3,
-                'language_id'  => $request->language,
+                'email'       => $request->email,
+                'phone_number'=> $request->phone_number,
+                'user_type'   => 3,
+                'language_id' => $request->language,
             ];
+
             $userDetailsData = [
                 'first_name'    => $request->first_name,
                 'last_name'     => $request->last_name,
@@ -69,80 +76,57 @@ class CustomerRepository implements CustomerRepositoryInterface
                 'valid_date'    => Carbon::createFromFormat('d-m-Y', $request->valid_date),
             ];
 
-            if (empty($id)) {
-                if ($request->hasFile('image')) {
-                    $file = $request->file('image');
-                    if ($file instanceof UploadedFile) {
-                        $userDetailsData['profile_image'] = $this->imageResizer->uploadFile($file, 'profile');
-                    }
+            // Handle profile image
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                if ($file instanceof UploadedFile) {
+                    $oldImage = !$isNew ? UserDetail::where('user_id', $id)->value('profile_image') : '';
+                    $userDetailsData['profile_image'] = $this->imageResizer->uploadFile($file, 'profile', $oldImage);
                 }
-                $user = User::create($userData);
+            }
 
+            // Create or update user
+            if ($isNew) {
+                $user = User::create($userData);
                 $userDetailsData['user_id'] = $user->id;
                 UserDetail::create($userDetailsData);
-
-                /** @var UploadedFile[]|UploadedFile|null $files */
-                $files = $request->file('documents');
-                if (is_array($files)) {
-                    foreach ($files as $file) {
-                        $document = uploadFile($file, 'documents');
-                        UserDocument::create([
-                            'user_id'  => $user->id,
-                            'document' => $document,
-                        ]);
-                    }
-                }
             } else {
-                $user = UserDetail::where('user_id', $id)->first();
-                $oldImage = '';
-                if ($user) {
-                    $oldImage = $user->profile_image;
-                }
-
-                if ($request->hasFile('image')) {
-                    $file = $request->file('image');
-                    if ($file instanceof UploadedFile) {
-                        $userDetailsData['profile_image'] = $this->imageResizer->uploadFile($file, 'profile', $oldImage);
-                    }
-                }
-
-                /** @var UploadedFile[]|UploadedFile|null $files */
-                $files = $request->file('documents');
-                if (is_array($files)) {
-                    foreach ($files as $file) {
-                        $document = uploadFile($file, 'documents');
-                        UserDocument::create([
-                            'user_id'  => $id,
-                            'document' => $document,
-                        ]);
-                    }
-                }
-                $removedDocuments = array_filter(explode(',', $request->removed_documents));
-                foreach ($removedDocuments as $docId) {
-                    $removedDocument = UserDocument::find($docId);
-                    if ($removedDocument) {
-                        $doc = $removedDocument->document;
-                        if (!empty($doc) && Storage::disk('public')->exists($doc)) {
-                            Storage::disk('public')->delete($doc);
-                        }
-                        $removedDocument->delete();
-                    }
-                }
                 User::where('id', $id)->update($userData);
-                UserDetail::updateOrCreate(
-                    ['user_id' => $id],
-                    $userDetailsData
-                );
+                UserDetail::updateOrCreate(['user_id' => $id], $userDetailsData);
             }
+
+            // Handle documents (new uploads)
+            $files = $request->file('documents') ?? [];
+            foreach ((array)$files as $file) {
+                $document = uploadFile($file, 'documents');
+                UserDocument::create([
+                    'user_id'  => $isNew ? $user->id : $id,
+                    'document' => $document,
+                ]);
+            }
+
+            // Handle removed documents
+            $removedDocuments = array_filter(explode(',', $request->removed_documents ?? ''));
+            foreach ($removedDocuments as $docId) {
+                $doc = UserDocument::find($docId);
+                if ($doc) {
+                    if (!empty($doc->document) && Storage::disk('public')->exists($doc->document)) {
+                        Storage::disk('public')->delete($doc->document);
+                    }
+                    $doc->delete();
+                }
+            }
+
             DB::commit();
 
             return [
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => $successMsg
+                'message' => $successMsg,
             ];
         } catch (\Throwable $e) {
             DB::rollBack();
+
             return [
                 'status'  => 'error',
                 'code'    => 500,
@@ -154,11 +138,11 @@ class CustomerRepository implements CustomerRepositoryInterface
     public function list(Request $request): array
     {
         try {
-            $start = $request->start ?? 0;
-            $length = $request->length ?? 10;
+            $start       = $request->start ?? 0;
+            $length      = $request->length ?? 10;
             $columnIndex = $request->order[0]['column'] ?? 0;
-            $columnName = $request->columns[$columnIndex]['data'] ?? 'customer_full_name';
-            $orderDir = $request->order[0]['dir'] ?? 'asc';
+            $columnName  = $request->columns[$columnIndex]['data'] ?? 'customer_full_name';
+            $orderDir    = strtoupper($request->order[0]['dir'] ?? 'ASC') === 'DESC' ? 'DESC' : 'ASC';
 
             $query = User::with([self::DOCUMENTS_SELECT])
                 ->select(
@@ -177,102 +161,99 @@ class CustomerRepository implements CustomerRepositoryInterface
                 )
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
                 ->leftJoin('translation_languages', 'translation_languages.id', '=', 'users.language_id')
-                ->where(['users.user_type' => 3])
+                ->where('users.user_type', 3)
                 ->whereNull('users.deleted_at');
 
-            if ($request->has('search') && !empty($request->search)) {
+            // Search
+            if (!empty($request->search)) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
                     $q->orWhere('users.email', 'LIKE', "%{$search}%")
-                        ->orWhere('users.phone_number', 'LIKE', "%{$search}%")
-                        ->orWhere('user_details.first_name', 'LIKE', "%{$search}%")
-                        ->orWhere('user_details.last_name', 'LIKE', "%{$search}%");
+                    ->orWhere('users.phone_number', 'LIKE', "%{$search}%")
+                    ->orWhere('user_details.first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('user_details.last_name', 'LIKE', "%{$search}%");
                 });
             }
 
-            if ($request->has('language') && !empty($request->language)) {
-                $query->whereIn('users.language_id', $request->language);
+            // Filters
+            if (!empty($request->language)) {
+                $query->whereIn('users.language_id', (array)$request->language);
             }
 
-            if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
-                $status = $request->sort_by_status;
-                $query->where('users.status', $status);
+            if (isset($request->sort_by_status)) {
+                $query->where('users.status', $request->sort_by_status);
             }
 
-            if ($request->has('sort_by_date') && !empty($request->sort_by_date)) {
+            // Date filter
+            if (!empty($request->sort_by_date)) {
                 $dates = explode(' - ', $request->sort_by_date);
                 if (count($dates) === 2) {
-                    $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
-                    $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
-
-                    if ($startDate && $endDate) {
-                        $query->whereBetween('users.created_at', [$startDate->startOfDay(), $endDate->endOfDay()]);
-                    }
+                    $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
+                    $endDate   = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
+                    $query->whereBetween('users.created_at', [$startDate, $endDate]);
                 }
             }
 
-            if ($request->has('sort_by') && !empty($request->sort_by)) {
-                switch (strtolower($request->sort_by)) {
-                    case 'latest':
-                        $query->orderBy('users.created_at', 'desc');
-                        break;
-
+            // Sort by
+            if (!empty($request->sort_by)) {
+                switch (strtolower($request->sort_by ?? '')) {
                     case 'ascending':
-                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) asc");
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) ASC");
                         break;
 
                     case 'descending':
-                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) desc");
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) DESC");
                         break;
 
                     case 'last month':
-                        $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
-                        $endDate   = \Carbon\Carbon::now()->subMonth()->endOfMonth();
-                        $query->whereBetween('users.created_at', [$startDate, $endDate]);
+                        $query->whereBetween('users.created_at', [
+                            \Carbon\Carbon::now()->subMonth()->startOfMonth(),
+                            \Carbon\Carbon::now()->subMonth()->endOfMonth()
+                        ]);
                         break;
 
                     case 'last 7 days':
-                        $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
-                        $endDate   = \Carbon\Carbon::now()->endOfDay();
-                        $query->whereBetween('users.created_at', [$startDate, $endDate]);
+                        $query->whereBetween('users.created_at', [
+                            \Carbon\Carbon::now()->subDays(7)->startOfDay(),
+                            \Carbon\Carbon::now()->endOfDay()
+                        ]);
                         break;
 
                     default:
-                        $query->orderBy('users.created_at', 'desc');
+                        $query->orderBy('users.created_at', 'DESC');
                         break;
                 }
             }
 
-
+            // Column sorting
             if ($columnName === 'customer_full_name') {
                 $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) {$orderDir}");
             } else {
-                $query->orderBy($columnName, $orderDir);
+                $allowedColumns = ['email', 'phone_number', 'status', 'language_id'];
+                $col = in_array($columnName, $allowedColumns) ? "users.$columnName" : 'users.created_at';
+                $query->orderBy($col, $orderDir);
             }
 
-            $totalRecords = User::where(['users.user_type' => 3])->count();
+            $totalRecords    = User::where('user_type', 3)->count();
             $filteredRecords = $query->count();
 
-            $query->offset($start)->limit($length);
-            $users = $query->get();
+            $users = $query->offset($start)->limit($length)->get();
 
+            // Map user data
             $users->map(function ($user) {
-                $user->valid_date = formatDateTime($user->valid_date, false);
+                $user->valid_date    = formatDateTime($user->valid_date, false);
                 $user->date_of_issue = formatDateTime($user->date_of_issue, false);
-                $user->profile_image = is_string($user->profile_image) || is_null($user->profile_image)
-                    ? uploadedAsset($user->profile_image, 'profile')
-                    : uploadedAsset(null, 'profile');
-                $user->language_flag = url('/backend/assets/img/flags/' . $user->language_code . '.svg');
-                $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
+                $user->profile_image = uploadedAsset($user->profile_image ?? null, 'profile');
+                $user->language_flag = url("/backend/assets/img/flags/{$user->language_code}.svg");
+                $user->encrypted_id  = customEncrypt($user->id, User::$userSecretKey);
 
-                /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDocument> $documents */
-                $documents = $user->documents;
-                $documents->map(function (UserDocument $document) {
+                // Map documents
+                $user->documents->map(function ($document) {
                     $document->document_url = uploadedAsset($document->document, 'documents');
                     return $document;
                 });
 
-                $user->customer_full_name = $user->customer_full_name == ' ' ? '' : ucwords($user->customer_full_name);
+                $user->customer_full_name = trim($user->customer_full_name) === '' ? '' : ucwords($user->customer_full_name);
 
                 return $user;
             });

@@ -124,43 +124,39 @@ class CalendarRepository implements CalendarRepositoryInterface
         if (!$booking) {
             return [
                 'code'    => 404,
-                'message' => 'Booking not found'
+                'message' => 'Booking not found',
             ];
         }
 
-        /** @var \Modules\CarInfo\Models\VehicleInfo|null $vehicle */
-        $vehicle = $booking->vehicle;
+        // Vehicle info
         $vehicleType = null;
+        $vehicle = $booking->vehicle;
         if ($vehicle) {
             $vehicleImagePath = $vehicle->vehicle_image ?? '';
             $filename = basename($vehicleImagePath);
-            $newpath = 'vehicles/images/small/' . $filename;
-            $file = public_path('storage/' . $newpath);
-            if (file_exists($file)) {
-                $vehicleImagePath = $newpath;
-            }
-            $vehicle->vehicle_image = uploadedAsset($vehicleImagePath);
-            $vehicleTypeId = $vehicle->type_id ?? null;
-            $vehicleType = Cartype::select('name')->where("id", $vehicleTypeId)->first();
+            $newPath = 'vehicles/images/small/' . $filename;
+            $file = public_path('storage/' . $newPath);
+
+            $vehicle->vehicle_image = uploadedAsset(file_exists($file) ? $newPath : $vehicleImagePath);
+
+            $vehicleType = Cartype::select('name')->where('id', $vehicle->type_id ?? 0)->first();
         }
 
+        // Locations
         $pickupLocation = Location::where('id', $booking->pickup_location)->value('name');
-
         $returnLocation = Location::where('id', $booking->return_location)->value('name');
 
+        // Driver details
         if (!empty($booking->driver_id)) {
             $driverDetails = Driver::select('driver_name', 'image', 'phone_number')
                 ->where('id', $booking->driver_id)
                 ->first();
 
-            if ($driverDetails && $driverDetails->image) {
-                $driverDetails->image = is_string($driverDetails->image)
-                    ? uploadedAsset($driverDetails->image, 'profile')
-                    : uploadedAsset('', 'profile');
+            if ($driverDetails) {
+                $driverDetails->image = uploadedAsset(is_string($driverDetails->image) ? $driverDetails->image : '', 'profile');
             }
         } else {
             $bookingUser = BookingUserInfo::where('booking_id', $booking->id)->first();
-
             $driverDetails = (object) [
                 'driver_name'  => trim(($bookingUser->driver_first_name ?? '') . ' ' . ($bookingUser->driver_last_name ?? '')) ?: null,
                 'phone_number' => $bookingUser->driver_mobile_number ?? null,
@@ -168,37 +164,30 @@ class CalendarRepository implements CalendarRepositoryInterface
             ];
         }
 
-        $userInfo = User::where("id", $booking->customer_id)->first();
-
+        // Customer info
+        $userInfo = User::find($booking->customer_id);
+        $customerData = null;
         if ($userInfo) {
             $userDetail = $userInfo->userDetail;
-
             $customerData = [
                 'first_name'    => $userDetail->first_name ?? '',
                 'last_name'     => $userDetail->last_name ?? '',
                 'phone_number'  => $userInfo->phone_number ?? '',
-                'profile_image' => ($userDetail && $userDetail->profile_image)
-                    ? uploadedAsset($userDetail->profile_image, 'profile')
-                    : uploadedAsset('', 'profile'),
+                'profile_image' => uploadedAsset($userDetail->profile_image ?? '', 'profile'),
             ];
-        } else {
-            $customerData = null;
-        }
-        $drivingTypeId = $booking->driving_type ?? null;
-        $booking->driver_type_info = null;
-        if ($drivingTypeId) {
-            $booking->driver_type_info = DrivingType::where('id', $drivingTypeId)->first();
-        }
-        $booking->delivery_type = $booking->delivery_type ? ucfirst(str_replace('_', ' ', $booking->delivery_type)) : 'N/A';
-
-        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-        $currency = null;
-
-        if ($currencySetting && $currencySetting->value) {
-            $currency = Currency::find($currencySetting->value);
         }
 
-        $currencySymbol = $currency->symbol ?? "$";
+        // Driving type info
+        $booking->driver_type_info = $booking->driving_type ? DrivingType::find($booking->driving_type) : null;
+
+        // Delivery type formatting
+        $booking->delivery_type = $booking->delivery_type
+            ? ucfirst(str_replace('_', ' ', $booking->delivery_type))
+            : 'N/A';
+
+        // Currency symbol
+        $currencySymbol = getDefaultCurrencySymbol();
+
         return [
             'code'            => 200,
             'booking'         => $booking,

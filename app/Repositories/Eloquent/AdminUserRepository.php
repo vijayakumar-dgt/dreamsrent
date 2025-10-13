@@ -37,13 +37,20 @@ class AdminUserRepository implements AdminUserRepositoryInterface
     public function store(Request $request): array
     {
         $id = $request->id ?? '';
+        $isNew = empty($id);
 
-        $successMsg = empty($id) ? __('admin.user_management.user_create_success') : __('admin.user_management.user_update_success');
-        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
+        $successMsg = $isNew
+            ? __('admin.user_management.user_create_success')
+            : __('admin.user_management.user_update_success');
+
+        $errorMsg = $isNew
+            ? __('admin.common.default_create_error')
+            : __('admin.common.default_update_error');
 
         try {
             DB::beginTransaction();
 
+            // Prepare user data
             $userData = [
                 'email'        => $request->email,
                 'phone_number' => $request->phone_number,
@@ -51,42 +58,37 @@ class AdminUserRepository implements AdminUserRepositoryInterface
                 'user_type'    => 2,
                 'status'       => $request->status ?? 1,
             ];
+
             $userDetailsData = [
                 'first_name' => $request->first_name,
                 'last_name'  => $request->last_name,
-                'parent_id'  => currentUser()->id ?? $request->user_id
+                'parent_id'  => currentUser()->id ?? $request->user_id,
             ];
 
-            if (empty($id)) {
-                if ($request->hasFile('image')) {
-                    $file = $request->file('image');
-                    if ($file instanceof UploadedFile) {
-                        $userDetailsData['profile_image'] = $this->imageResizer->uploadFile($file, 'profile');
+            // Handle file upload if exists
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                if ($file instanceof UploadedFile) {
+                    $oldImage = '';
+                    if (!$isNew) {
+                        $userDetail = UserDetail::where('user_id', $id)->first();
+                        $oldImage = $userDetail->profile_image ?? '';
                     }
+                    $userDetailsData['profile_image'] = $this->imageResizer->uploadFile($file, 'profile', $oldImage);
                 }
+            }
+
+            if ($isNew) {
+                // Create new user
                 $userData['password'] = Hash::make($request->password);
                 $user = User::create($userData);
 
                 $userDetailsData['user_id'] = $user->id;
                 UserDetail::create($userDetailsData);
             } else {
-                $user = UserDetail::where('user_id', $id)->first();
-                $oldImage = '';
-                if ($user) {
-                    $oldImage = $user->profile_image;
-                }
-
-                if ($request->hasFile('image')) {
-                    $file = $request->file('image');
-                    if ($file instanceof UploadedFile) {
-                        $userDetailsData['profile_image'] = $this->imageResizer->uploadFile($file, 'profile', $oldImage);
-                    }
-                }
-                user::where('id', $id)->update($userData);
-                UserDetail::updateOrCreate(
-                    ['user_id' => $id],
-                    $userDetailsData
-                );
+                // Update existing user
+                User::where('id', $id)->update($userData);
+                UserDetail::updateOrCreate(['user_id' => $id], $userDetailsData);
             }
 
             DB::commit();
@@ -94,129 +96,137 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             return [
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => $successMsg
+                'message' => $successMsg,
             ];
         } catch (\Throwable $e) {
             DB::rollBack();
+
             return [
                 'status'  => 'error',
                 'code'    => 500,
                 'message' => $errorMsg,
-                'error'   => $e->getMessage()
+                'error'   => $e->getMessage(),
             ];
         }
     }
 
     public function list(Request $request): array
-    {
-        try {
-            $start = $request->start ?? 0;
-            $length = $request->length ?? 10;
-            $columnIndex = $request->order[0]['column'] ?? 0;
-            $columnName = $request->columns[$columnIndex]['data'] ?? 'full_name';
-            $orderDir = $request->order[0]['dir'] ?? 'asc';
+{
+    try {
+        $start       = $request->start ?? 0;
+        $length      = $request->length ?? 10;
+        $columnIndex = $request->order[0]['column'] ?? 0;
+        $columnName  = $request->columns[$columnIndex]['data'] ?? 'full_name';
+        $orderDir    = $request->order[0]['dir'] ?? 'asc';
+        $userId      = currentUser()->id ?? $request->user_id;
 
-            $userId = currentUser()->id ?? $request->user_id;
+        // Base query
+        $query = User::select(
+            'users.id',
+            DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
+            'users.email',
+            'users.phone_number',
+            'users.status',
+            'user_details.profile_image',
+            'users.role_id',
+            'roles.role_name'
+        )
+        ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+        ->join('roles', 'roles.id', '=', 'users.role_id')
+        ->where('user_details.parent_id', $userId);
 
-            $query = User::select(
-                'users.id',
-                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
-                'users.email',
-                'users.phone_number',
-                'users.status',
-                'user_details.profile_image',
-                'users.role_id',
-                'roles.role_name'
-            )
-                ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-                ->join('roles', 'roles.id', '=', 'users.role_id')
-                ->where(['user_details.parent_id' => $userId]);
-
-            if ($request->has('search') && !empty($request->search)) {
-                $search = $request->search;
-                $query->where(function ($q) use ($search) {
-                    $q->orWhere('users.email', 'LIKE', "%{$search}%")
-                        ->orWhere('users.phone_number', 'LIKE', "%{$search}%")
-                        ->orWhere('user_details.first_name', 'LIKE', "%{$search}%")
-                        ->orWhere('user_details.last_name', 'LIKE', "%{$search}%");
-                });
-            }
-
-            if ($request->has('role_ids') && !empty($request->role_ids)) {
-                $query->whereIn('users.role_id', $request->role_ids);
-            }
-
-            if (
-                $request->has('sort_by_status')
-                && !empty($request->sort_by_status) || $request->sort_by_status == '0'
-            ) {
-                $status = $request->sort_by_status;
-                $query->where('users.status', $status);
-            }
-
-            if ($request->has('sort_by') && !empty($request->sort_by)) {
-                switch (strtolower($request->sort_by)) {
-                    case 'latest':
-                        $query->orderBy('users.created_at', 'desc');
-                        break;
-                    case 'ascending':
-                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) asc");
-                        break;
-                    case 'descending':
-                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) desc");
-                        break;
-                    case 'last month':
-                        $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
-                        $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
-                        $query->whereBetween('users.created_at', [$startDate, $endDate]);
-                        break;
-                    case 'last 7 days':
-                        $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
-                        $endDate = \Carbon\Carbon::now()->endOfDay();
-                        $query->whereBetween('users.created_at', [$startDate, $endDate]);
-                        break;
-                    default:
-                        $query->orderBy('users.created_at', 'desc');
-                        break;
-                }
-            }
-
-            if ($columnName === 'full_name') {
-                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)){$orderDir}");
-            } else {
-                $query->orderBy($columnName, $orderDir);
-            }
-
-            $totalRecords = User::leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-                ->where(['user_details.parent_id' => $userId])
-                ->count();
-            $filteredRecords = $query->count();
-
-            $query->offset($start)->limit($length);
-            $users = $query->get();
-
-            $users->map(function ($user) {
-                $profileImage = is_string($user->profile_image) ? $user->profile_image : '';
-                $user->profile_image = uploadedAsset($profileImage, 'profile');
-                $user->full_name = $user->full_name ? ucwords($user->full_name) : '';
-
-                return $user;
+        // Search filter
+        if ($search = $request->search ?? null) {
+            $query->where(function ($q) use ($search) {
+                $q->orWhere('users.email', 'LIKE', "%{$search}%")
+                  ->orWhere('users.phone_number', 'LIKE', "%{$search}%")
+                  ->orWhere('user_details.first_name', 'LIKE', "%{$search}%")
+                  ->orWhere('user_details.last_name', 'LIKE', "%{$search}%");
             });
+        }
 
-            return [
-                'draw'            => intval($request->draw),
-                'recordsTotal'    => $totalRecords,
-                'recordsFiltered' => $filteredRecords,
-                'data'            => $users,
-                'code'            => 200
-            ];
-        } catch (\Throwable $e) {
-            return [
-                'code'    => 500,
-                'message' => __('admin.common.default_retrieve_error'),
-            ];
+        // Role filter
+        if (!empty($request->role_ids ?? [])) {
+            $query->whereIn('users.role_id', $request->role_ids);
+        }
+
+        // Status filter
+        if (isset($request->sort_by_status)) {
+            $query->where('users.status', $request->sort_by_status);
+        }
+
+        // Sorting
+        $this->applySorting($query, $request, $columnName, $orderDir);
+
+        // Records count
+        $totalRecords    = User::leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+                                ->where('user_details.parent_id', $userId)
+                                ->count();
+        $filteredRecords = $query->count();
+
+        // Pagination
+        $users = $query->offset($start)->limit($length)->get();
+
+        // Format users
+        $users->map(function ($user) {
+            $user->profile_image = uploadedAsset(is_string($user->profile_image) ? $user->profile_image : '', 'profile');
+            $user->full_name     = $user->full_name ? ucwords($user->full_name) : '';
+            return $user;
+        });
+
+        return [
+            'draw'            => intval($request->draw),
+            'recordsTotal'    => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data'            => $users,
+            'code'            => 200,
+        ];
+    } catch (\Throwable $e) {
+        return [
+            'code'    => 500,
+            'message' => __('admin.common.default_retrieve_error'),
+        ];
+    }
+}
+
+/**
+ * Apply sorting and date filters
+ */
+private function applySorting($query, Request $request, string $columnName, string $orderDir): void
+{
+    $sortBy = strtolower($request->sort_by ?? '');
+
+    if ($sortBy) {
+        switch ($sortBy) {
+            case 'latest':
+                $query->orderBy('users.created_at', 'desc');
+                break;
+            case 'ascending':
+                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) asc");
+                break;
+            case 'descending':
+                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) desc");
+                break;
+            case 'last month':
+                $query->whereBetween('users.created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()]);
+                break;
+            case 'last 7 days':
+                $query->whereBetween('users.created_at', [now()->subDays(7)->startOfDay(), now()->endOfDay()]);
+                break;
+            default:
+                $query->orderBy('users.created_at', 'desc');
+                break;
         }
     }
+
+    // Column ordering
+    if ($columnName === 'full_name') {
+        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) {$orderDir}");
+    } else {
+        $query->orderBy($columnName, $orderDir);
+    }
+}
+
 
     public function edit(int $id): array
     {

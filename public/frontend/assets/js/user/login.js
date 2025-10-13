@@ -87,9 +87,14 @@ $(document).ready(function () {
                             $("#" + key + "_error").text(val[0]);
                             errorMessages.push(val[0]);
                         });
-                        showToast("error", errorMessages.join("<br>"));
+                        if (errorMessages.length > 0) {
+                            showToast("error", errorMessages.join("<br>"));
+                        } else {
+                            const message = error.responseJSON.message || "An error occurred while login";
+                            showToast("error", message);
+                        }
                     } else {
-                        const message = error.responseJSON ? error.responseJSON.message : "An error occurred";
+                        const message = error.responseJSON ? error.responseJSON.message : "An error occurred while login";
                         showToast("error", message);
                     }
                 }

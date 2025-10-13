@@ -364,10 +364,8 @@
                     },
                 },
                 errorPlacement: function (error, element) {
-                    if (element.hasClass("select2-hidden-accessible")) {
-                        const errorId = element.attr("id") + "_error";
-                        $("#" + errorId).text(error.text());
-                    }
+                    const errorId = element.attr("id") + "_error";
+                    $("#" + errorId).text(error.text());
                 },
                 highlight: function (element) {
                     if ($(element).hasClass("select2-hidden-accessible")) {
@@ -393,7 +391,7 @@
                 },
                 submitHandler: function (form) {
                     let formData = new FormData(form);
-                    formData.set('phone_number', international_phone_number);
+                    formData.set('phone_number', $('#edit_international_phone_number').val());
 
                     $.ajax({
                         type: "POST",
@@ -436,6 +434,7 @@
         if (resp.code === 200) {
             showToast('success', resp.message);
             $("#add_customer_modal").modal('hide');
+            $("#edit_customer_modal").modal('hide');
             $("#customerTable").DataTable().ajax.reload();
         }
     }
@@ -445,8 +444,14 @@
 
         if (error.responseJSON.code === 422) {
             $.each(error.responseJSON.errors, function (key, val) {
-                $("#" + key).addClass("is-invalid");
-                $("#" + key + "_error").text(val[0]);
+                let baseKey = key.includes('.') ? key.split('.')[0] : key;
+
+                if ($("#id").val()) {
+                    baseKey = "edit_" + baseKey;
+                }
+                
+                $("#" + baseKey).addClass("is-invalid");
+                $("#" + baseKey + "_error").text(val[0]);
             });
         } else {
             showToast('error', error.responseJSON.message);
@@ -456,7 +461,8 @@
     function resetFormState() {
         $(".error-text").text("");
         $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-        $(".submitbtn").removeAttr("disabled").html(_l('admin.common.create_new'));
+        let btnText = $('#id').val() ? _l('admin.common.save_changes') : _l('admin.common.create_new');
+        $(".submitbtn").removeAttr("disabled").html(btnText);
     }
 
     function initEvents(){
@@ -550,6 +556,7 @@
         $('#edit_language').on('change', function () {
             $(this).valid();
         });
+
         $(document).on('click', '.dataTables_paginate a', function() {
             $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
         });
