@@ -5,100 +5,106 @@ namespace Modules\CarInfo\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\CarInfo\Repositories\Contracts\VehicleInfoRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\VehicleManagementRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\VehicleQueryRepositoryInterface;
 
 class VehicleInfoController extends Controller
 {
-    protected VehicleInfoRepositoryInterface $vehicleInfoRepository;
+    protected VehicleManagementRepositoryInterface $vehicleManagementRepository;
+    protected VehicleQueryRepositoryInterface $vehicleQueryRepository;
 
-    public function __construct(VehicleInfoRepositoryInterface $vehicleInfoRepository)
+    public function __construct(
+        VehicleManagementRepositoryInterface $vehicleManagementRepository,
+        VehicleQueryRepositoryInterface $vehicleQueryRepository
+    )
     {
-        $this->vehicleInfoRepository = $vehicleInfoRepository;
+        $this->vehicleManagementRepository = $vehicleManagementRepository;
+        $this->vehicleQueryRepository = $vehicleQueryRepository;
     }
 
     public function seasonalInfo(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-        $response = $this->vehicleInfoRepository->seasonalInfo($vehicleId);
+        $response = $this->vehicleQueryRepository->seasonalInfo($vehicleId);
         return response()->json($response, $response['code']);
     }
 
     public function tarrifInfo(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-        $response = $this->vehicleInfoRepository->tariffInfo($vehicleId);
+        $response = $this->vehicleQueryRepository->tariffInfo($vehicleId);
         return response()->json($response, $response['code']);
     }
 
     public function documents(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-        $response = $this->vehicleInfoRepository->documents($vehicleId);
+        $response = $this->vehicleQueryRepository->documents($vehicleId);
         return response()->json($response, $response['code']);
     }
 
     public function faq(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-        $response = $this->vehicleInfoRepository->faq($vehicleId);
+        $response = $this->vehicleQueryRepository->faq($vehicleId);
         return response()->json($response, $response['code']);
     }
 
     public function damage(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-        $response = $this->vehicleInfoRepository->damage($vehicleId);
+        $response = $this->vehicleQueryRepository->damage($vehicleId);
         return response()->json($response, $response['code']);
     }
 
     public function insurance(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-        $response = $this->vehicleInfoRepository->insurance($vehicleId);
+        $response = $this->vehicleQueryRepository->insurance($vehicleId);
         return response()->json($response, $response['code']);
     }
 
     public function getModel(Request $request): JsonResponse
     {
         $brandId = $request->brand_id;
-        $response = $this->vehicleInfoRepository->getModel($brandId);
+        $response = $this->vehicleQueryRepository->getModel($brandId);
         return response()->json($response, $response['code']);
     }
 
     public function getTypeAndModel(Request $request): JsonResponse
     {
         $categoryId = $request->category_id;
-        $response = $this->vehicleInfoRepository->getTypeAndModel($categoryId);
+        $response = $this->vehicleQueryRepository->getTypeAndModel($categoryId);
         return response()->json($response, $response['code']);
     }
 
     public function vehicleDetailsList(Request $request): JsonResponse
     {
-        $response = $this->vehicleInfoRepository->vehicleDetailsList($request);
+        $response = $this->vehicleQueryRepository->vehicleDetailsList($request);
         return response()->json($response, $response['code']);
     }
 
     public function deleteVehicleImage(Request $request): JsonResponse
     {
-        $response = $this->vehicleInfoRepository->deleteVehicleImage($request);
+        $response = $this->vehicleManagementRepository->deleteVehicleImage($request);
         return response()->json($response, $response['code']);
     }
 
     public function deleteVehiclePolicy(Request $request): JsonResponse
     {
-        $response = $this->vehicleInfoRepository->deleteVehiclePolicy($request);
+        $response = $this->vehicleManagementRepository->deleteVehiclePolicy($request);
         return response()->json($response, $response['code']);
     }
 
     public function vehicleIntrestLists(Request $request): JsonResponse
     {
-        $response = $this->vehicleInfoRepository->vehicleInterestLists($request);
+        $response = $this->vehicleQueryRepository->vehicleInterestLists($request);
         return response()->json($response, $response['code']);
     }
 
     public function getDamageDetails(Request $request): JsonResponse
     {
-        $response = $this->vehicleInfoRepository->getDamageDetails($request);
+        $response = $this->vehicleQueryRepository->getDamageDetails($request);
         return response()->json($response, $response['code']);
     }
 }
