@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\User;
 use App\Repositories\Contracts\DashboardRepositoryInterface;
 use Carbon\Carbon;
+use Closure;
 use Illuminate\Support\Facades\DB;
 use Modules\Booking\Models\Booking;
 use Modules\CarInfo\Models\Maintenance;
@@ -20,128 +21,28 @@ class DashboardRepository implements DashboardRepositoryInterface
         $currentUser = currentUser();
 
         $languageId = $currentUser->language_id ?? 1;
-        $carTypes = VehicleInfo::LeftJoin('car_fuels', 'vehicle_info.fuel_type_id', '=', 'car_fuels.id')
-            ->LeftJoin('driving_types', 'vehicle_info.type_id', '=', 'driving_types.id')
-            ->select('vehicle_info.*', 'driving_types.name as driving_name', 'car_fuels.fuel_type')
-            ->where('vehicle_info.language_id', $languageId)
-            ->orderBy('vehicle_info.id', 'desc')->get();
+        [$thisWeekRange, $lastWeekRange] = $this->getWeekRanges();
+
+        $carTypes = $this->getCarTypes($languageId);
+        $booking = Booking::get();
         $today = Carbon::today();
 
-        $booking = Booking::get();
+        $thisWeekCount = $this->getBookingCountForRange($thisWeekRange);
+        $lastWeekCount = $this->getBookingCountForRange($lastWeekRange);
+        [$percentageChange, $sign] = $this->formatChange($thisWeekCount, $lastWeekCount);
 
-        $startOfThisWeek = Carbon::now()->startOfWeek();
-        $endOfThisWeek = Carbon::now()->endOfWeek();
+        $bookingCount = $this->getActiveBookingCount($today);
 
-        $startOfLastWeek = Carbon::now()->subWeek()->startOfWeek();
-        $endOfLastWeek = Carbon::now()->subWeek()->endOfWeek();
+        $thisWeekAmount = $this->getBookingAmountForRange($thisWeekRange);
+        $lastWeekAmount = $this->getBookingAmountForRange($lastWeekRange);
+        [$amountPercentageChange, $amountSymbol] = $this->formatChange($thisWeekAmount, $lastWeekAmount);
 
-        // Count bookings
-        $thisWeekCount = Booking::whereBetween('booking_date', [$startOfThisWeek, $endOfThisWeek])->count();
-        $lastWeekCount = Booking::whereBetween('booking_date', [$startOfLastWeek, $endOfLastWeek])->count();
+        $amount = $this->getTotalBookingAmount();
+        $symbol = $this->getCurrencySymbol();
 
-        // Calculate percentage change
-        if ($lastWeekCount > 0) {
-            $change = (($thisWeekCount - $lastWeekCount) / $lastWeekCount) * 100;
-        } else {
-            // If last week was 0, and this week has bookings, it's 100% increase
-            $change = $thisWeekCount > 0 ? 100 : 0;
-        }
-
-        // Determine the sign
-        if ($change > 0) {
-            $sign = '+';
-        } elseif ($change < 0) {
-            $sign = '-';
-        } else {
-            $sign = '';
-        }
-
-        // Format the percentage change
-        $percentageChange = $sign . abs(round($change, 2)) . '%';
-
-        $bookingCount = Booking::whereDate('start_datetime', '<=', $today)
-            ->whereDate('end_datetime', '>=', $today)
-            ->count();
-
-        // Reusable query logic for filtering user/admin bookings
-        $filteredQuery = function ($query) {
-            $query->where(function ($q) {
-                $q->where('booking_by', 'user')->where('payment_status', 1);
-            })->orWhere('booking_by', 'admin');
-        };
-
-        // Amount for this week
-        $thisWeekAmount = Booking::whereBetween('booking_date', [$startOfThisWeek, $endOfThisWeek])
-            ->where($filteredQuery)
-            ->sum('final_price');
-
-        // Amount for last week
-        $lastWeekAmount = Booking::whereBetween('booking_date', [$startOfLastWeek, $endOfLastWeek])
-            ->where($filteredQuery)
-            ->sum('final_price');
-
-        // Calculate percentage change
-        if ($lastWeekAmount > 0) {
-            $amountChange = (($thisWeekAmount - $lastWeekAmount) / $lastWeekAmount) * 100;
-        } else {
-            $amountChange = $thisWeekAmount > 0 ? 100 : 0;
-        }
-
-        // Determine the symbol for amount change
-        if ($amountChange > 0) {
-            $amountSymbol = '+';
-        } elseif ($amountChange < 0) {
-            $amountSymbol = '-';
-        } else {
-            $amountSymbol = '';
-        }
-
-        // Format the amount percentage change
-        $amountPercentageChange = $amountSymbol . abs(round($amountChange, 2)) . '%';
-
-        $amount = Booking::where(function ($query) {
-            $query->where(function ($q) {
-                $q->where('booking_by', 'user')
-                    ->where('payment_status', 1);
-            })->orWhere('booking_by', 'admin');
-        })->sum('final_price');
-
-        $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
-        $symbol = null;
-
-        if ($generalSettings !== null) {
-            $currency = Currency::where('id', $generalSettings->value)->select('symbol')->first();
-            if ($currency !== null) {
-                $symbol = $currency->symbol;
-            }
-        }
-
-        // Count cars created this week
-        $thisWeekCars = VehicleInfo::whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])
-            ->where('vehicle_info.language_id', $languageId)->count();
-
-        // Count cars created last week
-        $lastWeekCars = VehicleInfo::whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
-            ->where('vehicle_info.language_id', $languageId)->count();
-
-        // Calculate percentage change
-        if ($lastWeekCars > 0) {
-            $carChange = (($thisWeekCars - $lastWeekCars) / $lastWeekCars) * 100;
-        } else {
-            $carChange = $thisWeekCars > 0 ? 100 : 0;
-        }
-
-        // Determine the symbol for car change
-        if ($carChange > 0) {
-            $carSymbol = '+';
-        } elseif ($carChange < 0) {
-            $carSymbol = '-';
-        } else {
-            $carSymbol = '';
-        }
-
-        // Format the car percentage change
-        $carPercentageChange = $carSymbol . abs(round($carChange, 2)) . '%';
+        $thisWeekCars = $this->getCarCountForRange($thisWeekRange, $languageId);
+        $lastWeekCars = $this->getCarCountForRange($lastWeekRange, $languageId);
+        [$carPercentageChange, $carSymbol] = $this->formatChange($thisWeekCars, $lastWeekCars);
 
         $upcomingCount = Booking::whereDate('start_datetime', '>', $today)->count();
 
@@ -243,6 +144,105 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->get();
 
 
+        [$dates, $times, $series, $formattedDates] = $this->getBookingHeatmapData();
+
+        $invoices = $this->getRecentInvoices($currentUser?->language_id);
+
+        return ['currentUser' => $currentUser, 'carTypes' => $carTypes, 'bookingCount' => $bookingCount, 'upcomingCount' => $upcomingCount, 'symbol' => $symbol, 'amount' => $amount, 'booking' => $booking, 'percentageChange' => $percentageChange, 'sign' => $sign, 'amountPercentageChange' => $amountPercentageChange, 'amountSymbol' => $amountSymbol, 'carSymbol' => $carSymbol, 'carPercentageChange' => $carPercentageChange, 'reservations' => $reservations, 'users' => $users, 'chartbooking' => $chartbooking, 'maintenances' => $maintenances, 'drivers' => $drivers, 'dates' => $dates, 'times' => $times, 'series' => $series, 'formattedDates' => $formattedDates, 'invoices' => $invoices];
+    }
+
+    private function getCarTypes(int $languageId)
+    {
+        return VehicleInfo::LeftJoin('car_fuels', 'vehicle_info.fuel_type_id', '=', 'car_fuels.id')
+            ->LeftJoin('driving_types', 'vehicle_info.type_id', '=', 'driving_types.id')
+            ->select('vehicle_info.*', 'driving_types.name as driving_name', 'car_fuels.fuel_type')
+            ->where('vehicle_info.language_id', $languageId)
+            ->orderBy('vehicle_info.id', 'desc')->get();
+    }
+
+    private function getWeekRanges(): array
+    {
+        $now = Carbon::now();
+
+        return [
+            [$now->copy()->startOfWeek(), $now->copy()->endOfWeek()],
+            [$now->copy()->subWeek()->startOfWeek(), $now->copy()->subWeek()->endOfWeek()],
+        ];
+    }
+
+    private function getBookingCountForRange(array $range): int
+    {
+        return Booking::whereBetween('booking_date', $range)->count();
+    }
+
+    private function getBookingAmountForRange(array $range): float
+    {
+        return Booking::whereBetween('booking_date', $range)
+            ->where($this->bookingFilter())
+            ->sum('final_price');
+    }
+
+    private function bookingFilter(): Closure
+    {
+        return function ($query) {
+            $query->where(function ($q) {
+                $q->where('booking_by', 'user')
+                    ->where('payment_status', 1);
+            })->orWhere('booking_by', 'admin');
+        };
+    }
+
+    private function getTotalBookingAmount(): float
+    {
+        return Booking::where($this->bookingFilter())->sum('final_price');
+    }
+
+    private function getCurrencySymbol(): ?string
+    {
+        $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
+
+        if ($generalSettings === null) {
+            return null;
+        }
+
+        return Currency::where('id', $generalSettings->value)->value('symbol');
+    }
+
+    private function getCarCountForRange(array $range, int $languageId): int
+    {
+        return VehicleInfo::whereBetween('created_at', $range)
+            ->where('vehicle_info.language_id', $languageId)
+            ->count();
+    }
+
+    private function formatChange(float $current, float $previous): array
+    {
+        if ($previous > 0) {
+            $change = (($current - $previous) / $previous) * 100;
+        } elseif ($current > 0) {
+            $change = 100;
+        } else {
+            $change = 0;
+        }
+
+        $symbol = match (true) {
+            $change > 0 => '+',
+            $change < 0 => '-',
+            default => '',
+        };
+
+        return [$symbol . abs(round($change, 2)) . '%', $symbol];
+    }
+
+    private function getActiveBookingCount(Carbon $today): int
+    {
+        return Booking::whereDate('start_datetime', '<=', $today)
+            ->whereDate('end_datetime', '>=', $today)
+            ->count();
+    }
+
+    private function getBookingHeatmapData(): array
+    {
         $bookingsRes = Booking::selectRaw(
             'DATE(start_datetime) as date,
                  TIME_FORMAT(booking_date, "%H:00") as time,
@@ -253,39 +253,44 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->orderBy('time')
             ->get();
 
-        // Extract unique dates (x-axis) and times (y-axis)
         $dates = $bookingsRes->pluck('date')->unique()->values();
         $times = $bookingsRes->pluck('time')->unique()->sort()->values();
 
-        // Format data for ApexCharts
-        $series = [];
-        foreach ($times as $time) {
-            $seriesData = [];
-            foreach ($dates as $date) {
-                $count = $bookingsRes->where('date', $date)->where('time', $time)->first()->count ?? 0;
-                $seriesData[] = ['x' => $date, 'y' => $count];
-            }
-            $series[] = [
-                'name' => $time,
-                'data' => $seriesData
-            ];
-        }
-        $formattedDates = $dates->map(function ($date) {
-            return \Carbon\Carbon::parse($date)->format('d M');
-        })->values();
-        /** @var \App\Models\User|null $authId */
-        $authId = currentUser();
-        $languageId = $authId ? $authId->language_id : null;
+        $series = $times->map(function ($time) use ($bookingsRes, $dates) {
+            $seriesData = $dates->map(function ($date) use ($bookingsRes, $time) {
+                $booking = $bookingsRes->where('date', $date)->where('time', $time)->first();
 
-        $invoices = Invoice::with('items')
+                return ['x' => $date, 'y' => $booking->count ?? 0];
+            });
+
+            return [
+                'name' => $time,
+                'data' => $seriesData->values()->all(),
+            ];
+        })->values()->all();
+
+        $formattedDates = $dates->map(function ($date) {
+            return Carbon::parse($date)->format('d M');
+        })->values();
+
+        return [$dates, $times, $series, $formattedDates];
+    }
+
+    private function getRecentInvoices(?int $languageId)
+    {
+        return Invoice::with('items')
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')
-            ->where('invoices.deleted_at', null)->where('invoices.language_id', $languageId)->limit(5)->get()->map(function ($invoice) {
+            ->whereNull('invoices.deleted_at')
+            ->when($languageId, function ($query, $languageId) {
+                $query->where('invoices.language_id', $languageId);
+            })
+            ->limit(5)
+            ->get()
+            ->map(function ($invoice) {
                 $invoice->full_name = empty($invoice->first_name) ? '' : ucwords($invoice->first_name . ' ' . $invoice->last_name);
                 return $invoice;
             });
-
-        return ['currentUser' => $currentUser, 'carTypes' => $carTypes, 'bookingCount' => $bookingCount, 'upcomingCount' => $upcomingCount, 'symbol' => $symbol, 'amount' => $amount, 'booking' => $booking, 'percentageChange' => $percentageChange, 'sign' => $sign, 'amountPercentageChange' => $amountPercentageChange, 'amountSymbol' => $amountSymbol, 'carSymbol' => $carSymbol, 'carPercentageChange' => $carPercentageChange, 'reservations' => $reservations, 'users' => $users, 'chartbooking' => $chartbooking, 'maintenances' => $maintenances, 'drivers' => $drivers, 'dates' => $dates, 'times' => $times, 'series' => $series, 'formattedDates' => $formattedDates, 'invoices' => $invoices];
     }
 }
