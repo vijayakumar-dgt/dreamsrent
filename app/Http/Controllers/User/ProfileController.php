@@ -10,14 +10,14 @@ class ProfileController extends BaseUserController
 {
     public function settings(): View
     {
-        $data = $this->userRepository->getProfileSettings();
+        $data = $this->profileRepository->getProfileSettings();
 
         return view('frontend.user.usersettings', $data);
     }
 
     public function update(UserProfileRequest $request): JsonResponse
     {
-        $response = $this->userRepository->updateProfile($request);
+        $response = $this->profileRepository->updateProfile($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }

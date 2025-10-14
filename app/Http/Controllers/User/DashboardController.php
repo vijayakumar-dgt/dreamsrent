@@ -8,7 +8,7 @@ class DashboardController extends BaseUserController
 {
     public function index(): View
     {
-        $data = $this->userRepository->getDashboardData();
+        $data = $this->bookingRepository->getDashboardData();
 
         return view('frontend.user.dashboard', $data);
     }

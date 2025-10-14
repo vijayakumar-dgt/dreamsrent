@@ -9,7 +9,7 @@ class EnquiryController extends BaseUserController
 {
     public function store(Request $request): JsonResponse
     {
-        $response = $this->userRepository->storeEnquiry($request);
+        $response = $this->profileRepository->storeEnquiry($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }

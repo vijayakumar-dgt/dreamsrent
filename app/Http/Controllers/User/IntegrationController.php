@@ -8,7 +8,7 @@ class IntegrationController extends BaseUserController
 {
     public function index(): View
     {
-        $data = $this->userRepository->getProfileSettings();
+        $data = $this->profileRepository->getProfileSettings();
 
         return view('frontend.user.usersettings', $data);
     }

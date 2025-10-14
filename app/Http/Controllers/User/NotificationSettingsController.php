@@ -10,14 +10,14 @@ class NotificationSettingsController extends BaseUserController
 {
     public function index(): View
     {
-        $data = $this->userRepository->getUserNotifications();
+        $data = $this->notificationRepository->getUserNotifications();
 
         return view('frontend.user.notification', $data);
     }
 
     public function update(Request $request): JsonResponse
     {
-        $response = $this->userRepository->updateNotificationSettings($request);
+        $response = $this->notificationRepository->updateNotificationSettings($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }

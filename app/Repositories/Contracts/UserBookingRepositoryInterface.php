@@ -3,26 +3,27 @@
 namespace App\Repositories\Contracts;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 interface UserBookingRepositoryInterface
 {
-    public function getDashboardData();
+    public function getDashboardData(): array;
 
-    public function getUserBookings();
+    public function getUserBookings(): array;
 
-    public function getAjaxLastBookings(Request $request);
+    public function getAjaxLastBookings(Request $request): Collection;
 
-    public function getAjaxBookings(Request $request);
+    public function getAjaxBookings(Request $request): Collection;
 
-    public function getBookingDetails(int $id);
+    public function getBookingDetails(int $id): object;
 
-    public function cancelBooking(Request $request);
+    public function cancelBooking(Request $request): array;
 
-    public function completeBooking(Request $request);
+    public function completeBooking(Request $request): array;
 
-    public function startRide(Request $request);
+    public function startRide(Request $request): array;
 
-    public function deleteRide(Request $request);
+    public function deleteRide(Request $request): array;
 
-    public function getTransactionsAjax(Request $request);
+    public function getTransactionsAjax(Request $request): Collection;
 }

@@ -12,14 +12,14 @@ class BookingController extends BaseUserController
 {
     public function index(): View
     {
-        $data = $this->userRepository->getUserBookings();
+        $data = $this->bookingRepository->getUserBookings();
 
         return view('frontend.user.bookings', $data);
     }
 
     public function last(Request $request): AnonymousResourceCollection
     {
-        $bookings = $this->userRepository->getAjaxLastBookings($request);
+        $bookings = $this->bookingRepository->getAjaxLastBookings($request);
 
         return UserBookings::collection($bookings)->additional([
             'status' => 'success',
@@ -28,7 +28,7 @@ class BookingController extends BaseUserController
 
     public function list(Request $request): AnonymousResourceCollection
     {
-        $bookings = $this->userRepository->getAjaxBookings($request);
+        $bookings = $this->bookingRepository->getAjaxBookings($request);
 
         return UserBookings::collection($bookings)->additional([
             'status' => 'success',
@@ -37,7 +37,7 @@ class BookingController extends BaseUserController
 
     public function show(?int $id): JsonResponse
     {
-        $booking = $this->userRepository->getBookingDetails($id);
+        $booking = $this->bookingRepository->getBookingDetails($id);
 
         return response()->json([
             'status' => 'success',
@@ -47,28 +47,28 @@ class BookingController extends BaseUserController
 
     public function cancel(Request $request): JsonResponse
     {
-        $response = $this->userRepository->cancelBooking($request);
+        $response = $this->bookingRepository->cancelBooking($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function complete(Request $request): JsonResponse
     {
-        $response = $this->userRepository->completeBooking($request);
+        $response = $this->bookingRepository->completeBooking($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function start(Request $request): JsonResponse
     {
-        $response = $this->userRepository->startRide($request);
+        $response = $this->bookingRepository->startRide($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function destroy(Request $request): JsonResponse
     {
-        $response = $this->userRepository->deleteRide($request);
+        $response = $this->bookingRepository->deleteRide($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }

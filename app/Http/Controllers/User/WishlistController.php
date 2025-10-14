@@ -11,21 +11,21 @@ class WishlistController extends BaseUserController
 {
     public function index(): View
     {
-        $seoTitle = $this->userRepository->getWishlistData();
+        $seoTitle = $this->wishlistRepository->getWishlistData();
 
         return view('frontend.user.wishlists', ['seo_title' => $seoTitle]);
     }
 
     public function store(Request $request): JsonResponse
     {
-        $response = $this->userRepository->addToWishlist($request->id);
+        $response = $this->wishlistRepository->addToWishlist($request->id);
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function list(): JsonResponse
     {
-        $wishlists = $this->userRepository->getWishlistDataAjax();
+        $wishlists = $this->wishlistRepository->getWishlistDataAjax();
 
         return response()->json([
             'status' => 'success',
