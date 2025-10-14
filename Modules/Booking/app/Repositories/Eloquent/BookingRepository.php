@@ -227,7 +227,7 @@ class BookingRepository implements BookingRepositoryInterface
     {
         try {
             $id = $request->id;
-            Booking::where('id', $id)->update(['booking_status' => 5]);
+            Booking::where('id', $id)->update(['booking_status' => 5, 'payment_status' => 2]);
 
             return [
                 'status'  => 'success',

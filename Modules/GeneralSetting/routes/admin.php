@@ -35,35 +35,34 @@ if (! function_exists('registerAdminSettingsRoutes')) {
     function registerAdminSettingsRoutes(): void
     {
         Route::group(['prefix' => 'admin/settings', 'middleware' => 'admin'], function () {
-            Route::get('logo', [GeneralSettingController::class, 'logo'])->name('admin.logo-settings')->middleware('permission');
-            Route::get('company', [GeneralSettingController::class, 'company'])->name('admin.company-settings')->middleware('permission');
-            Route::post('company/store', [GeneralSettingController::class, 'store'])->name('admin.company-store-settings');
-            Route::post('company/list/new', [GeneralSettingController::class, 'listCompany'])->name('admin.company-list-new-settings');
-            Route::post('company/list', [GeneralSettingController::class, 'list'])->name('admin.company-list-settings');
+            Route::get('logo', [LogoSettingsController::class, 'logo'])->name('admin.logo-settings')->middleware('permission');
+            Route::get('company', [CompanySettingsController::class, 'company'])->name('admin.company-settings')->middleware('permission');
+            Route::post('company/store', [CompanySettingsController::class, 'store'])->name('admin.company-store-settings');
+            Route::post('company/list/new', [CompanySettingsController::class, 'listCompany'])->name('admin.company-list-new-settings');
+            Route::post('company/list', [CompanySettingsController::class, 'list'])->name('admin.company-list-settings');
             Route::get('profile', [AdminProfileController::class, 'adminProfile'])->name('admin.profile-settings');
-            Route::get('notifications', [GeneralSettingController::class, 'notifications'])->name('admin.notifications-settings')->middleware('permission');
-            Route::post('notifications/store', [GeneralSettingController::class, 'storeNotificationSettings'])->name('admin.storenotifications-settings');
+            Route::get('notifications', [NotificationSettingsController::class, 'notifications'])->name('admin.notifications-settings')->middleware('permission');
+            Route::post('notifications/store', [NotificationSettingsController::class, 'storeNotificationSettings'])->name('admin.storenotifications-settings');
 
             //seosetup
-            Route::get('seosetup', [GeneralSettingController::class, 'seosetup'])->name('admin.seosetup-settings')->middleware('permission');
-            Route::post('seosetup/store', [GeneralSettingController::class, 'storeSeoSetupSettings'])->name('admin.seosetup-store-settings');
+            Route::get('seosetup', [SeoSettingsController::class, 'seosetup'])->name('admin.seosetup-settings')->middleware('permission');
+            Route::post('seosetup/store', [SeoSettingsController::class, 'storeSeoSetupSettings'])->name('admin.seosetup-store-settings');
 
             //cookies
-            Route::get('gdpr-cookies', [GeneralSettingController::class, 'gdprCookies'])->name('admin.gdpr-cookies-settings')->middleware('permission');
-            Route::post('cookies/store', [GeneralSettingController::class, 'storeCookiesSettings'])->name('admin.gdpr-cookies-store-settings');
-            Route::post('cookies/list', [GeneralSettingController::class, 'cookiesSettingsList'])->name('admin.gdpr-cookies-list-settings');
+            Route::get('gdpr-cookies', [CookiesSettingsController::class, 'gdprCookies'])->name('admin.gdpr-cookies-settings')->middleware('permission');
+            Route::post('cookies/store', [CookiesSettingsController::class, 'storeCookiesSettings'])->name('admin.gdpr-cookies-store-settings');
+            Route::post('cookies/list', [CookiesSettingsController::class, 'cookiesSettingsList'])->name('admin.gdpr-cookies-list-settings');
 
             // Security
-            Route::get('security', [GeneralSettingController::class, 'security'])->name('admin.security-settings')->middleware('permission');
-            Route::post('check-current-password', [GeneralSettingController::class, 'checkCurrentPassword'])->name('admin.check-current-password');
-            Route::post('update-password', [GeneralSettingController::class, 'updatePassword'])->name('admin.update-password');
-            Route::post('check-current-phonenumber', [GeneralSettingController::class, 'checkCurrentPhoneNumber'])->name('admin.check-current-phonenumber');
-            Route::post('update-phone-number', [GeneralSettingController::class, 'updatePhoneNumber'])->name('admin.update-phone-number');
-            Route::post('update-email', [GeneralSettingController::class, 'updateEmail'])->name('admin.update-email');
-            Route::get('get-security-settings', [GeneralSettingController::class, 'getSecuritySettings'])->name('admin.get-security-settings');
-            Route::post('logout-device', [GeneralSettingController::class, 'logoutDevice'])->name('admin.logout-device');
-            Route::post('update-google-auth', [GeneralSettingController::class, 'updateGoogleAuth'])->name('admin.update-google-auth');
-            Route::get('prefixes', [GeneralSettingController::class, 'prefixes'])->name('admin.prefixes-settings');
+            Route::get('security', [SecuritySettingsController::class, 'security'])->name('admin.security-settings')->middleware('permission');
+            Route::post('check-current-password', [SecuritySettingsController::class, 'checkCurrentPassword'])->name('admin.check-current-password');
+            Route::post('update-password', [SecuritySettingsController::class, 'updatePassword'])->name('admin.update-password');
+            Route::post('check-current-phonenumber', [SecuritySettingsController::class, 'checkCurrentPhoneNumber'])->name('admin.check-current-phonenumber');
+            Route::post('update-phone-number', [SecuritySettingsController::class, 'updatePhoneNumber'])->name('admin.update-phone-number');
+            Route::post('update-email', [SecuritySettingsController::class, 'updateEmail'])->name('admin.update-email');
+            Route::get('get-security-settings', [SecuritySettingsController::class, 'getSecuritySettings'])->name('admin.get-security-settings');
+            Route::post('logout-device', [SecuritySettingsController::class, 'logoutDevice'])->name('admin.logout-device');
+            Route::post('update-google-auth', [SecuritySettingsController::class, 'updateGoogleAuth'])->name('admin.update-google-auth');
 
             // Currency
             Route::get('currencies', [CurrencyController::class, 'index'])->name('admin.currencies')->middleware('permission');
@@ -79,19 +78,19 @@ if (! function_exists('registerAdminSettingsRoutes')) {
             Route::get('get-timezone', [LocalizationController::class, 'getTimezone']);
 
             //maintenance settings
-            Route::get('maintenance', [GeneralSettingController::class, 'maintenance'])->name('admin.maintenance-settings')->middleware('permission');
-            Route::post('maintenance/update', [GeneralSettingController::class, 'storeMaintenanceSettings'])->name('admin.maintenanceupdate-settings');
+            Route::get('maintenance', [MaintenanceSettingsController::class, 'maintenance'])->name('admin.maintenance-settings')->middleware('permission');
+            Route::post('maintenance/update', [MaintenanceSettingsController::class, 'storeMaintenanceSettings'])->name('admin.maintenanceupdate-settings');
 
             // Common general-settings list
-            Route::post('list', [GeneralSettingController::class, 'list']);
+            Route::post('list', [CompanySettingsController::class, 'list']);
 
             // Prefixes
-            Route::get('prefixes', [GeneralSettingController::class, 'prefixes'])->name('admin.prefixes-settings')->middleware('permission');
-            Route::post('update-prefixes', [GeneralSettingController::class, 'updatePrefixes'])->name('admin.update-prefixes');
+            Route::get('prefixes', [PrefixSettingsController::class, 'prefixes'])->name('admin.prefixes-settings')->middleware('permission');
+            Route::post('update-prefixes', [PrefixSettingsController::class, 'updatePrefixes'])->name('admin.update-prefixes');
 
             // AI Configuration
-            Route::get('ai-configuration', [GeneralSettingController::class, 'aiConfiguration'])->name('admin.ai-configuration')->middleware('permission');
-            Route::post('update-ai-configuration', [GeneralSettingController::class, 'updateAiConfiguration'])->name('admin.update-ai-configuration');
+            Route::get('ai-configuration', [AiConfigurationController::class, 'aiConfiguration'])->name('admin.ai-configuration')->middleware('permission');
+            Route::post('update-ai-configuration', [AiConfigurationController::class, 'updateAiConfiguration'])->name('admin.update-ai-configuration');
 
             // Insuarnce
             Route::get('insurances', [InsuranceController::class, 'index'])->name('insurance.index')->middleware('permission');
@@ -115,7 +114,7 @@ if (! function_exists('registerAdminSettingsRoutes')) {
             Route::post('sms-store', [CommunicationSettingController::class, 'storeCommunicationSetting'])->name('admin.smsstore-settings');
 
             //storagesettings
-            Route::get('storage', [GeneralSettingController::class, 'storage'])->name('admin.storage-settings')->middleware('permission');
+            Route::get('storage', [StorageSettingsController::class, 'storage'])->name('admin.storage-settings')->middleware('permission');
 
             //Sitemap Settings
             Route::get('sitemap', [SitemapController::class, 'index'])->name('admin.sitemap')->middleware('permission');
@@ -130,8 +129,8 @@ if (! function_exists('registerAdminSettingsRoutes')) {
             Route::post('send-test-mail', [CommunicationSettingController::class, 'sendTestMail'])->name('admin.send-test-mail');
 
             // storage settings
-            Route::post('storageupdate', [GeneralSettingController::class, 'storageStatusUpdate'])->name('admin.storageupdate-settings');
-            Route::post('aws/store', [GeneralSettingController::class, 'storeAwsSettings'])->name('admin.storawsStoreage-settings');
+            Route::post('storageupdate', [StorageSettingsController::class, 'storageStatusUpdate'])->name('admin.storageupdate-settings');
+            Route::post('aws/store', [StorageSettingsController::class, 'storeAwsSettings'])->name('admin.storawsStoreage-settings');
 
             //Language
             Route::get('languages', [LanguageController::class, 'index'])->name('admin.languages')->middleware('permission');
@@ -170,26 +169,26 @@ if (! function_exists('registerAdminSettingsRoutes')) {
             Route::post('clear', [SignatureSettingsController::class, 'clear'])->name('admin.clear-cache');
 
             // Payment settings
-            Route::get('payment-methods', [GeneralSettingController::class, 'paymentIndex'])->name('admin.paymentIndex-settings')->middleware('permission');
-            Route::post('updatepaymentSettings', [GeneralSettingController::class, 'updatepaymentSettings'])->name('admin.updatepayment-settings');
-            Route::post('updatepaymentStatus', [GeneralSettingController::class, 'updatepaymentStatus'])->name('admin.updatepaymentStatus-settings');
-            Route::get('payment-list', [GeneralSettingController::class, 'paymentList'])->name('admin.paymentList-settings');
+            Route::get('payment-methods', [PaymentSettingsController::class, 'paymentIndex'])->name('admin.paymentIndex-settings')->middleware('permission');
+            Route::post('updatepaymentSettings', [PaymentSettingsController::class, 'updatepaymentSettings'])->name('admin.updatepayment-settings');
+            Route::post('updatepaymentStatus', [PaymentSettingsController::class, 'updatepaymentStatus'])->name('admin.updatepaymentStatus-settings');
+            Route::get('payment-list', [PaymentSettingsController::class, 'paymentList'])->name('admin.paymentList-settings');
 
             // Invoice settings
-            Route::get('invoice-settings', [GeneralSettingController::class, 'invoiceSettings'])->name('admin.invoiceSettings-settings')->middleware('permission');
-            Route::post('invoice-settings/store', [GeneralSettingController::class, 'storeInvoiceSettings'])->name('admin.storeInvoiceSettings-settings');
+            Route::get('invoice-settings', [InvoiceSettingsController::class, 'invoiceSettings'])->name('admin.invoiceSettings-settings')->middleware('permission');
+            Route::post('invoice-settings/store', [InvoiceSettingsController::class, 'storeInvoiceSettings'])->name('admin.storeInvoiceSettings-settings');
 
             // Theme Settings
-            Route::get('theme', [GeneralSettingController::class, 'themeSettings'])->name('admin.theme-settings');
-            Route::post('update-theme-settings', [GeneralSettingController::class, 'updateThemeSettings']);
+            Route::get('theme', [ThemeSettingsController::class, 'themeSettings'])->name('admin.theme-settings');
+            Route::post('update-theme-settings', [ThemeSettingsController::class, 'updateThemeSettings']);
 
             // otp settings
-            Route::get('otp-settings', [GeneralSettingController::class, 'otpSettings'])->name('admin.otp-settings')->middleware('permission');
-            Route::post('otp/update', [GeneralSettingController::class, 'storeOtpSettings'])->name('admin.otpstore-settings');
+            Route::get('otp-settings', [OtpSettingsController::class, 'otpSettings'])->name('admin.otp-settings')->middleware('permission');
+            Route::post('otp/update', [OtpSettingsController::class, 'storeOtpSettings'])->name('admin.otpstore-settings');
 
             //rental Setting
-            Route::get('rental-settings', [GeneralSettingController::class, 'rentalSettings'])->name('admin.rental-settings');
-            Route::post('rental/update', [GeneralSettingController::class, 'storeRentalSettings'])->name('admin.rentalstore-settings');
+            Route::get('rental-settings', [RentalSettingsController::class, 'rentalSettings'])->name('admin.rental-settings');
+            Route::post('rental/update', [RentalSettingsController::class, 'storeRentalSettings'])->name('admin.rentalstore-settings');
 
             //database Settings
             Route::get('database-settings', [DbbackupController::class, 'datebaseSettings'])->name('admin.database-settings')->middleware('permission');
@@ -202,8 +201,8 @@ if (! function_exists('registerAdminSettingsRoutes')) {
             Route::post('system-backup/delete', [DbbackupController::class, 'deleteSystemBackup']);
 
             //logo-setting
-            Route::get('logo-settings', [GeneralSettingController::class, 'logoSettings'])->name('admin.logo-settings');
-            Route::post('logo/store', [GeneralSettingController::class, 'storeLogoSettings'])->name('admin.logostore-settings');
+            Route::get('logo-settings', [LogoSettingsController::class, 'logoSettings'])->name('admin.logo-settings');
+            Route::post('logo/store', [LogoSettingsController::class, 'storeLogoSettings'])->name('admin.logostore-settings');
         });
     }
 }

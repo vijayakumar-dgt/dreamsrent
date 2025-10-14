@@ -68,7 +68,7 @@
 <script src="{{ asset('backend/assets/js/custom/custom-script.js') }}"></script>
 
 @if (Route::is(['dashboard', 'admin.income-report', 'admin.earning-report']))
-<script src="{{ asset('backend/assets/js/admin/apexcharts.js') }}"></script>
+<script src="{{ asset('backend/assets/plugins/apexchart/apexcharts.min.js') }}"></script>
 @endif
 
 @stack('scripts')

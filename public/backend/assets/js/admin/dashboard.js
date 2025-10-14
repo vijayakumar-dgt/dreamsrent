@@ -9,6 +9,7 @@
     const series = JSON.parse(chartDataElement.dataset.series);
     // Removed unused dates variable
     const bookingData = JSON.parse(chartDataElement.dataset.bookings);
+    let chart;
 
     document.addEventListener("DOMContentLoaded", function () {
         let options = {
@@ -57,11 +58,11 @@
             series: series,
         };
 
-        let chart = new ApexCharts(
+        let statisticsChart = new ApexCharts(
             document.querySelector("#statistics_chart"),
             options
         );
-        chart.render();
+        statisticsChart.render();
     });
 
     if (typeof bookingData === "undefined" || !Array.isArray(bookingData)) {
@@ -105,7 +106,7 @@
     };
 
     if (typeof ApexCharts !== "undefined") {
-        let chart = new ApexCharts(
+        chart = new ApexCharts(
             document.querySelector("#income_expense_chart"),
             optionsIncome
         );
@@ -116,29 +117,22 @@
 
     document.querySelectorAll(".dropdown-item-chat").forEach((item) => {
         item.addEventListener("click", function () {
-            let selected = this.textContent.trim();
+            let selected = this.dataset.value.trim();
+            let seletedtext = this.textContent.trim();
 
             document.querySelector(
                 ".dropdown-filter"
-            ).innerHTML = `<i class="ti ti-calendar me-1"></i> ${selected}`;
+            ).innerHTML = `<i class="ti ti-calendar me-1"></i> ${seletedtext}`;
 
-            updateChartData(selected);
+            updateChartData(selected, seletedtext);
         });
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-        updateChartData("This Week");
+        updateChartData("this_month", $('.dropdown-filter').data('this_month') || 'This Month');
     });
 
-    document.querySelectorAll(".dropdown-item-chat").forEach((item) => {
-        item.addEventListener("click", function () {
-            let selected = this.textContent.trim();
-
-            updateChartData(selected);
-        });
-    });
-
-    function updateChartData(filter) {
+    function updateChartData(filter, filterText) {
         let today = new Date();
         let dayOfWeek = today.getDay();
 
@@ -174,14 +168,14 @@
         let filteredData = bookingData.filter((booking) => {
             let bookingDate = new Date(booking.booking_date);
 
-            if (filter === "This Week")
+            if (filter === "this_week")
                 return bookingDate >= startOfWeek && bookingDate <= endOfWeek;
-            if (filter === "Last Week")
+            if (filter === "last_week")
                 return (
                     bookingDate >= startOfLastWeek &&
                     bookingDate <= endOfLastWeek
                 );
-            if (filter === "This Month") return bookingDate >= thisMonth;
+            if (filter === "this_month") return bookingDate >= thisMonth;
 
             return true;
         });
@@ -196,11 +190,11 @@
         });
 
         let dateRange = [];
-        if (filter === "This Week")
+        if (filter === "this_week")
             dateRange = generateDateRange(startOfWeek, endOfWeek);
-        if (filter === "Last Week")
+        if (filter === "last_week")
             dateRange = generateDateRange(startOfLastWeek, endOfLastWeek);
-        if (filter === "This Month") {
+        if (filter === "this_month") {
             let endOfMonth = new Date(
                 today.getFullYear(),
                 today.getMonth() + 1,
@@ -224,7 +218,7 @@
         const incomeText = document.querySelector(".income-summary p");
         const incomeAmount = document.querySelector(".income-summary h5");
         if (incomeText) {
-            incomeText.textContent = `Income ${filter}`;
+            incomeText.textContent = `Income ${filterText}`;
         }
 
         const totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
@@ -245,8 +239,4 @@
             }`;
         }
     }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        updateChartData("This Week");
-    });
 })();

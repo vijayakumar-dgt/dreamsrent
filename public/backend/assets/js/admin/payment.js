@@ -81,7 +81,7 @@
                         switch (data) {
                             case 1:
                                 badgeClass = "badge-info-transparent";
-                                label = _l("admin.general_settings.open");
+                                label = _l("admin.finance_accounts.open");
                                 break;
                             case 2:
                                 badgeClass = "badge-success-transparent";
@@ -89,7 +89,7 @@
                                 break;
                             case 3:
                                 badgeClass = "badge-warning-transparent";
-                                label = _l("admin.rentals.pending");
+                                label = _l("admin.finance_accounts.pending");
                                 break;
                             default:
                                 badgeClass = "badge-danger-transparent";

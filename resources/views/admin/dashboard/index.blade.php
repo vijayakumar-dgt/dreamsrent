@@ -328,15 +328,18 @@
                                     </div>
                                 </div>
                                 <div class="dropdown me-2">
-                                    <a href="javascript:void(0);" class="dropdown-filter dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                        <i class="ti ti-calendar me-1"></i> {{ __('admin.dashboard.this_week') }}
+                                    <a href="javascript:void(0);" class="dropdown-filter dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-this_month="{{ __('admin.dashboard.this_month') }}">
+                                        <i class="ti ti-calendar me-1"></i> {{ __('admin.dashboard.this_month') }}
                                     </a>
-                                    <ul class="dropdown-menu  dropdown-menu-end p-2">
+                                    <ul class="dropdown-menu dropdown-menu-end p-2">
                                         <li>
-                                            <a href="javascript:void(0);" class="dropdown-item dropdown-item-chat rounded-1">{{ __('admin.dashboard.this_week') }}</a>
+                                            <a href="javascript:void(0);" class="dropdown-item dropdown-item-chat rounded-1" data-value="this_month">{{ __('admin.dashboard.this_month') }}</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0);" class=" dropdown-item dropdown-item-chat rounded-1">{{ __('admin.dashboard.last_week') }}</a>
+                                            <a href="javascript:void(0);" class="dropdown-item dropdown-item-chat rounded-1" data-value="this_week">{{ __('admin.reports.this_week') }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class=" dropdown-item dropdown-item-chat rounded-1" data-value="last_week">{{ __('admin.reports.last_week') }}</a>
                                         </li>
                                     </ul>
                                 </div>
