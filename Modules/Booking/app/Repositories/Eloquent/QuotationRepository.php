@@ -4,34 +4,35 @@ namespace Modules\Booking\Repositories\Eloquent;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingDetail;
 use Modules\Booking\Models\BookingHistory;
 use Modules\Booking\Repositories\Contracts\QuotationRepositoryInterface;
-use Modules\CarInfo\Models\Driver;
-use Modules\CarInfo\Models\ExtraService;
+use Modules\Booking\Repositories\Eloquent\Support\QuotationBookingDataBuilder;
+use Modules\Booking\Repositories\Eloquent\Support\QuotationBookingFormatter;
+use Modules\Booking\Repositories\Eloquent\Support\QuotationBookingPersistence;
+use Modules\Booking\Repositories\Eloquent\Support\QuotationBookingQueryBuilder;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\PricingType;
-use Modules\CarInfo\Models\VehicleInfo;
-use Modules\CarInfo\Models\VehicleSeason;
-use Modules\CarInfo\Models\VehicleTarrif;
-use Modules\GeneralSetting\Models\GeneralSetting;
-use Modules\GeneralSetting\Models\Insurance;
-use Modules\GeneralSetting\Models\InsuranceBenefit;
 
 class QuotationRepository implements QuotationRepositoryInterface
 {
-    public const VEHICLE_NAME_SELECT        = 'vehicle_info.name as vehicle_name';
-    public const CUSTOMER_FULLNAME_SELECT   = "CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name";
-    public const CUSTOMER_IMAGE_SELECT      = 'user_details.profile_image as customer_image';
-    public const PICKUP_LOCATION_SELECT     = 'locations as pickup_location';
-    public const DROP_LOCATION_SELECT       = 'locations as drop_location';
-    public const VEHICLE_IMAGE_PATH         = 'vehicles/images/small/';
-    public const STORAGE_PATH               = 'storage/';
+    public const VEHICLE_NAME_SELECT      = 'vehicle_info.name as vehicle_name';
+    public const CUSTOMER_FULLNAME_SELECT = "CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name";
+    public const CUSTOMER_IMAGE_SELECT    = 'user_details.profile_image as customer_image';
+    public const PICKUP_LOCATION_SELECT   = 'locations as pickup_location';
+    public const DROP_LOCATION_SELECT     = 'locations as drop_location';
+    public const VEHICLE_IMAGE_PATH       = 'vehicles/images/small/';
+    public const STORAGE_PATH             = 'storage/';
+
+    public function __construct(
+        private readonly QuotationBookingDataBuilder $dataBuilder,
+        private readonly QuotationBookingPersistence $persistence,
+        private readonly QuotationBookingQueryBuilder $queryBuilder,
+        private readonly QuotationBookingFormatter $formatter,
+    ) {
+    }
 
     public function create(): array
     {
@@ -58,10 +59,10 @@ class QuotationRepository implements QuotationRepositoryInterface
             });
 
         return [
-            'locations'   => $locations,
-            'priceTypes'  => $priceTypes,
-            'drivingTypes'=> $drivingTypes,
-            'customers'   => $customers,
+            'locations'    => $locations,
+            'priceTypes'   => $priceTypes,
+            'drivingTypes' => $drivingTypes,
+            'customers'    => $customers,
         ];
     }
 
@@ -69,26 +70,32 @@ class QuotationRepository implements QuotationRepositoryInterface
     {
         $bookingId = $request->input('booking_id');
 
-        $successMsg = !empty($bookingId) ? __('admin.bookings.reservation_create_success') : __('admin.bookings.reservation_update_success');
-        $errorMsg = !empty($bookingId) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
+        $successMsg = !empty($bookingId)
+            ? __('admin.bookings.reservation_create_success')
+            : __('admin.bookings.reservation_update_success');
+        $errorMsg = !empty($bookingId)
+            ? __('admin.common.default_create_error')
+            : __('admin.common.default_update_error');
 
         try {
             DB::beginTransaction();
 
-            [$startDateTime, $endDateTime] = $this->parseDateTimes($request);
-            $data = $this->prepareBookingData($request, $startDateTime, $endDateTime);
-            $details = $this->prepareBookingDetails($request);
+            [$startDateTime, $endDateTime] = $this->dataBuilder->parseDateTimes($request);
+            $data = $this->dataBuilder->prepareBookingData($request, $startDateTime, $endDateTime);
+            $details = $this->dataBuilder->prepareBookingDetails($request);
 
             if (empty($bookingId)) {
-                $booking = $this->createBooking($data, $details);
+                $booking = $this->persistence->createBooking($data, $details);
                 $bookingId = $booking->id;
             } else {
-                $this->updateBooking($bookingId, $data, $details);
+                $this->persistence->updateBooking($bookingId, $data, $details);
             }
 
             DB::commit();
 
-            $encryptedId = (is_int($bookingId) || is_string($bookingId)) ? customEncrypt($bookingId, Booking::$reservationSecretKey) : null;
+            $encryptedId = (is_int($bookingId) || is_string($bookingId))
+                ? customEncrypt($bookingId, Booking::$reservationSecretKey)
+                : null;
 
             return [
                 'code'             => 200,
@@ -106,195 +113,10 @@ class QuotationRepository implements QuotationRepositoryInterface
         }
     }
 
-    private function parseDateTimes(Request $request): array
-    {
-        $startDate = $request->input('start_date');
-        $startTime = $request->input('start_time');
-        $endDate = $request->input('end_date');
-        $endTime = $request->input('end_time');
-
-        if (!is_string($startDate) || !is_string($startTime) || !is_string($endDate) || !is_string($endTime)) {
-            throw new \InvalidArgumentException('Invalid date or time input.');
-        }
-
-        $startDateTime = Carbon::parse($startDate . ' ' . $startTime)->format('Y-m-d H:i:s');
-        $endDateTime = Carbon::parse($endDate . ' ' . $endTime)->format('Y-m-d H:i:s');
-
-        return [$startDateTime, $endDateTime];
-    }
-
-    private function prepareBookingData(Request $request, string $startDateTime, string $endDateTime): array
-    {
-        return [
-            'vehicle_id'                => $request->vehicle_id,
-            'customer_id'               => $request->customer_id,
-            'booking_by'                => 'quotation',
-            'driver_id'                 => $request->driver_id ?? null,
-            'driver_price'              => $request->driver_price ?? 0,
-            'vehicle_price'             => $request->vehicle_price,
-            'total_insurance_price'     => $request->total_insurance_price ?? 0,
-            'total_extra_service_price' => $request->total_extra_service_price ?? 0,
-            'final_price'               => $request->final_price ?? 0,
-            'extra_service'             => $request->extra_service ?? null,
-            'insurance'                 => $request->insurance ?? null,
-            'security_deposit'          => $request->security_deposit ?? null,
-            'start_datetime'            => $startDateTime,
-            'end_datetime'              => $endDateTime,
-            'pickup_location'           => $request->pickup_location,
-            'return_location'           => $request->return_location,
-            'booking_status'            => 1,
-            'booking_tariff'            => $request->tariff ?? null,
-            'driving_type'              => $request->driving_type ?? null,
-            'rental_type'               => $request->vehicle_price_type ?? null,
-            'no_of_passengers'          => $request->no_of_passengers ?? null,
-            'no_of_days'                => $request->no_of_days ?? null,
-            'vehicle_total_price'       => $request->vehicle_total_price ?? null,
-            'base_km'                   => $request->base_km ?? null,
-            'km_extra_price'            => $request->km_extra_price ?? null,
-            'expenses'                  => $request->expenses ?? null,
-            'delivery_price'            => $request->delivery_price ?? null,
-            'tax_val'                   => $request->tax_val ?? null,
-            'tax_type'                  => $request->tax_type ?? null,
-            'booking_date'              => now(),
-        ];
-    }
-
-    private function prepareBookingDetails(Request $request): array
-    {
-        $details = [
-            'vehicle_price_type' => $request->vehicle_price_type,
-            'vehicle_season_id'  => $request->vehicle_season_id ?? null,
-            'vehicle_tariff_id'  => $request->vehicle_tariff_id ?? null,
-        ];
-
-        if ($request->vehicle_tariff_id) {
-            $vehicleTariff = VehicleTarrif::find($request->vehicle_tariff_id);
-            if ($vehicleTariff instanceof VehicleTarrif) {
-                $details = array_merge($details, [
-                    'tariff_title'      => $vehicleTariff->tariff_title,
-                    'tariff_price'      => $vehicleTariff->tariff_daily_price,
-                    'tariff_from_days'  => $vehicleTariff->tariff_from_days,
-                    'tariff_to_days'    => $vehicleTariff->tariff_to_days,
-                    'tariff_base_km'    => $vehicleTariff->tariff_base_km,
-                    'tariff_extra_price'=> $vehicleTariff->tariff_extra_price,
-                ]);
-            }
-        }
-
-        if ($request->vehicle_season_id) {
-            $vehicleSeason = VehicleSeason::find($request->vehicle_season_id);
-            if ($vehicleSeason instanceof VehicleSeason) {
-                $details = array_merge($details, [
-                    'seasonal_title'       => $vehicleSeason->seasonal_title,
-                    'seasonal_start_date'  => $vehicleSeason->seasonal_start_date,
-                    'seasonal_end_date'    => $vehicleSeason->seasonal_end_date,
-                    'seasonal_daily_rate'  => $vehicleSeason->seasonal_daily_rate,
-                    'seasonal_weekly_rate' => $vehicleSeason->seasonal_weekly_rate,
-                    'seasonal_monthly_rate'=> $vehicleSeason->seasonal_monthly_rate,
-                    'seasonal_late_fee'    => $vehicleSeason->seasonal_late_fee,
-                ]);
-            }
-        }
-
-        return $details;
-    }
-
-    private function createBooking(array $data, array $details): Booking
-    {
-        $data['created_by'] = Auth::guard('admin')->id();
-        $booking = Booking::create($data);
-        $bookingNumber = str_pad((string) $booking->id, 4, '0', STR_PAD_LEFT);
-        $bookingPrefix = GeneralSetting::select('value')->where('key', 'reservation_prefix')->first();
-        $bookingPrefix = $bookingPrefix->value ?? 'RES';
-        $booking->update(['reservation_id' => $bookingPrefix . $bookingNumber]);
-        $details['booking_id'] = $booking->id;
-
-        $bookingDetail = BookingDetail::create($details);
-
-        $historyData = [
-            'bookings'        => $booking->toArray(),
-            'booking_details' => $bookingDetail->toArray(),
-        ];
-        BookingHistory::create([
-            'booking_id' => $booking->id,
-            'action'     => 'create',
-            'data'       => json_encode($historyData),
-            'message'    => 'Quotations created'
-        ]);
-
-        $this->sendNotification($booking);
-
-        return $booking;
-    }
-
-    private function updateBooking(int|string $bookingId, array $data, array $details): void
-    {
-        $data['updated_by'] = Auth::guard('admin')->id();
-
-        Booking::where('id', $bookingId)->update($data);
-        BookingDetail::where('booking_id', $bookingId)->update($details);
-
-        $booking = Booking::find($bookingId);
-        $bookingDetail = BookingDetail::where('booking_id', $bookingId)->first();
-
-        $historyData = [
-            'bookings'        => $booking instanceof Booking ? $booking->toArray() : [],
-            'booking_details' => $bookingDetail instanceof BookingDetail ? $bookingDetail->toArray() : [],
-        ];
-        if ($booking instanceof Booking) {
-            BookingHistory::create([
-                'booking_id' => $booking->id,
-                'action'     => 'update',
-                'data'       => json_encode($historyData),
-                'message'    => 'Quotations updated'
-            ]);
-        }
-    }
-
-    private function sendNotification(Booking $booking): void
-    {
-        $customer = User::where('id', $booking->customer_id)->first();
-        $vehicle = VehicleInfo::where('id', $booking->vehicle_id)->first();
-        $driver = Driver::find($booking->driver_id);
-        $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
-        $notifyData = [
-            'user_name'       => $customer->name ?? '',
-            'company_name'    => $companyName,
-            'email'           => $customer->email ?? '',
-            'phonenumber'     => $customer->phone_number ?? '',
-            'vehicle_name'    => $vehicle->name ?? "",
-            'driver_name'     => $driver ? $driver->driver_name : "",
-            'reservation_id'  => $booking->reservation_id ?? "",
-            'start_date'      => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
-            'end_date'        => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
-            'pickup_location' => $booking->pickupLocation ? $booking->pickupLocation->name : "",
-            'delivery_type'   => $booking->delivery_type ?? "",
-            'rental_type'     => $booking->rental_type ?? "",
-            'payment_type'    => $booking->payment_type ?? "",
-            'payment_status'  => $booking->payment_status ?? "",
-            'tototal_amount'  => $booking->final_price ?? ""
-        ];
-
-        try {
-            if (rentalNotificationEnabled()) {
-                $appAdmin = User::where('user_type', 1)->first();
-                if ($appAdmin !== null) {
-                    sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
-                }
-
-                if ($customer !== null) {
-                    sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
-                }
-            }
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-        }
-    }
-
     public function edit(Request $request, string|int|null $id): array
     {
-        $locations   = Location::where('status', 1)->get();
-        $priceTypes  = PricingType::where('type', 1)->get();
+        $locations = Location::where('status', 1)->get();
+        $priceTypes = PricingType::where('type', 1)->get();
         $drivingTypes = DB::table('driving_types')->get();
 
         $customers = User::select(
@@ -317,22 +139,22 @@ class QuotationRepository implements QuotationRepositoryInterface
         )->findOrFail($bookingId);
 
         return [
-            'locations'   => $locations,
-            'priceTypes'  => $priceTypes,
-            'drivingTypes'=> $drivingTypes,
-            'customers'   => $customers,
-            'bookingId'   => $bookingId,
-            'booking'     => $booking,
+            'locations'    => $locations,
+            'priceTypes'   => $priceTypes,
+            'drivingTypes' => $drivingTypes,
+            'customers'    => $customers,
+            'bookingId'    => $bookingId,
+            'booking'      => $booking,
         ];
     }
 
     public function bookingList(Request $request): array
     {
         try {
-            $query = $this->baseBookingQuery();
+            $query = $this->queryBuilder->baseBookingQuery();
 
-            $this->applyFilters($query, $request);
-            $this->applySorting($query, $request);
+            $this->queryBuilder->applyFilters($query, $request);
+            $this->queryBuilder->applySorting($query, $request);
 
             $totalRecords = Booking::join('users', 'users.id', '=', 'bookings.customer_id')
                 ->where('bookings.booking_by', 'quotation')
@@ -340,17 +162,16 @@ class QuotationRepository implements QuotationRepositoryInterface
 
             $filteredRecords = $query->count();
 
-            $bookings = $query->offset((int)$request->start)
-                ->limit((int)$request->length)
-                ->get();
-
-            $bookings->map(fn($booking) => $this->formatBooking($booking));
+            $bookings = $query->offset((int) $request->start)
+                ->limit((int) $request->length)
+                ->get()
+                ->map(fn ($booking) => $this->formatter->formatListBooking($booking));
 
             return [
-                "draw"            => intval($request->input('draw', 0)),
-                "recordsTotal"    => $totalRecords,
-                "recordsFiltered" => $filteredRecords,
-                "data"            => $bookings,
+                'draw'            => intval($request->input('draw', 0)),
+                'recordsTotal'    => $totalRecords,
+                'recordsFiltered' => $filteredRecords,
+                'data'            => $bookings,
             ];
         } catch (\Exception $e) {
             return [
@@ -361,175 +182,6 @@ class QuotationRepository implements QuotationRepositoryInterface
         }
     }
 
-    /**
-     * Base Booking Query
-     */
-    private function baseBookingQuery()
-    {
-        return Booking::select(
-            'bookings.id',
-            'bookings.reservation_id',
-            'bookings.booking_date',
-            self::VEHICLE_NAME_SELECT,
-            'vehicle_info.vehicle_image',
-            DB::raw(self::CUSTOMER_FULLNAME_SELECT),
-            self::CUSTOMER_IMAGE_SELECT,
-            'users.name as user_name',
-            'bookings.start_datetime',
-            'bookings.end_datetime',
-            'pickup_location.name as pickup_location',
-            'drop_location.name as drop_location',
-            'bookings.booking_status',
-            'bookings.booking_by'
-        )
-            ->join('users', 'users.id', '=', 'bookings.customer_id')
-            ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-            ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
-            ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
-            ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
-            ->where('bookings.booking_by', 'quotation');
-    }
-
-    /**
-     * Apply all filters to the query
-     */
-    private function applyFilters($query, Request $request)
-    {
-        $this->applySearch($query, $request->search ?? null);
-        $this->applyStatusFilter($query, $request->status ?? null);
-        $this->applyLocationFilters($query, $request->pickup_location_ids ?? [], $request->drop_location_ids ?? []);
-        $this->applyDateFilter($query, $request->sort_by_date ?? null);
-        $this->applySortByDateRange($query, $request->sort_by ?? null);
-    }
-
-    /**
-     * Search filter
-     */
-    private function applySearch($query, $search)
-    {
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('bookings.reservation_id', 'LIKE', "%{$search}%")
-                    ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
-                    ->orWhere('users.name', 'LIKE', "%{$search}%");
-            });
-        }
-    }
-
-    /**
-     * Status filter
-     */
-    private function applyStatusFilter($query, $status)
-    {
-        if (!empty($status)) {
-            $query->whereIn('bookings.booking_status', $status);
-        }
-    }
-
-    /**
-     * Pickup and drop location filter
-     */
-    private function applyLocationFilters($query, $pickupIds, $dropIds)
-    {
-        if (!empty($pickupIds)) {
-            $query->whereIn('bookings.pickup_location', $pickupIds);
-        }
-        if (!empty($dropIds)) {
-            $query->whereIn('bookings.return_location', $dropIds);
-        }
-    }
-
-    /**
-     * Date filter
-     */
-    private function applyDateFilter($query, $sortByDate)
-    {
-        if (!$sortByDate) {
-            return;
-        }
-
-        $dates = explode(' - ', $sortByDate);
-        if (count($dates) === 2) {
-            $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
-            $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
-
-            if ($startDate && $endDate) {
-                $query->whereBetween('bookings.created_at', [
-                    $startDate->startOfDay(),
-                    $endDate->endOfDay()
-                ]);
-            }
-        }
-    }
-
-
-    /**
-     * Apply sort filters
-     */
-    private function applySortByDateRange($query, $sortBy)
-    {
-        if (!$sortBy) {
-            $query->orderBy('bookings.created_at', 'desc');
-            return;
-        }
-
-        $sortBy = strtolower((string)$sortBy);
-        $now = \Carbon\Carbon::now();
-
-        switch ($sortBy) {
-            case 'latest':
-                $query->orderBy('bookings.created_at', 'desc');
-                break;
-            case 'ascending':
-                $query->orderBy('bookings.reservation_id', 'asc');
-                break;
-            case 'descending':
-                $query->orderBy('bookings.reservation_id', 'desc');
-                break;
-            case 'last month':
-                $query->whereBetween('bookings.created_at', [$now->subMonth()->startOfMonth(), $now->subMonth()->endOfMonth()]);
-                break;
-            case 'last 7 days':
-                $query->whereBetween('bookings.created_at', [$now->subDays(7)->startOfDay(), $now->endOfDay()]);
-                break;
-            default:
-                $query->orderBy('bookings.created_at', 'desc');
-                break;
-        }
-    }
-
-    /**
-     * Apply column sorting
-     */
-    private function applySorting($query, Request $request)
-    {
-        $columns = ['id', 'reservation_id', 'vehicle_name', 'customer_full_name', 'pickup_location', 'drop_location', 'booking_status'];
-        $orderBy = $columns[$request->input('order.0.column', 0)] ?? 'id';
-        $orderDir = $request->input('order.0.dir', 'desc');
-        $query->orderBy($orderBy, $orderDir);
-    }
-
-    /**
-     * Format booking before sending
-     */
-    private function formatBooking($booking)
-    {
-        $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-
-        $vehicleImagePath = $booking->vehicle_image ?? '';
-        $filename = basename($vehicleImagePath);
-        $newPath = self::VEHICLE_IMAGE_PATH . $filename;
-        $file = public_path(self::STORAGE_PATH . $newPath);
-        if (file_exists($file)) {
-            $vehicleImagePath = $newPath;
-        }
-        $booking->vehicle_image = uploadedAsset($vehicleImagePath);
-        $booking->booking_status_text = Booking::getStatusLabel((int)$booking->booking_status);
-
-        return $booking;
-    }
-
-
     public function getBookingDetails(Request $request): array
     {
         try {
@@ -539,46 +191,14 @@ class QuotationRepository implements QuotationRepositoryInterface
                 return [
                     'status'  => 'error',
                     'code'    => 400,
-                    'message' => 'Booking id is required.'
+                    'message' => 'Booking id is required.',
                 ];
             }
 
-            $booking = Booking::select(
-                'bookings.*',
-                self::VEHICLE_NAME_SELECT,
-                'vehicle_info.vehicle_image',
-                DB::raw(self::CUSTOMER_FULLNAME_SELECT),
-                self::CUSTOMER_IMAGE_SELECT,
-                'users.name as user_name',
-                'pickup_location.name as pickup_location_name',
-                'drop_location.name as drop_location_name',
-            )
-                ->join('users', 'users.id', '=', 'bookings.customer_id')
-                ->join('user_details', 'user_details.user_id', '=', 'users.id')
-                ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
-                ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
-                ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
-                ->where('bookings.id', $id)
-                ->first();
+            $booking = $this->queryBuilder->findBookingForModal((int) $id);
 
             if (!empty($booking)) {
-                $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-                $vehicleImagePath = $booking->vehicle_image ?? '';
-                $filename = basename($vehicleImagePath);
-                $newpath = self::VEHICLE_IMAGE_PATH . $filename;
-                $file = public_path(self::STORAGE_PATH . $newpath);
-                if (file_exists($file)) {
-                    $vehicleImagePath = $newpath;
-                }
-                $booking->vehicle_image = uploadedAsset($vehicleImagePath);
-                if (!empty($booking->insurance)) {
-                    $booking->insurance_formatted = json_decode($booking->insurance, true);
-                }
-
-                if ($booking->extra_service) {
-                    $booking->extra_service_formatted = json_decode($booking->extra_service, true);
-                }
-                $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
+                $this->formatter->formatBasicDetails($booking);
             }
 
             return [
@@ -599,13 +219,10 @@ class QuotationRepository implements QuotationRepositoryInterface
     {
         $bookingId = customDecrypt($id, Booking::$reservationSecretKey);
 
-        $booking = $this->getBookingsDetails($bookingId);
+        $booking = $this->queryBuilder->findBookingWithDetails((int) $bookingId);
 
         if ($booking) {
-            $this->formatBookingImages($booking);
-            $this->formatExtraServices($booking);
-            $this->formatInsurance($booking);
-            $this->formatBookingMisc($booking);
+            $this->formatter->formatDetailedBooking($booking);
         }
 
         $bookingHistories = BookingHistory::where('booking_id', $bookingId)
@@ -613,182 +230,9 @@ class QuotationRepository implements QuotationRepositoryInterface
 
         return [
             'bookingHistories' => $bookingHistories,
-            'booking' => $booking,
+            'booking'          => $booking,
         ];
     }
-
-    /**
-     * Get booking details query
-     */
-    private function getBookingsDetails(int $bookingId)
-    {
-        return Booking::select(
-            'bookings.id',
-            'bookings.reservation_id',
-            'bookings.vehicle_id',
-            'bookings.booking_status',
-            'bookings.booking_date',
-            'bookings.start_datetime',
-            'bookings.end_datetime',
-            'bookings.no_of_days',
-            'bookings.driving_type',
-            'bookings.pickup_location',
-            'bookings.return_location',
-            'bookings.security_deposit',
-            'bookings.customer_id',
-            'bookings.driver_id',
-            'bookings.insurance',
-            'bookings.extra_service',
-            'bookings.driver_price',
-            'bookings.vehicle_price',
-            'bookings.vehicle_total_price',
-            'bookings.total_insurance_price',
-            'bookings.total_extra_service_price',
-            'bookings.final_price',
-            self::VEHICLE_NAME_SELECT,
-            'vehicle_info.vehicle_image',
-            'cartypes.name as vehicle_type',
-            'pickup_location.name as pickup_location_name',
-            'drop_location.name as drop_location_name',
-            DB::raw(self::CUSTOMER_FULLNAME_SELECT),
-            self::CUSTOMER_IMAGE_SELECT,
-            'users.name as customer_user_name',
-            'users.phone_number as customer_phone_number',
-            'drivers.driver_name',
-            'drivers.image as driver_image',
-            'drivers.phone_number as driver_phone_number',
-            'booking_details.vehicle_price_type',
-            'bookings.rental_type',
-            'bookings.delivery_type',
-            'bookings.booking_by',
-            'driving_types.name as driving_type_name',
-        )
-            ->leftJoin('booking_details', 'booking_details.booking_id', '=', 'bookings.id')
-            ->join('users', 'users.id', '=', 'bookings.customer_id')
-            ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-            ->join(self::PICKUP_LOCATION_SELECT, 'pickup_location.id', '=', 'bookings.pickup_location')
-            ->join(self::DROP_LOCATION_SELECT, 'drop_location.id', '=', 'bookings.return_location')
-            ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
-            ->leftJoin('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
-            ->leftJoin('drivers', 'drivers.id', '=', 'bookings.driver_id')
-            ->leftJoin('driving_types', 'driving_types.id', '=', 'bookings.driving_type')
-            ->where('bookings.id', $bookingId)
-            ->firstOrFail();
-    }
-
-    /**
-     * Format booking images
-     */
-    private function formatBookingImages($booking): void
-    {
-        $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-        $booking->driver_image = uploadedAsset($booking->driver_image, 'profile');
-
-        $vehicleImagePath = $booking->vehicle_image ?? '';
-        $filename = basename($vehicleImagePath);
-        $newPath = self::VEHICLE_IMAGE_PATH . $filename;
-        $file = public_path(self::STORAGE_PATH . $newPath);
-        if (file_exists($file)) {
-            $vehicleImagePath = $newPath;
-        }
-        $booking->vehicle_image = uploadedAsset($vehicleImagePath);
-    }
-
-    /**
-     * Format extra services
-     */
-    private function formatExtraServices($booking): void
-    {
-        $booking->extra_service_count = 0;
-        $booking->extra_service_names = [];
-        $booking->extra_service_formatted = [];
-
-        if (empty($booking->extra_service)) {
-            return;
-        }
-
-        $extraServiceArray = json_decode($booking->extra_service, true);
-
-        if (!is_array($extraServiceArray)) {
-            return;
-        }
-
-        $booking->extra_service_formatted = $extraServiceArray;
-        $booking->extra_service_count = count($extraServiceArray);
-
-        $extraServiceIds = collect($extraServiceArray)
-            ->pluck('id')
-            ->toArray();
-
-        $booking->extra_service_names = ExtraService::whereIn('id', $extraServiceIds)
-            ->pluck('name')
-            ->toArray();
-    }
-
-
-    /**
-     * Format insurance details
-     */
-    private function formatInsurance($booking): void
-    {
-        $booking->insurance_count = 0;
-        $booking->insurance_names = [];
-        $booking->insurance_benefits_formatted = [];
-        $booking->insurance_formatted = [];
-
-        if (empty($booking->insurance)) {
-            return;
-        }
-
-        $insuranceArray = json_decode($booking->insurance, true);
-
-        if (!is_array($insuranceArray)) {
-            return;
-        }
-
-        $booking->insurance_formatted = $insuranceArray;
-        $booking->insurance_count = count($insuranceArray);
-
-        $insuranceIds = collect($insuranceArray)
-            ->pluck('id')
-            ->toArray();
-
-        $booking->insurance_names = Insurance::whereIn('id', $insuranceIds)
-            ->pluck('insurance_name')
-            ->toArray();
-
-        $booking->insurance_benefits_formatted = InsuranceBenefit::whereIn('insurance_id', $insuranceIds)
-            ->pluck('benefit')
-            ->toArray();
-    }
-
-    /**
-     * Format miscellaneous booking fields
-     */
-    private function formatBookingMisc($booking): void
-    {
-        $status = is_numeric($booking->booking_status) ? (int)$booking->booking_status : 4;
-        $booking->booking_status_text = Booking::getStatusLabel($status);
-        $booking->currency_symbol = getDefaultCurrencySymbol();
-
-        if ($booking->delivery_type) {
-            $booking->delivery_type = $booking->delivery_type === "self_pickup" ? 'Self Pickup' : 'Delivery';
-        }
-
-        $fields = [
-            'driver_price',
-            'vehicle_price',
-            'vehicle_total_price',
-            'total_insurance_price',
-            'total_extra_service_price',
-            'final_price'
-        ];
-
-        foreach ($fields as $field) {
-            $booking->$field = number_format((float)($booking->$field ?? 0), 2, '.', '');
-        }
-    }
-
 
     public function delete(Request $request): array
     {
@@ -800,7 +244,7 @@ class QuotationRepository implements QuotationRepositoryInterface
             return [
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => __('admin.bookings.quotation_delete_success')
+                'message' => __('admin.bookings.quotation_delete_success'),
             ];
         } catch (\Exception $e) {
             return [
