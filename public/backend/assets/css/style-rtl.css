@@ -5245,18 +5245,7 @@ hr {
   margin-inline-start: 0.25rem;
   vertical-align: 0;
   content: "\f078";
-  font-family: "Font Awesome 5 Free";
-  border: 0;
-  font-size: 0.6rem;
-  font-weight: 600;
-}
-
-.dropup .dropdown-toggle::after {
-  display: inline-block;
-  margin-inline-start: 0.25rem;
-  vertical-align: 0;
-  content: "\f078";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 5 Free", sans-serif;
   border: 0;
   font-size: 0.6rem;
   font-weight: 600;
@@ -5267,7 +5256,7 @@ hr {
   margin-inline-start: 0.25rem;
   vertical-align: 0;
   content: "\f077";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 5 Free", sans-serif;
   border: 0;
   font-size: 0.6rem;
   font-weight: 600;
@@ -5278,7 +5267,7 @@ hr {
   margin-inline-start: 0.25rem;
   vertical-align: 0;
   content: "\f054";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 5 Free", sans-serif;
   border: 0;
   font-size: 0.6rem;
   font-weight: 600;
@@ -5289,7 +5278,7 @@ hr {
   margin-inline-start: 0.25rem;
   vertical-align: 0;
   content: "\f053";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 5 Free", sans-serif;
   border: 0;
   font-size: 0.6rem;
   font-weight: 600;
