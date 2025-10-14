@@ -150,58 +150,12 @@ class SectionController extends Controller
 
     public function store(AddSectionRequest $request): JsonResponse
     {
-        $authuser = Auth::user();
-        if (!$authuser) {
-            return response()->json([
-                'code'    => 401,
-                'message' => __(self::UNAUTHORIZED_USER_NOT_FOUND),
-            ], 401);
-        }
-
-        $languageId = $authuser->language_id;
-        $sectionId = $request->section_id;
-
-        $existingData = $this->sectionRepository->getSectionData($sectionId, $languageId);
-        $existingData = $existingData ? json_decode($existingData, true) : [];
-
-        $data = $this->processSectionData($request, $existingData);
-
-        $this->updateSectionTitle($request, $sectionId);
-
-        try {
-            $this->sectionRepository->updateOrCreateSectionData($sectionId, $languageId, $data);
-            return response()->json(['code' => 200, 'message' => __('admin.cms.section_update_success')], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => __('admin.common.default_update_error'), 'error' => $e->getMessage()], 500);
-        }
+        return $this->persistSection($request);
     }
 
     public function update(UpdateSectionRequest $request): JsonResponse
     {
-        $authuser = Auth::user();
-        if (!$authuser) {
-            return response()->json([
-                'code'    => 401,
-                'message' => __(self::UNAUTHORIZED_USER_NOT_FOUND),
-            ], 401);
-        }
-
-        $languageId = $authuser->language_id;
-        $sectionId = $request->section_id;
-
-        $existingData = $this->sectionRepository->getSectionData($sectionId, $languageId);
-        $existingData = $existingData ? json_decode($existingData, true) : [];
-
-        $data = $this->processSectionData($request, $existingData);
-
-        $this->updateSectionTitle($request, $sectionId);
-
-        try {
-            $this->sectionRepository->updateOrCreateSectionData($sectionId, $languageId, $data);
-            return response()->json(['code' => 200, 'message' => __('admin.cms.section_update_success')], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => __('admin.common.default_update_error'), 'error' => $e->getMessage()], 500);
-        }
+        return $this->persistSection($request, true);
     }
 
     public function delete(Request $request): JsonResponse
@@ -431,6 +385,42 @@ class SectionController extends Controller
 
         if (isset($titleFieldMap[$sectionId]) && $request->has($titleFieldMap[$sectionId])) {
             $this->sectionRepository->updateSectionTitle($sectionId, $request->{$titleFieldMap[$sectionId]});
+        }
+    }
+
+    private function persistSection(Request $request, bool $isUpdate = false): JsonResponse
+    {
+        $authuser = Auth::user();
+        if (!$authuser) {
+            return response()->json([
+                'code'    => 401,
+                'message' => __(self::UNAUTHORIZED_USER_NOT_FOUND),
+            ], 401);
+        }
+
+        $languageId = $authuser->language_id;
+        $sectionId  = $request->section_id;
+
+        $existingData = $this->sectionRepository->getSectionData($sectionId, $languageId);
+        $existingData = $existingData ? json_decode($existingData, true) : [];
+
+        $data = $this->processSectionData($request, $existingData);
+
+        $this->updateSectionTitle($request, $sectionId);
+
+        try {
+            $this->sectionRepository->updateOrCreateSectionData($sectionId, $languageId, $data);
+            return response()->json([
+                'code'    => 200,
+                'message' => __('admin.cms.section_update_success'),
+                'updated' => $isUpdate,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => __('admin.common.default_update_error'),
+                'error'   => $e->getMessage(),
+                'updated' => $isUpdate,
+            ], 500);
         }
     }
 }
