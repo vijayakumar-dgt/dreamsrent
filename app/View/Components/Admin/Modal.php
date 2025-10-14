@@ -11,6 +11,15 @@ class Modal extends Component
     protected string $id;
     protected bool $isHeader;
     protected string $title;
+    protected string $modalTitleId;
+    protected string $className;
+    protected string $dialogClassName;
+    protected string $dialogPosition;
+    protected string $formId;
+    protected string $method;
+    protected string $action;
+    protected string $enctype;
+    protected string $modalBodyClass = '';
 
     /**
      * Create a new component instance.
@@ -19,24 +28,28 @@ class Modal extends Component
         string $id,
         bool $isHeader = true,
         string $title = '',
+        string $modalTitleId = '',
+        string $className = '',
+        string $dialogClassName = 'modal-md',
+        string $dialogPosition = 'modal-dialog-centered',
+        string $formId = '',
+        string $method = '',
+        string $action = '',
+        string $enctype = '',
+        string $modalBodyClass = '',
     ) {
         $this->id = $id;
         $this->isHeader = $isHeader;
         $this->title = $title;
-    }
-
-    /**
-     * Resolve an optional attribute from the component attribute bag.
-     */
-    private function optionalAttribute(string $key, string $default = ''): string
-    {
-        $value = $this->attributes->get($key);
-
-        if ($value === null) {
-            return $default;
-        }
-
-        return (string) $value;
+        $this->modalTitleId = $modalTitleId;
+        $this->className = $className;
+        $this->dialogClassName = $dialogClassName;
+        $this->dialogPosition = $dialogPosition;
+        $this->formId = $formId;
+        $this->method = $method;
+        $this->action = $action;
+        $this->enctype = $enctype;
+        $this->modalBodyClass = $modalBodyClass;
     }
 
     /**
@@ -48,15 +61,15 @@ class Modal extends Component
             'id' => $this->id,
             'isHeader' => $this->isHeader,
             'title' => $this->title,
-            'modalTitleId' => $this->optionalAttribute('modalTitleId'),
-            'className' => $this->optionalAttribute('className'),
-            'dialogClassName' => $this->optionalAttribute('dialogClassName', 'modal-md'),
-            'dialogPosition' => $this->optionalAttribute('dialogPosition', 'modal-dialog-centered'),
-            'formId' => $this->optionalAttribute('formId'),
-            'method' => $this->optionalAttribute('method'),
-            'action' => $this->optionalAttribute('action'),
-            'enctype' => $this->optionalAttribute('enctype'),
-            'modalBodyClass' => $this->optionalAttribute('modalBodyClass'),
+            'modalTitleId' => $this->modalTitleId,
+            'className' => $this->className,
+            'dialogClassName' => $this->dialogClassName,
+            'dialogPosition' => $this->dialogPosition,
+            'formId' => $this->formId,
+            'method' => $this->method,
+            'action' => $this->action,
+            'enctype' => $this->enctype,
+            'modalBodyClass' => $this->modalBodyClass,
         ]);
     }
 }
