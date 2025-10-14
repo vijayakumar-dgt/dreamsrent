@@ -19,7 +19,8 @@ use Modules\CarInfo\Repositories\Contracts\SeasonRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\TagRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleColorRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleFuelRepositoryInterface;
-use Modules\CarInfo\Repositories\Contracts\VehicleInfoRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\VehicleManagementRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\VehicleQueryRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleModelRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleSeatRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleSteeringRepositoryInterface;
@@ -41,7 +42,8 @@ use Modules\CarInfo\Repositories\Eloquent\SeasonRepository;
 use Modules\CarInfo\Repositories\Eloquent\TagRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleColorRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleFuelRepository;
-use Modules\CarInfo\Repositories\Eloquent\VehicleInfoRepository;
+use Modules\CarInfo\Repositories\Eloquent\VehicleInfoManagementRepository;
+use Modules\CarInfo\Repositories\Eloquent\VehicleInfoQueryRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleModelRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleSeatRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleSteeringRepository;
@@ -81,6 +83,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(InspectionRepositoryInterface::class, InspectionRepository::class);
         $this->app->bind(DriverRepositoryInterface::class, DriverRepository::class);
         $this->app->bind(EnquiryRepositoryInterface::class, EnquiryRepository::class);
-        $this->app->bind(VehicleInfoRepositoryInterface::class, VehicleInfoRepository::class);
+        $this->app->bind(VehicleManagementRepositoryInterface::class, VehicleInfoManagementRepository::class);
+        $this->app->bind(VehicleQueryRepositoryInterface::class, VehicleInfoQueryRepository::class);
     }
 }
