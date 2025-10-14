@@ -10,21 +10,21 @@ class PreferenceController extends BaseUserController
 {
     public function index(): View
     {
-        $data = $this->userRepository->getPreferenceSettings();
+        $data = $this->profileRepository->getPreferenceSettings();
 
         return view('frontend.user.preference', $data);
     }
 
     public function update(Request $request): JsonResponse
     {
-        $response = $this->userRepository->updatePreference($request);
+        $response = $this->profileRepository->updatePreference($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function get(Request $request): JsonResponse
     {
-        $response = $this->userRepository->getPreferences($request);
+        $response = $this->profileRepository->getPreferences($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }

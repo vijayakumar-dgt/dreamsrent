@@ -18,21 +18,21 @@ class SecurityController extends BaseUserController
 
     public function checkCurrentPassword(Request $request): JsonResponse
     {
-        $response = $this->userRepository->checkCurrentPassword($request);
+        $response = $this->securityRepository->checkCurrentPassword($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function updatePassword(UpdateUserPasswordRequest $request): JsonResponse
     {
-        $response = $this->userRepository->updatePassword($request);
+        $response = $this->securityRepository->updatePassword($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function details(): JsonResponse
     {
-        $response = $this->userRepository->getSecuritySettings();
+        $response = $this->securityRepository->getSecuritySettings();
 
         return response()->json([
             'status' => 'success',
@@ -43,7 +43,7 @@ class SecurityController extends BaseUserController
 
     public function logoutDevice(Request $request): JsonResponse
     {
-        $response = $this->userRepository->logoutDevice($request);
+        $response = $this->securityRepository->logoutDevice($request);
 
         return response()->json($response, $response['code'] ?? 200);
     }

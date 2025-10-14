@@ -18,7 +18,7 @@ class PaymentController extends BaseUserController
 
     public function transactions(Request $request): AnonymousResourceCollection
     {
-        $bookings = $this->userRepository->getTransactionsAjax($request);
+        $bookings = $this->bookingRepository->getTransactionsAjax($request);
 
         return UserBookings::collection($bookings)->additional([
             'status' => 'success',

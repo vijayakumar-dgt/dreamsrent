@@ -6,19 +6,19 @@ use Illuminate\Http\Request;
 
 interface UserNotificationRepositoryInterface
 {
-    public function getUserNotifications();
+    public function getUserNotifications(): array;
 
-    public function updateNotificationSettings(Request $request);
+    public function updateNotificationSettings(Request $request): array;
 
-    public function getNotifications();
+    public function getNotifications(): array;
 
-    public function markAllAsRead();
+    public function markAllAsRead(): array;
 
-    public function notifications();
+    public function notifications(): object;
 
-    public function markNotificationAsRead(int $id);
+    public function markNotificationAsRead(int $id): array;
 
-    public function deleteNotification(int $id);
+    public function deleteNotification(int $id): array;
 
-    public function deleteAllNotification();
+    public function deleteAllNotification(): array;
 }

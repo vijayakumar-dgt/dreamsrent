@@ -10,7 +10,7 @@ class NotificationController extends BaseUserController
 {
     public function index(Request $request): View|JsonResponse
     {
-        $notifications = $this->userRepository->notifications();
+        $notifications = $this->notificationRepository->notifications();
 
         if ($request->ajax()) {
             $view = view('frontend.user.partials.notification-items', ['notifications' => $notifications])->render();
@@ -30,35 +30,35 @@ class NotificationController extends BaseUserController
 
     public function list(): JsonResponse
     {
-        $response = $this->userRepository->getNotifications();
+        $response = $this->notificationRepository->getNotifications();
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function markAllAsRead(): JsonResponse
     {
-        $response = $this->userRepository->markAllAsRead();
+        $response = $this->notificationRepository->markAllAsRead();
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function markAsRead(Request $request): JsonResponse
     {
-        $response = $this->userRepository->markNotificationAsRead($request->id);
+        $response = $this->notificationRepository->markNotificationAsRead($request->id);
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function delete(Request $request): JsonResponse
     {
-        $response = $this->userRepository->deleteNotification($request->id);
+        $response = $this->notificationRepository->deleteNotification($request->id);
 
         return response()->json($response, $response['code'] ?? 200);
     }
 
     public function deleteAll(): JsonResponse
     {
-        $response = $this->userRepository->deleteAllNotification();
+        $response = $this->notificationRepository->deleteAllNotification();
 
         return response()->json($response, $response['code'] ?? 200);
     }

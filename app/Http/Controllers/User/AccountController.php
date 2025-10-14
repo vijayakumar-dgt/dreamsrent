@@ -8,7 +8,7 @@ class AccountController extends BaseUserController
 {
     public function destroy(): JsonResponse
     {
-        $response = $this->userRepository->deleteAccount();
+        $response = $this->securityRepository->deleteAccount();
 
         return response()->json($response, $response['code'] ?? 200);
     }
