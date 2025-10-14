@@ -5148,6 +5148,7 @@ hr {
 
 .dropdown-divider {
   margin: 0;
+  border-color: var(--gray-200);
 }
 
 .dropdown .btn-icon.btn-sm {
@@ -5208,10 +5209,6 @@ hr {
 }
 .dropdown-menu.dropdown-menu-lg {
   min-width: 280px;
-}
-
-.dropdown-divider {
-  border-color: var(--gray-200);
 }
 
 .dropdown-item-text {
@@ -5443,10 +5440,6 @@ hr {
 .dropdown-menu.dropmenu-light-danger .dropdown-item:hover, .dropdown-menu.dropmenu-light-danger .dropdown-item:focus, .dropdown-menu.dropmenu-light-danger .dropdown-item:active, .dropdown-menu.dropmenu-light-danger .dropdown-item.active {
   color: var(--white);
   background-color: #FF0000 !important;
-}
-
-.dropdown-divider {
-  margin: 0;
 }
 
 .bd-example > .dropdown-menu {
