@@ -1371,10 +1371,6 @@ ul .btn-primary:not(:disabled):not(.disabled):active:focus, ul .btn-primary:not(
   background: transparent;
 }
 
-.border-success {
-  border-color: #01B664 !important;
-}
-
 .shadow-sm {
   box-shadow: 0px 1px 2px 0px rgba(45, 54, 67, 0.0509803922) !important;
 }
@@ -1482,16 +1478,6 @@ hr {
 .btn.btn-md {
   padding: 0.35rem 0.85rem;
   font-size: 0.813rem;
-}
-.btn.btn-primary {
-  background-color: #FFA633;
-  border: 1px solid #FFA633;
-  color: var(--white);
-}
-.btn.btn-primary:hover, .btn.btn-primary:focus, .btn.btn-primary.focus, .btn.btn-primary:active, .btn.btn-primary.active {
-  background-color: rgb(255, 148.2, 10.2);
-  border: 1px solid rgb(255, 148.2, 10.2);
-  color: var(--white);
 }
 .btn.btn-secondary {
   background-color: #127384;
@@ -2042,11 +2028,6 @@ hr {
   color: var(--white) !important;
 }
 
-.badge.badge-primary {
-  background: rgba(255, 166, 51, 0.1);
-  box-shadow: 0 1px 1px rgba(255, 166, 51, 0.5);
-  color: #FFA633;
-}
 .badge.badge-skyblue {
   background-color: #27EAEA;
   color: var(--white);
@@ -2062,22 +2043,6 @@ hr {
 }
 .badge.badge-dark-transparent i {
   color: var(--gray-900);
-}
-.badge.badge-secondary-transparent {
-  background: var(--white);
-  color: var(--gray-900);
-  border: 1px solid var(--gray-200);
-}
-.badge.badge-secondary-transparent i {
-  color: #127384;
-}
-.badge.badge-pink-transparent {
-  background: var(--white);
-  color: var(--gray-900);
-  border: 1px solid var(--gray-200);
-}
-.badge.badge-pink-transparent i {
-  color: #F301CA;
 }
 .badge.badge-secondary-transparent {
   background: #E7F1F3;
@@ -2206,11 +2171,6 @@ hr {
   background: #AB47BC;
   color: var(--white);
 }
-.badge.badge-soft-purple {
-  background: rgba(171, 71, 188, 0.1);
-  color: #AB47BC;
-}
-
 .badge {
   padding: 0.25rem 0.45rem;
   font-weight: 500;
@@ -2902,17 +2862,6 @@ hr {
 
 .fc-unthemed .fc-today {
   background: var(--white);
-}
-
-.fc-event {
-  border-radius: 2px;
-  border: none;
-  color: var(--white) !important;
-  cursor: move;
-  font-size: 13px;
-  margin: 1px 7px;
-  padding: 5px 5px;
-  text-align: center;
 }
 
 .fc-basic-view td.fc-week-number span {
