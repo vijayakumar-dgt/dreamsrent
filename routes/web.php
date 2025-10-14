@@ -7,7 +7,19 @@ use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TranslationController;
 use App\Http\Controllers\user\auth\UserLoginRegisterController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\User\AccountController as UserAccountController;
+use App\Http\Controllers\User\BookingController as UserBookingViewController;
+use App\Http\Controllers\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\User\EnquiryController as UserEnquiryController;
+use App\Http\Controllers\User\IntegrationController as UserIntegrationController;
+use App\Http\Controllers\User\NotificationController as UserNotificationController;
+use App\Http\Controllers\User\NotificationSettingsController as UserNotificationSettingsController;
+use App\Http\Controllers\User\PaymentController as UserPaymentController;
+use App\Http\Controllers\User\PreferenceController as UserPreferenceController;
+use App\Http\Controllers\User\ProfileController as UserProfileController;
+use App\Http\Controllers\User\ReviewController as UserReviewController;
+use App\Http\Controllers\User\SecurityController as UserSecurityController;
+use App\Http\Controllers\User\WishlistController as UserWishlistController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -42,9 +54,9 @@ Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securit
         Route::get('/register', [UserLoginRegisterController::class, 'userRegister'])->name('user-register');
         Route::get('/user/forgot-password', [UserLoginRegisterController::class, 'forgotPassword'])->name('user-forgot-password');
         Route::get('/user/reset-password', [UserLoginRegisterController::class, 'resetPassword'])->name('user-reset-password');
-        Route::post('/user/check-current-password-reset', [UserController::class, 'checkCurrentPassword']);
+        Route::post('/user/check-current-password-reset', [UserSecurityController::class, 'checkCurrentPassword']);
         Route::post('/user/reset-password-update', [UserLoginRegisterController::class, 'resetPasswordUpdate']);
-        Route::post('/user/delete-account', [UserController::class, 'deleteAccount'])->name('user.delete-account');
+        Route::post('/user/delete-account', [UserAccountController::class, 'destroy'])->name('user.delete-account');
 
         Route::post('/user/register', [UserLoginRegisterController::class, 'register'])->name('user-registersave');
         Route::post('/user/login', [UserLoginRegisterController::class, 'login'])->name('user-logincheck');
@@ -54,36 +66,44 @@ Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securit
     });
 
     //user profile
-    Route::prefix('user')->middleware(['customer', 'maintenance'])->controller(UserController::class)->group(function () {
-        Route::get('dashboard', 'dashboard')->name('user.dashboard');
-        Route::get('bookings', 'bookings')->name('user.bookings');
-        Route::post('ajax-last-bookings', 'ajaxLastBookings')->name('user.ajaxLastBookings');
-        Route::post('ajax-bookings', 'ajaxBookings')->name('user.ajaxBookings');
-        Route::get('booking-details/{id}', 'bookingDetails')->name('user.bookingDetails');
-        Route::post('cancel-ride', 'cancelRide')->name('user.cancelRide');
-        Route::post('complete-ride', 'completeRide')->name('user.completeRide');
-        Route::post('start-ride', 'startRide')->name('user.startRide');
-        Route::post('delete-ride', 'deleteRide')->name('user.deleteRide');
-        Route::get('wishlists', 'wishlists')->name('user.wishlists');
-        Route::post('add-to-wishlist', 'addToWishlist')->name('user.addToWishlist');
-        Route::post('ajax-wishlists', 'ajaxWishlists')->name('user.ajaxWishlists');
-        Route::get('usersettings', 'userprofilesettings')->name('user.usersettings');
-        Route::get('preference', 'userpreference')->name('user.preference');
-        Route::post('preference/update', 'updatePreference')->name('user.update-preference');
-        Route::post('get-preferences', 'getPreferences')->name('user.get-preference');
-        Route::get('integration', 'userintegration')->name('user.integration');
-        Route::get('notification', 'usernotification')->name('user.notification');
-        Route::get('security', 'usersecurity')->name('user.security');
-        Route::post('check-current-password', 'checkCurrentPassword')->name('user.check-current-password');
-        Route::post('update-password', 'updatePassword')->name('user.update-password');
-        Route::get('security-details', 'getSecuritySettings')->name('user.security-details');
-        Route::get('reviews', 'reviews')->name('user.reviews');
-        Route::get('payments', 'payments')->name('user.payments');
-        Route::post('ajax-transactions', 'ajaxTransactions')->name('user.ajax-transactions');
-        Route::post('update-notification-settings', 'updateNotificationSettings')->name('user.update-notification-settings');
+    Route::prefix('user')->middleware(['customer', 'maintenance'])->group(function () {
+        Route::get('dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+
+        Route::get('bookings', [UserBookingViewController::class, 'index'])->name('user.bookings');
+        Route::post('ajax-last-bookings', [UserBookingViewController::class, 'last'])->name('user.ajaxLastBookings');
+        Route::post('ajax-bookings', [UserBookingViewController::class, 'list'])->name('user.ajaxBookings');
+        Route::get('booking-details/{id}', [UserBookingViewController::class, 'show'])->name('user.bookingDetails');
+        Route::post('cancel-ride', [UserBookingViewController::class, 'cancel'])->name('user.cancelRide');
+        Route::post('complete-ride', [UserBookingViewController::class, 'complete'])->name('user.completeRide');
+        Route::post('start-ride', [UserBookingViewController::class, 'start'])->name('user.startRide');
+        Route::post('delete-ride', [UserBookingViewController::class, 'destroy'])->name('user.deleteRide');
+
+        Route::get('wishlists', [UserWishlistController::class, 'index'])->name('user.wishlists');
+        Route::post('add-to-wishlist', [UserWishlistController::class, 'store'])->name('user.addToWishlist');
+        Route::post('ajax-wishlists', [UserWishlistController::class, 'list'])->name('user.ajaxWishlists');
+
+        Route::get('usersettings', [UserProfileController::class, 'settings'])->name('user.usersettings');
+
+        Route::get('preference', [UserPreferenceController::class, 'index'])->name('user.preference');
+        Route::post('preference/update', [UserPreferenceController::class, 'update'])->name('user.update-preference');
+        Route::post('get-preferences', [UserPreferenceController::class, 'get'])->name('user.get-preference');
+
+        Route::get('notification', [UserNotificationSettingsController::class, 'index'])->name('user.notification');
+        Route::get('integration', [UserIntegrationController::class, 'index'])->name('user.integration');
+        Route::post('update-notification-settings', [UserNotificationSettingsController::class, 'update'])->name('user.update-notification-settings');
+
+        Route::get('security', [UserSecurityController::class, 'index'])->name('user.security');
+        Route::post('check-current-password', [UserSecurityController::class, 'checkCurrentPassword'])->name('user.check-current-password');
+        Route::post('update-password', [UserSecurityController::class, 'updatePassword'])->name('user.update-password');
+        Route::get('security-details', [UserSecurityController::class, 'details'])->name('user.security-details');
+
+        Route::get('reviews', [UserReviewController::class, 'index'])->name('user.reviews');
+
+        Route::get('payments', [UserPaymentController::class, 'index'])->name('user.payments');
+        Route::post('ajax-transactions', [UserPaymentController::class, 'transactions'])->name('user.ajax-transactions');
     });
 
-    Route::post('/user/store_enquiry', [UserController::class, 'storeEnquiry'])->name('user.store-enquiry');
+    Route::post('/user/store_enquiry', [UserEnquiryController::class, 'store'])->name('user.store-enquiry');
     Route::post('user/reviews-list', [ReviewController::class, 'userReviewsList'])->name('user.reviews-list');
     Route::post('user/save-newsletter-subscriber', [NewsletterController::class, 'store'])->name('user.save-newsletter-subscriber');
 
@@ -140,13 +160,13 @@ Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securit
     Route::get('blogs', [BlogController::class, 'blogList'])->name('blogs.list');
     Route::get('blog-details/{id}', [BlogController::class, 'blogDetail'])->name('blogs.detail');
     Route::post('/blog-review', [BlogController::class, 'storeReview'])->name('blogs.review.store');
-    Route::post('/userprofile', [UserController::class, 'userprofile'])->name('userprofile');
-    Route::post('user/mark-all-notifications-as-read', [UserController::class, 'markAllAsRead']);
-    Route::get('user/get-notifications', [UserController::class, 'getNotifications'])->name('user.notifications');
-    Route::get('user/notifications', [UserController::class, 'notifications'])->name('user.notifications')->middleware('customer');
-    Route::post('user/mark-notification-as-read', [UserController::class, 'markNotificationAsRead']);
-    Route::post('user/delete-notification', [UserController::class, 'deleteNotification']);
-    Route::post('user/delete-all-notifications', [UserController::class, 'deleteAllNotification']);
+    Route::post('/userprofile', [UserProfileController::class, 'update'])->name('userprofile');
+    Route::post('user/mark-all-notifications-as-read', [UserNotificationController::class, 'markAllAsRead']);
+    Route::get('user/get-notifications', [UserNotificationController::class, 'list'])->name('user.notifications');
+    Route::get('user/notifications', [UserNotificationController::class, 'index'])->name('user.notifications')->middleware('customer');
+    Route::post('user/mark-notification-as-read', [UserNotificationController::class, 'markAsRead']);
+    Route::post('user/delete-notification', [UserNotificationController::class, 'delete']);
+    Route::post('user/delete-all-notifications', [UserNotificationController::class, 'deleteAll']);
 
     Route::get('vehicle-list-api', [CarInfoController::class,'vehicleLists'])->middleware('web');
       Route::post('vehicle-list-detail-api', [VehicleInfoController::class,'vehicleDetailsList'])->middleware('web');
