@@ -247,8 +247,10 @@ button {
   -webkit-transition: all 0.5s ease;
   -ms-transition: all 0.5s ease;
   transition: all 0.5s ease;
+  cursor: pointer;
 }
 button:focus {
+  outline: 0;
   box-shadow: none !important;
 }
 
@@ -926,7 +928,7 @@ ul .btn-primary:not(:disabled):not(.disabled):active:focus, ul .btn-primary:not(
   background: var(--light-200);
 }
 
-.bg-light-300 {
+.color-box.bg-light-300 {
   background: var(--light-300);
 }
 
@@ -1450,14 +1452,6 @@ hr {
   background-color: #FFA633;
   border-color: #FFA633;
   color: var(--white) !important;
-}
-
-button {
-  cursor: pointer;
-}
-button:focus {
-  outline: 0;
-  box-shadow: none;
 }
 
 .btn {
