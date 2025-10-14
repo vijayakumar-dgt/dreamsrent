@@ -13,8 +13,8 @@ use Modules\GeneralSetting\Http\Requests\FaqUpdateRequest;
 use Modules\GeneralSetting\Http\Requests\HowItWorksListRequest;
 use Modules\GeneralSetting\Http\Requests\HowItWorksStoreRequest;
 use Modules\GeneralSetting\Models\Language;
+use Modules\GeneralSetting\Repositories\Contracts\ContentSettingRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\FaqInterface;
-use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 
 class FaqController extends Controller
 {
@@ -32,7 +32,7 @@ class FaqController extends Controller
         return view('generalsetting::cms.how-it-work', compact('languages'));
     }
 
-    public function howItWorksUpdate(HowItWorksStoreRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function howItWorksUpdate(HowItWorksStoreRequest $request, ContentSettingRepositoryInterface $repository): JsonResponse
     {
         try {
             $repository->storeHowItWorks($request->validated());
@@ -52,7 +52,7 @@ class FaqController extends Controller
         }
     }
 
-    public function howItWorksList(HowItWorksListRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function howItWorksList(HowItWorksListRequest $request, ContentSettingRepositoryInterface $repository): JsonResponse
     {
         try {
             $data = $repository->getHowItWorks($request->validated());
@@ -80,7 +80,7 @@ class FaqController extends Controller
         return view('generalsetting::cms.copyright', compact('languages'));
     }
 
-    public function copyrightUpdate(CopyrightUpdateRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function copyrightUpdate(CopyrightUpdateRequest $request, ContentSettingRepositoryInterface $repository): JsonResponse
     {
         try {
             $repository->updateCopyright($request->validated());
@@ -100,7 +100,7 @@ class FaqController extends Controller
         }
     }
 
-    public function copyrightList(CopyrightListRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function copyrightList(CopyrightListRequest $request, ContentSettingRepositoryInterface $repository): JsonResponse
     {
         try {
             $data = $repository->getCopyright($request->validated());

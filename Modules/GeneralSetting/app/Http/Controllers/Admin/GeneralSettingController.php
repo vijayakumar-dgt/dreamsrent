@@ -27,9 +27,13 @@ use Modules\GeneralSetting\Http\Requests\UpdatePaymentSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\UpdatePaymentStatusRequest;
 use Modules\GeneralSetting\Http\Requests\UpdatePhoneNumberRequest;
 use Modules\GeneralSetting\Http\Requests\UpdateThemeSettingsRequest;
-use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
-use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
+use Modules\GeneralSetting\Repositories\Contracts\AppearanceSettingRepositoryInterface;
+use Modules\GeneralSetting\Repositories\Contracts\BusinessSettingRepositoryInterface;
+use Modules\GeneralSetting\Repositories\Contracts\CompanySettingRepositoryInterface;
+use Modules\GeneralSetting\Repositories\Contracts\ContentSettingRepositoryInterface;
+use Modules\GeneralSetting\Repositories\Contracts\PaymentSettingRepositoryInterface;
+use Modules\GeneralSetting\Repositories\Contracts\SecuritySettingRepositoryInterface;
 use Modules\GeneralSetting\Exceptions\StorageStatusUpdateException;
 use Modules\GeneralSetting\Exceptions\AwsSettingsUpdateException;
 use Modules\GeneralSetting\Exceptions\PaymentSettingsUpdateException;
@@ -37,11 +41,14 @@ use Modules\GeneralSetting\Exceptions\PaymentStatusUpdateException;
 
 class GeneralSettingController extends Controller
 {
-    protected GeneralSettingInterface $repository;
-
-    public function __construct(GeneralSettingInterface $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        private readonly CompanySettingRepositoryInterface $companySettings,
+        private readonly AppearanceSettingRepositoryInterface $appearanceSettings,
+        private readonly BusinessSettingRepositoryInterface $businessSettings,
+        private readonly SecuritySettingRepositoryInterface $securitySettings,
+        private readonly ContentSettingRepositoryInterface $contentSettings,
+        private readonly PaymentSettingRepositoryInterface $paymentSettings
+    ) {
     }
 
     public function index(): View
@@ -107,10 +114,10 @@ class GeneralSettingController extends Controller
         return view('generalsetting::rental_settings.rental-settings');
     }
 
-    public function storeRentalSettings(StoreRentalSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function storeRentalSettings(StoreRentalSettingsRequest $request): JsonResponse
     {
         try {
-            $repository->saveRentalSettings($request->validated());
+            $this->businessSettings->saveRentalSettings($request->validated());
 
             return response()->json([
                 'code'    => 200,
@@ -130,7 +137,7 @@ class GeneralSettingController extends Controller
     {
         try {
             $files = $request->only(['logo_image', 'favicon_image', 'small_image', 'dark_logo']);
-            $paths = $this->repository->storeLogoSettings($files);
+            $paths = $this->appearanceSettings->storeLogoSettings($files);
 
             return response()->json([
                 'code'    => 200,
@@ -146,10 +153,10 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeOtpSettings(StoreOtpSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function storeOtpSettings(StoreOtpSettingsRequest $request): JsonResponse
     {
         try {
-            $repository->storeOtpSettings($request->validated());
+            $this->securitySettings->storeOtpSettings($request->validated());
 
             return response()->json([
                 'code'    => 200,
@@ -167,7 +174,7 @@ class GeneralSettingController extends Controller
     public function storageStatusUpdate(StorageStatusUpdateRequest $request): JsonResponse
     {
         try {
-            $success = $this->repository->updateStorageStatus(
+            $success = $this->paymentSettings->updateStorageStatus(
                 $request->storage_type,
                 (bool) $request->status
             );
@@ -207,7 +214,7 @@ class GeneralSettingController extends Controller
                 'aws_base_url'    => $request->aws_base_url
             ];
 
-            $success = $this->repository->updateAwsSettings($settings);
+            $success = $this->paymentSettings->updateAwsSettings($settings);
 
             if (!$success) {
                 throw new AwsSettingsUpdateException(__('admin.general_settings.update_failed'));
@@ -232,10 +239,10 @@ class GeneralSettingController extends Controller
     }
 
 
-    public function storeInvoiceSettings(StoreInvoiceSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function storeInvoiceSettings(StoreInvoiceSettingsRequest $request): JsonResponse
     {
         try {
-            $repository->saveInvoiceSettings($request->validated());
+            $this->businessSettings->saveInvoiceSettings($request->validated());
 
             return response()->json([
                 'code'    => 200,
@@ -254,7 +261,7 @@ class GeneralSettingController extends Controller
     public function store(CompanySettingRequest $request): JsonResponse
     {
         try {
-            $this->repository->storeCompanySettings($request->validated());
+            $this->companySettings->storeCompanySettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',
@@ -274,7 +281,7 @@ class GeneralSettingController extends Controller
     public function storeNotificationSettings(StoreNotificationSettingsRequest $request): JsonResponse
     {
         try {
-            $this->repository->saveNotificationSettings($request->validated());
+            $this->companySettings->saveNotificationSettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',
@@ -296,7 +303,7 @@ class GeneralSettingController extends Controller
         try {
             $data = $request->validated();
             $groupId = $request->group_id ?? null;
-            $this->repository->storeSeoSettings($data, $groupId);
+            $this->appearanceSettings->storeSeoSettings($data, $groupId);
 
             return response()->json([
                 'status'  => 'success',
@@ -313,10 +320,10 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeMaintenanceSettings(StoreMaintenanceSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function storeMaintenanceSettings(StoreMaintenanceSettingsRequest $request): JsonResponse
     {
         try {
-            $repository->storeMaintenanceSettings($request->all());
+            $this->appearanceSettings->storeMaintenanceSettings($request->all());
 
             return response()->json([
                 'status'  => 'success',
@@ -333,10 +340,10 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeCookiesSettings(StoreCookiesSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function storeCookiesSettings(StoreCookiesSettingsRequest $request): JsonResponse
     {
         try {
-            $repository->storeCookiesSettings($request->validated());
+            $this->contentSettings->storeCookiesSettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',
@@ -353,10 +360,10 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function cookiesSettingsList(CookiesSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function cookiesSettingsList(CookiesSettingsRequest $request): JsonResponse
     {
         try {
-            $settings = $repository->getCookiesSettings(
+            $settings = $this->contentSettings->getCookiesSettings(
                 $request->group_id,
                 $request->language_id
             );
@@ -380,7 +387,7 @@ class GeneralSettingController extends Controller
     public function listCompany(ListCompanyRequest $request): JsonResponse
     {
         try {
-            $data = $this->repository->getCompanySettings($request->group_id);
+            $data = $this->companySettings->getCompanySettings($request->group_id);
 
             if (!$data) {
                 return response()->json([
@@ -408,7 +415,7 @@ class GeneralSettingController extends Controller
     public function list(SettingListRequest $request): JsonResponse
     {
         try {
-            $settings = $this->repository->getSettingsByGroup($request->validated()['group_id']);
+            $settings = $this->companySettings->getSettingsByGroup($request->validated()['group_id']);
 
             return response()->json([
                 'status'  => 'success',
@@ -477,7 +484,7 @@ class GeneralSettingController extends Controller
 
     public function updatePassword(UpdatePasswordRequest $request): JsonResponse
     {
-        $result = $this->repository->updatePassword($request->only([
+        $result = $this->securitySettings->updatePassword($request->only([
             'current_password',
             'new_password'
         ]));
@@ -491,7 +498,7 @@ class GeneralSettingController extends Controller
 
     public function updatePhoneNumber(UpdatePhoneNumberRequest $request): JsonResponse
     {
-        $result = $this->repository->updatePhoneNumber($request->only([
+        $result = $this->securitySettings->updatePhoneNumber($request->only([
             'phone_current_password',
             'current_phonenumber',
             'new_phonenumber'
@@ -506,7 +513,7 @@ class GeneralSettingController extends Controller
 
     public function updateEmail(UpdateEmailRequest $request): JsonResponse
     {
-        $result = $this->repository->updateEmail($request->only([
+        $result = $this->securitySettings->updateEmail($request->only([
             'email_current_password',
             'current_email',
             'new_email'
@@ -521,7 +528,7 @@ class GeneralSettingController extends Controller
 
     public function getSecuritySettings(): JsonResponse
     {
-        $data = $this->repository->getSecuritySettings();
+        $data = $this->securitySettings->getSecuritySettings();
 
         return response()->json([
             'status' => 'success',
@@ -532,7 +539,7 @@ class GeneralSettingController extends Controller
 
     public function logoutDevice(Request $request): JsonResponse
     {
-        $result = $this->repository->logoutDevice($request->only(['isAll', 'id']));
+        $result = $this->securitySettings->logoutDevice($request->only(['isAll', 'id']));
 
         return response()->json([
             'status'  => $result['success'] ? 'success' : 'error',
@@ -567,7 +574,7 @@ class GeneralSettingController extends Controller
     public function updatePrefixes(Request $request): JsonResponse
     {
         try {
-            $this->repository->updatePrefixes($request->all(), $request->group_id);
+            $this->companySettings->updatePrefixes($request->all(), $request->group_id);
 
             return response()->json([
                 'status'  => 'success',
@@ -592,7 +599,7 @@ class GeneralSettingController extends Controller
     public function updatepaymentSettings(UpdatePaymentSettingsRequest $request): JsonResponse
     {
         try {
-            $success = $this->repository->updatePaymentSettings($request->all());
+            $success = $this->paymentSettings->updatePaymentSettings($request->all());
 
             if (!$success) {
                 throw new PaymentSettingsUpdateException(__('admin.general_settings.update_failed'));
@@ -618,7 +625,7 @@ class GeneralSettingController extends Controller
     public function updatepaymentStatus(UpdatePaymentStatusRequest $request): JsonResponse
     {
         try {
-            $success = $this->repository->updatePaymentStatus($request->all());
+            $success = $this->paymentSettings->updatePaymentStatus($request->all());
 
             if (!$success) {
                 throw new PaymentStatusUpdateException(__('admin.general_settings.update_failed'));
@@ -647,7 +654,7 @@ class GeneralSettingController extends Controller
         $groupId = 13;
 
         try {
-            $data = $this->repository->getPaymentSettings($groupId, $orderBy);
+            $data = $this->paymentSettings->getPaymentSettings($groupId, $orderBy);
 
             return response()->json([
                 'code'    => 200,
@@ -668,10 +675,10 @@ class GeneralSettingController extends Controller
         return view('generalsetting::website_settings.theme_settings');
     }
 
-    public function updateThemeSettings(UpdateThemeSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function updateThemeSettings(UpdateThemeSettingsRequest $request): JsonResponse
     {
         try {
-            $repository->updateThemeSettings($request->validated());
+            $this->appearanceSettings->updateThemeSettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',
