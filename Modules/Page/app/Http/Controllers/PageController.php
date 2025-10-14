@@ -346,6 +346,11 @@ class PageController extends Controller
 
     public function pageBuilderApi(Request $request, ?string $slug = null): View|JsonResponse
     {
+        return $this->executePageBuilderApi($request, $slug);
+    }
+
+    private function executePageBuilderApi(Request $request, ?string $slug = null): View|JsonResponse
+    {
         $themeId = null;
         $returnResponse = [];
 

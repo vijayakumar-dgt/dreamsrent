@@ -7,15 +7,29 @@ use Modules\GeneralSetting\Http\Controllers\Admin\CommunicationSettingController
 use Modules\GeneralSetting\Http\Controllers\Admin\CurrencyController;
 use Modules\GeneralSetting\Http\Controllers\Admin\DbbackupController;
 use Modules\GeneralSetting\Http\Controllers\Admin\EmailTemplateController;
+use Modules\GeneralSetting\Http\Controllers\Admin\AiConfigurationController;
+use Modules\GeneralSetting\Http\Controllers\Admin\CompanySettingsController;
+use Modules\GeneralSetting\Http\Controllers\Admin\CookiesSettingsController;
 use Modules\GeneralSetting\Http\Controllers\Admin\FaqController;
-use Modules\GeneralSetting\Http\Controllers\Admin\GeneralSettingController;
 use Modules\GeneralSetting\Http\Controllers\Admin\InsuranceController;
+use Modules\GeneralSetting\Http\Controllers\Admin\InvoiceSettingsController;
 use Modules\GeneralSetting\Http\Controllers\Admin\LanguageController;
 use Modules\GeneralSetting\Http\Controllers\Admin\LocalizationController;
+use Modules\GeneralSetting\Http\Controllers\Admin\LogoSettingsController;
+use Modules\GeneralSetting\Http\Controllers\Admin\MaintenanceSettingsController;
+use Modules\GeneralSetting\Http\Controllers\Admin\NotificationSettingsController;
+use Modules\GeneralSetting\Http\Controllers\Admin\OtpSettingsController;
+use Modules\GeneralSetting\Http\Controllers\Admin\PaymentSettingsController;
+use Modules\GeneralSetting\Http\Controllers\Admin\PrefixSettingsController;
+use Modules\GeneralSetting\Http\Controllers\Admin\RentalSettingsController;
+use Modules\GeneralSetting\Http\Controllers\Admin\SecuritySettingsController;
+use Modules\GeneralSetting\Http\Controllers\Admin\SeoSettingsController;
 use Modules\GeneralSetting\Http\Controllers\Admin\SignatureSettingsController;
 use Modules\GeneralSetting\Http\Controllers\Admin\SitemapController;
+use Modules\GeneralSetting\Http\Controllers\Admin\StorageSettingsController;
 use Modules\GeneralSetting\Http\Controllers\Admin\TaxRateController;
 use Modules\GeneralSetting\Http\Controllers\Admin\TestimonialController;
+use Modules\GeneralSetting\Http\Controllers\Admin\ThemeSettingsController;
 
 if (! function_exists('registerAdminSettingsRoutes')) {
     function registerAdminSettingsRoutes(): void

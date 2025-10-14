@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Exception;
+use App\Exceptions\SystemBackupZipException;
 use Illuminate\Console\Command;
 use Modules\GeneralSetting\Models\Dbbackup;
 use ZipArchive;
+use Throwable;
 
 class CustomSystemBackup extends Command
 {
@@ -40,9 +41,9 @@ class CustomSystemBackup extends Command
 
                 $this->info("System backup stored as: $fileName and recorded in Dbbackup table.");
             } else {
-                throw new Exception("Could not create the zip archive.");
+                throw new SystemBackupZipException('Could not create the zip archive.');
             }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $this->error("System backup failed: " . $e->getMessage());
         }
         return 0;

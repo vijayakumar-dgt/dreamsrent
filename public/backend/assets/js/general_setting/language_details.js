@@ -122,9 +122,12 @@
                         $("#lngicon").attr("src", response.icon);
                         $(".lngTitile").text(response.language.trans_lang.name);
                         $("#modalProgressBar")
-                            .css("width", response.progress + "%")
-                            .removeClass()
-                            .addClass("progress-bar rounded " + response.color);
+                            .prop("value", response.progress)
+                            .attr("max", 100)
+                            .attr(
+                                "class",
+                                "progress-bar rounded w-100 " + response.color
+                            );
                         $(".modalProgress").text(response.progress + "%");
                         $(".langTitle").text(response.uppercaseName);
 
@@ -230,14 +233,13 @@
                 },
                 success: function (response) {
                     if (response.code === 200) {
-                        $("#modalProgressBar").css(
-                            "width",
-                            response.progress + "%"
-                        );
-                        $("#modalProgressBar").removeClass();
-                        $("#modalProgressBar").addClass(
-                            "progress-bar  rounded " + response.color
-                        );
+                        $("#modalProgressBar")
+                            .prop("value", response.progress)
+                            .attr("max", 100)
+                            .attr(
+                                "class",
+                                "progress-bar rounded w-100 " + response.color
+                            );
                         $(".modalProgress").text(response.progress + "%");
                         showToast("success", response.message);
                     } else {
