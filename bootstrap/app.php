@@ -12,6 +12,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+use function App\Routes\registerAdminRoutes;
+use function App\Routes\registerWebRoutes;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,8 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         using: function () {
             Route::group(['middleware' => ['web']], function () {
-                require_once __DIR__ . '/../routes/web.php';
-                require_once __DIR__ . '/../routes/admin.php';
+                registerWebRoutes();
+                registerAdminRoutes();
             });
         }
     )
