@@ -27,38 +27,40 @@ class VehicleMediaService extends VehicleRepositoryBase
                 ->first();
 
             if (!$vehicleMeta) {
-                return [
+                $response = [
                     'code'    => 404,
                     'success' => false,
                     'message' => 'Vehicle images not found.'
                 ];
+            } else {
+                $images = json_decode($vehicleMeta->value, true) ?? [];
+                $imageToDelete = parse_url($request->image_path, PHP_URL_PATH);
+                $relativePath = is_string($imageToDelete) ? ltrim(str_replace(self::STORAGES, '', $imageToDelete), '/') : null;
+
+                if ($relativePath && ($key = array_search($relativePath, $images)) !== false) {
+                    unset($images[$key]);
+                    Storage::delete($relativePath);
+                    $vehicleMeta->value = json_encode(array_values($images)) ?: '';
+                    $vehicleMeta->save();
+
+                    $response = [
+                        'code'    => 200,
+                        'success' => true,
+                        'message' => 'Image deleted successfully.'
+                    ];
+                } else {
+                    $response = [
+                        'code'    => 404,
+                        'success' => false,
+                        'message' => 'Image not found in database.'
+                    ];
+                }
             }
-
-            $images = json_decode($vehicleMeta->value, true) ?? [];
-            $imageToDelete = parse_url($request->image_path, PHP_URL_PATH);
-            $relativePath = is_string($imageToDelete) ? ltrim(str_replace(self::STORAGES, '', $imageToDelete), '/') : null;
-
-            if ($relativePath && ($key = array_search($relativePath, $images)) !== false) {
-                unset($images[$key]);
-                Storage::delete($relativePath);
-                $vehicleMeta->value = json_encode(array_values($images)) ?: '';
-                $vehicleMeta->save();
-
-                return [
-                    'code'    => 200,
-                    'success' => true,
-                    'message' => 'Image deleted successfully.'
-                ];
-            }
-
-            return [
-                'code'    => 404,
-                'success' => false,
-                'message' => 'Image not found in database.'
-            ];
         } catch (\Exception $e) {
-            return $response;
+            // Keep default response on exception
         }
+
+        return $response;
     }
 
     public function deleteVehiclePolicy(Request $request): array
