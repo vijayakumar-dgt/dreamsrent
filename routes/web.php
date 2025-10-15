@@ -6,7 +6,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TranslationController;
-use App\Http\Controllers\user\auth\UserLoginRegisterController;
+use App\Http\Controllers\User\auth\UserLoginRegisterController;
 use App\Http\Controllers\User\AccountController as UserAccountController;
 use App\Http\Controllers\User\BookingController as UserBookingViewController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
