@@ -2996,7 +2996,7 @@ hr {
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
-  font-family: "Fontawesome";
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif;
   content: "\f055";
 }
 
@@ -6968,7 +6968,7 @@ hr.text-danger {
 }
 .blockquote.custom-blockquote:before {
   content: "\f10d";
-  font-family: "Fontawesome";
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif;
   z-index: 0;
   font-size: 2rem;
   position: absolute;
@@ -10158,7 +10158,7 @@ table.table.dataTable > tbody > tr td {
   -webkit-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   content: "\f078";
-  font-family: "Fontawesome";
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif;
 }
 .accordion-button:focus {
   border-color: rgba(255, 166, 51, 0.3);
@@ -10169,7 +10169,7 @@ table.table.dataTable > tbody > tr td {
 }
 .accordion-button:after {
   content: "\f078";
-  font-family: "Fontawesome";
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif;
   font-size: 12px;
   line-height: 1;
   background-color: var(--white);
@@ -10516,12 +10516,12 @@ table.table.dataTable > tbody > tr td {
 
 .accordion.accordion-customicon1 .accordion-button:after {
   content: "+";
-  font-family: "Fontawesome";
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif;
   background-color: var(--light);
 }
 .accordion.accordion-customicon1 .accordion-button:not(.collapsed)::after {
   content: "\f068";
-  font-family: "Fontawesome";
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif;
   background-color: var(--white);
 }
 
@@ -10644,7 +10644,7 @@ table.table.dataTable > tbody > tr td {
 }
 .custom-accordion-icon .accordion-button:not(.collapsed):after {
   content: "\f078" !important;
-  font-family: "Fontawesome";
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif;
 }
 .custom-accordion-icon .accordion-button:after {
   width: 24px;
@@ -10694,13 +10694,13 @@ table.table.dataTable > tbody > tr td {
 .breadcrumb-arrow .breadcrumb-item + .breadcrumb-item::before {
   color: var(--gray-600);
   content: "\f101";
-  font-family: "Fontawesome" !important;
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif !important;
 }
 
 .breadcrumb-pipe .breadcrumb-item + .breadcrumb-item::before {
   color: var(--gray-600);
   content: "\f061";
-  font-family: "Fontawesome" !important;
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif !important;
 }
 
 .breadcrumb-line .breadcrumb-item + .breadcrumb-item::before {
@@ -10716,7 +10716,7 @@ table.table.dataTable > tbody > tr td {
 .breadcrumb-divide .breadcrumb-item + .breadcrumb-item::before {
   color: var(--gray-600);
   content: "\f054";
-  font-family: "Fontawesome" !important;
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif !important;
 }
 
 .breadcrumb-separatorless .breadcrumb-item + .breadcrumb-item::before {
@@ -19057,7 +19057,7 @@ span.flatpickr-weekday {
 }
 .edit-menu-list .sortable-list .list-group-item .accordion-button::after {
   content: "\f078";
-  font-family: "Fontawesome";
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif;
   font-size: 12px;
   line-height: 1;
   background-color: #FFF;
@@ -19082,7 +19082,7 @@ span.flatpickr-weekday {
 }
 .edit-menu-list .sortable-list .list-group-item + .list-group-item .accordion-button::after {
   content: "\f078";
-  font-family: "Fontawesome";
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif;
   font-size: 12px;
   line-height: 1;
   background-color: #FFF;
@@ -19103,7 +19103,7 @@ span.flatpickr-weekday {
 }
 .menu-right .accordion-button::after {
   content: "\f078";
-  font-family: "Fontawesome";
+  font-family: "Fontawesome", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif;
   font-size: 12px;
   line-height: 1;
   background-color: #FFF;
