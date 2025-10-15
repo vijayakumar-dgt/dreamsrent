@@ -10,7 +10,10 @@ use Modules\GeneralSetting\Repositories\Contracts\CurrencySettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\DbbackupInterface;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\FaqInterface;
-use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
+use Modules\GeneralSetting\Repositories\Contracts\PaymentAndStorageSettingsInterface;
+use Modules\GeneralSetting\Repositories\Contracts\SettingsManagementInterface;
+use Modules\GeneralSetting\Repositories\Contracts\SettingsRetrievalInterface;
+use Modules\GeneralSetting\Repositories\Contracts\UserSecuritySettingsInterface;
 use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\LanguageSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\LocalizationInterface;
@@ -25,7 +28,10 @@ use Modules\GeneralSetting\Repositories\Eloquent\CurrencySettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\DbbackupRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\EmailTemplateSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\FaqRepository;
-use Modules\GeneralSetting\Repositories\Eloquent\GeneralSettingRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\PaymentAndStorageSettingsRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\SettingsManagementRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\SettingsRetrievalRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\UserSecuritySettingsRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\InsuranceSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\LanguageSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\LocalizationRepository;
@@ -47,7 +53,10 @@ class RepositoryServiceProvider extends ServiceProvider
     protected function registerBindings(): void
     {
         $this->app->bind(AdminProfileInterface::class, AdminProfileRepository::class);
-        $this->app->bind(GeneralSettingInterface::class, GeneralSettingRepository::class);
+        $this->app->bind(SettingsRetrievalInterface::class, SettingsRetrievalRepository::class);
+        $this->app->bind(SettingsManagementInterface::class, SettingsManagementRepository::class);
+        $this->app->bind(UserSecuritySettingsInterface::class, UserSecuritySettingsRepository::class);
+        $this->app->bind(PaymentAndStorageSettingsInterface::class, PaymentAndStorageSettingsRepository::class);
         $this->app->bind(LanguageSettingInterface::class, LanguageSettingRepository::class);
         $this->app->bind(EmailTemplateRepositoryInterface::class, EmailTemplateSettingRepository::class);
         $this->app->bind(InsuranceSettingInterface::class, InsuranceSettingRepository::class);

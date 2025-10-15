@@ -16,7 +16,7 @@ class OtpSettingsController extends GeneralSettingBaseController
     public function storeOtpSettings(StoreOtpSettingsRequest $request): JsonResponse
     {
         try {
-            $this->repository->storeOtpSettings($request->validated());
+            $this->settingsManager->storeOtpSettings($request->validated());
 
             return response()->json([
                 'code'    => 200,

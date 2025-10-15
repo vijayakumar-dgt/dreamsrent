@@ -16,7 +16,7 @@ class PrefixSettingsController extends GeneralSettingBaseController
     public function updatePrefixes(Request $request): JsonResponse
     {
         try {
-            $this->repository->updatePrefixes($request->all(), $request->group_id);
+            $this->settingsManager->updatePrefixes($request->all(), $request->group_id);
 
             return response()->json([
                 'status'  => 'success',

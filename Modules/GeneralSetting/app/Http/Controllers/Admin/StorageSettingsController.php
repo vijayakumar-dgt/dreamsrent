@@ -19,7 +19,7 @@ class StorageSettingsController extends GeneralSettingBaseController
     public function storageStatusUpdate(StorageStatusUpdateRequest $request): JsonResponse
     {
         try {
-            $success = $this->repository->updateStorageStatus(
+            $success = $this->paymentSettings->updateStorageStatus(
                 $request->storage_type,
                 (bool) $request->status
             );
@@ -59,7 +59,7 @@ class StorageSettingsController extends GeneralSettingBaseController
                 'aws_base_url'    => $request->aws_base_url,
             ];
 
-            $success = $this->repository->updateAwsSettings($settings);
+            $success = $this->paymentSettings->updateAwsSettings($settings);
 
             if (!$success) {
                 throw new AwsSettingsUpdateException(__('admin.general_settings.update_failed'));

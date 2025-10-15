@@ -16,7 +16,7 @@ class RentalSettingsController extends GeneralSettingBaseController
     public function storeRentalSettings(StoreRentalSettingsRequest $request): JsonResponse
     {
         try {
-            $this->repository->saveRentalSettings($request->validated());
+            $this->settingsManager->saveRentalSettings($request->validated());
 
             return response()->json([
                 'code'    => 200,

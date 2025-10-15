@@ -16,7 +16,7 @@ class MaintenanceSettingsController extends GeneralSettingBaseController
     public function storeMaintenanceSettings(StoreMaintenanceSettingsRequest $request): JsonResponse
     {
         try {
-            $this->repository->storeMaintenanceSettings($request->all());
+            $this->settingsManager->storeMaintenanceSettings($request->all());
 
             return response()->json([
                 'status'  => 'success',

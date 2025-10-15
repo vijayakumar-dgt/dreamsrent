@@ -16,7 +16,7 @@ class ThemeSettingsController extends GeneralSettingBaseController
     public function updateThemeSettings(UpdateThemeSettingsRequest $request): JsonResponse
     {
         try {
-            $this->repository->updateThemeSettings($request->validated());
+            $this->settingsManager->updateThemeSettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',

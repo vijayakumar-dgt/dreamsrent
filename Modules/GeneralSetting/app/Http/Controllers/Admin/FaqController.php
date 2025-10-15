@@ -14,7 +14,8 @@ use Modules\GeneralSetting\Http\Requests\HowItWorksListRequest;
 use Modules\GeneralSetting\Http\Requests\HowItWorksStoreRequest;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Repositories\Contracts\FaqInterface;
-use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
+use Modules\GeneralSetting\Repositories\Contracts\SettingsManagementInterface;
+use Modules\GeneralSetting\Repositories\Contracts\SettingsRetrievalInterface;
 
 class FaqController extends Controller
 {
@@ -32,10 +33,10 @@ class FaqController extends Controller
         return view('generalsetting::cms.how-it-work', compact('languages'));
     }
 
-    public function howItWorksUpdate(HowItWorksStoreRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function howItWorksUpdate(HowItWorksStoreRequest $request, SettingsManagementInterface $settingsManager): JsonResponse
     {
         try {
-            $repository->storeHowItWorks($request->validated());
+            $settingsManager->storeHowItWorks($request->validated());
 
             return response()->json([
                 'code'    => 200,
@@ -52,10 +53,10 @@ class FaqController extends Controller
         }
     }
 
-    public function howItWorksList(HowItWorksListRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function howItWorksList(HowItWorksListRequest $request, SettingsRetrievalInterface $settingsRetriever): JsonResponse
     {
         try {
-            $data = $repository->getHowItWorks($request->validated());
+            $data = $settingsRetriever->getHowItWorks($request->validated());
 
             return response()->json([
                 'status'  => 'success',
@@ -80,10 +81,10 @@ class FaqController extends Controller
         return view('generalsetting::cms.copyright', compact('languages'));
     }
 
-    public function copyrightUpdate(CopyrightUpdateRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function copyrightUpdate(CopyrightUpdateRequest $request, SettingsManagementInterface $settingsManager): JsonResponse
     {
         try {
-            $repository->updateCopyright($request->validated());
+            $settingsManager->updateCopyright($request->validated());
 
             return response()->json([
                 'code'    => 200,
@@ -100,10 +101,10 @@ class FaqController extends Controller
         }
     }
 
-    public function copyrightList(CopyrightListRequest $request, GeneralSettingInterface $repository): JsonResponse
+    public function copyrightList(CopyrightListRequest $request, SettingsRetrievalInterface $settingsRetriever): JsonResponse
     {
         try {
-            $data = $repository->getCopyright($request->validated());
+            $data = $settingsRetriever->getCopyright($request->validated());
 
             return response()->json([
                 'status'  => 'success',
