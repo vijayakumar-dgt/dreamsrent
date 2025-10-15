@@ -28,19 +28,10 @@ class VehicleInfoWriter extends VehicleRepositoryBase
     {
         $authId = Auth::guard('admin')->id();
 
-        [$baseKm, $extraKm] = $this->determineKilometers($request);
-        $pricePayload = $this->buildVehiclePricePayload($request);
-        $categorySlug = $this->getCategorySlug($request->vehicle_category_id);
-        $imagePath = $this->uploadVehicleImage($request->file('vehicle_image'));
-
         $vehicle = VehicleInfo::create($this->buildVehicleAttributes(
             $request,
+            null,
             $authId,
-            $imagePath,
-            $pricePayload,
-            $baseKm,
-            $extraKm,
-            $categorySlug,
             false
         ));
 
@@ -60,19 +51,10 @@ class VehicleInfoWriter extends VehicleRepositoryBase
         $vehicle = VehicleInfo::findOrFail($request->vehicle_id);
         $authId = Auth::guard('admin')->id();
 
-        [$baseKm, $extraKm] = $this->determineKilometers($request);
-        $pricePayload = $this->buildVehiclePricePayload($request);
-        $categorySlug = $this->getCategorySlug($request->vehicle_category_id);
-        $imagePath = $this->uploadVehicleImage($request->file('vehicle_image'), $vehicle->vehicle_image ?? null);
-
         $vehicle->update($this->buildVehicleAttributes(
             $request,
+            $vehicle,
             $authId,
-            $imagePath,
-            $pricePayload,
-            $baseKm,
-            $extraKm,
-            $categorySlug,
             true
         ));
 
@@ -126,16 +108,13 @@ class VehicleInfoWriter extends VehicleRepositoryBase
         return Category::find($categoryId)?->slug;
     }
 
-    private function buildVehicleAttributes(
-        Request $request,
-        ?int $authId,
-        ?string $imagePath,
-        string $pricePayload,
-        ?int $baseKm,
-        ?int $extraKm,
-        ?string $categorySlug,
-        bool $isUpdate
-    ): array {
+    private function buildVehicleAttributes(Request $request, ?VehicleInfo $vehicle, ?int $authId, bool $isUpdate): array
+    {
+        [$baseKm, $extraKm] = $this->determineKilometers($request);
+        $pricePayload = $this->buildVehiclePricePayload($request);
+        $categorySlug = $this->getCategorySlug($request->vehicle_category_id);
+        $imagePath = $this->uploadVehicleImage($request->file('vehicle_image'), $vehicle?->vehicle_image);
+
         $data = [
             'vehicle_image'        => $imagePath,
             'name'                 => $request->title,
