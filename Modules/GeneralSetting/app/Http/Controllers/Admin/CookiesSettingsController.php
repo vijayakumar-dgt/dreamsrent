@@ -20,7 +20,7 @@ class CookiesSettingsController extends GeneralSettingBaseController
     public function storeCookiesSettings(StoreCookiesSettingsRequest $request): JsonResponse
     {
         try {
-            $this->repository->storeCookiesSettings($request->validated());
+            $this->settingsManager->storeCookiesSettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',
@@ -40,7 +40,7 @@ class CookiesSettingsController extends GeneralSettingBaseController
     public function cookiesSettingsList(CookiesSettingsRequest $request): JsonResponse
     {
         try {
-            $settings = $this->repository->getCookiesSettings(
+            $settings = $this->settingsRetriever->getCookiesSettings(
                 $request->group_id,
                 $request->language_id
             );

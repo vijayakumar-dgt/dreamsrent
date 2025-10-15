@@ -11,4 +11,6 @@ interface UserSecuritySettingsInterface
     public function updateEmail(array $data);
 
     public function logoutDevice(array $data);
+
+    public function getSecuritySettings();
 }

@@ -22,7 +22,7 @@ class LogoSettingsController extends GeneralSettingBaseController
     {
         try {
             $files = $request->only(['logo_image', 'favicon_image', 'small_image', 'dark_logo']);
-            $paths = $this->repository->storeLogoSettings($files);
+            $paths = $this->settingsManager->storeLogoSettings($files);
 
             return response()->json([
                 'code'    => 200,

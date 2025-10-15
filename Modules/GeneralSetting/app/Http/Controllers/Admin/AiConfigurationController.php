@@ -32,8 +32,8 @@ class AiConfigurationController extends GeneralSettingBaseController
         ];
 
         try {
-            $this->repository->saveNotificationSettings($settings);
-            $this->repository->updateEnvVariables(['OPENAI_API_KEY' => $validated['ai_api_key']]);
+            $this->settingsManager->saveNotificationSettings($settings);
+            $this->paymentSettings->updateEnvVariables(['OPENAI_API_KEY' => $validated['ai_api_key']]);
 
             return response()->json([
                 'code'    => 200,

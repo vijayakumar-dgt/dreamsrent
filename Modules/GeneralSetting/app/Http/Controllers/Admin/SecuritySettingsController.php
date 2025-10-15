@@ -64,7 +64,7 @@ class SecuritySettingsController extends GeneralSettingBaseController
 
     public function updatePassword(UpdatePasswordRequest $request): JsonResponse
     {
-        $result = $this->repository->updatePassword($request->only([
+        $result = $this->userSecuritySettings->updatePassword($request->only([
             'current_password',
             'new_password',
         ]));
@@ -78,7 +78,7 @@ class SecuritySettingsController extends GeneralSettingBaseController
 
     public function updatePhoneNumber(UpdatePhoneNumberRequest $request): JsonResponse
     {
-        $result = $this->repository->updatePhoneNumber($request->only([
+        $result = $this->userSecuritySettings->updatePhoneNumber($request->only([
             'phone_current_password',
             'current_phonenumber',
             'new_phonenumber',
@@ -93,7 +93,7 @@ class SecuritySettingsController extends GeneralSettingBaseController
 
     public function updateEmail(UpdateEmailRequest $request): JsonResponse
     {
-        $result = $this->repository->updateEmail($request->only([
+        $result = $this->userSecuritySettings->updateEmail($request->only([
             'email_current_password',
             'current_email',
             'new_email',
@@ -108,7 +108,7 @@ class SecuritySettingsController extends GeneralSettingBaseController
 
     public function getSecuritySettings(): JsonResponse
     {
-        $data = $this->repository->getSecuritySettings();
+        $data = $this->userSecuritySettings->getSecuritySettings();
 
         return response()->json([
             'status' => 'success',
@@ -119,7 +119,7 @@ class SecuritySettingsController extends GeneralSettingBaseController
 
     public function logoutDevice(Request $request): JsonResponse
     {
-        $result = $this->repository->logoutDevice($request->only(['isAll', 'id']));
+        $result = $this->userSecuritySettings->logoutDevice($request->only(['isAll', 'id']));
 
         return response()->json([
             'status'  => $result['success'] ? 'success' : 'error',

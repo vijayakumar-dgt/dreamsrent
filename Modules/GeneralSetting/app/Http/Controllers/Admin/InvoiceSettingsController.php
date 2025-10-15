@@ -16,7 +16,7 @@ class InvoiceSettingsController extends GeneralSettingBaseController
     public function storeInvoiceSettings(StoreInvoiceSettingsRequest $request): JsonResponse
     {
         try {
-            $this->repository->saveInvoiceSettings($request->validated());
+            $this->settingsManager->saveInvoiceSettings($request->validated());
 
             return response()->json([
                 'code'    => 200,

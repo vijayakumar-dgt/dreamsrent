@@ -16,7 +16,7 @@ class NotificationSettingsController extends GeneralSettingBaseController
     public function storeNotificationSettings(StoreNotificationSettingsRequest $request): JsonResponse
     {
         try {
-            $this->repository->saveNotificationSettings($request->validated());
+            $this->settingsManager->saveNotificationSettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',

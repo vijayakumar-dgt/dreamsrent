@@ -18,7 +18,7 @@ class SeoSettingsController extends GeneralSettingBaseController
         try {
             $data = $request->validated();
             $groupId = $request->group_id ?? null;
-            $this->repository->storeSeoSettings($data, $groupId);
+            $this->settingsManager->storeSeoSettings($data, $groupId);
 
             return response()->json([
                 'status'  => 'success',

@@ -17,6 +17,4 @@ interface SettingsRetrievalInterface
     public function getHowItWorks(array $data);
 
     public function getCopyright(array $data);
-
-    public function getSecuritySettings();
 }

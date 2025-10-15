@@ -20,7 +20,7 @@ class PaymentSettingsController extends GeneralSettingBaseController
     public function updatepaymentSettings(UpdatePaymentSettingsRequest $request): JsonResponse
     {
         try {
-            $success = $this->repository->updatePaymentSettings($request->all());
+            $success = $this->paymentSettings->updatePaymentSettings($request->all());
 
             if (!$success) {
                 throw new PaymentSettingsUpdateException(__('admin.general_settings.update_failed'));
@@ -46,7 +46,7 @@ class PaymentSettingsController extends GeneralSettingBaseController
     public function updatepaymentStatus(UpdatePaymentStatusRequest $request): JsonResponse
     {
         try {
-            $success = $this->repository->updatePaymentStatus($request->all());
+            $success = $this->paymentSettings->updatePaymentStatus($request->all());
 
             if (!$success) {
                 throw new PaymentStatusUpdateException(__('admin.general_settings.update_failed'));
@@ -75,7 +75,7 @@ class PaymentSettingsController extends GeneralSettingBaseController
         $groupId = 13;
 
         try {
-            $data = $this->repository->getPaymentSettings($groupId, $orderBy);
+            $data = $this->settingsRetriever->getPaymentSettings($groupId, $orderBy);
 
             return response()->json([
                 'code'    => 200,

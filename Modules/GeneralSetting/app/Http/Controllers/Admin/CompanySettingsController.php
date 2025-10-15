@@ -18,7 +18,7 @@ class CompanySettingsController extends GeneralSettingBaseController
     public function store(CompanySettingRequest $request): JsonResponse
     {
         try {
-            $this->repository->storeCompanySettings($request->validated());
+            $this->settingsManager->storeCompanySettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',
@@ -38,7 +38,7 @@ class CompanySettingsController extends GeneralSettingBaseController
     public function listCompany(ListCompanyRequest $request): JsonResponse
     {
         try {
-            $data = $this->repository->getCompanySettings($request->group_id);
+            $data = $this->settingsRetriever->getCompanySettings($request->group_id);
 
             if (!$data) {
                 return response()->json([
@@ -66,7 +66,7 @@ class CompanySettingsController extends GeneralSettingBaseController
     public function list(SettingListRequest $request): JsonResponse
     {
         try {
-            $settings = $this->repository->getSettingsByGroup($request->validated()['group_id']);
+            $settings = $this->settingsRetriever->getSettingsByGroup($request->validated()['group_id']);
 
             return response()->json([
                 'status'  => 'success',
