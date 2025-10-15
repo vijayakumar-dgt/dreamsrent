@@ -94,44 +94,49 @@ class VehicleInfoQueryRepository extends VehicleRepositoryBase implements Vehicl
 
     public function vehicleDetailsList(Request $request): array
     {
+        $response = [];
+
         try {
             $vehicleSlug = $request->vehicle_slug;
+
             if (!$vehicleSlug) {
-                return $this->errorResponse('Vehicle ID is required', 400);
+                $response = $this->errorResponse('Vehicle ID is required', 400);
+            } else {
+                $vehicle = VehicleInfo::with([
+                    self::CAR_TYPE,
+                    self::BRAND,
+                    self::CATEGORY,
+                    self::MAIN_LOCATION,
+                    self::COLOR,
+                    self::FUEL_TYPE,
+                    self::TRANSMISSION,
+                    'extraservices.extraService:id,name,icon,description,image',
+                    'faqs:id,vehicle_id,question,answer',
+                    'damages:id,Vehicle_id,damage_type,damage_loaction,image,description',
+                    'tariffs:id,vehicle_id,tariff_title,tariff_daily_price,tariff_from_days,tariff_to_days,tariff_base_km,tariff_extra_price',
+                    'seasonals:id,vehicle_id,seasonal_title,seasonal_start_date,seasonal_end_date,seasonal_daily_rate,seasonal_weekly_rate,seasonal_monthly_rate,seasonal_late_fee',
+                    'owner.userDetails:id,user_id,profile_image',
+                ])->where('slug', $vehicleSlug)->first();
+
+                if (!$vehicle) {
+                    $response = $this->errorResponse(__('admin.common.no_data_found'), 404);
+                } else {
+                    $extraServiceEnabled = $this->isSettingEnabled(6, 'extra_service_enable');
+                    $faqEnabled = $this->isSettingEnabled(6, 'faq_enable');
+
+                    $response = [
+                        'code'    => 200,
+                        'success' => true,
+                        'message' => __('admin.common.default_retrieve_success'),
+                        'data'    => $this->formatter->formatVehicleDetails($vehicle, $extraServiceEnabled, $faqEnabled),
+                    ];
+                }
             }
-
-            $vehicle = VehicleInfo::with([
-                self::CAR_TYPE,
-                self::BRAND,
-                self::CATEGORY,
-                self::MAIN_LOCATION,
-                self::COLOR,
-                self::FUEL_TYPE,
-                self::TRANSMISSION,
-                'extraservices.extraService:id,name,icon,description,image',
-                'faqs:id,vehicle_id,question,answer',
-                'damages:id,Vehicle_id,damage_type,damage_loaction,image,description',
-                'tariffs:id,vehicle_id,tariff_title,tariff_daily_price,tariff_from_days,tariff_to_days,tariff_base_km,tariff_extra_price',
-                'seasonals:id,vehicle_id,seasonal_title,seasonal_start_date,seasonal_end_date,seasonal_daily_rate,seasonal_weekly_rate,seasonal_monthly_rate,seasonal_late_fee',
-                'owner.userDetails:id,user_id,profile_image',
-            ])->where('slug', $vehicleSlug)->first();
-
-            if (!$vehicle) {
-                return $this->errorResponse(__('admin.common.no_data_found'), 404);
-            }
-
-            $extraServiceEnabled = $this->isSettingEnabled(6, 'extra_service_enable');
-            $faqEnabled = $this->isSettingEnabled(6, 'faq_enable');
-
-            return [
-                'code'    => 200,
-                'success' => true,
-                'message' => __('admin.common.default_retrieve_success'),
-                'data'    => $this->formatter->formatVehicleDetails($vehicle, $extraServiceEnabled, $faqEnabled),
-            ];
         } catch (\Throwable $e) {
-            return $this->errorResponse(__('admin.common.default_retrieve_error'), 500);
+            $response = $this->errorResponse(__('admin.common.default_retrieve_error'), 500);
         }
+
+        return $response;
     }
 
     public function getModel(?int $brandId): array
