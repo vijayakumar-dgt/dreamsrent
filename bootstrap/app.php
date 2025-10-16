@@ -18,10 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
         using: function () {
-            Route::group(['middleware' => ['web']], function () {
-                require_once __DIR__ . '/../routes/web.php';
-                require_once __DIR__ . '/../routes/admin.php';
-            });
+            Route::middleware('web')->group(base_path('routes/web.php'));
+            Route::middleware('web')->group(base_path('routes/admin.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware) {
