@@ -553,6 +553,8 @@ return  [
     'payment_failed_message'   => 'عفوًا! فشل الدفع!',
     'payment_fail_description' => 'تعذر معالجة الدفع. يرجى المحاولة مرة أخرى أو الاتصال بالدعم إذا استمرت المشكلة.',
     'insurance_benefits'       => 'مزايا التأمين',
+    'filter'                   => 'تصفية',
+    'tags'                     => 'العلامات',
   ],
   'user' => [
     'user_dashboard'                             => 'لوحة تحكم المستخدم',
@@ -816,10 +818,8 @@ return  [
   'blog' => [
     'blog_list'                    => 'قائمة المدونات',
     'blogs'                        => 'المدونات',
-    'filter'                       => 'تصفية',
     'to_search_type_and_hit_enter' => 'للبحث اكتب واضغط Enter',
     'categories'                   => 'الفئات',
-    'tags'                         => 'العلامات',
     'top_article'                  => 'المقال الأبرز',
     'blog_grid'                    => 'شبكة المدونات',
     'read_more'                    => 'اقرأ المزيد',

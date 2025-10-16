@@ -49,21 +49,43 @@
 @else
     <h4 class="no-blog">{{ __('web.blog.no_blog_found') }}</h4>
 @endif
-<!--Pagination-->
+
+<!--/Pagination-->
 <div class="pagination">
     @if ($blogPosts->lastPage() > 1)
-        <nav class="d-flex justify-content-center mt-4">
-            <ul class="pagination custom-pagination mb-0">
-                <li class="page-item {{ $blogPosts->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link prev-next" href="{{ $blogPosts->previousPageUrl() }}">&larr; Prev</a>
+        <nav>
+            <ul class="pagination mt-0">
+                <!-- Previous Button -->
+                <li class="previtem {{ $blogPosts->onFirstPage() ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ $blogPosts->previousPageUrl() ?? '#' }}">
+                        <i class="fas fa-regular fa-arrow-left me-2"></i> {{ __('web.user.prev') }}
+                    </a>
                 </li>
-                @for ($i = 1; $i <= $blogPosts->lastPage(); $i++)
-                    <li class="page-item {{ $blogPosts->currentPage() == $i ? 'active' : '' }}">
-                        <a class="page-link number-btn" href="{{ $blogPosts->url($i) }}">{{ $i }}</a>
-                    </li>
-                @endfor
-                <li class="page-item {{ !$blogPosts->hasMorePages() ? 'disabled' : '' }}">
-                    <a class="page-link prev-next" href="{{ $blogPosts->nextPageUrl() }}">Next &rarr;</a>
+
+                <!-- Page Numbers -->
+                <li class="justify-content-center pagination-center">
+                    <div class="page-group">
+                        <ul>
+                            @for ($i = 1; $i <= $blogPosts->lastPage(); $i++)
+                                <li class="page-item">
+                                    <a class="page-link {{ $blogPosts->currentPage() == $i ? 'active' : '' }}"
+                                       href="{{ $blogPosts->url($i) }}">
+                                        {{ $i }}
+                                        @if ($blogPosts->currentPage() == $i)
+                                            <span class="visually-hidden">(current)</span>
+                                        @endif
+                                    </a>
+                                </li>
+                            @endfor
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Next Button -->
+                <li class="nextlink {{ !$blogPosts->hasMorePages() ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ $blogPosts->nextPageUrl() ?? '#' }}">
+                        {{ __('web.user.next') }} <i class="fas fa-regular fa-arrow-right ms-2"></i>
+                    </a>
                 </li>
             </ul>
         </nav>

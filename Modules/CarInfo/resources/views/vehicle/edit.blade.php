@@ -182,7 +182,7 @@
                                                     <input type="hidden" id="brand_id" value="{{ $query->brand_id }}">
                                                     <select name="vehicle_brand_id" class="form-control select"
                                                         id="vehicle_brand_id">
-                                                        <option value="">Select</option>
+                                                        <option value="">{{ __('admin.common.select') }}</option>
                                                     </select>
                                                     <span class="invalid-feedback" id="vehicle_brand_id_error"></span>
                                                 </div>

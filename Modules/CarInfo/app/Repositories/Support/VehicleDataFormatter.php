@@ -15,6 +15,7 @@ use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use App\Models\Review;
 use App\Models\Wishlist;
+use Modules\CarInfo\Models\SafetyFeature;
 
 class VehicleDataFormatter extends VehicleRepositoryBase
 {
@@ -49,6 +50,8 @@ class VehicleDataFormatter extends VehicleRepositoryBase
         $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)->where('key', 'vehicle_image')->first();
         $vehiclePrices = is_string($vehicle->vehicle_price) ? json_decode($vehicle->vehicle_price, true) : [];
         $filteredPrices = [];
+        $featureIds = json_decode($vehicle->features ?? '', true);
+        $features = SafetyFeature::whereIn('id', $featureIds)->pluck('feature');
 
         foreach ($vehiclePrices ?? [] as $price) {
             foreach ($price as $key => $value) {
@@ -113,7 +116,7 @@ class VehicleDataFormatter extends VehicleRepositoryBase
             'num_doors'               => $vehicle->num_doors,
             'num_airbags'             => $vehicle->num_airbags,
             'vehicle_video'           => $vehicle->vehicle_video,
-            'features'                => $vehicle->features,
+            'features'                => $features,
             'currency'                => $currencySymbol,
             'rating'                  => $rating,
             'wishlist'                => $wishlistExists,
@@ -139,6 +142,8 @@ class VehicleDataFormatter extends VehicleRepositoryBase
         $rating = Review::where('vehicle_id', $vehicle->id)->value('average_ratings') ?? 0;
         $reviewCount = Review::where('vehicle_id', $vehicle->id)->count();
         $avatarImage = $this->getOwnerAvatar($vehicle);
+        $featureIds = json_decode($vehicle->features ?? '', true);
+        $features = SafetyFeature::whereIn('id', $featureIds)->pluck('feature');
 
         return [
             'id'                 => $vehicle->id,
@@ -160,7 +165,7 @@ class VehicleDataFormatter extends VehicleRepositoryBase
             'num_doors'          => $vehicle->num_doors,
             'num_airbags'        => $vehicle->num_airbags,
             'vehicle_video'      => $vehicle->vehicle_video,
-            'features'           => $vehicle->features,
+            'features'           => $features,
             'currency'           => $currencySymbol,
             'rating'             => $rating,
             'wishlist'           => $wishlistExists,
@@ -182,6 +187,8 @@ class VehicleDataFormatter extends VehicleRepositoryBase
         $images = $this->getVehicleMeta($vehicle->id, 'vehicle_image');
         $docs = $this->getVehicleMeta($vehicle->id, 'vehicle_doc');
         $policies = $this->getVehicleMeta($vehicle->id, 'vehicle_policy');
+        $featureIds = json_decode($vehicle->features ?? '', true);
+        $features = SafetyFeature::whereIn('id', $featureIds)->pluck('feature');
 
         $filteredPrices = $this->filterVehiclePrices($vehicle->vehicle_price);
         $multipleImages = $this->formatImages($images, $vehicle->vehicle_image);
@@ -216,7 +223,7 @@ class VehicleDataFormatter extends VehicleRepositoryBase
             'num_doors'               => $vehicle->num_doors,
             'num_airbags'             => $vehicle->num_airbags,
             'vehicle_video'           => $vehicle->vehicle_video,
-            'features'                => $vehicle->features,
+            'features'                => $features,
             'currency'                => $currencySymbol,
             'rating'                  => $rating,
             'review_count'            => $reviewCount,

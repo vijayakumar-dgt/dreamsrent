@@ -159,6 +159,10 @@
                         },
                     },
                 ],
+                initComplete: function () {
+                    $(".table-loader").hide();
+                    $(".real-table, .table-footer").removeClass("d-none");
+                },
                 drawCallback: function () {
                     customizeTableFooter($(this));
                 },

@@ -2869,6 +2869,7 @@
                                         `<option value="${brand.id}" ${selected}>${brand.brand_name}</option>`
                                     );
                                 });
+                                $("#vehicle_brand_id").val(selectedBrandId).trigger("change");
                             } else {
                                 modelBrandDropdown.html(
                                     '<option value="">No brands found</option>'

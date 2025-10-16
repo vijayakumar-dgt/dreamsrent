@@ -553,6 +553,8 @@ return [
         'payment_failed_message'   => 'Oops! Payment Failed!',
         'payment_fail_description' => 'The payment could not be processed. Please try again or contact support if the issue persists.',
         'insurance_benefits'       => 'Insurance Benefits',
+        'filter'                   => 'Filter',
+        'tags'                     => 'Tags',
     ],
     'user' => [
         'user_dashboard'                                => 'User Dashboard',
@@ -816,10 +818,8 @@ return [
     'blog' => [
         'blog_list'                    => 'Blog List',
         'blogs'                        => 'Blogs',
-        'filter'                       => 'Filter',
         'to_search_type_and_hit_enter' => 'To Search type and hit enter',
         'categories'                   => 'Categories',
-        'tags'                         => 'Tags',
         'top_article'                  => 'Top Article',
         'blog_grid'                    => 'Blog Grid',
         'read_more'                    => 'Read More',

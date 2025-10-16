@@ -128,7 +128,6 @@
 }
 .gallery-list li {
   width: 100px; /* Thumbnail size */
-  /* height: 100px; */
   overflow: hidden;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -532,9 +531,6 @@
   max-height: 380px !important;
   object-fit: cover !important;
 }
-.dash-height{
-  height: 200px !important;
-}
 .note-editor .btn-outline-secondary {
     border: 1px solid #e5e7eb !important;
     color: #111827 !important;
@@ -568,9 +564,6 @@
 }
 .vehiclelist-brudgrumb{
   padding-bottom: 100px !important;
-}
-.suggestions-list{
-  display: none;
 }
 .btn-disabled{
   pointer-events: none !important;
@@ -606,9 +599,6 @@
 }
 .logo-large-size img {
   max-height: 50px;
-}
-.move-cal{
-  width: 220px !important;
 }
 .ticket_no_data {
     height: 285px;
