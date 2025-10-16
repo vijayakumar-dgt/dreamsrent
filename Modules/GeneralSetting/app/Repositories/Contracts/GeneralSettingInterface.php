@@ -2,10 +2,13 @@
 
 namespace Modules\GeneralSetting\Repositories\Contracts;
 
-interface GeneralSettingInterface extends
-    SettingsRetrievalInterface,
-    SettingsManagementInterface,
-    UserSecuritySettingsInterface,
-    PaymentAndStorageSettingsInterface
+interface GeneralSettingInterface
 {
+    public function retrieval(): SettingsRetrievalInterface;
+
+    public function management(): SettingsManagementInterface;
+
+    public function security(): UserSecuritySettingsInterface;
+
+    public function payment(): PaymentAndStorageSettingsInterface;
 }
