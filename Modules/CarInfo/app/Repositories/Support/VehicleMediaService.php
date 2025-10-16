@@ -84,35 +84,37 @@ class VehicleMediaService extends VehicleRepositoryBase
                 ->first();
 
             if (!$vehicleMeta) {
-                return [
+                $response = [
                     'code'    => 404,
                     'success' => false,
                     'message' => 'Policy files not found.'
                 ];
+            } else {
+                $policyFiles = json_decode($vehicleMeta->value, true) ?? [];
+
+                if (($key = array_search($filePath, $policyFiles)) === false) {
+                    $response = [
+                        'code'    => 404,
+                        'success' => false,
+                        'message' => 'Policy file not found.'
+                    ];
+                } else {
+                    unset($policyFiles[$key]);
+                    Storage::delete($filePath);
+                    $vehicleMeta->value = json_encode(array_values($policyFiles)) ?: '';
+                    $vehicleMeta->save();
+
+                    $response = [
+                        'code'    => 200,
+                        'success' => true,
+                        'message' => 'Policy file deleted successfully.'
+                    ];
+                }
             }
-
-            $policyFiles = json_decode($vehicleMeta->value, true) ?? [];
-
-            if (($key = array_search($filePath, $policyFiles)) === false) {
-                return [
-                    'code'    => 404,
-                    'success' => false,
-                    'message' => 'Policy file not found.'
-                ];
-            }
-
-            unset($policyFiles[$key]);
-            Storage::delete($filePath);
-            $vehicleMeta->value = json_encode(array_values($policyFiles)) ?: '';
-            $vehicleMeta->save();
-
-            return [
-                'code'    => 200,
-                'success' => true,
-                'message' => 'Policy file deleted successfully.'
-            ];
         } catch (\Exception $e) {
-            return $response;
+            // Keep default response on exception
         }
+
+        return $response;
     }
 }

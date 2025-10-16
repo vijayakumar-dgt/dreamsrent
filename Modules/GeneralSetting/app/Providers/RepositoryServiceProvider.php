@@ -10,6 +10,7 @@ use Modules\GeneralSetting\Repositories\Contracts\CurrencySettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\DbbackupInterface;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\FaqInterface;
+use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\PaymentAndStorageSettingsInterface;
 use Modules\GeneralSetting\Repositories\Contracts\SettingsManagementInterface;
 use Modules\GeneralSetting\Repositories\Contracts\SettingsRetrievalInterface;
@@ -28,6 +29,7 @@ use Modules\GeneralSetting\Repositories\Eloquent\CurrencySettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\DbbackupRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\EmailTemplateSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\FaqRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\GeneralSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\PaymentAndStorageSettingsRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\SettingsManagementRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\SettingsRetrievalRepository;
@@ -53,6 +55,7 @@ class RepositoryServiceProvider extends ServiceProvider
     protected function registerBindings(): void
     {
         $this->app->bind(AdminProfileInterface::class, AdminProfileRepository::class);
+        $this->app->bind(GeneralSettingInterface::class, GeneralSettingRepository::class);
         $this->app->bind(SettingsRetrievalInterface::class, SettingsRetrievalRepository::class);
         $this->app->bind(SettingsManagementInterface::class, SettingsManagementRepository::class);
         $this->app->bind(UserSecuritySettingsInterface::class, UserSecuritySettingsRepository::class);

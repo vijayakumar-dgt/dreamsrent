@@ -504,6 +504,7 @@ class PageController extends Controller
 
                         unset($banner->datas);
                     }
+                    unset($banner);
 
                     $section['section_type'] = 'banner';
                     $section['type'] = 'banner';
@@ -560,6 +561,7 @@ class PageController extends Controller
 
                     unset($banner->datas);
                 }
+                unset($banner);
 
                 $section['section_type'] = 'banner_two';
                 $section['type'] = 'banner_two';
@@ -613,6 +615,7 @@ class PageController extends Controller
 
                     unset($banner->datas);
                 }
+                unset($banner);
 
                 $section['section_type'] = 'banner_three';
                 $section['type'] = 'banner_three';
@@ -668,6 +671,7 @@ class PageController extends Controller
 
                     unset($banner->datas);
                 }
+                unset($banner);
 
                 $section['section_type'] = 'banner_four';
                 $section['type'] = 'banner_four';
@@ -735,6 +739,7 @@ class PageController extends Controller
 
                         unset($best_vehicle->content);
                     }
+                    unset($best_vehicle);
 
                     $section['section_type'] = 'best_vehicle';
                     $section['type'] = 'best_vehicle';
@@ -1577,6 +1582,7 @@ class PageController extends Controller
                     foreach ($testimonials as &$testimonial) {
                         $testimonial->image = asset(self::STORAGE_PATH . $testimonial->image);
                     }
+                    unset($testimonial);
 
                     $section['section_type'] = 'testimonial';
                     $section['design'] = 'testimonial_one';
@@ -2408,6 +2414,8 @@ class PageController extends Controller
             }
         }
 
+        unset($section);
+
         return $pageContentSections;
     }
 
@@ -2584,6 +2592,7 @@ class PageController extends Controller
 
                             unset($banner->datas);
                         }
+                        unset($banner);
 
                         $section['section_type'] = 'banner';
                         $section['type'] = 'banner';
@@ -2640,6 +2649,7 @@ class PageController extends Controller
 
                         unset($banner->datas);
                     }
+                    unset($banner);
 
                     $section['section_type'] = 'banner_two';
                     $section['type'] = 'banner_two';
@@ -2707,6 +2717,7 @@ class PageController extends Controller
 
                             unset($best_vehicle->content);
                         }
+                        unset($best_vehicle);
 
                         $section['section_type'] = 'best_vehicle';
                         $section['type'] = 'best_vehicle';
@@ -3011,6 +3022,7 @@ class PageController extends Controller
                         foreach ($testimonials as &$testimonial) {
                             $testimonial->image = asset(self::STORAGE_PATH . $testimonial->image);
                         }
+                        unset($testimonial);
 
                         $section['section_type'] = 'testimonial';
                         $section['design'] = 'testimonial_one';
@@ -3261,6 +3273,8 @@ class PageController extends Controller
                     $section['section_type'] = 'multiple_section';
                 }
             }
+
+            unset($section);
         }
 
         if ($page) {
