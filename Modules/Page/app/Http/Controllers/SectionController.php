@@ -178,66 +178,83 @@ class SectionController extends Controller
 
     protected function processSectionData($request, $existingData)
     {
+        $existingData = $existingData ?? [];
         $sectionId = (int) $request->section_id;
 
         $handlers = [
-            1  => 'processBannerOneSection',
-            29 => 'processBannerTwoSection',
-            43 => 'processBannerFourSection',
-            56 => 'processBoatSection',
-            42 => 'processVehicleSection',
-            26 => 'processWhyChooseSection',
-            68 => 'processBoatExperienceSection',
-            71 => 'processBikeExperienceSection',
-            58 => 'processBoatBenefitsSection',
-            72 => 'processBoatSeasonalSection',
-            25 => 'processCarAdSection',
-            73 => 'processBoatOfferSection',
-            74 => 'processBoatExclusiveSection',
-            75 => 'processBikeExclusiveSection',
+            1  => fn () => $this->handleSectionOne($request, $existingData),
+            29 => fn () => $this->handleSectionTwentyNine($request, $existingData),
+            43 => fn () => $this->handleSectionFortyThree($request, $existingData),
+            56 => fn () => $this->handleSectionFiftySix($request, $existingData),
+            42 => fn () => $this->handleSectionFortyTwo($request),
+            26 => fn () => $this->handleSectionTwentySix($request, $existingData),
+            68 => fn () => $this->handleSectionSixtyEight($request, $existingData),
+            71 => fn () => $this->handleSectionSeventyOne($request, $existingData),
+            58 => fn () => $this->handleSectionFiftyEight($request, $existingData),
+            72 => fn () => $this->handleSectionWithSingleUpload($request, 'thumbnail_image_boat_seasonal'),
+            25 => fn () => $this->handleSectionWithSingleUpload($request, 'thumbnail_image_car_ad'),
+            73 => fn () => $this->handleSectionWithSingleUpload($request, 'thumbnail_image_boat_offer'),
+            74 => fn () => $this->handleSectionWithSingleUpload($request, 'thumbnail_image_boat_exclusive'),
+            75 => fn () => $this->handleSectionSeventyFive($request, $existingData),
         ];
 
         if (!isset($handlers[$sectionId])) {
             return [];
         }
 
-        $handler = $handlers[$sectionId];
-
-        return $this->{$handler}($request, $existingData);
+        return $handlers[$sectionId]();
     }
 
-    protected function processBannerOneSection($request, array $existingData): array
+    protected function handleSectionOne($request, array $existingData): array
     {
+        $thumbnailPath = $existingData['thumbnail_image_one'] ?? null;
+
+        if ($request->hasFile('thumbnail_image_one')) {
+            $thumbnailPath = uploadFile($request->file('thumbnail_image_one'), 'general');
+        }
+
         return [
             'label_one'           => $request->label_one,
             'line_one'            => $request->line_one,
             'line_two'            => $request->line_two,
             'description_one'     => $request->description_one,
-            'thumbnail_image_one' => $this->processIcon($request, 'thumbnail_image_one', $existingData['thumbnail_image_one'] ?? null),
+            'thumbnail_image_one' => $thumbnailPath,
         ];
     }
 
-    protected function processBannerTwoSection($request, array $existingData): array
+    protected function handleSectionTwentyNine($request, array $existingData): array
     {
+        $thumbnailPath = $existingData['thumbnail_image_two'] ?? null;
+
+        if ($request->hasFile('thumbnail_image_two')) {
+            $thumbnailPath = uploadFile($request->file('thumbnail_image_two'), 'general');
+        }
+
         return [
             'label_two'           => $request->label_two,
             'description_two'     => $request->description_two,
-            'thumbnail_image_two' => $this->processIcon($request, 'thumbnail_image_two', $existingData['thumbnail_image_two'] ?? null),
+            'thumbnail_image_two' => $thumbnailPath,
         ];
     }
 
-    protected function processBannerFourSection($request, array $existingData): array
+    protected function handleSectionFortyThree($request, array $existingData): array
     {
+        $thumbnailPath = $existingData['thumbnail_image_four'] ?? null;
+
+        if ($request->hasFile('thumbnail_image_four')) {
+            $thumbnailPath = uploadFile($request->file('thumbnail_image_four'), 'general');
+        }
+
         return [
             'label_three_one'      => $request->label_three_one,
             'label_three_two'      => $request->label_three_two,
             'label_three_three'    => $request->label_three_three,
             'description_three'    => $request->description_three,
-            'thumbnail_image_four' => $this->processIcon($request, 'thumbnail_image_four', $existingData['thumbnail_image_four'] ?? null),
+            'thumbnail_image_four' => $thumbnailPath,
         ];
     }
 
-    protected function processBoatSection($request, array $existingData): array
+    protected function handleSectionFiftySix($request, array $existingData): array
     {
         $thumbnails = $existingData['thumbnail_image_boat'] ?? [];
 
@@ -260,7 +277,7 @@ class SectionController extends Controller
         ];
     }
 
-    protected function processVehicleSection($request, array $existingData): array
+    protected function handleSectionFortyTwo($request): array
     {
         return [
             'vehicle_id' => $request->vehicle_id,
@@ -279,7 +296,7 @@ class SectionController extends Controller
         ];
     }
 
-    protected function processWhyChooseSection($request, array $existingData): array
+    protected function handleSectionTwentySix($request, array $existingData): array
     {
         return [
             'why_label_1' => $request->why_label_1,
@@ -294,7 +311,7 @@ class SectionController extends Controller
         ];
     }
 
-    protected function processBoatExperienceSection($request, array $existingData): array
+    protected function handleSectionSixtyEight($request, array $existingData): array
     {
         return [
             'label_boat_experience_1'           => $request->label_boat_experience_1,
@@ -312,7 +329,7 @@ class SectionController extends Controller
         ];
     }
 
-    protected function processBikeExperienceSection($request, array $existingData): array
+    protected function handleSectionSeventyOne($request, array $existingData): array
     {
         return [
             'label_bike_experience_1'           => $request->label_bike_experience_1,
@@ -324,7 +341,7 @@ class SectionController extends Controller
         ];
     }
 
-    protected function processBoatBenefitsSection($request, array $existingData): array
+    protected function handleSectionFiftyEight($request, array $existingData): array
     {
         $data = [
             'thumbnail_image_boat_benefits_main' => $this->processIcon(
@@ -347,34 +364,27 @@ class SectionController extends Controller
         return $data;
     }
 
-    protected function processBoatSeasonalSection($request, array $existingData): array
+    protected function handleSectionWithSingleUpload($request, string $fieldName): array
     {
-        return $this->processSingleUpload($request, 'thumbnail_image_boat_seasonal');
-    }
+        if (!$request->hasFile($fieldName)) {
+            return [];
+        }
 
-    protected function processCarAdSection($request, array $existingData): array
-    {
-        return $this->processSingleUpload($request, 'thumbnail_image_car_ad');
-    }
-
-    protected function processBoatOfferSection($request, array $existingData): array
-    {
-        return $this->processSingleUpload($request, 'thumbnail_image_boat_offer');
-    }
-
-    protected function processBoatExclusiveSection($request, array $existingData): array
-    {
-        return $this->processSingleUpload($request, 'thumbnail_image_boat_exclusive');
-    }
-
-    protected function processBikeExclusiveSection($request, array $existingData): array
-    {
         return [
-            'thumbnail_image_bike_exclusive' => $this->processIcon(
-                $request,
-                'thumbnail_image_bike_exclusive',
-                $existingData['thumbnail_image_bike_exclusive'] ?? null
-            ),
+            $fieldName => uploadFile($request->file($fieldName), 'general'),
+        ];
+    }
+
+    protected function handleSectionSeventyFive($request, array $existingData): array
+    {
+        $thumbnailPath = $existingData['thumbnail_image_bike_exclusive'] ?? null;
+
+        if ($request->hasFile('thumbnail_image_bike_exclusive')) {
+            $thumbnailPath = uploadFile($request->file('thumbnail_image_bike_exclusive'), 'general');
+        }
+
+        return [
+            'thumbnail_image_bike_exclusive' => $thumbnailPath,
             'bike_label_1'                   => $request->bike_label_1,
             'bike_dis_1'                     => $request->bike_dis_1,
             'bike_label_2'                   => $request->bike_label_2,
@@ -383,17 +393,6 @@ class SectionController extends Controller
             'bike_dis_3'                     => $request->bike_dis_3,
             'bike_label_4'                   => $request->bike_label_4,
             'bike_dis_4'                     => $request->bike_dis_4,
-        ];
-    }
-
-    protected function processSingleUpload($request, string $fieldName): array
-    {
-        if (!$request->hasFile($fieldName)) {
-            return [];
-        }
-
-        return [
-            $fieldName => uploadFile($request->file($fieldName), 'general'),
         ];
     }
 
