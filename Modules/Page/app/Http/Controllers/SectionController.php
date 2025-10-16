@@ -178,182 +178,223 @@ class SectionController extends Controller
 
     protected function processSectionData($request, $existingData)
     {
-        $data = [];
-        $sectionId = $request->section_id;
+        $sectionId = (int) $request->section_id;
 
-        if ($sectionId == 1) {
-            $thumbnailPath = $existingData['thumbnail_image_one'] ?? null;
-            if ($request->hasFile('thumbnail_image_one')) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_one'), 'general');
-            }
+        $handlers = [
+            1  => 'processBannerOneSection',
+            29 => 'processBannerTwoSection',
+            43 => 'processBannerFourSection',
+            56 => 'processBoatSection',
+            42 => 'processVehicleSection',
+            26 => 'processWhyChooseSection',
+            68 => 'processBoatExperienceSection',
+            71 => 'processBikeExperienceSection',
+            58 => 'processBoatBenefitsSection',
+            72 => 'processBoatSeasonalSection',
+            25 => 'processCarAdSection',
+            73 => 'processBoatOfferSection',
+            74 => 'processBoatExclusiveSection',
+            75 => 'processBikeExclusiveSection',
+        ];
 
-            $data = [
-                'label_one'           => $request->label_one,
-                'line_one'            => $request->line_one,
-                'line_two'            => $request->line_two,
-                'description_one'     => $request->description_one,
-                'thumbnail_image_one' => $thumbnailPath,
-            ];
-        } elseif ($sectionId == 29) {
-            $thumbnailPath = $existingData['thumbnail_image_two'] ?? null;
-            if ($request->hasFile('thumbnail_image_two')) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_two'), 'general');
-            }
+        if (!isset($handlers[$sectionId])) {
+            return [];
+        }
 
-            $data = [
-                'label_two'           => $request->label_two,
-                'description_two'     => $request->description_two,
-                'thumbnail_image_two' => $thumbnailPath,
-            ];
-        } elseif ($sectionId == 43) {
-            $thumbnailPath = $existingData['thumbnail_image_four'] ?? null;
-            if ($request->hasFile('thumbnail_image_four')) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_four'), 'general');
-            }
+        $handler = $handlers[$sectionId];
 
-            $data = [
-                'label_three_one'      => $request->label_three_one,
-                'label_three_two'      => $request->label_three_two,
-                'label_three_three'    => $request->label_three_three,
-                'description_three'    => $request->description_three,
-                'thumbnail_image_four' => $thumbnailPath,
-            ];
-        } elseif ($sectionId == 56) {
-            $thumbnails = $existingData['thumbnail_image_boat'] ?? [];
+        return $this->{$handler}($request, $existingData);
+    }
 
-            if (!is_array($thumbnails)) {
-                $thumbnails = $thumbnails ? [$thumbnails] : [];
-            }
+    protected function processBannerOneSection($request, array $existingData): array
+    {
+        return [
+            'label_one'           => $request->label_one,
+            'line_one'            => $request->line_one,
+            'line_two'            => $request->line_two,
+            'description_one'     => $request->description_one,
+            'thumbnail_image_one' => $this->processIcon($request, 'thumbnail_image_one', $existingData['thumbnail_image_one'] ?? null),
+        ];
+    }
 
-            if ($request->hasFile('thumbnail_image_boat')) {
-                foreach ($request->file('thumbnail_image_boat') as $image) {
-                    $thumbnails[] = uploadFile($image, 'general');
-                }
-            }
+    protected function processBannerTwoSection($request, array $existingData): array
+    {
+        return [
+            'label_two'           => $request->label_two,
+            'description_two'     => $request->description_two,
+            'thumbnail_image_two' => $this->processIcon($request, 'thumbnail_image_two', $existingData['thumbnail_image_two'] ?? null),
+        ];
+    }
 
-            $data = [
-                'label_boat_one'       => $request->label_boat_one,
-                'label_boat_two'       => $request->label_boat_two,
-                'label_boat_three'     => $request->label_boat_three,
-                'description_boat'     => $request->description_boat,
-                'thumbnail_image_boat' => $thumbnails, // Store as array
-            ];
-        } elseif ($sectionId == 42) {
-            $data = [
-                'vehicle_id' => $request->vehicle_id,
-                'label_1'    => $request->label_1,
-                'dis_1'      => $request->dis_1,
-                'label_2'    => $request->label_2,
-                'dis_2'      => $request->dis_2,
-                'label_3'    => $request->label_3,
-                'dis_3'      => $request->dis_3,
-                'label_4'    => $request->label_4,
-                'dis_4'      => $request->dis_4,
-                'label_5'    => $request->label_5,
-                'dis_5'      => $request->dis_5,
-                'label_6'    => $request->label_6,
-                'dis_6'      => $request->dis_6,
-            ];
-        } elseif ($sectionId == 26) {
-            $data = [
-                'why_label_1' => $request->why_label_1,
-                'why_dis_1'   => $request->why_dis_1,
-                'why_icon_1'  => $this->processIcon($request, 'why_icon_1', $existingData['why_icon_1'] ?? null),
-                'why_label_2' => $request->why_label_2,
-                'why_dis_2'   => $request->why_dis_2,
-                'why_icon_2'  => $this->processIcon($request, 'why_icon_2', $existingData['why_icon_2'] ?? null),
-                'why_label_3' => $request->why_label_3,
-                'why_dis_3'   => $request->why_dis_3,
-                'why_icon_3'  => $this->processIcon($request, 'why_icon_3', $existingData['why_icon_3'] ?? null),
-            ];
-        } elseif ($sectionId == 68) {
-            $data = [
-                'label_boat_experience_1'           => $request->label_boat_experience_1,
-                'description_boat_experience_1'     => $request->description_boat_experience_1,
-                'thumbnail_image_boat_experience_1' => $this->processIcon(
-                    $request,
-                    'thumbnail_image_boat_experience_1',
-                    $existingData['thumbnail_image_boat_experience_1'] ?? null
-                ),
+    protected function processBannerFourSection($request, array $existingData): array
+    {
+        return [
+            'label_three_one'      => $request->label_three_one,
+            'label_three_two'      => $request->label_three_two,
+            'label_three_three'    => $request->label_three_three,
+            'description_three'    => $request->description_three,
+            'thumbnail_image_four' => $this->processIcon($request, 'thumbnail_image_four', $existingData['thumbnail_image_four'] ?? null),
+        ];
+    }
 
-                'thumbnail_image_boat_experience_2' => $this->processIcon(
-                    $request,
-                    'thumbnail_image_boat_experience_2',
-                    $existingData['thumbnail_image_boat_experience_2'] ?? null
-                ),
-            ];
-        } elseif ($sectionId == 71) {
-            $data = [
-                'label_bike_experience_1'           => $request->label_bike_experience_1,
-                'thumbnail_image_bike_experience_1' => $this->processIcon(
-                    $request,
-                    'thumbnail_image_bike_experience_1',
-                    $existingData['thumbnail_image_bike_experience_1'] ?? null
-                ),
-            ];
-        } elseif ($sectionId == 58) {
-            $data = [
-                'thumbnail_image_boat_benefits_main' => $this->processIcon(
-                    $request,
-                    'thumbnail_image_boat_benefits_main',
-                    $existingData['thumbnail_image_boat_benefits_main'] ?? null
-                ),
-            ];
+    protected function processBoatSection($request, array $existingData): array
+    {
+        $thumbnails = $existingData['thumbnail_image_boat'] ?? [];
 
-            for ($i = 1; $i <= 6; $i++) {
-                $data["label_boat_benefits_$i"] = $request->input("label_boat_benefits_$i");
-                $data["description_boat_benefits_$i"] = $request->input("description_boat_benefits_$i");
-                $data["thumbnail_image_boat_benefits_$i"] = $this->processIcon(
-                    $request,
-                    "thumbnail_image_boat_benefits_$i",
-                    $existingData["thumbnail_image_boat_benefits_$i"] ?? null
-                );
-            }
-        } elseif ($sectionId == 72) {
-            if ($request->hasFile('thumbnail_image_boat_seasonal')) {
-                $data = [
-                    'thumbnail_image_boat_seasonal' => uploadFile($request->file('thumbnail_image_boat_seasonal'), 'general'),
-                ];
-            }
-        } elseif ($sectionId == 25) {
-            if ($request->hasFile('thumbnail_image_car_ad')) {
-                $data = [
-                    'thumbnail_image_car_ad' => uploadFile($request->file('thumbnail_image_car_ad'), 'general'),
-                ];
-            }
-        } elseif ($sectionId == 73) {
-            if ($request->hasFile('thumbnail_image_boat_offer')) {
-                $data = [
-                    'thumbnail_image_boat_offer' => uploadFile($request->file('thumbnail_image_boat_offer'), 'general'),
-                ];
-            }
-        } elseif ($sectionId == 74) {
-            if ($request->hasFile('thumbnail_image_boat_exclusive')) {
-                $data = [
-                    'thumbnail_image_boat_exclusive' => uploadFile($request->file('thumbnail_image_boat_exclusive'), 'general'),
-                ];
-            }
-        } elseif ($sectionId == 75) {
-            $thumbnailPath = $existingData['thumbnail_image_bike_exclusive'] ?? null;
+        if (!is_array($thumbnails)) {
+            $thumbnails = $thumbnails ? [$thumbnails] : [];
+        }
 
-            if ($request->hasFile('thumbnail_image_bike_exclusive')) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_bike_exclusive'), 'general');
+        if ($request->hasFile('thumbnail_image_boat')) {
+            foreach ($request->file('thumbnail_image_boat') as $image) {
+                $thumbnails[] = uploadFile($image, 'general');
             }
+        }
 
-            $data = [
-                'thumbnail_image_bike_exclusive' => $thumbnailPath,
-                'bike_label_1'                   => $request->bike_label_1,
-                'bike_dis_1'                     => $request->bike_dis_1,
-                'bike_label_2'                   => $request->bike_label_2,
-                'bike_dis_2'                     => $request->bike_dis_2,
-                'bike_label_3'                   => $request->bike_label_3,
-                'bike_dis_3'                     => $request->bike_dis_3,
-                'bike_label_4'                   => $request->bike_label_4,
-                'bike_dis_4'                     => $request->bike_dis_4,
-            ];
+        return [
+            'label_boat_one'       => $request->label_boat_one,
+            'label_boat_two'       => $request->label_boat_two,
+            'label_boat_three'     => $request->label_boat_three,
+            'description_boat'     => $request->description_boat,
+            'thumbnail_image_boat' => $thumbnails,
+        ];
+    }
+
+    protected function processVehicleSection($request, array $existingData): array
+    {
+        return [
+            'vehicle_id' => $request->vehicle_id,
+            'label_1'    => $request->label_1,
+            'dis_1'      => $request->dis_1,
+            'label_2'    => $request->label_2,
+            'dis_2'      => $request->dis_2,
+            'label_3'    => $request->label_3,
+            'dis_3'      => $request->dis_3,
+            'label_4'    => $request->label_4,
+            'dis_4'      => $request->dis_4,
+            'label_5'    => $request->label_5,
+            'dis_5'      => $request->dis_5,
+            'label_6'    => $request->label_6,
+            'dis_6'      => $request->dis_6,
+        ];
+    }
+
+    protected function processWhyChooseSection($request, array $existingData): array
+    {
+        return [
+            'why_label_1' => $request->why_label_1,
+            'why_dis_1'   => $request->why_dis_1,
+            'why_icon_1'  => $this->processIcon($request, 'why_icon_1', $existingData['why_icon_1'] ?? null),
+            'why_label_2' => $request->why_label_2,
+            'why_dis_2'   => $request->why_dis_2,
+            'why_icon_2'  => $this->processIcon($request, 'why_icon_2', $existingData['why_icon_2'] ?? null),
+            'why_label_3' => $request->why_label_3,
+            'why_dis_3'   => $request->why_dis_3,
+            'why_icon_3'  => $this->processIcon($request, 'why_icon_3', $existingData['why_icon_3'] ?? null),
+        ];
+    }
+
+    protected function processBoatExperienceSection($request, array $existingData): array
+    {
+        return [
+            'label_boat_experience_1'           => $request->label_boat_experience_1,
+            'description_boat_experience_1'     => $request->description_boat_experience_1,
+            'thumbnail_image_boat_experience_1' => $this->processIcon(
+                $request,
+                'thumbnail_image_boat_experience_1',
+                $existingData['thumbnail_image_boat_experience_1'] ?? null
+            ),
+            'thumbnail_image_boat_experience_2' => $this->processIcon(
+                $request,
+                'thumbnail_image_boat_experience_2',
+                $existingData['thumbnail_image_boat_experience_2'] ?? null
+            ),
+        ];
+    }
+
+    protected function processBikeExperienceSection($request, array $existingData): array
+    {
+        return [
+            'label_bike_experience_1'           => $request->label_bike_experience_1,
+            'thumbnail_image_bike_experience_1' => $this->processIcon(
+                $request,
+                'thumbnail_image_bike_experience_1',
+                $existingData['thumbnail_image_bike_experience_1'] ?? null
+            ),
+        ];
+    }
+
+    protected function processBoatBenefitsSection($request, array $existingData): array
+    {
+        $data = [
+            'thumbnail_image_boat_benefits_main' => $this->processIcon(
+                $request,
+                'thumbnail_image_boat_benefits_main',
+                $existingData['thumbnail_image_boat_benefits_main'] ?? null
+            ),
+        ];
+
+        for ($i = 1; $i <= 6; $i++) {
+            $data["label_boat_benefits_$i"] = $request->input("label_boat_benefits_$i");
+            $data["description_boat_benefits_$i"] = $request->input("description_boat_benefits_$i");
+            $data["thumbnail_image_boat_benefits_$i"] = $this->processIcon(
+                $request,
+                "thumbnail_image_boat_benefits_$i",
+                $existingData["thumbnail_image_boat_benefits_$i"] ?? null
+            );
         }
 
         return $data;
+    }
+
+    protected function processBoatSeasonalSection($request, array $existingData): array
+    {
+        return $this->processSingleUpload($request, 'thumbnail_image_boat_seasonal');
+    }
+
+    protected function processCarAdSection($request, array $existingData): array
+    {
+        return $this->processSingleUpload($request, 'thumbnail_image_car_ad');
+    }
+
+    protected function processBoatOfferSection($request, array $existingData): array
+    {
+        return $this->processSingleUpload($request, 'thumbnail_image_boat_offer');
+    }
+
+    protected function processBoatExclusiveSection($request, array $existingData): array
+    {
+        return $this->processSingleUpload($request, 'thumbnail_image_boat_exclusive');
+    }
+
+    protected function processBikeExclusiveSection($request, array $existingData): array
+    {
+        return [
+            'thumbnail_image_bike_exclusive' => $this->processIcon(
+                $request,
+                'thumbnail_image_bike_exclusive',
+                $existingData['thumbnail_image_bike_exclusive'] ?? null
+            ),
+            'bike_label_1'                   => $request->bike_label_1,
+            'bike_dis_1'                     => $request->bike_dis_1,
+            'bike_label_2'                   => $request->bike_label_2,
+            'bike_dis_2'                     => $request->bike_dis_2,
+            'bike_label_3'                   => $request->bike_label_3,
+            'bike_dis_3'                     => $request->bike_dis_3,
+            'bike_label_4'                   => $request->bike_label_4,
+            'bike_dis_4'                     => $request->bike_dis_4,
+        ];
+    }
+
+    protected function processSingleUpload($request, string $fieldName): array
+    {
+        if (!$request->hasFile($fieldName)) {
+            return [];
+        }
+
+        return [
+            $fieldName => uploadFile($request->file($fieldName), 'general'),
+        ];
     }
 
     protected function processIcon($request, $fieldName, $existingValue)
