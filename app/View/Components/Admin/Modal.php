@@ -8,22 +8,18 @@ use Illuminate\View\Component;
 
 class Modal extends Component
 {
-    private const DEFAULT_CONFIG = [
-        'className' => '',
-        'dialogClassName' => 'modal-md',
-        'dialogPosition' => 'modal-dialog-centered',
-        'formId' => '',
-        'method' => '',
-        'action' => '',
-        'enctype' => '',
-        'modalBodyClass' => '',
-    ];
-
     protected string $id;
     protected bool $isHeader;
     protected string $title;
     protected string $modalTitleId;
-    protected array $config;
+    protected string $className;
+    protected string $dialogClassName;
+    protected string $dialogPosition;
+    protected string $formId;
+    protected string $method;
+    protected string $action;
+    protected string $enctype;
+    protected string $modalBodyClass = '';
 
     /**
      * Create a new component instance.
@@ -33,29 +29,27 @@ class Modal extends Component
         bool $isHeader = true,
         string $title = '',
         string $modalTitleId = '',
-        array $config = [],
+        string $className = '',
+        string $dialogClassName = 'modal-md',
+        string $dialogPosition = 'modal-dialog-centered',
+        string $formId = '',
+        string $method = '',
+        string $action = '',
+        string $enctype = '',
+        string $modalBodyClass = '',
     ) {
         $this->id = $id;
         $this->isHeader = $isHeader;
         $this->title = $title;
         $this->modalTitleId = $modalTitleId;
-        $this->config = array_merge(self::DEFAULT_CONFIG, $config);
-    }
-
-    /**
-     * Resolve the configuration options for the modal.
-     */
-    protected function resolveConfig(): array
-    {
-        $attributeOverrides = [];
-
-        foreach (array_keys(self::DEFAULT_CONFIG) as $key) {
-            if ($this->attributes->has($key)) {
-                $attributeOverrides[$key] = $this->attributes->get($key);
-            }
-        }
-
-        return array_merge(self::DEFAULT_CONFIG, $this->config, $attributeOverrides);
+        $this->className = $className;
+        $this->dialogClassName = $dialogClassName;
+        $this->dialogPosition = $dialogPosition;
+        $this->formId = $formId;
+        $this->method = $method;
+        $this->action = $action;
+        $this->enctype = $enctype;
+        $this->modalBodyClass = $modalBodyClass;
     }
 
     /**
@@ -63,21 +57,19 @@ class Modal extends Component
      */
     public function render(): View|Closure|string
     {
-        $config = $this->resolveConfig();
-
         return view('components.admin.modal', [
             'id' => $this->id,
             'isHeader' => $this->isHeader,
             'title' => $this->title,
             'modalTitleId' => $this->modalTitleId,
-            'className' => $config['className'],
-            'dialogClassName' => $config['dialogClassName'],
-            'dialogPosition' => $config['dialogPosition'],
-            'formId' => $config['formId'],
-            'method' => $config['method'],
-            'action' => $config['action'],
-            'enctype' => $config['enctype'],
-            'modalBodyClass' => $config['modalBodyClass'],
+            'className' => $this->className,
+            'dialogClassName' => $this->dialogClassName,
+            'dialogPosition' => $this->dialogPosition,
+            'formId' => $this->formId,
+            'method' => $this->method,
+            'action' => $this->action,
+            'enctype' => $this->enctype,
+            'modalBodyClass' => $this->modalBodyClass,
         ]);
     }
 }
